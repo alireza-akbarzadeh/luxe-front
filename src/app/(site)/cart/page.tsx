@@ -1,5 +1,5 @@
-import CheckoutDomain from '@/domains/checkout/checkout.domain';
+import CartDomain from '~/src/domains/cart/cart.domain';
 
-export default function CheckoutPage() {
-  return <CheckoutDomain />;
+export default function CartPage() {
+  return <CartDomain />;
 }

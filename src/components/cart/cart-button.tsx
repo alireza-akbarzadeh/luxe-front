@@ -36,7 +36,7 @@ export function CartButton({ showLabel = false }: CartButtonProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
               className={cn(
-                'bg-primary text-primary-foreground absolute flex items-center justify-center rounded-full text-[10px] font-bold shadow-sm',
+                'text-primary-foreground absolute flex items-center justify-center rounded-full bg-orange-400 text-[10px] font-bold shadow-sm',
                 showLabel
                   ? '-top-1 -right-1 h-5 min-w-5 px-1'
                   : '-top-0.5 -right-0.5 h-4 min-w-4 px-0.5'

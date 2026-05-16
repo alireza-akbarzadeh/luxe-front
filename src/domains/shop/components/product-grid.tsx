@@ -14,7 +14,7 @@ export function ProductGrid(props: ProductGridDataProps) {
   const { gridCols, clearFilters } = useProductFilters();
   const mappedProduct = products?.map((p) => ({
     ...p.items,
-    is_liked: p.is_liked
+    isLike: p.is_liked || false
   }));
   return (
     <div className='flex-1'>

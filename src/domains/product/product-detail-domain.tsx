@@ -26,7 +26,7 @@ export default function ProductDetailDomain({ productId }: { productId: string }
     : 0;
 
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div className='container mx-auto mt-20 px-4 py-8'>
       {/* Breadcrumb */}
       <nav className='text-muted-foreground flex items-center gap-1.5 text-xs'>
         <Link href='/' className='hover:text-foreground'>

@@ -1,7 +1,6 @@
 // hooks/useCart.ts
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { toast } from 'sonner';
 import { useCartStore } from '~/src/store/card.store';
 import { useGetCart } from '../services/-cart-get';
@@ -26,10 +25,14 @@ export const useCart = () => {
     mutation: {
       onMutate: async (newItem) => {
         const previousCart = queryClient.getQueryData(['/cart']);
+        // optimistic item – minimal fields; full data will arrive after refetch
         addOptimisticItem({
-          id: Date.now(),
+          id: Date.now(), // temporary id
           product_id: newItem.data.product_id,
-          quantity: newItem.data.quantity
+          quantity: newItem.data.quantity,
+          size: newItem.data.size || '',
+          color: newItem.data.color || ''
+          // name, price, image will be filled after server response
         });
         return { previousCart };
       },
@@ -46,7 +49,6 @@ export const useCart = () => {
     }
   });
 
-  // 3. Update quantity mutation
   const updateQuantity = usePutCartItemsId({
     mutation: {
       onMutate: async ({ id, data }) => {
@@ -67,7 +69,6 @@ export const useCart = () => {
     }
   });
 
-  // 4. Remove item mutation
   const removeItem = useDeleteCartItemsId({
     mutation: {
       onMutate: async ({ id }) => {
@@ -99,8 +100,8 @@ export const useCart = () => {
     subtotal,
     isLoading,
     error,
-    addItem: (productId: number, quantity: number) =>
-      addItem.mutate({ data: { product_id: productId, quantity } }),
+    addItem: (productId: number, quantity: number, color?: string, size?: string) =>
+      addItem.mutate({ data: { product_id: productId, quantity, color, size } }),
     updateQuantity: (id: number, quantity: number) =>
       updateQuantity.mutate({ id, data: { quantity } }),
     removeItem: (id: number) => removeItem.mutate({ id }),

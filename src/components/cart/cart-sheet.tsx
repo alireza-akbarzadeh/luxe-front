@@ -1,3 +1,4 @@
+'use client';
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -5,9 +6,11 @@ import { IconMinus, IconPlus, IconShoppingBag, IconTrash } from '@tabler/icons-r
 import { useCartStore } from '~/src/store/card.store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCart } from '@/hooks/useCartController';
+import Link from 'next/link';
 
 export function CartSheet() {
-  const { isOpen, setOpen } = useCartStore((s) => ({ isOpen: s.isOpen, setOpen: s.setOpen }));
+  const setOpen = useCartStore((s) => s.setOpen);
+  const isOpen = useCartStore((s) => s.isOpen);
 
   const {
     items,
@@ -30,7 +33,7 @@ export function CartSheet() {
       <Sheet open={isOpen} onOpenChange={setOpen}>
         <SheetContent className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
           <SheetHeader className='border-border border-b px-6 py-5'>
-            <SheetTitle className='font-display text-xl'>Your Bag · loading...</SheetTitle>
+            <SheetTitle className='font-display text-xl'>Your Cart · loading...</SheetTitle>
           </SheetHeader>
           <div className='flex-1 space-y-4 overflow-y-auto px-6 py-4'>
             {[1, 2].map((i) => (
@@ -53,7 +56,7 @@ export function CartSheet() {
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
         <SheetHeader className='border-border border-b px-6 py-5'>
-          <SheetTitle className='font-display text-xl'>Your Bag · {itemCount}</SheetTitle>
+          <SheetTitle className='font-display text-xl'>Your Cart · {itemCount}</SheetTitle>
         </SheetHeader>
 
         {items.length === 0 ? (
@@ -61,12 +64,12 @@ export function CartSheet() {
             <div className='bg-secondary rounded-full p-5'>
               <IconShoppingBag className='text-muted-foreground h-7 w-7' />
             </div>
-            <p className='font-display text-lg'>Your bag is empty</p>
+            <p className='font-display text-lg'>Your cart is empty</p>
             <p className='text-muted-foreground text-sm'>
               Discover pieces designed to last a decade.
             </p>
-            <Button onClick={() => setOpen(false)} className='mt-2'>
-              Continue shopping
+            <Button asChild onClick={() => setOpen(false)} className='mt-2'>
+              <Link href='/shop'>Continue shopping</Link>
             </Button>
           </div>
         ) : (
@@ -75,17 +78,31 @@ export function CartSheet() {
               <ul className='divide-border divide-y'>
                 {items.map((item: any) => (
                   <li key={item.id} className='flex gap-4 py-4'>
-                    <div className='bg-muted h-24 w-20 shrink-0 overflow-hidden rounded-md'>
-                      <img
-                        src={item.image || '/placeholder.png'}
-                        alt={item.name || 'Product'}
-                        className='h-full w-full object-cover'
-                      />
-                    </div>
+                    {/* Clickable image */}
+                    <Link
+                      href={`/product/${item.product_id}`}
+                      onClick={() => setOpen(false)}
+                      className='shrink-0'
+                    >
+                      <div className='bg-muted h-24 w-20 overflow-hidden rounded-md'>
+                        <img
+                          src={item.image || '/placeholder.png'}
+                          alt={item.name || 'Product'}
+                          className='h-full w-full object-cover transition-transform hover:scale-105'
+                        />
+                      </div>
+                    </Link>
                     <div className='flex flex-1 flex-col'>
                       <div className='flex items-start justify-between gap-2'>
                         <div>
-                          <p className='leading-tight font-medium'>{item.name}</p>
+                          {/* Clickable name */}
+                          <Link
+                            href={`/product/${item.product_id}`}
+                            onClick={() => setOpen(false)}
+                            className='hover:text-primary leading-tight font-medium transition-colors'
+                          >
+                            {item.name}
+                          </Link>
                           {getItemVariant(item) && (
                             <p className='text-muted-foreground mt-0.5 text-xs'>
                               {getItemVariant(item)}
@@ -135,19 +152,29 @@ export function CartSheet() {
                   <span className='text-muted-foreground'>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                {/* If your backend returns discounts or original prices, compute discount here */}
                 <Separator className='my-2' />
                 <div className='flex justify-between text-base font-semibold'>
                   <span>Total</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
                 <p className='text-muted-foreground text-xs'>Shipping calculated at checkout.</p>
-                <Button className='mt-3 w-full' size='lg'>
-                  Checkout
-                </Button>
-                <Button variant='ghost' className='w-full' onClick={() => setOpen(false)}>
-                  Continue shopping
-                </Button>
+
+                {/* Action buttons: View Cart + Checkout */}
+                <div className='mt-3 flex flex-col gap-2'>
+                  <Button asChild variant='outline' className='w-full'>
+                    <Link href='/cart' onClick={() => setOpen(false)}>
+                      View Full Cart
+                    </Link>
+                  </Button>
+                  <Button asChild className='w-full' size='lg'>
+                    <Link href='/checkout' onClick={() => setOpen(false)}>
+                      Proceed to Checkout
+                    </Link>
+                  </Button>
+                  <Button variant='ghost' className='w-full' onClick={() => setOpen(false)}>
+                    Continue shopping
+                  </Button>
+                </div>
               </div>
             </SheetFooter>
           </>

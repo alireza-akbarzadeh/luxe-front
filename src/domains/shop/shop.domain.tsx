@@ -9,7 +9,6 @@ import { useProductFilters } from './useProductFilters';
 
 export function ShopDomain() {
   const { apiParams } = useProductFilters();
-  console.log(apiParams);
 
   const { data } = useGetProducts(apiParams);
   const total = data?.data?.total ?? 0;

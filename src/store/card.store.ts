@@ -1,7 +1,7 @@
-// stores/cartStore.ts
+'use client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { DtoCartItemData } from '../services/models';
+import type { DtoCartItemData } from '../services/-cart-items-post.schemas';
 
 interface CartStore {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export const useCartStore = create<CartStore>()(
       reset: () => set({ items: [], isOpen: false })
     }),
     {
-      name: 'luxe-cart-ui', // only persist UI state, not cart items
+      name: 'luxe-cart-ui',
       partialize: (state) => ({ isOpen: state.isOpen })
     }
   )

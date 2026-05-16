@@ -3,12 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { IconHeart, IconShoppingBag, IconStar } from '@tabler/icons-react';
+import { IconShoppingBag, IconStar } from '@tabler/icons-react';
 import { useCart } from '@/hooks/useCartController';
-import type { ModelsProduct } from '~/src/services/-products-get.schemas';
+import type { ModelsProduct } from '~/src/services/-categories-bulk-post.schemas';
+import { LikeButton } from '~/src/components/buttons/like-button';
 
 interface ProductCardProps {
-  product: ModelsProduct;
+  product: ModelsProduct & {
+    isLike: boolean;
+  };
   index?: number;
 }
 
@@ -19,10 +22,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     e.preventDefault();
     e.stopPropagation();
 
+    const defaultColor = product.colors?.[0]?.toString() || '';
+    const defaultSize = product.sizes?.[0]?.toString() || '';
+
     if (!product.id) return;
 
     try {
-      await addItem(product.id, 1);
+      await addItem(product.id, 1, defaultColor || '', defaultSize || '');
+
       toast.success(`${product.name} added to cart`);
     } catch (error) {
       toast.error('Failed to add item');
@@ -62,18 +69,12 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               </Badge>
             )}
           </div>
-
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              toast('Saved to wishlist');
-            }}
-            aria-label='Save to wishlist'
-            className='bg-background/80 hover:bg-background absolute top-3 right-3 rounded-full p-2 opacity-0 backdrop-blur transition-all duration-300 group-hover:opacity-100'
-          >
-            <IconHeart className='h-4 w-4' />
-          </button>
+          <LikeButton
+            isLiked={product.isLike}
+            productId={product.id as number}
+            productName={product.name || ''}
+            className='bg-background/80 hover:bg-background absolute top-3 right-3 rounded-full p-2 opacity-0 backdrop-blur group-hover:opacity-100'
+          />
 
           <div className='absolute inset-x-3 bottom-3 translate-y-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100'>
             <Button
