@@ -22,11 +22,7 @@ export function OrderSummary() {
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);
 
-  const productDiscount = items.reduce((sum, item) => {
-    const original = item.original_price ?? item.price;
-    const discount = original - item.price;
-    return sum + (discount > 0 ? discount * item.quantity : 0);
-  }, 0);
+  const totalDiscount = items.reduce((sum, item) => sum + (item.discount || 0), 0);
 
   const handleApplyPromo = () => {
     if (promoCode.toLowerCase() === 'luxe10') {
@@ -35,7 +31,7 @@ export function OrderSummary() {
     }
   };
   const shipping = subtotal > 100 ? 0 : 12;
-  const total = subtotal - productDiscount - promoDiscount + shipping;
+  const total = subtotal - totalDiscount - promoDiscount + shipping;
 
   return (
     <div className='lg:col-span-1'>
@@ -52,10 +48,10 @@ export function OrderSummary() {
             <span className='text-muted-foreground'>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
-          {productDiscount > 0 && (
+          {totalDiscount > 0 && (
             <div className='flex justify-between text-green-600'>
               <span>Product Discount</span>
-              <span>-${productDiscount.toFixed(2)}</span>
+              <span>-${totalDiscount.toFixed(2)}</span>
             </div>
           )}
           {promoApplied && (

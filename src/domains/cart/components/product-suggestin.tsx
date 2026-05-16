@@ -5,12 +5,20 @@ import Link from 'next/link';
 import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
 import { useCart } from '~/src/hooks/useCartController';
 import { Skeleton } from '@/components/ui/skeleton';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { IconAlertCircle } from '@tabler/icons-react';
 
 export function ProductSuggestion() {
   const { items } = useCart();
-  const productIds = items.map((item) => item.product_id).filter(Boolean);
+
+  // Create a stable key from the product IDs (sorted, unique, joined)
+  const productIdsKey = useMemo(() => {
+    const ids = items
+      .map((item) => item.product_id)
+      .filter((id): id is number => id !== undefined && id !== null)
+      .sort((a, b) => a - b);
+    return ids.join(',');
+  }, [items]);
 
   const {
     mutate: getSuggestions,
@@ -20,21 +28,20 @@ export function ProductSuggestion() {
     reset
   } = usePostProductsSuggestions();
 
-  // Fetch suggestions when cart changes
+  // Fetch only when the stable key changes (i.e., product IDs set changes)
   React.useEffect(() => {
-    if (productIds.length === 0) {
+    if (!productIdsKey) {
       reset();
       return;
     }
+    const productIds = productIdsKey.split(',').map(Number);
     getSuggestions({ data: { product_ids: productIds, limit: 4 } });
-  }, [productIds, getSuggestions, reset]);
+  }, [productIdsKey, getSuggestions, reset]);
 
   const suggestions = suggestionsData?.data ?? [];
 
-  // No suggestions to show
   if (!isPending && suggestions.length === 0 && !isError) return null;
 
-  // Loading skeleton
   if (isPending) {
     return (
       <div className='mt-12'>
@@ -52,7 +59,6 @@ export function ProductSuggestion() {
     );
   }
 
-  // Error state
   if (isError) {
     return (
       <div className='border-destructive/20 bg-destructive/5 mt-12 rounded-lg border p-4 text-center'>
@@ -64,7 +70,6 @@ export function ProductSuggestion() {
     );
   }
 
-  // Success state – show products
   return (
     <div className='mt-12'>
       <h3 className='mb-4 text-lg font-semibold'>You might also like</h3>

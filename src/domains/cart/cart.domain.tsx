@@ -78,6 +78,7 @@ export default function CartPage() {
 
                   return (
                     <CartItem
+                      cartItemId={cartItemId}
                       index={index}
                       key={item.id}
                       isUpdatingThis={isUpdatingThis}

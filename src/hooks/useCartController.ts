@@ -7,6 +7,7 @@ import { useGetCart } from '../services/-cart-get';
 import { usePostCartItems } from '../services/-cart-items-post';
 import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
+import { useDeleteCartItems } from '../services/-cart-items-delete';
 
 export const useCart = () => {
   const queryClient = useQueryClient();
@@ -90,6 +91,18 @@ export const useCart = () => {
     }
   });
 
+  const clearCartMutation = useDeleteCartItems();
+
+  const clearCart = async () => {
+    try {
+      await clearCartMutation.mutateAsync();
+      await queryClient.invalidateQueries({ queryKey: ['/cart'] });
+      useCartStore.getState().setItems([]);
+      toast.success('Cart cleared');
+    } catch (error) {
+      toast.error('Failed to clear cart');
+    }
+  };
   const items = useCartStore((state) => state.items);
   const itemCount = items.reduce((sum, i) => sum + Number(i.quantity), 0);
   const subtotal = items.reduce((sum, i) => sum + Number(i.price) * Number(i.quantity), 0);
@@ -105,6 +118,7 @@ export const useCart = () => {
     updateQuantity: (id: number, quantity: number) =>
       updateQuantity.mutate({ id, data: { quantity } }),
     removeItem: (id: number) => removeItem.mutate({ id }),
+    clearCart,
     isAdding: addItem.isPending,
     isUpdating: updateQuantity.isPending,
     isRemoving: removeItem.isPending

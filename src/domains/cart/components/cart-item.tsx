@@ -12,10 +12,11 @@ interface CartItemProps {
   isUpdatingThis: boolean;
   isRemovingThis: boolean;
   index: number;
+  cartItemId: number;
 }
 
 export function CartItem(props: CartItemProps) {
-  const { cart } = props;
+  const { cart, index, isRemovingThis, isUpdatingThis, cartItemId } = props;
   const { updateQuantity, removeItem } = useCart();
 
   return (
@@ -77,17 +78,17 @@ export function CartItem(props: CartItemProps) {
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, Math.max(1, item.quantity - 1))}
+              onClick={() => updateQuantity(cartItemId, Math.max(1, cart.quantity - 1))}
               disabled={isUpdatingThis}
             >
               <IconMinus className='h-3 w-3' />
             </Button>
-            <span className='w-8 text-center font-medium'>{item.quantity}</span>
+            <span className='w-8 text-center font-medium'>{cart.quantity}</span>
             <Button
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, item.quantity + 1)}
+              onClick={() => updateQuantity(cartItemId, cart.quantity + 1)}
               disabled={isUpdatingThis}
             >
               <IconPlus className='h-3 w-3' />
