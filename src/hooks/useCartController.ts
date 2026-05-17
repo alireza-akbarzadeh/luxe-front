@@ -8,16 +8,25 @@ import { usePostCartItems } from '../services/-cart-items-post';
 import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
 import { useDeleteCartItems } from '../services/-cart-items-delete';
+import { useUser } from './useUser';
 
 export const useCart = () => {
+  const { isAuthenticated } = useUser();
   const queryClient = useQueryClient();
   const { setItems, addOptimisticItem, updateOptimisticQuantity, removeOptimisticItem } =
     useCartStore();
 
-  const { data: cartData, isLoading, error } = useGetCart();
-
+  const {
+    data: cartData,
+    isLoading,
+    error
+  } = useGetCart({
+    query: {
+      enabled: isAuthenticated
+    }
+  });
   useEffect(() => {
-    if (cartData?.data?.cart?.items) {
+    if (isAuthenticated && cartData?.data?.cart?.items) {
       setItems(cartData.data.cart.items || []);
     }
   }, [cartData, setItems]);
@@ -26,14 +35,13 @@ export const useCart = () => {
     mutation: {
       onMutate: async (newItem) => {
         const previousCart = queryClient.getQueryData(['/cart']);
-        // optimistic item – minimal fields; full data will arrive after refetch
+
         addOptimisticItem({
-          id: Date.now(), // temporary id
+          id: Date.now(),
           product_id: newItem.data.product_id,
           quantity: newItem.data.quantity,
           size: newItem.data.size || '',
           color: newItem.data.color || ''
-          // name, price, image will be filled after server response
         });
         return { previousCart };
       },

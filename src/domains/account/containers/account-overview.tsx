@@ -80,7 +80,6 @@ export function AccountOverview() {
       </div>
     );
   }
-  console.log(user);
 
   // Normal render when user is loaded
   return (

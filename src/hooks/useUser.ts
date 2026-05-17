@@ -15,6 +15,5 @@ export function useUser() {
   }, []);
 
   const isAuthenticated = !!user;
-
   return { user, loading, isAuthenticated };
 }

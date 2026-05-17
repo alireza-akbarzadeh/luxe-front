@@ -33,7 +33,7 @@ interface UserProfileProps {
 export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserProfileProps) {
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
-
+  const nextTheme = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
   const avatarSeed = user?.email || 'Guest';
   const userName = user?.first_name || 'Guest User';
   const userEmail = user?.email || 'guest@example.com';
@@ -175,7 +175,10 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
             )}
 
             <DropdownMenuItem>
-              <button className='focus:bg-primary/10 focus:text-primary group flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'>
+              <Link
+                href='/account'
+                className='focus:bg-primary/10 focus:text-primary group flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+              >
                 <IconUserCircle
                   size={16}
                   className='text-muted-foreground group-focus:text-primary'
@@ -184,7 +187,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
                   <span className='text-sm font-medium'>My Profile</span>
                   <span className='text-muted-foreground text-[10px]'>Work & Personal details</span>
                 </div>
-              </button>
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem>
@@ -195,21 +198,20 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
                 />
                 <div className='flex flex-col text-left'>
                   <span className='text-sm font-medium'>Preferences</span>
-                  <span className='text-muted-foreground text-[10px]'>Theme & System settings</span>
+                  <span className='text-muted-foreground text-[10px]'>System settings</span>
                 </div>
               </button>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button
-                variant='ghost'
-                size='icon'
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className='rounded-full'
+              <button
+                onClick={() => setTheme(nextTheme)}
+                className='focus:bg-primary/10 focus:text-primary group flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
               >
-                <IconSun className='h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
-                <IconMoon className='absolute h-5 w-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
-                <span className='sr-only'>Toggle theme</span>
-              </Button>
+                <IconMoon size={16} className='text-muted-foreground group-focus:text-primary' />
+                <div className='flex flex-col text-left'>
+                  <span className='text-sm font-medium'>Swithc Them</span>
+                </div>
+              </button>
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
