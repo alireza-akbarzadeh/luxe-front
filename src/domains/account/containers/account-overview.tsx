@@ -16,12 +16,16 @@ import { useUser } from '~/src/hooks/useUser';
 import { toast } from 'sonner';
 import { profileFormSchema } from '../account.schema';
 import { AccountProfileForm } from '../components/account-profile-form';
+import { usePostProfileChangePassword } from '~/src/services/-profile-change-password-post';
+import { useGetAddressesDefault } from '~/src/services/-addresses-default-get';
 
 export function AccountOverview() {
   const { setActiveTab } = useSidebarTab();
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const updatPassword = usePostProfileChangePassword();
+  const { data } = useGetAddressesDefault;
 
   const form = useAppForm({
     defaultValues: {
@@ -34,7 +38,7 @@ export function AccountOverview() {
       onChange: profileFormSchema,
       onBlur: profileFormSchema
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async () => {
       startTransition(async () => {
         try {
           // await updateProfileAction(value);
@@ -76,6 +80,7 @@ export function AccountOverview() {
       </div>
     );
   }
+  console.log(user);
 
   // Normal render when user is loaded
   return (
@@ -125,7 +130,7 @@ export function AccountOverview() {
           { label: 'Wishlist Items', value: mockWishlist.length, icon: IconHeart },
           {
             label: 'Saved Addresses',
-            value: user?.addresses?.length || 0,
+            value: data?.addresses?.length || 0,
             icon: IconMapPin
           }
         ].map((stat) => {

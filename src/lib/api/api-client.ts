@@ -67,6 +67,7 @@ AXIOS_INSTANCE.interceptors.response.use(
       toast.error(errorMessage);
     };
 
+    // If not a 401 or already retried, show error and reject
     if (error.response?.status !== HttpStatusCode.Unauthorized || originalRequest._retry) {
       if (error.response?.status === HttpStatusCode.Unauthorized) {
         toast.error('Authentication failed. Please log in again.');
@@ -89,19 +90,21 @@ AXIOS_INSTANCE.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const refreshResponse = await Axios.post(
-        '/api/auth/refresh',
-        {},
-        {
-          baseURL: '',
-          withCredentials: true
-        }
+      // ✅ Direct call to your Go backend (no body, cookie is sent automatically)
+      const refreshResponse = await AXIOS_INSTANCE.post(
+        '/auth/refresh',
+        null, // no body – cookie contains refresh_token
+        { withCredentials: true } // sends httpOnly cookie
       );
-      const newToken = refreshResponse.data.access_token;
-      processQueue(null, newToken);
-      if (newToken) {
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-      }
+
+      const newAccessToken = refreshResponse.data.data?.access_token;
+      if (!newAccessToken) throw new Error('No access token in refresh response');
+
+      // Process queued requests with the new token
+      processQueue(null, newAccessToken);
+
+      // Retry the original request with the new token
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return AXIOS_INSTANCE(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError as Error, null);
@@ -115,7 +118,6 @@ AXIOS_INSTANCE.interceptors.response.use(
     }
   }
 );
-
 /**
  * Enhanced API client with error handling and toast notifications
  * @param config - Axios request configuration
