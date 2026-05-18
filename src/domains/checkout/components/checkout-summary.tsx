@@ -6,18 +6,24 @@ import { Separator } from '~/src/components/ui/separator';
 import { IconLock, IconShieldCheck } from '@tabler/icons-react';
 import { useCart } from '~/src/hooks/useCartController';
 
-interface ChckoutSummaryProps {
+interface CheckoutSummaryProps {
   shippingMethod: string;
+  couponDiscount?: number;
+  couponCode?: string;
 }
 
-export function CheckoutSummary(props: ChckoutSummaryProps) {
-  const { shippingMethod } = props;
+export function CheckoutSummary({
+  shippingMethod,
+  couponDiscount = 0,
+  couponCode = ''
+}: CheckoutSummaryProps) {
   const { items, subtotal } = useCart();
 
   const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
   const shippingCost = selectedShipping?.price || 0;
   const tax = subtotal * 0.08;
-  const total = subtotal + shippingCost + tax;
+  const total = subtotal + shippingCost + tax - couponDiscount;
+
   return (
     <div className='lg:col-span-2'>
       <motion.div
@@ -70,6 +76,12 @@ export function CheckoutSummary(props: ChckoutSummaryProps) {
             <span className='text-muted-foreground'>Tax (8%)</span>
             <span>${tax.toFixed(2)}</span>
           </div>
+          {couponDiscount > 0 && (
+            <div className='flex justify-between text-green-600'>
+              <span>Coupon Discount ({couponCode})</span>
+              <span>-${couponDiscount.toFixed(2)}</span>
+            </div>
+          )}
         </div>
         <Separator className='my-4' />
         <div className='flex items-center justify-between'>

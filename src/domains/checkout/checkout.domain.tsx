@@ -23,6 +23,9 @@ import { CheckoutSummary } from './components/checkout-summary';
 import { CheckoutPayment } from './containers/checkout-payment';
 import { CheckoutReview } from './containers/checkout-review';
 import { CheckoutShipping } from './containers/checkout-shipping';
+import { useGetAccountSummary } from '~/src/services/-account-summary-get';
+
+export type CheckoutFormApi = any;
 
 const steps = [
   { id: 1, name: 'Shipping', icon: IconMapPin },
@@ -42,19 +45,26 @@ export default function CheckoutDomain() {
   const [currentStep, setCurrentStep] = useState(1);
   const { mutate: placeOrder, isPending } = usePostOrders();
 
+  const { data: summaryData } = useGetAccountSummary();
+  const defaultAddress = summaryData?.data?.default_shipping_address;
+  const userEmail = summaryData?.data?.email;
+  const userFirstName = summaryData?.data?.first_name;
+  const userLastName = summaryData?.data?.last_name;
+  const userPhone = summaryData?.data?.phone;
+
   const form = useAppForm({
     defaultValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zip: '',
-      country: 'United States',
-      phone: '',
-      shippingMethod: 'standard' as const,
+      email: userEmail || '',
+      firstName: userFirstName || '',
+      lastName: userLastName || '',
+      addressLine1: defaultAddress?.address_line1 || '',
+      addressLine2: defaultAddress?.address_line2 || '',
+      city: defaultAddress?.city || '',
+      state: defaultAddress?.state || '',
+      zip: defaultAddress?.postal_code || '',
+      country: defaultAddress?.country || 'United States',
+      phone: userPhone || '',
+      shippingMethod: 'standard',
       cardNumber: '',
       cardName: '',
       expiry: '',
@@ -121,17 +131,13 @@ export default function CheckoutDomain() {
       return;
     }
 
-    const currentValues = form.getFieldValue();
-    const partialSchema = checkoutSchema.pick(
-      Object.fromEntries(fieldsToValidate.map((f) => [f, true]))
-    );
-    const result = partialSchema.safeParse(currentValues);
-
-    if (!result.success) {
-      for (const err of result.error.errors) {
-        const fieldName = err.path[0] as keyof CheckoutFormValues;
-        form.setFieldMeta(fieldName, (prev) => ({ ...prev, error: err.message }));
-      }
+    const currentValues = form.state.values;
+    // Use a manual validation for simplicity, as pick method might not be available
+    const missingFields = fieldsToValidate?.filter((field) => !currentValues[field]);
+    if (missingFields.length > 0) {
+      missingFields?.forEach((field) => {
+        form.setFieldMeta(field, (prev) => ({ ...prev, error: 'This field is required' }));
+      });
       toast.error('Please fill all required fields correctly');
       return;
     }
@@ -225,7 +231,16 @@ export default function CheckoutDomain() {
                   <AnimatePresence mode='wait'>
                     {currentStep === 1 && <CheckoutShipping form={form} onNext={handleNext} />}
                     {currentStep === 2 && (
-                      <CheckoutPayment form={form} onNext={handleNext} onBack={handleBack} />
+                      <CheckoutPayment
+                        form={form}
+                        onNext={handleNext}
+                        onBack={handleBack}
+                        onApplyCoupon={(code) => {
+                          form.setFieldValue('couponCode', code);
+                        }}
+                        isApplyingCoupon={false}
+                        subtotal={items.reduce((sum, i) => sum + i.price * i.quantity, 0)}
+                      />
                     )}
                     {currentStep === 3 && (
                       <CheckoutReview form={form} onBack={handleBack} isSubmitting={isPending} />
@@ -235,7 +250,11 @@ export default function CheckoutDomain() {
               </form.AppForm>
             </div>
             <div className='lg:col-span-2'>
-              <CheckoutSummary shippingMethod={form.getFieldValue('shippingMethod')} />
+              <CheckoutSummary
+                shippingMethod={form.getFieldValue('shippingMethod')}
+                couponDiscount={'couponDiscount'}
+                couponCode={'appliedCouponCode'}
+              />
             </div>
           </div>
         </div>

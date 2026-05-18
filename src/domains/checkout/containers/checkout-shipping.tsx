@@ -5,7 +5,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import type { CheckoutFormApi } from '../checkout.domain';
+import type { CheckoutFormApi } from '../../auth/containers/register.domain';
 
 const shippingMethods = [
   { id: 'standard', name: 'Standard Shipping', description: '5-7 business days', price: 0 },

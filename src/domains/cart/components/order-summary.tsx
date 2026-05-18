@@ -1,7 +1,6 @@
 'use client';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-
 import {
   IconArrowRight,
   IconRotateClockwise,
@@ -14,21 +13,38 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useCart } from '~/src/hooks/useCartController';
+import { usePostCouponsValidate } from '~/src/services/-coupons-validate-post';
+import { toast } from 'sonner';
 
 export function OrderSummary() {
   const { items, subtotal } = useCart();
-
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);
 
+  const { mutate: validateCoupon, isPending: isValidating } = usePostCouponsValidate();
+
   const totalDiscount = items.reduce((sum, item) => sum + (item.discount || 0), 0);
 
   const handleApplyPromo = () => {
-    if (promoCode.toLowerCase() === 'luxe10') {
-      setPromoDiscount(subtotal * 0.1);
-      setPromoApplied(true);
-    }
+    if (!promoCode.trim()) return;
+    validateCoupon(
+      { data: { code: promoCode, order_total: subtotal } },
+      {
+        onSuccess: (response) => {
+          const data = response.data;
+          setPromoDiscount(data?.discount_amount as number);
+          setPromoApplied(true);
+          toast.success(`Coupon applied! You saved $${data?.discount_amount?.toFixed(2)}`);
+        },
+        onError: (error: any) => {
+          const message = error?.response?.data?.message || 'Invalid or expired coupon';
+          toast.error(message);
+          setPromoApplied(false);
+          setPromoDiscount(0);
+        }
+      }
+    );
   };
   const shipping = subtotal > 100 ? 0 : 12;
   const total = subtotal - totalDiscount - promoDiscount + shipping;
@@ -56,7 +72,7 @@ export function OrderSummary() {
           )}
           {promoApplied && (
             <div className='flex justify-between text-green-600'>
-              <span>Promo Code (LUXE10)</span>
+              <span>Promo Code ({promoCode.toUpperCase()})</span>
               <span>-${promoDiscount.toFixed(2)}</span>
             </div>
           )}
@@ -85,16 +101,16 @@ export function OrderSummary() {
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
                 className='rounded-full pl-9'
-                disabled={promoApplied}
+                disabled={promoApplied || isValidating}
               />
             </div>
             <Button
               variant='outline'
               onClick={handleApplyPromo}
-              disabled={promoApplied || !promoCode}
+              disabled={promoApplied || !promoCode || isValidating}
               className='rounded-full'
             >
-              {promoApplied ? 'Applied' : 'Apply'}
+              {isValidating ? 'Validating...' : promoApplied ? 'Applied' : 'Apply'}
             </Button>
           </div>
           <p className='text-muted-foreground mt-1 pt-2 text-xs'>

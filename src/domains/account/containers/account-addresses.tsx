@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,18 +20,34 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import { IconCheck, IconEdit, IconMapPin, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '~/src/components/forms/useAppForm';
-import type { Address } from '@/store/auth.store';
+import { getGetAccountSummaryQueryKey } from '~/src/services/-account-summary-get';
+import { getGetAddressesQueryKey, useGetAddresses } from '~/src/services/-addresses-get';
+import { usePostAddresses } from '~/src/services/-addresses-post';
+import { usePatchAddressesIdDefault } from '~/src/services/-addresses-{id}-default-patch';
+import { useDeleteAddressesId } from '~/src/services/-addresses-{id}-delete';
+import { usePutAddressesId } from '~/src/services/-addresses-{id}-put';
 import { addressFormSchema } from '../account.schema';
-import { useUser } from '~/src/hooks/useUser';
 
 export function AccountAddresses() {
-  const { user } = useUser();
+  const queryClient = useQueryClient();
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
-  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+  const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Fetch addresses
+  const { data: addressesResponse, isLoading, isError, refetch } = useGetAddresses();
+  const addresses = addressesResponse?.data?.addresses || [];
+
+  // Mutations
+  const createAddress = usePostAddresses();
+  const updateAddress = usePutAddressesId();
+  const setDefaultAddress = usePatchAddressesIdDefault();
+  const deleteAddress = useDeleteAddressesId();
 
   const form = useAppForm({
     defaultValues: {
@@ -52,19 +67,46 @@ export function AccountAddresses() {
       onChange: addressFormSchema,
       onBlur: addressFormSchema
     },
-    onSubmit: async ({ formApi }) => {
+    onSubmit: async ({ value }) => {
       startTransition(async () => {
         try {
+          // Map form fields to backend DTO
+          const recipientName = `${value.firstName} ${value.lastName}`.trim();
+          const payload = {
+            address_type: 'both', // or you can let user choose: shipping/billing/both
+            recipient_name: recipientName,
+            phone: value.phone,
+            address_line1: value.street,
+            address_line2: value.apartment || '',
+            city: value.city,
+            state: value.state,
+            postal_code: value.zipCode,
+            country: value.country,
+            is_default: value.isDefault,
+            instructions: value.label // store label as instructions (optional)
+          };
+
           if (editingAddressId) {
+            await updateAddress.mutateAsync({
+              id: editingAddressId,
+              data: payload
+            });
             toast.success('Address updated');
           } else {
+            await createAddress.mutateAsync({ data: payload });
             toast.success('Address added');
           }
+
+          // Invalidate both address list and account summary (for default addresses)
+          await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
+          await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+
           setIsAddressDialogOpen(false);
           setEditingAddressId(null);
-          formApi.reset();
-        } catch (error) {
-          toast.error('Something went wrong');
+          form.reset();
+        } catch (error: any) {
+          const message = error?.response?.data?.message || 'Something went wrong';
+          toast.error(message);
         }
       });
     }
@@ -72,39 +114,82 @@ export function AccountAddresses() {
 
   const handleAddNewAddress = () => {
     setEditingAddressId(null);
+    // Prefill first/last name from user if available (we can get from useUser or from context)
+    // For simplicity, leave empty; user can fill.
     form.reset({
       label: '',
-      firstName: user.first_name || '',
-      lastName: user.last_name || '',
+      firstName: '',
+      lastName: '',
       street: '',
       apartment: '',
       city: '',
       state: '',
       zipCode: '',
       country: 'United States',
-      phone: user.phone || '',
+      phone: '',
       isDefault: false
     });
     setIsAddressDialogOpen(true);
   };
 
-  const handleEditAddress = (address: Address) => {
+  const handleEditAddress = (address: any) => {
     setEditingAddressId(address.id);
+    // Extract first/last name from recipient_name
+    const nameParts = (address.recipient_name || '').split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
     form.reset({
-      label: address.label || '',
-      firstName: address.firstName,
-      lastName: address.lastName,
-      street: address.street,
-      apartment: address.apartment || '',
+      label: address.instructions || '',
+      firstName,
+      lastName,
+      street: address.address_line1,
+      apartment: address.address_line2 || '',
       city: address.city,
       state: address.state,
-      zipCode: address.zipCode,
+      zipCode: address.postal_code,
       country: address.country,
       phone: address.phone,
-      isDefault: address.isDefault
+      isDefault: address.is_default
     });
     setIsAddressDialogOpen(true);
   };
+
+  const handleSetDefault = async (id: number) => {
+    try {
+      await setDefaultAddress.mutateAsync({ id });
+      toast.success('Default address updated');
+      await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
+      await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to set default');
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAddress.mutateAsync({ id });
+      toast.success('Address deleted');
+      await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
+      await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to delete');
+    }
+  };
+
+  if (isLoading) {
+    return <div className='animate-pulse'>Loading addresses...</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className='rounded-2xl border p-6 text-center'>
+        <p className='text-destructive'>Failed to load addresses.</p>
+        <Button variant='outline' className='mt-4' onClick={() => refetch()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -131,33 +216,24 @@ export function AccountAddresses() {
                 }}
                 className='mt-4 grid grid-cols-2 gap-4'
               >
-                {/* Label */}
                 <form.AppField name='label'>
                   {(field) => (
                     <field.TextField
-                      label='Label'
+                      label='Label (e.g., Home, Work)'
                       placeholder='Home, Work, etc.'
                       className='col-span-2'
                     />
                   )}
                 </form.AppField>
-
-                {/* First Name */}
                 <form.AppField name='firstName'>
                   {(field) => <field.TextField label='First Name' />}
                 </form.AppField>
-
-                {/* Last Name */}
                 <form.AppField name='lastName'>
                   {(field) => <field.TextField label='Last Name' />}
                 </form.AppField>
-
-                {/* Street */}
                 <form.AppField name='street'>
                   {(field) => <field.TextField label='Street Address' className='col-span-2' />}
                 </form.AppField>
-
-                {/* Apartment */}
                 <form.AppField name='apartment'>
                   {(field) => (
                     <field.TextField
@@ -166,40 +242,26 @@ export function AccountAddresses() {
                     />
                   )}
                 </form.AppField>
-
-                {/* City */}
                 <form.AppField name='city'>
                   {(field) => <field.TextField label='City' />}
                 </form.AppField>
-
-                {/* State */}
                 <form.AppField name='state'>
                   {(field) => <field.TextField label='State' />}
                 </form.AppField>
-
-                {/* ZIP Code */}
                 <form.AppField name='zipCode'>
                   {(field) => <field.TextField label='ZIP Code' />}
                 </form.AppField>
-
-                {/* Phone */}
                 <form.AppField name='phone'>
                   {(field) => <field.InputPhone label='Phone' />}
                 </form.AppField>
-
-                {/* Country */}
                 <form.AppField name='country'>
                   {(field) => <field.TextField label='Country' />}
                 </form.AppField>
-
-                {/* Default toggle */}
                 <form.AppField name='isDefault'>
                   {(field) => (
                     <field.Checkbox label='Set as default address' className='col-span-2 mt-2' />
                   )}
                 </form.AppField>
-
-                {/* Buttons */}
                 <div className='col-span-2 mt-4 flex justify-end gap-2'>
                   <Button
                     variant='outline'
@@ -216,33 +278,31 @@ export function AccountAddresses() {
         </Dialog>
       </div>
 
-      {/* Address list – unchanged from original */}
-      {user.addresses && user.addresses.length > 0 ? (
+      {addresses.length > 0 ? (
         <div className='grid grid-cols-2 gap-4'>
-          {user.addresses.map((address) => (
+          {addresses.map((address) => (
             <div
               key={address.id}
               className={`bg-card relative rounded-xl border p-6 ${
-                address.isDefault ? 'border-accent' : 'border-border'
+                address.is_default ? 'border-accent' : 'border-border'
               }`}
             >
-              {address.isDefault && (
+              {address.is_default && (
                 <span className='text-accent absolute top-4 right-4 flex items-center gap-1 text-xs font-medium'>
                   <IconCheck className='h-3 w-3' />
                   Default
                 </span>
               )}
-              <h3 className='mb-2 font-semibold'>{address.label}</h3>
+              <h3 className='mb-2 font-semibold'>{address.instructions || 'Address'}</h3>
+              <p className='text-muted-foreground text-sm'>{address.recipient_name}</p>
               <p className='text-muted-foreground text-sm'>
-                {address.firstName} {address.lastName}
+                {address.address_line1}
+                {address.address_line2 && `, ${address.address_line2}`}
               </p>
               <p className='text-muted-foreground text-sm'>
-                {address.street}
-                {address.apartment && `, ${address.apartment}`}
+                {address.city}, {address.state} {address.postal_code}
               </p>
-              <p className='text-muted-foreground text-sm'>
-                {address.city}, {address.state} {address.zipCode}
-              </p>
+              <p className='text-muted-foreground text-sm'>{address.country}</p>
               <p className='text-muted-foreground text-sm'>{address.phone}</p>
 
               <div className='border-border mt-4 flex items-center gap-2 border-t pt-4'>
@@ -250,12 +310,8 @@ export function AccountAddresses() {
                   <IconEdit className='mr-1 h-4 w-4' />
                   Edit
                 </Button>
-                {!address.isDefault && (
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    // onClick={() => setDefaultAddress(address.id)}
-                  >
+                {!address.is_default && (
+                  <Button variant='ghost' size='sm' onClick={() => handleSetDefault(address.id)}>
                     Set Default
                   </Button>
                 )}
@@ -280,7 +336,7 @@ export function AccountAddresses() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        // onClick={() => removeAddress(address.id)}
+                        onClick={() => handleDelete(address.id)}
                         className='bg-red-600 hover:bg-red-700'
                       >
                         Delete
