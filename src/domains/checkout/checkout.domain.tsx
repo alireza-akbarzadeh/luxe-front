@@ -38,7 +38,7 @@ export const shippingMethods = [
 
 export default function CheckoutDomain() {
   const router = useRouter();
-  const { items, subtotal, clearCart } = useCart();
+  const { items, clearCart } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const { mutate: placeOrder, isPending } = usePostOrders();
 
@@ -116,13 +116,12 @@ export default function CheckoutDomain() {
       []
     ];
     const fieldsToValidate = stepFields[currentStep - 1];
-    if (fieldsToValidate.length === 0) {
-      // Last step: proceed to submit (handled by review step button)
+    if (fieldsToValidate?.length === 0) {
       if (currentStep < 3) setCurrentStep(currentStep + 1);
       return;
     }
 
-    const currentValues = form.getFieldValues(); // all values
+    const currentValues = form.getFieldValue();
     const partialSchema = checkoutSchema.pick(
       Object.fromEntries(fieldsToValidate.map((f) => [f, true]))
     );
@@ -236,11 +235,7 @@ export default function CheckoutDomain() {
               </form.AppForm>
             </div>
             <div className='lg:col-span-2'>
-              <CheckoutSummary
-                items={items}
-                subtotal={subtotal}
-                shippingMethod={form.getFieldValue('shippingMethod')}
-              />
+              <CheckoutSummary shippingMethod={form.getFieldValue('shippingMethod')} />
             </div>
           </div>
         </div>

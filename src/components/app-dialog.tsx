@@ -32,7 +32,7 @@ interface AppDialogProps {
   description?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  component: 'sheet' | 'drawer';
+  component?: 'sheet' | 'drawer';
   className?: string;
 }
 

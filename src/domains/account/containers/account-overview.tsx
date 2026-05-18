@@ -1,74 +1,57 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import {
+  IconChevronRight,
+  IconCreditCard,
   IconEdit,
-  IconPackage,
   IconHeart,
+  IconHome,
   IconMapPin,
-  IconChevronRight
+  IconPackage
 } from '@tabler/icons-react';
+import { useState } from 'react';
+
 import { Button } from '~/src/components/ui/button';
-import { useAppForm } from '~/src/components/forms/useAppForm';
-import { mockOrders, mockWishlist, statusColors } from '../data';
-import { useSidebarTab } from '../hooks/useSidebarTab';
-import { useUser } from '~/src/hooks/useUser';
-import { toast } from 'sonner';
-import { profileFormSchema } from '../account.schema';
+import { useGetAccountSummary } from '~/src/services/-account-summary-get';
+
 import { AccountProfileForm } from '../components/account-profile-form';
-import { usePostProfileChangePassword } from '~/src/services/-profile-change-password-post';
-import { useGetAddressesDefault } from '~/src/services/-addresses-default-get';
+import { statusColors } from '../data';
+import { useSidebarTab } from '../hooks/useSidebarTab';
 
 export function AccountOverview() {
   const { setActiveTab } = useSidebarTab();
-  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const updatPassword = usePostProfileChangePassword();
-  const { data } = useGetAddressesDefault;
 
-  const form = useAppForm({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: ''
-    },
-    validators: {
-      onChange: profileFormSchema,
-      onBlur: profileFormSchema
-    },
-    onSubmit: async () => {
-      startTransition(async () => {
-        try {
-          // await updateProfileAction(value);
-          toast.success('Profile updated');
-          setIsEditing(false);
-        } catch (error) {
-          toast.error('Something went wrong');
-        }
-      });
-    }
-  });
+  const { data: summaryData, isLoading, error } = useGetAccountSummary();
 
-  const handleStartEditing = () => {
-    // safe: user might be null, we use fallbacks
-    form.reset({
-      firstName: user?.first_name ?? '',
-      lastName: user?.last_name ?? '',
-      email: user?.email ?? '',
-      phone: user?.phone ?? ''
-    });
-    setIsEditing(true);
-  };
+  const user = summaryData?.data;
+  const defaultShipping = user?.default_shipping_address;
+  const defaultBilling = user?.default_billing_address;
 
   const handleCancelEditing = () => {
     setIsEditing(false);
-    form.reset();
   };
 
-  // If user is still loading, show a minimal placeholder (no early return)
-  if (!user) {
+  // Format address for display
+  const formatAddress = (address: any) => {
+    if (!address) return 'No address set';
+    const parts = [
+      address.address_line1,
+      address.address_line2,
+      address.city,
+      address.state,
+      address.postal_code,
+      address.country
+    ].filter(Boolean);
+    return parts.join(', ');
+  };
+
+  // Extract summary data
+  const addressCount = summaryData?.data?.address_count ?? 0;
+  const likedProductsCount = summaryData?.data?.liked_products_count ?? 0;
+  const recentOrders = summaryData?.data?.recent_orders ?? [];
+
+  if (isLoading) {
     return (
       <div className='animate-pulse space-y-6'>
         <div className='bg-card border-border h-32 rounded-2xl border p-6' />
@@ -81,7 +64,25 @@ export function AccountOverview() {
     );
   }
 
-  // Normal render when user is loaded
+  if (error) {
+    return (
+      <div className='bg-card border-border rounded-2xl border p-6 text-center'>
+        <p className='text-destructive'>Failed to load dashboard data. Please try again later.</p>
+        <Button variant='outline' className='mt-4' onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className='bg-card border-border rounded-2xl border p-6 text-center'>
+        <p className='text-muted-foreground'>No profile data available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className='space-y-6'>
       {/* Profile Card */}
@@ -94,44 +95,68 @@ export function AccountOverview() {
               Cancel
             </Button>
           ) : (
-            <Button variant='ghost' size='sm' onClick={handleStartEditing}>
+            <Button onClick={() => setIsEditing(true)} variant='ghost' size='sm'>
               <IconEdit className='mr-2 h-4 w-4' />
               Edit
             </Button>
           )}
         </div>
 
-        {isEditing ? (
-          <AccountProfileForm onCancel={handleCancelEditing} />
-        ) : (
-          <div className='flex items-center gap-6'>
-            <div className='bg-accent/20 flex h-20 w-20 items-center justify-center rounded-full'>
-              <span className='text-accent text-2xl font-semibold'>
-                {user.first_name?.[0]}
-                {user.last_name?.[0]}
-              </span>
-            </div>
-            <div>
-              <h3 className='text-lg font-medium'>
-                {user.first_name} {user.last_name}
-              </h3>
-              <p className='text-muted-foreground'>{user.email}</p>
-              {user.phone && <p className='text-muted-foreground'>{user.phone}</p>}
-            </div>
+        <AccountProfileForm
+          open={isEditing}
+          onOpenChange={setIsEditing}
+          onClose={handleCancelEditing}
+          defaultValues={{
+            firstName: user?.first_name ?? '',
+            lastName: user?.last_name ?? '',
+            email: user?.email ?? '',
+            phone: user?.phone ?? ''
+          }}
+        />
+        <div className='flex items-center gap-6'>
+          <div className='bg-accent/20 flex h-20 w-20 items-center justify-center rounded-full'>
+            <span className='text-accent text-2xl font-semibold'>
+              {user.first_name?.[0]}
+              {user.last_name?.[0]}
+            </span>
           </div>
-        )}
+          <div>
+            <h3 className='text-lg font-medium'>
+              {user.first_name} {user.last_name}
+            </h3>
+            <p className='text-muted-foreground'>{user.email}</p>
+            {user.phone && <p className='text-muted-foreground'>{user.phone}</p>}
+          </div>
+        </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Default Addresses Section */}
+      <div className='bg-card border-border rounded-2xl border p-6'>
+        <h2 className='mb-4 text-xl font-semibold'>Default Addresses</h2>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <div className='bg-muted/50 rounded-xl p-4'>
+            <div className='mb-2 flex items-center gap-2'>
+              <IconHome className='text-accent h-5 w-5' />
+              <h3 className='font-medium'>Shipping Address</h3>
+            </div>
+            <p className='text-muted-foreground text-sm'>{formatAddress(defaultShipping)}</p>
+          </div>
+          <div className='bg-muted/50 rounded-xl p-4'>
+            <div className='mb-2 flex items-center gap-2'>
+              <IconCreditCard className='text-accent h-5 w-5' />
+              <h3 className='font-medium'>Billing Address</h3>
+            </div>
+            <p className='text-muted-foreground text-sm'>{formatAddress(defaultBilling)}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats using real data from summary API */}
       <div className='grid grid-cols-3 gap-4'>
         {[
-          { label: 'Total Orders', value: mockOrders.length, icon: IconPackage },
-          { label: 'Wishlist Items', value: mockWishlist.length, icon: IconHeart },
-          {
-            label: 'Saved Addresses',
-            value: data?.addresses?.length || 0,
-            icon: IconMapPin
-          }
+          { label: 'Total Orders', value: recentOrders.length, icon: IconPackage },
+          { label: 'Wishlist Items', value: likedProductsCount, icon: IconHeart },
+          { label: 'Saved Addresses', value: addressCount, icon: IconMapPin }
         ].map((stat) => {
           const Icon = stat.icon;
           return (
@@ -147,7 +172,7 @@ export function AccountOverview() {
         })}
       </div>
 
-      {/* Recent Orders */}
+      {/* Recent Orders using real data from summary API */}
       <div className='bg-card border-border rounded-2xl border p-6'>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-xl font-semibold'>Recent Orders</h2>
@@ -157,29 +182,35 @@ export function AccountOverview() {
           </Button>
         </div>
         <div className='space-y-4'>
-          {mockOrders.slice(0, 2).map((order) => (
-            <div
-              key={order.id}
-              className='bg-muted/50 flex items-center justify-between rounded-xl p-4'
-            >
-              <div>
-                <p className='font-medium'>{order.id}</p>
-                <p className='text-muted-foreground text-sm'>
-                  {new Date(order.date).toLocaleDateString()}
-                </p>
-              </div>
-              <div className='text-right'>
-                <span
-                  className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
-                    statusColors[order.status]
-                  }`}
-                >
-                  {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                </span>
-                <p className='mt-1 text-sm font-medium'>${order.total.toFixed(2)}</p>
-              </div>
+          {recentOrders.length === 0 ? (
+            <div className='bg-muted/50 text-muted-foreground rounded-xl p-4 text-center'>
+              No orders yet.
             </div>
-          ))}
+          ) : (
+            recentOrders.map((order: any) => (
+              <div
+                key={order.id}
+                className='bg-muted/50 flex items-center justify-between rounded-xl p-4'
+              >
+                <div>
+                  <p className='font-medium'>{order.order_number}</p>
+                  <p className='text-muted-foreground text-sm'>
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className='text-right'>
+                  <span
+                    className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
+                      statusColors[order.status] || ''
+                    }`}
+                  >
+                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  </span>
+                  <p className='mt-1 text-sm font-medium'>${order.total_amount.toFixed(2)}</p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
