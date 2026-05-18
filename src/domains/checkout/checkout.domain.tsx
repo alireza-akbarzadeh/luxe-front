@@ -21,12 +21,6 @@ import { CheckoutPayment } from './containers/checkout-payment';
 import { CheckoutReview } from './containers/checkout-review';
 import { CheckoutShipping } from './containers/checkout-shipping';
 
-export const shippingMethods = [
-  { id: 'standard', name: 'Standard Shipping', description: '5-7 business days', price: 0 },
-  { id: 'express', name: 'Express Shipping', description: '2-3 business days', price: 15 },
-  { id: 'overnight', name: 'Overnight Shipping', description: 'Next business day', price: 30 }
-];
-
 export default function CheckoutDomain() {
   const router = useRouter();
   const { items, clearCart } = useCart();

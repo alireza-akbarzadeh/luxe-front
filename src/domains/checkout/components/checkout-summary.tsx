@@ -1,10 +1,10 @@
 'use client';
 import Image from 'next/image';
-import { shippingMethods } from '../checkout.domain';
 import { motion } from 'framer-motion';
 import { Separator } from '~/src/components/ui/separator';
 import { IconLock, IconShieldCheck } from '@tabler/icons-react';
 import { useCart } from '~/src/hooks/useCartController';
+import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
 
 interface CheckoutSummaryProps {
   shippingMethod: string;
@@ -19,7 +19,9 @@ export function CheckoutSummary({
 }: CheckoutSummaryProps) {
   const { items, subtotal } = useCart();
 
-  const selectedShipping = shippingMethods.find((m) => m.id === shippingMethod);
+  const { data: { data } = {} } = useGetShippingProviders();
+
+  const selectedShipping = data?.find((m) => m.name === shippingMethod);
   const shippingCost = selectedShipping?.price || 0;
   const tax = subtotal * 0.08;
   const total = subtotal + shippingCost + tax - couponDiscount;
