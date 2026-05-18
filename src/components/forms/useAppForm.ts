@@ -1,18 +1,18 @@
 import { createFormHook } from '@tanstack/react-form';
-import { fieldContext, formContext } from './useFormContext';
-import { TextField } from './text-field';
+import { Checkbox } from './checkbox';
+import { ComboboxField } from './combox-box';
+import { DatePicker } from './date-picker';
 import { ErrorMessages } from './error-message';
 import { FormRoot } from './form-root';
-import { SubscribeButton } from './subscribe-button';
-import { TextArea } from './text-area';
-import { Switch } from './switch';
-import { Checkbox } from './checkbox';
-import { SelectController } from './select';
-import { ComboboxField } from './combox-box';
-import { MultiSelect } from './multi-select';
-import { DatePicker } from './date-picker';
-import { InputPassword } from './input-password';
 import { InputPhone } from './input-from';
+import { InputPassword } from './input-password';
+import { MultiSelect } from './multi-select';
+import { SelectController } from './select';
+import { SubscribeButton } from './subscribe-button';
+import { Switch } from './switch';
+import { TextArea } from './text-area';
+import { TextField } from './text-field';
+import { fieldContext, formContext } from './useFormContext';
 
 export const { useAppForm } = createFormHook({
   fieldComponents: {

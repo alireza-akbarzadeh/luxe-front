@@ -26,8 +26,8 @@ export const useCart = () => {
     }
   });
   useEffect(() => {
-    if (isAuthenticated && cartData?.data?.cart?.items) {
-      setItems(cartData.data.cart.items || []);
+    if (isAuthenticated && cartData?.data?.items) {
+      setItems(cartData?.data?.items);
     }
   }, [cartData, setItems]);
 
@@ -37,11 +37,10 @@ export const useCart = () => {
         const previousCart = queryClient.getQueryData(['/cart']);
 
         addOptimisticItem({
-          id: Date.now(),
           product_id: newItem.data.product_id,
           quantity: newItem.data.quantity,
-          size: newItem.data.size || '',
-          color: newItem.data.color || ''
+          selected_color: newItem.data.size || '',
+          selected_size: newItem.data.color || ''
         });
         return { previousCart };
       },

@@ -1,14 +1,14 @@
 'use client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { DtoCartItemData } from '../services/-cart-items-post.schemas';
+import type { DtoCartItemDetail } from '../services/-cart-get.schemas';
 
 interface CartStore {
   isOpen: boolean;
   setOpen: (open: boolean) => void;
-  items: DtoCartItemData[];
-  setItems: (items: DtoCartItemData[]) => void;
-  addOptimisticItem: (item: DtoCartItemData) => void;
+  items: DtoCartItemDetail[];
+  setItems: (items: DtoCartItemDetail[]) => void;
+  addOptimisticItem: (item: DtoCartItemDetail) => void;
   updateOptimisticQuantity: (id: number, quantity: number) => void;
   removeOptimisticItem: (id: number) => void;
   reset: () => void;
@@ -23,7 +23,16 @@ export const useCartStore = create<CartStore>()(
       setItems: (items) => set({ items }),
       addOptimisticItem: (newItem) =>
         set((state) => ({
-          items: [...state.items, newItem],
+          items: [
+            ...state.items,
+            {
+              id: Date.now(),
+              product_id: newItem.product_id,
+              quantity: newItem.quantity,
+              selected_color: newItem.selected_color,
+              selected_size: newItem.selected_size
+            }
+          ],
           isOpen: true
         })),
       updateOptimisticQuantity: (id, quantity) =>

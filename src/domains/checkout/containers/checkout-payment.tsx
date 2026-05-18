@@ -1,4 +1,3 @@
-// app/checkout/containers/checkout-payment.tsx
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -9,6 +8,7 @@ import {
   IconTag
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+
 import { useGetCoupons } from '~/src/services/-coupons-get';
 import { AvailableCoupons } from '../components/available-coupons';
 
@@ -97,11 +97,10 @@ export function CheckoutPayment({
           </div>
           <div className='flex items-center gap-2 pt-2'>
             <form.AppField name='saveInfo'>
-              {(field) => <field.Checkbox id='saveInfo' />}
+              {(field) => (
+                <field.Checkbox label='Save this information for next time' id='saveInfo' />
+              )}
             </form.AppField>
-            <Label htmlFor='saveInfo' className='text-sm font-normal'>
-              Save this information for next time
-            </Label>
           </div>
 
           {/* Coupon Code Section */}

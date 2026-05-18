@@ -1,14 +1,14 @@
-import { motion, removeItem } from 'framer-motion';
-import { IconX, IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconMinus, IconPlus, IconX } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 import Image from 'next/image';
 import { Button } from '~/src/components/ui/button';
-import type { DtoCartItemData } from '~/src/services/-cart-items-post.schemas';
 import { useCart } from '~/src/hooks/useCartController';
+import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 
 interface CartItemProps {
-  cart: DtoCartItemData;
+  cart: DtoCartItemDetail;
   isUpdatingThis: boolean;
   isRemovingThis: boolean;
   index: number;
@@ -33,7 +33,7 @@ export function CartItem(props: CartItemProps) {
         <div className='bg-muted relative h-24 w-24 overflow-hidden rounded-xl sm:h-32 sm:w-32'>
           <Image
             src={cart.image || '/placeholder.png'}
-            alt={cart.name}
+            alt={cart.name || ''}
             fill
             className='object-cover'
           />
@@ -78,7 +78,7 @@ export function CartItem(props: CartItemProps) {
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, Math.max(1, cart.quantity - 1))}
+              onClick={() => updateQuantity(cartItemId, Math.max(1, (cart.quantity ?? 0) - 1))}
               disabled={isUpdatingThis}
             >
               <IconMinus className='h-3 w-3' />
@@ -88,7 +88,7 @@ export function CartItem(props: CartItemProps) {
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, cart.quantity + 1)}
+              onClick={() => updateQuantity(cartItemId, (cart.quantity ?? 0) + 1)}
               disabled={isUpdatingThis}
             >
               <IconPlus className='h-3 w-3' />
@@ -97,10 +97,10 @@ export function CartItem(props: CartItemProps) {
 
           {/* Price with original price strikethrough */}
           <div className='text-right'>
-            <p className='font-semibold'>${(cart.price * cart.quantity).toFixed(2)}</p>
-            {cart.original_price && cart.original_price > cart.price && (
+            ${((cart.price ?? 0) * (cart.quantity ?? 0)).toFixed(2)}
+            {cart.original_price && cart.original_price > (cart.price ?? 0) && (
               <p className='text-muted-foreground text-sm line-through'>
-                ${(cart.original_price * cart.quantity).toFixed(2)}
+                ${(cart.original_price * (cart.quantity ?? 0)).toFixed(2)}
               </p>
             )}
           </div>
