@@ -31,8 +31,8 @@ export function RegisterDomain() {
       acceptMarketing: false
     },
     validators: {
+      onSubmit:registerFormSchema,
       onChange: registerFormSchema,
-      onBlur: registerFormSchema
     },
     onSubmit: async ({ value, formApi }) => {
       startTransition(async () => {

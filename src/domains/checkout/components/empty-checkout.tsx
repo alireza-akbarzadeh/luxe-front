@@ -1,22 +1,21 @@
-import Link from 'next/link';
+import { Empty } from '@/components/empty';
 import { Button } from '@/components/ui/button';
+import { IconBasket } from '@tabler/icons-react';
+import Link from 'next/link';
 
-export function EmptyCheckout() {
+export function EmptyCart() {
   return (
-    <div className='bg-background min-h-screen'>
-      <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8'>
-          <h1 className='mb-4 text-2xl font-bold'>Your cart is empty</h1>
-          <p className='text-muted-foreground mb-8'>
-            Add some items to your cart before checking out.
-          </p>
-          <Link href='/shop'>
-            <Button size='lg' className='rounded-full'>
-              Continue Shopping
-            </Button>
-          </Link>
-        </div>
-      </main>
-    </div>
+    <Empty
+      title='Your Cart is empty'
+      icon={IconBasket}
+      description='Add some items to your cart before checking out.'
+      content={
+        <Link href='/shop'>
+          <Button size='lg' className='rounded-full'>
+            Continue Shopping
+          </Button>
+        </Link>
+      }
+    />
   );
 }

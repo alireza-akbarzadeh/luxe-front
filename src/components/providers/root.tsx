@@ -5,19 +5,19 @@ import TanstackQueryProvider from './client/tanstack-query';
 import { Toaster } from '@/components/ui/sonner';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import ThemeProvider from './client/theme';
-import { Direction } from '../ui/direction';
+import { DirectionProvider } from '../ui/direction';
 
 type TRootProvider = Readonly<PropsWithChildren>;
 
 export default function RootProvider({ children }: TRootProvider) {
   return (
     <ThemeProvider>
-      <Direction defaultDir='ltr'>
+      <DirectionProvider dir='ltr'>
         <NuqsAdapter>
           <Toaster />
           <TanstackQueryProvider>{children}</TanstackQueryProvider>
         </NuqsAdapter>
-      </Direction>
+      </DirectionProvider>
     </ThemeProvider>
   );
 }

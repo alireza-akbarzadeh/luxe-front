@@ -38,6 +38,10 @@ function Span({ className, ...props }: ComponentProps<'span'>) {
   return <span className={cn('', className)} {...props} />;
 }
 
+function Small({ className, ...props }: ComponentProps<'small'>) {
+  return <small className={cn('text-sm leading-none font-medium', className)} {...props} />;
+}
+
 const Typography = {
   H1: Heading1,
   H2: Heading2,
@@ -45,7 +49,8 @@ const Typography = {
   H4: Heading4,
   P: Paragraph,
   S: Span,
-  Blockquote
+  Blockquote,
+  Small
 };
 
 export { Typography };

@@ -8,9 +8,9 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '~/src/hooks/useCartController';
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartItem } from './components/cart-item';
-import { EmptyCart } from './components/empty-cart';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestin';
+import { EmptyCart } from '../checkout/components/empty-checkout';
 
 export default function CartPage() {
   const { items, isLoading, error, isUpdating, isRemoving } = useCart();
@@ -78,7 +78,7 @@ export default function CartPage() {
 
                   return (
                     <CartItem
-                      cartItemId={cartItemId}
+                      cartItemId={cartItemId || 0}
                       index={index}
                       key={item.id}
                       isUpdatingThis={isUpdatingThis}

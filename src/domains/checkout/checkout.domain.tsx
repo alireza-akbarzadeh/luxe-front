@@ -16,10 +16,10 @@ import { checkoutSchema } from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutSteps, stepNames } from './components/checkout-steps';
 import { CheckoutSummary } from './components/checkout-summary';
-import { EmptyCheckout } from './components/empty-checkout';
 import { CheckoutPayment } from './containers/checkout-payment';
 import { CheckoutReview } from './containers/checkout-review';
 import { CheckoutShipping } from './containers/checkout-shipping';
+import { EmptyCart } from './components/empty-checkout';
 
 export default function CheckoutDomain() {
   const router = useRouter();
@@ -64,6 +64,7 @@ export default function CheckoutDomain() {
       couponCode: ''
     },
     validators: {
+      onSubmit: checkoutSchema,
       onChange: checkoutSchema,
       onBlur: checkoutSchema
     },
@@ -180,7 +181,7 @@ export default function CheckoutDomain() {
   }, [safeStep]);
 
   if (items.length === 0) {
-    return <EmptyCheckout />;
+    return <EmptyCart />;
   }
 
   return (

@@ -5,16 +5,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import type { CheckoutFormApi } from '../../auth/containers/register.domain';
 
-const shippingMethods = [
-  { id: 'standard', name: 'Standard Shipping', description: '5-7 business days', price: 0 },
-  { id: 'express', name: 'Express Shipping', description: '2-3 business days', price: 15 },
-  { id: 'overnight', name: 'Overnight Shipping', description: 'Next business day', price: 30 }
-];
 
 interface CheckoutShippingProps {
-  form: CheckoutFormApi;
+  form: any;
   onNext: () => void;
 }
 
