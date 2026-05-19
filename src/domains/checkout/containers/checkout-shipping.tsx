@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
 
 
 interface CheckoutShippingProps {
@@ -13,6 +14,7 @@ interface CheckoutShippingProps {
 }
 
 export function CheckoutShipping({ form, onNext }: CheckoutShippingProps) {
+  const { data } = useGetShippingProviders()
   return (
     <motion.div
       key='shipping'
@@ -76,34 +78,44 @@ export function CheckoutShipping({ form, onNext }: CheckoutShippingProps) {
         <form.AppField name='shippingMethod'>
           {(field) => (
             <RadioGroup
-              value={field.state.value}
+              value={String(field.state.value ?? '')}
               onValueChange={(val) => field.handleChange(val)}
               className='space-y-3'
             >
-              {shippingMethods.map((method) => (
-                <div
-                  key={method.id}
-                  className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${
-                    field.state.value === method.id
-                      ? 'border-accent bg-accent/5'
-                      : 'border-border hover:border-accent/50'
-                  }`}
-                  onClick={() => field.handleChange(method.id)}
-                >
-                  <div className='flex items-center gap-3'>
-                    <RadioGroupItem value={method.id} id={method.id} />
-                    <div>
-                      <Label htmlFor={method.id} className='cursor-pointer font-medium'>
-                        {method.name}
-                      </Label>
-                      <p className='text-muted-foreground text-sm'>{method.description}</p>
+              {data?.data?.map((method) => {
+                const value = String(method.id);
+
+                return (
+                  <Label
+                    key={method.id}
+                    htmlFor={value}
+                    className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${field.state.value === value
+                        ? 'border-accent bg-accent/5'
+                        : 'border-border hover:border-accent/50'
+                      }`}
+                  >
+                    <div className='flex items-center gap-3'>
+                      <RadioGroupItem value={value} id={value} />
+
+                      <div>
+                        <div className='font-medium'>
+                          {method.name || 'Unnamed'} Shipping
+                        </div>
+
+                        <p className='text-muted-foreground text-sm'>
+                          {method.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <span className='font-medium'>
-                    {method.price === 0 ? 'Free' : `$${method.price.toFixed(2)}`}
-                  </span>
-                </div>
-              ))}
+
+                    <span className='font-medium'>
+                      {method.price === 0
+                        ? 'Free'
+                        : `$${(method.price ?? 0).toFixed(2)}`}
+                    </span>
+                  </Label>
+                );
+              })}
             </RadioGroup>
           )}
         </form.AppField>

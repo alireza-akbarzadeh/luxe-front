@@ -11,22 +11,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { useCart } from '~/src/hooks/useCartController';
 
-const shippingMethods = {
-  standard: { name: 'Standard Shipping', price: 0 },
-  express: { name: 'Express Shipping', price: 15 },
-  overnight: { name: 'Overnight Shipping', price: 30 }
-};
 
 interface CheckoutReviewProps {
   form: any;
   onBack: () => void;
   isSubmitting: boolean;
+  shippingMethod:string
 }
 
-export function CheckoutReview({ form, onBack, isSubmitting }: CheckoutReviewProps) {
+export function CheckoutReview(props: CheckoutReviewProps) {
+  const { form, onBack, isSubmitting, shippingMethod} = props
   const { items, subtotal } = useCart();
   const values = form.getFieldValues();
-  const shippingCost = shippingMethods[values.shippingMethod]?.price || 0;
+  const shippingCost = 10
   const tax = subtotal * 0.08;
   const total = subtotal + shippingCost + tax;
 
@@ -62,7 +59,7 @@ export function CheckoutReview({ form, onBack, isSubmitting }: CheckoutReviewPro
         </p>
         <p className='mt-2 text-sm'>
           <span className='text-muted-foreground'>Shipping Method:</span>{' '}
-          {shippingMethods[values.shippingMethod]?.name}
+          {shippingMethod}
         </p>
       </div>
 
@@ -92,7 +89,7 @@ export function CheckoutReview({ form, onBack, isSubmitting }: CheckoutReviewPro
           {items.map((item) => (
             <div key={`${item.id}-${item.color}-${item.size}`} className='flex items-center gap-3'>
               <div className='bg-muted relative h-12 w-12 shrink-0 overflow-hidden rounded-lg'>
-                <Image src={item.image} alt={item.name} fill className='object-cover' />
+                <Image src={item.image || ""} alt={item.name || ""} fill className='object-cover' />
                 <span className='bg-accent text-accent-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
                   {item.quantity}
                 </span>
@@ -107,7 +104,7 @@ export function CheckoutReview({ form, onBack, isSubmitting }: CheckoutReviewPro
                   </p>
                 )}
               </div>
-              <p className='text-sm font-medium'>${(item.price * item.quantity).toFixed(2)}</p>
+              <p className='text-sm font-medium'>${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}</p>
             </div>
           ))}
         </div>

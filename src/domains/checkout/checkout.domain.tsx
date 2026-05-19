@@ -185,52 +185,51 @@ export default function CheckoutDomain() {
   }
 
   return (
-    <div className='bg-background min-h-screen'>
-      <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <CheckoutBreadcrumb />
-          <CheckoutSteps currentStep={safeStep} />
-
-          <div className='grid gap-8 lg:grid-cols-5 lg:gap-12'>
-            <div className='lg:col-span-3'>
-              <form.AppForm>
-                <form.Root
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (safeStep === 'Review') form.handleSubmit();
-                  }}
-                >
-                  <AnimatePresence mode='wait'>
-                    {safeStep === 'Shipping' && (
-                      <CheckoutShipping form={form} onNext={handleNext} />
-                    )}
-                    {safeStep === 'Payment' && (
-                      <CheckoutPayment
-                        form={form}
-                        onNext={handleNext}
-                        onBack={handleBack}
-                        onApplyCoupon={handleApplyCoupon}
-                        isApplyingCoupon={isApplyingCoupon}
-                        subtotal={subtotal}
-                      />
-                    )}
-                    {safeStep === 'Review' && (
-                      <CheckoutReview form={form} onBack={handleBack} isSubmitting={isPending} />
-                    )}
-                  </AnimatePresence>
-                </form.Root>
-              </form.AppForm>
-            </div>
-            <div className='lg:col-span-2'>
-              <CheckoutSummary
-                shippingMethod={form.getFieldValue('shippingMethod')}
-                couponDiscount={couponDiscount}
-                couponCode={appliedCouponCode}
-              />
-            </div>
+    <div className='pt-24 pb-16'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <CheckoutBreadcrumb />
+        <CheckoutSteps currentStep={safeStep} />
+        <div className='grid gap-8 lg:grid-cols-5 lg:gap-12'>
+          <div className='lg:col-span-3'>
+            <form.AppForm>
+              <form.Root
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (safeStep === 'Review') form.handleSubmit();
+                }}
+              >
+                <AnimatePresence mode='wait'>
+                  {safeStep === 'Shipping' && (
+                    <CheckoutShipping form={form} onNext={handleNext} />
+                  )}
+                  {safeStep === 'Payment' && (
+                    <CheckoutPayment
+                      form={form}
+                      onNext={handleNext}
+                      onBack={handleBack}
+                      onApplyCoupon={handleApplyCoupon}
+                      isApplyingCoupon={isApplyingCoupon}
+                      subtotal={subtotal}
+                    />
+                  )}
+                  {safeStep === 'Review' && (
+                    <CheckoutReview
+                      shippingMethod={form.getFieldValue('shippingMethod')}
+                      form={form} onBack={handleBack} isSubmitting={isPending} />
+                  )}
+                </AnimatePresence>
+              </form.Root>
+            </form.AppForm>
+          </div>
+          <div className='lg:col-span-2'>
+            <CheckoutSummary
+              shippingMethod={form.getFieldValue('shippingMethod')}
+              couponDiscount={couponDiscount}
+              couponCode={appliedCouponCode}
+            />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
