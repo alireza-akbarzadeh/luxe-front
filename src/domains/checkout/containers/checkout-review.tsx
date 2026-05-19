@@ -1,31 +1,25 @@
 // app/checkout/components/checkout-review.tsx
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 import {
-  IconChevronLeft,
   IconCreditCard,
-  IconLock,
   IconPackage,
   IconTruck
 } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useCart } from '~/src/hooks/useCartController';
+import type { CheckoutFormValues } from '../checkout.schema';
 
 
 interface CheckoutReviewProps {
-  form: any;
+  formValues: CheckoutFormValues;
   onBack: () => void;
-  isSubmitting: boolean;
-  shippingMethod:string
 }
 
 export function CheckoutReview(props: CheckoutReviewProps) {
-  const { form, onBack, isSubmitting, shippingMethod} = props
-  const { items, subtotal } = useCart();
-  const values = form.getFieldValues();
-  const shippingCost = 10
-  const tax = subtotal * 0.08;
-  const total = subtotal + shippingCost + tax;
+  const { formValues, onBack } = props
+  const { items } = useCart();
+
 
   return (
     <motion.div
@@ -37,7 +31,6 @@ export function CheckoutReview(props: CheckoutReviewProps) {
     >
       <h2 className='mb-6 text-2xl font-bold'>Review Your Order</h2>
 
-      {/* Shipping Address Summary */}
       <div className='bg-card border-border/50 rounded-xl border p-4'>
         <div className='mb-2 flex items-center justify-between'>
           <h3 className='flex items-center gap-2 font-medium'>
@@ -48,18 +41,18 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           </Button>
         </div>
         <p className='text-muted-foreground text-sm'>
-          {values.firstName} {values.lastName}
+          {formValues.firstName} {formValues.lastName}
           <br />
-          {values.addressLine1}
-          {values.addressLine2 && `, ${values.addressLine2}`}
+          {formValues.addressLine1}
+          {formValues.addressLine2 && `, ${formValues.addressLine2}`}
           <br />
-          {values.city}, {values.state} {values.zip}
+          {formValues.city}, {formValues.state} {formValues.zip}
           <br />
-          {values.phone}
+          {formValues.phone}
         </p>
         <p className='mt-2 text-sm'>
           <span className='text-muted-foreground'>Shipping Method:</span>{' '}
-          {shippingMethod}
+          {formValues.shippingMethod}
         </p>
       </div>
 
@@ -74,9 +67,9 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           </Button>
         </div>
         <p className='text-muted-foreground text-sm'>
-          Card ending in {values.cardNumber.slice(-4) || '****'}
+          Card ending in {formValues.cardNumber.slice(-4) || '****'}
           <br />
-          {values.cardName || 'Name on card'}
+          {formValues.cardName || 'Name on card'}
         </p>
       </div>
 
@@ -108,29 +101,6 @@ export function CheckoutReview(props: CheckoutReviewProps) {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className='flex justify-between pt-6'>
-        <Button variant='ghost' onClick={onBack} className='rounded-full'>
-          <IconChevronLeft className='mr-2 h-4 w-4' /> Back
-        </Button>
-        <Button type='submit' disabled={isSubmitting} className='min-w-[200px] rounded-full'>
-          {isSubmitting ? (
-            <span className='flex items-center gap-2'>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                className='h-4 w-4 rounded-full border-2 border-current border-t-transparent'
-              />
-              Processing...
-            </span>
-          ) : (
-            <>
-              <IconLock className='mr-2 h-4 w-4' />
-              Place Order - ${total.toFixed(2)}
-            </>
-          )}
-        </Button>
       </div>
     </motion.div>
   );

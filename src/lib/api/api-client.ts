@@ -2,6 +2,7 @@
 import Axios, {
   AxiosError,
   HttpStatusCode,
+  isCancel,
   type AxiosRequestConfig,
   type AxiosResponse,
   type InternalAxiosRequestConfig
@@ -53,7 +54,10 @@ AXIOS_INSTANCE.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
+    if (isCancel(error) || error?.code === 'ERR_CANCELED') {
+      return Promise.reject(error);
 
+    }
     const showErrorToast = () => {
       let errorMessage = 'An unexpected error occurred';
       if (error.response?.data) {
@@ -61,8 +65,6 @@ AXIOS_INSTANCE.interceptors.response.use(
         errorMessage = data.message || data.error || JSON.stringify(data);
       } else if (error.request) {
         errorMessage = 'No response from server. Please check your network.';
-      } else {
-        errorMessage = error.message;
       }
       toast.error(errorMessage);
     };

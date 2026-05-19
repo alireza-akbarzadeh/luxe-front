@@ -1,135 +1,134 @@
-// app/checkout/components/checkout-shipping.tsx
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
+// app/checkout/containers/checkout-shipping.tsx
+'use client';
 
+import { motion } from 'framer-motion';
+import type { AppFormApi } from '~/src/components/forms/useAppForm';
+import { Label } from '~/src/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '~/src/components/ui/radio-group';
+import type { ModelsShippingMethod } from '~/src/services/-shipping-providers-get.schemas';
 
 interface CheckoutShippingProps {
-  form: any;
-  onNext: () => void;
+  form: AppFormApi;
+  shippingProviders: ModelsShippingMethod[];
 }
 
-export function CheckoutShipping({ form, onNext }: CheckoutShippingProps) {
-  const { data } = useGetShippingProviders()
+export function CheckoutShipping(props: CheckoutShippingProps) {
+  const { form, shippingProviders } = props
+
   return (
+
     <motion.div
-      key='shipping'
+      key="shipping"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className='space-y-6'
+      className="space-y-6"
     >
       <div>
-        <h2 className='mb-6 text-2xl font-bold'>Shipping Information</h2>
-        <div className='mb-8 space-y-4'>
-          <h3 className='font-medium'>Contact</h3>
-          <form.AppField name='email'>
-            {(field) => <field.TextField label='Email' type='email' placeholder='your@email.com' />}
-          </form.AppField>
-          <div className='flex items-center gap-2'>
-            <form.AppField name='newsletter'>
-              {(field) => <field.Checkbox id='newsletter' />}
-            </form.AppField>
-            <Label htmlFor='newsletter' className='text-sm font-normal'>
-              Email me with news and offers
-            </Label>
-          </div>
-        </div>
-        <div className='space-y-4'>
-          <h3 className='font-medium'>Shipping Address</h3>
-          <div className='grid grid-cols-2 gap-4'>
-            <form.AppField name='firstName'>
-              {(field) => <field.TextField label='First Name' placeholder='John' />}
-            </form.AppField>
-            <form.AppField name='lastName'>
-              {(field) => <field.TextField label='Last Name' placeholder='Doe' />}
-            </form.AppField>
-          </div>
-          <form.AppField name='addressLine1'>
-            {(field) => <field.TextField label='Address' placeholder='123 Main St' />}
-          </form.AppField>
-          <form.AppField name='addressLine2'>
+        <h2 className="mb-6 text-2xl font-bold">Shipping Information</h2>
+
+        <div className="mb-8 space-y-4">
+          <h3 className="font-medium">Contact</h3>
+
+          <form.AppField name="email">
             {(field) => (
-              <field.TextField label='Apartment, suite, etc. (optional)' placeholder='Apt 4B' />
+              <field.TextField label="Email" type="email" placeholder="your@email.com" />
             )}
           </form.AppField>
-          <div className='grid grid-cols-3 gap-4'>
-            <form.AppField name='city'>
-              {(field) => <field.TextField label='City' placeholder='New York' />}
-            </form.AppField>
-            <form.AppField name='state'>
-              {(field) => <field.TextField label='State' placeholder='NY' />}
-            </form.AppField>
-            <form.AppField name='zip'>
-              {(field) => <field.TextField label='ZIP Code' placeholder='10001' />}
+
+          <div className="flex items-center gap-2">
+            <form.AppField name="newsletter">
+              {(field) => <field.Checkbox label="Email me with news and offers" id="newsletter" />}
             </form.AppField>
           </div>
-          <form.AppField name='phone'>
-            {(field) => <field.InputPhone label='Phone' placeholder='(555) 123-4567' />}
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="font-medium">Shipping Address</h3>
+
+          <div className="grid grid-cols-2 gap-4">
+            <form.AppField name="firstName">
+              {(field) => <field.TextField label="First Name" placeholder="John" />}
+            </form.AppField>
+
+            <form.AppField name="lastName">
+              {(field) => <field.TextField label="Last Name" placeholder="Doe" />}
+            </form.AppField>
+          </div>
+
+          <form.AppField name="addressLine1">
+            {(field) => <field.TextField label="Address" placeholder="123 Main St" />}
+          </form.AppField>
+
+          <form.AppField name="addressLine2">
+            {(field) => (
+              <field.TextField
+                label="Apartment, suite, etc. (optional)"
+                placeholder="Apt 4B"
+              />
+            )}
+          </form.AppField>
+
+          <div className="grid grid-cols-3 gap-4">
+            <form.AppField name="city">
+              {(field) => <field.TextField label="City" placeholder="New York" />}
+            </form.AppField>
+
+            <form.AppField name="state">
+              {(field) => <field.TextField label="State" placeholder="NY" />}
+            </form.AppField>
+
+            <form.AppField name="zip">
+              {(field) => <field.TextField label="ZIP Code" placeholder="10001" />}
+            </form.AppField>
+          </div>
+
+          <form.AppField name="phone">
+            {(field) => <field.InputPhone label="Phone" placeholder="(555) 123-4567" />}
           </form.AppField>
         </div>
       </div>
-      <div className='pt-6'>
-        <h3 className='mb-4 font-medium'>Shipping Method</h3>
-        <form.AppField name='shippingMethod'>
+
+      <div className="pt-6">
+        <h3 className="mb-4 font-medium">Shipping Method</h3>
+
+        <form.AppField name="shippingMethod">
           {(field) => (
             <RadioGroup
-              value={String(field.state.value ?? '')}
+              value={field.state.value ?? ''}
               onValueChange={(val) => field.handleChange(val)}
-              className='space-y-3'
+              className="space-y-3"
             >
-              {data?.data?.map((method) => {
-                const value = String(method.id);
-
-                return (
-                  <Label
-                    key={method.id}
-                    htmlFor={value}
-                    className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${field.state.value === value
-                        ? 'border-accent bg-accent/5'
-                        : 'border-border hover:border-accent/50'
-                      }`}
-                  >
-                    <div className='flex items-center gap-3'>
-                      <RadioGroupItem value={value} id={value} />
-
-                      <div>
-                        <div className='font-medium'>
-                          {method.name || 'Unnamed'} Shipping
-                        </div>
-
-                        <p className='text-muted-foreground text-sm'>
-                          {method.description}
-                        </p>
+              {shippingProviders.map((method) => (
+                <Label
+                  key={method.id}
+                  htmlFor={`shipping-${method.id}`}
+                  className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${field.state.value === method.name
+                    ? 'border-accent bg-accent/5'
+                    : 'border-border hover:border-accent/50'
+                    }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value={method.name ?? ''} id={`shipping-${method.id}`} />
+                    <div>
+                      <div className="font-medium">
+                        {method.name || 'Unnamed'} Shipping
                       </div>
+                      <p className="text-muted-foreground text-sm">
+                        {method.description}
+                      </p>
                     </div>
+                  </div>
 
-                    <span className='font-medium'>
-                      {method.price === 0
-                        ? 'Free'
-                        : `$${(method.price ?? 0).toFixed(2)}`}
-                    </span>
-                  </Label>
-                );
-              })}
+                  <span className="font-medium">
+                    {method.price === 0 ? 'Free' : `$${(method.price ?? 0).toFixed(2)}`}
+                  </span>
+                </Label>
+              ))}
             </RadioGroup>
           )}
         </form.AppField>
       </div>
-      <div className='flex justify-between pt-6'>
-        <Link href='/cart'>
-          <Button variant='ghost' className='rounded-full'>
-            <IconChevronLeft className='mr-2 h-4 w-4' /> Back to Cart
-          </Button>
-        </Link>
-        <Button onClick={onNext} className='rounded-full'>
-          Continue to Payment <IconChevronRight className='ml-2 h-4 w-4' />
-        </Button>
-      </div>
-    </motion.div>
+    </motion.div >
   );
 }
