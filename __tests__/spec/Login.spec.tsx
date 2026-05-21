@@ -1,9 +1,7 @@
 import {test,expect} from "@playwright/test"
+import {createUser} from "~/__tests__/utils/factories/user.factory";
 
-const TEST_USER = {
-  email: 'e2e@example.com',
-  password: 'E2ePass123!',
-};
+const TEST_USER = createUser()
 
 test.describe("Login flow",()=>{
   test.beforeEach(async ({page})=>{

@@ -64,9 +64,6 @@ export function LoginDomain() {
             <h1 className='mb-2 text-3xl font-bold'>Welcome back</h1>
             <p className='text-muted-foreground'>Enter your credentials to access your account</p>
           </div>
-
-
-
           <form.AppForm>
             <form.Root
               onSubmit={(e) => {

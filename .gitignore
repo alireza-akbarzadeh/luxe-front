@@ -8,6 +8,7 @@
 /__tests_results__/
 /playwright-report/
 /playwright/.cache/
+/__tests_results__
 
 # next.js
 /.next/
@@ -38,3 +39,5 @@ next-env.d.ts
 
 /src/services
 openapi3.json
+
+.env
