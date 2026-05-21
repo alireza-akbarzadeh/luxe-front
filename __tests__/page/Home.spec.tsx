@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import config from '~/_config';
+import config from '@/_config';
 
 test('should display authenticated user greeting', async ({ page }) => {
   await page.goto(`http://${config.server.host}:${config.server.port}`);
-  // Wait for loading to complete (not showing "Loading..")
+  // Wait for loading to complete (not showing "Loading...")
   await expect(page.getByText(/Loading\.\./i)).not.toBeVisible({ timeout: 10000 });
   // Verify that the greeting with user ID is visible (authenticated state)
   await expect(page.getByText(/Hello, /i)).toBeVisible();

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { IconCheck, IconMail } from '@tabler/icons-react';
+import {  IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAppForm } from '~/src/components/forms/useAppForm';
@@ -65,26 +65,7 @@ export function LoginDomain() {
             <p className='text-muted-foreground'>Enter your credentials to access your account</p>
           </div>
 
-          {/* Demo Credentials Notice */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className='bg-accent/10 border-accent/20 mb-6 rounded-xl border p-4'
-          >
-            <div className='flex items-start gap-3'>
-              <IconCheck className='text-accent mt-0.5 h-5 w-5' />
-              <div className='text-sm'>
-                <p className='mb-1 font-medium'>Demo Account</p>
-                <p className='text-muted-foreground'>
-                  Email: <span className='text-foreground font-mono'>demo@luxe.com</span>
-                </p>
-                <p className='text-muted-foreground'>
-                  Password: <span className='text-foreground font-mono'>demo123</span>
-                </p>
-              </div>
-            </div>
-          </motion.div> */}
+
 
           <form.AppForm>
             <form.Root
@@ -95,13 +76,14 @@ export function LoginDomain() {
               }}
               className='space-y-6'
             >
-              {/* Show error from store if any */}
-              {error && <div className='mb-2 text-sm text-red-500'>{error}</div>}
+
+              {error && <div data-testid='form-error' className='mb-2 text-sm text-red-500'>{error}</div>}
               {/* Email Field */}
               <form.AppField name='email'>
                 {(field) => (
                   <field.TextField
                     startIcon={IconMail}
+                    data-testid='email-input'
                     label='Email address'
                     placeholder='name@example.com'
                     className='h-12 pl-10'
@@ -112,11 +94,13 @@ export function LoginDomain() {
               {/* Password Field */}
               <form.AppField name='password'>
                 {(field) => (
-                  <field.InputPassword label='Password' placeholder='Enter your password' />
+                  <field.InputPassword
+                      data-testid='password-input'
+                      label='Password'
+                      placeholder='Enter your password' />
                 )}
               </form.AppField>
-
-              <form.Submit isPending={isPending} label='login' />
+              <form.Submit  data-testid='login-submit' isPending={isPending} label='login' />
             </form.Root>
           </form.AppForm>
 

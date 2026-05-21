@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-import config from './_config';
+import config from '@/_config';
 
 /**
  * Read environment variables from file.
@@ -13,6 +13,7 @@ import config from './_config';
  */
 export default defineConfig({
   testDir: '__tests__',
+  globalSetup: './__tests__/global-setup.ts',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {

@@ -36,5 +36,3 @@ export const { useAppForm } = createFormHook({
   formContext
 });
 
-
-export type AppFormApi = ReturnType<typeof useAppForm>;

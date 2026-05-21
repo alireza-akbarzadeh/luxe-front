@@ -61,9 +61,11 @@ export function FieldMessage({ asChild, className, children, ...props }: FieldMe
 
   if (!message && !children) return null;
 
+  const testId = field.name ? `${field.name}-error` : 'field-error';
+
   return (
     <Comp
-      className={cn(
+        data-testid={testId}       className={cn(
         'text-[10px] font-bold',
         message ? 'text-destructive' : 'text-muted-foreground',
         className
