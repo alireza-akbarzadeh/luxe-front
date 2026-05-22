@@ -2,13 +2,13 @@ import { IconTag } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePostCouponsValidate } from '~/src/services/-coupons-validate-post';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export function CouponCode() {
   const { mutate: validateCoupon, isPending: isValidating } = usePostCouponsValidate();
-  const { items, subtotal } = useCart();
+  const { items, subtotal } = useCartController();
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);

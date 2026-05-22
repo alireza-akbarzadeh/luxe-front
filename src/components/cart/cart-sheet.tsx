@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { IconMinus, IconPlus, IconShoppingBag, IconTrash } from '@tabler/icons-react';
 import { useCartStore } from '~/src/store/card.store';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCart } from '@/hooks/useCartController';
+import { useCartController } from '@/hooks/useCartController';
 import Link from 'next/link';
 
 export function CartSheet() {
@@ -21,7 +21,7 @@ export function CartSheet() {
     isLoading,
     isUpdating,
     isRemoving
-  } = useCart();
+  } = useCartController();
 
   const getItemVariant = (item: { color: string; size: string }) => {
     const parts = [item.color, item.size].filter(Boolean);

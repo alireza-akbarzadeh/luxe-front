@@ -3,10 +3,19 @@
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { setAuthCookies, clearAuthCookies } from '@/lib/auth-helpers';
-import type { DtoLoginResponse } from '../services/-auth-login-post.schemas';
-import type { DtoRegisterResponse } from '../services/-auth-register-post.schemas';
-import type { DtoRefreshResponse } from '../services/-auth-refresh-post.schemas';
-import { BASE_URL } from '../lib/api/api-client';
+import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
+import type { DtoRefreshResponse } from '@/services/-auth-refresh-post.schemas';
+import { BASE_URL } from '@/lib/api/api-client';
+
+function isNextRedirectError(error: unknown): error is { digest: string } {
+  return (
+      error !== null &&
+      typeof error === 'object' &&
+      'digest' in error &&
+      typeof (error as { digest: string }).digest === 'string' &&
+      (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')
+  );
+}
 
 /**
  * Get callback URL from referer header
@@ -50,9 +59,8 @@ async function handleAuthResponse<
   redirect(callbackUrl);
 }
 
-/**
- * Login action
- */
+
+
 export async function loginAction(formData: FormData) {
   try {
     const email = formData.get('email') as string;
@@ -70,18 +78,19 @@ export async function loginAction(formData: FormData) {
       credentials: 'include'
     });
 
-    const json = (await res.json()) as DtoLoginResponse;
+    const json = await res.json() as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json, rememberMe);
     if (error) return error;
   } catch (error) {
+    // Rethrow Next.js redirect errors so the framework can handle them
+    if (isNextRedirectError(error)) {
+      throw error;
+    }
     console.error('Login error:', error);
     return { error: 'An unexpected error occurred during login' };
   }
 }
 
-/**
- * Register action
- */
 export async function registerAction(formData: FormData) {
   try {
     const email = formData.get('email') as string;
@@ -107,10 +116,14 @@ export async function registerAction(formData: FormData) {
       credentials: 'include'
     });
 
-    const json = (await res.json()) as DtoRegisterResponse;
+    const json = await res.json() as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json);
     if (error) return error;
   } catch (error) {
+    // Rethrow Next.js redirect errors
+    if (isNextRedirectError(error)) {
+      throw error;
+    }
     console.error('Registration error:', error);
     return { error: 'An unexpected error occurred during registration' };
   }

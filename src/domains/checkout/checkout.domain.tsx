@@ -2,10 +2,10 @@
 
 import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
-import { Button } from '~/src/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { useCart } from '~/src/hooks/useCartController';
-import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
+import { useCartController } from '@/hooks/useCartController';
+import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutSteps } from './components/checkout-steps';
 import { CheckoutSummary } from './components/checkout-summary';
@@ -19,12 +19,11 @@ import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useCheckoutCoupon } from './hooks/useCheckoutCoupon';
 import { useCheckoutTotals } from './hooks/useCheckoutForm';
 import { useCheckoutSubmit } from './hooks/useCheckoutSubmit';
-import Link from "next/link";
 
 export default function CheckoutDomain() {
-  const { items, isLoading: isLoadingCart } = useCart();
+  const { items, isLoading: isLoadingCart } = useCartController();
   const { data: shippingProvidersData, isLoading: isLoadingShipping } = useGetShippingProviders();
-  const { currentStep, handleNext, handleBack, isFirstStep } = useCheckoutSteps();
+  const { currentStep, handleNext, handleBack } = useCheckoutSteps();
   const { submitOrder, isPending } = useCheckoutSubmit();
   const form = useCheckoutForm({ onSubmit: submitOrder });
 
@@ -36,13 +35,13 @@ export default function CheckoutDomain() {
     (sum, i) => sum + (i.price ?? 0) * (i.quantity ?? 0),
     0
   );
-  const { couponDiscount, appliedCouponCode, applyCoupon, isApplyingCoupon } =
+  const { couponDiscount, appliedCouponCode } =
     useCheckoutCoupon({
       subtotal: subtotalFromCart,
       setCouponCode: (code) => form.setFieldValue('couponCode', code),
     });
 
-  const { subtotal, tax, total } = useCheckoutTotals({
+  const {  total } = useCheckoutTotals({
     items,
     shippingPrice: selectedShippingPrice,
     couponDiscount,
@@ -79,32 +78,35 @@ export default function CheckoutDomain() {
                   {currentStep === 'Payment' && (
                     <CheckoutPayment form={form} />
                   )}
-                  {currentStep === 'Review' && <CheckoutReview form={form} />}
+                  {currentStep === 'Review' && <CheckoutReview  formValues={form.state.values}  />}
                 </AnimatePresence>
 
                 <div className='flex justify-between pt-6'>
-                  {!isFirstStep && (
-                    <Button variant='ghost' onClick={handleBack} className='rounded-full'>
-                      <IconChevronLeft className='mr-2 h-4 w-4' /> Back
-                    </Button>
-                  )}
                   {currentStep === 'Review' ? (
-                    <form.Submit
-                      className='min-w-[180px] rounded-full bg-accent text-accent-foreground py-4.5'
-                      isPending={isPending}
-                      label={`Place Order – $${total.toFixed(2)}`}
-                    />
-                  ) : (
-                      <div className="flex justify-between w-full items-center">
+                      <>
                         <Button
-                            asChild
+                            onClick={handleBack}
                             variant="link"
                             className='py-4.5 px-6'
                         >
-                          <Link href="/cart">
+                          <IconChevronLeft className='ml-2 h-4 w-4' />
+                          back to payment
+                        </Button>
+                        <form.Submit
+                            className='w-50 rounded-full bg-accent text-accent-foreground py-4.5'
+                            isPending={isPending}
+                            label={`Place Order – $${total.toFixed(2)}`}
+                        />
+                      </>
+                  ) : (
+                      <div className="flex justify-between w-full items-center">
+                        <Button
+                            onClick={handleBack}
+                            variant="link"
+                            className='py-4.5 px-6'
+                        >
                             <IconChevronLeft className='ml-2 h-4 w-4' />
                             {currentStep === 'Shipping' ? 'back to card' : 'back to shipping'}
-                          </Link>
                         </Button>
                           <Button
                             onClick={handleNext}
@@ -119,7 +121,6 @@ export default function CheckoutDomain() {
               </form.Root>
             </form.AppForm>
           </div>
-
           <div className='lg:col-span-2'>
             <CheckoutSummary
               shippingMethod={shippingMethod}

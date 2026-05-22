@@ -10,7 +10,7 @@ import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
 import { useDeleteCartItems } from '../services/-cart-items-delete';
 import { useUser } from './useUser';
 
-export const useCart = () => {
+export const useCartController = () => {
   const { isAuthenticated } = useUser();
   const queryClient = useQueryClient();
   const { setItems, addOptimisticItem, updateOptimisticQuantity, removeOptimisticItem } =
@@ -71,8 +71,8 @@ export const useCart = () => {
         }
         toast.error('Failed to update quantity');
       },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['/cart'] });
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['/cart'] });
       }
     }
   });

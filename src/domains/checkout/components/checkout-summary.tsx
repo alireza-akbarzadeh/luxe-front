@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Separator } from '~/src/components/ui/separator';
 import { IconLock, IconShieldCheck } from '@tabler/icons-react';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
 
 interface CheckoutSummaryProps {
@@ -17,7 +17,7 @@ export function CheckoutSummary({
   couponDiscount = 0,
   couponCode = ''
 }: CheckoutSummaryProps) {
-  const { items, subtotal } = useCart();
+  const { items, subtotal } = useCartController();
 
   const { data: { data } = {} } = useGetShippingProviders();
 

@@ -1,5 +1,6 @@
 import { IconCreditCard, IconMapPin, IconPackage } from '@tabler/icons-react';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
+import {useRouter} from "next/navigation";
 
 
 export type CheckoutSteps = 'Shipping' | 'Payment' | 'Review';
@@ -15,6 +16,7 @@ export const steps = [
 
 
 export function useCheckoutSteps() {
+  const {push}=useRouter()
   const [currentStepRaw, setCurrentStep] = useQueryState<CheckoutSteps>(
     'step',
     parseAsStringLiteral(stepNames).withDefault('Shipping')
@@ -26,15 +28,19 @@ export function useCheckoutSteps() {
   const isFirstStep = currentIndex === 0;
   const isLastStep = currentIndex === stepNames.length - 1;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!isLastStep) {
-      setCurrentStep(stepNames[currentIndex + 1] as CheckoutSteps);
+      await  setCurrentStep(stepNames[currentIndex + 1] as CheckoutSteps);
     }
   };
 
-  const handleBack = () => {
+  const handleBack = async () => {
+    if (currentStep === "Shipping") {
+      push("/cart")
+      return
+    }
     if (!isFirstStep) {
-      setCurrentStep(stepNames[currentIndex - 1] as CheckoutSteps);
+      await  setCurrentStep(stepNames[currentIndex - 1] as CheckoutSteps);
     }
   };
 

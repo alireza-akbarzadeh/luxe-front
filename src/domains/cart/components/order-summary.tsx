@@ -9,10 +9,10 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 
 export function OrderSummary() {
-  const { subtotal, items } = useCart();
+  const { subtotal, items } = useCartController();
 
   const totalDiscount = items.reduce((sum, item) => sum + (item.discount || 0), 0);
 

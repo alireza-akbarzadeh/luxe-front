@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartItem } from './components/cart-item';
 import { OrderSummary } from './components/order-summary';
@@ -13,7 +13,7 @@ import { ProductSuggestion } from './components/product-suggestin';
 import { EmptyCart } from '../checkout/components/empty-checkout';
 
 export default function CartPage() {
-  const { items, isLoading, error, isUpdating, isRemoving } = useCart();
+  const { items, isLoading, error, isUpdating, isRemoving } = useCartController();
 
   if (isLoading) {
     return (

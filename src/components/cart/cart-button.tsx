@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IconShoppingBag } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '~/src/store/card.store';
-import { useCart } from '@/hooks/useCartController';
+import { useCartController } from '@/hooks/useCartController';
 
 interface CartButtonProps {
   showLabel?: boolean;
 }
 
 export function CartButton({ showLabel = false }: CartButtonProps) {
-  const { itemCount } = useCart();
+  const { itemCount } = useCartController();
   const setOpen = useCartStore((state) => state.setOpen);
 
   return (

@@ -2,13 +2,13 @@
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import { usePostOrders } from '~/src/services/-orders-post';
 import type { CheckoutFormValues } from '../checkout.schema';
 
 export function useCheckoutSubmit() {
   const router = useRouter();
-  const { clearCart } = useCart();
+  const { clearCart } = useCartController();
   const { mutateAsync, isPending } = usePostOrders();
 
   const submitOrder = async (value: CheckoutFormValues) => {

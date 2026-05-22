@@ -26,13 +26,9 @@ export function useCheckoutCoupon({
   const applyCoupon = (code: string) => {
     if (!code) {
       setCouponDiscount(0);
-
       setAppliedCouponCode('');
-
       setCouponCode('');
-
       toast.info('Coupon removed');
-
       return;
     }
 

@@ -1,9 +1,9 @@
 // app/checkout/hooks/useCartTotal.ts (or rename to useCheckoutTotals)
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import { useCheckoutStore } from '../store/checkout.store';
 
 export function useCheckoutTotals() {
-  const { items } = useCart();
+  const { items } = useCartController();
   const { selectedShippingPrice, couponDiscount } = useCheckoutStore();
 
   const subtotal = items.reduce(

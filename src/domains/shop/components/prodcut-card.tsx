@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { IconShoppingBag, IconStar } from '@tabler/icons-react';
-import { useCart } from '@/hooks/useCartController';
+import { useCartController } from '@/hooks/useCartController';
 import type { ModelsProduct } from '~/src/services/-categories-bulk-post.schemas';
 import { LikeButton } from '~/src/components/buttons/like-button';
 
@@ -16,7 +16,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
-  const { addItem, isAdding } = useCart();
+  const { addItem, isAdding } = useCartController();
 
   const handleQuickAdd = async (e: React.MouseEvent) => {
     e.preventDefault();

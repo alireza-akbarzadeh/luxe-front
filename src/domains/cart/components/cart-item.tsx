@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import Image from 'next/image';
 import { Button } from '~/src/components/ui/button';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 
 interface CartItemProps {
@@ -17,7 +17,7 @@ interface CartItemProps {
 
 export function CartItem(props: CartItemProps) {
   const { cart, index, isRemovingThis, isUpdatingThis, cartItemId } = props;
-  const { updateQuantity, removeItem } = useCart();
+  const { updateQuantity, removeItem } = useCartController();
 
   return (
     <motion.div

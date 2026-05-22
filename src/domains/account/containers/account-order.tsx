@@ -6,6 +6,7 @@ import { IconChevronLeft, IconChevronRight, IconPackage } from '@tabler/icons-re
 import { format } from 'date-fns';
 import { useGetAccountOrders } from '~/src/services/-account-orders-get';
 import { statusColors } from '../data';
+import {useGetOrdersMy} from "@/services/-orders-my-get";
 
 const PAGE_SIZE = 5;
 
@@ -13,7 +14,7 @@ export function AccountOrder() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
 
-  const { data: response, isLoading, isError, error } = useGetAccountOrders({});
+  const { data: response, isLoading, isError, error } = useGetOrdersMy({});
 
   const ordersData = response?.data?.orders;
   const totalOrders = response?.data?.total || 0;

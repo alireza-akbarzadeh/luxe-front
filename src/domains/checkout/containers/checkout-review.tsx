@@ -7,18 +7,17 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import type { CheckoutFormValues } from '../checkout.schema';
 
 
 interface CheckoutReviewProps {
   formValues: CheckoutFormValues;
-  onBack: () => void;
 }
 
 export function CheckoutReview(props: CheckoutReviewProps) {
-  const { formValues, onBack } = props
-  const { items } = useCart();
+  const { formValues } = props
+  const { items } = useCartController();
 
 
   return (
@@ -36,17 +35,17 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           <h3 className='flex items-center gap-2 font-medium'>
             <IconTruck className='h-4 w-4' /> Shipping Address
           </h3>
-          <Button variant='ghost' size='sm' onClick={onBack} className='text-accent'>
+          <Button variant='ghost' size='sm'  className='text-accent'>
             Edit
           </Button>
         </div>
         <p className='text-muted-foreground text-sm'>
           {formValues.firstName} {formValues.lastName}
           <br />
-          {formValues.addressLine1}
-          {formValues.addressLine2 && `, ${formValues.addressLine2}`}
+          {formValues?.addressLine1}
+          {formValues?.addressLine2 && `, ${formValues.addressLine2}`}
           <br />
-          {formValues.city}, {formValues.state} {formValues.zip}
+          {formValues?.city}, {formValues.state} {formValues.zip}
           <br />
           {formValues.phone}
         </p>
@@ -62,7 +61,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           <h3 className='flex items-center gap-2 font-medium'>
             <IconCreditCard className='h-4 w-4' /> Payment Method
           </h3>
-          <Button variant='ghost' size='sm' onClick={onBack} className='text-accent'>
+          <Button variant='ghost' size='sm'  className='text-accent'>
             Edit
           </Button>
         </div>
@@ -79,7 +78,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           <IconPackage className='h-4 w-4' /> Items ({items.length})
         </h3>
         <div className='space-y-3'>
-          {items.map((item) => (
+          {items?.map((item) => (
             <div key={`${item.id}-${item.color}-${item.size}`} className='flex items-center gap-3'>
               <div className='bg-muted relative h-12 w-12 shrink-0 overflow-hidden rounded-lg'>
                 <Image src={item.image || ""} alt={item.name || ""} fill className='object-cover' />

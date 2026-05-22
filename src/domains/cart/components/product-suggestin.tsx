@@ -3,13 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
-import { useCart } from '~/src/hooks/useCartController';
+import { useCartController } from '~/src/hooks/useCartController';
 import { Skeleton } from '@/components/ui/skeleton';
 import React, { useMemo } from 'react';
 import { IconAlertCircle } from '@tabler/icons-react';
 
 export function ProductSuggestion() {
-  const { items } = useCart();
+  const { items } = useCartController();
 
   // Create a stable key from the product IDs (sorted, unique, joined)
   const productIdsKey = useMemo(() => {

@@ -35,8 +35,6 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
     cardName: '',
     expiry: '',
     cvc: '',
-    saveInfo: false,
-    newsletter: false,
     couponCode: '',
   };
 

@@ -9,7 +9,7 @@ import { ProductBadges } from './product-badges';
 import ProductColors from './product-colors';
 import ProductQuntity from './product-quntity';
 import { ProductSized } from './product-sized';
-import { useCart } from '@/hooks/useCartController';
+import { useCartController } from '@/hooks/useCartController';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -20,7 +20,7 @@ interface ProductInfoProps {
 
 export function ProductInfo(props: ProductInfoProps) {
   const { product, is_liked } = props;
-  const { addItem } = useCart();
+  const { addItem } = useCartController();
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);

@@ -15,7 +15,6 @@ export function CheckoutShipping(props: CheckoutShippingProps) {
   const { form, shippingProviders } = props
 
   return (
-
     <motion.div
       key="shipping"
       initial={{ opacity: 0, x: 20 }}
