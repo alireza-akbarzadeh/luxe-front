@@ -19,6 +19,7 @@ import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useCheckoutCoupon } from './hooks/useCheckoutCoupon';
 import { useCheckoutTotals } from './hooks/useCheckoutForm';
 import { useCheckoutSubmit } from './hooks/useCheckoutSubmit';
+import Link from "next/link";
 
 export default function CheckoutDomain() {
   const { items, isLoading: isLoadingCart } = useCart();
@@ -94,13 +95,25 @@ export default function CheckoutDomain() {
                       label={`Place Order – $${total.toFixed(2)}`}
                     />
                   ) : (
-                    <Button
-                      onClick={handleNext}
-                      className='rounded-full bg-accent text-accent-foreground py-4.5 px-6'
-                    >
-                      {currentStep === 'Shipping' ? 'Payment' : 'Review'}
-                      <IconChevronRight className='ml-2 h-4 w-4' />
-                    </Button>
+                      <div className="flex justify-between w-full items-center">
+                        <Button
+                            asChild
+                            variant="link"
+                            className='py-4.5 px-6'
+                        >
+                          <Link href="/cart">
+                            <IconChevronLeft className='ml-2 h-4 w-4' />
+                            {currentStep === 'Shipping' ? 'back to card' : 'back to shipping'}
+                          </Link>
+                        </Button>
+                          <Button
+                            onClick={handleNext}
+                            className='rounded-full bg-accent text-accent-foreground py-4.5 px-6'
+                          >
+                            {currentStep === 'Shipping' ? 'Payment' : 'Review'}
+                            <IconChevronRight className='ml-2 h-4 w-4' />
+                          </Button>
+                      </div>
                   )}
                 </div>
               </form.Root>

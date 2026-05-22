@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { UserPayload } from '@/lib/auth-server';
-import { getClientUser } from '../actions/users.actions';
+import { getClientUser } from '@/actions/users.actions';
 
 export function useUser() {
   const [user, setUser] = useState<UserPayload | null>(null);

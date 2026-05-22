@@ -54,7 +54,3 @@ test.describe('Button component', () => {
     await expect(component).toHaveAttribute('href', '/dashboard');
   });
 });
-
-
-// npx playwright init --ct
-// npm install -D @playwright/experimental-ct-react

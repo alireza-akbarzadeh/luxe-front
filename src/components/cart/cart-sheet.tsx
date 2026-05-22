@@ -161,18 +161,21 @@ export function CartSheet() {
 
                 {/* Action buttons: View Cart + Checkout */}
                 <div className='mt-3 flex flex-col gap-2'>
-                  <Button asChild variant='outline' className='w-full'>
-                    <Link href='/cart' onClick={() => setOpen(false)}>
-                      View Full Cart
-                    </Link>
-                  </Button>
+
+                  <div className="flex items-center justify-between gap-2">
+                    <Button variant='outline' size="lg" className="rounded-lg flex-1"  onClick={() => setOpen(false)}>
+                      Continue shopping
+                    </Button>
+                    <Button asChild variant='outline' size="lg" className='rounded-lg flex-1'>
+                      <Link href='/cart' onClick={() => setOpen(false)}>
+                        View Full Cart
+                      </Link>
+                    </Button>
+                  </div>
                   <Button asChild className='w-full' size='lg'>
                     <Link href='/checkout' onClick={() => setOpen(false)}>
                       Proceed to Checkout
                     </Link>
-                  </Button>
-                  <Button variant='ghost' className='w-full' onClick={() => setOpen(false)}>
-                    Continue shopping
                   </Button>
                 </div>
               </div>

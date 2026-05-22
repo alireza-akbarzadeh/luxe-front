@@ -2,13 +2,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { AppFormApi } from '~/src/components/forms/useAppForm';
 import { Label } from '~/src/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '~/src/components/ui/radio-group';
 import type { ModelsShippingMethod } from '~/src/services/-shipping-providers-get.schemas';
 
 interface CheckoutShippingProps {
-  form: AppFormApi;
+  form: any
   shippingProviders: ModelsShippingMethod[];
 }
 

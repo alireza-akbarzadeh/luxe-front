@@ -103,7 +103,6 @@ AXIOS_INSTANCE.interceptors.response.use(
         // Redirect to log in
         window.location.href = '/login?session=expired';
       }
-
       return Promise.reject(error);
     }
 

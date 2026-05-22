@@ -4,15 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import type { AppFormApi } from '~/src/components/forms/useAppForm';
 import { useGetCoupons } from '~/src/services/-coupons-get';
 import { AvailableCoupons } from '../components/available-coupons';
 import { useCheckoutTotals } from '../hooks/useCartTotal'; // or wherever totals are
 import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
 import { useCheckoutStore } from '../store/checkout.store';
+import type {AppFieldExtendedReactFormApi} from "@tanstack/react-form";
+import type {AppFormApi} from "@/components/forms/useAppForm";
 
 interface CheckoutPaymentProps {
-  form: AppFormApi
+  form: AppFormApi;
 }
 
 export function CheckoutPayment(props: CheckoutPaymentProps) {

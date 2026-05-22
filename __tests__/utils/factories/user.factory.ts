@@ -24,7 +24,7 @@ export function createRegisterUser(overrides?: Partial<RegisterUser>): RegisterU
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email().toLowerCase(),
-    phone: faker.phone.number('09#########'),
+    phone: `09${faker.string.numeric(9)}`,
     password,
     confirmPassword: password,
     acceptTerms: true,
