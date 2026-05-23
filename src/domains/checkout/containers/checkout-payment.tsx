@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { AvailableCoupons } from '../components/available-coupons';
@@ -10,7 +11,8 @@ import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
 import { useCheckoutStore } from '../store/checkout.store';
 import { useEffect } from 'react';
 import { useGetCouponsMy } from '@/services/-coupons-my-get';
-import type { CheckoutFormApi } from "@/domains/checkout/hooks/useCheckoutForm";
+import type { CheckoutFormApi } from '@/domains/checkout/hooks/useCheckoutForm';
+import type { CheckoutFormValues } from '../checkout.schema';
 
 interface CheckoutPaymentProps {
   form: CheckoutFormApi;
@@ -19,8 +21,7 @@ interface CheckoutPaymentProps {
 export function CheckoutPayment(props: CheckoutPaymentProps) {
   const { form } = props;
   const { subtotal, couponDiscount, total } = useCheckoutTotals();
-  const couponCode = form.getFieldValue("couponCode")
-  console.log(couponCode);
+  const couponCode = form.getFieldValue('couponCode');
 
   const { data: couponsData, isLoading: couponsLoading } = useGetCouponsMy({
     order_total: total ?? 0,
@@ -71,8 +72,40 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
             Your payment information is encrypted and secure
           </p>
         </div>
+
+        {/* Payment Method Selector */}
+        <div className="mb-6">
+          <Label className="mb-3 block font-medium">Payment Method</Label>
+          <form.AppField name="paymentMethod">
+            {(field) => (
+              <RadioGroup
+                value={field.state.value}
+                onValueChange={(value) => field.handleChange(value as CheckoutFormValues["paymentMethod"])}
+                className="flex gap-4"
+              >
+                <Label
+                  htmlFor="payment-credit"
+                  className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 transition-colors ${field.state.value === 'credit_card' ? 'border-accent bg-accent/5' : 'border-border'
+                    }`}
+                >
+                  <RadioGroupItem value="credit_card" id="payment-credit" />
+                  <span>Credit Card</span>
+                </Label>
+                <Label
+                  htmlFor="payment-debit"
+                  className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 transition-colors ${field.state.value === 'debit_card' ? 'border-accent bg-accent/5' : 'border-border'
+                    }`}
+                >
+                  <RadioGroupItem value="debit_card" id="payment-debit" />
+                  <span>Debit Card</span>
+                </Label>
+              </RadioGroup>
+            )}
+          </form.AppField>
+        </div>
+
         <div className='space-y-4'>
-          {/* Card fields */}
+          {/* Card Number */}
           <form.AppField name='cardNumber'>
             {(field) => (
               <div className='relative'>
@@ -85,17 +118,29 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
               </div>
             )}
           </form.AppField>
-          <form.AppField name='cardName'>
-            {(field) => <field.TextField label='Name on Card' placeholder='John Doe' />}
-          </form.AppField>
+
+          {/* Expiry Fields (split) */}
           <div className='grid grid-cols-2 gap-4'>
-            <form.AppField name='expiry'>
-              {(field) => <field.TextField label='Expiry Date' placeholder='MM/YY' />}
+            <form.AppField name='expiryMonth'>
+              {(field) => (
+                <field.TextField label='Expiry Month' placeholder='MM' maxLength={2} />
+              )}
             </form.AppField>
-            <form.AppField name='cvc'>
-              {(field) => <field.TextField label='CVC' placeholder='123' />}
+            <form.AppField name='expiryYear'>
+              {(field) => (
+                <field.TextField label='Expiry Year' placeholder='YYYY' maxLength={4} />
+              )}
             </form.AppField>
           </div>
+
+          {/* CVC */}
+          <form.AppField name='cvv'>
+            {(field) => (
+              <field.TextField label='CVC' placeholder='123' maxLength={4} />
+            )}
+          </form.AppField>
+
+          {/* Save info toggle (UI only) */}
           <div className='flex items-center gap-2 pt-2'>
             <form.AppField name='saveInfo'>
               {(field) => (
@@ -104,7 +149,7 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
             </form.AppField>
           </div>
 
-          {/* Coupon Section */}
+          {/* Coupon Section (unchanged) */}
           <div className='pt-2'>
             <Label className='mb-2 block text-sm font-medium'>Coupon Code (optional)</Label>
             <div className='flex gap-2'>
@@ -141,7 +186,6 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
                   Remove
                 </Button>
               ) : (
-
                 <form.Subscribe
                   selector={(state) => state.values.couponCode}
                 >
@@ -202,6 +246,6 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
           )}
         </div>
       </div>
-    </motion.div >
+    </motion.div>
   );
 }

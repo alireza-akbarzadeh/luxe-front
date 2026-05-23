@@ -13,6 +13,7 @@ import {
   IconPackage,
   IconTruck
 } from '@tabler/icons-react';
+import { useGetOrdersMy } from '~/src/services/-orders-my-get';
 
 function generateOrderNumber() {
   return `LX-${Date.now().toString(36).toUpperCase()}-${Math.random()
@@ -24,6 +25,8 @@ function generateOrderNumber() {
 export function OrderConfirmatinDomain() {
   const [orderNumber, setOrderNumber] = useState('');
   const [copied, setCopied] = useState(false);
+  const { data: { data } = {} } = useGetOrdersMy()
+  const orders = data?.orders
 
   useEffect(() => {
     setOrderNumber(generateOrderNumber());
@@ -175,16 +178,14 @@ export function OrderConfirmatinDomain() {
                   className='flex flex-col items-center text-center'
                 >
                   <div
-                    className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${
-                      step.completed ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'
-                    }`}
+                    className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${step.completed ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'
+                      }`}
                   >
                     <step.icon className='h-5 w-5' />
                   </div>
                   <p
-                    className={`text-sm font-medium ${
-                      step.completed ? 'text-foreground' : 'text-muted-foreground'
-                    }`}
+                    className={`text-sm font-medium ${step.completed ? 'text-foreground' : 'text-muted-foreground'
+                      }`}
                   >
                     {step.title}
                   </p>

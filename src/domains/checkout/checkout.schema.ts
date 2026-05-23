@@ -1,24 +1,34 @@
 import { z } from 'zod';
 
 export const checkoutSchema = z.object({
-  email: z.email('Invalid email address'),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
+  // --- UI fields (not sent to backend) ---
+  email: z.string().email().optional(), // if you still want to display it
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  phone: z.string().optional(),
+  newsletter: z.boolean().default(false),
+  saveInfo: z.boolean().default(false),
+
+  // --- Backend fields ---
   addressLine1: z.string().min(1, 'Address is required'),
-  addressLine2: z.string().default(''),
+  addressLine2: z.string().optional().default(''),
   city: z.string().min(1, 'City is required'),
   state: z.string().min(1, 'State is required'),
   zip: z.string().min(1, 'ZIP code is required'),
   country: z.string().min(1, 'Country is required'),
-  phone: z.string().min(1, 'Phone is required'),
-  shippingMethod: z.string().min(1, 'Please select a shipping method').default('standard'),
-  cardNumber: z.string().min(1, 'Card number is required'),
-  cardName: z.string().min(1, 'Name on card is required'),
-  expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Invalid expiry date (MM/YY)'),
-  cvc: z.string().regex(/^\d{3,4}$/, 'Invalid CVC'),
-  saveInfo: z.boolean().default(false),
-  newsletter: z.boolean().default(false),
-  couponCode: z.string().default('')
+
+  // coupon
+  couponCode: z.string().optional().default(''),
+
+  // payment
+  paymentMethod: z.enum(['credit_card', 'debit_card']),
+  cardNumber: z.string().min(16).max(19, 'Card number must be 16-19 digits'),
+  expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Month must be 01-12'),
+  expiryYear: z.string().regex(/^\d{4}$/, 'Year must be 4 digits'),
+  cvv: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
+
+  // shipping
+  shippingProviderId: z.number().nullable().optional()
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;

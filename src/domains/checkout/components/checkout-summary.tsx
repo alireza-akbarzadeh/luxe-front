@@ -8,18 +8,19 @@ import { useGetShippingProviders } from '~/src/services/-shipping-providers-get'
 import { useCheckoutStore } from '../store/checkout.store';
 
 interface CheckoutSummaryProps {
-  shippingMethod: string;
+  shippingProviderId: number;
 }
 
 export function CheckoutSummary({
-  shippingMethod,
+  shippingProviderId,
 }: CheckoutSummaryProps) {
   const { items, subtotal } = useCartController();
   const { couponDiscount, appliedCouponCode } = useCheckoutStore();
 
   const { data: { data } = {} } = useGetShippingProviders();
 
-  const selectedShipping = data?.find((m) => m.name === shippingMethod);
+  const selectedShipping = data?.find((m) => m.id === shippingProviderId);
+
   const shippingCost = selectedShipping?.price || 0;
   // FIXME: tax should come front backend
   const tax = subtotal * 0.08;

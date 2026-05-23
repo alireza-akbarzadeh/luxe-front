@@ -28,9 +28,10 @@ export default function CheckoutDomain() {
 
   const { couponDiscount } = useCheckoutStore();
 
-  const shippingMethod = form.getFieldValue('shippingMethod');
+  const shippingProviderId = form.getFieldValue('shippingProviderId');
+
   const selectedShippingPrice =
-    shippingProvidersData?.data?.find((m) => m.name === shippingMethod)?.price ?? 0;
+    shippingProvidersData?.data?.find((m) => m.id === shippingProviderId)?.price ?? 0;
 
 
   const { total } = useCheckoutTotals({
@@ -115,7 +116,7 @@ export default function CheckoutDomain() {
             </form.AppForm>
           </div>
           <div className='lg:col-span-2'>
-            <CheckoutSummary shippingMethod={shippingMethod} />
+            <CheckoutSummary shippingProviderId={shippingProviderId as number} />
           </div>
         </div>
       </div>
