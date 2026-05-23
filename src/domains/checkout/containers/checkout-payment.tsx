@@ -4,47 +4,58 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import { useGetCoupons } from '~/src/services/-coupons-get';
 import { AvailableCoupons } from '../components/available-coupons';
-import { useCheckoutTotals } from '../hooks/useCartTotal'; // or wherever totals are
+import { useCheckoutTotals } from '../hooks/useCartTotal';
 import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
 import { useCheckoutStore } from '../store/checkout.store';
+import { useEffect } from 'react';
+import { useGetCouponsMy } from '@/services/-coupons-my-get';
+import type { CheckoutFormApi } from "@/domains/checkout/hooks/useCheckoutForm";
 
 interface CheckoutPaymentProps {
-  form: any;
+  form: CheckoutFormApi;
 }
-// @ts-ignore
-export function CheckoutPayment(props: CheckoutPaymentProps) {
-  const { form } = props
-  const { subtotal } = useCheckoutTotals();
 
-  const { data: couponsData, isLoading: couponsLoading } = useGetCoupons({ is_active: true });
-  const allCoupons = couponsData?.data?.coupons || [];
+export function CheckoutPayment(props: CheckoutPaymentProps) {
+  const { form } = props;
+  const { subtotal, couponDiscount, total } = useCheckoutTotals();
+
+  const couponCode = form.getFieldValue("couponCode");
+
+  const { data: couponsData, isLoading: couponsLoading } = useGetCouponsMy({
+    order_total: total ?? 0,
+  });
+  const applicableCoupons = couponsData?.data || [];
 
   const { appliedCouponCode } = useCheckoutStore();
 
-  const { applyCoupon, isApplyingCoupon } = useCheckoutCoupon({
+  const { applyCoupon, isApplyingCoupon, error: couponError } = useCheckoutCoupon({
     subtotal: subtotal ?? 0,
     setCouponCode: (code) => form.setFieldValue('couponCode', code),
   });
 
-  const currentCouponCode = form.getFieldValue('couponCode');
+  const currentCouponCode = couponCode || '';
 
-  const applicableCoupons = allCoupons.filter(
-      (coupon) => (coupon.minimum_order_amount ?? 0) <= (subtotal ?? 0)
-  );
+  useEffect(() => {
+    if (appliedCouponCode && appliedCouponCode !== currentCouponCode) {
+      form.setFieldValue('couponCode', appliedCouponCode);
+    }
+  }, [appliedCouponCode, currentCouponCode, form]);
 
   const handleApply = (code?: string) => {
     const codeToApply = code || currentCouponCode;
-    if (!codeToApply) return;
-    applyCoupon(codeToApply);
+    if (!codeToApply || codeToApply.trim() === '') return;
+    applyCoupon(codeToApply.trim().toUpperCase());
   };
 
   const handleClear = () => {
     form.setFieldValue('couponCode', '');
     applyCoupon('');
   };
-  // @ts-ignore
+
+  const isApplied = appliedCouponCode && couponDiscount > 0;
+  const isSameCoupon = currentCouponCode?.trim().toUpperCase() === appliedCouponCode;
+
   return (
     <motion.div
       key='payment'
@@ -106,27 +117,65 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
                       placeholder='Enter coupon code'
                       className='pl-9'
                       disabled={isApplyingCoupon}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleApply();
+                        }
+                      }}
                     />
                   )}
                 </form.AppField>
               </div>
-              {currentCouponCode ? (
-                <Button type='button' variant='outline' onClick={handleClear} className='rounded-full'>
+              {isApplied ? (
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={handleClear}
+                  className='rounded-full'
+                  disabled={isApplyingCoupon}
+                >
                   Remove
                 </Button>
               ) : (
                 <Button
                   type='button'
                   onClick={() => handleApply()}
-                  disabled={!currentCouponCode || isApplyingCoupon}
+                  disabled={
+                    !currentCouponCode ||
+                    currentCouponCode.trim() === '' ||
+                    isApplyingCoupon ||
+                    isSameCoupon
+                  }
                   className='rounded-full'
                 >
                   {isApplyingCoupon ? 'Applying...' : 'Apply'}
                 </Button>
               )}
             </div>
+
+            {/* Success/Error Messages */}
+            {isApplied && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className='mt-2 text-sm text-green-600'
+              >
+                ✓ Coupon applied! You saved ${couponDiscount.toFixed(2)}
+              </motion.p>
+            )}
+            {couponError && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className='mt-2 text-sm text-red-600'
+              >
+                {couponError}
+              </motion.p>
+            )}
           </div>
 
+          {/* Available Coupons Accordion */}
           {!couponsLoading && applicableCoupons.length > 0 && (
             <AvailableCoupons
               applicableCoupons={applicableCoupons}
@@ -137,6 +186,6 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
           )}
         </div>
       </div>
-    </motion.div>
+    </motion.div >
   );
 }

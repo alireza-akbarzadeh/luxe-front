@@ -40,7 +40,6 @@ export function TextField({
           onChange={(e) => field.handleChange(e.target.value)}
           className={cn(StartIcon && 'pl-12', EndIcon && 'pr-12', className)}
         />
-
         {EndIcon && (
           <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2' />
         )}

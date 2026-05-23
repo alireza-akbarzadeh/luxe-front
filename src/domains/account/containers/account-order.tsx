@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { IconChevronLeft, IconChevronRight, IconPackage } from '@tabler/icons-react';
 import { format } from 'date-fns';
-import { useGetAccountOrders } from '~/src/services/-account-orders-get';
 import { statusColors } from '../data';
 import {useGetOrdersMy} from "@/services/-orders-my-get";
 
@@ -14,7 +13,7 @@ export function AccountOrder() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
 
-  const { data: response, isLoading, isError, error } = useGetOrdersMy({});
+  const { data: response, isLoading, isError } = useGetOrdersMy({offset,limit:20});
 
   const ordersData = response?.data?.orders;
   const totalOrders = response?.data?.total || 0;
@@ -118,8 +117,8 @@ export function AccountOrder() {
           <div className='mb-4 space-y-3'>
             {order?.items?.map((item, idx) => {
               const price = typeof item.price === 'number' ? item.price : 0;
-              const imageUrl = item.image_url || null;
-              const productName = item.product_name || 'Product';
+              const imageUrl = item?.product?.images?.[0] || null;
+              const productName = item?.product?.name || 'Product';
               return (
                 <div
                   key={idx}

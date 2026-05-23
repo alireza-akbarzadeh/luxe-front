@@ -1,14 +1,14 @@
-// app/checkout/containers/checkout-shipping.tsx
 'use client';
 
 import { motion } from 'framer-motion';
 import { Label } from '~/src/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '~/src/components/ui/radio-group';
-import type { ModelsShippingMethod } from '~/src/services/-shipping-providers-get.schemas';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
+import type { CheckoutFormApi } from '../hooks/useCheckoutForm';
 
 interface CheckoutShippingProps {
-  form: any
-  shippingProviders: ModelsShippingMethod[];
+  form: CheckoutFormApi
+  shippingProviders: ModelsShippingProviders[]
 }
 
 export function CheckoutShipping(props: CheckoutShippingProps) {

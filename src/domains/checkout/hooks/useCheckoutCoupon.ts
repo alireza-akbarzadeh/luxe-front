@@ -1,80 +1,78 @@
+// app/checkout/hooks/useCheckoutCoupon.ts
 import { useState } from 'react';
-
 import { toast } from 'sonner';
-
-import { usePostCouponsValidate }
-  from '@/services/-coupons-validate-post';
+import { usePostCouponsValidate } from '@/services/-coupons-validate-post';
+import { useCheckoutStore } from '../store/checkout.store';
 
 interface Props {
   subtotal: number;
   setCouponCode: (code: string) => void;
 }
 
-export function useCheckoutCoupon({
-  subtotal,
-  setCouponCode
-}: Props) {
-  const [couponDiscount, setCouponDiscount] =
-    useState(0);
+export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
+  const [error, setError] = useState<string>('');
 
-  const [appliedCouponCode, setAppliedCouponCode] =
-    useState('');
+  // Use the global store instead of local state
+  const {
+    setCouponDiscount,
+    setAppliedCouponCode,
+    resetCoupon
+  } = useCheckoutStore();
 
-  const { mutate, isPending } =
-    usePostCouponsValidate();
+  const { mutate, isPending } = usePostCouponsValidate();
 
   const applyCoupon = (code: string) => {
-    if (!code) {
-      setCouponDiscount(0);
-      setAppliedCouponCode('');
+    // Clear coupon if no code provided
+    if (!code || code.trim() === '') {
+      resetCoupon();
       setCouponCode('');
+      setError('');
       toast.info('Coupon removed');
       return;
     }
 
+    // Clear previous error
+    setError('');
+
     mutate(
-      {
-        data: {
-          code,
-          order_total: subtotal
-        }
-      },
-      {
-        onSuccess: (res) => {
-          const discount =
-            res?.data?.discount_amount || 0;
-
-          setCouponDiscount(discount);
-
-          setAppliedCouponCode(code);
-
-          setCouponCode(code);
-
-          toast.success(
-            `Coupon applied! You save $${discount.toFixed(2)}`
-          );
+        {
+          data: {
+            code: code.trim().toUpperCase(),
+            order_total: subtotal,
+          },
         },
+        {
+          onSuccess: (res) => {
+            const discount = res?.data?.discount_amount || 0;
 
-        onError: (err) => {
-          toast.error(
-            err?.message ||
-              'Invalid or expired coupon'
-          );
+            // Update global store
+            setCouponDiscount(discount);
+            setAppliedCouponCode(code.trim().toUpperCase());
 
-          setCouponDiscount(0);
+            // Update form field
+            setCouponCode(code.trim().toUpperCase());
 
-          setAppliedCouponCode('');
+            setError('');
+            toast.success(`Coupon applied! You save $${discount.toFixed(2)}`);
+          },
 
-          setCouponCode('');
+          onError: (err: any) => {
+            const errorMessage = err?.message || 'Invalid or expired coupon';
+
+            setError(errorMessage);
+            toast.error(errorMessage);
+
+            // Clear everything on error
+            resetCoupon();
+            setCouponCode('');
+          },
         }
-      }
     );
   };
 
   return {
-    couponDiscount,
-    appliedCouponCode,
     applyCoupon,
-    isApplyingCoupon: isPending
+    isApplyingCoupon: isPending,
+    error,
   };
 }

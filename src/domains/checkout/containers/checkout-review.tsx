@@ -35,7 +35,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           <h3 className='flex items-center gap-2 font-medium'>
             <IconTruck className='h-4 w-4' /> Shipping Address
           </h3>
-          <Button variant='ghost' size='sm'  className='text-accent'>
+          <Button variant='ghost' size='sm' className='text-accent'>
             Edit
           </Button>
         </div>
@@ -61,7 +61,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           <h3 className='flex items-center gap-2 font-medium'>
             <IconCreditCard className='h-4 w-4' /> Payment Method
           </h3>
-          <Button variant='ghost' size='sm'  className='text-accent'>
+          <Button variant='ghost' size='sm' className='text-accent'>
             Edit
           </Button>
         </div>

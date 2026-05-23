@@ -11,7 +11,7 @@ export const checkoutSchema = z.object({
   zip: z.string().min(1, 'ZIP code is required'),
   country: z.string().min(1, 'Country is required'),
   phone: z.string().min(1, 'Phone is required'),
-  shippingMethod: z.enum(['standard', 'express', 'overnight']),
+  shippingMethod: z.string().min(1, 'Please select a shipping method').default('standard'),
   cardNumber: z.string().min(1, 'Card number is required'),
   cardName: z.string().min(1, 'Name on card is required'),
   expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Invalid expiry date (MM/YY)'),
