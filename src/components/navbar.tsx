@@ -29,11 +29,10 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? 'bg-background/80 border-border/50 border-b shadow-sm backdrop-blur-xl'
-            : 'bg-transparent'
-        }`}
+        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'bg-background/80 border-border/50 border-b shadow-sm backdrop-blur-xl'
+          : 'bg-transparent'
+          }`}
       >
         <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <div className='flex h-16 items-center justify-between lg:h-20'>
@@ -63,6 +62,12 @@ export function Navbar() {
 
             {/* Right Side Actions */}
             <div className='flex items-center gap-2'>
+              <Link href="/search">
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <search className="h-5 w-5" />
+                  <span className="sr-only">Search</span>
+                </Button>
+              </Link>
               <CartButton />
               <UserProfile />
               {/* Mobile Menu Button */}
