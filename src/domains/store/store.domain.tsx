@@ -50,7 +50,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductCard } from "../shop/components/prodcut-card";
 import { products, sortOptions, stores } from "./data";
 import { useStoreFilters } from "./hooks/useStoreFilter";
@@ -73,14 +73,14 @@ export function StoreDomain({ slug }: { slug: string }) {
     } = useStoreStore();
 
     // Track store view
-    useMemo(() => {
+    useEffect(() => {
         addRecentlyViewed({
             id: store.id,
             name: store.name,
             slug: store.slug,
             logo: store.logo,
         });
-    }, [store, addRecentlyViewed]);
+    }, [store.id, store.name, store.slug, store.logo, addRecentlyViewed]);
 
     const filters = useStoreFilters(store.categories);
     const {
@@ -665,7 +665,6 @@ export function StoreDomain({ slug }: { slug: string }) {
                 </div>
             </section>
 
-            <Footer />
         </div>
     );
 }
