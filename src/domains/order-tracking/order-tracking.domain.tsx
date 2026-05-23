@@ -19,6 +19,7 @@ import { PaymentDetails } from './components/payment-details';
 import { ShipmentTraking } from './components/shipment-traking';
 import { TrakingFooter } from './components/traking-footer';
 import { useOrderWebSocket } from './useOrderWebsoket';
+import { notFound } from 'next/navigation';
 
 interface OrderTrackingDomainProps {
   orderId: string;
@@ -32,7 +33,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const { status: liveStatus, connected } = useOrderWebSocket(id);
 
   if (isLoading) return <OrderTrackingSkeleton />;
-  if (error || !order) return <EmptyOrder />;
+  if (error || !order) return notFound()
 
   const currentStatus = liveStatus ?? order.status ?? OrderStatus.Pending;
   const currentOrder = { ...order, status: currentStatus };
@@ -65,6 +66,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
 
 
   const orderDateRelative = formatDistanceToNow(new Date(currentOrder.created_at as string), { addSuffix: true });
+
   return (
     <div className='pt-24 pb-16'>
       <div className='mx-auto max-w-5xl px-4 sm:px-6 lg:px-8'>
