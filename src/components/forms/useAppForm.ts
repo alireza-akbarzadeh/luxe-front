@@ -14,25 +14,25 @@ import { TextArea } from './text-area';
 import { TextField } from './text-field';
 import { fieldContext, formContext } from './useFormContext';
 
-export const { useAppForm } = createFormHook({
-  fieldComponents: {
-    TextField,
-    TextArea,
-    Switch,
-    Checkbox,
-    MultiSelect,
-    DatePicker,
-    Select: SelectController,
-    InputPassword: InputPassword,
-    InputPhone: InputPhone,
-    Combobox: ComboboxField
-  },
-  formComponents: {
-    Submit: SubscribeButton,
-    Root: FormRoot,
-    ErrorMessages
-  },
-  fieldContext,
-  formContext
-});
-
+export const { useAppForm, extendForm, useTypedAppFormContext, withFieldGroup, withForm } =
+  createFormHook({
+    fieldComponents: {
+      TextField,
+      TextArea,
+      Switch,
+      Checkbox,
+      MultiSelect,
+      DatePicker,
+      Select: SelectController,
+      InputPassword: InputPassword,
+      InputPhone: InputPhone,
+      Combobox: ComboboxField
+    },
+    formComponents: {
+      Submit: SubscribeButton,
+      Root: FormRoot,
+      ErrorMessages
+    },
+    fieldContext,
+    formContext
+  });

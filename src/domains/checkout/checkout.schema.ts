@@ -21,7 +21,7 @@ export const checkoutSchema = z.object({
   couponCode: z.string().optional().default(''),
 
   // payment
-  paymentMethod: z.enum(['credit_card', 'debit_card']),
+  paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
   cardNumber: z.string().min(16).max(19, 'Card number must be 16-19 digits'),
   expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Month must be 01-12'),
   expiryYear: z.string().regex(/^\d{4}$/, 'Year must be 4 digits'),

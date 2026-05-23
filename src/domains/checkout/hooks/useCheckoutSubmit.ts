@@ -1,45 +1,71 @@
 // app/checkout/hooks/useCheckoutSubmit.ts
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-
-import { useCartController } from '~/src/hooks/useCartController';
-import { usePostOrders } from '~/src/services/-orders-post';
+import { useCartController } from '@/hooks/useCartController';
+import { usePostCheckout } from '@/services/-checkout-post';
 import type { CheckoutFormValues } from '../checkout.schema';
+import { useQueryClient } from '@tanstack/react-query';
+import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
+import { getGetShippingProvidersQueryKey } from '@/services/-shipping-providers-get';
+import { ShippingProviders } from '@/lib/constants/enum-statuses';
 
 export function useCheckoutSubmit() {
   const router = useRouter();
   const { clearCart } = useCartController();
-  const { mutateAsync, isPending } = usePostOrders();
-
-  const submitOrder = async (value: CheckoutFormValues) => {
-    try {
-      await mutateAsync({
-        data: {
-          email: value.email,
-          first_name: value.firstName,
-          last_name: value.lastName,
-          address_line1: value.addressLine1,
-          address_line2: value.addressLine2,
-          city: value.city,
-          state: value.state,
-          zip: value.zip,
-          country: value.country,
-          phone: value.phone,
-          shipping_method: value.shippingMethod,
-          payment_method: 'card',
-          save_info: value.saveInfo,
-          newsletter: value.newsletter,
-          card_last4: value.cardNumber.slice(-4),
-          coupon_code: value.couponCode || undefined
+  const queryClient = useQueryClient();
+  const providers = queryClient.getQueryData<ModelsShippingProviders[]>(
+    getGetShippingProvidersQueryKey()
+  );
+  const { mutate, isPending } = usePostCheckout({
+    mutation: {
+      onSuccess: async (response) => {
+        if (response?.success === false) {
+          toast.error(response.message || 'Failed to place order');
+          return;
         }
-      });
 
-      await clearCart();
-      toast.success('Order placed successfully!');
-      router.push('/order-confirmation');
-    } catch {
-      toast.error('Failed to place order');
+        await clearCart();
+        const orderId = response?.data?.id;
+        toast.success('Order placed successfully!');
+        router.push(`/order-tracking/${orderId}`);
+      },
+      onError: (error) => {
+        console.error('Checkout error:', error);
+        toast.error('Failed to place order. Please try again.');
+      }
     }
+  });
+
+  const submitOrder = (values: CheckoutFormValues) => {
+    const selectedProvider = providers?.find(
+      (provider) => provider.id === values.shippingProviderId
+    );
+
+    mutate({
+      data: {
+        email: values.email || '',
+        first_name: values.firstName || '',
+        last_name: values.lastName || '',
+        address_line1: values.addressLine1,
+        address_line2: values.addressLine2,
+        city: values.city,
+        state: values.state,
+        zip: values.zip,
+        country: values.country,
+        phone: values.phone || '',
+        shipping_provider_id: Number(values.shippingProviderId),
+        payment_method: values.paymentMethod,
+        save_info: values.saveInfo,
+        newsletter: values.newsletter,
+        coupon_code: values.couponCode || undefined,
+        shipping_method: selectedProvider?.name || ShippingProviders.Standard,
+        card_number: values.cardNumber.replace(/\s/g, ''),
+        expiry_month: Number(values.expiryMonth),
+        expiry_year: Number(values.expiryYear),
+        cvv: values.cvv,
+        card_last4: values.cardNumber.slice(-4)
+      }
+    });
   };
 
   return { submitOrder, isPending };

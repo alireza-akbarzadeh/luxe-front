@@ -48,3 +48,9 @@ export const ProductStatus = {
   Archived: 'archived'
 } as const;
 export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus];
+
+export const ShippingProviders = {
+  Standard: 'standard',
+  express: 'express',
+  Overnight: 'overnight'
+} as const;

@@ -10,15 +10,14 @@ import Image from 'next/image';
 import { useCartController } from '~/src/hooks/useCartController';
 import type { CheckoutFormValues } from '../checkout.schema';
 
-
 interface CheckoutReviewProps {
   formValues: CheckoutFormValues;
+  shippingProviderName?: string;
 }
 
 export function CheckoutReview(props: CheckoutReviewProps) {
-  const { formValues } = props
+  const { formValues, shippingProviderName } = props;
   const { items } = useCartController();
-
 
   return (
     <motion.div
@@ -30,6 +29,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
     >
       <h2 className='mb-6 text-2xl font-bold'>Review Your Order</h2>
 
+      {/* Shipping Address Summary */}
       <div className='bg-card border-border/50 rounded-xl border p-4'>
         <div className='mb-2 flex items-center justify-between'>
           <h3 className='flex items-center gap-2 font-medium'>
@@ -42,16 +42,16 @@ export function CheckoutReview(props: CheckoutReviewProps) {
         <p className='text-muted-foreground text-sm'>
           {formValues.firstName} {formValues.lastName}
           <br />
-          {formValues?.addressLine1}
-          {formValues?.addressLine2 && `, ${formValues.addressLine2}`}
+          {formValues.addressLine1}
+          {formValues.addressLine2 && `, ${formValues.addressLine2}`}
           <br />
-          {formValues?.city}, {formValues.state} {formValues.zip}
+          {formValues.city}, {formValues.state} {formValues.zip}
           <br />
           {formValues.phone}
         </p>
         <p className='mt-2 text-sm'>
           <span className='text-muted-foreground'>Shipping Method:</span>{' '}
-          {formValues.shippingMethod}
+          {shippingProviderName || 'Standard'}
         </p>
       </div>
 
@@ -66,9 +66,8 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           </Button>
         </div>
         <p className='text-muted-foreground text-sm'>
-          Card ending in {formValues.cardNumber.slice(-4) || '****'}
-          <br />
-          {formValues.cardName || 'Name on card'}
+          {formValues.paymentMethod === 'credit_card' ? 'Credit Card' : 'Debit Card'}
+          ending in {formValues.cardNumber.slice(-4) || '****'}
         </p>
       </div>
 

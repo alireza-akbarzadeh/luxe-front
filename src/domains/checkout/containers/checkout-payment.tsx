@@ -2,17 +2,16 @@
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import type { CheckoutFormApi } from '@/domains/checkout/hooks/useCheckoutForm';
+import { useGetCouponsMy } from '@/services/-coupons-my-get';
 import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { AvailableCoupons } from '../components/available-coupons';
+import { PaymentMethodSelector } from '../components/payment-providers';
 import { useCheckoutTotals } from '../hooks/useCartTotal';
 import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
 import { useCheckoutStore } from '../store/checkout.store';
-import { useEffect } from 'react';
-import { useGetCouponsMy } from '@/services/-coupons-my-get';
-import type { CheckoutFormApi } from '@/domains/checkout/hooks/useCheckoutForm';
-import type { CheckoutFormValues } from '../checkout.schema';
 
 interface CheckoutPaymentProps {
   form: CheckoutFormApi;
@@ -78,28 +77,10 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
           <Label className="mb-3 block font-medium">Payment Method</Label>
           <form.AppField name="paymentMethod">
             {(field) => (
-              <RadioGroup
+              <PaymentMethodSelector
                 value={field.state.value}
-                onValueChange={(value) => field.handleChange(value as CheckoutFormValues["paymentMethod"])}
-                className="flex gap-4"
-              >
-                <Label
-                  htmlFor="payment-credit"
-                  className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 transition-colors ${field.state.value === 'credit_card' ? 'border-accent bg-accent/5' : 'border-border'
-                    }`}
-                >
-                  <RadioGroupItem value="credit_card" id="payment-credit" />
-                  <span>Credit Card</span>
-                </Label>
-                <Label
-                  htmlFor="payment-debit"
-                  className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 transition-colors ${field.state.value === 'debit_card' ? 'border-accent bg-accent/5' : 'border-border'
-                    }`}
-                >
-                  <RadioGroupItem value="debit_card" id="payment-debit" />
-                  <span>Debit Card</span>
-                </Label>
-              </RadioGroup>
+                onChange={(val) => field.handleChange(val)}
+              />
             )}
           </form.AppField>
         </div>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useCartStore } from '~/src/store/card.store';
-import { useGetCart } from '../services/-cart-get';
+import { getGetCartQueryKey, useGetCart } from '../services/-cart-get';
 import { usePostCartItems } from '../services/-cart-items-post';
 import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
@@ -51,7 +51,7 @@ export const useCartController = () => {
         toast.error('Failed to add item');
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['/cart'] });
+        queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
         toast.success('Item added to cart');
       }
     }

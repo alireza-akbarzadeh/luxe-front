@@ -51,7 +51,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string | null> 
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
-        maxAge:APP_CONFIG.MAX_AGE
+        maxAge: APP_CONFIG.MAX_AGE
       });
 
       return newAccessToken;

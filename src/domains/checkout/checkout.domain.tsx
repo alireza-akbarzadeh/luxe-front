@@ -28,15 +28,14 @@ export default function CheckoutDomain() {
 
   const { couponDiscount } = useCheckoutStore();
 
-  const shippingProviderId = form.getFieldValue('shippingProviderId');
 
-  const selectedShippingPrice =
-    shippingProvidersData?.data?.find((m) => m.id === shippingProviderId)?.price ?? 0;
+  const selectedShipping =
+    shippingProvidersData?.data?.find((m) => m.id === form.state.values.shippingProviderId)
 
 
-  const { total } = useCheckoutTotals({
+  const { subtotal, tax } = useCheckoutTotals({
     items,
-    shippingPrice: selectedShippingPrice,
+    shippingPrice: selectedShipping?.price ?? 0.0,
     couponDiscount,
   });
 
@@ -72,7 +71,7 @@ export default function CheckoutDomain() {
                       form={form}
                     />
                   )}
-                  {currentStep === 'Review' && <CheckoutReview formValues={form.state.values} />}
+                  {currentStep === 'Review' && <CheckoutReview shippingProviderName={selectedShipping?.name} formValues={form.state.values} />}
                 </AnimatePresence>
 
                 <div className='flex justify-between pt-6'>
@@ -86,11 +85,22 @@ export default function CheckoutDomain() {
                         <IconChevronLeft className='ml-2 h-4 w-4' />
                         back to payment
                       </Button>
-                      <form.Submit
-                        className='w-50 rounded-full bg-accent text-accent-foreground py-4.5'
-                        isPending={isPending}
-                        label={`Place Order – $${total.toFixed(2)}`}
-                      />
+                      <form.Subscribe
+                        selector={(state) => state.values.shippingProviderId}
+                      >
+                        {(shippingProviderId) => {
+                          const selectedShipping = shippingProvidersData?.data?.find(p => p.id === shippingProviderId);
+                          const shippingPrice = selectedShipping?.price ?? 0;
+                          const total = subtotal + shippingPrice + tax - couponDiscount;
+                          return (
+                            <form.Submit
+                              className='w-50 rounded-full bg-accent text-accent-foreground py-4.5'
+                              isPending={isPending}
+                              label={`Place Order – $${total.toFixed(2)}`}
+                            />
+                          );
+                        }}
+                      </form.Subscribe>
                     </>
                   ) : (
                     <div className="flex justify-between w-full items-center">
@@ -116,7 +126,9 @@ export default function CheckoutDomain() {
             </form.AppForm>
           </div>
           <div className='lg:col-span-2'>
-            <CheckoutSummary shippingProviderId={shippingProviderId as number} />
+            <form.Subscribe selector={(state) => state.values.shippingProviderId}>
+              {((shippingProviderId) => <CheckoutSummary shippingProviderId={shippingProviderId as number} />)}
+            </form.Subscribe>
           </div>
         </div>
       </div>
