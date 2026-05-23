@@ -19,8 +19,8 @@ interface CheckoutPaymentProps {
 export function CheckoutPayment(props: CheckoutPaymentProps) {
   const { form } = props;
   const { subtotal, couponDiscount, total } = useCheckoutTotals();
-
-  const couponCode = form.getFieldValue("couponCode");
+  const couponCode = form.getFieldValue("couponCode")
+  console.log(couponCode);
 
   const { data: couponsData, isLoading: couponsLoading } = useGetCouponsMy({
     order_total: total ?? 0,
@@ -54,7 +54,6 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
   };
 
   const isApplied = appliedCouponCode && couponDiscount > 0;
-  const isSameCoupon = currentCouponCode?.trim().toUpperCase() === appliedCouponCode;
 
   return (
     <motion.div
@@ -120,7 +119,11 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
-                          handleApply();
+                          const trimmedCode = field.state.value?.trim() || '';
+                          const isSameCoupon = trimmedCode.toUpperCase() === appliedCouponCode;
+                          if (trimmedCode && !isSameCoupon) {
+                            applyCoupon(trimmedCode);
+                          }
                         }
                       }}
                     />
@@ -138,19 +141,32 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
                   Remove
                 </Button>
               ) : (
-                <Button
-                  type='button'
-                  onClick={() => handleApply()}
-                  disabled={
-                    !currentCouponCode ||
-                    currentCouponCode.trim() === '' ||
-                    isApplyingCoupon ||
-                    isSameCoupon
-                  }
-                  className='rounded-full'
+
+                <form.Subscribe
+                  selector={(state) => state.values.couponCode}
                 >
-                  {isApplyingCoupon ? 'Applying...' : 'Apply'}
-                </Button>
+                  {(couponCode) => {
+                    const trimmedCode = (couponCode || '').trim();
+                    const isSameCoupon = trimmedCode.toUpperCase() === appliedCouponCode;
+                    const isButtonDisabled = !trimmedCode || isSameCoupon || isApplyingCoupon;
+
+                    return (
+                      <Button
+                        type='button'
+                        variant='outline'
+                        onClick={() => {
+                          if (trimmedCode && !isSameCoupon) {
+                            applyCoupon(trimmedCode);
+                          }
+                        }}
+                        disabled={isButtonDisabled}
+                        loading={isApplyingCoupon}
+                      >
+                        Apply
+                      </Button>
+                    );
+                  }}
+                </form.Subscribe>
               )}
             </div>
 

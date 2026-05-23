@@ -5,24 +5,23 @@ import { Separator } from '~/src/components/ui/separator';
 import { IconLock, IconShieldCheck } from '@tabler/icons-react';
 import { useCartController } from '~/src/hooks/useCartController';
 import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
+import { useCheckoutStore } from '../store/checkout.store';
 
 interface CheckoutSummaryProps {
   shippingMethod: string;
-  couponDiscount?: number;
-  couponCode?: string;
 }
 
 export function CheckoutSummary({
   shippingMethod,
-  couponDiscount = 0,
-  couponCode = ''
 }: CheckoutSummaryProps) {
   const { items, subtotal } = useCartController();
+  const { couponDiscount, appliedCouponCode } = useCheckoutStore();
 
   const { data: { data } = {} } = useGetShippingProviders();
 
   const selectedShipping = data?.find((m) => m.name === shippingMethod);
   const shippingCost = selectedShipping?.price || 0;
+  // FIXME: tax should come front backend
   const tax = subtotal * 0.08;
   const total = subtotal + shippingCost + tax - couponDiscount;
 
@@ -82,7 +81,7 @@ export function CheckoutSummary({
           </div>
           {couponDiscount > 0 && (
             <div className='flex justify-between text-green-600'>
-              <span>Coupon Discount ({couponCode})</span>
+              <span>Coupon Discount ({appliedCouponCode})</span>
               <span>-${couponDiscount.toFixed(2)}</span>
             </div>
           )}
