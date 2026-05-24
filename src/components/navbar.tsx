@@ -62,7 +62,7 @@ export function Navbar() {
             </div>
 
             {/* Right Side Actions */}
-            <div className='flex items-center'>
+            <div className='flex items-center gap-2'>
               <Link href='/search' className='cursor-pointer'>
                 <Button variant='ghost' size='icon' className='rounded-full'>
                   <IconSearch className='h-5 w-5' />

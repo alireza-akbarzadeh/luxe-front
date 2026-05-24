@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { ActiveFilter } from './components/active-filter';
-import { FilterContent } from './components/filter-contemt';
+import { FilterContent } from './components/filter-content';
 import { ProductGrid } from './components/product-grid';
 import { ShopToolbar } from './components/shop-toolbar';
 import { useGetProducts } from '~/src/services/-products-get';

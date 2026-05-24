@@ -86,10 +86,7 @@ function Button({
       data-variant={variant}
       data-size={size}
       disabled={isDisabled}
-      className={cn(
-        buttonVariants({ variant, size, className }),
-        loading && 'cursor-not-allowed'
-      )}
+      className={cn(buttonVariants({ variant, size, className }), loading && 'cursor-not-allowed')}
       {...props}
     >
       {loading && <Spinner className='mr-1.5' />}

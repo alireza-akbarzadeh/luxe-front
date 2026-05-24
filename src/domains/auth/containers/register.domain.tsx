@@ -32,7 +32,7 @@ export function RegisterDomain() {
     },
     validators: {
       onSubmit: registerFormSchema,
-      onChange: registerFormSchema,
+      onChange: registerFormSchema
     },
     onSubmit: async ({ value, formApi }) => {
       startTransition(async () => {
@@ -92,7 +92,7 @@ export function RegisterDomain() {
           {/* Error */}
           {error && (
             <motion.div
-              data-testid="register-error"
+              data-testid='register-error'
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className='bg-destructive/10 border-destructive/20 text-destructive mb-6 rounded-xl border p-4 text-sm'
@@ -115,7 +115,7 @@ export function RegisterDomain() {
                 <form.AppField name='firstName'>
                   {(field) => (
                     <field.TextField
-                      data-testid="firstName-input"
+                      data-testid='firstName-input'
                       label='First name'
                       placeholder='John'
                       startIcon={IconUser}
@@ -127,10 +127,11 @@ export function RegisterDomain() {
                 <form.AppField name='lastName'>
                   {(field) => (
                     <field.TextField
-                      data-testid="lastName-input"
+                      data-testid='lastName-input'
                       label='Last name'
                       placeholder='Doe'
-                      className='h-12' />
+                      className='h-12'
+                    />
                   )}
                 </form.AppField>
               </div>
@@ -139,7 +140,7 @@ export function RegisterDomain() {
               <form.AppField name='email'>
                 {(field) => (
                   <field.TextField
-                    data-testid="email-input"
+                    data-testid='email-input'
                     label='Email address'
                     placeholder='name@example.com'
                     startIcon={IconMail}
@@ -151,7 +152,7 @@ export function RegisterDomain() {
               <form.AppField name='phone'>
                 {(field) => (
                   <field.InputPhone
-                    data-testid="phone-input"
+                    data-testid='phone-input'
                     label='phone'
                     placeholder='09381223880'
                     startIcon={IconMail}
@@ -165,7 +166,7 @@ export function RegisterDomain() {
                 {(field) => (
                   <div className='space-y-3'>
                     <field.InputPassword
-                      data-testid="password-input"
+                      data-testid='password-input'
                       label='Password'
                       placeholder='Create a strong password'
                     />
@@ -181,12 +182,13 @@ export function RegisterDomain() {
                             <span className='text-muted-foreground'>Password strength</span>
 
                             <span
-                              className={`font-medium ${passwordStrength.score >= 3
-                                ? 'text-green-500'
-                                : passwordStrength.score >= 2
-                                  ? 'text-yellow-500'
-                                  : 'text-red-500'
-                                }`}
+                              className={`font-medium ${
+                                passwordStrength.score >= 3
+                                  ? 'text-green-500'
+                                  : passwordStrength.score >= 2
+                                    ? 'text-yellow-500'
+                                    : 'text-red-500'
+                              }`}
                             >
                               {passwordStrength.label}
                             </span>
@@ -211,8 +213,9 @@ export function RegisterDomain() {
                             return (
                               <div
                                 key={req.label}
-                                className={`flex items-center gap-2 text-xs ${passed ? 'text-green-500' : 'text-muted-foreground'
-                                  }`}
+                                className={`flex items-center gap-2 text-xs ${
+                                  passed ? 'text-green-500' : 'text-muted-foreground'
+                                }`}
                               >
                                 {passed ? (
                                   <IconCheck className='size-3.5' />
@@ -235,7 +238,7 @@ export function RegisterDomain() {
               <form.AppField name='confirmPassword'>
                 {(field) => (
                   <field.InputPassword
-                    data-testid="confirmPassword-input"
+                    data-testid='confirmPassword-input'
                     label='Confirm password'
                     placeholder='Confirm your password'
                   />
@@ -247,9 +250,7 @@ export function RegisterDomain() {
                 <form.AppField name='acceptTerms'>
                   {(field) => (
                     <div className='flex flex-wrap items-start gap-3'>
-                      <field.Checkbox
-                        data-testid="acceptTerms-checkbox"
-                        label='' />
+                      <field.Checkbox data-testid='acceptTerms-checkbox' label='' />
                       <Label
                         htmlFor={field.name}
                         className='cursor-pointer text-sm leading-relaxed font-normal'
@@ -270,9 +271,7 @@ export function RegisterDomain() {
                 <form.AppField name='acceptMarketing'>
                   {(field) => (
                     <div className='flex items-start gap-3'>
-                      <field.Checkbox
-                        data-testid="acceptMarketing-checkbox"
-                        label='' />
+                      <field.Checkbox data-testid='acceptMarketing-checkbox' label='' />
                       <Label
                         htmlFor={field.name}
                         className='cursor-pointer text-sm leading-relaxed font-normal'
@@ -285,8 +284,7 @@ export function RegisterDomain() {
               </div>
 
               {/* Submit */}
-              <form.Submit data-testid="register-submit"
-                label='Register' isPending={isPending} />
+              <form.Submit data-testid='register-submit' label='Register' isPending={isPending} />
             </form.Root>
           </form.AppForm>
 

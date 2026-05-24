@@ -16,17 +16,13 @@ test.describe('Button component', () => {
   });
 
   test('outline variant', async ({ mount }) => {
-    const component = await mount(
-      <Button variant="outline">Outline</Button>
-    );
+    const component = await mount(<Button variant='outline'>Outline</Button>);
 
     await expect(component).toHaveAttribute('data-variant', 'outline');
   });
 
   test('disabled button', async ({ mount }) => {
-    const component = await mount(
-      <Button disabled>Disabled</Button>
-    );
+    const component = await mount(<Button disabled>Disabled</Button>);
 
     await expect(component).toBeDisabled();
   });
@@ -34,9 +30,7 @@ test.describe('Button component', () => {
   test('click event works', async ({ mount }) => {
     let clicked = false;
 
-    const component = await mount(
-      <Button onClick={() => (clicked = true)}>Click</Button>
-    );
+    const component = await mount(<Button onClick={() => (clicked = true)}>Click</Button>);
 
     await component.click();
 
@@ -46,7 +40,7 @@ test.describe('Button component', () => {
   test('asChild renders link', async ({ mount }) => {
     const component = await mount(
       <Button asChild>
-        <a href="/dashboard">Dashboard</a>
+        <a href='/dashboard'>Dashboard</a>
       </Button>
     );
 

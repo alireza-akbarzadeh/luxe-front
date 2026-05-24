@@ -9,11 +9,11 @@ import { BASE_URL } from '@/lib/api/api-client';
 
 function isNextRedirectError(error: unknown): error is { digest: string } {
   return (
-      error !== null &&
-      typeof error === 'object' &&
-      'digest' in error &&
-      typeof (error as { digest: string }).digest === 'string' &&
-      (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')
+    error !== null &&
+    typeof error === 'object' &&
+    'digest' in error &&
+    typeof (error as { digest: string }).digest === 'string' &&
+    (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')
   );
 }
 
@@ -59,8 +59,6 @@ async function handleAuthResponse<
   redirect(callbackUrl);
 }
 
-
-
 export async function loginAction(formData: FormData) {
   try {
     const email = formData.get('email') as string;
@@ -78,7 +76,7 @@ export async function loginAction(formData: FormData) {
       credentials: 'include'
     });
 
-    const json = await res.json() as DtoRegisterResponse;
+    const json = (await res.json()) as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json, rememberMe);
     if (error) return error;
   } catch (error) {
@@ -116,7 +114,7 @@ export async function registerAction(formData: FormData) {
       credentials: 'include'
     });
 
-    const json = await res.json() as DtoRegisterResponse;
+    const json = (await res.json()) as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json);
     if (error) return error;
   } catch (error) {

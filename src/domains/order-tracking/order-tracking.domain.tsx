@@ -1,11 +1,7 @@
 'use client';
 
 import { OrderStatus } from '@/lib/constants/enum-statuses';
-import {
-  IconCalendar,
-  IconCheckbox,
-  IconMapPin
-} from '@tabler/icons-react';
+import { IconCalendar, IconCheckbox, IconMapPin } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
@@ -25,7 +21,6 @@ interface OrderTrackingDomainProps {
   orderId: string;
 }
 
-
 export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const id = Number(orderId);
   const { data: initialData, isLoading, error } = useGetOrdersId(id);
@@ -33,22 +28,43 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const { status: liveStatus, connected } = useOrderWebSocket(id);
 
   if (isLoading) return <OrderTrackingSkeleton />;
-  if (error || !order) return notFound()
+  if (error || !order) return notFound();
 
   const currentStatus = liveStatus ?? order.status ?? OrderStatus.Pending;
   const currentOrder = { ...order, status: currentStatus };
 
-
-
   // Order progress steps
   const getStepStatus = (status: string) => {
-    const stepMap: Record<string, { confirmed: boolean; processing: boolean; shipped: boolean; delivered: boolean }> = {
-      [OrderStatus.Pending]: { confirmed: true, processing: false, shipped: false, delivered: false },
+    const stepMap: Record<
+      string,
+      { confirmed: boolean; processing: boolean; shipped: boolean; delivered: boolean }
+    > = {
+      [OrderStatus.Pending]: {
+        confirmed: true,
+        processing: false,
+        shipped: false,
+        delivered: false
+      },
       [OrderStatus.Paid]: { confirmed: true, processing: true, shipped: false, delivered: false },
       [OrderStatus.Shipped]: { confirmed: true, processing: true, shipped: true, delivered: false },
-      [OrderStatus.Delivered]: { confirmed: true, processing: true, shipped: true, delivered: true },
-      [OrderStatus.Cancelled]: { confirmed: true, processing: false, shipped: false, delivered: false },
-      [OrderStatus.Refunded]: { confirmed: true, processing: false, shipped: false, delivered: false },
+      [OrderStatus.Delivered]: {
+        confirmed: true,
+        processing: true,
+        shipped: true,
+        delivered: true
+      },
+      [OrderStatus.Cancelled]: {
+        confirmed: true,
+        processing: false,
+        shipped: false,
+        delivered: false
+      },
+      [OrderStatus.Refunded]: {
+        confirmed: true,
+        processing: false,
+        shipped: false,
+        delivered: false
+      }
     };
     return stepMap[status] || stepMap[OrderStatus.Pending];
   };
@@ -59,13 +75,16 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const shipment = currentOrder.shipment;
 
   // Calculate order totals
-  const subtotal = currentOrder.items?.reduce((sum, item) => sum + ((item.price ?? 0) * (item.quantity ?? 0)), 0) ?? 0;
+  const subtotal =
+    currentOrder.items?.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0) ??
+    0;
   const shippingCost = shipment?.price ?? 0;
   const tax = subtotal * 0.08; // assuming 8% tax – you could read from order if available
   const total = currentOrder.total_amount;
 
-
-  const orderDateRelative = formatDistanceToNow(new Date(currentOrder.created_at as string), { addSuffix: true });
+  const orderDateRelative = formatDistanceToNow(new Date(currentOrder.created_at as string), {
+    addSuffix: true
+  });
 
   return (
     <div className='pt-24 pb-16'>
@@ -114,7 +133,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
           <h1 className='mb-2 text-3xl font-bold md:text-4xl'>Thank you for your order!</h1>
           <p className='text-muted-foreground text-lg'>
             Order #{currentOrder.order_number} –{' '}
-            <span className='capitalize font-medium text-green-600'>{currentStatus}</span>
+            <span className='font-medium text-green-600 capitalize'>{currentStatus}</span>
           </p>
           <p className='text-muted-foreground mt-1 flex items-center justify-center gap-1 text-sm'>
             <IconCalendar className='h-4 w-4' />
@@ -133,7 +152,13 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
           {/* Items List - takes 2/3 */}
           <OrderItemSummary orderItems={currentOrder.items || []} />
           {/* Order Summary - takes 1/3 */}
-          <OrderTrackingSummary currency={currentOrder.currency || ""} shippingCost={shippingCost} subtotal={subtotal} tax={tax} total={total as number} />
+          <OrderTrackingSummary
+            currency={currentOrder.currency || ''}
+            shippingCost={shippingCost}
+            subtotal={subtotal}
+            tax={tax}
+            total={total as number}
+          />
         </div>
 
         {/* Payment & Shipment Details */}

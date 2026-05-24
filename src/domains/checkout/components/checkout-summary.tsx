@@ -65,7 +65,11 @@ export function CheckoutSummary({ shippingProviderId }: CheckoutSummaryProps) {
         <div className='flex justify-between'>
           <span className='text-muted-foreground'>Shipping</span>
           <span>
-            {shippingCost === 0 ? <span className='text-green-600'>Free</span> : `$${shippingCost.toFixed(2)}`}
+            {shippingCost === 0 ? (
+              <span className='text-green-600'>Free</span>
+            ) : (
+              `$${shippingCost.toFixed(2)}`
+            )}
           </span>
         </div>
         <div className='flex justify-between'>

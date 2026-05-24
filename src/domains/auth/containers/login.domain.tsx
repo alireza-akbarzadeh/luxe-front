@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {  IconMail } from '@tabler/icons-react';
+import { IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useAppForm } from '~/src/components/forms/useAppForm';
@@ -73,8 +73,11 @@ export function LoginDomain() {
               }}
               className='space-y-6'
             >
-
-              {error && <div data-testid='form-error' className='mb-2 text-sm text-red-500'>{error}</div>}
+              {error && (
+                <div data-testid='form-error' className='mb-2 text-sm text-red-500'>
+                  {error}
+                </div>
+              )}
               {/* Email Field */}
               <form.AppField name='email'>
                 {(field) => (
@@ -92,12 +95,13 @@ export function LoginDomain() {
               <form.AppField name='password'>
                 {(field) => (
                   <field.InputPassword
-                      data-testid='password-input'
-                      label='Password'
-                      placeholder='Enter your password' />
+                    data-testid='password-input'
+                    label='Password'
+                    placeholder='Enter your password'
+                  />
                 )}
               </form.AppField>
-              <form.Submit  data-testid='login-submit' isPending={isPending} label='login' />
+              <form.Submit data-testid='login-submit' isPending={isPending} label='login' />
             </form.Root>
           </form.AppForm>
 

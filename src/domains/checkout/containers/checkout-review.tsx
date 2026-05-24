@@ -1,10 +1,6 @@
 // app/checkout/components/checkout-review.tsx
 import { Button } from '@/components/ui/button';
-import {
-  IconCreditCard,
-  IconPackage,
-  IconTruck
-} from '@tabler/icons-react';
+import { IconCreditCard, IconPackage, IconTruck } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCartController } from '~/src/hooks/useCartController';
@@ -80,7 +76,7 @@ export function CheckoutReview(props: CheckoutReviewProps) {
           {items?.map((item) => (
             <div key={`${item.id}-${item.color}-${item.size}`} className='flex items-center gap-3'>
               <div className='bg-muted relative h-12 w-12 shrink-0 overflow-hidden rounded-lg'>
-                <Image src={item.image || ""} alt={item.name || ""} fill className='object-cover' />
+                <Image src={item.image || ''} alt={item.name || ''} fill className='object-cover' />
                 <span className='bg-accent text-accent-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
                   {item.quantity}
                 </span>
@@ -95,7 +91,9 @@ export function CheckoutReview(props: CheckoutReviewProps) {
                   </p>
                 )}
               </div>
-              <p className='text-sm font-medium'>${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}</p>
+              <p className='text-sm font-medium'>
+                ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
+              </p>
             </div>
           ))}
         </div>

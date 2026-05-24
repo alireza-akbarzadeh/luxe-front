@@ -16,74 +16,74 @@ export function CheckoutShipping(props: CheckoutShippingProps) {
 
   return (
     <motion.div
-      key="shipping"
+      key='shipping'
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="space-y-6"
+      className='space-y-6'
     >
       <div>
-        <h2 className="mb-6 text-2xl font-bold">Shipping Information</h2>
+        <h2 className='mb-6 text-2xl font-bold'>Shipping Information</h2>
 
         {/* Contact section – unchanged */}
-        <div className="mb-8 space-y-4">
-          <h3 className="font-medium">Contact</h3>
-          <form.AppField name="email">
-            {(field) => <field.TextField label="Email" type="email" placeholder="your@email.com" />}
+        <div className='mb-8 space-y-4'>
+          <h3 className='font-medium'>Contact</h3>
+          <form.AppField name='email'>
+            {(field) => <field.TextField label='Email' type='email' placeholder='your@email.com' />}
           </form.AppField>
-          <div className="flex items-center gap-2">
-            <form.AppField name="newsletter">
-              {(field) => <field.Checkbox label="Email me with news and offers" id="newsletter" />}
+          <div className='flex items-center gap-2'>
+            <form.AppField name='newsletter'>
+              {(field) => <field.Checkbox label='Email me with news and offers' id='newsletter' />}
             </form.AppField>
           </div>
         </div>
 
         {/* Shipping address section – unchanged */}
-        <div className="space-y-4">
-          <h3 className="font-medium">Shipping Address</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <form.AppField name="firstName">
-              {(field) => <field.TextField label="First Name" placeholder="John" />}
+        <div className='space-y-4'>
+          <h3 className='font-medium'>Shipping Address</h3>
+          <div className='grid grid-cols-2 gap-4'>
+            <form.AppField name='firstName'>
+              {(field) => <field.TextField label='First Name' placeholder='John' />}
             </form.AppField>
-            <form.AppField name="lastName">
-              {(field) => <field.TextField label="Last Name" placeholder="Doe" />}
+            <form.AppField name='lastName'>
+              {(field) => <field.TextField label='Last Name' placeholder='Doe' />}
             </form.AppField>
           </div>
-          <form.AppField name="addressLine1">
-            {(field) => <field.TextField label="Address" placeholder="123 Main St" />}
+          <form.AppField name='addressLine1'>
+            {(field) => <field.TextField label='Address' placeholder='123 Main St' />}
           </form.AppField>
-          <form.AppField name="addressLine2">
+          <form.AppField name='addressLine2'>
             {(field) => (
-              <field.TextField label="Apartment, suite, etc. (optional)" placeholder="Apt 4B" />
+              <field.TextField label='Apartment, suite, etc. (optional)' placeholder='Apt 4B' />
             )}
           </form.AppField>
-          <div className="grid grid-cols-3 gap-4">
-            <form.AppField name="city">
-              {(field) => <field.TextField label="City" placeholder="New York" />}
+          <div className='grid grid-cols-3 gap-4'>
+            <form.AppField name='city'>
+              {(field) => <field.TextField label='City' placeholder='New York' />}
             </form.AppField>
-            <form.AppField name="state">
-              {(field) => <field.TextField label="State" placeholder="NY" />}
+            <form.AppField name='state'>
+              {(field) => <field.TextField label='State' placeholder='NY' />}
             </form.AppField>
-            <form.AppField name="zip">
-              {(field) => <field.TextField label="ZIP Code" placeholder="10001" />}
+            <form.AppField name='zip'>
+              {(field) => <field.TextField label='ZIP Code' placeholder='10001' />}
             </form.AppField>
           </div>
-          <form.AppField name="phone">
-            {(field) => <field.InputPhone label="Phone" placeholder="(555) 123-4567" />}
+          <form.AppField name='phone'>
+            {(field) => <field.InputPhone label='Phone' placeholder='(555) 123-4567' />}
           </form.AppField>
         </div>
       </div>
 
       {/* Shipping Method section – updated */}
-      <div className="pt-6">
-        <h3 className="mb-4 font-medium">Shipping Method</h3>
+      <div className='pt-6'>
+        <h3 className='mb-4 font-medium'>Shipping Method</h3>
 
-        <form.AppField name="shippingProviderId">
+        <form.AppField name='shippingProviderId'>
           {(field) => (
             <RadioGroup
               value={field.state.value ? String(field.state.value) : ''}
               onValueChange={(val) => field.handleChange(Number(val))}
-              className="space-y-3"
+              className='space-y-3'
             >
               {shippingProviders.map((provider) => {
                 const isSelected = field.state.value === provider.id;
@@ -91,24 +91,20 @@ export function CheckoutShipping(props: CheckoutShippingProps) {
                   <Label
                     key={provider.id}
                     htmlFor={`shipping-${provider.id}`}
-                    className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${isSelected
+                    className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${
+                      isSelected
                         ? 'border-accent bg-accent/5'
                         : 'border-border hover:border-accent/50'
-                      }`}
+                    }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem
-                        value={String(provider.id)}
-                        id={`shipping-${provider.id}`}
-                      />
+                    <div className='flex items-center gap-3'>
+                      <RadioGroupItem value={String(provider.id)} id={`shipping-${provider.id}`} />
                       <div>
-                        <div className="font-medium">
-                          {provider.name || 'Unnamed'} Shipping
-                        </div>
-                        <p className="text-muted-foreground text-sm">{provider.description}</p>
+                        <div className='font-medium'>{provider.name || 'Unnamed'} Shipping</div>
+                        <p className='text-muted-foreground text-sm'>{provider.description}</p>
                       </div>
                     </div>
-                    <span className="font-medium">
+                    <span className='font-medium'>
                       {provider.price === 0 ? 'Free' : `$${(provider.price ?? 0).toFixed(2)}`}
                     </span>
                   </Label>

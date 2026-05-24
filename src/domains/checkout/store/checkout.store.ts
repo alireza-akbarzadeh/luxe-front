@@ -25,5 +25,5 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
   selectedShippingMethod: '',
   selectedShippingPrice: 0,
   setShippingMethod: (method, price) =>
-    set({ selectedShippingMethod: method, selectedShippingPrice: price }),
+    set({ selectedShippingMethod: method, selectedShippingPrice: price })
 }));

@@ -25,7 +25,6 @@ export class RegisterPage {
   submit = () => this.page.getByTestId('register-submit');
   errorBox = () => this.page.getByTestId('register-error');
 
-
   async fillForm(user: RegisterUser) {
     await this.firstName().fill(user.firstName);
     await this.lastName().fill(user.lastName);

@@ -23,15 +23,19 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
   const couponCode = form.getFieldValue('couponCode');
 
   const { data: couponsData, isLoading: couponsLoading } = useGetCouponsMy({
-    order_total: total ?? 0,
+    order_total: total ?? 0
   });
   const applicableCoupons = couponsData?.data || [];
 
   const { appliedCouponCode } = useCheckoutStore();
 
-  const { applyCoupon, isApplyingCoupon, error: couponError } = useCheckoutCoupon({
+  const {
+    applyCoupon,
+    isApplyingCoupon,
+    error: couponError
+  } = useCheckoutCoupon({
     subtotal: subtotal ?? 0,
-    setCouponCode: (code) => form.setFieldValue('couponCode', code),
+    setCouponCode: (code) => form.setFieldValue('couponCode', code)
   });
 
   const currentCouponCode = couponCode || '';
@@ -73,9 +77,9 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
         </div>
 
         {/* Payment Method Selector */}
-        <div className="mb-6">
-          <Label className="mb-3 block font-medium">Payment Method</Label>
-          <form.AppField name="paymentMethod">
+        <div className='mb-6'>
+          <Label className='mb-3 block font-medium'>Payment Method</Label>
+          <form.AppField name='paymentMethod'>
             {(field) => (
               <PaymentMethodSelector
                 value={field.state.value}
@@ -103,22 +107,16 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
           {/* Expiry Fields (split) */}
           <div className='grid grid-cols-2 gap-4'>
             <form.AppField name='expiryMonth'>
-              {(field) => (
-                <field.TextField label='Expiry Month' placeholder='MM' maxLength={2} />
-              )}
+              {(field) => <field.TextField label='Expiry Month' placeholder='MM' maxLength={2} />}
             </form.AppField>
             <form.AppField name='expiryYear'>
-              {(field) => (
-                <field.TextField label='Expiry Year' placeholder='YYYY' maxLength={4} />
-              )}
+              {(field) => <field.TextField label='Expiry Year' placeholder='YYYY' maxLength={4} />}
             </form.AppField>
           </div>
 
           {/* CVC */}
           <form.AppField name='cvv'>
-            {(field) => (
-              <field.TextField label='CVC' placeholder='123' maxLength={4} />
-            )}
+            {(field) => <field.TextField label='CVC' placeholder='123' maxLength={4} />}
           </form.AppField>
 
           {/* Save info toggle (UI only) */}
@@ -167,9 +165,7 @@ export function CheckoutPayment(props: CheckoutPaymentProps) {
                   Remove
                 </Button>
               ) : (
-                <form.Subscribe
-                  selector={(state) => state.values.couponCode}
-                >
+                <form.Subscribe selector={(state) => state.values.couponCode}>
                   {(couponCode) => {
                     const trimmedCode = (couponCode || '').trim();
                     const isSameCoupon = trimmedCode.toUpperCase() === appliedCouponCode;

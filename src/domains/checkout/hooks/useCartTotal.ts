@@ -6,10 +6,7 @@ export function useCheckoutTotals() {
   const { items } = useCartController();
   const { selectedShippingPrice, couponDiscount } = useCheckoutStore();
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0),
-    0
-  );
+  const subtotal = items.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0);
   const tax = subtotal * 0.08;
   const total = subtotal + selectedShippingPrice + tax - couponDiscount;
 

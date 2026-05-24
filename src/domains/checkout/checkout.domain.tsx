@@ -28,15 +28,14 @@ export default function CheckoutDomain() {
 
   const { couponDiscount } = useCheckoutStore();
 
-
-  const selectedShipping =
-    shippingProvidersData?.data?.find((m) => m.id === form.state.values.shippingProviderId)
-
+  const selectedShipping = shippingProvidersData?.data?.find(
+    (m) => m.id === form.state.values.shippingProviderId
+  );
 
   const { subtotal, tax } = useCheckoutTotals({
     items,
     shippingPrice: selectedShipping?.price ?? 0.0,
-    couponDiscount,
+    couponDiscount
   });
 
   useEffect(() => {
@@ -64,37 +63,37 @@ export default function CheckoutDomain() {
               >
                 <AnimatePresence mode='wait'>
                   {currentStep === 'Shipping' && (
-                    <CheckoutShipping form={form} shippingProviders={shippingProvidersData?.data || []} />
-                  )}
-                  {currentStep === 'Payment' && (
-                    <CheckoutPayment
+                    <CheckoutShipping
                       form={form}
+                      shippingProviders={shippingProvidersData?.data || []}
                     />
                   )}
-                  {currentStep === 'Review' && <CheckoutReview shippingProviderName={selectedShipping?.name} formValues={form.state.values} />}
+                  {currentStep === 'Payment' && <CheckoutPayment form={form} />}
+                  {currentStep === 'Review' && (
+                    <CheckoutReview
+                      shippingProviderName={selectedShipping?.name}
+                      formValues={form.state.values}
+                    />
+                  )}
                 </AnimatePresence>
 
                 <div className='flex justify-between pt-6'>
                   {currentStep === 'Review' ? (
                     <>
-                      <Button
-                        onClick={handleBack}
-                        variant="link"
-                        className='py-4.5 px-6'
-                      >
+                      <Button onClick={handleBack} variant='link' className='px-6 py-4.5'>
                         <IconChevronLeft className='ml-2 h-4 w-4' />
                         back to payment
                       </Button>
-                      <form.Subscribe
-                        selector={(state) => state.values.shippingProviderId}
-                      >
+                      <form.Subscribe selector={(state) => state.values.shippingProviderId}>
                         {(shippingProviderId) => {
-                          const selectedShipping = shippingProvidersData?.data?.find(p => p.id === shippingProviderId);
+                          const selectedShipping = shippingProvidersData?.data?.find(
+                            (p) => p.id === shippingProviderId
+                          );
                           const shippingPrice = selectedShipping?.price ?? 0;
                           const total = subtotal + shippingPrice + tax - couponDiscount;
                           return (
                             <form.Submit
-                              className='w-50 rounded-full bg-accent text-accent-foreground py-4.5'
+                              className='bg-accent text-accent-foreground w-50 rounded-full py-4.5'
                               isPending={isPending}
                               label={`Place Order – $${total.toFixed(2)}`}
                             />
@@ -103,18 +102,14 @@ export default function CheckoutDomain() {
                       </form.Subscribe>
                     </>
                   ) : (
-                    <div className="flex justify-between w-full items-center">
-                      <Button
-                        onClick={handleBack}
-                        variant="link"
-                        className='py-4.5 px-6'
-                      >
+                    <div className='flex w-full items-center justify-between'>
+                      <Button onClick={handleBack} variant='link' className='px-6 py-4.5'>
                         <IconChevronLeft className='ml-2 h-4 w-4' />
                         {currentStep === 'Shipping' ? 'back to card' : 'back to shipping'}
                       </Button>
                       <Button
                         onClick={handleNext}
-                        className='rounded-full bg-accent text-accent-foreground py-4.5 px-6'
+                        className='bg-accent text-accent-foreground rounded-full px-6 py-4.5'
                       >
                         {currentStep === 'Shipping' ? 'Payment' : 'Review'}
                         <IconChevronRight className='ml-2 h-4 w-4' />
@@ -127,7 +122,9 @@ export default function CheckoutDomain() {
           </div>
           <div className='lg:col-span-2'>
             <form.Subscribe selector={(state) => state.values.shippingProviderId}>
-              {((shippingProviderId) => <CheckoutSummary shippingProviderId={shippingProviderId as number} />)}
+              {(shippingProviderId) => (
+                <CheckoutSummary shippingProviderId={shippingProviderId as number} />
+              )}
             </form.Subscribe>
           </div>
         </div>

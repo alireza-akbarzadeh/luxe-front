@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { IconChevronLeft, IconChevronRight, IconPackage } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import { statusColors } from '../data';
-import {useGetOrdersMy} from "@/services/-orders-my-get";
+import { useGetOrdersMy } from '@/services/-orders-my-get';
 
 const PAGE_SIZE = 5;
 
@@ -13,7 +13,7 @@ export function AccountOrder() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
 
-  const { data: response, isLoading, isError } = useGetOrdersMy({offset,limit:20});
+  const { data: response, isLoading, isError } = useGetOrdersMy({ offset, limit: 20 });
 
   const ordersData = response?.data?.orders;
   const totalOrders = response?.data?.total || 0;

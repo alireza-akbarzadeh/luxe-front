@@ -19,7 +19,7 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useProductFilters } from '../useProductFilters';
-import { FilterContent } from './filter-contemt';
+import { FilterContent } from './filter-content';
 
 interface ShopToolbarProps {
   total: number;

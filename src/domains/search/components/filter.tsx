@@ -1,13 +1,9 @@
 import React from 'react';
 
-interface FilterProps { }
+interface FilterProps {}
 
 export function Filter(props: FilterProps) {
+  const {} = props;
 
-    const { } = props
-
-    return (
-        <div>
-        </div>
-    );
-};
+  return <div></div>;
+}

@@ -1,11 +1,9 @@
 import { IconCreditCard, IconMapPin, IconPackage } from '@tabler/icons-react';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
-import {useRouter} from "next/navigation";
-
+import { useRouter } from 'next/navigation';
 
 export type CheckoutSteps = 'Shipping' | 'Payment' | 'Review';
 export const stepNames = ['Shipping', 'Payment', 'Review'] as const;
-
 
 export const steps = [
   { id: 'Shipping', name: 'Shipping', icon: IconMapPin },
@@ -13,10 +11,8 @@ export const steps = [
   { id: 'Review', name: 'Review', icon: IconPackage }
 ];
 
-
-
 export function useCheckoutSteps() {
-  const {push}=useRouter()
+  const { push } = useRouter();
   const [currentStepRaw, setCurrentStep] = useQueryState<CheckoutSteps>(
     'step',
     parseAsStringLiteral(stepNames).withDefault('Shipping')
@@ -30,17 +26,17 @@ export function useCheckoutSteps() {
 
   const handleNext = async () => {
     if (!isLastStep) {
-      await  setCurrentStep(stepNames[currentIndex + 1] as CheckoutSteps);
+      await setCurrentStep(stepNames[currentIndex + 1] as CheckoutSteps);
     }
   };
 
   const handleBack = async () => {
-    if (currentStep === "Shipping") {
-      push("/cart")
-      return
+    if (currentStep === 'Shipping') {
+      push('/cart');
+      return;
     }
     if (!isFirstStep) {
-      await  setCurrentStep(stepNames[currentIndex - 1] as CheckoutSteps);
+      await setCurrentStep(stepNames[currentIndex - 1] as CheckoutSteps);
     }
   };
 
@@ -53,4 +49,3 @@ export function useCheckoutSteps() {
     handleBack
   };
 }
-

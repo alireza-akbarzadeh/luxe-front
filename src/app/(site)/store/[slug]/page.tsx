@@ -1,15 +1,12 @@
-import { StoreDomain } from '~/src/domains/store/store.domain'
+import { StoreDomain } from '~/src/domains/store/store.domain';
 
 interface StorePageProps {
-    params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>;
 }
 
-
 export default async function StorePage(props: StorePageProps) {
-    const { params } = props;
-    const { slug } = await params;
+  const { params } = props;
+  const { slug } = await params;
 
-    return (
-        <StoreDomain slug={slug} />
-    )
+  return <StoreDomain slug={slug} />;
 }

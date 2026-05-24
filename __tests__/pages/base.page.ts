@@ -15,4 +15,3 @@ export class BasePage {
     await this.page.waitForLoadState('networkidle');
   }
 }
-

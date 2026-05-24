@@ -51,7 +51,7 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
       onChange: checkoutSchema as any,
       onBlur: checkoutSchema as any
     },
-    
+
     onSubmit: async ({ value }) => {
       await onSubmit(value);
     }

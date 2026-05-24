@@ -37,7 +37,12 @@ type TRootLayout = Readonly<PropsWithChildren>;
 
 export default function RootLayout({ children }: TRootLayout) {
   return (
-    <html lang='en' className={nunitoSans.variable} suppressHydrationWarning data-scroll-behavior="smooth">
+    <html
+      lang='en'
+      className={nunitoSans.variable}
+      suppressHydrationWarning
+      data-scroll-behavior='smooth'
+    >
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootProvider>{children}</RootProvider>
       </body>
