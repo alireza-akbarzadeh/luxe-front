@@ -6,10 +6,10 @@ type TRootLayout = Readonly<PropsWithChildren>;
 
 export default function SiteLayout({ children }: TRootLayout) {
   return (
-    <main className='bg-background flex min-h-screen flex-col'>
+    <>
       <Navbar />
-      {children}
+      <main className='bg-background flex min-h-screen flex-col'>{children}</main>
       <Footer />
-    </main>
+    </>
   );
 }

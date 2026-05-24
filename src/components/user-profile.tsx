@@ -113,9 +113,8 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
             </div>
           </button>
         </DropdownMenuTrigger>
-
         <DropdownMenuContent
-          className='border-border/50 bg-background w-72 rounded-2xl border p-2 shadow-xl backdrop-blur-md'
+          className='w-72 p-2'
           side={isHeader ? 'bottom' : isCollapsed ? 'right' : 'top'}
           align={isHeader ? 'end' : 'center'}
           sideOffset={12}
