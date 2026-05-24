@@ -2,7 +2,8 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { products, stores, productCategories } from '@/lib/data';
+import { productCategories } from '@/lib/data';
+import { products, stores } from '../store/data';
 
 export interface SearchHistoryItem {
   query: string;

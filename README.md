@@ -155,3 +155,19 @@ Special thanks to:
 - [tandpfun](https://github.com/tandpfun) for [skill-icons](https://github.com/tandpfun/skill-icons);
 
 [Back to :arrow_up:](#nextjs-16-typescript--shadcnui--template "Back to 'Table of contents' section")
+
+
+
+| `wishlist` | High | Saved/favorite products
+| `/orders` | High | Order history with tracking
+| `/orders/[id]` | High | Individual order details
+| `/categories` | Medium | Browse by category
+| `/categories/[slug]` | Medium | Category-specific products
+| `/contact` | Medium | Contact form & support
+| `/about` | Medium | About the brand/company
+| `/faq` | Medium | Frequently asked questions
+| `/shipping-returns` | Medium | Shipping & return policies
+| `/privacy-policy` | Low | Legal - Privacy policy
+| `/terms` | Low | Legal - Terms of service
+| `/compare` | Low | Compare products side-by-side
+| `/track-order` | Low | Track order by number (guest)

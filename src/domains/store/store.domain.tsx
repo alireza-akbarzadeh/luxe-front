@@ -51,7 +51,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ProductCard } from "../shop/components/prodcut-card";
+import { ProductCard } from "../shop/components/product-card";
 import { products, sortOptions, stores } from "./data";
 import { useStoreFilters } from "./hooks/useStoreFilter";
 import { useStoreStore } from "./hooks/useStoreStore";
