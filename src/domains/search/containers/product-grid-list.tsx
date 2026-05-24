@@ -11,7 +11,20 @@ import { useSearchParams } from '../hooks/useSearchParams';
 
 interface ProductGridListProps {
   //   filteredProducts: ProductCardProps['product'][];
-  filteredProducts: any;
+  filteredProducts: {
+    id: number;
+    name: string;
+    price: number;
+    originalPrice: number;
+    rating: number;
+    reviews: number;
+    image: string;
+    category: string;
+    isNew: boolean;
+    isDigital: boolean;
+    storeId: string;
+    description: string;
+  }[];
 }
 
 export function ProductGridList(props: ProductGridListProps) {
