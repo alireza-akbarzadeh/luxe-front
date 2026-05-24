@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { UserProfile } from './user-profile';
 import { CartButton } from './cart/cart-button';
 import { CartSheet } from './cart/cart-sheet';
+import { APP_CONFIG } from '../lib/config';
+import { cn } from '../lib/utils';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,7 +37,7 @@ export function Navbar() {
             : 'bg-transparent'
         }`}
       >
-        <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <nav className={cn('px-4 sm:px-6', APP_CONFIG.CONTAINER_SPACING_PADDING)}>
           <div className='flex h-16 items-center justify-between lg:h-20'>
             {/* Logo */}
             <Link href='/' className='flex items-center gap-2'>

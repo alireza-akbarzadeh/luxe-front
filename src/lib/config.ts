@@ -9,7 +9,8 @@ export const APP_CONFIG = {
   },
   API_DEFAULT_TIMEOUT: 30000,
   MAX_RETRY_LIMIT: 3,
-  MAX_AGE: 15 * 60 // 15 min
+  MAX_AGE: 15 * 60, // 15 min
+  CONTAINER_SPACING_PADDING: 'lg:px-20'
 } as const;
 
 export type AuthConfig = typeof APP_CONFIG;

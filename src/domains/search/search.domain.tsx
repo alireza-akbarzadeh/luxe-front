@@ -14,6 +14,8 @@ import { SearchHero } from './containers/search-hero';
 import { useSearchParams } from './hooks/useSearchParams';
 import { useSearchStore } from './search.store';
 import { ResultHeader } from './containers/result-header';
+import { cn } from '~/src/lib/utils';
+import { APP_CONFIG } from '~/src/lib/config';
 
 export default function SearchDomain() {
   const searchParams = useSearchParams();
@@ -121,7 +123,7 @@ export default function SearchDomain() {
       {/* Search Hero */}
       <SearchHero filteredProducts={filteredProducts} />
       {/* Results Section */}
-      <section className='mx-auto max-w-7xl px-4 py-8'>
+      <section className={'py-8'}>
         <div className='flex flex-col gap-8 lg:flex-row'>
           {/* Desktop Filters Sidebar */}
           <aside className='hidden w-64 shrink-0 lg:block'>

@@ -1,8 +1,8 @@
 import { AxiosError, HttpStatusCode, type AxiosRequestConfig } from 'axios';
 import { toast } from 'sonner';
 import type { ApiClientOptions, ApiErrorResponse } from './type';
-import {logger} from "@/lib/api/logger";
-import {extractErrorMessage} from "@/lib/api/api-utils";
+import { logger } from '@/lib/api/logger';
+import { extractErrorMessage } from '@/lib/api/api-utils';
 
 /**
  * Handle API errors with appropriate toast notifications
@@ -13,9 +13,9 @@ import {extractErrorMessage} from "@/lib/api/api-utils";
 // ---------- Advanced error handler ----------
 // ---------- Advanced error handler ----------
 export const handleApiError = (
-    axiosError: AxiosError<ApiErrorResponse>,
-    config: AxiosRequestConfig,
-    apiOptions: ApiClientOptions
+  axiosError: AxiosError<ApiErrorResponse>,
+  config: AxiosRequestConfig,
+  apiOptions: ApiClientOptions
 ): void => {
   if (typeof window === 'undefined' || apiOptions.skipToast) return;
 
@@ -30,7 +30,7 @@ export const handleApiError = (
   }
 
   switch (status) {
-      // ── 4xx client errors ────────────────────────────────
+    // ── 4xx client errors ────────────────────────────────
     case HttpStatusCode.BadRequest:
       toast.error(`Bad request — ${message}`);
       break;
@@ -63,7 +63,7 @@ export const handleApiError = (
       break;
     }
 
-      // ── 5xx server errors ────────────────────────────────
+    // ── 5xx server errors ────────────────────────────────
     case HttpStatusCode.InternalServerError:
       if (!url.includes('Insight')) {
         toast.error(`Server error — ${message}`);

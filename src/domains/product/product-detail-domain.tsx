@@ -9,7 +9,7 @@ import ProductDescription from './components/product-description';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import ProductReviews from './components/product-reviews';
-import { ProductSpecifications } from './components/product-specificaitons';
+import { ProductSpecifications } from './components/product-specification';
 import RelatedProduct from './related-product';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
@@ -26,7 +26,7 @@ export default function ProductDetailDomain({ productId }: { productId: string }
     : 0;
 
   return (
-    <div className='container mx-auto mt-20 px-4 py-8'>
+    <div className='mt-20 py-8'>
       {/* Breadcrumb */}
       <nav className='text-muted-foreground flex items-center gap-1.5 text-xs'>
         <Link href='/' className='hover:text-foreground'>

@@ -1,7 +1,5 @@
 'use client';
 
-import { Footer } from '@/components/footer';
-import { Navbar } from '@/components/navbar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -321,9 +319,7 @@ export function StoreDomain({ slug }: { slug: string }) {
   );
 
   return (
-    <div className='bg-background min-h-screen'>
-      <Navbar />
-
+    <>
       {/* Store Header */}
       <section className='relative pt-20'>
         {/* Banner */}
@@ -641,6 +637,6 @@ export function StoreDomain({ slug }: { slug: string }) {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
