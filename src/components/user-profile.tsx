@@ -13,6 +13,8 @@ import {
 import { cn } from '@/lib/utils';
 import {
   IconDashboard,
+  IconHeart,
+  IconLogin,
   IconLogout,
   IconMoon,
   IconSettings,
@@ -34,7 +36,6 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
   const { user, isAuthenticated } = useUser();
   const { theme, setTheme } = useTheme();
 
-  // Derive the next theme in the cycle: light → dark → system → light
   const nextTheme = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
 
   const userName = user?.first_name || 'Guest User';
@@ -157,23 +158,42 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
                 </Link>
               </DropdownMenuItem>
             )}
-
-            <DropdownMenuItem asChild>
-              <Link
-                href='/account'
-                className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
-              >
-                <IconUserCircle
-                  size={16}
-                  className='text-muted-foreground group-focus:text-primary'
-                />
-                <div className='flex flex-col text-left'>
-                  <span className='text-sm font-medium'>My Profile</span>
-                  <span className='text-muted-foreground text-[10px]'>Work & Personal details</span>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-
+            {isAuthenticated && (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href='/account'
+                    className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+                  >
+                    <IconUserCircle
+                      size={16}
+                      className='text-muted-foreground group-focus:text-primary'
+                    />
+                    <div className='flex flex-col text-left'>
+                      <span className='text-sm font-medium'>My Profile</span>
+                      <span className='text-muted-foreground text-[10px]'>
+                        Work & Personal details
+                      </span>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href='/wishlist'
+                    className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+                  >
+                    <IconHeart
+                      size={16}
+                      className='text-muted-foreground group-focus:text-primary'
+                    />
+                    <div className='flex flex-col text-left'>
+                      <span className='text-sm font-medium'>My Wishlist</span>
+                      <span className='text-muted-foreground text-[10px]'>your item loved</span>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuItem asChild>
               <button className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'>
                 <IconSettings
@@ -190,7 +210,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
             <DropdownMenuItem asChild>
               <button
                 onClick={() => setTheme(nextTheme)}
-                className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+                className='group focus:bg-primary/10 focus:text-primary flex w-full cursor-pointer items-center gap-3 rounded-lg p-4.5'
               >
                 <ThemeIcon size={16} className='text-muted-foreground group-focus:text-primary' />
                 <div className='flex flex-col text-left'>
@@ -202,16 +222,28 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
-
-          <DropdownMenuItem asChild>
-            <button
-              onClick={handleSignOut}
-              className='text-destructive focus:bg-destructive/10 focus:text-destructive flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
-            >
-              <IconLogout size={16} />
-              <span className='text-sm font-medium'>Sign out</span>
-            </button>
-          </DropdownMenuItem>
+          {isAuthenticated ? (
+            <DropdownMenuItem asChild>
+              <button
+                onClick={handleSignOut}
+                className='text-destructive focus:bg-destructive/10 focus:text-destructive flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+              >
+                <IconLogout size={16} />
+                <span className='text-sm font-medium'>Sign out</span>
+              </button>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem asChild>
+              <button
+                onClick={handleSignOut}
+                className='flex w-full cursor-pointer items-center gap-3 rounded-lg p-2.5'
+              >
+                <IconLogin size={16} />
+                <span className='text-sm font-medium'>log in</span>
+                <span className='text-muted-foreground text-[10px]'></span>
+              </button>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

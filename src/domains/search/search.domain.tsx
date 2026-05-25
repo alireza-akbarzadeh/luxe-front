@@ -14,8 +14,6 @@ import { SearchHero } from './containers/search-hero';
 import { useSearchParams } from './hooks/useSearchParams';
 import { useSearchStore } from './search.store';
 import { ResultHeader } from './containers/result-header';
-import { cn } from '~/src/lib/utils';
-import { APP_CONFIG } from '~/src/lib/config';
 
 export default function SearchDomain() {
   const searchParams = useSearchParams();

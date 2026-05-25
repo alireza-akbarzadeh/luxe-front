@@ -11,7 +11,7 @@ import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
 import { useCartController } from '@/hooks/useCartController';
 import { toast } from 'sonner';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 interface ProductInfoProps {

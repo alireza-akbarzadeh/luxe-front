@@ -167,6 +167,7 @@ export async function refreshAccessToken(): Promise<string | null> {
     const refreshToken = cookieStore.get('refresh_token')?.value;
 
     if (!refreshToken) {
+      console.log('No refresh token cookie');
       return null;
     }
 
@@ -178,8 +179,12 @@ export async function refreshAccessToken(): Promise<string | null> {
     });
 
     if (!res.ok) {
-      // Refresh token is invalid or expired
-      await clearAuthCookies();
+      console.log(`Refresh failed with status ${res.status}`);
+      // Only clear if the backend rejects the refresh token
+      if (res.status === 401 || res.status === 403) {
+        console.log('Refresh token invalid, clearing cookies');
+        await clearAuthCookies();
+      }
       return null;
     }
 
@@ -187,25 +192,27 @@ export async function refreshAccessToken(): Promise<string | null> {
     const accessToken = json.data?.access_token;
 
     if (!accessToken) {
+      console.log('No access token in response');
       return null;
     }
 
-    // Update only the access token cookie
+    // Update access token cookie
     cookieStore.set('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 15 * 60 // 15 minutes
+      maxAge: 15 * 60
     });
 
+    console.log('Refresh successful, new access token set');
     return accessToken;
   } catch (error) {
     console.error('Token refresh error:', error);
+    // Network errors – do NOT clear cookies
     return null;
   }
 }
-
 /**
  * Validate current session
  */

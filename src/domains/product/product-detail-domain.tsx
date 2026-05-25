@@ -11,6 +11,7 @@ import { ProductInfo } from './components/product-info';
 import ProductReviews from './components/product-reviews';
 import { ProductSpecifications } from './components/product-specification';
 import RelatedProduct from './related-product';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
   const { data } = useGetProductsId(productId);
@@ -26,21 +27,19 @@ export default function ProductDetailDomain({ productId }: { productId: string }
     : 0;
 
   return (
-    <div className='mt-20 py-8'>
+    <div className='app-container mt-20 py-8'>
       {/* Breadcrumb */}
-      <nav className='text-muted-foreground flex items-center gap-1.5 text-xs'>
-        <Link href='/' className='hover:text-foreground'>
-          Home
-        </Link>
-        <IconChevronRight className='h-3 w-3' />
-        <Link href='/' className='hover:text-foreground'>
-          Shop
-        </Link>
-        <IconChevronRight className='h-3 w-3' />
-        <span className='hover:text-foreground'>{product.category?.name}</span>
-        <IconChevronRight className='h-3 w-3' />
-        <span className='text-foreground'>{product.name}</span>
-      </nav>
+      <DynamicBreadcrumb
+        items={[
+          { label: 'Shop', href: '/shop' },
+          { label: product.category?.name || '' },
+          { label: product.name || '' }
+        ]}
+        direction='column'
+        separator={<IconChevronRight className='h-3 w-3' />}
+        className='text-muted-foreground text-xs'
+        breadcrumbClassName='flex items-center gap-1.5'
+      />
 
       {/* Main */}
       <div className='mt-6 grid gap-10 lg:grid-cols-2'>

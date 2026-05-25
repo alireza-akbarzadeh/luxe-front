@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { products } from '../data';
+import { products } from '../store/data';
 
 const MAX_COMPARE_ITEMS = 4;
 
@@ -31,7 +31,7 @@ export const useCompareStore = create<CompareState>()(
         if (!get().canAddMore()) return false;
         if (get().isInCompare(productId)) return false;
 
-        const product = products.find((p) => p.id === productId);
+        const product = products?.find((p) => p.id === productId);
         if (!product) return false;
 
         set((state) => ({
@@ -70,7 +70,7 @@ export const useCompareStore = create<CompareState>()(
 
       getItems: () => {
         return get()
-          .items.map((id) => products.find((p) => p.id === id))
+          .items.map((id) => products?.find((p) => p.id === id))
           .filter(Boolean) as Array<(typeof products)[0]>;
       },
 

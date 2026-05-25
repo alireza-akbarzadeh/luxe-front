@@ -1,16 +1,5 @@
 'use client';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -23,57 +12,49 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
-import {
-  ArrowRight,
-  Bell,
-  BellOff,
-  ChevronRight,
-  Gift,
-  Grid3X3,
-  Heart,
-  List,
-  Package,
-  Share2,
-  ShoppingCart,
-  Sparkles,
-  Star,
-  Trash2,
-  TrendingDown,
-  X
-} from 'lucide-react';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useCartController } from '~/src/hooks/useCartController';
+import { useState } from 'react';
+import { useCartController } from '@/hooks/useCartController';
 import { useCompareStore } from '../compare/compare.store';
-import { products, type stores } from '../store/data';
+import { products, stores } from '../store/data';
 import { useWishlistStore } from './wishlist.store';
+import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
+import { WishlistHeader } from './components/wishlist-header';
+import { Empty } from '@/components/empty';
+import {
+  IconArrowRight,
+  IconBell,
+  IconBellOff,
+  IconChevronRight,
+  IconGift,
+  IconGrid3x3,
+  IconHeart,
+  IconList,
+  IconPackage,
+  IconShoppingCart,
+  IconSparkles,
+  IconStar,
+  IconTrash,
+  IconTrendingDown,
+  IconX
+} from '@tabler/icons-react';
 
 type SortOption = 'date-desc' | 'date-asc' | 'price-asc' | 'price-desc' | 'name';
 type ViewMode = 'grid' | 'list';
 
-export default function WishlistPage() {
-  const [mounted, setMounted] = useState(false);
+export function WishlistDomain() {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>('date-desc');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
-  const {
-    items: wishlistItems,
-    removeItem,
-    toggleNotifyOnSale,
-    clearWishlist,
-    getItems,
-    getPriceDrops,
-    getTotalSavings
-  } = useWishlistStore();
+  const { removeItem, toggleNotifyOnSale, getItems, getPriceDrops, getTotalSavings } =
+    useWishlistStore();
   const { addItem: addToCart } = useCartController();
   const { addItem: addToCompare, isInCompare, canAddMore } = useCompareStore();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const allItems = getItems().filter((item) => item.product);
   const priceDrops = getPriceDrops();
@@ -115,8 +96,7 @@ export default function WishlistPage() {
       const product = products?.find((p) => p.id === id);
       if (product) {
         addToCart({
-          id: product.id,
-          name: product.name,
+          productId: product.id,
           price: product.price,
           originalPrice: product.originalPrice,
           image: product.image
@@ -125,12 +105,6 @@ export default function WishlistPage() {
     });
     setSelectedItems([]);
   };
-
-  const removeSelected = () => {
-    selectedItems.forEach((id) => removeItem(id));
-    setSelectedItems([]);
-  };
-
   const handleAddToCart = (product: (typeof products)[0]) => {
     addToCart({
       id: product.id,
@@ -140,129 +114,31 @@ export default function WishlistPage() {
       image: product.image
     });
   };
-
-  const handleShare = async () => {
-    const shareText = `Check out my wishlist with ${allItems.length} items!`;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'My Luxe Wishlist',
-          text: shareText,
-          url: window.location.href
-        });
-      } catch {
-        // User cancelled or error
-      }
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-    }
+  const removeSelected = () => {
+    selectedItems.forEach((id) => removeItem(id));
+    setSelectedItems([]);
   };
-
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-  };
-
-  if (!mounted) {
-    return (
-      <>
-        <div className='mx-auto max-w-7xl px-4 py-24'>
-          <div className='animate-pulse space-y-8'>
-            <div className='bg-muted h-10 w-48 rounded' />
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
-              {[1, 2, 3].map((i) => (
-                <div key={i} className='bg-muted h-64 rounded-2xl' />
-              ))}
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
 
   return (
-    <div className='mx-auto max-w-7xl px-4 py-8 pt-24'>
+    <div className='app-container py-8 pt-24'>
       {/* Breadcrumb */}
-      <nav className='text-muted-foreground mb-8 flex items-center gap-2 text-sm'>
-        <Link href='/' className='hover:text-foreground transition-colors'>
-          Home
-        </Link>
-        <ChevronRight className='h-4 w-4' />
-        <span className='text-foreground'>Wishlist</span>
-      </nav>
-
+      <DynamicBreadcrumb segments={['Wishlist']} />
       {/* Header */}
-      <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
-        <div>
-          <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>My Wishlist</h1>
-          <p className='text-muted-foreground mt-1'>
-            {allItems.length} {allItems.length === 1 ? 'item' : 'items'} saved for later
-          </p>
-        </div>
-
-        <div className='flex items-center gap-3'>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant='outline' size='icon' onClick={handleShare}>
-                  <Share2 className='h-4 w-4' />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Share Wishlist</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          {allItems.length > 0 && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant='outline' size='sm' className='gap-2'>
-                  <Trash2 className='h-4 w-4' />
-                  Clear All
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Clear Wishlist?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will remove all {allItems.length} items from your wishlist. This action
-                    cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={clearWishlist}>Clear All</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
-        </div>
-      </div>
-
+      <WishlistHeader itemLength={allItems.length || 0} />
       {allItems.length === 0 ? (
-        /* Empty State */
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className='py-20 text-center'
-        >
-          <div className='bg-muted mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full'>
-            <Heart className='text-muted-foreground h-12 w-12' />
-          </div>
-          <h2 className='mb-2 text-2xl font-semibold'>Your wishlist is empty</h2>
-          <p className='text-muted-foreground mx-auto mb-8 max-w-md'>
-            Start adding items you love by clicking the heart icon on any product. We&apos;ll save
-            them here for you.
-          </p>
-          <Link href='/shop'>
-            <Button size='lg' className='gap-2 rounded-full'>
-              Explore Products
-              <ArrowRight className='h-4 w-4' />
-            </Button>
-          </Link>
-        </motion.div>
+        <Empty
+          content={
+            <Link href='/shop'>
+              <Button size='lg' className='gap-2 rounded-full'>
+                Explore Products
+                <IconArrowRight className='h-4 w-4' />
+              </Button>
+            </Link>
+          }
+          description="Start adding items you love by clicking the heart icon on any product. We'll save them here for you."
+          title='your wishlist os Empty'
+          icon={IconHeart}
+        />
       ) : (
         <>
           {/* Price Drops Alert */}
@@ -275,7 +151,7 @@ export default function WishlistPage() {
               <Card className='border-green-500/30 bg-green-500/5 p-4'>
                 <div className='flex items-center gap-3'>
                   <div className='rounded-full bg-green-500/10 p-2'>
-                    <TrendingDown className='h-5 w-5 text-green-500' />
+                    <IconTrendingDown className='h-5 w-5 text-green-500' />
                   </div>
                   <div className='flex-1'>
                     <p className='font-medium text-green-700 dark:text-green-400'>
@@ -289,7 +165,7 @@ export default function WishlistPage() {
                   <Link href='#price-drops'>
                     <Button variant='ghost' size='sm' className='gap-1'>
                       View
-                      <ChevronRight className='h-4 w-4' />
+                      <IconChevronRight className='h-4 w-4' />
                     </Button>
                   </Link>
                 </div>
@@ -302,7 +178,7 @@ export default function WishlistPage() {
             <Card className='p-4'>
               <div className='flex items-center gap-3'>
                 <div className='bg-primary/10 rounded-lg p-2'>
-                  <Heart className='text-primary h-5 w-5' />
+                  <IconHeart className='text-primary h-5 w-5' />
                 </div>
                 <div>
                   <p className='text-2xl font-bold'>{allItems.length}</p>
@@ -313,7 +189,7 @@ export default function WishlistPage() {
             <Card className='p-4'>
               <div className='flex items-center gap-3'>
                 <div className='rounded-lg bg-green-500/10 p-2'>
-                  <Sparkles className='h-5 w-5 text-green-500' />
+                  <IconSparkles className='h-5 w-5 text-green-500' />
                 </div>
                 <div>
                   <p className='text-2xl font-bold'>${totalSavings}</p>
@@ -324,7 +200,7 @@ export default function WishlistPage() {
             <Card className='p-4'>
               <div className='flex items-center gap-3'>
                 <div className='bg-accent/50 rounded-lg p-2'>
-                  <Gift className='text-accent-foreground h-5 w-5' />
+                  <IconGift className='text-accent-foreground h-5 w-5' />
                 </div>
                 <div>
                   <p className='text-2xl font-bold'>{priceDrops.length}</p>
@@ -365,7 +241,7 @@ export default function WishlistPage() {
                       className='gap-1'
                       onClick={addSelectedToCart}
                     >
-                      <ShoppingCart className='h-3 w-3' />
+                      <IconShoppingCart className='h-3 w-3' />
                       Add to Cart
                     </Button>
                     <Button
@@ -374,7 +250,7 @@ export default function WishlistPage() {
                       className='text-destructive hover:text-destructive gap-1'
                       onClick={removeSelected}
                     >
-                      <Trash2 className='h-3 w-3' />
+                      <IconTrash className='h-3 w-3' />
                       Remove
                     </Button>
                   </motion.div>
@@ -384,7 +260,7 @@ export default function WishlistPage() {
 
             <div className='flex items-center gap-3'>
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                <SelectTrigger className='w-[180px]'>
+                <SelectTrigger className='w-45'>
                   <SelectValue placeholder='Sort by' />
                 </SelectTrigger>
                 <SelectContent>
@@ -403,7 +279,7 @@ export default function WishlistPage() {
                   className='h-8 w-8'
                   onClick={() => setViewMode('grid')}
                 >
-                  <Grid3X3 className='h-4 w-4' />
+                  <IconGrid3x3 className='h-4 w-4' />
                 </Button>
                 <Button
                   variant={viewMode === 'list' ? 'secondary' : 'ghost'}
@@ -411,7 +287,7 @@ export default function WishlistPage() {
                   className='h-8 w-8'
                   onClick={() => setViewMode('list')}
                 >
-                  <List className='h-4 w-4' />
+                  <IconList className='h-4 w-4' />
                 </Button>
               </div>
             </div>
@@ -473,7 +349,7 @@ export default function WishlistPage() {
                             </div>
 
                             {/* Actions Overlay */}
-                            <div className='from-background/90 absolute inset-0 flex items-end justify-center bg-gradient-to-t via-transparent to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
+                            <div className='from-background/90 absolute inset-0 flex items-end justify-center bg-linear-to-t via-transparent to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100'>
                               <div className='flex w-full gap-2'>
                                 <Button
                                   size='sm'
@@ -483,7 +359,7 @@ export default function WishlistPage() {
                                     handleAddToCart(product);
                                   }}
                                 >
-                                  <ShoppingCart className='h-3 w-3' />
+                                  <IconShoppingCart className='h-3 w-3' />
                                   Add to Cart
                                 </Button>
                                 <TooltipProvider>
@@ -500,9 +376,9 @@ export default function WishlistPage() {
                                         disabled={!canAddMore() && !isInCompare(product.id)}
                                       >
                                         {isInCompare(product.id) ? (
-                                          <X className='h-3 w-3' />
+                                          <IconX className='h-3 w-3' />
                                         ) : (
-                                          <Package className='h-3 w-3' />
+                                          <IconPackage className='h-3 w-3' />
                                         )}
                                       </Button>
                                     </TooltipTrigger>
@@ -531,7 +407,7 @@ export default function WishlistPage() {
                           <h3 className='mt-1 line-clamp-1 font-medium'>{product.name}</h3>
 
                           <div className='mt-1 flex items-center gap-1'>
-                            <Star className='fill-accent text-accent h-3 w-3' />
+                            <IconStar className='fill-accent text-accent h-3 w-3' />
                             <span className='text-muted-foreground text-xs'>{product.rating}</span>
                           </div>
 
@@ -556,9 +432,9 @@ export default function WishlistPage() {
                                       onClick={() => toggleNotifyOnSale(item.id)}
                                     >
                                       {item.notifyOnSale ? (
-                                        <Bell className='text-primary h-4 w-4' />
+                                        <IconBell className='text-primary h-4 w-4' />
                                       ) : (
-                                        <BellOff className='h-4 w-4' />
+                                        <IconBellOff className='h-4 w-4' />
                                       )}
                                     </Button>
                                   </TooltipTrigger>
@@ -574,13 +450,13 @@ export default function WishlistPage() {
                                 className='text-destructive hover:text-destructive h-8 w-8'
                                 onClick={() => removeItem(item.id)}
                               >
-                                <Trash2 className='h-4 w-4' />
+                                <IconTrash className='h-4 w-4' />
                               </Button>
                             </div>
                           </div>
 
                           <p className='text-muted-foreground mt-2 text-xs'>
-                            Added {formatDate(item.addedAt)}
+                            Added {format(new Date(item.addedAt), '')}
                           </p>
                         </div>
                       </Card>
@@ -615,7 +491,7 @@ export default function WishlistPage() {
 
                           <Link
                             href={`/product/${product.id}`}
-                            className='bg-secondary relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg'
+                            className='bg-secondary relative h-24 w-24 shrink-0 overflow-hidden rounded-lg'
                           >
                             <Image
                               src={product.image}
@@ -660,10 +536,10 @@ export default function WishlistPage() {
                             <div className='mt-3 flex items-center justify-between'>
                               <div className='text-muted-foreground flex items-center gap-4 text-sm'>
                                 <div className='flex items-center gap-1'>
-                                  <Star className='fill-accent text-accent h-3 w-3' />
+                                  <IconStar className='fill-accent text-accent h-3 w-3' />
                                   {product.rating}
                                 </div>
-                                <span>Added {formatDate(item.addedAt)}</span>
+                                <span>Added {format(new Date(item.addedAt), '')}</span>
                               </div>
 
                               <div className='flex items-center gap-2'>
@@ -674,9 +550,9 @@ export default function WishlistPage() {
                                   className='gap-1'
                                 >
                                   {item.notifyOnSale ? (
-                                    <Bell className='text-primary h-4 w-4' />
+                                    <IconBell className='text-primary h-4 w-4' />
                                   ) : (
-                                    <BellOff className='h-4 w-4' />
+                                    <IconBellOff className='h-4 w-4' />
                                   )}
                                   {item.notifyOnSale ? 'Notifying' : 'Notify'}
                                 </Button>
@@ -686,7 +562,7 @@ export default function WishlistPage() {
                                   className='gap-1'
                                   onClick={() => handleAddToCart(product)}
                                 >
-                                  <ShoppingCart className='h-4 w-4' />
+                                  <IconShoppingCart className='h-4 w-4' />
                                   Add to Cart
                                 </Button>
                                 <Button
@@ -695,7 +571,7 @@ export default function WishlistPage() {
                                   className='text-destructive hover:text-destructive h-8 w-8'
                                   onClick={() => removeItem(item.id)}
                                 >
-                                  <Trash2 className='h-4 w-4' />
+                                  <IconTrash className='h-4 w-4' />
                                 </Button>
                               </div>
                             </div>
@@ -717,7 +593,7 @@ export default function WishlistPage() {
             <Link href='/shop'>
               <Button variant='outline' size='lg' className='gap-2 rounded-full'>
                 Continue Shopping
-                <ArrowRight className='h-4 w-4' />
+                <IconArrowRight className='h-4 w-4' />
               </Button>
             </Link>
           </div>

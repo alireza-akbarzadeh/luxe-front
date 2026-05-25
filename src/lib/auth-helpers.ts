@@ -37,6 +37,8 @@ export async function setAuthCookies(
  * Clear all authentication cookies
  */
 export async function clearAuthCookies() {
+  console.trace('clearAuthCookies called from:', new Error().stack);
+
   const cookieStore = await cookies();
 
   cookieStore.delete('access_token');

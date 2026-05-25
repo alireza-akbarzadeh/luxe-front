@@ -10,8 +10,6 @@ import { useEffect, useState } from 'react';
 import { UserProfile } from './user-profile';
 import { CartButton } from './cart/cart-button';
 import { CartSheet } from './cart/cart-sheet';
-import { APP_CONFIG } from '../lib/config';
-import { cn } from '../lib/utils';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -31,13 +29,13 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
+        className={`app-container fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
           isScrolled
             ? 'bg-background/80 border-border/50 border-b shadow-sm backdrop-blur-xl'
             : 'bg-transparent'
         }`}
       >
-        <nav className={cn('px-4 sm:px-6', APP_CONFIG.CONTAINER_SPACING_PADDING)}>
+        <nav className={'xs:px-4 app-container sm:px-6'}>
           <div className='flex h-16 items-center justify-between lg:h-20'>
             {/* Logo */}
             <Link href='/' className='flex items-center gap-2'>

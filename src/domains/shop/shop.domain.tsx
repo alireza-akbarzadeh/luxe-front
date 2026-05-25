@@ -6,8 +6,6 @@ import { ProductGrid } from './components/product-grid';
 import { ShopToolbar } from './components/shop-toolbar';
 import { useGetProducts } from '~/src/services/-products-get';
 import { useProductFilters } from './useProductFilters';
-import { cn } from '~/src/lib/utils';
-import { APP_CONFIG } from '~/src/lib/config';
 
 export function ShopDomain() {
   const { apiParams } = useProductFilters();
@@ -15,7 +13,7 @@ export function ShopDomain() {
   const { data } = useGetProducts(apiParams);
   const total = data?.data?.total ?? 0;
   return (
-    <div className={'mt-10'}>
+    <div className='app-container mt-10'>
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

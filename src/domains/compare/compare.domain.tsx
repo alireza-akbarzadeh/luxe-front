@@ -1,34 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  X,
-  Plus,
-  ShoppingCart,
-  Heart,
-  Star,
-  Check,
-  Minus,
-  ArrowRight,
-  ChevronRight,
-  Layers,
-  Package,
-  Truck,
-  Shield,
-  RotateCcw,
-  Trash2
-} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -38,27 +12,47 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import {
+  IconArrowRight,
+  IconCheck,
+  IconHeart,
+  IconLayersSelected,
+  IconPackage,
+  IconPlus,
+  IconRotateClockwise,
+  IconShield,
+  IconShoppingCart,
+  IconStar,
+  IconTrash,
+  IconTruck,
+  IconX
+} from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCompareStore, MAX_COMPARE } from '@/lib/stores/compare-store';
-import { useCartStore } from '@/lib/stores/cart-store';
-import { useWishlistStore } from '@/lib/stores/wishlist-store';
-import { products, stores, productCategories } from '@/lib/data';
+import { useState } from 'react';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
+import { useCartController } from '~/src/hooks/useCartController';
+import { productCategories, products, stores } from '../store/data';
+import { useWishlistStore } from '../wishlist/wishlist.store';
+import { useCompareStore } from './compare.store';
 
 export default function ComparePage() {
-  const [mounted, setMounted] = useState(false);
   const [addProductOpen, setAddProductOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [highlightDiffs, setHighlightDiffs] = useState(true);
 
   const { items, removeItem, addItem, clearAll, getItems, canAddMore } = useCompareStore();
-  const { addItem: addToCart } = useCartStore();
+  const { addItem: addToCart } = useCartController();
   const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const compareProducts = getItems();
 
@@ -125,6 +119,7 @@ export default function ComparePage() {
     if (numericValues.length < 2) return null;
     return type === 'min' ? Math.min(...numericValues) : Math.max(...numericValues);
   };
+  const MAX_COMPAR = 10;
 
   const isHighlighted = (
     product: (typeof products)[0],
@@ -151,44 +146,27 @@ export default function ComparePage() {
   const comparisonRows = [
     { key: 'price', label: 'Price', icon: null },
     { key: 'discount', label: 'Discount', icon: null, suffix: '%' },
-    { key: 'rating', label: 'Rating', icon: Star },
+    { key: 'rating', label: 'Rating', icon: IconStar },
     { key: 'reviews', label: 'Reviews', icon: null },
-    { key: 'category', label: 'Category', icon: Layers },
-    { key: 'store', label: 'Store', icon: Package },
+    { key: 'category', label: 'Category', icon: IconLayersSelected },
+    { key: 'store', label: 'Store', icon: IconPackage },
     { key: 'isNew', label: 'New Arrival', icon: null },
     { key: 'isDigital', label: 'Product Type', icon: null },
-    { key: 'shipping', label: 'Shipping', icon: Truck },
-    { key: 'returns', label: 'Returns', icon: RotateCcw }
+    { key: 'shipping', label: 'Shipping', icon: IconTruck },
+    { key: 'returns', label: 'Returns', icon: IconRotateClockwise }
   ];
-
-  if (!mounted) {
-    return (
-      <div className='mx-auto max-w-7xl px-4 py-24'>
-        <div className='animate-pulse space-y-8'>
-          <div className='bg-muted h-10 w-48 rounded' />
-          <div className='bg-muted h-96 rounded-2xl' />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className='mx-auto max-w-7xl px-4 py-8 pt-24'>
       {/* Breadcrumb */}
-      <nav className='text-muted-foreground mb-8 flex items-center gap-2 text-sm'>
-        <Link href='/' className='hover:text-foreground transition-colors'>
-          Home
-        </Link>
-        <ChevronRight className='h-4 w-4' />
-        <span className='text-foreground'>Compare Products</span>
-      </nav>
+      <DynamicBreadcrumb segments={['Compare Products']} />
 
       {/* Header */}
       <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
           <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>Compare Products</h1>
           <p className='text-muted-foreground mt-1'>
-            {compareProducts.length} of {MAX_COMPARE} products selected
+            {compareProducts.length} of {MAX_COMPAR} products selected
           </p>
         </div>
 
@@ -205,7 +183,7 @@ export default function ComparePage() {
 
           {compareProducts.length > 0 && (
             <Button variant='outline' size='sm' className='gap-2' onClick={clearAll}>
-              <Trash2 className='h-4 w-4' />
+              <IconTrash className='h-4 w-4' />
               Clear All
             </Button>
           )}
@@ -220,7 +198,7 @@ export default function ComparePage() {
           className='py-20 text-center'
         >
           <div className='bg-muted mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full'>
-            <Layers className='text-muted-foreground h-12 w-12' />
+            <IconLayersIntersects className='text-muted-foreground h-12 w-12' />
           </div>
           <h2 className='mb-2 text-2xl font-semibold'>No products to compare</h2>
           <p className='text-muted-foreground mx-auto mb-8 max-w-md'>
@@ -230,7 +208,7 @@ export default function ComparePage() {
           <Dialog open={addProductOpen} onOpenChange={setAddProductOpen}>
             <DialogTrigger asChild>
               <Button size='lg' className='gap-2 rounded-full'>
-                <Plus className='h-4 w-4' />
+                <IconPlus className='h-4 w-4' />
                 Add Products to Compare
               </Button>
             </DialogTrigger>
@@ -256,7 +234,7 @@ export default function ComparePage() {
                     ))}
                   </SelectContent>
                 </Select>
-                <ScrollArea className='h-[300px]'>
+                <ScrollArea className='h-75'>
                   <div className='space-y-2'>
                     {availableProducts.map((product) => (
                       <div
@@ -281,7 +259,7 @@ export default function ComparePage() {
                             {product.category} · ${product.price}
                           </p>
                         </div>
-                        <Plus className='text-muted-foreground h-4 w-4' />
+                        <IconPlus className='text-muted-foreground h-4 w-4' />
                       </div>
                     ))}
                     {availableProducts.length === 0 && (
@@ -297,7 +275,7 @@ export default function ComparePage() {
         <>
           {/* Comparison Table */}
           <div className='overflow-x-auto'>
-            <div className='min-w-[800px]'>
+            <div className='min-w-200'>
               {/* Product Cards Row */}
               <div
                 className='mb-6 grid gap-4'
@@ -328,7 +306,7 @@ export default function ComparePage() {
                             className='absolute top-2 right-2 h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100'
                             onClick={() => removeItem(product.id)}
                           >
-                            <X className='h-4 w-4' />
+                            <IconX className='h-4 w-4' />
                           </Button>
 
                           {/* Product Image */}
@@ -357,7 +335,7 @@ export default function ComparePage() {
                               {store.name}
                             </Link>
                           )}
-                          <h3 className='mt-1 line-clamp-2 min-h-[48px] font-semibold'>
+                          <h3 className='mt-1 line-clamp-2 min-h-12 font-semibold'>
                             {product.name}
                           </h3>
 
@@ -377,7 +355,7 @@ export default function ComparePage() {
                               size='sm'
                               onClick={() => handleAddToCart(product)}
                             >
-                              <ShoppingCart className='h-4 w-4' />
+                              <IconShoppingCart className='h-4 w-4' />
                               Add
                             </Button>
                             <Button
@@ -386,7 +364,7 @@ export default function ComparePage() {
                               className='h-9 w-9'
                               onClick={() => toggleWishlist(product.id)}
                             >
-                              <Heart
+                              <IconHeart
                                 className={`h-4 w-4 ${
                                   inWishlist ? 'fill-red-500 text-red-500' : ''
                                 }`}
@@ -405,7 +383,7 @@ export default function ComparePage() {
                     <DialogTrigger asChild>
                       <button className='border-border text-muted-foreground hover:border-primary hover:text-primary flex min-h-[300px] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 transition-colors'>
                         <div className='bg-muted flex h-12 w-12 items-center justify-center rounded-full'>
-                          <Plus className='h-6 w-6' />
+                          <IconPlus className='h-6 w-6' />
                         </div>
                         <span className='text-sm font-medium'>Add Product</span>
                       </button>
@@ -432,7 +410,7 @@ export default function ComparePage() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <ScrollArea className='h-[300px]'>
+                        <ScrollArea className='h-75'>
                           <div className='space-y-2'>
                             {availableProducts.map((product) => (
                               <div
@@ -457,7 +435,7 @@ export default function ComparePage() {
                                     {product.category} · ${product.price}
                                   </p>
                                 </div>
-                                <Plus className='text-muted-foreground h-4 w-4' />
+                                <IconPlus className='text-muted-foreground h-4 w-4' />
                               </div>
                             ))}
                             {availableProducts.length === 0 && (
@@ -511,7 +489,7 @@ export default function ComparePage() {
                           {row.key === 'price' && '$'}
                           {row.key === 'rating' ? (
                             <span className='flex items-center justify-center gap-1'>
-                              <Star className='fill-accent text-accent h-4 w-4' />
+                              <IconStar className='fill-accent text-accent h-4 w-4' />
                               {value}
                             </span>
                           ) : (
@@ -521,7 +499,7 @@ export default function ComparePage() {
                             </>
                           )}
                           {isBest && row.key !== 'isNew' && row.key !== 'isDigital' && (
-                            <Check className='ml-1 inline-block h-4 w-4 text-green-500' />
+                            <IconCheck className='ml-1 inline-block h-4 w-4 text-green-500' />
                           )}
                         </div>
                       );
@@ -539,7 +517,7 @@ export default function ComparePage() {
                 >
                   <Card className='p-6'>
                     <h3 className='mb-4 flex items-center gap-2 text-lg font-semibold'>
-                      <Shield className='text-primary h-5 w-5' />
+                      <IconShield className='text-primary h-5 w-5' />
                       Quick Summary
                     </h3>
                     <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
@@ -591,7 +569,7 @@ export default function ComparePage() {
                                   {bestProduct.name}
                                 </p>
                                 <p className='text-accent flex items-center gap-1'>
-                                  <Star className='fill-accent h-4 w-4' />
+                                  <IconStar className='fill-accent h-4 w-4' />
                                   {bestProduct.rating}
                                 </p>
                               </div>
@@ -659,7 +637,7 @@ export default function ComparePage() {
             <Link href='/shop'>
               <Button variant='outline' size='lg' className='gap-2 rounded-full'>
                 Continue Shopping
-                <ArrowRight className='h-4 w-4' />
+                <IconArrowRight className='h-4 w-4' />
               </Button>
             </Link>
           </div>

@@ -7,8 +7,6 @@ import {
   IconBrandTwitter,
   IconBrandYoutube
 } from '@tabler/icons-react';
-import { cn } from '../lib/utils';
-import { APP_CONFIG } from '../lib/config';
 
 const footerLinks = {
   shop: [
@@ -40,10 +38,8 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className='border-border/50 border-t'>
-      <div
-        className={cn('px-4 py-16 sm:px-6 lg:px-8 lg:py-20', APP_CONFIG.CONTAINER_SPACING_PADDING)}
-      >
+    <footer className='border-border/50 app-container border-t'>
+      <div className={'xs:px-4 app-container py-16 sm:px-6 lg:px-8 lg:py-20'}>
         <div className='grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5 lg:gap-8'>
           {/* Brand Section */}
           <motion.div

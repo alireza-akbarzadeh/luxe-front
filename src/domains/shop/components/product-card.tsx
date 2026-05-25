@@ -28,7 +28,13 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     if (!product.id) return;
 
     try {
-      addItem(product.id, 1, defaultColor || '', defaultSize || '');
+      addItem({
+        productId: product.id,
+        quantity: 1,
+        color: defaultColor,
+        size: defaultSize || undefined,
+        image: (product.images as string[])?.[0]
+      });
       toast.success(`${product.name} added to cart`);
     } catch (error) {
       toast.error('Failed to add item');
