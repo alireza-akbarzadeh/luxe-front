@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { APP_CONFIG } from './config';
+import { AUTH_COOKIE_OPTIONS } from './auth-cookies';
 
 /**
  * Set authentication cookies (access token and refresh token)
@@ -15,20 +16,13 @@ export async function setAuthCookies(
     ? APP_CONFIG.accessToken.rememberMeMaxAge
     : APP_CONFIG.accessToken.defaultMaxAge;
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax' as const,
-    path: '/'
-  };
-
   cookieStore.set('access_token', accessToken, {
-    ...cookieOptions,
+    ...AUTH_COOKIE_OPTIONS,
     maxAge: accessMaxAge
   });
 
   cookieStore.set('refresh_token', refreshToken, {
-    ...cookieOptions,
+    ...AUTH_COOKIE_OPTIONS,
     maxAge: APP_CONFIG.refreshToken.maxAge
   });
 }
@@ -37,27 +31,10 @@ export async function setAuthCookies(
  * Clear all authentication cookies
  */
 export async function clearAuthCookies() {
-  console.trace('clearAuthCookies called from:', new Error().stack);
-
   const cookieStore = await cookies();
 
   cookieStore.delete('access_token');
   cookieStore.delete('refresh_token');
-}
-
-/**
- * Update only the access token cookie
- */
-export async function updateAccessToken(accessToken: string, maxAge?: number) {
-  const cookieStore = await cookies();
-
-  cookieStore.set('access_token', accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: maxAge || APP_CONFIG.accessToken.defaultMaxAge
-  });
 }
 
 /**

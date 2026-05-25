@@ -3,8 +3,8 @@
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { setAuthCookies, clearAuthCookies } from '@/lib/auth-helpers';
+import { refreshSessionFromCookies } from '@/lib/auth-refresh';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
-import type { DtoRefreshResponse } from '@/services/-auth-refresh-post.schemas';
 import { BASE_URL } from '@/lib/api/api-client';
 
 function isNextRedirectError(error: unknown): error is { digest: string } {
@@ -158,58 +158,13 @@ export async function logoutAction() {
 }
 
 /**
- * Refresh access token
- * This is primarily used by the API client interceptor
+ * Refresh access token — used by /api/auth/refresh and the API client interceptor
  */
 export async function refreshAccessToken(): Promise<string | null> {
   try {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refresh_token')?.value;
-
-    if (!refreshToken) {
-      console.log('No refresh token cookie');
-      return null;
-    }
-
-    const res = await fetch(`${BASE_URL}/auth/refresh`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: refreshToken }),
-      credentials: 'include'
-    });
-
-    if (!res.ok) {
-      console.log(`Refresh failed with status ${res.status}`);
-      // Only clear if the backend rejects the refresh token
-      if (res.status === 401 || res.status === 403) {
-        console.log('Refresh token invalid, clearing cookies');
-        await clearAuthCookies();
-      }
-      return null;
-    }
-
-    const json = (await res.json()) as DtoRefreshResponse;
-    const accessToken = json.data?.access_token;
-
-    if (!accessToken) {
-      console.log('No access token in response');
-      return null;
-    }
-
-    // Update access token cookie
-    cookieStore.set('access_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60
-    });
-
-    console.log('Refresh successful, new access token set');
-    return accessToken;
+    return await refreshSessionFromCookies();
   } catch (error) {
     console.error('Token refresh error:', error);
-    // Network errors – do NOT clear cookies
     return null;
   }
 }

@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { BASE_URL } from './api-client';
 import { HttpStatus } from '../status';
-import { refreshAccessToken } from '~/src/actions/auth.actions';
+import { refreshAccessToken } from '@/actions/auth.actions';
 
 export async function apiFetch(input: string, init?: RequestInit) {
   const cookieStore = await cookies();
