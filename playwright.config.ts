@@ -1,6 +1,31 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { defineConfig, devices } from '@playwright/test';
 
 import { testEnv } from './__tests__/config/env';
+
+/** Load `.env.test.local` without adding a dotenv dependency. */
+function loadTestEnvFile(fileName: string) {
+  const filePath = path.resolve(fileName);
+  if (!fs.existsSync(filePath)) return;
+
+  for (const line of fs.readFileSync(filePath, 'utf8').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+
+    const key = trimmed.slice(0, eq).trim();
+    const value = trimmed.slice(eq + 1).trim();
+    if (key && process.env[key] === undefined) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadTestEnvFile('.env.test.local');
 
 const chromeDevice = testEnv.useSystemChrome
   ? { ...devices['Desktop Chrome'], channel: 'chrome' as const }

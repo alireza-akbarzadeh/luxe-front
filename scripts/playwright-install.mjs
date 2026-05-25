@@ -16,22 +16,22 @@ const SKIP = process.env['PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD'] === '1';
 
 const MIRROR_PRESETS = [
   {
-    label: 'default CDN',
-    env: {}
+    label: 'testeng mirror (Iran / restricted networks)',
+    env: {
+      PLAYWRIGHT_DOWNLOAD_HOST: 'https://mirror.testeng.ir/playwright',
+      PLAYWRIGHT_CHROMIUM_DOWNLOAD_HOST: 'https://mirror.testeng.ir/playwright'
+    }
   },
   {
-    label: 'npmmirror (China / restricted networks)',
+    label: 'npmmirror',
     env: {
       PLAYWRIGHT_DOWNLOAD_HOST: 'https://cdn.npmmirror.com/binaries/playwright',
       PLAYWRIGHT_CHROMIUM_DOWNLOAD_HOST: 'https://cdn.npmmirror.com/binaries/chrome-for-testing'
     }
   },
   {
-    label: 'testeng mirror (Iran)',
-    env: {
-      PLAYWRIGHT_DOWNLOAD_HOST: 'https://mirror.testeng.ir/playwright',
-      PLAYWRIGHT_CHROMIUM_DOWNLOAD_HOST: 'https://mirror.testeng.ir/playwright'
-    }
+    label: 'default CDN',
+    env: {}
   }
 ];
 
@@ -81,16 +81,18 @@ async function main() {
   console.error(`
 ❌ Could not download Playwright browsers from any mirror.
 
-Options:
+Recommended (no CDN download — uses Google Chrome already on your Mac):
+
+  echo 'PLAYWRIGHT_USE_SYSTEM_CHROME=1' >> .env.test.local
+  echo 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1' >> .env.test.local
+  pnpm install
+
+Other options:
   1. VPN, then:  pnpm run test:install
   2. Custom mirror:
        export PLAYWRIGHT_DOWNLOAD_HOST=https://your-mirror/playwright
        export PLAYWRIGHT_CHROMIUM_DOWNLOAD_HOST=https://your-mirror/chrome-for-testing
        pnpm run test:install
-  3. System Chrome (no download):
-       export PLAYWRIGHT_USE_SYSTEM_CHROME=1
-       export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-       pnpm install
 `);
 
   // Do not fail `pnpm install` — dev can still run the app without E2E browsers.
