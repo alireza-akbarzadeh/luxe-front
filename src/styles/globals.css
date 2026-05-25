@@ -124,6 +124,16 @@
   }
 }
 
+@utility flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@utility app-container {
+  padding-inline: 5rem;
+}
+
 html {
   scroll-behavior: smooth;
 }

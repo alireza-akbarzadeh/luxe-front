@@ -1,13 +1,7 @@
-/* eslint-disable unicorn/prevent-abbreviations */
-/* eslint-disable @typescript-eslint/no-restricted-imports */
-
 import * as React from 'react';
-
 import type { VariantProps } from 'class-variance-authority';
-
 import { cva } from 'class-variance-authority';
 import { Slot } from 'radix-ui';
-
 import { cn } from '@/lib/utils';
 import { Spinner } from './spinner';
 
@@ -16,28 +10,33 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+        default: 'bg-primary text-primary-foreground hover:bg-primary/80',
         outline:
           'border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 aria-expanded:bg-muted aria-expanded:text-foreground',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
-        ghost:
-          'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground',
-        destructive:
-          'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30',
-        link: 'text-primary underline-offset-4 hover:underline'
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50',
+        destructive: 'bg-destructive/10 hover:bg-destructive/20 text-destructive',
+        link: 'text-primary underline-offset-4 hover:underline',
+        success: 'bg-success text-success-foreground hover:bg-success/80',
+        warning: 'bg-warning text-warning-foreground hover:bg-warning/80',
+        info: 'bg-info text-info-foreground hover:bg-info/80',
+        brand: 'bg-brand text-brand-foreground hover:bg-brand/80',
+        'outline-success': 'border-success text-success bg-transparent hover:bg-success/10',
+        'outline-warning': 'border-warning text-warning bg-transparent hover:bg-warning/10',
+        'outline-info': 'border-info text-info bg-transparent hover:bg-info/10',
+        'outline-brand': 'border-brand text-brand bg-transparent hover:bg-brand/10',
+        ice: 'bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow-md hover:shadow-lg hover:from-sky-500 hover:to-blue-600 transition-all dark:from-sky-600 dark:to-blue-700'
       },
       size: {
         default:
           'h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
+        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
         lg: 'h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
         icon: 'size-8',
         'icon-xs':
-          "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-        'icon-sm':
-          'size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg',
+          "size-6 rounded-[min(var(--radius-md),10px)] [&_svg:not([class*='size-'])]:size-3",
+        'icon-sm': 'size-7 rounded-[min(var(--radius-md),12px)]',
         'icon-lg': 'size-9'
       }
     },
@@ -48,7 +47,7 @@ const buttonVariants = cva(
   }
 );
 
-function Button({
+export function Button({
   className,
   variant = 'default',
   size = 'default',
@@ -95,4 +94,4 @@ function Button({
   );
 }
 
-export { Button, buttonVariants };
+export { buttonVariants };

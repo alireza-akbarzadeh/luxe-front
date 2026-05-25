@@ -7,6 +7,7 @@ import { useCartStore } from '~/src/store/card.store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCartController } from '@/hooks/useCartController';
 import Link from 'next/link';
+import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 
 export function CartSheet() {
   const setOpen = useCartStore((s) => s.setOpen);
@@ -23,8 +24,8 @@ export function CartSheet() {
     isRemoving
   } = useCartController();
 
-  const getItemVariant = (item: { color: string; size: string }) => {
-    const parts = [item.color, item.size].filter(Boolean);
+  const getItemVariant = (item: DtoCartItemDetail) => {
+    const parts = [item.selected_color, item.selected_size].filter(Boolean);
     return parts.length ? ` · ${parts.join(' · ')}` : '';
   };
 
@@ -76,7 +77,7 @@ export function CartSheet() {
           <>
             <div className='flex-1 overflow-y-auto px-6 py-4'>
               <ul className='divide-border divide-y'>
-                {items.map((item: any) => (
+                {items.map((item) => (
                   <li key={item.id} className='flex gap-4 py-4'>
                     {/* Clickable image */}
                     <Link
@@ -95,7 +96,6 @@ export function CartSheet() {
                     <div className='flex flex-1 flex-col'>
                       <div className='flex items-start justify-between gap-2'>
                         <div>
-                          {/* Clickable name */}
                           <Link
                             href={`/product/${item.product_id}`}
                             onClick={() => setOpen(false)}
@@ -110,7 +110,7 @@ export function CartSheet() {
                           )}
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id!)}
                           disabled={isRemoving}
                           className='text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50'
                           aria-label='Remove'
@@ -121,15 +121,15 @@ export function CartSheet() {
                       <div className='mt-auto flex items-center justify-between'>
                         <div className='border-border flex items-center rounded-full border'>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            disabled={isUpdating || item.quantity <= 1}
+                            onClick={() => updateQuantity(item.id!, (item.quantity ?? 0) - 1)}
+                            disabled={isUpdating || (item.quantity ?? 0) <= 0}
                             className='hover:bg-secondary rounded-l-full p-1.5 disabled:opacity-40'
                           >
                             <IconMinus className='h-3 w-3' />
                           </button>
-                          <span className='w-7 text-center text-sm'>{item.quantity}</span>
+                          <span className='w-7 text-center text-sm'>{item.quantity ?? 0}</span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.id!, (item.quantity ?? 0) + 1)}
                             disabled={isUpdating}
                             className='hover:bg-secondary rounded-r-full p-1.5 disabled:opacity-40'
                           >
@@ -137,7 +137,7 @@ export function CartSheet() {
                           </button>
                         </div>
                         <p className='text-sm font-semibold'>
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -159,7 +159,6 @@ export function CartSheet() {
                 </div>
                 <p className='text-muted-foreground text-xs'>Shipping calculated at checkout.</p>
 
-                {/* Action buttons: View Cart + Checkout */}
                 <div className='mt-3 flex flex-col gap-2'>
                   <div className='flex items-center justify-between gap-2'>
                     <Button

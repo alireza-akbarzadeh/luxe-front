@@ -1,5 +1,5 @@
 'use client';
-import { IconCheck, IconChevronRight, IconStar } from '@tabler/icons-react';
+import { IconBasket, IconCheck, IconChevronRight, IconStar } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +11,7 @@ import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
 import { useCartController } from '@/hooks/useCartController';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 
 interface ProductInfoProps {
@@ -19,41 +19,69 @@ interface ProductInfoProps {
   is_liked: boolean;
 }
 
-export function ProductInfo(props: ProductInfoProps) {
-  const { product, is_liked } = props;
-  const { addItem, removeItem, itemCount } = useCartController(); // itemCount = count for this product
+export function ProductInfo({ product, is_liked }: ProductInfoProps) {
+  const { addItem, updateQuantity, removeItem, itemCount, items, isAdding } = useCartController();
 
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
+  const cartItem = items.find((item) => item.product_id === product.id);
+
   const stock = product.stock ?? 0;
-  const currentQuantity = itemCount ?? 0;
+  const productQuantity = cartItem?.quantity ?? 0;
 
   const handleIncrement = () => {
-    if (currentQuantity < stock) {
-      addItem(product.id as number, 1);
+    if (productQuantity >= stock) {
+      toast.error(`Only ${stock} left in stock`);
+      return;
+    }
+
+    if (cartItem) {
+      updateQuantity(Number(cartItem?.id), productQuantity + 1);
       toast.success(`Added 1 × ${product.name}`);
     } else {
-      toast.error(`Only ${stock} in stock`);
+      addItem({
+        productId: product.id!,
+        quantity: 1,
+        color: selectedColor,
+        size: selectedSize || undefined,
+        image: (product.images as string[])?.[0]
+      });
+      toast.success(`Added ${product.name} to cart`);
     }
   };
 
   const handleDecrement = () => {
-    if (currentQuantity > 0) {
-      removeItem(product.id as number);
+    if (!cartItem) return;
+    if (productQuantity === 1) {
+      removeItem(Number(cartItem.id));
+      toast.info(`Removed ${product.name} from cart`);
+    } else {
+      updateQuantity(Number(cartItem.id), productQuantity - 1);
       toast.info(`Removed 1 × ${product.name}`);
     }
   };
 
   const handleAddToCart = () => {
     if (!product.id) return;
-    addItem(product.id, 1);
-    toast.success(`${product.name} added to cart`);
+    if (cartItem) {
+      updateQuantity(Number(cartItem.id), productQuantity + 1);
+      toast.success(`Added 1 × ${product.name}`);
+    } else {
+      addItem({
+        productId: product.id,
+        quantity: 1,
+        color: selectedColor,
+        size: selectedSize || undefined,
+        image: (product.images as string[])?.[0]
+      });
+      toast.success(`${product.name} added to cart`);
+    }
   };
 
   return (
     <div className='flex flex-col gap-6'>
-      {/* product header, rating, price (unchanged) */}
+      {/* Product header */}
       <div>
         <p className='text-muted-foreground text-xs tracking-widest uppercase'>
           {product.category?.name}
@@ -94,7 +122,6 @@ export function ProductInfo(props: ProductInfoProps) {
       <p className='text-muted-foreground text-base'>{product.description}</p>
       <Separator />
 
-      {/* Color & Size – unchanged */}
       <ProductColors
         onSetSelected={setSelectedColor}
         selected={selectedColor || ''}
@@ -106,32 +133,49 @@ export function ProductInfo(props: ProductInfoProps) {
         sizes={product.sizes as string[]}
       />
 
-      {/* Quantity picker – directly modifies cart */}
       <ProductQuantity
-        value={currentQuantity}
+        value={productQuantity}
         onIncrement={handleIncrement}
         onDecrement={handleDecrement}
         stock={stock}
       />
 
-      {/* CTA Buttons */}
-      <div className='flex gap-2'>
-        <Button onClick={handleAddToCart} size='lg' className='flex-1 gap-2'>
-          <IconCheck className='h-4 w-4' /> Add to cart
-        </Button>
-        <Button asChild size='lg' className='bg-accent py-4.5'>
-          <Link href='/checkout'>
-            Proceed to checkout
-            <IconChevronRight />
-          </Link>
-        </Button>
-        <LikeButton
-          productName={product.name as string}
-          isLiked={is_liked}
-          productId={product.id as number}
-        />
-      </div>
+      <div className='mt-8 flex flex-col gap-4'>
+        <div className='flex gap-3'>
+          <Button
+            onClick={handleAddToCart}
+            size='lg'
+            className='bg-foreground text-background hover:bg-foreground/90 flex-1 gap-2'
+            disabled={isAdding}
+          >
+            <IconCheck className='h-4 w-4' />
+            {isAdding ? 'Adding...' : 'Add to cart'}
+          </Button>
 
+          <Button asChild size='lg' variant='outline' className='flex-1 gap-2'>
+            <Link href='/checkout'>
+              Checkout
+              <IconChevronRight className='h-4 w-4' />
+            </Link>
+          </Button>
+        </div>
+
+        <div className='flex items-center gap-3'>
+          <Button asChild size='lg' variant='outline' className='flex-1 rounded-xl border-dashed'>
+            <Link href='/cart' className='flex items-center justify-center gap-2'>
+              <IconBasket className='size-5' />
+              View Cart ({itemCount})
+            </Link>
+          </Button>
+
+          <LikeButton
+            productName={product.name as string}
+            isLiked={is_liked}
+            productId={product.id as number}
+            className='border-input bg-background hover:bg-accent rounded-xl border'
+          />
+        </div>
+      </div>
       <ProductBadges />
     </div>
   );

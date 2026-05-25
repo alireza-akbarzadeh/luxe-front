@@ -17,6 +17,11 @@ import { logger } from './logger';
 
 export const BASE_URL = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:8080/api/v1';
 
+const NEXT_API = Axios.create({
+  baseURL: '',
+  withCredentials: true
+});
+
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
@@ -131,37 +136,25 @@ AXIOS_INSTANCE.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      // Attempt to refresh the token
-      const refreshResponse = await AXIOS_INSTANCE.post('/auth/refresh', null, {
-        withCredentials: true,
-        _retry: true // Mark as retry to avoid infinite loop
-      } as any);
-
-      const newAccessToken = refreshResponse.data.data?.access_token;
+      const refreshResponse = await NEXT_API.post('/api/auth/refresh', null, {
+        withCredentials: true
+      });
+      const newAccessToken = refreshResponse.data.access_token;
 
       if (!newAccessToken) {
         throw new Error('No access token in refresh response');
       }
 
-      // Process all queued requests with the new token
       processQueue(null, newAccessToken);
 
-      // Retry the original request with the new token
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return AXIOS_INSTANCE(originalRequest);
     } catch (refreshError) {
-      // Refresh failed - clear queue and redirect to login
       processQueue(refreshError as Error, null);
-
-      toast.error('Session expired. Please log in again.');
-
       if (typeof window !== 'undefined') {
-        // Small delay to show toast before redirect
-        setTimeout(() => {
-          window.location.href = '/login?session=expired';
-        }, 500);
+        const currentPath = window.location.pathname + window.location.search;
+        window.location.href = `/login?callbackUrl=${encodeURIComponent(currentPath)}`;
       }
-
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
