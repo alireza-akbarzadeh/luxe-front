@@ -13,7 +13,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "playwright install",
+    "postinstall": "node scripts/playwright-install.mjs",
     "dev": "next dev",
     "build": "next build",
     "preview": "next start",
@@ -23,7 +23,11 @@
     "lint:fix": "eslint --fix",
     "format": "prettier --write --no-error-on-unmatched-pattern \"**/**/*.{html,css,scss,js,jsx,cjs,mjs,ts,tsx,mdx}\" --cache",
     "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:install": "node scripts/playwright-install.mjs",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:auth": "playwright test --grep @auth",
+    "test:integration": "E2E_INTEGRATION=1 playwright test --grep @integration"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "0.13.11",

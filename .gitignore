@@ -9,6 +9,8 @@
 /playwright-report/
 /playwright/.cache/
 /__tests_results__
+/__tests__/.auth/
+.env.test.local
 
 # next.js
 /.next/

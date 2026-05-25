@@ -16,11 +16,11 @@ jobs:
       - name: Install pnpm
         run: npm i -g pnpm
       - name: Install dependencies
-        run: pnpm i
-      - name: Install Playwright dependencies
-        run: npx playwright install-deps
-      - name: Run Playwright tests
-        run: pnpm test
+        run: pnpm i --ignore-scripts && pnpm run test:install
+      - name: Install Playwright system dependencies
+        run: pnpm exec playwright install-deps chromium
+      - name: Run Playwright smoke tests
+        run: pnpm run test:smoke
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -26,7 +26,6 @@
     },
     "types": ["node"],
     "resolveJsonModule": true,
-    "noUncheckedSideEffectImports": true,
 
     // ==========================================================================
     // JAVASCRIPT SUPPORT
@@ -43,7 +42,6 @@
     // ==========================================================================
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
 
