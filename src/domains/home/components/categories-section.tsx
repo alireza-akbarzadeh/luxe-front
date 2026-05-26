@@ -1,17 +1,15 @@
 'use client';
 
+import { IconArrowRight } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { IconArrowRight } from '@tabler/icons-react';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetCategories } from '~/src/services/-categories-get';
+
+import { getCategoryImage, resolveCategories, sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
-import {
-  getCategoryImage,
-  resolveCategories,
-  sectionContainerClass
-} from '../lib/home-utils';
 
 export function CategoriesSection() {
   const { data, isLoading, isError } = useGetCategories({
@@ -42,8 +40,8 @@ export function CategoriesSection() {
 
         {isLoading ? (
           <div className='grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4'>
-            {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className='aspect-[3/4] rounded-2xl sm:rounded-3xl' />
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className='aspect-3/4 rounded-2xl sm:rounded-3xl' />
             ))}
           </div>
         ) : (
@@ -92,19 +90,19 @@ function CategoryCard({
   categoryId,
   image,
   className
-}: {
+}: Readonly<{
   name?: string;
   description?: string;
   categoryId?: number;
   image: string;
   className?: string;
-}) {
+}>) {
   const href = categoryId ? `/shop?categoryId=${categoryId}` : '/shop';
 
   return (
     <Link
       href={href}
-      className={`group relative block aspect-[3/4] overflow-hidden rounded-2xl shadow-md sm:rounded-3xl ${className ?? ''}`}
+      className={`group relative block aspect-3/4 overflow-hidden rounded-2xl shadow-md sm:rounded-3xl ${className ?? ''}`}
     >
       <Image
         src={image}
@@ -118,7 +116,7 @@ function CategoryCard({
         <h3 className='text-primary-foreground font-display text-xl font-semibold sm:text-2xl'>
           {name}
         </h3>
-        {description && (
+        {description != null && (
           <p className='text-primary-foreground/75 mt-1 line-clamp-2 text-sm'>{description}</p>
         )}
         <span className='text-primary-foreground mt-4 inline-flex items-center gap-2 text-sm font-medium'>

@@ -35,7 +35,7 @@ export function SectionHeader({
       className={cn(
         'mb-10 flex flex-col gap-4 md:mb-14',
         isCenter ? 'items-center text-center' : 'items-start text-left',
-        href && !isCenter && 'md:flex-between md:items-end',
+        href && !isCenter && 'md:flex-row md:items-end md:justify-between',
         className
       )}
     >

@@ -1,88 +1,160 @@
-'use client';
+import { IconCheck, IconCopy, IconShare2, IconTrash } from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'sonner';
+
 import {
-  AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-  AlertDialog
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-import { TooltipProvider, TooltipTrigger, TooltipContent, Tooltip } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-import { IconShare2, IconTrash } from '@tabler/icons-react';
-import { useWishlistStore } from '../wishlist.store';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
+import useWishlistStore from '~/src/domains/wishlist/wishlist.store';
 
-interface WishlistHeaderProps {
+interface WishlistHeaderProperties {
   itemLength: number;
 }
-export function WishlistHeader(props: WishlistHeaderProps) {
-  const clearWishlist = useWishlistStore((store) => store.clearWishlist);
 
-  const { itemLength } = props;
+export function WishlistHeader(properties: Readonly<WishlistHeaderProperties>) {
+  const { itemLength } = properties;
+  const { isCopied, setSelectedItems, setIsCopied } = useWishlistStore();
+  const isShareSupported = typeof navigator !== 'undefined' && 'share' in navigator;
+
   const handleShare = async () => {
     const shareText = `Check out my wishlist with ${itemLength} items!`;
-    if (navigator.share) {
+
+    if (isShareSupported) {
       try {
         await navigator.share({
           title: 'My Luxe Wishlist',
           text: shareText,
-          url: window.location.href
+          url: globalThis.location.href
         });
+        toast.success('Wishlist shared successfully!');
       } catch {
-        // User cancelled or error
+        // User cancelled share window or native interface threw error
       }
     } else {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(globalThis.location.href);
+      setIsCopied(true);
+      toast.success('Link copied to clipboard!');
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+      toast.error('Failed to copy link. Please try copying the URL bar.');
     }
   };
 
+  let shareTooltipText = 'Copy Wishlist Link';
+  if (isCopied) {
+    shareTooltipText = 'Copied!';
+  } else if (isShareSupported) {
+    shareTooltipText = 'Share Wishlist';
+  }
+
   return (
-    <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
-      <div>
-        <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>My Wishlist</h1>
-        <p className='text-muted-foreground mt-1'>
-          {itemLength} {itemLength === 1 ? 'item' : 'items'} saved for later
-        </p>
-      </div>
+    <div className='mb-8 space-y-4'>
+      <DynamicBreadcrumb segments={['Wishlist']} direction='column' />
 
-      <div className='flex items-center gap-3'>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant='outline' size='icon' onClick={handleShare}>
-                <IconShare2 className='h-4 w-4' />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Share Wishlist</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
+        <div>
+          <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>My Wishlist</h1>
+          <p className='text-muted-foreground mt-1 text-sm md:text-base'>
+            You have <span className='text-foreground font-semibold'>{itemLength}</span>{' '}
+            {itemLength === 1 ? 'item' : 'items'} saved for later
+          </p>
+        </div>
 
-        {itemLength > 0 && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant='outline' size='sm' className='gap-2'>
-                <IconTrash className='h-4 w-4' />
-                Clear All
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Clear Wishlist?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will remove all {itemLength} items from your wishlist. This action cannot be
-                  undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={clearWishlist}>Clear All</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+        <div className='flex items-center gap-3 self-start sm:self-auto'>
+          <TooltipProvider delayDuration={200}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant='outline'
+                  size='icon'
+                  onClick={handleShare}
+                  className='transform active:scale-95'
+                >
+                  <AnimatePresence mode='wait' initial={false}>
+                    {isCopied ? (
+                      <motion.div
+                        key='check'
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.6 }}
+                      >
+                        <IconCheck className='h-4 w-4 text-green-500' />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key='share'
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.6 }}
+                      >
+                        {isShareSupported ? (
+                          <IconShare2 className='h-4 w-4' />
+                        ) : (
+                          <IconCopy className='h-4 w-4' />
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{shareTooltipText} </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <AnimatePresence>
+            {itemLength > 0 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, x: 10 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.95, x: 10 }}
+                transition={{ duration: 0.15 }}
+              >
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      className='text-destructive hover:bg-destructive/10 hover:text-destructive bor h-9 gap-2'
+                    >
+                      <IconTrash className='h-4 w-4' />
+                      Clear All
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will permanently delete all {itemLength} items currently saved to your
+                        wishlist. This operation cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => setSelectedItems([])}
+                        className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                      >
+                        Clear All Items
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

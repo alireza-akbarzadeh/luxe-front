@@ -39,7 +39,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/src/services
+src/services
 openapi3.json
 
 .env
