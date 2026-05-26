@@ -1,4 +1,4 @@
-import { IconCheck, IconCopy, IconShare2, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconChevronRight, IconCopy, IconShare2, IconTrash } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
-import useWishlistStore from '~/src/domains/wishlist/wishlist.store';
+import { useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 
 interface WishlistHeaderProperties {
   itemLength: number;
@@ -24,7 +24,7 @@ interface WishlistHeaderProperties {
 
 export function WishlistHeader(properties: Readonly<WishlistHeaderProperties>) {
   const { itemLength } = properties;
-  const { isCopied, setSelectedItems, setIsCopied } = useWishlistStore();
+  const { isCopied, setIsCopied, clearSelection } = useWishlistStore();
   const isShareSupported = typeof navigator !== 'undefined' && 'share' in navigator;
 
   const handleShare = async () => {
@@ -61,8 +61,13 @@ export function WishlistHeader(properties: Readonly<WishlistHeaderProperties>) {
 
   return (
     <div className='mb-8 space-y-4'>
-      <DynamicBreadcrumb segments={['Wishlist']} direction='column' />
-
+      <DynamicBreadcrumb
+        items={[{ label: 'Wishlist' }]}
+        direction='column'
+        separator={<IconChevronRight className='h-3 w-3' />}
+        className='text-muted-foreground text-xs'
+        breadcrumbClassName='flex items-center gap-1.5'
+      />
       <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
         <div>
           <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>My Wishlist</h1>
@@ -143,7 +148,7 @@ export function WishlistHeader(properties: Readonly<WishlistHeaderProperties>) {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => setSelectedItems([])}
+                        onClick={clearSelection}
                         className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
                       >
                         Clear All Items

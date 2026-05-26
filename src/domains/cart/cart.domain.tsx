@@ -13,7 +13,7 @@ import { ProductSuggestion } from './components/product-suggestin';
 import { EmptyCart } from '../checkout/components/empty-checkout';
 
 export default function CartPage() {
-  const { items, isLoading, error, isUpdating, isRemoving } = useCartController();
+  const { items, isLoading, error } = useCartController();
 
   if (isLoading) {
     return (
@@ -73,8 +73,8 @@ export default function CartPage() {
               <AnimatePresence mode='popLayout'>
                 {items.map((item, index) => {
                   const cartItemId = item.id;
-                  const isUpdatingThis = isUpdating && item.id === cartItemId;
-                  const isRemovingThis = isRemoving && item.id === cartItemId;
+                  const isUpdatingThis = isLoading && item.id === cartItemId;
+                  const isRemovingThis = isLoading && item.id === cartItemId;
 
                   return (
                     <CartItem

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
 import Link from 'next/link';
 import { IconShoppingBag, IconStar } from '@tabler/icons-react';
 import { useCartController } from '@/hooks/useCartController';
@@ -18,30 +17,7 @@ export interface ProductCardProps {
 
 export function ProductCard({ product, index = 0, size = 'default' }: ProductCardProps) {
   const isCompact = size === 'compact';
-  const { addItem, isAdding } = useCartController();
-
-  const handleQuickAdd = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const defaultColor = product.colors?.[0]?.toString() || '';
-    const defaultSize = product.sizes?.[0]?.toString() || '';
-
-    if (!product.id) return;
-
-    try {
-      addItem({
-        productId: product.id,
-        quantity: 1,
-        color: defaultColor,
-        size: defaultSize || undefined,
-        image: (product.images as string[])?.[0]
-      });
-      toast.success(`${product.name} added to cart`);
-    } catch (error) {
-      toast.error('Failed to add item');
-    }
-  };
+  const { increment, isLoading } = useCartController();
 
   const discountPercent = product.compare_at_price
     ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
@@ -100,13 +76,13 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
             }`}
           >
             <Button
-              onClick={handleQuickAdd}
-              disabled={isAdding}
+              onClick={() => increment(product)}
+              disabled={isLoading}
               className={`w-full gap-1.5 shadow-lg ${isCompact ? 'h-8 text-xs' : 'gap-2'}`}
               size='sm'
             >
               <IconShoppingBag className={isCompact ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
-              {isAdding ? 'Adding...' : isCompact ? 'Add' : 'Add to Cart'}
+              {isLoading ? 'Adding...' : isCompact ? 'Add' : 'Add to Cart'}
             </Button>
           </div>
         </div>

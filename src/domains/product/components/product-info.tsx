@@ -10,7 +10,6 @@ import ProductColors from './product-colors';
 import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
 import { useCartController } from '@/hooks/useCartController';
-import { toast } from 'sonner';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -20,7 +19,7 @@ interface ProductInfoProps {
 }
 
 export function ProductInfo({ product, is_liked }: ProductInfoProps) {
-  const { addItem, updateQuantity, removeItem, itemCount, items, isAdding } = useCartController();
+  const { increment, decrement, itemCount, items, isLoading } = useCartController();
 
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -29,55 +28,6 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
   const stock = product.stock ?? 0;
   const productQuantity = cartItem?.quantity ?? 0;
-
-  const handleIncrement = () => {
-    if (productQuantity >= stock) {
-      toast.error(`Only ${stock} left in stock`);
-      return;
-    }
-
-    if (cartItem) {
-      updateQuantity(Number(cartItem?.id), productQuantity + 1);
-      toast.success(`Added 1 × ${product.name}`);
-    } else {
-      addItem({
-        productId: product.id!,
-        quantity: 1,
-        color: selectedColor,
-        size: selectedSize || undefined,
-        image: (product.images as string[])?.[0]
-      });
-      toast.success(`Added ${product.name} to cart`);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (!cartItem) return;
-    if (productQuantity === 1) {
-      removeItem(Number(cartItem.id));
-      toast.info(`Removed ${product.name} from cart`);
-    } else {
-      updateQuantity(Number(cartItem.id), productQuantity - 1);
-      toast.info(`Removed 1 × ${product.name}`);
-    }
-  };
-
-  const handleAddToCart = () => {
-    if (!product.id) return;
-    if (cartItem) {
-      updateQuantity(Number(cartItem.id), productQuantity + 1);
-      toast.success(`Added 1 × ${product.name}`);
-    } else {
-      addItem({
-        productId: product.id,
-        quantity: 1,
-        color: selectedColor,
-        size: selectedSize || undefined,
-        image: (product.images as string[])?.[0]
-      });
-      toast.success(`${product.name} added to cart`);
-    }
-  };
 
   return (
     <div className='flex flex-col gap-6'>
@@ -135,21 +85,21 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
       <ProductQuantity
         value={productQuantity}
-        onIncrement={handleIncrement}
-        onDecrement={handleDecrement}
+        onIncrement={() => increment(product)}
+        onDecrement={() => decrement(product)}
         stock={stock}
       />
 
       <div className='mt-8 flex flex-col gap-4'>
         <div className='flex gap-3'>
           <Button
-            onClick={handleAddToCart}
+            onClick={() => increment(product)}
             size='lg'
             className='bg-foreground text-background hover:bg-foreground/90 flex-1 gap-2'
-            disabled={isAdding}
+            disabled={isLoading}
           >
             <IconCheck className='h-4 w-4' />
-            {isAdding ? 'Adding...' : 'Add to cart'}
+            {isLoading ? 'Adding...' : 'Add to cart'}
           </Button>
 
           <Button asChild size='lg' variant='outline' className='flex-1 gap-2'>

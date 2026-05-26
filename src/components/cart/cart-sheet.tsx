@@ -13,20 +13,24 @@ export function CartSheet() {
   const setOpen = useCartStore((s) => s.setOpen);
   const isOpen = useCartStore((s) => s.isOpen);
 
-  const {
-    items,
-    itemCount,
-    subtotal,
-    updateQuantity,
-    removeItem,
-    isLoading,
-    isUpdating,
-    isRemoving
-  } = useCartController();
+  const { increment, decrement, items, isLoading, itemCount, subtotal } = useCartController();
 
   const getItemVariant = (item: DtoCartItemDetail) => {
     const parts = [item.selected_color, item.selected_size].filter(Boolean);
     return parts.length ? ` · ${parts.join(' · ')}` : '';
+  };
+
+  const mapBasketItemToPayload = (item: DtoCartItemDetail) => {
+    return {
+      color: item.selected_color,
+      image_url: item.image?.[0],
+      is_in_stock: item.is_in_stock,
+      price: item.price,
+      product_id: item.product_id,
+      product_name: item.product_name,
+      size: item.selected_size,
+      stock: item.stock
+    };
   };
 
   if (isLoading) {
@@ -77,72 +81,76 @@ export function CartSheet() {
           <>
             <div className='flex-1 overflow-y-auto px-6 py-4'>
               <ul className='divide-border divide-y'>
-                {items.map((item) => (
-                  <li key={item.id} className='flex gap-4 py-4'>
-                    {/* Clickable image */}
-                    <Link
-                      href={`/product/${item.product_id}`}
-                      onClick={() => setOpen(false)}
-                      className='shrink-0'
-                    >
-                      <div className='bg-muted h-24 w-20 overflow-hidden rounded-md'>
-                        <img
-                          src={item.image || '/placeholder.png'}
-                          alt={item.name || 'Product'}
-                          className='h-full w-full object-cover transition-transform hover:scale-105'
-                        />
-                      </div>
-                    </Link>
-                    <div className='flex flex-1 flex-col'>
-                      <div className='flex items-start justify-between gap-2'>
-                        <div>
-                          <Link
-                            href={`/product/${item.product_id}`}
-                            onClick={() => setOpen(false)}
-                            className='hover:text-primary leading-tight font-medium transition-colors'
-                          >
-                            {item.name}
-                          </Link>
-                          {getItemVariant(item) && (
-                            <p className='text-muted-foreground mt-0.5 text-xs'>
-                              {getItemVariant(item)}
-                            </p>
-                          )}
+                {items.map((item) => {
+                  const controllerPayload = mapBasketItemToPayload(item);
+
+                  return (
+                    <li key={item.id} className='flex gap-4 py-4'>
+                      {/* Clickable image */}
+                      <Link
+                        href={`/product/${item.product_id}`}
+                        onClick={() => setOpen(false)}
+                        className='shrink-0'
+                      >
+                        <div className='bg-muted h-24 w-20 overflow-hidden rounded-md'>
+                          <img
+                            src={item.image || '/placeholder.png'}
+                            alt={item.name || 'Product'}
+                            className='h-full w-full object-cover transition-transform hover:scale-105'
+                          />
                         </div>
-                        <button
-                          onClick={() => removeItem(item.id!)}
-                          disabled={isRemoving}
-                          className='text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50'
-                          aria-label='Remove'
-                        >
-                          <IconTrash className='h-4 w-4' />
-                        </button>
-                      </div>
-                      <div className='mt-auto flex items-center justify-between'>
-                        <div className='border-border flex items-center rounded-full border'>
+                      </Link>
+                      <div className='flex flex-1 flex-col'>
+                        <div className='flex items-start justify-between gap-2'>
+                          <div>
+                            <Link
+                              href={`/product/${item.product_id}`}
+                              onClick={() => setOpen(false)}
+                              className='hover:text-primary leading-tight font-medium transition-colors'
+                            >
+                              {item.name}
+                            </Link>
+                            {getItemVariant(item) && (
+                              <p className='text-muted-foreground mt-0.5 text-xs'>
+                                {getItemVariant(item)}
+                              </p>
+                            )}
+                          </div>
                           <button
-                            onClick={() => updateQuantity(item.id!, (item.quantity ?? 0) - 1)}
-                            disabled={isUpdating || (item.quantity ?? 0) <= 0}
-                            className='hover:bg-secondary rounded-l-full p-1.5 disabled:opacity-40'
+                            onClick={() => decrement(controllerPayload)}
+                            disabled={isLoading}
+                            className='text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50'
+                            aria-label='Remove'
                           >
-                            <IconMinus className='h-3 w-3' />
-                          </button>
-                          <span className='w-7 text-center text-sm'>{item.quantity ?? 0}</span>
-                          <button
-                            onClick={() => updateQuantity(item.id!, (item.quantity ?? 0) + 1)}
-                            disabled={isUpdating}
-                            className='hover:bg-secondary rounded-r-full p-1.5 disabled:opacity-40'
-                          >
-                            <IconPlus className='h-3 w-3' />
+                            <IconTrash className='h-4 w-4' />
                           </button>
                         </div>
-                        <p className='text-sm font-semibold'>
-                          ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
-                        </p>
+                        <div className='mt-auto flex items-center justify-between'>
+                          <div className='border-border flex items-center rounded-full border'>
+                            <button
+                              onClick={() => decrement(controllerPayload)}
+                              disabled={isLoading || (item.quantity ?? 0) <= 0}
+                              className='hover:bg-secondary rounded-l-full p-1.5 disabled:opacity-40'
+                            >
+                              <IconMinus className='h-3 w-3' />
+                            </button>
+                            <span className='w-7 text-center text-sm'>{item.quantity ?? 0}</span>
+                            <button
+                              onClick={() => increment(controllerPayload)}
+                              disabled={isLoading}
+                              className='hover:bg-secondary rounded-r-full p-1.5 disabled:opacity-40'
+                            >
+                              <IconPlus className='h-3 w-3' />
+                            </button>
+                          </div>
+                          <p className='text-sm font-semibold'>
+                            ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
