@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '~/src/components/navbar/navbar';
 import { Footer } from '@/components/footer';
 import { cn } from '~/src/lib/utils';
 

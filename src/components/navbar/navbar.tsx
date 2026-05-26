@@ -1,15 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { navLinks } from '@/lib/data';
 import { IconMenu, IconSearch, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { UserProfile } from './user-profile';
-import { CartButton } from './cart/cart-button';
-import { CartSheet } from './cart/cart-sheet';
+import { DesktopNav } from './desktop-nav';
+import { MobileNav } from './mobile-nav';
+import { CartButton } from '../cart/cart-button';
+import { CartSheet } from '../cart/cart-sheet';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -48,17 +49,8 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className='hidden items-center gap-8 md:flex'>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className='text-muted-foreground hover:text-foreground group relative text-sm font-medium transition-colors'
-                >
-                  {link.name}
-                  <span className='bg-accent absolute -bottom-1 left-0 h-0.5 w-0 transition-all duration-300 group-hover:w-full' />
-                </Link>
-              ))}
+            <div className='hidden flex-1 justify-center px-6 md:flex'>
+              <DesktopNav />
             </div>
 
             {/* Right Side Actions */}
@@ -70,7 +62,7 @@ export function Navbar() {
                 </Button>
               </Link>
               <CartButton />
-              <UserProfile variant='header' />
+              <UserProfile />
               {/* Mobile Menu Button */}
               <Button
                 variant='ghost'
@@ -99,23 +91,8 @@ export function Navbar() {
               transition={{ duration: 0.3 }}
               className='bg-background/95 border-border border-b backdrop-blur-xl md:hidden'
             >
-              <div className='space-y-4 px-4 py-6'>
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className='text-muted-foreground hover:text-foreground block py-2 text-lg font-medium transition-colors'
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
+              <div className='px-4 py-6'>
+                <MobileNav onNavigate={() => setIsMobileMenuOpen(false)} />
               </div>
             </motion.div>
           )}
