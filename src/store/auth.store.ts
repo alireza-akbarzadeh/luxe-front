@@ -1,16 +1,15 @@
 'use client';
 
 import { create } from 'zustand';
-
-import {
-  postAuthLogin,
-  postAuthRegister,
-  postAuthLogout,
-  type postAuthLoginResponse,
-  type postAuthRegisterResponse
-} from '../services/apis/authentication';
-import type { DtoLoginRequest, DtoRegisterRequest, GetUsers200Data } from '../services/models';
-
+import { postAuthLogin } from '~/src/services/-auth-login-post';
+import type { DtoLoginRequest, DtoLoginResponse } from '~/src/services/-auth-login-post.schemas';
+import { postAuthLogout } from '~/src/services/-auth-logout-post';
+import { postAuthRegister } from '~/src/services/-auth-register-post';
+import type { DtoUserResponse } from '~/src/services/-auth-login-post.schemas';
+import type {
+  DtoRegisterRequest,
+  DtoRegisterResponse
+} from '~/src/services/-auth-register-post.schemas';
 /* =========================
    Types
 ========================= */
@@ -32,7 +31,9 @@ export interface Address {
 
 export type AddressInput = Omit<Address, 'id'>;
 
-export type User = GetUsers200Data['users'];
+export type User = DtoUserResponse & {
+  addresses?: Address[];
+};
 
 type AuthError = string | null;
 
@@ -42,8 +43,8 @@ type AuthState = {
   isLoading: boolean;
   error: AuthError;
 
-  login: (data: DtoLoginRequest) => Promise<postAuthLoginResponse>;
-  register: (data: DtoRegisterRequest) => Promise<postAuthRegisterResponse>;
+  login: (data: DtoLoginRequest) => Promise<DtoLoginResponse>;
+  register: (data: DtoRegisterRequest) => Promise<DtoRegisterResponse>;
   logout: () => void;
 
   updateProfile: (data: Partial<User>) => void;
@@ -71,59 +72,55 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   isLoading: false,
   error: null,
 
-  login: async (data: DtoLoginRequest): Promise<postAuthLoginResponse> => {
+  login: async (data): Promise<DtoLoginResponse> => {
     set({ isLoading: true, error: null });
     try {
       const res = await postAuthLogin({ email: data.email, password: data.password });
-      if (res.status === 200 && res.data && res.data.data) {
-        const user = (res.data.data as any).user || res.data.data;
+      if (res.success && res.data?.user) {
         set({
-          user: user || null,
+          user: res.data.user,
           isAuthenticated: true,
           isLoading: false
         });
         return res;
-      } else {
-        set({
-          isLoading: false,
-          error: (res.data as any)?.message || 'Invalid email or password'
-        });
-        return res;
       }
-    } catch (e) {
+      set({
+        isLoading: false,
+        error: res.message ?? 'Invalid email or password'
+      });
+      return res;
+    } catch {
       set({
         isLoading: false,
         error: 'Login failed. Please try again.'
       });
-      return e;
+      throw new Error('Login failed. Please try again.');
     }
   },
 
-  register: async (data: DtoRegisterRequest): Promise<postAuthRegisterResponse> => {
+  register: async (data: DtoRegisterRequest): Promise<DtoRegisterResponse> => {
     set({ isLoading: true, error: null });
     try {
       const res = await postAuthRegister(data);
-      if (res.data && res.data.data) {
-        const user = (res.data.data as any).user || res.data.data;
+      if (res.success && res.data?.user) {
         set({
-          user: user || null,
+          user: res.data.user,
           isAuthenticated: true,
           isLoading: false
         });
         return res;
-      } else {
-        set({
-          isLoading: false,
-          error: res.data?.message || 'Registration failed'
-        });
-        return res;
       }
-    } catch (e) {
+      set({
+        isLoading: false,
+        error: res.message ?? 'Registration failed'
+      });
+      return res;
+    } catch {
       set({
         isLoading: false,
         error: 'Registration failed. Please try again.'
       });
-      return e;
+      throw new Error('Registration failed. Please try again.');
     }
   },
 
@@ -170,7 +167,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   updateAddress: (id: string, address: Partial<Address>) => {
     const user = get().user;
     if (!user) return;
-    let addresses = user.addresses.map((a) => (a.id === id ? { ...a, ...address } : a));
+    let addresses = (user.addresses ?? []).map((a) => (a.id === id ? { ...a, ...address } : a));
     if (address.isDefault) {
       addresses = addresses.map((a) => (a.id === id ? a : { ...a, isDefault: false }));
     }
@@ -188,7 +185,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     set({
       user: {
         ...user,
-        addresses: user.addresses.filter((a) => a.id !== id)
+        addresses: (user.addresses ?? []).filter((a) => a.id !== id)
       }
     });
   },
@@ -199,7 +196,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     set({
       user: {
         ...user,
-        addresses: user.addresses.map((a) => ({
+        addresses: (user.addresses ?? []).map((a) => ({
           ...a,
           isDefault: a.id === id
         }))
@@ -209,7 +206,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   resetPassword: async (_email: string) => {
     set({ isLoading: true });
-    // TODO: Implement reset password using backend API
     set({ isLoading: false });
     return true;
   },

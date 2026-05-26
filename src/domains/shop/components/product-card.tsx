@@ -62,16 +62,9 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           />
 
           <div className='absolute top-3 left-3 flex flex-col gap-1.5'>
-            {product.is_new && (
-              <Badge className='bg-foreground text-background hover:bg-foreground'>New</Badge>
-            )}
+            {product.is_new && <Badge variant='inverse'>New</Badge>}
             {discountPercent > 0 && (
-              <Badge
-                variant='outline'
-                className='border-accent bg-background/90 text-accent backdrop-blur'
-              >
-                -{discountPercent}%
-              </Badge>
+              <Badge variant='accentOutline'>-{discountPercent}%</Badge>
             )}
           </div>
           <LikeButton
@@ -101,7 +94,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           <h3 className='font-display group-hover:text-accent text-lg leading-tight transition-colors'>
             {product.name}
           </h3>
-          <div className='text-muted-foreground flex items-center gap-1.5 text-xs'>
+          <div className='text-muted-foreground flex-start gap-1.5 text-xs'>
             <IconStar className='fill-foreground text-foreground h-3.5 w-3.5' />
             <span>{product.rating}</span>
             <span>· {product.reviews_count} reviews</span>

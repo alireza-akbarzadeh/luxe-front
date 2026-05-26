@@ -1,90 +1,116 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconTag } from '@tabler/icons-react';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { sectionContainerClass } from '../lib/home-utils';
+
+const PROMO_END = new Date('2026-06-30T23:59:59');
+
+function useCountdown(target: Date) {
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const tick = () => {
+      const diff = Math.max(0, target.getTime() - Date.now());
+      setTimeLeft({
+        hours: Math.floor(diff / (1000 * 60 * 60)) % 24,
+        minutes: Math.floor(diff / (1000 * 60)) % 60,
+        seconds: Math.floor(diff / 1000) % 60
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [target]);
+
+  return timeLeft;
+}
 
 export function PromoSection() {
+  const { hours, minutes, seconds } = useCountdown(PROMO_END);
+
   return (
-    <section className='py-24 lg:py-32'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+    <section className='py-16 sm:py-20 lg:py-28'>
+      <div className={sectionContainerClass}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className='relative overflow-hidden rounded-3xl'
+          transition={{ duration: 0.55 }}
+          className='border-border/60 relative overflow-hidden rounded-2xl border shadow-lg sm:rounded-3xl'
         >
-          {/* Background */}
-          <div className='from-foreground via-foreground/95 to-foreground/90 absolute inset-0 bg-gradient-to-br' />
+          <div className='relative grid min-h-[28rem] lg:grid-cols-2 lg:min-h-[24rem]'>
+            <div className='relative min-h-[14rem] lg:min-h-full'>
+              <Image
+                src='https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1200&h=900&fit=crop'
+                alt='Seasonal sale'
+                fill
+                className='object-cover'
+                sizes='(max-width: 1024px) 100vw, 50vw'
+              />
+              <div className='from-foreground/40 absolute inset-0 bg-gradient-to-r to-transparent lg:hidden' />
+            </div>
 
-          {/* Decorative Elements */}
-          <div className='bg-accent/20 absolute top-0 right-0 h-96 w-96 translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl' />
-          <div className='bg-accent/10 absolute bottom-0 left-0 h-64 w-64 -translate-x-1/2 translate-y-1/2 rounded-full blur-3xl' />
+            <div className='bg-foreground text-primary-foreground relative flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 lg:py-16'>
+              <div className='bg-accent/20 pointer-events-none absolute -top-20 right-0 h-56 w-56 rounded-full blur-3xl' />
 
-          {/* Content */}
-          <div className='relative px-8 py-16 text-center lg:px-16 lg:py-24'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <span className='bg-accent/20 text-accent mb-6 inline-block rounded-full px-4 py-2 text-sm font-medium'>
-                Limited Time Offer
+              <span className='bg-primary-foreground/10 text-primary-foreground inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-xs font-medium'>
+                <IconTag className='h-3.5 w-3.5' />
+                Limited time
               </span>
 
-              <h2 className='text-primary-foreground mb-6 text-3xl font-bold tracking-tight text-balance sm:text-4xl lg:text-6xl'>
-                Get 30% Off Your First Order
+              <h2 className='font-display mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
+                30% off your first order
               </h2>
-
-              <p className='text-primary-foreground/70 mx-auto mb-10 max-w-2xl text-lg'>
-                Join thousands of satisfied customers and experience the Luxe difference. Use code
-                WELCOME30 at checkout.
+              <p className='text-primary-foreground/75 mt-4 max-w-md text-sm leading-relaxed sm:text-base'>
+                Join the LUXE community and unlock exclusive access to private sales, early drops,
+                and member-only styling sessions. Use code{' '}
+                <span className='text-primary-foreground font-semibold'>WELCOME30</span> at checkout.
               </p>
 
-              <div className='flex flex-col justify-center gap-4 sm:flex-row'>
-                <Button
-                  size='lg'
-                  className='bg-accent hover:bg-accent/90 text-accent-foreground group h-14 rounded-full px-8 text-base font-medium'
+              <div className='mt-8 flex flex-wrap gap-6'>
+                {[
+                  { value: String(hours).padStart(2, '0'), label: 'Hours' },
+                  { value: String(minutes).padStart(2, '0'), label: 'Min' },
+                  { value: String(seconds).padStart(2, '0'), label: 'Sec' }
+                ].map((item) => (
+                  <div key={item.label} className='text-center'>
+                    <div className='font-display text-3xl font-semibold tabular-nums sm:text-4xl'>
+                      {item.value}
+                    </div>
+                    <div className='text-primary-foreground/50 text-xs tracking-widest uppercase'>
+                      {item.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className='mt-10 flex flex-col gap-3 sm:flex-row'>
+                <Link
+                  href='/shop'
+                  className={cn(
+                    buttonVariants({ size: 'lg' }),
+                    'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8'
+                  )}
                 >
-                  Shop Now
-                  <IconArrowRight className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
-                </Button>
+                  Shop the sale
+                  <IconArrowRight className='ml-2 h-4 w-4' />
+                </Link>
                 <Button
                   variant='outline'
                   size='lg'
-                  className='border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-14 rounded-full px-8 text-base font-medium'
+                  className='border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10 h-12 rounded-full px-8'
+                  asChild
                 >
-                  Learn More
+                  <Link href='/register'>Create account</Link>
                 </Button>
               </div>
-
-              {/* Countdown-style elements */}
-              <div className='mt-12 flex flex-wrap items-center justify-center gap-8'>
-                {[
-                  { value: '48', label: 'Hours' },
-                  { value: '23', label: 'Minutes' },
-                  { value: '59', label: 'Seconds' }
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    className='text-center'
-                  >
-                    <div className='text-primary-foreground text-3xl font-bold lg:text-4xl'>
-                      {item.value}
-                    </div>
-                    <div className='text-primary-foreground/50 text-sm tracking-wider uppercase'>
-                      {item.label}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>

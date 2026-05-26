@@ -1,59 +1,54 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { IconGeometry, IconHeadphones, IconShield, IconTruck } from '@tabler/icons-react';
-import { features } from '@/lib/data';
+import {
+  IconDiamond,
+  IconHeadphones,
+  IconShield,
+  IconTruck
+} from '@tabler/icons-react';
+import { features } from '../lib/home-mock-data';
+import { SectionHeader } from './section-header';
+import { sectionContainerClass } from '../lib/home-utils';
 
 const iconMap = {
   truck: IconTruck,
-  gem: IconGeometry,
+  gem: IconDiamond,
   shield: IconShield,
   headphones: IconHeadphones
-};
+} as const;
 
 export function FeaturesSection() {
   return (
-    <section id='features' className='py-24 lg:py-32'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className='mb-16 text-center'
-        >
-          <span className='text-accent text-sm font-medium tracking-wider uppercase'>Why Luxe</span>
-          <h2 className='mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl'>
-            The Luxe Difference
-          </h2>
-          <p className='text-muted-foreground mx-auto mt-4 max-w-2xl'>
-            We go above and beyond to ensure every aspect of your experience is exceptional.
-          </p>
-        </motion.div>
+    <section id='features' className='py-16 sm:py-20 lg:py-28'>
+      <div className={sectionContainerClass}>
+        <SectionHeader
+          eyebrow='Why LUXE'
+          title='The LUXE difference'
+          description='We obsess over every touchpoint — from sourcing to delivery — so you can shop with total confidence.'
+        />
 
-        {/* Features Grid */}
-        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5'>
           {features.map((feature, index) => {
-            const Icon = iconMap[feature.icon as keyof typeof iconMap];
+            const Icon = iconMap[feature.icon];
             return (
               <motion.div
                 key={feature.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.45, delay: index * 0.08 }}
+                whileHover={{ y: -4 }}
                 className='group'
               >
-                <div className='bg-card border-border/50 hover:border-border h-full rounded-2xl border p-8 transition-all duration-300 hover:shadow-xl'>
-                  {/* Icon */}
-                  <div className='bg-secondary group-hover:bg-accent group-hover:text-accent-foreground mb-6 flex h-14 w-14 items-center justify-center rounded-xl transition-colors duration-300'>
-                    <Icon className='h-6 w-6' />
+                <div className='bg-card border-border/60 hover:border-border h-full rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-lg sm:rounded-3xl sm:p-8'>
+                  <div className='bg-secondary text-accent group-hover:bg-accent group-hover:text-accent-foreground mb-5 flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-300'>
+                    <Icon className='h-6 w-6' stroke={1.5} />
                   </div>
-
-                  <h3 className='mb-2 text-lg font-semibold'>{feature.title}</h3>
-                  <p className='text-muted-foreground text-sm'>{feature.description}</p>
+                  <h3 className='font-display text-lg font-semibold'>{feature.title}</h3>
+                  <p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
+                    {feature.description}
+                  </p>
                 </div>
               </motion.div>
             );

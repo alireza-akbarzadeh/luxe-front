@@ -1,0 +1,75 @@
+import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
+import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
+import type { ModelsProduct } from '~/src/services/-categories-get.schemas';
+import {
+  CATEGORY_IMAGES,
+  FALLBACK_CATEGORY_IMAGES,
+  MOCK_CATEGORIES,
+  MOCK_FEATURED_PRODUCTS
+} from './home-mock-data';
+
+export function getCategoryImage(category: ModelsCategory, index: number): string {
+  const slug = category.slug?.toLowerCase() ?? '';
+  const name = category.name?.toLowerCase() ?? '';
+
+  for (const key of Object.keys(CATEGORY_IMAGES)) {
+    if (key !== 'default' && (slug.includes(key) || name.includes(key))) {
+      return CATEGORY_IMAGES[key]!;
+    }
+  }
+
+  return FALLBACK_CATEGORY_IMAGES[index % FALLBACK_CATEGORY_IMAGES.length]!;
+}
+
+export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCategory[] {
+  if (apiCategories && apiCategories.length > 0) {
+    return apiCategories.filter((c) => c.is_active !== false).slice(0, 8);
+  }
+  return MOCK_CATEGORIES;
+}
+
+export function mapProductForCard(
+  item: GetProducts200DataProductsItem
+): ModelsProduct & { isLike: boolean } {
+  const product = item.items;
+  return {
+    id: product?.id,
+    name: product?.name ?? 'Product',
+    slug: product?.slug ?? `product-${product?.id ?? 'unknown'}`,
+    sku: product?.sku ?? `SKU-${product?.id ?? 'unknown'}`,
+    price: product?.price ?? 0,
+    compare_at_price: product?.compare_at_price,
+    rating: product?.rating,
+    reviews_count: product?.reviews_count,
+    is_new: product?.is_new,
+    images: product?.images,
+    category: product?.category,
+    status: product?.status as ModelsProduct['status'],
+    isLike: item.is_liked ?? false
+  };
+}
+
+export function resolveProducts(
+  apiProducts?: GetProducts200DataProductsItem[],
+  fallback = MOCK_FEATURED_PRODUCTS
+): GetProducts200DataProductsItem[] {
+  if (apiProducts && apiProducts.length > 0) {
+    return apiProducts;
+  }
+  return fallback;
+}
+
+export function formatPrice(value?: number): string {
+  if (value === undefined || Number.isNaN(value)) return '$0';
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
+/** Break out of parent `app-container` padding for full-bleed sections */
+export const fullBleedClass =
+  'relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2';
+
+export const sectionContainerClass = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8';

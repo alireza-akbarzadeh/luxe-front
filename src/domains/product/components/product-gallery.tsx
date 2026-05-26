@@ -33,10 +33,8 @@ export function ProductGallery(props: ProductGalleryProps) {
         </AnimatePresence>
 
         <div className='absolute top-4 left-4 flex flex-col gap-2'>
-          {product.is_new && <Badge className='bg-foreground text-background'>New Arrival</Badge>}
-          {discount > 0 && (
-            <Badge className='bg-accent text-accent-foreground'>-{discount}% Off</Badge>
-          )}
+          {product.is_new && <Badge variant='inverse'>New Arrival</Badge>}
+          {discount > 0 && <Badge variant='accent'>-{discount}% Off</Badge>}
         </div>
 
         <button

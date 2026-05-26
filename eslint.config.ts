@@ -24,7 +24,6 @@ export default defineConfig(
   sonarjs.recommended,
   unicorn.configs.recommended,
   reactCompilerPlugin.configs.recommended,
-  simpleImportSort.configs.recommended,
   {
     linterOptions: {
       reportUnusedDisableDirectives: true
@@ -99,6 +98,9 @@ export default defineConfig(
   prettierConfig,
   prettierPlugin,
   {
+    plugins: {
+      'simple-import-sort': simpleImportSort
+    },
     rules: {
       curly: ['error', 'all'],
       'no-console': ['warn', { allow: ['warn', 'error'] }],

@@ -3,8 +3,9 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/query-clinet';
 import { HomeDomains } from '@/domains/home/home.domain';
 import type { Metadata } from 'next';
-import type { GetProductsParams } from '~/src/services/-products-get.schemas';
+import { getGetCategoriesQueryOptions } from '~/src/services/-categories-get';
 import { getGetProductsQueryOptions } from '~/src/services/-products-get';
+import type { GetProductsParams } from '~/src/services/-products-get.schemas';
 
 export const metadata: Metadata = {
   title: 'LUXE | Premium Fashion & Lifestyle Ecommerce',
@@ -66,14 +67,36 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const queryClient = getQueryClient();
 
-  const params: GetProductsParams = {
+  const featuredParams: GetProductsParams = {
     status: 'active',
     limit: 8,
-    offset: 1
+    offset: 0,
+    sort: 'rating_desc'
   };
 
-  const queryOptions = getGetProductsQueryOptions(params);
-  await queryClient.prefetchQuery(queryOptions);
+  await Promise.all([
+    queryClient.prefetchQuery(getGetProductsQueryOptions(featuredParams)),
+    queryClient.prefetchQuery(
+      getGetCategoriesQueryOptions({ is_active: true, limit: 8, offset: 0 })
+    ),
+    queryClient.prefetchQuery(
+      getGetProductsQueryOptions({
+        status: 'active',
+        limit: 6,
+        offset: 0,
+        is_new: true,
+        sort: 'newest'
+      })
+    ),
+    queryClient.prefetchQuery(
+      getGetProductsQueryOptions({
+        status: 'active',
+        limit: 3,
+        offset: 0,
+        sort: 'newest'
+      })
+    )
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

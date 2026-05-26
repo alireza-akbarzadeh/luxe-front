@@ -78,7 +78,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
           >
             {item.label}
             {item.badge && (
-              <Badge variant='destructive' className='text-[10px]'>
+              <Badge variant='destructive' size='sm'>
                 {item.badge}
               </Badge>
             )}

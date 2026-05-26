@@ -128,7 +128,7 @@ export function DesktopNav() {
                 >
                   {item.label}
                   {item.badge && (
-                    <Badge variant='destructive' className='text-[10px] px-1.5 py-0'>
+                    <Badge variant='destructive' size='sm'>
                       {item.badge}
                     </Badge>
                   )}

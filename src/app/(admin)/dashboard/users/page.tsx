@@ -1,15 +1,13 @@
 'use client';
 
+import { IconDownload } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { toast } from 'sonner';
+
 import { AppDialog } from '@/components/app-dialog';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { InviteUserForm } from '../components/invite-user-form';
-import { UserStatCard } from '../components/user-status-card';
-import { UserManagementTable } from './user-table';
-import { useGetUsers } from '~/src/services/apis/user';
 
 export default function UserManagementPage() {
   const [isInviteOpen, setIsInviteOpen] = React.useState(false);
@@ -48,7 +46,7 @@ export default function UserManagementPage() {
             onClick={handleExport}
             className='border-border/60 h-10 rounded-xl text-[10px] font-bold tracking-wider uppercase'
           >
-            <Download className='mr-2 h-3.5 w-3.5' /> Export
+            <IconDownload className='mr-2 h-3.5 w-3.5' /> Export
           </Button>
 
           <AppDialog
@@ -72,7 +70,11 @@ export default function UserManagementPage() {
               </Button>
             }
           >
-            <InviteUserForm onSuccess={() => setIsInviteOpen(false)} />
+            <InviteUserForm
+              onSuccess={() => {
+                setIsInviteOpen(false);
+              }}
+            />
           </AppDialog>
 
           <Button
