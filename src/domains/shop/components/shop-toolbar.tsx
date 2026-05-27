@@ -13,8 +13,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { sortOptions } from '@/lib/data';
 import {
   IconArrowsHorizontal,
+  IconLayout,
   IconLayout2Filled,
   IconLayoutGrid,
+  IconLayoutGridRemove,
   IconSearch
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -104,7 +106,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
             className='h-8 w-8'
             onClick={() => setGridCols(3)}
           >
-            <IconLayout2Filled className='h-4 w-4' />
+            <IconLayoutGridRemove className='h-4 w-4' />
           </Button>
           <Button
             variant={gridCols === 4 ? 'secondary' : 'ghost'}

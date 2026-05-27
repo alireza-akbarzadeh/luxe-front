@@ -1,6 +1,6 @@
 // lib/prefetch-with-auth.ts
 import { cookies } from 'next/headers';
-import { getQueryClient } from './query-clinet';
+import { getQueryClient } from './query-client';
 
 export async function prefetchWithAuth(
   queryOptionsFn: (id: string, options?: any) => any,

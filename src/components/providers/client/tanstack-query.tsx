@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/query-clinet';
+import { getQueryClient } from '~/src/lib/query-client';
 import { DevTools } from '@/components/providers/DevTools';
 
 type TTanstackQueryProvider = Readonly<PropsWithChildren>;

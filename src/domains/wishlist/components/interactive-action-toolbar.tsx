@@ -1,4 +1,4 @@
-import { IconGrid3x3, IconList } from '@tabler/icons-react';
+import { IconGrid3x3, IconGridDots, IconList } from '@tabler/icons-react';
 
 import { Button } from '~/src/components/ui/button';
 import { Checkbox } from '~/src/components/ui/checkbox';
@@ -88,7 +88,7 @@ export default function InteractiveActionToolbar({
               setViewMode('grid');
             }}
           >
-            <IconGrid3x3 className='h-4 w-4' />
+            <IconGridDots className='h-4 w-4' />
           </Button>
           <Button
             variant={viewMode === 'list' ? 'secondary' : 'ghost'}

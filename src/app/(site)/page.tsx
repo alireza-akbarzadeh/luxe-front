@@ -1,6 +1,6 @@
 // app/page.tsx
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/query-clinet';
+import { getQueryClient } from '~/src/lib/query-client';
 import { HomeDomains } from '@/domains/home/home.domain';
 import type { Metadata } from 'next';
 import { getGetCategoriesQueryOptions } from '~/src/services/-categories-get';

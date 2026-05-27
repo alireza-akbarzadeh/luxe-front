@@ -2,7 +2,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IconChevronRight } from '@tabler/icons-react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useGetProductsId } from '~/src/services/-products-{id}-get';
 import ProductDescription from './components/product-description';

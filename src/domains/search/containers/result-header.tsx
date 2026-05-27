@@ -11,11 +11,10 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-import { IconFilter2, IconGrid3x3, IconList } from '@tabler/icons-react';
+import { IconFilter2, IconGrid3x3, IconGridDots, IconList } from '@tabler/icons-react';
 import { Button } from '~/src/components/ui/button';
 import { Badge } from '~/src/components/ui/badge';
 import { SearchFilterContent } from '../components/search-filter-content';
-import type { ProductCardProps } from '../../shop/components/product-card';
 
 const sortOptions = [
   { label: 'Most Relevant', value: 'relevance' },
@@ -88,7 +87,7 @@ export function ResultHeader(props: ResultHeaderProps) {
             className='h-8 w-8'
             onClick={() => searchParams.setView('grid')}
           >
-            <IconGrid3x3 className='h-4 w-4' />
+            <IconGridDots className='h-4 w-4' />
           </Button>
           <Button
             variant={searchParams.view === 'list' ? 'secondary' : 'ghost'}

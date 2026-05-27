@@ -26,21 +26,8 @@ export default function CartPage() {
       </main>
     );
   }
-  if (error || !items.length) return notFound();
-
-  if (error) {
-    return (
-      <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <div className='bg-destructive/10 rounded-lg p-6 text-center'>
-            <p className='text-destructive'>Failed to load your cart. Please try again later.</p>
-            <Button variant='outline' className='mt-4' onClick={() => window.location.reload()}>
-              Retry
-            </Button>
-          </div>
-        </div>
-      </main>
-    );
+  if (error || items.length === 0) {
+    return notFound();
   }
 
   return (
