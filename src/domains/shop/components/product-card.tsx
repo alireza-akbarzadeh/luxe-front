@@ -2,8 +2,13 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { IconShoppingBag, IconStar } from '@tabler/icons-react';
-import { useCartController } from '@/hooks/useCartController';
+import {
+  IconBasketCheck,
+  IconShoppingBag,
+  IconShoppingCartCheck,
+  IconStar
+} from '@tabler/icons-react';
+import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
 import type { ModelsProduct } from '~/src/services/-categories-bulk-post.schemas';
 import { LikeButton } from '~/src/components/buttons/like-button';
 
@@ -17,11 +22,43 @@ export interface ProductCardProps {
 
 export function ProductCard({ product, index = 0, size = 'default' }: ProductCardProps) {
   const isCompact = size === 'compact';
-  const { increment, isLoading } = useCartController();
+  const { increment, isLoading, items: cartItems } = useCartController(); // Get cart items
 
   const discountPercent = product.compare_at_price
     ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
     : 0;
+
+  // Find quantity of this product in the cart
+  const cartItem = cartItems?.find((item) => item.product_id === product.id);
+  const cartQuantity = cartItem?.quantity ?? 0;
+
+  const mapToBasket = (values: ModelsProduct): CartItemPayload => {
+    return {
+      color: values.colors?.[0]?.toString(),
+      size: values.colors?.[0]?.toString(),
+      image_url: values.images?.[0],
+      is_in_stock: Number(values.stock) > 0,
+      price: values.price,
+      product_id: values.id,
+      product_name: values.name,
+      stock: values.stock
+    };
+  };
+
+  const handleAddToCart = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    increment(mapToBasket(product));
+  };
+
+  // Button text based on cart quantity
+  const getButtonText = () => {
+    if (isLoading) return isCompact ? '...' : 'Adding...';
+    if (cartQuantity > 0) {
+      return isCompact ? `${cartQuantity}` : `In Cart (${cartQuantity})`;
+    }
+    return isCompact ? 'Add' : 'Add to Cart';
+  };
 
   return (
     <motion.div
@@ -76,13 +113,18 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
             }`}
           >
             <Button
-              onClick={() => increment(product)}
+              onClick={handleAddToCart}
               disabled={isLoading}
               className={`w-full gap-1.5 shadow-lg ${isCompact ? 'h-8 text-xs' : 'gap-2'}`}
               size='sm'
+              variant={cartQuantity > 0 ? 'secondary' : 'default'}
             >
-              <IconShoppingBag className={isCompact ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
-              {isLoading ? 'Adding...' : isCompact ? 'Add' : 'Add to Cart'}
+              {cartQuantity > 0 ? (
+                <IconBasketCheck className={isCompact ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
+              ) : (
+                <IconShoppingBag className={isCompact ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
+              )}
+              {getButtonText()}
             </Button>
           </div>
         </div>

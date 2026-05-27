@@ -1,30 +1,29 @@
 'use client';
-
+import { IconArrowLeft, IconBasket } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { IconArrowLeft, IconBuildingStore } from '@tabler/icons-react';
+import { Button } from '~/src/components/ui/button';
 
-export default function OrderNotFound() {
+export function CartNotFound() {
   return (
-    <div className='bg-background flex min-h-screen items-center justify-center px-4'>
+    <div className='bg-background flex min-h-screen flex-row items-center justify-center px-4'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className='text-center'
       >
         <div className='bg-secondary mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full'>
-          <IconBuildingStore className='text-muted-foreground h-10 w-10' />
+          <IconBasket className='text-muted-foreground h-10 w-10' />
         </div>
-        <h1 className='mb-2 text-3xl font-bold'>Order Not Found</h1>
+        <h1 className='mb-2 text-3xl font-bold'>Your Cart is empty </h1>
         <p className='text-muted-foreground mb-6 max-w-md'>
-          The order you&apos;re looking for doesn&apos;t exist or may have been removed.
+          Add some items to your cart before checking out.
         </p>
         <div className='flex items-center justify-center gap-3'>
-          <Button asChild variant='outline' className='gap-2'>
+          <Button asChild variant='outline' className='gap-2 py-4'>
             <Link href='/shop'>
               <IconArrowLeft className='h-4 w-4' />
-              Continue Shopping
+              Go Shopping
             </Link>
           </Button>
           <Button asChild>

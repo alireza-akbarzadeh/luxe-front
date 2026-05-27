@@ -9,7 +9,7 @@ import { ProductBadges } from './product-badges';
 import ProductColors from './product-colors';
 import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
-import { useCartController } from '@/hooks/useCartController';
+import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -28,6 +28,19 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
   const stock = product.stock ?? 0;
   const productQuantity = cartItem?.quantity ?? 0;
+
+  const mapToBasket = (values: DtoProductResponse): CartItemPayload => {
+    return {
+      color: selectedColor,
+      size: selectedSize as string,
+      image_url: values.images?.[0],
+      is_in_stock: Number(values.stock) > 0,
+      price: values.price,
+      product_id: values.id,
+      product_name: values.name,
+      stock: values.stock
+    };
+  };
 
   return (
     <div className='flex flex-col gap-6'>
@@ -85,15 +98,15 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
       <ProductQuantity
         value={productQuantity}
-        onIncrement={() => increment(product)}
-        onDecrement={() => decrement(product)}
+        onIncrement={() => increment(mapToBasket(product))}
+        onDecrement={() => decrement(mapToBasket(product))}
         stock={stock}
       />
 
       <div className='mt-8 flex flex-col gap-4'>
         <div className='flex gap-3'>
           <Button
-            onClick={() => increment(product)}
+            onClick={() => increment(mapToBasket(product))}
             size='lg'
             className='bg-foreground text-background hover:bg-foreground/90 flex-1 gap-2'
             disabled={isLoading}

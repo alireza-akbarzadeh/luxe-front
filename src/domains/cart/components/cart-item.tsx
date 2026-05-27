@@ -1,23 +1,55 @@
 import { IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-
 import Image from 'next/image';
 import { Button } from '~/src/components/ui/button';
 import { useCartController } from '~/src/hooks/useCartController';
+import { Badge } from '~/src/components/ui/badge';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
+import { getContrastColor } from '~/src/lib/colros';
 
 interface CartItemProps {
   cart: DtoCartItemDetail;
-  isUpdatingThis: boolean;
-  isRemovingThis: boolean;
   index: number;
+
+  isUpdatingThis?: boolean;
+  isRemovingThis?: boolean;
   cartItemId: number;
 }
 
-export function CartItem(props: CartItemProps) {
-  const { cart, index, isRemovingThis, isUpdatingThis, cartItemId } = props;
-  const { updateQuantity, removeItem } = useCartController();
+export function CartItem({
+  cart,
+  index,
+  cartItemId,
+  isUpdatingThis,
+  isRemovingThis
+}: CartItemProps) {
+  const { updateCartItemQuantity, removeCartItem, updateCartItemVariant, isUpdating, isRemoving } =
+    useCartController();
+
+  const isUpdatingItem = isUpdatingThis ?? isUpdating;
+  const isRemovingItem = isRemovingThis ?? isRemoving;
+
+  const handleUpdateQuantity = (newQuantity: number) => {
+    if (newQuantity < 1) return;
+    updateCartItemQuantity(cartItemId, newQuantity);
+  };
+
+  const handleRemove = () => removeCartItem(cartItemId);
+
+  const handleSelectColor = (color: string) => {
+    updateCartItemVariant(cartItemId, color, cart.selected_size || '');
+  };
+
+  const handleSelectSize = (size: string) => {
+    updateCartItemVariant(cartItemId, cart.selected_color || '', size);
+  };
+
+  const hasColorOptions = cart.color && cart.color.length > 0;
+  const hasSizeOptions = cart.size && cart.size.length > 0;
+  const needsColorSelection =
+    hasColorOptions && (!cart.selected_color || cart.selected_color === '');
+  const needsSizeSelection = hasSizeOptions && (!cart.selected_size || cart.selected_size === '');
 
   return (
     <motion.div
@@ -50,20 +82,88 @@ export function CartItem(props: CartItemProps) {
             >
               {cart.name}
             </Link>
-            <div className='text-muted-foreground mt-1 flex items-center gap-2 text-sm'>
-              {cart.color && <span>Color: {cart.color}</span>}
-              {cart.color && cart.size && <span>/</span>}
-              {cart.size && <span>Size: {cart.size}</span>}
-            </div>
+
+            {/* Color selection UI */}
+            {hasColorOptions && (
+              <div className='mt-2'>
+                {needsColorSelection ? (
+                  <div className='flex flex-wrap items-center gap-1.5'>
+                    <span className='text-muted-foreground text-xs'>Select color:</span>
+                    {cart?.color?.map((c) => (
+                      <Button
+                        key={c}
+                        variant='outline'
+                        size='sm'
+                        className='h-7 px-2 text-xs'
+                        onClick={() => handleSelectColor(c.toString())}
+                      >
+                        {c}
+                      </Button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className='flex items-center gap-1.5'>
+                    <span className='text-muted-foreground text-xs'>Color:</span>
+                    <Badge variant='secondary' className='gap-1'>
+                      {cart.selected_color}
+                      <button
+                        onClick={() => handleSelectColor('')}
+                        className='hover:text-destructive ml-1'
+                        aria-label='Change color'
+                      >
+                        <IconX className='h-3 w-3' />
+                      </button>
+                    </Badge>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Size selection UI */}
+            {hasSizeOptions && (
+              <div className='mt-2'>
+                {needsSizeSelection ? (
+                  <div className='flex flex-wrap items-center gap-1.5'>
+                    <span className='text-muted-foreground text-xs'>Select size:</span>
+                    {cart?.size?.map((s) => (
+                      <Button
+                        key={s}
+                        variant='outline'
+                        size='sm'
+                        className='h-7 px-2 text-xs'
+                        onClick={() => handleSelectSize(s.toString())}
+                      >
+                        {s}
+                      </Button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className='flex items-center gap-1.5'>
+                    <span className='text-muted-foreground text-xs'>Size:</span>
+                    <Badge variant='secondary' className='gap-1'>
+                      {cart.selected_size}
+                      <button
+                        onClick={() => handleSelectSize('')}
+                        className='hover:text-destructive ml-1'
+                        aria-label='Change size'
+                      >
+                        <IconX className='h-3 w-3' />
+                      </button>
+                    </Badge>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
+
           <Button
             variant='ghost'
             size='icon'
             className='text-muted-foreground hover:text-destructive h-8 w-8 shrink-0 rounded-full'
-            onClick={() => removeItem(cartItemId)}
-            disabled={isRemovingThis}
+            onClick={handleRemove}
+            disabled={isRemovingItem}
           >
-            {isRemovingThis ? (
+            {isRemovingItem ? (
               <div className='h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent' />
             ) : (
               <IconX className='h-4 w-4' />
@@ -72,14 +172,14 @@ export function CartItem(props: CartItemProps) {
         </div>
 
         <div className='mt-4 flex items-end justify-between'>
-          {/* Quantity */}
+          {/* Quantity controls */}
           <div className='flex items-center gap-2'>
             <Button
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, Math.max(1, (cart.quantity ?? 0) - 1))}
-              disabled={isUpdatingThis}
+              onClick={() => handleUpdateQuantity((cart.quantity ?? 0) - 1)}
+              disabled={isUpdatingItem || (cart.quantity ?? 0) <= 1}
             >
               <IconMinus className='h-3 w-3' />
             </Button>
@@ -88,14 +188,14 @@ export function CartItem(props: CartItemProps) {
               variant='outline'
               size='icon'
               className='h-8 w-8 rounded-full'
-              onClick={() => updateQuantity(cartItemId, (cart.quantity ?? 0) + 1)}
-              disabled={isUpdatingThis}
+              onClick={() => handleUpdateQuantity((cart.quantity ?? 0) + 1)}
+              disabled={isUpdatingItem}
             >
               <IconPlus className='h-3 w-3' />
             </Button>
           </div>
 
-          {/* Price with original price strikethrough */}
+          {/* Price */}
           <div className='text-right'>
             ${((cart.price ?? 0) * (cart.quantity ?? 0)).toFixed(2)}
             {cart.original_price && cart.original_price > (cart.price ?? 0) && (

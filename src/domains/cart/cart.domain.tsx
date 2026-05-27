@@ -9,8 +9,8 @@ import { useCartController } from '~/src/hooks/useCartController';
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartItem } from './components/cart-item';
 import { OrderSummary } from './components/order-summary';
-import { ProductSuggestion } from './components/product-suggestin';
-import { EmptyCart } from '../checkout/components/empty-checkout';
+import { ProductSuggestion } from './components/product-suggestion';
+import { notFound } from 'next/navigation';
 
 export default function CartPage() {
   const { items, isLoading, error } = useCartController();
@@ -26,6 +26,7 @@ export default function CartPage() {
       </main>
     );
   }
+  if (error || !items.length) return notFound();
 
   if (error) {
     return (
@@ -54,49 +55,44 @@ export default function CartPage() {
         >
           Shopping Cart
         </motion.h1>
-
-        {items.length === 0 ? (
-          <EmptyCart />
-        ) : (
-          <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
-            {/* Cart Items */}
-            <div className='space-y-4 lg:col-span-2'>
-              <div className='mb-4 flex items-center justify-between'>
-                <span className='text-muted-foreground'>
-                  {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
-                </span>
-                <Link href='/shop' className='text-accent text-sm font-medium hover:underline'>
-                  Continue Shopping
-                </Link>
-              </div>
-
-              <AnimatePresence mode='popLayout'>
-                {items.map((item, index) => {
-                  const cartItemId = item.id;
-                  const isUpdatingThis = isLoading && item.id === cartItemId;
-                  const isRemovingThis = isLoading && item.id === cartItemId;
-
-                  return (
-                    <CartItem
-                      cartItemId={cartItemId || 0}
-                      index={index}
-                      key={item.id}
-                      isUpdatingThis={isUpdatingThis}
-                      isRemovingThis={isRemovingThis}
-                      cart={item}
-                    />
-                  );
-                })}
-              </AnimatePresence>
-
-              {/* Suggested Products */}
-              <ProductSuggestion />
+        <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
+          {/* Cart Items */}
+          <div className='space-y-4 lg:col-span-2'>
+            <div className='mb-4 flex items-center justify-between'>
+              <span className='text-muted-foreground'>
+                {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+              </span>
+              <Link href='/shop' className='text-accent text-sm font-medium hover:underline'>
+                Continue Shopping
+              </Link>
             </div>
 
-            {/* Order Summary */}
-            <OrderSummary />
+            <AnimatePresence mode='popLayout'>
+              {items.map((item, index) => {
+                const cartItemId = item.id;
+                const isUpdatingThis = isLoading && item.id === cartItemId;
+                const isRemovingThis = isLoading && item.id === cartItemId;
+
+                return (
+                  <CartItem
+                    cartItemId={cartItemId || 0}
+                    index={index}
+                    key={item.id}
+                    isUpdatingThis={isUpdatingThis}
+                    isRemovingThis={isRemovingThis}
+                    cart={item}
+                  />
+                );
+              })}
+            </AnimatePresence>
+
+            {/* Suggested Products */}
+            <ProductSuggestion />
           </div>
-        )}
+
+          {/* Order Summary */}
+          <OrderSummary />
+        </div>
       </div>
     </main>
   );

@@ -5,7 +5,6 @@ import { IconCalendar, IconCheckbox, IconMapPin } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
-import { EmptyOrder } from './components/empty-order';
 import { OrderBoxNumebr } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
@@ -78,6 +77,8 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const subtotal =
     currentOrder.items?.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0) ??
     0;
+
+  // FIXME: add pice to the backend
   const shippingCost = shipment?.price ?? 0;
   const tax = subtotal * 0.08; // assuming 8% tax – you could read from order if available
   const total = currentOrder.total_amount;

@@ -12,15 +12,15 @@ import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 
 import { useUser } from './useUser';
 
-interface CartItemPayload {
+export interface CartItemPayload {
   product_id?: number | null;
   product_name?: string | null;
   price?: number | null;
   stock?: number | null;
   is_in_stock?: boolean | null;
   image_url?: string | null;
-  color?: string | string[];
-  size?: string | string[];
+  color?: string;
+  size?: string;
 }
 
 export const useCartController = () => {
@@ -34,7 +34,21 @@ export const useCartController = () => {
     error
   } = useGetCart({
     query: {
-      enabled: isAuthenticated
+      enabled: isAuthenticated,
+      // ✅ Sort items by ID (stable order, prevents jumping)
+      select: (data) => {
+        const items = data?.data?.items ?? [];
+        return {
+          ...data,
+          data: {
+            ...data?.data,
+            items: [...items].sort((a, b) => Number(a.id) - Number(b.id))
+          }
+        };
+      },
+      // ✅ Cross‑tab / background sync without breaking optimistic updates
+      refetchOnWindowFocus: true,
+      staleTime: 1000 * 60 * 5
     }
   });
 
@@ -147,13 +161,12 @@ export const useCartController = () => {
         }
 
         toast.error('Failed to add item to cart');
-      },
-
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: getGetCartQueryKey()
-        });
       }
+
+      // ✅ REMOVED – no invalidation, optimistic cache is enough
+      // onSuccess: () => {
+      //   queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+      // }
     }
   });
 
@@ -206,13 +219,9 @@ export const useCartController = () => {
         }
 
         toast.error('Failed to update quantity');
-      },
-
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: getGetCartQueryKey()
-        });
       }
+
+      // ✅ REMOVED invalidation
     }
   });
 
@@ -255,13 +264,9 @@ export const useCartController = () => {
         }
 
         toast.error('Failed to remove item');
-      },
-
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: getGetCartQueryKey()
-        });
       }
+
+      // ✅ REMOVED invalidation
     }
   });
 
@@ -270,6 +275,41 @@ export const useCartController = () => {
   // =========================================================
 
   const clearCartMutation = useDeleteCartItems();
+
+  // =========================================================
+  // UPDATE VARIANT (color/size)
+  // =========================================================
+  const updateVariantMutation = usePutCartItemsId({
+    mutation: {
+      mutationKey: ['cart-update-variant'],
+      onMutate: async ({ id, data }: any) => {
+        await queryClient.cancelQueries({ queryKey: getGetCartQueryKey() });
+        const previousCart = queryClient.getQueryData(getGetCartQueryKey());
+
+        updateCartCache((old: any) => {
+          const currentItems = old?.data?.items ?? [];
+          const updatedItems = currentItems.map((item: any) => {
+            if (Number(item.id) !== Number(id)) return item;
+            return {
+              ...item,
+              selected_color: data.color ?? item.selected_color,
+              selected_size: data.size ?? item.selected_size
+            };
+          });
+          return { ...old, data: { ...old.data, items: updatedItems } };
+        });
+
+        return { previousCart };
+      },
+      onError: (_error, _variables, context: any) => {
+        if (context?.previousCart) {
+          queryClient.setQueryData(getGetCartQueryKey(), context.previousCart);
+        }
+        toast.error('Failed to update color/size');
+      }
+      // ✅ REMOVED invalidation
+    }
+  });
 
   // =========================================================
   // HELPERS
@@ -375,6 +415,24 @@ export const useCartController = () => {
     return Number(found?.quantity ?? 0);
   };
 
+  const updateCartItemVariant = (itemId: number, color: string, size: string) => {
+    updateVariantMutation.mutate({ id: itemId, data: { color, size } });
+  };
+  // =========================================================
+  // UPDATE QUANTITY BY CART ITEM ID (public)
+  // =========================================================
+  const updateCartItemQuantity = (itemId: number, quantity: number) => {
+    if (quantity < 1) return;
+    updateQuantityMutation.mutate({ id: itemId, data: { quantity } });
+  };
+
+  // =========================================================
+  // REMOVE CART ITEM BY ID (public)
+  // =========================================================
+  const removeCartItem = (itemId: number) => {
+    removeItemMutation.mutate({ id: itemId });
+  };
+
   // =========================================================
   // LOADING STATES
   // =========================================================
@@ -393,31 +451,24 @@ export const useCartController = () => {
 
   return {
     items,
-
     itemCount,
-
     subtotal,
-
     isLoading,
-
     isAdding,
-
     isUpdating,
-
     isRemoving,
-
     isClearing,
-
     error,
-
     getProductQuantity,
-
     increment: handleQuantityIncrement,
-
     decrement: handleQuantityDecrement,
-
+    updateCartItemVariant,
+    updateCartItemQuantity,
+    removeCartItem,
     clearCart: async () => {
       await clearCartMutation.mutateAsync();
+      // Also clear the cache optimistically
+      updateCartCache((old: any) => ({ ...old, data: { ...old.data, items: [] } }));
     }
   };
 };

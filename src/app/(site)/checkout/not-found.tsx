@@ -1,0 +1,5 @@
+import { CartNotFound } from '@/components/cart/cart-not-found';
+
+export default function CheckoutNotFound() {
+  return <CartNotFound />;
+}
