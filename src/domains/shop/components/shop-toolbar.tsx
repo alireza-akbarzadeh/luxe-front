@@ -13,8 +13,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { sortOptions } from '@/lib/data';
 import {
   IconArrowsHorizontal,
-  IconLayout,
-  IconLayout2Filled,
   IconLayoutGrid,
   IconLayoutGridRemove,
   IconSearch

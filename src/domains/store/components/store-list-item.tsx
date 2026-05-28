@@ -33,7 +33,7 @@ export function StoreListItem({ store }: { store: ModelsStoreReview }) {
               <IconMapPin className='h-3 w-3' /> {store.location}
             </p>
           </div>
-          <FollowButton storeId={store.id as number} />
+          <FollowButton slug={store.slug ?? ''} isFollowed={store.is_followed ?? false} />
         </div>
         <p className='text-muted-foreground mt-2 line-clamp-2 text-sm'>{store.description}</p>
         <div className='text-muted-foreground mt-auto flex flex-wrap items-center gap-4 pt-3 text-xs'>

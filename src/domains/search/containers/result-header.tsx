@@ -11,10 +11,12 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-import { IconFilter2, IconGrid3x3, IconGridDots, IconList } from '@tabler/icons-react';
-import { Button } from '~/src/components/ui/button';
-import { Badge } from '~/src/components/ui/badge';
+import { IconFilter2, IconGridDots, IconList } from '@tabler/icons-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { SearchFilterContent } from '../components/search-filter-content';
+import type { DtoCategoryResponse, DtoProductResponse } from '@/services/-products-get.schemas';
+import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 
 const sortOptions = [
   { label: 'Most Relevant', value: 'relevance' },
@@ -27,10 +29,14 @@ const sortOptions = [
 
 interface ResultHeaderProps {
   productCount: number;
+  total: number;
+  products: DtoProductResponse[];
+  stores: DtoStoreResponse[];
+  categories?: DtoCategoryResponse[];
 }
 
 export function ResultHeader(props: ResultHeaderProps) {
-  const { productCount } = props;
+  const { productCount, products, stores, categories } = props;
   const searchParams = useSearchParams();
   return (
     <div className='mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
@@ -60,7 +66,7 @@ export function ResultHeader(props: ResultHeaderProps) {
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
             <div className='mt-6'>
-              <SearchFilterContent />
+              <SearchFilterContent categories={categories} stores={stores} products={products} />
             </div>
           </SheetContent>
         </Sheet>

@@ -1,30 +1,28 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from '../hooks/useSearchParams';
-import { useSearchStore } from '../search.store';
-import { products, stores } from '../../store/data';
 import {
-  IconLoader2,
-  IconSearch,
-  IconX,
-  IconCommand,
-  IconTag,
   IconArrowRight,
   IconClock,
+  IconCommand,
+  IconLoader2,
+  IconSearch,
+  IconSparkles,
+  IconTag,
   IconTrendingUp,
-  IconSparkles
+  IconX
 } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useGetCategories } from '~/src/services/-categories-get'; // assuming you have this endpoint
+import { useGetSearchSuggestions } from '~/src/services/-search-suggestions-get';
+import { useGetSearchTrending } from '~/src/services/-search-trending-get';
+import { useSearchParams } from '../hooks/useSearchParams';
+import { useSearchStore } from '../search.store';
 
-interface SearchHeroProps {
-  filteredProducts: any; // Replace with your actual product type
-}
-
-export function SearchHero({ filteredProducts }: SearchHeroProps) {
+export function SearchHero() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [focusedSuggestion, setFocusedSuggestion] = useState(-1);
@@ -40,7 +38,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
     setInputValue(searchParams.query);
   }, [searchParams.query]);
 
-  // ─── Global keyboard shortcut (⌘K / Ctrl+K) to focus search ─────────────────
+  // Global keyboard shortcut
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -52,40 +50,55 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
     return () => document.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
-  // Get suggestions based on input
-  const suggestions = useMemo(() => {
-    if (!inputValue.trim()) return [];
-    return searchStore.getSuggestions(inputValue);
-  }, [inputValue, searchStore]);
+  // Fetch suggestions (only when input has value)
+  const { data: suggestionsData, isLoading: suggestionsLoading } = useGetSearchSuggestions(
+    {
+      q: inputValue,
+      limit: 8
+    },
+    {
+      query: {
+        enabled: inputValue.trim().length > 0 && showSuggestions
+      }
+    }
+  );
+  const suggestions = suggestionsData?.data?.suggestions || [];
+
+  // Fetch trending searches
+  const { data: trendingData } = useGetSearchTrending({ limit: 6 });
+  const trendingSearches = trendingData?.data?.trending?.map((t) => t.query) || [];
+
+  // Fetch popular categories (limit 6)
+  const { data: categoriesData } = useGetCategories({ limit: 6, sort: 'popular' });
+  const popularCategories = categoriesData?.data?.categories?.map((c) => c.name) || [];
 
   const handleSearch = useCallback(
     (query: string) => {
       setShowSuggestions(false);
       setIsSearching(true);
       searchParams.setQuery(query);
-      searchStore.addRecentSearch(query, filteredProducts.length);
+      // Result count is not known immediately; we can pass 0 or fetch later
+      searchStore.addRecentSearch(query, 0);
       searchStore.incrementSearchCount();
       setTimeout(() => setIsSearching(false), 300);
     },
-    [searchParams, searchStore, filteredProducts.length]
+    [searchParams, searchStore]
   );
 
-  // Handle keyboard navigation (when input is focused)
+  // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (focusedSuggestion >= 0 && suggestions[focusedSuggestion]) {
         const suggestion = suggestions[focusedSuggestion];
-        if (!suggestion) return;
-        // Open in new tab for product/store, toggle category for category
         if (suggestion.type === 'product') {
           window.open(`/product/${suggestion.id}`, '_blank');
         } else if (suggestion.type === 'store') {
           window.open(`/store/${suggestion.slug}`, '_blank');
         } else if (suggestion.type === 'category') {
-          searchParams.toggleCategory(suggestion.name);
+          searchParams.toggleCategory(suggestion.name ?? '');
           setShowSuggestions(false);
         } else {
-          handleSearch(suggestion.name);
+          handleSearch(suggestion.name ?? '');
         }
       } else {
         handleSearch(inputValue);
@@ -102,7 +115,6 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
     }
   };
 
-  // Handler for suggestion click (opens product/store in new tab)
   const handleSuggestionClick = (suggestion: any) => {
     if (suggestion.type === 'product') {
       window.open(`/product/${suggestion.id}`, '_blank');
@@ -126,11 +138,11 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
         >
           <h1 className='mb-2 text-3xl font-bold md:text-4xl'>Discover Your Next Favorite</h1>
           <p className='text-muted-foreground'>
-            Search across {products.length} products from {stores.length} premium stores
+            Search across thousands of products, stores, and categories
           </p>
         </motion.div>
 
-        {/* Search Input */}
+        {/* Search Input – same JSX, but note suggestions are now from API */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +151,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
         >
           <div className='relative'>
             <div className='absolute top-1/2 left-4 flex -translate-y-1/2 items-center gap-2'>
-              {isSearching ? (
+              {isSearching || suggestionsLoading ? (
                 <IconLoader2 className='text-muted-foreground h-5 w-5 animate-spin' />
               ) : (
                 <IconSearch className='text-muted-foreground h-5 w-5' />
@@ -203,7 +215,6 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                 exit={{ opacity: 0, y: -10 }}
                 className='bg-card absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border shadow-xl'
               >
-                {/* Fixed max height and scrollable container */}
                 <div className='custom-scrollbar max-h-100 overflow-y-auto'>
                   {/* Suggestions when typing */}
                   {inputValue && suggestions.length > 0 && (
@@ -215,9 +226,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                         <button
                           key={`${suggestion.type}-${suggestion.id || suggestion.name}`}
                           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
-                            index === focusedSuggestion
-                              ? 'bg-accent/20' // subtle light highlight
-                              : 'hover:bg-accent/10'
+                            index === focusedSuggestion ? 'bg-accent/20' : 'hover:bg-accent/10'
                           }`}
                           onMouseEnter={() => setFocusedSuggestion(index)}
                           onClick={() => handleSuggestionClick(suggestion)}
@@ -225,7 +234,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                           {suggestion.type === 'product' && suggestion.image && (
                             <Image
                               src={suggestion.image}
-                              alt={suggestion.name}
+                              alt={suggestion.name ?? ''}
                               width={40}
                               height={40}
                               className='rounded-lg object-cover'
@@ -234,7 +243,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                           {suggestion.type === 'store' && suggestion.image && (
                             <Image
                               src={suggestion.image}
-                              alt={suggestion.name}
+                              alt={suggestion.name ?? ''}
                               width={40}
                               height={40}
                               className='rounded-full object-cover'
@@ -248,7 +257,7 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                           <div className='flex-1 text-left'>
                             <div className='text-sm font-medium'>{suggestion.name}</div>
                             <div className='text-muted-foreground text-xs'>
-                              {suggestion.type === 'product' && suggestion.category}
+                              {suggestion.type === 'product' && suggestion.name}
                               {suggestion.type === 'store' && 'Store'}
                               {suggestion.type === 'category' && 'Category'}
                             </div>
@@ -306,29 +315,31 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
                       )}
 
                       {/* Trending Searches */}
-                      <div>
-                        <div className='text-muted-foreground flex items-center gap-1 px-3 py-2 text-xs font-medium'>
-                          <IconTrendingUp className='h-3 w-3' />
-                          Trending Searches
+                      {trendingSearches.length > 0 && (
+                        <div>
+                          <div className='text-muted-foreground flex items-center gap-1 px-3 py-2 text-xs font-medium'>
+                            <IconTrendingUp className='h-3 w-3' />
+                            Trending Searches
+                          </div>
+                          <div className='flex flex-wrap gap-2 px-3 pb-2'>
+                            {trendingSearches.map((query) => (
+                              <button
+                                key={query}
+                                className='bg-accent/20 hover:bg-accent/30 flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors'
+                                onClick={() => handleSearch(query ?? '')}
+                              >
+                                <IconSparkles className='text-primary h-3 w-3' />
+                                {query}
+                              </button>
+                            ))}
+                          </div>
                         </div>
-                        <div className='flex flex-wrap gap-2 px-3 pb-2'>
-                          {searchStore.trendingSearches.map((query) => (
-                            <button
-                              key={query}
-                              className='bg-accent/20 hover:bg-accent/30 flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors'
-                              onClick={() => handleSearch(query)}
-                            >
-                              <IconSparkles className='text-primary h-3 w-3' />
-                              {query}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                      )}
                     </div>
                   )}
 
-                  {/* No results */}
-                  {inputValue && suggestions.length === 0 && (
+                  {/* No results for suggestions */}
+                  {inputValue && suggestions.length === 0 && !suggestionsLoading && (
                     <div className='p-8 text-center'>
                       <IconSearch className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
                       <p className='text-muted-foreground text-sm'>
@@ -346,24 +357,26 @@ export function SearchHero({ filteredProducts }: SearchHeroProps) {
         </motion.div>
 
         {/* Popular Categories */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className='mt-12 flex flex-wrap justify-center gap-2'
-        >
-          {searchStore.popularCategories.map((cat) => (
-            <Button
-              key={cat}
-              variant={searchParams.categories.includes(cat) ? 'default' : 'outline'}
-              size='sm'
-              className='rounded-full'
-              onClick={() => searchParams.toggleCategory(cat)}
-            >
-              {cat}
-            </Button>
-          ))}
-        </motion.div>
+        {popularCategories.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className='mt-12 flex flex-wrap justify-center gap-2'
+          >
+            {popularCategories.map((cat) => (
+              <Button
+                key={cat}
+                variant={searchParams.categories.includes(cat) ? 'default' : 'outline'}
+                size='sm'
+                className='rounded-full'
+                onClick={() => searchParams.toggleCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

@@ -44,11 +44,7 @@ export function FeaturedProducts() {
           align='left'
         />
 
-        <Tabs
-          value={tab}
-          onValueChange={(v) => setTab(v as ProductTab)}
-          className='mb-8 sm:mb-10'
-        >
+        <Tabs value={tab} onValueChange={(v) => setTab(v as ProductTab)} className='mb-8 sm:mb-10'>
           <TabsList className='bg-muted/60 h-auto w-full justify-start gap-1 overflow-x-auto rounded-full p-1 sm:w-auto'>
             <TabsTrigger value='featured' className='rounded-full px-4 py-2 text-sm'>
               Featured
@@ -78,7 +74,7 @@ export function FeaturedProducts() {
           </div>
         )}
 
-        <div className='mt-12 flex-center sm:mt-14'>
+        <div className='flex-center mt-12 sm:mt-14'>
           <Button variant='outline' size='lg' className='rounded-full px-8' asChild>
             <Link href='/shop'>View all products</Link>
           </Button>

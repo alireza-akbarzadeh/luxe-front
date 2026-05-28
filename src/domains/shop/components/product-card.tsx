@@ -1,16 +1,14 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react';
-import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
-import type { ModelsProduct } from '@/services/-categories-bulk-post.schemas';
 import { LikeButton } from '@/components/buttons/like-button';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
+import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 
 export interface ProductCardProps {
-  product: ModelsProduct & {
-    isLike: boolean;
-  };
+  product: DtoProductResponse & { is_liked?: boolean };
   index?: number;
   size?: 'default' | 'compact';
 }
@@ -20,14 +18,16 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
   const { increment, isLoading, items: cartItems } = useCartController(); // Get cart items
 
   const discountPercent = product.compare_at_price
-    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+    ? Math.round(
+        ((product.compare_at_price - (product.price as number)) / product.compare_at_price) * 100
+      )
     : 0;
 
   // Find quantity of this product in the cart
   const cartItem = cartItems?.find((item) => item.product_id === product.id);
   const cartQuantity = cartItem?.quantity ?? 0;
 
-  const mapToBasket = (values: ModelsProduct): CartItemPayload => {
+  const mapToBasket = (values: DtoProductResponse & { is_liked?: boolean }): CartItemPayload => {
     return {
       color: values.colors?.[0]?.toString(),
       size: values.colors?.[0]?.toString(),
@@ -94,7 +94,7 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
             )}
           </div>
           <LikeButton
-            isLiked={product.isLike}
+            isLiked={product.is_liked ?? false}
             productId={product.id as number}
             productName={product.name || ''}
             className='bg-background/90 hover:bg-background absolute top-2.5 right-2.5 rounded-full p-1.5 opacity-100 shadow-sm backdrop-blur-sm transition-opacity sm:opacity-0 sm:group-hover:opacity-100'
@@ -152,7 +152,7 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
             <span className={isCompact ? 'text-sm font-semibold' : 'text-base font-semibold'}>
               ${product.price}
             </span>
-            {product.compare_at_price && product.compare_at_price > product.price && (
+            {product.compare_at_price && product.compare_at_price > (product.price ?? 0) && (
               <span
                 className={`text-muted-foreground line-through ${isCompact ? 'text-xs' : 'text-sm'}`}
               >

@@ -8,31 +8,18 @@ import { IconHeart, IconSearch, IconShoppingCart, IconStar } from '@tabler/icons
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from '../hooks/useSearchParams';
+import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 
 interface ProductGridListProps {
-  //   filteredProducts: ProductCardProps['product'][];
-  filteredProducts: {
-    id: number;
-    name: string;
-    price: number;
-    originalPrice: number;
-    rating: number;
-    reviews: number;
-    image: string;
-    category: string;
-    isNew: boolean;
-    isDigital: boolean;
-    storeId: string;
-    description: string;
-  }[];
+  products: DtoProductResponse[];
 }
 
 export function ProductGridList(props: ProductGridListProps) {
-  const { filteredProducts } = props;
+  const { products } = props;
   const searchParams = useSearchParams();
-  // Pagination
-  const totalPages = Math.ceil(filteredProducts.length / searchParams.perPage);
-  const paginatedProducts = filteredProducts.slice(
+
+  const totalPages = Math.ceil(products.length / searchParams.perPage);
+  const paginatedProducts = products.slice(
     (searchParams.page - 1) * searchParams.perPage,
     searchParams.page * searchParams.perPage
   );
@@ -64,12 +51,12 @@ export function ProductGridList(props: ProductGridListProps) {
                   >
                     <div className='bg-secondary relative h-32 w-32 shrink-0 overflow-hidden rounded-lg'>
                       <Image
-                        src={product.image}
-                        alt={product.name}
+                        src={product?.images?.[0] ?? ''}
+                        alt={product.name ?? ''}
                         fill
                         className='object-cover transition-transform duration-500 group-hover:scale-105'
                       />
-                      {product.isNew && (
+                      {product.is_new && (
                         <Badge className='absolute top-2 left-2' variant='secondary'>
                           New
                         </Badge>
@@ -77,7 +64,7 @@ export function ProductGridList(props: ProductGridListProps) {
                     </div>
                     <div className='min-w-0 flex-1'>
                       <span className='text-muted-foreground text-xs tracking-wider uppercase'>
-                        {product.category}
+                        {product.category?.name}
                       </span>
                       <h3 className='group-hover:text-primary mt-1 font-semibold transition-colors'>
                         {product.name}
@@ -89,14 +76,14 @@ export function ProductGridList(props: ProductGridListProps) {
                         <div className='flex items-center gap-1'>
                           <IconStar className='fill-accent text-accent h-4 w-4' />
                           <span className='text-sm'>
-                            {product.rating} ({product.reviews})
+                            {product.rating} ({product.reviews_count})
                           </span>
                         </div>
                         <div className='flex items-center gap-2'>
                           <span className='font-semibold'>${product.price}</span>
-                          {product.originalPrice && (
+                          {product.compare_at_price && (
                             <span className='text-muted-foreground text-sm line-through'>
-                              ${product.originalPrice}
+                              ${product.compare_at_price}
                             </span>
                           )}
                         </div>

@@ -9,11 +9,13 @@ import { FollowButton } from '@/components/buttons/follow-button';
 import { Badge } from '@/components/ui/badge';
 import { StoreRatingStars } from '@/domains/store/components/store-rating-start';
 import { VerifiedBadge } from '@/domains/store/components/verified-badge';
-import { cardHover, fadeUp, formatCount } from '@/domains/store/store.utils';
+import { cardHover, fadeUp, formatCount, mapStoreToView } from '@/domains/store/store.utils';
 import { IconMapPin, IconTruck, IconUsers } from '@tabler/icons-react';
 import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
-export function StoreCard({ store }: { store: DtoStoreResponse }) {
+export function StoreCard({ store: storeData }: { store: DtoStoreResponse }) {
+  const store = mapStoreToView(storeData);
+
   return (
     <motion.article
       variants={fadeUp}
@@ -89,12 +91,13 @@ export function StoreCard({ store }: { store: DtoStoreResponse }) {
             </span>
             <StoreRatingStars rating={store.rating || 0} reviewCount={store.review_count} />
             <span className='inline-flex items-center gap-1'>
-              <IconTruck className='h-3.5 w-3.5' /> {store.shippingSpeedDays}d
+              <IconTruck className='h-3.5 w-3.5' /> {store.shippingSpeedDays}
             </span>
           </div>
           <div className='flex items-center justify-between pt-1'>
             <span className='text-muted-foreground text-xs'>{store.productCount} products</span>
-            <FollowButton storeId={store.id as number} />
+
+            <FollowButton slug={store.slug ?? ''} isFollowed={store.is_followed ?? false} />
           </div>
         </div>
       </motion.div>

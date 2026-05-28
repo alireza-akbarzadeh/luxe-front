@@ -1,20 +1,52 @@
+'use client';
+
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { IconShoppingCart, IconTag } from '@tabler/icons-react';
-import { products, stores } from '../../store/data';
 import Image from 'next/image';
 import { useSearchParams } from '../hooks/useSearchParams';
 import { Button } from '~/src/components/ui/button';
 import { useMemo } from 'react';
+import type {
+  DtoProductResponse,
+  DtoStoreResponse,
+  DtoCategoryResponse
+} from '~/src/services/-search-get.schemas';
 
-export function SearchFilterContent() {
+interface SearchFilterContentProps {
+  products: DtoProductResponse[];
+  stores: DtoStoreResponse[];
+  categories?: DtoCategoryResponse[]; // optional, from search API
+}
+
+export function SearchFilterContent({
+  products,
+  stores,
+  categories: searchCategories
+}: SearchFilterContentProps) {
   const searchParams = useSearchParams();
-  // Available categories from current results
+
+  // Use search API categories if provided, otherwise derive from products
   const availableCategories = useMemo(() => {
-    const cats = new Set(products.map((p) => p.category));
+    if (searchCategories && searchCategories.length > 0) {
+      return searchCategories.map((c) => c.name).filter(Boolean);
+    }
+    const cats = new Set(products.map((p) => p.category?.name).filter(Boolean));
     return Array.from(cats).sort();
-  }, []);
+  }, [searchCategories, products]);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    products.forEach((p) => {
+      const catName = p.category?.name;
+      if (catName) {
+        counts[catName] = (counts[catName] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [products]);
+
   return (
     <div className='space-y-6'>
       {/* Categories */}
@@ -32,7 +64,7 @@ export function SearchFilterContent() {
               />
               <span className='group-hover:text-primary text-sm transition-colors'>{cat}</span>
               <span className='text-muted-foreground ml-auto text-xs'>
-                {products.filter((p) => p.category === cat).length}
+                {categoryCounts[cat] || 0}
               </span>
             </label>
           ))}
@@ -51,16 +83,20 @@ export function SearchFilterContent() {
           {stores.map((store) => (
             <label key={store.id} className='group flex cursor-pointer items-center gap-2'>
               <Checkbox
-                checked={searchParams.stores.includes(store.id)}
-                onCheckedChange={() => searchParams.toggleStore(store.id)}
+                checked={store.id ? searchParams.stores.includes(store.id.toString()) : false}
+                onCheckedChange={() => {
+                  if (store.id) searchParams.toggleStore(store.id.toString());
+                }}
               />
-              <Image
-                src={store.logo}
-                alt={store.name}
-                width={20}
-                height={20}
-                className='rounded-full'
-              />
+              {store.logo_url && (
+                <Image
+                  src={store.logo_url}
+                  alt={store.name || ''}
+                  width={20}
+                  height={20}
+                  className='rounded-full'
+                />
+              )}
               <span className='group-hover:text-primary text-sm transition-colors'>
                 {store.name}
               </span>
