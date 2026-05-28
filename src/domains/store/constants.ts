@@ -1,6 +1,7 @@
 import type { SortKey } from '@/domains/store/store.types';
 
 export const PAGE_SIZE = 24;
+
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: 'popular', label: 'Most Popular' },
   { value: 'top_rated', label: 'Top Rated' },
@@ -30,4 +31,12 @@ export const TRENDING_CATEGORIES = [
   'Tech',
   'Jewelry',
   'Art'
+];
+
+export const sortOptions = [
+  { label: 'Featured', value: 'featured' },
+  { label: 'Newest', value: 'newest' },
+  { label: 'Price: Low to High', value: 'price-asc' },
+  { label: 'Price: High to Low', value: 'price-desc' },
+  { label: 'Best Rating', value: 'rating' }
 ];

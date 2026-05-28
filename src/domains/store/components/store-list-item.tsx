@@ -2,16 +2,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { VerifiedBadge } from './verified-badge';
-import { formatCount, type ModelsStoreReview } from '@/domains/store/store.utils';
+import { type ModelsStoreReview } from '@/domains/store/store.types';
 import { IconMapPin, IconPackage, IconTruck, IconUsers } from '@tabler/icons-react';
 import { FollowButton } from '@/components/buttons/follow-button';
 import { StoreRatingStars } from '@/domains/store/components/store-rating-start';
+import { formatCount } from '@/domains/store/store.utils';
 
 export function StoreListItem({ store }: { store: ModelsStoreReview }) {
   return (
     <article className='group border-border bg-card flex gap-4 rounded-2xl border p-4 transition-shadow hover:shadow-md'>
       <Link
-        href={`/stores/${store.slug}`}
+        href={`/store/${store.slug}`}
         className='bg-muted relative h-28 w-28 shrink-0 overflow-hidden rounded-xl sm:h-32 sm:w-32'
       >
         <Image src={store.banner_url || ''} alt='' fill sizes='128px' className='object-cover' />
@@ -21,7 +22,7 @@ export function StoreListItem({ store }: { store: ModelsStoreReview }) {
           <div className='min-w-0'>
             <div className='flex items-center gap-1.5'>
               <Link
-                href={`/stores/${store.slug}`}
+                href={`/store/${store.slug}`}
                 className='truncate text-base font-semibold hover:underline'
               >
                 {store.name}

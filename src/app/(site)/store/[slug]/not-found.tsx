@@ -21,7 +21,7 @@ export default function StoreNotFound() {
           The store you&apos;re looking for doesn&apos;t exist or may have been removed.
         </p>
         <div className='flex items-center justify-center gap-3'>
-          <Link href='/stores'>
+          <Link href='/store'>
             <Button variant='outline' className='gap-2'>
               <IconArrowLeft className='h-4 w-4' />
               Browse Stores

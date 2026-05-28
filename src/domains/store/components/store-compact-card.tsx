@@ -6,13 +6,13 @@ import { FollowButton } from '~/src/components/buttons/follow-button';
 import { StoreRatingStars } from '~/src/domains/store/components/store-rating-start';
 import { VerifiedBadge } from '~/src/domains/store/components/verified-badge';
 import { formatCount } from '~/src/domains/store/store.utils';
-import { type ModelsStoreReview } from '@/domains/store/store.utils';
+import { type ModelsStoreReview } from '@/domains/store/store.types';
 
 export function StoreCardCompact({ store }: { store: ModelsStoreReview }) {
   return (
     <article className='group border-border bg-card hover:bg-muted/40 flex items-center gap-3 rounded-xl border p-3 transition-colors'>
       <Link
-        href={`/stores/${store.slug}`}
+        href={`/store/${store.slug}`}
         className='relative h-14 w-14 shrink-0 overflow-hidden rounded-lg'
       >
         <Image
@@ -25,7 +25,7 @@ export function StoreCardCompact({ store }: { store: ModelsStoreReview }) {
       </Link>
       <div className='min-w-0 flex-1'>
         <div className='flex items-center gap-1.5'>
-          <Link href={`/stores/${store.slug}`} className='truncate font-medium hover:underline'>
+          <Link href={`/store/${store.slug}`} className='truncate font-medium hover:underline'>
             {store.name}
           </Link>
           {store.is_verified && <VerifiedBadge />}

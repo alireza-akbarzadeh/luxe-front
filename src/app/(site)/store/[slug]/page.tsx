@@ -1,4 +1,4 @@
-import { StoreDomain } from '~/src/domains/store/store.domain';
+import { StoreDomain } from '~/src/domains/store/containers/store.domain';
 
 interface StorePageProps {
   params: Promise<{ slug: string }>;

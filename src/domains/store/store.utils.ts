@@ -1,6 +1,6 @@
-import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 import type { Variants } from 'framer-motion';
 import type { ModelsStoreReview, StoreBadge } from '@/domains/store/store.types';
+import type { DtoStoreResponse } from '~/src/services/-stores-{slug}-get.schemas';
 
 /**
  * Enrich raw API Store with UI-only computed fields.
@@ -38,6 +38,26 @@ export function mapStoreToView(store: DtoStoreResponse): ModelsStoreReview {
 }
 
 export const mapStoresToView = (stores: DtoStoreResponse[]) => stores.map(mapStoreToView);
+
+export function mapToStoreEssentials(apiStore: DtoStoreResponse) {
+  return {
+    id: apiStore.id,
+    name: apiStore.name,
+    slug: apiStore.slug,
+    description: apiStore.description,
+    logo: apiStore.logo_url,
+    banner: apiStore.banner_url,
+    rating: apiStore.rating,
+    reviewCount: apiStore.review_count,
+    followerCount: apiStore.follower_count,
+    location: apiStore.location,
+    shippingInfo: apiStore.shipping_info,
+    returnPolicy: apiStore.return_policy,
+    isVerified: apiStore.is_verified,
+    joinedDate: apiStore.joined_at,
+    categories: apiStore.categories
+  };
+}
 
 export const formatCount = (n: number): string => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;

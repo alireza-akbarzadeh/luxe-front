@@ -32,7 +32,7 @@ export function StoresVirtualList({ stores }: { stores: ModelsStoreReview[] }) {
                 padding: '0 0 12px 0'
               }}
             >
-              <StoreListItem store={store} />
+              <StoreListItem store={store as ModelsStoreReview} />
             </div>
           );
         })}

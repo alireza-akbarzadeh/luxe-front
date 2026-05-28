@@ -1,0 +1,109 @@
+'use client';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+  IconArrowsUpDown,
+  IconFileHorizontal,
+  IconGrid3x3,
+  IconLayoutGrid,
+  IconSearch
+} from '@tabler/icons-react';
+import { useState } from 'react';
+import { useStoreFilters } from '../hooks/useStoreFilter';
+import { sortOptions } from '@/domains/store/constants';
+import { FilterSidebar } from './filter-sidebar';
+
+export function StoreToolbar() {
+  const {
+    searchQuery,
+    setSearchQuery,
+    sortBy,
+    setSortBy,
+    gridCols,
+    setGridCols,
+    activeFilterCount
+  } = useStoreFilters([]);
+
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  return (
+    <div className='mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
+      <div className='relative w-full sm:w-80'>
+        <IconSearch className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+        <Input
+          type='text'
+          placeholder='Search products...'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className='pl-10'
+        />
+      </div>
+
+      <div className='flex w-full items-center gap-3 sm:w-auto'>
+        <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+          <SheetTrigger asChild>
+            <Button variant='outline' className='gap-2 lg:hidden'>
+              <IconFileHorizontal className='h-4 w-4' />
+              Filters
+              {activeFilterCount > 0 && (
+                <Badge variant='secondary' className='ml-1'>
+                  {activeFilterCount}
+                </Badge>
+              )}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side='left' className='w-80'>
+            <SheetHeader>
+              <SheetTitle>Filters</SheetTitle>
+            </SheetHeader>
+            <div className='mt-6'>
+              <FilterSidebar /> {/* will use its own useStoreFilters */}
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
+          <SelectTrigger className='w-45'>
+            <IconArrowsUpDown className='mr-2 h-4 w-4' />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {sortOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <div className='border-border hidden items-center rounded-lg border p-1 sm:flex'>
+          <Button
+            variant={gridCols === 3 ? 'secondary' : 'ghost'}
+            size='sm'
+            onClick={() => setGridCols(3)}
+            className='h-8 w-8 p-0'
+          >
+            <IconLayoutGrid className='h-4 w-4' />
+          </Button>
+          <Button
+            variant={gridCols === 4 ? 'secondary' : 'ghost'}
+            size='sm'
+            onClick={() => setGridCols(4)}
+            className='h-8 w-8 p-0'
+          >
+            <IconGrid3x3 className='h-4 w-4' />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

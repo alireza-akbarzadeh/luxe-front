@@ -24,7 +24,7 @@ export function StoreCard({ store }: { store: ModelsStoreReview }) {
     >
       <motion.div variants={cardHover} className='contents'>
         <Link
-          href={`/stores/${store.slug}`}
+          href={`/store/${store.slug}`}
           className='focus-visible:ring-foreground block focus:outline-none focus-visible:ring-2'
         >
           <div className='bg-muted relative aspect-[16/9] w-full overflow-hidden'>
