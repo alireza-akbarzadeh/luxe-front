@@ -14,7 +14,6 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
-import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,
@@ -34,39 +33,28 @@ interface AppDialogProps {
   onOpenChange?: (open: boolean) => void;
   component?: 'sheet' | 'drawer';
   className?: string;
+  side?: 'bottom' | 'top' | 'right' | 'left' | undefined;
 }
 
 export function AppDialog(props: AppDialogProps) {
-  const { trigger, children, title, description, open, onOpenChange, component, className } = props;
+  const {
+    trigger,
+    children,
+    title,
+    description,
+    open,
+    onOpenChange,
+    component,
+    className,
+    side = 'left'
+  } = props;
   const { isMobile } = useMediaDevices();
-
-  if (component === 'sheet') {
-    return (
-      <Sheet open={open} onOpenChange={onOpenChange}>
-        {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-        <SheetContent
-          side='bottom'
-          className={cn('rounded-t-[20px] border-t border-white/10 bg-[#121212]', className)}
-        >
-          <SheetHeader>
-            {title && <SheetTitle>{title}</SheetTitle>}
-            {description && <SheetDescription>{description}</SheetDescription>}
-          </SheetHeader>
-          <div className='mt-4'>{children}</div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
 
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-        <DrawerContent
-          className={cn(
-            'rounded-t-[20px] border-t border-white/10 bg-[#121212] focus:outline-none'
-          )}
-        >
+        <DrawerContent className={className}>
           {/* iPhone Styled Handle Bar */}
           <div className='mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20' />
 
@@ -84,10 +72,25 @@ export function AppDialog(props: AppDialogProps) {
     );
   }
 
+  if (component === 'sheet') {
+    return (
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
+        <SheetContent side={side} className={className}>
+          <SheetHeader>
+            {title && <SheetTitle>{title}</SheetTitle>}
+            {description && <SheetDescription>{description}</SheetDescription>}
+          </SheetHeader>
+          <div className='mt-4'>{children}</div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={cn('border-white/10 bg-[#1a1a1a] shadow-2xl sm:max-w-106.25')}>
+      <DialogContent className={className}>
         <DialogHeader>
           {title && <DialogTitle>{title}</DialogTitle>}
           {description && <DialogDescription>{description}</DialogDescription>}

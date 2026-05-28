@@ -11,6 +11,7 @@ export const addressFormSchema = z.object({
   zipCode: z.string().min(1, 'ZIP code is required'),
   country: z.string().min(1, 'Country is required'),
   phone: z.string().min(1, 'Phone number is required'),
+  address_type: z.enum(['both', 'billing', 'shipping']),
   isDefault: z.boolean()
 });
 
@@ -19,7 +20,7 @@ export type AddressFormValues = z.infer<typeof addressFormSchema>;
 export const profileFormSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email(),
+  email: z.email(),
   phone: z.string()
 });
 

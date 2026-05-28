@@ -1,4 +1,4 @@
-import { IconGrid3x3, IconGridDots, IconList } from '@tabler/icons-react';
+import { IconGridDots, IconList } from '@tabler/icons-react';
 
 import { Button } from '~/src/components/ui/button';
 import { Checkbox } from '~/src/components/ui/checkbox';

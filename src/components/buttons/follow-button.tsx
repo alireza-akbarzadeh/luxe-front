@@ -1,24 +1,41 @@
 'use client';
-import { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { IconCheck, IconPlus } from '@tabler/icons-react';
+import { IconBell, IconLoader2, IconPlus } from '@tabler/icons-react';
+import { useStoreFollow } from '~/src/hooks/useStoreFollow';
 
-export function FollowButton({ storeId, className }: { storeId: number; className?: string }) {
-  const [following, setFollowing] = useState(false);
-  const toggle = useCallback(() => setFollowing((f) => !f), []);
+interface FollowButtonProps {
+  slug: string;
+  isFollowed: boolean;
+  className?: string;
+}
+
+export function FollowButton(props: FollowButtonProps) {
+  const { className, isFollowed, slug } = props;
+
+  const { follow, unfollow, isLoading } = useStoreFollow({
+    slug
+  });
   return (
     <Button
-      type='button'
-      size='sm'
-      variant={following ? 'secondary' : 'default'}
-      onClick={toggle}
-      aria-pressed={following}
-      aria-label={following ? `Unfollow store ${storeId}` : `Follow store ${storeId}`}
-      className={cn('h-8 gap-1.5 rounded-full px-3', className)}
+      variant={isFollowed ? 'secondary' : 'default'}
+      onClick={() => (isFollowed ? unfollow() : follow())}
+      disabled={isLoading}
+      className={cn('gap-2', className)}
     >
-      {following ? <IconCheck className='h-3.5 w-3.5' /> : <IconPlus className='h-3.5 w-3.5' />}
-      {following ? 'Following' : 'Follow'}
+      {isLoading ? (
+        <IconLoader2 className='h-4 w-4 animate-spin' />
+      ) : isFollowed ? (
+        <>
+          <IconBell className='h-4 w-4' />
+          Following
+        </>
+      ) : (
+        <>
+          <IconPlus className='h-4 w-4' />
+          Follow
+        </>
+      )}
     </Button>
   );
 }

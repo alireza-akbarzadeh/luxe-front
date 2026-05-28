@@ -1,15 +1,19 @@
 'use client';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 import type { ModelsStoreReview } from '../store.types';
 
 import { StoreListItem } from '../components/store-list-item';
+import { mapStoreToView } from '~/src/domains/store/store.utils';
+import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
-export function StoresVirtualList({ stores }: { stores: ModelsStoreReview[] }) {
+export function StoresVirtualList({ stores }: { stores: DtoStoreResponse[] }) {
+  const mappedStores = useMemo(() => stores.map(mapStoreToView), [stores]);
+
   const parentRef = useRef<HTMLDivElement>(null);
   const rowVirtualizer = useVirtualizer({
-    count: stores.length,
+    count: mappedStores.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 170,
     overscan: 6
@@ -19,7 +23,7 @@ export function StoresVirtualList({ stores }: { stores: ModelsStoreReview[] }) {
     <div ref={parentRef} className='h-[80vh] overflow-y-auto rounded-2xl'>
       <div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative', width: '100%' }}>
         {rowVirtualizer.getVirtualItems().map((vi) => {
-          const store = stores[vi.index];
+          const store = mappedStores[vi.index];
           return (
             <div
               key={store?.id}

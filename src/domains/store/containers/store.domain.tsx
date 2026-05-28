@@ -1,23 +1,25 @@
-// StoreDomain.tsx (main)
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { notFound } from 'next/navigation';
+import {
+  StoreProductsGridSkeleton,
+  StoreSkeleton
+} from '@/domains/store/components/store-skeleton-loading';
 import { useGetStoresSlug } from '@/services/-stores-{slug}-get';
 import { useGetStoresSlugProducts } from '@/services/-stores-{slug}-products-get';
-import { useStoreFilters } from '../hooks/useStoreFilter';
-import { useStoreStore } from '../hooks/useStoreStore';
-
-import { StoreErrorState } from '../components/store-error-state';
-
-import { mapToStoreEssentials } from '../store.utils';
-import { IconFilter, IconLoader2 } from '@tabler/icons-react';
-import type { GetStoresSlugProductsParams } from '~/src/services/-stores-{slug}-products-get.schemas';
-import { StoreHeader } from '~/src/domains/store/sections/store-sort-header';
-import { StoreToolbar } from '~/src/domains/store/sections/store-sort-toolbar';
+import { IconFilter } from '@tabler/icons-react';
+import { notFound } from 'next/navigation';
+import { useMemo } from 'react';
+import { AppDialog } from '~/src/components/app-dialog';
 import { ActiveFilters } from '~/src/domains/store/sections/store-active-filter';
 import { StoreFilterSidebar } from '~/src/domains/store/sections/store-details-filter';
 import { StoreProductsGrid } from '~/src/domains/store/sections/store-product-grid';
+import { StoreHeader } from '~/src/domains/store/sections/store-sort-header';
+import { StoreToolbar } from '~/src/domains/store/sections/store-sort-toolbar';
+import type { GetStoresSlugProductsParams } from '~/src/services/-stores-{slug}-products-get.schemas';
+import { StoreErrorState } from '../components/store-error-state';
+import { useStoreFilters } from '../hooks/useStoreFilter';
+import { useStoreStore } from '../hooks/useStoreStore';
+import { mapToStoreEssentials } from '../store.utils';
 
 export function StoreDomain({ slug }: { slug: string }) {
   const {
@@ -78,27 +80,14 @@ export function StoreDomain({ slug }: { slug: string }) {
     refetch: refetchProducts
   } = useGetStoresSlugProducts(slug, apiParams);
 
+  const filterMobileSheetOpen = useStoreStore((state) => state.filterMobileSheetOpen);
+  const toggleFilterMobileSheet = useStoreStore((state) => state.toggleFilterMobileSheet);
+
   const apiProducts = productsData?.data?.products || [];
   const totalProducts = productsData?.data?.total || 0;
 
-  const { addRecentlyViewed } = useStoreStore();
-  useEffect(() => {
-    if (store) {
-      addRecentlyViewed({
-        id: String(store.id),
-        name: store.name ?? '',
-        slug: store.slug ?? '',
-        logo: store.logo ?? ''
-      });
-    }
-  }, [store, addRecentlyViewed]);
-
-  if (storeLoading || productsLoading) {
-    return (
-      <div className='flex items-center justify-center py-20'>
-        <IconLoader2 className='text-primary h-8 w-8 animate-spin' />
-      </div>
-    );
+  if (storeLoading) {
+    return <StoreSkeleton />;
   }
 
   if (storeError || productsError || !store) {
@@ -136,11 +125,30 @@ export function StoreDomain({ slug }: { slug: string }) {
               </div>
             </aside>
             <div className='flex-1'>
-              <StoreProductsGrid apiProducts={apiProducts} totalProducts={totalProducts} />
+              {productsLoading ? (
+                <StoreProductsGridSkeleton />
+              ) : (
+                <StoreProductsGrid apiProducts={apiProducts} totalProducts={totalProducts} />
+              )}
             </div>
           </div>
         </div>
       </section>
+
+      <AppDialog
+        title='Filters'
+        component='sheet'
+        onOpenChange={toggleFilterMobileSheet}
+        open={filterMobileSheetOpen}
+      >
+        <div className='mt-6 px-4'>
+          <StoreFilterSidebar
+            storeCategories={store.categories}
+            apiProducts={apiProducts}
+            totalProducts={totalProducts}
+          />
+        </div>
+      </AppDialog>
     </>
   );
 }

@@ -30,11 +30,12 @@ import {
   IconUserMinus,
   IconX
 } from '@tabler/icons-react';
-import { useGetUsers } from '~/src/services/apis/user';
-import type { GetUsers200DataUsersItem } from '~/src/services/models';
+
 import { useRouter } from 'next/navigation';
 import { userColumns } from './userColumns';
 import { AdvancedFilterContent } from '~/src/components/table/advanced-filter-content';
+import { useGetUsers } from '~/src/services/-users-get';
+import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
 
 export function UserManagementTable() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -60,7 +61,7 @@ export function UserManagementTable() {
   };
 
   const table = useReactTable({
-    data: data?.data?.data?.users || [],
+    data: data?.data?.users || [],
     columns: userColumns,
     state: { columnFilters, rowSelection },
     onColumnFiltersChange: setColumnFilters,

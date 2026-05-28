@@ -38,7 +38,6 @@ export function StoreFilterSidebar({
     clearFilters
   } = filters;
 
-  // We need expandedSections state locally (or lifted, but it's fine here)
   const [expandedSections, setExpandedSections] = useState({
     categories: true,
     price: true,
@@ -70,12 +69,12 @@ export function StoreFilterSidebar({
           >
             All Products ({totalProducts})
           </button>
-          {storeCategories.map((cat) => {
+          {storeCategories?.map((cat) => {
             const count = apiProducts.filter((p) => p.category === cat.name).length;
             return (
               <button
                 key={cat.id}
-                onClick={() => setCategory(cat.name)}
+                onClick={() => setCategory(cat.name ?? '')}
                 className={`block w-full rounded-md px-2 py-1.5 text-left text-sm transition-colors ${
                   category === cat.name
                     ? 'bg-primary text-primary-foreground'
@@ -102,7 +101,7 @@ export function StoreFilterSidebar({
             value={priceRange}
             onValueChange={(value) => setPriceRange(value as [number, number])}
             min={0}
-            max={500}
+            max={500_000_000}
             step={10}
             className='mb-4'
           />

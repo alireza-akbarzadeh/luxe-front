@@ -101,7 +101,13 @@ export function StackWishlistItem({ item, index, isChecked }: WishlistItemProps)
                       variant='ghost'
                       size='icon'
                       className='h-8 w-8 rounded-md'
-                      onClick={() => increment(item)}
+                      onClick={() =>
+                        increment({
+                          ...item.color,
+                          color: item?.color?.[0],
+                          size: item?.size?.[0]
+                        })
+                      }
                     >
                       <IconMinus className='h-3.5 w-3.5' />
                     </Button>
@@ -113,7 +119,13 @@ export function StackWishlistItem({ item, index, isChecked }: WishlistItemProps)
                       size='icon'
                       className='h-8 w-8 rounded-md'
                       disabled={productQuantity >= stock || !item.is_in_stock}
-                      onClick={() => decrement(item)}
+                      onClick={() =>
+                        decrement({
+                          ...item.color,
+                          color: item?.color?.[0],
+                          size: item?.size?.[0]
+                        })
+                      }
                     >
                       <IconPlus className='h-3.5 w-3.5' />
                     </Button>
@@ -124,7 +136,13 @@ export function StackWishlistItem({ item, index, isChecked }: WishlistItemProps)
                     size='sm'
                     className='h-9 gap-1'
                     disabled={!item.is_in_stock}
-                    onClick={() => increment(item)}
+                    onClick={() =>
+                      increment({
+                        ...item.color,
+                        color: item?.color?.[0],
+                        size: item?.size?.[0]
+                      })
+                    }
                   >
                     <IconShoppingCart className='h-3.5 w-3.5' />
                     <span className='hidden md:inline'>Add to Cart</span>

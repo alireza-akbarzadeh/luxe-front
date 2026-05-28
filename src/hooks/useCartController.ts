@@ -357,7 +357,7 @@ export const useCartController = () => {
 
           size: itemSize ?? ''
         },
-
+        // @ts-expect-error find out about this problem
         custom_metadata: {
           name: product.product_name,
 

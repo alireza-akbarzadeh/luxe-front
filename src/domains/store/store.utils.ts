@@ -55,9 +55,12 @@ export function mapToStoreEssentials(apiStore: DtoStoreResponse) {
     returnPolicy: apiStore.return_policy,
     isVerified: apiStore.is_verified,
     joinedDate: apiStore.joined_at,
-    categories: apiStore.categories
+    categories: apiStore.categories,
+    isFollowed: apiStore.is_followed
   };
 }
+
+export type StoreEssentialsType = ReturnType<typeof mapToStoreEssentials>;
 
 export const formatCount = (n: number): string => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;

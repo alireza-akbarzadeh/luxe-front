@@ -4,20 +4,18 @@ import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { AnimatedCounter } from '~/src/domains/store/components/animate-counter';
 import { StoreCardCompact } from '~/src/domains/store/components/store-compact-card';
-import type { ModelsStoreReview } from '../store.types';
+import { mapStoreToView } from '~/src/domains/store/store.utils';
+import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
-export function FeaturedCarousel({
-  stores,
-  title
-}: {
-  stores: ModelsStoreReview[];
-  title: string;
-}) {
+export function FeaturedCarousel({ stores, title }: { stores: DtoStoreResponse[]; title: string }) {
+  const mappedStores = useMemo(() => stores.map(mapStoreToView), [stores]);
+
   const top = useMemo(
-    () => [...stores].sort((a, b) => b.trendingScore - a.trendingScore).slice(0, 10),
+    () => [...mappedStores].sort((a, b) => b.trendingScore - a.trendingScore).slice(0, 10),
     [stores]
   );
   if (top.length === 0) return null;
+
   return (
     <section className='space-y-4'>
       <div className='flex items-end justify-between'>

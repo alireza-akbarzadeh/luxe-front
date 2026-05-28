@@ -1,12 +1,14 @@
+// hooks/useStoreFilter.ts (updated)
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   useQueryStates,
   parseAsInteger,
   parseAsString,
   parseAsBoolean,
-  parseAsStringLiteral
+  parseAsStringLiteral,
+  debounce
 } from 'nuqs';
 
 type GridCols = 3 | 4;
@@ -49,9 +51,25 @@ export function useStoreFilters(storeCategories: string[] = []) {
   // Setters
   const setCategory = (value: string) => setParams({ category: value, page: 1 });
   const setSortBy = (value: SortBy) => setParams({ sortBy: value });
-  const setPriceRange = (values: [number, number]) =>
-    setParams({ priceMin: values[0], priceMax: values[1], page: 1 });
-  const setSearchQuery = (value: string) => setParams({ searchQuery: value, page: 1 });
+
+  const setPriceRange = useCallback(
+    (values: [number, number]) => {
+      setParams(
+        { priceMin: values[0], priceMax: values[1], page: 1 },
+        { limitUrlUpdates: debounce(300) }
+      );
+    },
+    [setParams]
+  );
+
+  // Debounced search – updates URL only after 500ms of inactivity
+  const setSearchQuery = useCallback(
+    (value: string) => {
+      setParams({ searchQuery: value, page: 1 }, { limitUrlUpdates: debounce(500) });
+    },
+    [setParams]
+  );
+
   const setGridCols = (value: GridCols) => setParams({ gridCols: value });
   const setShowOnlyNew = (value: boolean) => setParams({ showOnlyNew: value, page: 1 });
   const setShowOnlySale = (value: boolean) => setParams({ showOnlySale: value, page: 1 });
@@ -129,5 +147,3 @@ export function useStoreFilters(storeCategories: string[] = []) {
     storeCategories
   };
 }
-
-export type StoreFilters = ReturnType<typeof useStoreFilters>;

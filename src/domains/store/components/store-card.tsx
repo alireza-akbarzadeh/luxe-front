@@ -1,19 +1,19 @@
 'use client';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
 
-import { Badge } from '@/components/ui/badge';
-import { cardHover, fadeUp, formatCount } from '@/domains/store/store.utils';
-import { VerifiedBadge } from '@/domains/store/components/verified-badge';
-import { IconMapPin, IconTruck, IconUsers } from '@tabler/icons-react';
-import { StoreRatingStars } from '@/domains/store/components/store-rating-start';
 import { FollowButton } from '@/components/buttons/follow-button';
-import type { ModelsStoreReview } from '@/domains/store/store.types';
+import { Badge } from '@/components/ui/badge';
+import { StoreRatingStars } from '@/domains/store/components/store-rating-start';
+import { VerifiedBadge } from '@/domains/store/components/verified-badge';
+import { cardHover, fadeUp, formatCount } from '@/domains/store/store.utils';
+import { IconMapPin, IconTruck, IconUsers } from '@tabler/icons-react';
+import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
-export function StoreCard({ store }: { store: ModelsStoreReview }) {
+export function StoreCard({ store }: { store: DtoStoreResponse }) {
   return (
     <motion.article
       variants={fadeUp}

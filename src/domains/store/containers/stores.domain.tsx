@@ -1,20 +1,20 @@
 'use client';
 import { useMemo } from 'react';
-import { SortDropdown } from '~/src/domains/store/components/sort-dropdown';
-import { StoresGridSkeleton } from '~/src/domains/store/components/store-cart-skeleton';
+import { SortDropdown } from '@/domains/store/components/sort-dropdown';
+import { StoresGridSkeleton } from '@/domains/store/components/store-cart-skeleton';
 
-import { StorePagination } from '~/src/domains/store/components/store-pagination';
-import { ViewModeToggle } from '~/src/domains/store/components/view-mode-toggle';
-import { PAGE_SIZE } from '~/src/domains/store/constants';
-import { useStoresFilters } from '~/src/domains/store/hooks/useStoresFilter';
+import { StorePagination } from '@/domains/store/components/store-pagination';
+import { ViewModeToggle } from '@/domains/store/components/view-mode-toggle';
+import { PAGE_SIZE } from '@/domains/store/constants';
+import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
 import { FeaturedCarousel } from '@/domains/store/sections/featured-carousel';
-import { FilterSidebar } from '~/src/domains/store/sections/filter-sidebar';
-import { StoreHeroSection } from '~/src/domains/store/sections/hero-section';
-import { MobileFilterSheet } from '~/src/domains/store/sections/mobile-filter-sheet';
-import { StoresVirtualList } from '~/src/domains/store/sections/store-virtual-list';
-import { StoresGrid } from '~/src/domains/store/sections/stores-grid';
-import { EmptyState } from '~/src/domains/store/components/store-empty-state';
-import { useGetStores } from '~/src/services/-stores-get';
+import { FilterSidebar } from '@/domains/store/sections/filter-sidebar';
+import { StoreHeroSection } from '@/domains/store/sections/hero-section';
+import { MobileFilterSheet } from '@/domains/store/sections/mobile-filter-sheet';
+import { StoresVirtualList } from '@/domains/store/sections/store-virtual-list';
+import { StoresGrid } from '@/domains/store/sections/stores-grid';
+import { EmptyState } from '@/domains/store/components/store-empty-state';
+import { useGetStores } from '@/services/-stores-get';
 
 export function StoresDomain() {
   const { filters } = useStoresFilters();
@@ -37,6 +37,7 @@ export function StoresDomain() {
   const stores = data?.data?.stores ?? [];
   const total = data?.data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
   return (
     <main className='pb-20'>
       <StoreHeroSection />

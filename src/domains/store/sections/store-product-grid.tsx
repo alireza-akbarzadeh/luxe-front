@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { IconPackage } from '@tabler/icons-react';
 import { ProductCard } from '../../shop/components/product-card';
 import { useStoreFilters } from '../hooks/useStoreFilter';
-import type { DtoProductResponse } from '~/src/services/-stores-{slug}-products-get.schemas';
+import type { DtoProductResponse } from '@/services/-stores-{slug}-products-get.schemas';
 
 interface ProductsGridProps {
   apiProducts: DtoProductResponse[];
@@ -14,12 +14,10 @@ interface ProductsGridProps {
 export function StoreProductsGrid({ apiProducts, totalProducts }: ProductsGridProps) {
   const { showOnlySale, gridCols, clearFilters } = useStoreFilters([]);
 
-  // Client-side sale filter
   const filteredProducts = showOnlySale
     ? apiProducts.filter((p) => p.compare_at_price && p.compare_at_price > (p.price ?? 0))
     : apiProducts;
 
-  // Map API product to the shape expected by ProductCard
   const adaptedProducts = filteredProducts.map((product) => ({
     id: product.id,
     name: product.name,
@@ -29,10 +27,22 @@ export function StoreProductsGrid({ apiProducts, totalProducts }: ProductsGridPr
     reviews_count: product.reviews_count ?? 0,
     is_new: product.is_new ?? false,
     images: product.images ?? [],
-    category: product.category ? { name: product.category.name ?? '' } : undefined,
+    category: product.category
+      ? {
+          name: product.category.name ?? '',
+          slug: product.category.slug ?? '',
+          id: product.category.id ?? 0
+        }
+      : undefined,
     colors: product.colors ?? [],
     sizes: product.sizes ?? [],
-    isLike: false // default; can be enhanced later if like status available
+    sku: product.sku ?? '',
+    slug: product.slug ?? '',
+    stock: product.stock ?? 0,
+    status: product.status ?? 'active',
+    description: product.description ?? '',
+    // FIXME: apis should handle like
+    isLike: false
   }));
 
   if (adaptedProducts.length === 0) {

@@ -6,7 +6,6 @@ import { ProductCard } from '@/domains/shop/components/product-card';
 import { useMemo } from 'react';
 
 import { IconClock, IconFilter2 } from '@tabler/icons-react';
-import { products } from '../store/data';
 import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
 import { ProductGridList } from './containers/product-grid-list';
@@ -14,10 +13,18 @@ import { SearchHero } from './containers/search-hero';
 import { useSearchParams } from './hooks/useSearchParams';
 import { useSearchStore } from './search.store';
 import { ResultHeader } from './containers/result-header';
+import { useGetProducts } from '~/src/services/-products-get';
 
 export default function SearchDomain() {
   const searchParams = useSearchParams();
   const searchStore = useSearchStore();
+  const { data } = useGetProducts();
+
+  const products =
+    data?.data?.products?.map((product) => ({
+      ...product.items,
+      isLike: product.is_liked
+    })) || [];
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -113,7 +120,7 @@ export default function SearchDomain() {
 
   // Recently viewed products
   const recentlyViewedProducts = products.filter((p) =>
-    searchStore.recentlyViewedProducts.includes(p.id)
+    searchStore.recentlyViewedProducts.includes(p.id as number)
   );
 
   return (

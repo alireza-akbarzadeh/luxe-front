@@ -1,26 +1,14 @@
 'use client';
 
-import { IconDownload } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
-import * as React from 'react';
+import { IconDownload, IconPlus } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
-import { AppDialog } from '@/components/app-dialog';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { UserManagementTable } from '~/src/domains/users/components/user-table';
 
 export default function UserManagementPage() {
-  const [isInviteOpen, setIsInviteOpen] = React.useState(false);
-
-  const { data } = useGetUsers();
-  const stats = data?.data?.data?.users || {
-    totalUsers: 0,
-    activeUsers: 0,
-    premiumUsers: 0,
-    freeUsers: 0,
-    newUsersThisMonth: 0
-  };
-
   const handleExport = () => {
     toast.promise(new Promise((res) => setTimeout(res, 1500)), {
       loading: 'Preparing CSV export...',
@@ -49,34 +37,6 @@ export default function UserManagementPage() {
             <IconDownload className='mr-2 h-3.5 w-3.5' /> Export
           </Button>
 
-          <AppDialog
-            open={isInviteOpen}
-            onOpenChange={setIsInviteOpen}
-            component='drawer'
-            title='Invite New Member'
-            description='Send an invitation link to a new user to join your organization.'
-            trigger={
-              <Button
-                variant='outline'
-                className={cn(
-                  'h-10 rounded-xl px-6',
-                  'bg-background/50 border-border/60 text-[10px] font-black tracking-[0.15em] uppercase backdrop-blur-md',
-                  'hover:bg-muted/50 hover:border-primary/50 hover:text-primary',
-                  'group shadow-sm transition-all duration-300'
-                )}
-              >
-                <Plus className='mr-2 h-3.5 w-3.5 transition-transform group-hover:rotate-90' />
-                Invite User
-              </Button>
-            }
-          >
-            <InviteUserForm
-              onSuccess={() => {
-                setIsInviteOpen(false);
-              }}
-            />
-          </AppDialog>
-
           <Button
             asChild
             className={cn(
@@ -86,8 +46,8 @@ export default function UserManagementPage() {
               'border-t border-white/20 transition-all duration-300 active:scale-95 active:shadow-inner'
             )}
           >
-            <Link to='/dashboard/users/create'>
-              <Plus className='mr-2 h-3.5 w-3.5 stroke-[3px]' />
+            <Link href='/dashboard/users/create'>
+              <IconPlus className='mr-2 h-3.5 w-3.5 stroke-[3px]' />
               Create User
             </Link>
           </Button>
@@ -96,7 +56,7 @@ export default function UserManagementPage() {
 
       {/* 2. Quick Summary Cards */}
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4'>
-        <UserStatCard label='Total Users' value={stats.totalUsers.toLocaleString()} change='+12%' />
+        {/* <UserStatCard label='Total Users' value={stats.totalUsers.toLocaleString()} change='+12%' />
         <UserStatCard label='Active Users' value={stats.activeUsers.toLocaleString()} pulse />
         <UserStatCard
           label='Premium Users'
@@ -107,7 +67,7 @@ export default function UserManagementPage() {
           label='New This Month'
           value={stats.newUsersThisMonth.toLocaleString()}
           color='text-blue-500'
-        />
+        /> */}
       </div>
 
       {/* 3. The Main Table Area */}

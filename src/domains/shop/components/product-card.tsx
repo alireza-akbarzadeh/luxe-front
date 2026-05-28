@@ -2,15 +2,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import {
-  IconBasketCheck,
-  IconShoppingBag,
-  IconShoppingCartCheck,
-  IconStar
-} from '@tabler/icons-react';
+import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react';
 import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
-import type { ModelsProduct } from '~/src/services/-categories-bulk-post.schemas';
-import { LikeButton } from '~/src/components/buttons/like-button';
+import type { ModelsProduct } from '@/services/-categories-bulk-post.schemas';
+import { LikeButton } from '@/components/buttons/like-button';
 
 export interface ProductCardProps {
   product: ModelsProduct & {

@@ -1,12 +1,8 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 import {
-  IconBell,
   IconCalendar,
   IconCheckbox,
-  IconHeart,
   IconMapPin,
   IconPackage,
   IconRotateClockwise,
@@ -15,20 +11,34 @@ import {
   IconTruck,
   IconUsers
 } from '@tabler/icons-react';
-import { useStoreStore } from '../hooks/useStoreStore';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { FollowButton } from '~/src/components/buttons/follow-button';
+import type { StoreEssentialsType } from '~/src/domains/store/store.utils';
+import { useSharing } from '~/src/hooks/useSharing';
+import { formatDate } from '~/src/lib/date';
 
 interface StoreHeaderProps {
-  store: any;
+  store: StoreEssentialsType;
   totalProducts: number;
 }
 
-export function StoreHeader({ store, totalProducts }: StoreHeaderProps) {
-  const { followStore, unfollowStore, isFollowing } = useStoreStore();
+export function StoreHeader(props: StoreHeaderProps) {
+  const { store, totalProducts } = props;
+
+  const isFollowed = store.isFollowed;
+  const { share } = useSharing(store.slug ?? '', store.name ?? '');
 
   return (
     <section className='relative pt-20'>
       <div className='relative h-48 overflow-hidden md:h-64'>
-        <Image src={store.banner} alt={store.name} fill className='object-cover' priority />
+        <Image
+          src={store.banner ?? ''}
+          alt={store.name ?? ''}
+          fill
+          className='object-cover'
+          priority
+        />
         <div className='from-background via-background/50 absolute inset-0 bg-linear-to-t to-transparent' />
       </div>
 
@@ -39,7 +49,7 @@ export function StoreHeader({ store, totalProducts }: StoreHeaderProps) {
             animate={{ opacity: 1, scale: 1 }}
             className='border-background relative h-24 w-24 overflow-hidden rounded-2xl border-4 shadow-lg md:h-32 md:w-32'
           >
-            <Image src={store.logo} alt={store.name} fill className='object-cover' />
+            <Image src={store.logo ?? ''} alt={store.name ?? ''} fill className='object-cover' />
           </motion.div>
 
           <motion.div
@@ -65,15 +75,15 @@ export function StoreHeader({ store, totalProducts }: StoreHeaderProps) {
               </div>
               <div className='text-muted-foreground flex items-center gap-1'>
                 <IconUsers className='h-4 w-4' />
-                <span>{(store.followerCount / 1000).toFixed(1)}k followers</span>
+                <span>{((store.followerCount ?? 0) / 1000).toFixed(1)}k followers</span>
               </div>
               <div className='text-muted-foreground flex items-center gap-1'>
                 <IconMapPin className='h-4 w-4' />
                 <span>{store.location}</span>
               </div>
-              <div className='text-muted-foreground flex items-center gap-1'>
+              <div className='text-muted-foreground ga-1 flex items-center'>
                 <IconCalendar className='h-4 w-4' />
-                <span>Since {new Date(store.joinedDate).getFullYear()}</span>
+                <span>Since {formatDate(new Date(store.joinedDate as string), '')}</span>
               </div>
             </div>
           </motion.div>
@@ -83,26 +93,8 @@ export function StoreHeader({ store, totalProducts }: StoreHeaderProps) {
             animate={{ opacity: 1, x: 0 }}
             className='mt-4 flex items-center gap-2 md:mt-0'
           >
-            <Button
-              variant={isFollowing(store.id) ? 'secondary' : 'default'}
-              onClick={() =>
-                isFollowing(store.id) ? unfollowStore(store.id) : followStore(store.id)
-              }
-              className='gap-2'
-            >
-              {isFollowing(store.id) ? (
-                <>
-                  <IconBell className='h-4 w-4' />
-                  Following
-                </>
-              ) : (
-                <>
-                  <IconHeart className='h-4 w-4' />
-                  Follow
-                </>
-              )}
-            </Button>
-            <Button variant='outline' size='icon'>
+            <FollowButton isFollowed={isFollowed ?? false} slug={store.slug ?? ''} />
+            <Button variant='outline' size='icon' onClick={share}>
               <IconShare2 className='h-4 w-4' />
             </Button>
           </motion.div>

@@ -1,9 +1,9 @@
 import {
+  IconMinus,
+  IconPackage,
+  IconPlus,
   IconShoppingCart,
   IconTrash,
-  IconMinus,
-  IconPlus,
-  IconPackage,
   IconX
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -25,7 +25,7 @@ interface WishlistItemProps {
   isChecked: boolean;
 }
 
-export function WishlistItem({ item, index, isChecked }: WishlistItemProps) {
+export function RowWishlistItem({ item, index, isChecked }: WishlistItemProps) {
   const removeItem = useWishlistStore((state) => state.removeItem);
   const toggleSelectItem = useWishlistStore((state) => state.toggleSelectItem);
 
@@ -111,7 +111,18 @@ export function WishlistItem({ item, index, isChecked }: WishlistItemProps) {
                   variant='ghost'
                   size='icon'
                   className='h-8 w-8 rounded-md'
-                  onClick={() => decrement(item)}
+                  onClick={() =>
+                    decrement({
+                      image_url: item.image_url,
+                      is_in_stock: item.is_in_stock,
+                      price: item.price,
+                      product_id: item.product_id,
+                      product_name: item.product_name,
+                      stock: item.stock,
+                      size: item?.size?.[0],
+                      color: item?.color?.[0]
+                    })
+                  }
                 >
                   <IconMinus className='h-3.5 w-3.5' />
                 </Button>
@@ -121,7 +132,18 @@ export function WishlistItem({ item, index, isChecked }: WishlistItemProps) {
                   size='icon'
                   className='h-8 w-8 rounded-md'
                   disabled={productQuantity >= stock || !item.is_in_stock}
-                  onClick={() => increment(item)}
+                  onClick={() =>
+                    increment({
+                      image_url: item.image_url,
+                      is_in_stock: item.is_in_stock,
+                      price: item.price,
+                      product_id: item.product_id,
+                      product_name: item.product_name,
+                      stock: item.stock,
+                      size: item?.size?.[0],
+                      color: item?.color?.[0]
+                    })
+                  }
                 >
                   <IconPlus className='h-3.5 w-3.5' />
                 </Button>
@@ -131,7 +153,18 @@ export function WishlistItem({ item, index, isChecked }: WishlistItemProps) {
                 size='sm'
                 className='h-9 flex-1 gap-1.5'
                 disabled={!item.is_in_stock}
-                onClick={() => increment(item)}
+                onClick={() =>
+                  decrement({
+                    image_url: item.image_url,
+                    is_in_stock: item.is_in_stock,
+                    price: item.price,
+                    product_id: item.product_id,
+                    product_name: item.product_name,
+                    stock: item.stock,
+                    size: item?.size?.[0],
+                    color: item?.color?.[0]
+                  })
+                }
               >
                 <IconShoppingCart className='h-3.5 w-3.5' />
                 Add to Cart

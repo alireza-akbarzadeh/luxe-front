@@ -2,9 +2,9 @@ import type { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import type { GetUsers200DataUsersItem } from '@/services/models';
 import { IconShieldCheck } from '@tabler/icons-react';
 import { UserActions } from './user-actions';
+import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
 
 export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
   {
@@ -30,7 +30,7 @@ export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
     id: 'name', // Explicit ID for Table.Search
     header: 'User Identity',
     cell: ({ row }) => {
-      const { email, role, phone } = row.original;
+      const { role } = row.original;
       return (
         <div className='flex items-center gap-3 py-1'>
           <div className='relative shrink-0'>
@@ -121,8 +121,7 @@ export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
     id: 'status',
     header: 'System Status',
     filterFn: 'multiSelect' as any,
-    cell: ({ row }) => {
-      const { is_active } = row.original;
+    cell: () => {
       const config = {
         active: { color: 'bg-emerald-500', label: 'Active' },
         pending: { color: 'bg-amber-500', label: 'Pending' },

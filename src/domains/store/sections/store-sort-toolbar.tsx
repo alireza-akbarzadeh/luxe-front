@@ -1,5 +1,4 @@
 'use client';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { sortOptions } from '@/domains/store/constants';
 import {
   IconArrowsUpDown,
   IconFileHorizontal,
@@ -17,10 +16,9 @@ import {
   IconLayoutGrid,
   IconSearch
 } from '@tabler/icons-react';
-import { useState } from 'react';
 import { useStoreFilters } from '../hooks/useStoreFilter';
-import { sortOptions } from '@/domains/store/constants';
-import { FilterSidebar } from './filter-sidebar';
+import { useStoreStore } from '~/src/domains/store/hooks/useStoreStore';
+import { Badge } from '~/src/components/ui/badge';
 
 export function StoreToolbar() {
   const {
@@ -33,7 +31,7 @@ export function StoreToolbar() {
     activeFilterCount
   } = useStoreFilters([]);
 
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const toggleFilterMobileSheet = useStoreStore((state) => state.toggleFilterMobileSheet);
 
   return (
     <div className='mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
@@ -49,28 +47,15 @@ export function StoreToolbar() {
       </div>
 
       <div className='flex w-full items-center gap-3 sm:w-auto'>
-        <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
-          <SheetTrigger asChild>
-            <Button variant='outline' className='gap-2 lg:hidden'>
-              <IconFileHorizontal className='h-4 w-4' />
-              Filters
-              {activeFilterCount > 0 && (
-                <Badge variant='secondary' className='ml-1'>
-                  {activeFilterCount}
-                </Badge>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side='left' className='w-80'>
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
-            <div className='mt-6'>
-              <FilterSidebar /> {/* will use its own useStoreFilters */}
-            </div>
-          </SheetContent>
-        </Sheet>
-
+        <Button onClick={toggleFilterMobileSheet} variant='outline' className='gap-2 lg:hidden'>
+          <IconFileHorizontal className='h-4 w-4' />
+          Filters
+          {activeFilterCount > 0 && (
+            <Badge variant='secondary' className='ml-1'>
+              {activeFilterCount}
+            </Badge>
+          )}
+        </Button>
         <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
           <SelectTrigger className='w-45'>
             <IconArrowsUpDown className='mr-2 h-4 w-4' />

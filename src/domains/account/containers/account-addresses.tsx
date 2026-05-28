@@ -32,6 +32,15 @@ import { usePatchAddressesIdDefault } from '~/src/services/-addresses-{id}-defau
 import { useDeleteAddressesId } from '~/src/services/-addresses-{id}-delete';
 import { usePutAddressesId } from '~/src/services/-addresses-{id}-put';
 import { addressFormSchema } from '../account.schema';
+import type {
+  DtoUpdateAddressRequest,
+  DtoUpdateAddressRequestAddressType
+} from '~/src/services/-addresses-{id}-put.schemas';
+import type {
+  DtoCreateAddressRequest,
+  DtoCreateAddressRequestAddressType
+} from '~/src/services/-addresses-post.schemas';
+import type { ModelsAddress } from '~/src/services/-addresses-default-get.schemas';
 
 export function AccountAddresses() {
   const queryClient = useQueryClient();
@@ -61,7 +70,8 @@ export function AccountAddresses() {
       zipCode: '',
       country: 'United States',
       phone: '',
-      isDefault: false
+      isDefault: false,
+      address_type: 'both'
     },
     validators: {
       onChange: addressFormSchema,
@@ -72,8 +82,9 @@ export function AccountAddresses() {
         try {
           // Map form fields to backend DTO
           const recipientName = `${value.firstName} ${value.lastName}`.trim();
-          const payload = {
-            address_type: 'both', // or you can let user choose: shipping/billing/both
+
+          const payload: DtoCreateAddressRequest = {
+            address_type: value.address_type as DtoCreateAddressRequestAddressType,
             recipient_name: recipientName,
             phone: value.phone,
             address_line1: value.street,
@@ -83,7 +94,7 @@ export function AccountAddresses() {
             postal_code: value.zipCode,
             country: value.country,
             is_default: value.isDefault,
-            instructions: value.label // store label as instructions (optional)
+            instructions: value.label
           };
 
           if (editingAddressId) {
@@ -114,8 +125,7 @@ export function AccountAddresses() {
 
   const handleAddNewAddress = () => {
     setEditingAddressId(null);
-    // Prefill first/last name from user if available (we can get from useUser or from context)
-    // For simplicity, leave empty; user can fill.
+
     form.reset({
       label: '',
       firstName: '',
@@ -127,13 +137,14 @@ export function AccountAddresses() {
       zipCode: '',
       country: 'United States',
       phone: '',
-      isDefault: false
+      isDefault: false,
+      address_type: 'both'
     });
     setIsAddressDialogOpen(true);
   };
 
-  const handleEditAddress = (address: any) => {
-    setEditingAddressId(address.id);
+  const handleEditAddress = (address: ModelsAddress) => {
+    setEditingAddressId(address.id as number);
     // Extract first/last name from recipient_name
     const nameParts = (address.recipient_name || '').split(' ');
     const firstName = nameParts[0] || '';
@@ -145,11 +156,12 @@ export function AccountAddresses() {
       street: address.address_line1,
       apartment: address.address_line2 || '',
       city: address.city,
-      state: address.state,
+      state: address.state ?? '',
       zipCode: address.postal_code,
       country: address.country,
       phone: address.phone,
-      isDefault: address.is_default
+      isDefault: address.is_default ?? false,
+      address_type: address.address_type ?? ''
     });
     setIsAddressDialogOpen(true);
   };
@@ -311,7 +323,11 @@ export function AccountAddresses() {
                   Edit
                 </Button>
                 {!address.is_default && (
-                  <Button variant='ghost' size='sm' onClick={() => handleSetDefault(address.id)}>
+                  <Button
+                    variant='ghost'
+                    size='sm'
+                    onClick={() => handleSetDefault(address.id as number)}
+                  >
                     Set Default
                   </Button>
                 )}
@@ -336,7 +352,7 @@ export function AccountAddresses() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleDelete(address.id)}
+                        onClick={() => handleDelete(address.id as number)}
                         className='bg-red-600 hover:bg-red-700'
                       >
                         Delete

@@ -37,7 +37,7 @@ export function StoreCardCompact({ store }: { store: ModelsStoreReview }) {
           </span>
         </div>
       </div>
-      <FollowButton storeId={store.id as number} />
+      <FollowButton slug={store.slug ?? ''} isFollowed={store.is_followed ?? false} />
     </article>
   );
 }

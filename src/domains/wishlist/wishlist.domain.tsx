@@ -11,7 +11,7 @@ import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
 
 import InteractiveActionToolbar from '~/src/domains/wishlist/components/interactive-action-toolbar';
 import { StackWishlistItem } from '~/src/domains/wishlist/components/stack-wishlist-item';
-import { WishlistItem } from '~/src/domains/wishlist/components/wishlist-item';
+import { RowWishlistItem } from '~/src/domains/wishlist/components/row-wishlist-item';
 import { WishlistFooter } from '~/src/domains/wishlist/components/wishlist-footer';
 import { WishlistHeader } from './components/wishlist-header';
 
@@ -108,7 +108,7 @@ export function WishlistDomain() {
                   const isChecked = selectedItems.includes(item.product_id);
 
                   return (
-                    <WishlistItem
+                    <RowWishlistItem
                       key={item.product_id}
                       isChecked={isChecked}
                       item={item}

@@ -1,14 +1,14 @@
 'use client';
 import { motion } from 'framer-motion';
-import { StoreCard } from '../components/store-card';
 import { stagger } from '~/src/domains/store/store.utils';
-import type { ModelsStoreReview } from '~/src/services/-checkout-post.schemas';
+import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
+import { StoreCard } from '../components/store-card';
 
 export function StoresGrid({
   stores,
   dense = false
 }: {
-  stores: ModelsStoreReview[];
+  stores: DtoStoreResponse[];
   dense?: boolean;
 }) {
   return (
