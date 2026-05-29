@@ -78,9 +78,9 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
     currentOrder.items?.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0) ??
     0;
 
-  // FIXME: add pice to the backend
-  const shippingCost = shipment?.price ?? 0;
-  const tax = subtotal * 0.08; // assuming 8% tax – you could read from order if available
+  const shippingCost = shipment?.shipping_price ?? 0;
+  // FIXME: tax should come from backend
+  const tax = subtotal * 0.08;
   const total = currentOrder.total_amount;
 
   const orderDateRelative = formatDistanceToNow(new Date(currentOrder.created_at as string), {

@@ -1,5 +1,4 @@
 import { IconCheck } from '@tabler/icons-react';
-import React from 'react';
 
 interface ProductDescriptionProps {
   description: string;

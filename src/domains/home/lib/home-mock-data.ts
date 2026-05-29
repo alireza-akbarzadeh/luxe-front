@@ -26,18 +26,16 @@ export const BRAND_NAMES = [
   'Velvet'
 ] as const;
 
-export const CATEGORY_IMAGES: Record<string, string> = {
-  accessories:
-    'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=900&h=1100&fit=crop',
+export const CATEGORY_IMAGES = {
+  accessories: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=900&h=1100&fit=crop',
   watches: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&h=1100&fit=crop',
   eyewear: 'https://images.unsplash.com/photo-1572635196233-14b40f21bd47?w=900&h=1100&fit=crop',
-  electronics:
-    'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=900&h=1100&fit=crop',
+  electronics: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=900&h=1100&fit=crop',
   home: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&h=1100&fit=crop',
   lifestyle: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&h=1100&fit=crop',
   fashion: 'https://images.unsplash.com/photo-1483985988355-763728e6155d?w=900&h=1100&fit=crop',
   default: 'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=900&h=1100&fit=crop'
-};
+} as const;
 
 export const FALLBACK_CATEGORY_IMAGES = [
   CATEGORY_IMAGES.accessories,
@@ -86,8 +84,7 @@ export const COLLECTION_BANNERS = [
     title: 'Modern Essentials',
     description: 'Refined staples built for everyday luxury — limited seasonal palette.',
     href: '/shop?sortBy=newest',
-    image:
-      'https://images.unsplash.com/photo-1483985988355-763728e6155d?w=1200&h=1400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1483985988355-763728e6155d?w=1200&h=1400&fit=crop',
     cta: 'Shop the edit'
   },
   {
@@ -96,8 +93,7 @@ export const COLLECTION_BANNERS = [
     title: 'The Atelier Collection',
     description: 'Hand-finished pieces from independent makers worldwide.',
     href: '/shop?sortBy=rating',
-    image:
-      'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=1400&fit=crop',
+    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=1400&fit=crop',
     cta: 'Explore collection'
   }
 ] as const;
@@ -136,7 +132,7 @@ export const testimonials = [
     role: 'Creative Director',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
     content:
-      "The quality from LUXE is unmatched. Every piece feels intentional — packaging, fit, and finish are all world-class.",
+      'The quality from LUXE is unmatched. Every piece feels intentional — packaging, fit, and finish are all world-class.',
     rating: 5
   },
   {
@@ -189,9 +185,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.9,
     reviews_count: 214,
     is_new: true,
-    images: [
-      'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop'],
     category: { name: 'Accessories', slug: 'accessories' }
   }),
   mockProduct({
@@ -204,9 +198,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.8,
     reviews_count: 189,
     is_new: false,
-    images: [
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=1000&fit=crop'],
     category: { name: 'Electronics', slug: 'electronics' }
   }),
   mockProduct({
@@ -218,9 +210,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.7,
     reviews_count: 96,
     is_new: true,
-    images: [
-      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=1000&fit=crop'],
     category: { name: 'Home & Living', slug: 'home' }
   }),
   mockProduct({
@@ -233,9 +223,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.9,
     reviews_count: 312,
     is_new: false,
-    images: [
-      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=1000&fit=crop'],
     category: { name: 'Accessories', slug: 'accessories' }
   }),
   mockProduct({
@@ -247,9 +235,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.6,
     reviews_count: 74,
     is_new: true,
-    images: [
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop'],
     category: { name: 'Lifestyle', slug: 'lifestyle' }
   }),
   mockProduct({
@@ -262,9 +248,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.8,
     reviews_count: 58,
     is_new: false,
-    images: [
-      'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=1000&fit=crop'],
     category: { name: 'Home & Living', slug: 'home' }
   }),
   mockProduct({
@@ -276,9 +260,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.7,
     reviews_count: 143,
     is_new: true,
-    images: [
-      'https://images.unsplash.com/photo-1572635196233-14b40f21bd47?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1572635196233-14b40f21bd47?w=800&h=1000&fit=crop'],
     category: { name: 'Accessories', slug: 'accessories' }
   }),
   mockProduct({
@@ -290,9 +272,7 @@ export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
     rating: 4.9,
     reviews_count: 201,
     is_new: false,
-    images: [
-      'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&h=1000&fit=crop'
-    ],
+    images: ['https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&h=1000&fit=crop'],
     category: { name: 'Accessories', slug: 'accessories' }
   })
 ];

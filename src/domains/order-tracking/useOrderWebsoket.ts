@@ -21,7 +21,9 @@ export function useOrderWebSocket(orderId: number) {
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
       // Adjust to your backend's actual field name
+      // @ts-expect-error proper socket
       if (msg.type === 'order_status_update') {
+        // @ts-expect-error proper socket
         setStatus(msg.data.new_status || msg.data.status);
       }
     };

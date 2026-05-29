@@ -3,17 +3,25 @@ import { formatDistanceToNow } from 'date-fns';
 import { Badge } from '~/src/components/ui/badge';
 import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 import { useGetReviews } from '~/src/services/-reviews-get';
+import { IconLoader2 } from '@tabler/icons-react';
 
-interface ProductRevuewsProps {
+interface ProductReviewsProps {
   product: DtoProductResponse;
   productId: string;
 }
 
-export default function ProductReviews(props: ProductRevuewsProps) {
+export default function ProductReviews(props: ProductReviewsProps) {
   const { product, productId } = props;
   const { data, isLoading } = useGetReviews({ product_id: Number(productId), limit: 10 });
   const reviews = data?.data?.reviews;
-  const total = data?.data?.total;
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center py-8'>
+        <IconLoader2 className='text-primary h-6 w-6 animate-spin' />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -50,39 +58,45 @@ export default function ProductReviews(props: ProductRevuewsProps) {
         </div>
       </div>
 
-      <ul className='space-y-6'>
-        {reviews?.map((r) => (
-          <li key={r.id} className='border-border border-b pb-6'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-2'>
-                <p className='font-medium'>{r.author}</p>
-                {r.is_verified && (
-                  <Badge variant='outline' className='gap-1 text-[10px]'>
-                    <IconCheck className='h-2.5 w-2.5' /> Verified
-                  </Badge>
-                )}
+      {reviews && reviews.length > 0 ? (
+        <ul className='space-y-6'>
+          {reviews.map((r) => (
+            <li key={r.id} className='border-border border-b pb-6'>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                  <p className='font-medium'>{r.author}</p>
+                  {r.is_verified && (
+                    <Badge variant='outline' className='gap-1 text-[10px]'>
+                      <IconCheck className='h-2.5 w-2.5' /> Verified
+                    </Badge>
+                  )}
+                </div>
+                <p className='text-muted-foreground text-xs'>
+                  {formatDistanceToNow(new Date(r.created_at as string))}
+                </p>
               </div>
-              <p className='text-muted-foreground text-xs'>
-                {formatDistanceToNow(String(r.created_at))}
-              </p>
-            </div>
-            <div className='mt-2 flex'>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <IconStar
-                  key={i}
-                  className={`h-3.5 w-3.5 ${
-                    i < Number(r.rating)
-                      ? 'fill-foreground text-foreground'
-                      : 'text-muted-foreground/40'
-                  }`}
-                />
-              ))}
-            </div>
-            <p className='mt-2 font-medium'>{r.title}</p>
-            <p className='text-muted-foreground mt-1 text-sm'>{r.comment}</p>
-          </li>
-        ))}
-      </ul>
+              <div className='mt-2 flex'>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <IconStar
+                    key={i}
+                    className={`h-3.5 w-3.5 ${
+                      i < Number(r.rating)
+                        ? 'fill-foreground text-foreground'
+                        : 'text-muted-foreground/40'
+                    }`}
+                  />
+                ))}
+              </div>
+              <p className='mt-2 font-medium'>{r.title}</p>
+              <p className='text-muted-foreground mt-1 text-sm'>{r.comment}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className='text-muted-foreground py-8 text-center'>
+          No reviews yet. Be the first to review!
+        </p>
+      )}
     </>
   );
 }

@@ -28,9 +28,7 @@ export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCateg
   return MOCK_CATEGORIES;
 }
 
-export function mapProductForCard(
-  item: GetProducts200DataProductsItem
-): ModelsProduct & { isLike: boolean } {
+export function mapProductForCard(item: GetProducts200DataProductsItem) {
   const product = item.items;
   return {
     id: product?.id,
