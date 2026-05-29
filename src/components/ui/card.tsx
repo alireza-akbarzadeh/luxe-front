@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-/* eslint-disable @typescript-eslint/no-restricted-imports */
+ 
 
 import * as React from 'react';
 
@@ -75,4 +75,4 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };
+export { Card, CardAction, CardContent,CardDescription, CardFooter, CardHeader, CardTitle };

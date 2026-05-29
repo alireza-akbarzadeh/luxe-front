@@ -1,6 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import {
   IconArrowRight,
   IconRotateClockwise,
@@ -9,6 +7,9 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { useCartController } from '~/src/hooks/useCartController';
 
 export function OrderSummary() {

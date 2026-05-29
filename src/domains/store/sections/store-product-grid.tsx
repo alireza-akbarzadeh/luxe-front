@@ -1,10 +1,12 @@
 // components/products-grid.tsx
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { IconPackage } from '@tabler/icons-react';
+import { AnimatePresence,motion } from 'framer-motion';
+
+import { Button } from '@/components/ui/button';
+import type { DtoProductResponse } from '@/services/-stores-{slug}-products-get.schemas';
+
 import { ProductCard } from '../../shop/components/product-card';
 import { useStoreFilters } from '../hooks/useStoreFilter';
-import type { DtoProductResponse } from '@/services/-stores-{slug}-products-get.schemas';
 
 interface ProductsGridProps {
   apiProducts: DtoProductResponse[];

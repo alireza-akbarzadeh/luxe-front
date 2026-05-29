@@ -1,8 +1,9 @@
 'use client';
 
+import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { IconArrowRight } from '@tabler/icons-react';
+
 import { cn } from '@/lib/utils';
 
 interface SectionHeaderProps {

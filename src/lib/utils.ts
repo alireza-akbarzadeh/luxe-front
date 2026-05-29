@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Row } from '@tanstack/react-table';
 import { type ClassValue, clsx } from 'clsx';
 import type { JSX } from 'react';
-
 import { twMerge } from 'tailwind-merge';
 
 export type StringNumber = `${number}`;

@@ -1,10 +1,12 @@
 'use client';
 import { motion } from 'framer-motion';
+
+import { useGetProducts } from '~/src/services/-products-get';
+
 import { ActiveFilter } from './components/active-filter';
 import { FilterContent } from './components/filter-content';
 import { ProductGrid } from './components/product-grid';
 import { ShopToolbar } from './components/shop-toolbar';
-import { useGetProducts } from '~/src/services/-products-get';
 import { useProductFilters } from './useProductFilters';
 
 export function ShopDomain() {

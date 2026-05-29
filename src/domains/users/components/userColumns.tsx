@@ -1,10 +1,13 @@
+// FIXME: find correct types and remove any
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IconShieldCheck } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { IconShieldCheck } from '@tabler/icons-react';
-import { UserActions } from './user-actions';
 import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
+
+import { UserActions } from './user-actions';
 
 export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
   {

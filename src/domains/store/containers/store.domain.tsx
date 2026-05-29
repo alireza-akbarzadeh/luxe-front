@@ -1,14 +1,15 @@
 'use client';
 
+import { IconFilter } from '@tabler/icons-react';
+import { notFound } from 'next/navigation';
+import { useMemo } from 'react';
+
 import {
   StoreProductsGridSkeleton,
   StoreSkeleton
 } from '@/domains/store/components/store-skeleton-loading';
 import { useGetStoresSlug } from '@/services/-stores-{slug}-get';
 import { useGetStoresSlugProducts } from '@/services/-stores-{slug}-products-get';
-import { IconFilter } from '@tabler/icons-react';
-import { notFound } from 'next/navigation';
-import { useMemo } from 'react';
 import { AppDialog } from '~/src/components/app-dialog';
 import { ActiveFilters } from '~/src/domains/store/sections/store-active-filter';
 import { StoreFilterSidebar } from '~/src/domains/store/sections/store-details-filter';
@@ -16,6 +17,7 @@ import { StoreProductsGrid } from '~/src/domains/store/sections/store-product-gr
 import { StoreHeader } from '~/src/domains/store/sections/store-sort-header';
 import { StoreToolbar } from '~/src/domains/store/sections/store-sort-toolbar';
 import type { GetStoresSlugProductsParams } from '~/src/services/-stores-{slug}-products-get.schemas';
+
 import { StoreErrorState } from '../components/store-error-state';
 import { useStoreFilters } from '../hooks/useStoreFilter';
 import { useStoreStore } from '../hooks/useStoreStore';

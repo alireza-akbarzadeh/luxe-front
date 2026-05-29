@@ -1,14 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
 import {
-  useQueryStates,
+  parseAsArrayOf,
+  parseAsBoolean,
   parseAsInteger,
   parseAsString,
-  parseAsBoolean,
   parseAsStringLiteral,
-  parseAsArrayOf
-} from 'nuqs';
+  useQueryStates} from 'nuqs';
+import { useMemo } from 'react';
 
 type SortBy = 'relevance' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'popular';
 type ViewMode = 'grid' | 'list';

@@ -1,8 +1,10 @@
-import { AxiosError, HttpStatusCode, type AxiosRequestConfig } from 'axios';
+import { AxiosError, type AxiosRequestConfig,HttpStatusCode } from 'axios';
 import { toast } from 'sonner';
-import type { ApiClientOptions, ApiErrorResponse } from './type';
-import { logger } from '@/lib/api/logger';
+
 import { extractErrorMessage } from '@/lib/api/api-utils';
+import { logger } from '@/lib/api/logger';
+
+import type { ApiClientOptions, ApiErrorResponse } from './type';
 
 /**
  * Handle API errors with appropriate toast notifications

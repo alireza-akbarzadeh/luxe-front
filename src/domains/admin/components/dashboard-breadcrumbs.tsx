@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
-import { dashboard_SIDEBAR } from '../data';
-import Link from 'next/link';
 import { IconChevronRight, IconHome } from '@tabler/icons-react';
+import Link from 'next/link';
+import { useMemo } from 'react';
+
+import { dashboard_SIDEBAR } from '../data';
 
 export function DashboardBreadcrumbs({ pathname }: { pathname: string }) {
   const breadcrumbs = useMemo(() => {

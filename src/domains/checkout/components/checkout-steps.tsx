@@ -1,7 +1,8 @@
 'use client';
 import { IconCheck } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import { stepNames, steps, type CheckoutSteps } from '../hooks/useCheckoutSteps';
+
+import { type CheckoutSteps,stepNames, steps } from '../hooks/useCheckoutSteps';
 
 interface CheckoutStepsProps {
   currentStep: CheckoutSteps;

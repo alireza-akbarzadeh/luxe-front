@@ -1,13 +1,14 @@
 'use client';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { IconShoppingCart, IconX } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCartController, type CartItemPayload } from '~/src/hooks/useCartController';
-import type { DtoCompareProductResponse } from '~/src/services/-compare-post.schemas';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import useCompareController from '~/src/domains/compare/hooks/useCompareController';
+import { type CartItemPayload,useCartController } from '~/src/hooks/useCartController';
+import type { DtoCompareProductResponse } from '~/src/services/-compare-post.schemas';
 
 interface CompareProductCardProps {
   product: DtoCompareProductResponse;

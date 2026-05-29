@@ -1,4 +1,6 @@
+import { IconCheck, IconChevronDown, IconX, type TablerIcon } from '@tabler/icons-react';
 import React from 'react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +13,6 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { IconCheck, IconChevronDown, IconX, type TablerIcon } from '@tabler/icons-react';
 
 interface CompactMultiSelectProps<TOption> {
   props: {

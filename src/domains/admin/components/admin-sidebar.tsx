@@ -1,15 +1,17 @@
+import { IconChevronLeft, IconSearch } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import type { SidebarGroup } from '../data';
-import { WorkspaceSwitcher } from './worksapce-switcher';
-import { IconChevronLeft, IconSearch } from '@tabler/icons-react';
+
 import { useDashboardStore } from '../admin.store';
+import type { SidebarGroup } from '../data';
 import { SidebarNavItem } from './sidebar-nav-item';
 import { UserProfile } from './user-profile';
+import { WorkspaceSwitcher } from './worksapce-switcher';
 
 export function AdminSidebar({
   groups,

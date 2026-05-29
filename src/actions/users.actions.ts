@@ -1,7 +1,7 @@
 'use server';
 
-import { getServerUser } from '@/lib/auth-server';
 import { apiFetch } from '@/lib/api/api';
+import { getServerUser } from '@/lib/auth-server';
 
 export async function getClientUser() {
   return await getServerUser();

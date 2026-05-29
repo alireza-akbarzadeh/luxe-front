@@ -1,12 +1,14 @@
 'use client';
 
+import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import type { CheckoutFormApi } from '@/domains/checkout/hooks/useCheckoutForm';
 import { useGetCouponsMy } from '@/services/-coupons-my-get';
-import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+
 import { AvailableCoupons } from '../components/available-coupons';
 import { PaymentMethodSelector } from '../components/payment-providers';
 import { useCheckoutTotals } from '../hooks/useCartTotal';

@@ -1,5 +1,8 @@
 'use client';
+import { IconChevronDown } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   DropdownMenu,
@@ -11,9 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+
 import { ICON_MAP, type SidebarItem } from '../data';
-import Link from 'next/link';
-import { IconChevronDown } from '@tabler/icons-react';
 
 export function SidebarNavItem({
   item,

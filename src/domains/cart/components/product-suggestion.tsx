@@ -1,12 +1,13 @@
 'use client';
 
+import { IconAlertCircle } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
-import { useCartController } from '~/src/hooks/useCartController';
-import { Skeleton } from '@/components/ui/skeleton';
 import React, { useMemo } from 'react';
-import { IconAlertCircle } from '@tabler/icons-react';
+
+import { Skeleton } from '@/components/ui/skeleton';
+import { useCartController } from '~/src/hooks/useCartController';
+import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
 
 export function ProductSuggestion() {
   const { items } = useCartController();

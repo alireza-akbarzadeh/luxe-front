@@ -1,8 +1,10 @@
 // components/active-filters.tsx
+import { IconX } from '@tabler/icons-react';
+import { AnimatePresence,motion } from 'framer-motion';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
-import { IconX } from '@tabler/icons-react';
+
 import { useStoreFilters } from '../hooks/useStoreFilter';
 
 export function ActiveFilters() {

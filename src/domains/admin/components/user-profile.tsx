@@ -1,3 +1,11 @@
+import {
+  IconChevronRight,
+  IconLogout,
+  IconSettings,
+  IconShieldCheck,
+  IconUserCircle
+} from '@tabler/icons-react';
+
 import { AnimatePresence, motion } from '@/components/motion';
 import {
   DropdownMenu,
@@ -8,13 +16,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import {
-  IconChevronRight,
-  IconLogout,
-  IconSettings,
-  IconShieldCheck,
-  IconUserCircle
-} from '@tabler/icons-react';
 import { logoutAction } from '~/src/actions/auth.actions';
 import { useUser } from '~/src/hooks/useUser';
 

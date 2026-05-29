@@ -1,10 +1,11 @@
 import { IconTag } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { usePostCouponsValidate } from '~/src/services/-coupons-validate-post';
-import { useCartController } from '~/src/hooks/useCartController';
 import { useState } from 'react';
 import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useCartController } from '~/src/hooks/useCartController';
+import { usePostCouponsValidate } from '~/src/services/-coupons-validate-post';
 
 export function CouponCode() {
   const { mutate: validateCoupon, isPending: isValidating } = usePostCouponsValidate();
@@ -25,8 +26,8 @@ export function CouponCode() {
           setPromoApplied(true);
           toast.success(`Coupon applied! You saved $${data?.discount_amount?.toFixed(2)}`);
         },
-        onError: (error: any) => {
-          const message = error?.response?.data?.message || 'Invalid or expired coupon';
+        onError: (error) => {
+          const message = error?.message || 'Invalid or expired coupon';
           toast.error(message);
           setPromoApplied(false);
           setPromoDiscount(0);

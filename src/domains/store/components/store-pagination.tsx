@@ -1,5 +1,5 @@
-import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
 import { Button } from '@/components/ui/button';
+import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
 
 export function StorePagination({ page, totalPages }: { page: number; totalPages: number }) {
   const { setFilters } = useStoresFilters();

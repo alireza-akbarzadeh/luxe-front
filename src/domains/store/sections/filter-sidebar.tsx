@@ -1,12 +1,9 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useStoresFilters } from '../hooks/useStoresFilter';
-import { RATING_OPTIONS, SHIPPING_SPEED_OPTIONS, STORE_SIZE_OPTIONS } from '../constants';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Slider } from '@/components/ui/slider';
-import { Separator } from '@/components/ui/separator';
+
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -14,6 +11,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Slider } from '@/components/ui/slider';
+
+import { RATING_OPTIONS, SHIPPING_SPEED_OPTIONS, STORE_SIZE_OPTIONS } from '../constants';
+import { useStoresFilters } from '../hooks/useStoresFilter';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

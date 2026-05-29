@@ -1,5 +1,5 @@
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
 import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
+import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
 
 export const HOME_STATS = [
   { label: 'Happy customers', value: '50K+' },

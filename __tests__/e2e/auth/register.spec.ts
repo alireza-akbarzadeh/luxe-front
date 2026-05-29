@@ -1,6 +1,6 @@
 import { expect, test } from '~/__tests__/fixtures/test.fixture';
-import { createRegisterUser } from '~/__tests__/utils/factories/user.factory';
 import { skipUnlessIntegration } from '~/__tests__/helpers/integration';
+import { createRegisterUser } from '~/__tests__/utils/factories/user.factory';
 
 test.describe('Register @auth', () => {
   test.beforeEach(async ({ registerPage }) => {

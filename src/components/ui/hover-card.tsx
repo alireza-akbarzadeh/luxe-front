@@ -1,8 +1,9 @@
 'use client';
 
-import * as React from 'react';
-import { Menubar as MenubarPrimitive } from 'radix-ui';
 import { IconCheck, IconChevronRight, IconCircle } from '@tabler/icons-react';
+import { Menubar as MenubarPrimitive } from 'radix-ui';
+import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 const MenubarMenu = MenubarPrimitive.Menu;
@@ -221,19 +222,18 @@ MenubarShortcut.displayName = 'MenubarShortcut';
 
 export {
   Menubar,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarItem,
-  MenubarSeparator,
-  MenubarLabel,
   MenubarCheckboxItem,
+  MenubarContent,
+  MenubarGroup,
+  MenubarItem,
+  MenubarLabel,
+  MenubarMenu,
+  MenubarPortal,
   MenubarRadioGroup,
   MenubarRadioItem,
-  MenubarPortal,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-  MenubarGroup,
-  MenubarSub,
-  MenubarShortcut
-};
+  MenubarTrigger};

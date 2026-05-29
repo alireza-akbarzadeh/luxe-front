@@ -1,16 +1,17 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { IconMenu, IconSearch, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { UserProfile } from './user-profile';
-import { DesktopNav } from './desktop-nav';
-import { MobileNav } from './mobile-nav';
+import { Button } from '@/components/ui/button';
+
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
+import { DesktopNav } from './desktop-nav';
+import { MobileNav } from './mobile-nav';
+import { UserProfile } from './user-profile';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

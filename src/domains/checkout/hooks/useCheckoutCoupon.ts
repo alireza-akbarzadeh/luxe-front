@@ -1,7 +1,9 @@
 // app/checkout/hooks/useCheckoutCoupon.ts
 import { useState } from 'react';
 import { toast } from 'sonner';
+
 import { usePostCouponsValidate } from '@/services/-coupons-validate-post';
+
 import { useCheckoutStore } from '../store/checkout.store';
 
 interface Props {
@@ -55,13 +57,8 @@ export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
           toast.success(`Coupon applied! You save $${discount.toFixed(2)}`);
         },
 
-        onError: (err: any) => {
-          const errorMessage =
-            err?.message ||
-            err?.error ||
-            err?.response?.data?.message ||
-            err?.response?.data?.error ||
-            'Invalid or expired coupon';
+        onError: (err) => {
+          const errorMessage = err?.message || err?.error || 'Invalid or expired coupon';
 
           setError(errorMessage);
           toast.error(errorMessage);

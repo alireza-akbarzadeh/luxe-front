@@ -1,7 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { IconAlertTriangle } from '@tabler/icons-react';
+
+import { Button } from '@/components/ui/button';
 
 export function StoreErrorState({
   message,

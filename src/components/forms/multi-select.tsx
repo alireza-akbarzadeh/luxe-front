@@ -1,8 +1,9 @@
+import type { TablerIcon } from '@tabler/icons-react';
 import React from 'react';
+
 import { CompactMultiSelect } from '../ui/compact-multi-select';
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
-import type { TablerIcon } from '@tabler/icons-react';
 
 interface MultiSelectFieldProps<TOption> {
   props: {

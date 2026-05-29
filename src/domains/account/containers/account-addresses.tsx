@@ -1,5 +1,10 @@
 'use client';
 
+import { IconCheck, IconEdit, IconMapPin, IconPlus, IconTrash } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,28 +24,20 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { IconCheck, IconEdit, IconMapPin, IconPlus, IconTrash } from '@tabler/icons-react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useState, useTransition } from 'react';
-import { toast } from 'sonner';
-
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { getGetAccountSummaryQueryKey } from '~/src/services/-account-summary-get';
-import { getGetAddressesQueryKey, useGetAddresses } from '~/src/services/-addresses-get';
-import { usePostAddresses } from '~/src/services/-addresses-post';
 import { usePatchAddressesIdDefault } from '~/src/services/-addresses-{id}-default-patch';
 import { useDeleteAddressesId } from '~/src/services/-addresses-{id}-delete';
 import { usePutAddressesId } from '~/src/services/-addresses-{id}-put';
-import { addressFormSchema } from '../account.schema';
-import type {
-  DtoUpdateAddressRequest,
-  DtoUpdateAddressRequestAddressType
-} from '~/src/services/-addresses-{id}-put.schemas';
+import type { ModelsAddress } from '~/src/services/-addresses-default-get.schemas';
+import { getGetAddressesQueryKey, useGetAddresses } from '~/src/services/-addresses-get';
+import { usePostAddresses } from '~/src/services/-addresses-post';
 import type {
   DtoCreateAddressRequest,
   DtoCreateAddressRequestAddressType
 } from '~/src/services/-addresses-post.schemas';
-import type { ModelsAddress } from '~/src/services/-addresses-default-get.schemas';
+
+import { addressFormSchema } from '../account.schema';
 
 export function AccountAddresses() {
   const queryClient = useQueryClient();

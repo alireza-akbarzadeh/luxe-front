@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+
 import { useUser } from '@/hooks/useUser';
 
 export function AccountHeader() {

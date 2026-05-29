@@ -1,10 +1,12 @@
 'use client';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Separator } from '@/components/ui/separator';
 import { IconLock, IconShieldCheck } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+import { Separator } from '@/components/ui/separator';
 import { useCartController } from '@/hooks/useCartController';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
+
 import { useCheckoutStore } from '../store/checkout.store';
 
 interface CheckoutSummaryProps {

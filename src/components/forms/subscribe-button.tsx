@@ -1,8 +1,10 @@
+import { IconLoader2 } from '@tabler/icons-react';
 import type { ComponentProps } from 'react';
+
 import { cn } from '@/lib/utils';
+
 import { Button } from '../ui/button';
 import { useFormContext } from './useFormContext';
-import { IconLoader2 } from '@tabler/icons-react';
 
 export function SubscribeButton({
   className,

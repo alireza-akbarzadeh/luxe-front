@@ -1,4 +1,7 @@
+import { IconFileText, IconSettings, IconUser } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+
 import {
   CommandDialog,
   CommandEmpty,
@@ -8,10 +11,9 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command';
-import { ICON_MAP, type SidebarGroup } from '../data';
-import { useRouter } from 'next/navigation';
+
 import { useDashboardStore } from '../admin.store';
-import { IconFileText, IconSettings, IconUser } from '@tabler/icons-react';
+import { ICON_MAP, type SidebarGroup } from '../data';
 
 type IconMapType = Record<string, React.ComponentType<{ className?: string }>>;
 

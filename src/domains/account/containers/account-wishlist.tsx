@@ -1,18 +1,19 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { IconHeart, IconHeartFilled, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
-import { usePostProductsIdLike } from '~/src/services/-products-{id}-like-post';
-import { Button } from '~/src/components/ui/button';
-import { toast } from 'sonner';
+import { IconChevronLeft, IconChevronRight,IconHeart, IconHeartFilled } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
+import { Button } from '~/src/components/ui/button';
+import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
 import { getGetAccountWishlistQueryKey } from '~/src/services/-account-wishlist-get';
+import { usePostProductsIdLike } from '~/src/services/-products-{id}-like-post';
 
 const PAGE_SIZE = 9;
 
-export function AccountWhishlist() {
+export function AccountWishlist() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
   const queryClient = useQueryClient();
@@ -20,8 +21,7 @@ export function AccountWhishlist() {
   const {
     data: response,
     isLoading,
-    isError,
-    error
+    isError
   } = useGetAccountWishlist({
     limit: PAGE_SIZE,
     offset

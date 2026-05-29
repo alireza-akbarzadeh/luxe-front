@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from '@/lib/utils';
+
 import { useFormContext } from './useFormContext';
 
 export function ErrorMessages({ className }: { className?: string }) {

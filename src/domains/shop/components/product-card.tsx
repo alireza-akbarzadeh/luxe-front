@@ -1,10 +1,11 @@
-import { LikeButton } from '@/components/buttons/like-button';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
 import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+
+import { LikeButton } from '@/components/buttons/like-button';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { type CartItemPayload,useCartController } from '@/hooks/useCartController';
 import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 
 export interface ProductCardProps {

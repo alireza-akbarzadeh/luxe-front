@@ -1,13 +1,15 @@
 'use client';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { IconMinus, IconPlus, IconShoppingBag, IconTrash } from '@tabler/icons-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { IconMinus, IconPlus, IconShoppingBag, IconTrash } from '@tabler/icons-react';
-import { useCartStore } from '~/src/store/card.store';
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCartController } from '@/hooks/useCartController';
-import Link from 'next/link';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
+import { useCartStore } from '~/src/store/card.store';
 
 export function CartSheet() {
   const setOpen = useCartStore((s) => s.setOpen);
@@ -93,7 +95,7 @@ export function CartSheet() {
                         className='shrink-0'
                       >
                         <div className='bg-muted h-24 w-20 overflow-hidden rounded-md'>
-                          <img
+                          <Image
                             src={item.image || '/placeholder.png'}
                             alt={item.name || 'Product'}
                             className='h-full w-full object-cover transition-transform hover:scale-105'

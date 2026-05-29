@@ -1,8 +1,9 @@
 'use client';
-import { cn } from '@/lib/utils';
 import { IconLayoutGrid, IconLayoutList, IconStack3 } from '@tabler/icons-react';
+
 import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
 import type { ViewMode } from '@/domains/store/store.types';
+import { cn } from '@/lib/utils';
 
 const MODES: { value: ViewMode; icon: typeof IconLayoutGrid; label: string }[] = [
   { value: 'grid', icon: IconLayoutGrid, label: 'Grid view' },

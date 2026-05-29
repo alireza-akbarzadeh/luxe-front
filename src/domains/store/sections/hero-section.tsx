@@ -1,12 +1,13 @@
 'use client';
-import { motion } from 'framer-motion';
-import { useStoresFilters } from '../hooks/useStoresFilter';
-
-import { TRENDING_CATEGORIES } from '../constants';
-import { CategoryPill } from '../components/category-pill';
-import { Input } from '@/components/ui/input';
-import { stagger, fadeUp } from '../store.utils';
 import { IconSearch, IconSparkles } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+
+import { Input } from '@/components/ui/input';
+
+import { CategoryPill } from '../components/category-pill';
+import { TRENDING_CATEGORIES } from '../constants';
+import { useStoresFilters } from '../hooks/useStoresFilter';
+import { fadeUp,stagger } from '../store.utils';
 
 export function StoreHeroSection() {
   const { filters, setFilters } = useStoresFilters();

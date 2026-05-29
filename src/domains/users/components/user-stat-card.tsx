@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function UserStatCard({ label, value, change, pulse, color }: any) {
   return (
     <div className='bg-muted/20 border-border/40 rounded-2xl border p-5'>

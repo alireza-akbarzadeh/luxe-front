@@ -1,12 +1,13 @@
+import { IconSearch } from '@tabler/icons-react';
 import { Command as CommandPrimitive } from 'cmdk';
 import type { ComponentProps } from 'react';
 import * as React from 'react';
-import { cn } from '@/lib/utils';
-import { Dialog, DialogContent } from './dialog';
 
-import { Drawer, DrawerContent } from './drawer';
-import { IconSearch } from '@tabler/icons-react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { cn } from '@/lib/utils';
+
+import { Dialog, DialogContent } from './dialog';
+import { Drawer, DrawerContent } from './drawer';
 
 function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive>) {
   return (

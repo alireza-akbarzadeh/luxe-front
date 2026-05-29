@@ -37,9 +37,8 @@ interface BulkActionsProps<TData> {
 
 export type {
   BodyProps,
+  BulkActionsProps,
   FilterTabsProps,
   SearchProps,
-  StatusOption,
   StatusFiltersProps,
-  BulkActionsProps
-};
+  StatusOption};

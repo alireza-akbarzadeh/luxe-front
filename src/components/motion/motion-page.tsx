@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react';
-import { motion } from '@/components/motion';
 import type { Variants } from 'framer-motion';
+import type { ReactNode } from 'react';
+
+import { motion } from '@/components/motion';
 
 interface AnimatedPageProps {
   children: ReactNode;

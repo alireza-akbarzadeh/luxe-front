@@ -14,6 +14,8 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
+
+import { useMediaDevices } from '../hooks/useMediaDevices';
 import {
   Sheet,
   SheetContent,
@@ -22,7 +24,6 @@ import {
   SheetTitle,
   SheetTrigger
 } from './ui/sheet';
-import { useMediaDevices } from '../hooks/useMediaDevices';
 
 interface AppDialogProps {
   trigger?: React.ReactNode;

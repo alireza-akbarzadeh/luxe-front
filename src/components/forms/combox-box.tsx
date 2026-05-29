@@ -1,4 +1,6 @@
+import { IconCheck, IconChevronDown, type TablerIcon } from '@tabler/icons-react';
 import React from 'react';
+
 import { motion } from '@/components/motion';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,8 +13,8 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
 import { useFieldContext } from './useFormContext';
-import { IconCheck, IconChevronDown, type TablerIcon } from '@tabler/icons-react';
 
 interface CompactSelectProps<TOption> {
   props: {

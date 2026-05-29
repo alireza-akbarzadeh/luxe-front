@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
 import ProductDetailDomain from '~/src/domains/product/product-detail-domain';
 import { prefetchWithAuth } from '~/src/lib/prefetch-with-auth';
 import { getGetProductsIdQueryOptions } from '~/src/services/-products-{id}-get';

@@ -1,5 +1,6 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
+
 import { ShopDomain } from '~/src/domains/shop/shop.domain';
 import { getQueryClient } from '~/src/lib/query-client';
 import { getGetProductsQueryOptions } from '~/src/services/-products-get';

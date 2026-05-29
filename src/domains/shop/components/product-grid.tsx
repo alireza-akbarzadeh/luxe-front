@@ -1,9 +1,11 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { AnimatePresence, motion } from 'framer-motion';
+
+import { Button } from '@/components/ui/button';
+import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
+
 import { useProductFilters } from '../useProductFilters';
 import { ProductCard } from './product-card';
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
 
 interface ProductGridDataProps {
   products: GetProducts200DataProductsItem[];

@@ -1,15 +1,17 @@
 'use client';
 
-import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useMemo, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetProducts } from '~/src/services/-products-get';
 import type { GetProductsParams } from '~/src/services/-products-get.schemas';
-import { ProductCard } from '@/domains/shop/components/product-card';
-import { SectionHeader } from './section-header';
-import { ProductGridSkeleton } from './product-grid-skeleton';
+
 import { mapProductForCard, resolveProducts, sectionContainerClass } from '../lib/home-utils';
+import { ProductGridSkeleton } from './product-grid-skeleton';
+import { SectionHeader } from './section-header';
 
 type ProductTab = 'featured' | 'new' | 'trending';
 

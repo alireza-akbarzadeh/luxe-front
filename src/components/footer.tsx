@@ -1,12 +1,12 @@
 'use client';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
 import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTwitter,
   IconBrandYoutube
 } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const footerLinks = {
   shop: [

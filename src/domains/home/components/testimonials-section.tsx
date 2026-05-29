@@ -1,11 +1,12 @@
 'use client';
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { IconQuote, IconStar } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
 import { testimonials } from '../lib/home-mock-data';
-import { SectionHeader } from './section-header';
 import { sectionContainerClass } from '../lib/home-utils';
+import { SectionHeader } from './section-header';
 
 export function TestimonialsSection() {
   return (

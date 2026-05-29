@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { useGetCompare, getGetCompareQueryKey } from '~/src/services/-compare-get';
+
+import { getGetCompareQueryKey,useGetCompare } from '~/src/services/-compare-get';
 import { postCompare } from '~/src/services/-compare-post';
 import { usePutCompare } from '~/src/services/-compare-put';
-import { useState } from 'react';
 
 export default function useCompareController() {
   const queryClient = useQueryClient();

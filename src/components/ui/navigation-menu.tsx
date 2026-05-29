@@ -1,8 +1,9 @@
 'use client';
 
-import * as React from 'react';
-import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui';
 import { IconChevronDown } from '@tabler/icons-react';
+import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui';
+import * as React from 'react';
+
 import { cn } from '@/lib/utils';
 
 const NavigationMenu = React.forwardRef<
@@ -146,12 +147,11 @@ NavigationMenuListItem.displayName = 'NavigationMenuListItem';
 
 export {
   NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
   NavigationMenuContent,
-  NavigationMenuTrigger,
-  NavigationMenuLink,
   NavigationMenuIndicator,
-  NavigationMenuViewport,
-  NavigationMenuListItem
-};
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuListItem,
+  NavigationMenuTrigger,
+  NavigationMenuViewport};

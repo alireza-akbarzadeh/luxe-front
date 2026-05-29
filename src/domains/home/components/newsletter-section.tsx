@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { IconArrowRight, IconCircleCheck, IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { IconArrowRight, IconCircleCheck, IconMail } from '@tabler/icons-react';
+
 import { sectionContainerClass } from '../lib/home-utils';
 
 export function NewsletterSection() {

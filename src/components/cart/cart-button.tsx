@@ -1,11 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
 import { IconShoppingBag } from '@tabler/icons-react';
+import { AnimatePresence,motion } from 'framer-motion';
+
+import { Button } from '@/components/ui/button';
+import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '~/src/store/card.store';
-import { useCartController } from '@/hooks/useCartController';
 
 interface CartButtonProps {
   showLabel?: boolean;

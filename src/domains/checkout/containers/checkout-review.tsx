@@ -1,9 +1,11 @@
 // app/checkout/components/checkout-review.tsx
-import { Button } from '@/components/ui/button';
 import { IconCreditCard, IconPackage, IconTruck } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
 import { useCartController } from '~/src/hooks/useCartController';
+
 import type { CheckoutFormValues } from '../checkout.schema';
 
 interface CheckoutReviewProps {

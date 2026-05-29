@@ -1,7 +1,8 @@
 'use client';
-import { Card } from '@/components/ui/card';
 import { IconShield, IconStar } from '@tabler/icons-react';
 import Image from 'next/image';
+
+import { Card } from '@/components/ui/card';
 import type { DtoCompareProductResponse } from '~/src/services/-compare-post.schemas';
 
 interface CompareSummaryProps {

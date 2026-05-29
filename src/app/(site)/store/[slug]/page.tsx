@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
 import { StoreDomain } from '~/src/domains/store/containers/store.domain';
 import { prefetchWithAuth } from '~/src/lib/prefetch-with-auth';
 import { getGetStoresSlugQueryOptions } from '~/src/services/-stores-{slug}-get';

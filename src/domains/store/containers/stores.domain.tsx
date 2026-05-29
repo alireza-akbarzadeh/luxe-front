@@ -1,8 +1,9 @@
 'use client';
 import { useMemo } from 'react';
+
 import { SortDropdown } from '@/domains/store/components/sort-dropdown';
 import { StoresGridSkeleton } from '@/domains/store/components/store-cart-skeleton';
-
+import { EmptyState } from '@/domains/store/components/store-empty-state';
 import { StorePagination } from '@/domains/store/components/store-pagination';
 import { ViewModeToggle } from '@/domains/store/components/view-mode-toggle';
 import { PAGE_SIZE } from '@/domains/store/constants';
@@ -13,7 +14,6 @@ import { StoreHeroSection } from '@/domains/store/sections/hero-section';
 import { MobileFilterSheet } from '@/domains/store/sections/mobile-filter-sheet';
 import { StoresVirtualList } from '@/domains/store/sections/store-virtual-list';
 import { StoresGrid } from '@/domains/store/sections/stores-grid';
-import { EmptyState } from '@/domains/store/components/store-empty-state';
 import { useGetStores } from '@/services/-stores-get';
 
 export function StoresDomain() {

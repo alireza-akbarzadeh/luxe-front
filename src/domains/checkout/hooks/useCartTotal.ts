@@ -1,5 +1,6 @@
 // app/checkout/hooks/useCartTotal.ts (or rename to useCheckoutTotals)
 import { useCartController } from '~/src/hooks/useCartController';
+
 import { useCheckoutStore } from '../store/checkout.store';
 
 export function useCheckoutTotals() {

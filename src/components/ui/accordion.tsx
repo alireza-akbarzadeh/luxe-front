@@ -1,7 +1,8 @@
+import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { Accordion as AccordionPrimitive } from 'radix-ui';
 import type * as React from 'react';
+
 import { cn } from '@/lib/utils';
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 
 function Accordion({ className, ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
   return (
@@ -78,4 +79,4 @@ function AccordionContent({
   );
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionContent,AccordionItem, AccordionTrigger };

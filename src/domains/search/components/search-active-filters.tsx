@@ -1,9 +1,11 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { useSearchParams } from '../hooks/useSearchParams';
 import { IconX } from '@tabler/icons-react';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+
+import { useSearchParams } from '../hooks/useSearchParams';
 
 export function SearchActiveFilters() {
   const searchParams = useSearchParams();

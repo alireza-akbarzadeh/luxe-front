@@ -1,18 +1,19 @@
 'use client';
 
+import { IconShoppingCart, IconTag } from '@tabler/icons-react';
+import Image from 'next/image';
+import { useMemo } from 'react';
+
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
-import { IconShoppingCart, IconTag } from '@tabler/icons-react';
-import Image from 'next/image';
-import { useSearchParams } from '../hooks/useSearchParams';
 import { Button } from '~/src/components/ui/button';
-import { useMemo } from 'react';
 import type {
+  DtoCategoryResponse,
   DtoProductResponse,
-  DtoStoreResponse,
-  DtoCategoryResponse
-} from '~/src/services/-search-get.schemas';
+  DtoStoreResponse} from '~/src/services/-search-get.schemas';
+
+import { useSearchParams } from '../hooks/useSearchParams';
 
 interface SearchFilterContentProps {
   products: DtoProductResponse[];

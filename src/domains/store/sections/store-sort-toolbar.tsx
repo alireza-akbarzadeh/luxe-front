@@ -1,4 +1,12 @@
 'use client';
+import {
+  IconArrowsUpDown,
+  IconFileHorizontal,
+  IconGrid3x3,
+  IconLayoutGrid,
+  IconSearch
+} from '@tabler/icons-react';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,16 +17,10 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { sortOptions } from '@/domains/store/constants';
-import {
-  IconArrowsUpDown,
-  IconFileHorizontal,
-  IconGrid3x3,
-  IconLayoutGrid,
-  IconSearch
-} from '@tabler/icons-react';
-import { useStoreFilters } from '../hooks/useStoreFilter';
-import { useStoreStore } from '~/src/domains/store/hooks/useStoreStore';
 import { Badge } from '~/src/components/ui/badge';
+import { useStoreStore } from '~/src/domains/store/hooks/useStoreStore';
+
+import { type SortBy, useStoreFilters } from '../hooks/useStoreFilter';
 
 export function StoreToolbar() {
   const {
@@ -56,7 +58,7 @@ export function StoreToolbar() {
             </Badge>
           )}
         </Button>
-        <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
+        <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortBy)}>
           <SelectTrigger className='w-45'>
             <IconArrowsUpDown className='mr-2 h-4 w-4' />
             <SelectValue />

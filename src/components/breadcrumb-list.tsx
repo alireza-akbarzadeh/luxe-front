@@ -1,13 +1,14 @@
 'use client';
 
 import { IconArrowLeft } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
@@ -44,24 +45,26 @@ export function DynamicBreadcrumb({
 }: DynamicBreadcrumbProps) {
   const router = useRouter();
 
-  let breadcrumbItems: BreadcrumbItemType[] = [];
+  const breadcrumbItems: BreadcrumbItemType[] = propItems
+    ? [{ label: homeLabel, href: '/' }, ...propItems]
+    : segments?.length
+      ? [
+          { label: homeLabel, href: '/' },
+          ...segments.map((segment, index) => {
+            const isLast = index === segments.length - 1;
 
-  if (propItems) {
-    breadcrumbItems = [{ label: homeLabel, href: '/' }, ...propItems];
-  } else if (segments && segments.length > 0) {
-    let currentPath = '';
-    const segmentItems = segments.map((segment, index) => {
-      const isLast = index === segments.length - 1;
-      currentPath += `/${segment.toLowerCase().replace(/\s+/g, '-')}`;
-      return {
-        label: segment,
-        href: isLast ? undefined : currentPath
-      };
-    });
-    breadcrumbItems = [{ label: homeLabel, href: '/' }, ...segmentItems];
-  } else {
-    breadcrumbItems = [{ label: homeLabel, href: '/' }];
-  }
+            const path = segments
+              .slice(0, index + 1)
+              .map((s) => s.toLowerCase().replace(/\s+/g, '-'))
+              .join('/');
+
+            return {
+              label: segment,
+              href: isLast ? undefined : `/${path}`
+            };
+          })
+        ]
+      : [{ label: homeLabel, href: '/' }];
 
   const handleBack = () => {
     if (onBack) onBack();
@@ -90,8 +93,9 @@ export function DynamicBreadcrumb({
         <BreadcrumbList>
           {breadcrumbItems.map((item, idx) => {
             const isLast = idx === breadcrumbItems.length - 1;
+
             return (
-              <BreadcrumbItem key={idx}>
+              <BreadcrumbItem key={`${item.label}-${idx}`}>
                 {item.href && !isLast ? (
                   <BreadcrumbLink asChild>
                     <Link href={item.href}>{item.label}</Link>
@@ -99,6 +103,7 @@ export function DynamicBreadcrumb({
                 ) : (
                   <BreadcrumbPage>{item.label}</BreadcrumbPage>
                 )}
+
                 {!isLast &&
                   (separator ? <span className='mx-1'>{separator}</span> : <BreadcrumbSeparator />)}
               </BreadcrumbItem>

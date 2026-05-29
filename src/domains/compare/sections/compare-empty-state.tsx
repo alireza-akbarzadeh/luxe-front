@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button';
 import { IconLayersIntersect2, IconPlus } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+
 import { AppDialog } from '@/components/app-dialog';
+import { Button } from '@/components/ui/button';
 import { CompareDialogContent } from '@/domains/compare/components/compare-dialog-content';
 
 export function CompareEmptyState() {

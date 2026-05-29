@@ -1,5 +1,4 @@
 'use client';
-import { Card } from '@/components/ui/card';
 import {
   IconCheck,
   IconLayersSelected,
@@ -9,6 +8,8 @@ import {
   IconStar,
   IconTruck
 } from '@tabler/icons-react';
+
+import { Card } from '@/components/ui/card';
 import { AppDialog } from '~/src/components/app-dialog';
 import { CompareDialogContent } from '~/src/domains/compare/components/compare-dialog-content';
 import { CompareProductCard } from '~/src/domains/compare/components/compare-product-card';
@@ -18,8 +19,6 @@ import type { DtoCompareProductResponse } from '~/src/services/-compare-post.sch
 export function CompareTable() {
   const {
     compareProducts: products,
-    removeItem,
-    addItem,
     canAddMore,
     highlightDiffs,
     setHighlightDiffs

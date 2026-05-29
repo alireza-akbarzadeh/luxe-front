@@ -1,6 +1,7 @@
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
 import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
 import type { ModelsProduct } from '~/src/services/-categories-get.schemas';
+import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
+
 import {
   CATEGORY_IMAGES,
   FALLBACK_CATEGORY_IMAGES,
@@ -14,7 +15,7 @@ export function getCategoryImage(category: ModelsCategory, index: number): strin
 
   for (const key of Object.keys(CATEGORY_IMAGES)) {
     if (key !== 'default' && (slug.includes(key) || name.includes(key))) {
-      return CATEGORY_IMAGES[key]!;
+      return CATEGORY_IMAGES[key as keyof typeof CATEGORY_IMAGES];
     }
   }
 

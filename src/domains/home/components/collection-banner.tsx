@@ -1,11 +1,13 @@
 'use client';
 
+import { IconArrowRight } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { IconArrowRight } from '@tabler/icons-react';
+
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
 import { COLLECTION_BANNERS } from '../lib/home-mock-data';
 import { sectionContainerClass } from '../lib/home-utils';
 

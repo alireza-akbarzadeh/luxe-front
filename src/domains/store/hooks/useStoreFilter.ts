@@ -1,18 +1,18 @@
 // hooks/useStoreFilter.ts (updated)
 'use client';
 
-import { useMemo, useCallback } from 'react';
 import {
-  useQueryStates,
+  debounce,
+  parseAsBoolean,
   parseAsInteger,
   parseAsString,
-  parseAsBoolean,
   parseAsStringLiteral,
-  debounce
+  useQueryStates
 } from 'nuqs';
+import { useCallback, useMemo } from 'react';
 
 type GridCols = 3 | 4;
-type SortBy = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'rating';
+export type SortBy = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'rating';
 
 const sortValues = ['featured', 'newest', 'price-asc', 'price-desc', 'rating'] as const;
 

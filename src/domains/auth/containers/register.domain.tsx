@@ -1,18 +1,20 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { IconCheck, IconMail, IconUser, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
+
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { registerAction } from '~/src/actions/auth.actions';
 import { useAppForm } from '~/src/components/forms/useAppForm';
+
 import { registerFormSchema } from '../auth.schema';
-import { getPasswordStrength, passwordRequirements } from '../utils.auth';
 import { RegisterSidebar } from '../components/register-sidebar';
+import { getPasswordStrength, passwordRequirements } from '../utils.auth';
 
 export function RegisterDomain() {
   const router = useRouter();

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   IconBell,
   IconChevronRight,
@@ -13,6 +12,7 @@ import {
   IconSun,
   IconUserCircle
 } from '@tabler/icons-react';
+import { AnimatePresence,motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 
 import {
@@ -22,12 +22,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-
 import { cn } from '@/lib/utils';
-import { logoutAction } from '../../actions/auth.actions';
-import { useUser } from '../../hooks/useUser';
 import { MenuButton } from '~/src/components/navbar/menu-button';
 import { MenuLink } from '~/src/components/navbar/menu-link';
+
+import { logoutAction } from '../../actions/auth.actions';
+import { useUser } from '../../hooks/useUser';
 
 interface UserProfileProps {
   className?: string;

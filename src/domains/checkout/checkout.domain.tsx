@@ -1,11 +1,13 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { useCartController } from '@/hooks/useCartController';
-import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { useCartController } from '@/hooks/useCartController';
+import { useGetShippingProviders } from '@/services/-shipping-providers-get';
+
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutSteps } from './components/checkout-steps';

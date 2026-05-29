@@ -1,11 +1,13 @@
 // https://shadcn-phone-input.vercel.app/
 // FIXME: getVirtualItems() always returns an empty array with React Compiler, 'use no memo' is a temporary solution
 
+import { IconChevronDown } from '@tabler/icons-react';
 import type { Virtualizer } from '@tanstack/react-virtual';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { ComponentProps, PropsWithChildren } from 'react';
 import { useState } from 'react';
 import * as PhoneInputPrimitive from 'react-phone-number-input';
+
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -27,11 +29,11 @@ import {
 import { TwemojiFlag } from '@/components/ui/twemoji';
 import { useDynamicNode } from '@/hooks/useDynamicNode';
 import { cn } from '@/lib/utils';
+import { createContextFactory } from '~/src/hooks/useContextFactory';
+import { useMediaDevices } from '~/src/hooks/useMediaDevices';
+
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
-import { useMediaDevices } from '~/src/hooks/useMediaDevices';
-import { createContextFactory } from '~/src/hooks/useContextFactory';
-import { IconChevronDown } from '@tabler/icons-react';
 
 type InputPhoneProps = Omit<
   ComponentProps<typeof PhoneInputPrimitive.default>,
@@ -48,6 +50,7 @@ export function InputPhone({ label, className, ...props }: InputPhoneProps) {
         {...props}
         value={field.state.value}
         onChange={(value) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           field.handleChange(() => value as any);
         }}
         onBlur={field.handleBlur}

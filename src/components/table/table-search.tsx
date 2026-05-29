@@ -1,7 +1,9 @@
 import { IconSearch } from '@tabler/icons-react';
 import type * as React from 'react';
+
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+
 import { useTableContext } from './table-context';
 
 // --- Types ---

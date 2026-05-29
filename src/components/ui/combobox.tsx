@@ -1,12 +1,18 @@
 'use no memo';
 
-import {} from 'radix-ui';
+import { IconCheck, IconChevronDown } from '@tabler/icons-react';
 import type { Virtualizer } from '@tanstack/react-virtual';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import {} from 'radix-ui';
 import type { PropsWithChildren } from 'react';
 import { useState } from 'react';
+
+import { useControllableState } from '@/hooks/useControllableState';
 import { useDynamicNode } from '@/hooks/useDynamicNode';
 import { cn } from '@/lib/utils';
+import { createContextFactory } from '~/src/hooks/useContextFactory';
+import { useMediaDevices } from '~/src/hooks/useMediaDevices';
+
 import { Button } from './button';
 import {
   Command,
@@ -19,10 +25,6 @@ import {
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from './drawer';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { ScrollAreaRoot, ScrollBar, ScrollCorner, ScrollViewport } from './scroll-area';
-import { createContextFactory } from '~/src/hooks/useContextFactory';
-import { useMediaDevices } from '~/src/hooks/useMediaDevices';
-import { IconCheck, IconChevronDown } from '@tabler/icons-react';
-import { useControllableState } from '@/hooks/useControllableState';
 
 interface ComboboxOption {
   label: string;

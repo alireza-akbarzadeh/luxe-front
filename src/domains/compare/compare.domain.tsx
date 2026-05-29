@@ -5,6 +5,7 @@ import { CompareEmptyState } from '@/domains/compare/sections/compare-empty-stat
 import { CompareHeader } from '@/domains/compare/sections/compare-header';
 import { CompareSummary } from '@/domains/compare/sections/compare-summary';
 import { CompareTable } from '@/domains/compare/sections/compare-table';
+
 import useCompareController from './hooks/useCompareController';
 
 export function CompareDomain() {

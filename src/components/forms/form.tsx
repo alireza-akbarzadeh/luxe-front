@@ -1,12 +1,14 @@
 import type { ComponentProps } from 'react';
 import React from 'react';
+
 import { Label } from '@/components/ui/label';
 import type { AsChildProps } from '@/components/ui/slot';
 import { Slot } from '@/components/ui/slot';
 import { cn } from '@/lib/utils';
+
 import { useFieldContext } from './useFormContext';
 
-interface FieldLabelProps extends ComponentProps<typeof Label> {}
+type FieldLabelProps = ComponentProps<typeof Label>;
 interface FieldDetailProps extends ComponentProps<'p'>, AsChildProps {}
 interface FieldMessageProps extends ComponentProps<'p'>, AsChildProps {}
 interface FieldContainerProps extends ComponentProps<'div'> {
@@ -55,7 +57,7 @@ export function FieldMessage({ asChild, className, children, ...props }: FieldMe
   const message = React.useMemo(() => {
     if (!rawError) return null;
     if (typeof rawError === 'string') return rawError;
-    if (typeof rawError === 'object' && 'message' in rawError) return (rawError as any).message;
+    if (typeof rawError === 'object' && 'message' in rawError) return rawError.message;
     return String(rawError);
   }, [rawError]);
 

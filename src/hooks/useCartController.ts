@@ -1,3 +1,5 @@
+// FIXME: find correct types and remove any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // hooks/useCartController.ts
 'use client';
 
@@ -5,11 +7,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { getGetCartQueryKey, useGetCart } from '../services/-cart-get';
-import { useDeleteCartItems } from '../services/-cart-items-delete';
-import { usePostCartItems } from '../services/-cart-items-post';
 import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
 import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
-
+import { useDeleteCartItems } from '../services/-cart-items-delete';
+import { usePostCartItems } from '../services/-cart-items-post';
 import { useUser } from './useUser';
 
 export interface CartItemPayload {
@@ -105,7 +106,7 @@ export const useCartController = () => {
               item.selected_size === newItem.data.size
           );
 
-          let updatedItems = [...currentItems];
+          const updatedItems = [...currentItems];
 
           if (existingIndex !== -1) {
             updatedItems[existingIndex] = {

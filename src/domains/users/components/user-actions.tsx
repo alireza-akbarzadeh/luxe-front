@@ -1,10 +1,11 @@
+import { IconMoodShare } from '@tabler/icons-react';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { IconMoodShare } from '@tabler/icons-react';
 import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
 
 interface UserActionsProps {

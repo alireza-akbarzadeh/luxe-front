@@ -1,12 +1,14 @@
 'use client';
+import { IconMapPin, IconPackage, IconTruck, IconUsers } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { VerifiedBadge } from './verified-badge';
-import { type ModelsStoreReview } from '@/domains/store/store.types';
-import { IconMapPin, IconPackage, IconTruck, IconUsers } from '@tabler/icons-react';
+
 import { FollowButton } from '@/components/buttons/follow-button';
 import { StoreRatingStars } from '@/domains/store/components/store-rating-start';
+import { type ModelsStoreReview } from '@/domains/store/store.types';
 import { formatCount } from '@/domains/store/store.utils';
+
+import { VerifiedBadge } from './verified-badge';
 
 export function StoreListItem({ store }: { store: ModelsStoreReview }) {
   return (

@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { IconArrowRight, IconTag } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
 import { sectionContainerClass } from '../lib/home-utils';
 
 const PROMO_END = new Date('2026-06-30T23:59:59');

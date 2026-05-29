@@ -1,13 +1,15 @@
+import { IconEye, IconEyeOff, IconLock, type TablerIcon } from '@tabler/icons-react';
+import Link from 'next/link';
 import type { ComponentProps } from 'react';
 import { useId, useState } from 'react';
+
 import { cn } from '@/lib/utils';
+
+import { PropsProvider } from '../props-provider';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
-import { PropsProvider } from '../props-provider';
-import { IconEye, IconEyeOff, IconLock, type TablerIcon } from '@tabler/icons-react';
-import Link from 'next/link';
 
 export function InputPassword({
   label = 'Password',

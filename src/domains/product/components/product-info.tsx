@@ -1,17 +1,19 @@
 'use client';
 import { IconBasket, IconCheck, IconChevronRight, IconStar } from '@tabler/icons-react';
-import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { useState } from 'react';
+
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { type CartItemPayload,useCartController } from '@/hooks/useCartController';
 import type { DtoProductResponse } from '@/services/-products-get.schemas';
+
 import { ProductBadges } from './product-badges';
 import ProductColors from './product-colors';
 import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
-import { useCartController, type CartItemPayload } from '@/hooks/useCartController';
-import { useState } from 'react';
-import Link from 'next/link';
 
 interface ProductInfoProps {
   product: DtoProductResponse;

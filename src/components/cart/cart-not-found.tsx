@@ -2,6 +2,7 @@
 import { IconArrowLeft, IconBasket } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+
 import { Button } from '~/src/components/ui/button';
 
 export function CartNotFound() {

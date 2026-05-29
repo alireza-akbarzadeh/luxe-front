@@ -1,12 +1,12 @@
 import { IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+
+import { Badge } from '~/src/components/ui/badge';
 import { Button } from '~/src/components/ui/button';
 import { useCartController } from '~/src/hooks/useCartController';
-import { Badge } from '~/src/components/ui/badge';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
-import { getContrastColor } from '~/src/lib/colros';
 
 interface CartItemProps {
   cart: DtoCartItemDetail;

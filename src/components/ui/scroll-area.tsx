@@ -1,5 +1,6 @@
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui';
 import type { ComponentProps } from 'react';
+
 import { cn } from '@/lib/utils';
 
 function ScrollArea({ children, ...props }: ComponentProps<typeof ScrollAreaPrimitive.Root>) {

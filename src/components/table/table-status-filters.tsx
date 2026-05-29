@@ -1,4 +1,6 @@
+import { IconCheck, IconChevronDown, IconRotateClockwise } from '@tabler/icons-react';
 import React from 'react';
+
 import {
   Command,
   CommandEmpty,
@@ -8,11 +10,11 @@ import {
   CommandList
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
+
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { useTableContext } from './table-context';
 import type { StatusFiltersProps } from './table-types';
-import { IconCheck, IconChevronDown, IconRotateClockwise } from '@tabler/icons-react';
 
 export const TableStatusFilters = ({ columnId, options, title = 'Status' }: StatusFiltersProps) => {
   const { table } = useTableContext();

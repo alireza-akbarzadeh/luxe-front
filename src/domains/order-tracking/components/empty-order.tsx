@@ -1,5 +1,6 @@
 import { IconBasket } from '@tabler/icons-react';
 import Link from 'next/link';
+
 import { Empty } from '@/components/empty';
 import { Button } from '@/components/ui/button';
 

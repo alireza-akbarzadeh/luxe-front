@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 
 export function useControllableState<T>({
   prop,
@@ -9,28 +9,23 @@ export function useControllableState<T>({
   onChange?: (value: T) => void;
   defaultProp?: T;
 }): [T, (nextValue: T) => void] {
-  const [internalValue, setInternalValue] = useState<T>(defaultProp as T);
   const isControlled = prop !== undefined;
-  const value = isControlled ? prop : internalValue;
+
+  const [internalValue, setInternalValue] = useState<T>(() => {
+    return (defaultProp as T) ?? (prop as T);
+  });
+
+  const value = isControlled ? (prop as T) : internalValue;
 
   const setValue = useCallback(
     (nextValue: T) => {
-      if (isControlled) {
-        onChange?.(nextValue);
-      } else {
+      if (!isControlled) {
         setInternalValue(nextValue);
-        onChange?.(nextValue);
       }
+      onChange?.(nextValue);
     },
     [isControlled, onChange]
   );
-
-  // Sync internal state when controlled prop changes
-  useEffect(() => {
-    if (isControlled && prop !== internalValue) {
-      setInternalValue(prop);
-    }
-  }, [isControlled, prop, internalValue]);
 
   return [value, setValue];
 }

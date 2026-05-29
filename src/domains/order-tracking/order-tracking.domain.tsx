@@ -1,10 +1,13 @@
 'use client';
 
-import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { IconCalendar, IconCheckbox, IconMapPin } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
+import { notFound } from 'next/navigation';
+
+import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
+
 import { OrderBoxNumebr } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
@@ -14,7 +17,6 @@ import { PaymentDetails } from './components/payment-details';
 import { ShipmentTraking } from './components/shipment-traking';
 import { TrakingFooter } from './components/traking-footer';
 import { useOrderWebSocket } from './useOrderWebsoket';
-import { notFound } from 'next/navigation';
 
 interface OrderTrackingDomainProps {
   orderId: string;

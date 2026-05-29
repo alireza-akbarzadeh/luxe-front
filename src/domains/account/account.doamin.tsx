@@ -1,18 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-
 import type { ReactNode } from 'react';
-import { AccountAddresses } from './containers/account-addresses';
-import { AccountPayment } from './containers/account-payment';
-import { AccountSetting } from './containers/account-settings';
-import { AccountWhishlist } from './containers/account-wishlist';
-import { AccountOverview } from './containers/account-overview';
-import { AccountOrder } from './containers/account-order';
 
 import { AccountHeader } from './components/account-header';
 import { AccountSidebar } from './components/account-sidebar';
-
+import { AccountAddresses } from './containers/account-addresses';
+import { AccountOrder } from './containers/account-order';
+import { AccountOverview } from './containers/account-overview';
+import { AccountPayment } from './containers/account-payment';
+import { AccountSetting } from './containers/account-settings';
+import { AccountWishlist } from './containers/account-wishlist';
 import { useSidebarTab } from './hooks/useSidebarTab';
 
 export function AccountDomain() {
@@ -23,7 +21,7 @@ export function AccountDomain() {
   const accountTabs: Account = {
     overview: <AccountOverview />,
     orders: <AccountOrder />,
-    wishlist: <AccountWhishlist />,
+    wishlist: <AccountWishlist />,
     addresses: <AccountAddresses />,
     payment: <AccountPayment />,
     settings: <AccountSetting />

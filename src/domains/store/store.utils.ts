@@ -1,4 +1,5 @@
 import type { Variants } from 'framer-motion';
+
 import type { ModelsStoreReview, StoreBadge } from '@/domains/store/store.types';
 import type { DtoStoreResponse } from '~/src/services/-stores-{slug}-get.schemas';
 

@@ -1,14 +1,14 @@
 'use clent';
+import { IconBasket, type TablerIcon } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+
 import {
+  Empty as EmptyUI,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
-  EmptyTitle,
-  Empty as EmptyUI
-} from '@/components/ui/empty';
-import { IconBasket, type TablerIcon } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
+  EmptyTitle} from '@/components/ui/empty';
 interface EmptyProps {
   icon?: TablerIcon;
   title: string;

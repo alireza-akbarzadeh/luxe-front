@@ -1,16 +1,18 @@
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IconChevronRight } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 import { useGetProductsId } from '~/src/services/-products-{id}-get';
+
 import ProductDescription from './components/product-description';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import ProductReviews from './components/product-reviews';
 import { ProductSpecifications } from './components/product-specification';
 import RelatedProduct from './related-product';
-import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
   const { data } = useGetProductsId(productId);

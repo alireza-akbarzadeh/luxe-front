@@ -1,9 +1,11 @@
+import { IconChevronDown } from '@tabler/icons-react';
 import * as React from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
 import { useTableContext } from './table-context';
-import { IconChevronDown } from '@tabler/icons-react';
 
 // --- Types ---
 export interface StatusOption {

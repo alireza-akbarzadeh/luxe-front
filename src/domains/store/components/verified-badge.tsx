@@ -1,5 +1,6 @@
-import { cn } from '@/lib/utils';
 import { IconSquareRoundedCheck } from '@tabler/icons-react';
+
+import { cn } from '@/lib/utils';
 export function VerifiedBadge({ className }: { className?: string }) {
   return (
     <span

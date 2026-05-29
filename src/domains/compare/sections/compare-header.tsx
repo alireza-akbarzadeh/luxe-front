@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { IconTrash } from '@tabler/icons-react';
+
+import { Button } from '@/components/ui/button';
 interface CompareHeaderProps {
   itemCount: number;
   maxCompare: number;

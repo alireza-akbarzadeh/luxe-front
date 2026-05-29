@@ -1,8 +1,9 @@
 'use client';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useSearchParams } from '../hooks/useSearchParams';
+import { IconFilter2, IconGridDots, IconList } from '@tabler/icons-react';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -10,13 +11,12 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-
-import { IconFilter2, IconGridDots, IconList } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { SearchFilterContent } from '../components/search-filter-content';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import type { DtoCategoryResponse, DtoProductResponse } from '@/services/-products-get.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
+
+import { SearchFilterContent } from '../components/search-filter-content';
+import { useSearchParams } from '../hooks/useSearchParams';
 
 const sortOptions = [
   { label: 'Most Relevant', value: 'relevance' },

@@ -1,13 +1,15 @@
 // components/filter-sidebar.tsx
+import { IconChevronDown, IconStar } from '@tabler/icons-react';
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Slider } from '@/components/ui/slider';
-import { IconChevronDown, IconStar } from '@tabler/icons-react';
-import { useStoreFilters } from '../hooks/useStoreFilter';
-import { useState } from 'react';
-import type { DtoCategoryResponse } from '~/src/services/-stores-get.schemas';
 import type { DtoProductResponse } from '~/src/services/-stores-{slug}-products-get.schemas';
+import type { DtoCategoryResponse } from '~/src/services/-stores-get.schemas';
+
+import { useStoreFilters } from '../hooks/useStoreFilter';
 
 interface FilterSidebarProps {
   storeCategories: DtoCategoryResponse[] | undefined;

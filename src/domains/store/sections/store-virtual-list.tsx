@@ -1,12 +1,12 @@
 'use client';
-import { useMemo, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useMemo, useRef } from 'react';
 
-import type { ModelsStoreReview } from '../store.types';
-
-import { StoreListItem } from '../components/store-list-item';
 import { mapStoreToView } from '~/src/domains/store/store.utils';
 import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
+
+import { StoreListItem } from '../components/store-list-item';
+import type { ModelsStoreReview } from '../store.types';
 
 export function StoresVirtualList({ stores }: { stores: DtoStoreResponse[] }) {
   const mappedStores = useMemo(() => stores.map(mapStoreToView), [stores]);

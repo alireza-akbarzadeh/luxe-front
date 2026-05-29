@@ -1,10 +1,12 @@
 'use client';
 
+import { IconFilter } from '@tabler/icons-react';
+
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+
 import { useUIStore } from '../stores.store';
 import { FilterSidebar } from './filter-sidebar';
-import { IconFilter } from '@tabler/icons-react';
 
 export function MobileFilterSheet() {
   const open = useUIStore((s) => s.filterDrawerOpen);

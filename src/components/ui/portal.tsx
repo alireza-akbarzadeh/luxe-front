@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import { Portal as PortalPrimitive } from 'radix-ui';
+import * as React from 'react';
 
 type PortalProps = PortalPrimitive.PortalProps;
 

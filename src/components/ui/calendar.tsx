@@ -1,15 +1,17 @@
 // https://date-picker.luca-felix.com/
 
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { differenceInCalendarDays } from 'date-fns';
 import type { ComponentProps, Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
 import type { CustomComponents, DayPickerProps } from 'react-day-picker';
 import { DayPicker, labelNext, labelPrevious, useDayPicker } from 'react-day-picker';
 import type { Except } from 'type-fest';
+
 import { cn } from '@/lib/utils';
-import { Button, buttonVariants } from './button';
 import { createContextFactory } from '~/src/hooks/useContextFactory';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+
+import { Button, buttonVariants } from './button';
 
 interface CalendarBaseProps {
   /**

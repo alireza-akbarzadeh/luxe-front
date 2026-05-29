@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { Empty } from '@/components/empty';
 import { Button } from '@/components/ui/button';
 import { AnalyticalStats } from '~/src/domains/wishlist/components/analytical-stats';
+import InteractiveActionToolbar from '~/src/domains/wishlist/components/interactive-action-toolbar';
+import { RowWishlistItem } from '~/src/domains/wishlist/components/row-wishlist-item';
+import { StackWishlistItem } from '~/src/domains/wishlist/components/stack-wishlist-item';
+import { WishlistFooter } from '~/src/domains/wishlist/components/wishlist-footer';
 import { useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
 
-import InteractiveActionToolbar from '~/src/domains/wishlist/components/interactive-action-toolbar';
-import { StackWishlistItem } from '~/src/domains/wishlist/components/stack-wishlist-item';
-import { RowWishlistItem } from '~/src/domains/wishlist/components/row-wishlist-item';
-import { WishlistFooter } from '~/src/domains/wishlist/components/wishlist-footer';
 import { WishlistHeader } from './components/wishlist-header';
 
 export function WishlistDomain() {

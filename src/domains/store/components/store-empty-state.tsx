@@ -1,6 +1,7 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { IconBuildingStore, IconSearchOff } from '@tabler/icons-react';
+
+import { Button } from '@/components/ui/button';
 import { useStoresFilters } from '~/src/domains/store/hooks/useStoresFilter';
 
 export function EmptyState() {

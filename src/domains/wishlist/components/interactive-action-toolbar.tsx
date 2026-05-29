@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '~/src/components/ui/select';
-import { useWishlistStore, type SortOption } from '~/src/domains/wishlist/wishlist.store';
+import { type SortOption,useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 import type { DtoWishlistItemDTO } from '~/src/services/-account-wishlist-get.schemas';
 
 interface InteractiveActionToolbarProperties {

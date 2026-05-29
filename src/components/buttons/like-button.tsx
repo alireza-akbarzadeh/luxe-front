@@ -1,14 +1,16 @@
 'use client';
 import { IconHeart } from '@tabler/icons-react';
-import { useQueryClient, type QueryKey } from '@tanstack/react-query';
+import { type QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useOptimistic, useTransition } from 'react';
 import { toast } from 'sonner';
+
+import { cn } from '~/src/hooks/useContextFactory';
 import { getGetProductsIdQueryKey } from '~/src/services/-products-{id}-get';
 import type { GetProductsId200 } from '~/src/services/-products-{id}-get.schemas';
-import type { GetProducts200 } from '~/src/services/-products-get.schemas';
 import { usePostProductsIdLike } from '~/src/services/-products-{id}-like-post';
+import type { GetProducts200 } from '~/src/services/-products-get.schemas';
+
 import { Button } from '../ui/button';
-import { cn } from '~/src/hooks/useContextFactory';
 
 interface LikeButtonProps {
   isLiked: boolean;
@@ -111,7 +113,7 @@ export function LikeButton(props: LikeButtonProps) {
       if (revalidate === 'ProductList') {
         await queryClient.invalidateQueries({ queryKey: ['/products'], exact: false });
       }
-    } catch (error) {
+    } catch {
       // Revert on network errors
       if (previousProductData) queryClient.setQueryData(productQueryKey, previousProductData);
       for (const [key, oldData] of previousListDataMap.entries()) {

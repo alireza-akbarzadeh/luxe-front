@@ -2,11 +2,12 @@
 import { IconUsers } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { type ModelsStoreReview } from '@/domains/store/store.types';
 import { FollowButton } from '~/src/components/buttons/follow-button';
 import { StoreRatingStars } from '~/src/domains/store/components/store-rating-start';
 import { VerifiedBadge } from '~/src/domains/store/components/verified-badge';
 import { formatCount } from '~/src/domains/store/store.utils';
-import { type ModelsStoreReview } from '@/domains/store/store.types';
 
 export function StoreCardCompact({ store }: { store: ModelsStoreReview }) {
   return (

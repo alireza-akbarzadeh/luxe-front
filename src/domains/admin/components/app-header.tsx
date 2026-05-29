@@ -1,18 +1,3 @@
-import * as React from 'react';
-import { NotificationCenter } from './notificaiton-center';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
-import { useDashboardShortcuts } from '../useDahboardShortcut';
-import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
-import { UserProfile } from './user-profile';
 import {
   IconBrandZapier,
   IconLayoutGrid,
@@ -23,8 +8,25 @@ import {
   IconSearch,
   IconUsers
 } from '@tabler/icons-react';
-import { useDashboardStore } from '../admin.store';
 import Link from 'next/link';
+import * as React from 'react';
+
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
+
+import { useDashboardStore } from '../admin.store';
+import { useDashboardShortcuts } from '../useDahboardShortcut';
+import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
+import { NotificationCenter } from './notificaiton-center';
+import { UserProfile } from './user-profile';
 
 interface AppHeaderProps {
   pathname: string;

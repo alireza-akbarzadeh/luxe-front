@@ -2,10 +2,11 @@
 
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { setAuthCookies, clearAuthCookies } from '@/lib/auth-helpers';
+
+import { BASE_URL } from '@/lib/api/api-client';
+import { clearAuthCookies,setAuthCookies } from '@/lib/auth-helpers';
 import { refreshSessionFromCookies } from '@/lib/auth-refresh';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
-import { BASE_URL } from '@/lib/api/api-client';
 
 function isNextRedirectError(error: unknown): error is { digest: string } {
   return (

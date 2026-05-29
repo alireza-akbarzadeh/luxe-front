@@ -1,12 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/store/auth.store';
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -15,6 +8,14 @@ import {
   IconLoader2,
   IconMail
 } from '@tabler/icons-react';
+import { AnimatePresence,motion } from 'framer-motion';
+import Link from 'next/link';
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuthStore } from '@/store/auth.store';
 
 export function ForgotPasswordDomain() {
   const { resetPassword, isLoading } = useAuthStore();

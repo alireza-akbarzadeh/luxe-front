@@ -1,9 +1,10 @@
 'use client';
 
+import { IconLogout } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-import { IconLogout } from '@tabler/icons-react';
 import { logoutAction } from '~/src/actions/auth.actions';
+
 import { menuItems } from '../data';
 import { useSidebarTab } from '../hooks/useSidebarTab';
 

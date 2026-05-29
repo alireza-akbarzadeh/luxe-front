@@ -2,11 +2,10 @@ import '../styles/globals.css';
 import '../styles/globals.scss';
 
 import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono, Nunito_Sans } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
 
-import { Geist, Geist_Mono, Nunito_Sans } from 'next/font/google';
 import config from '@/_config';
-
 import RootProvider from '@/components/providers/root';
 
 const nunitoSans = Nunito_Sans({ variable: '--font-sans' });

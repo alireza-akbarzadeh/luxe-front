@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // lib/prefetch-with-auth.ts
 import { cookies } from 'next/headers';
+
 import { getQueryClient } from './query-client';
 
 export async function prefetchWithAuth(

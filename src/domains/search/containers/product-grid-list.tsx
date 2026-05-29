@@ -1,14 +1,15 @@
 'use client';
+import { IconHeart, IconSearch, IconShoppingCart, IconStar } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { motion } from 'framer-motion';
-
-import { IconHeart, IconSearch, IconShoppingCart, IconStar } from '@tabler/icons-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useSearchParams } from '../hooks/useSearchParams';
 import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
+
+import { useSearchParams } from '../hooks/useSearchParams';
 
 interface ProductGridListProps {
   products: DtoProductResponse[];

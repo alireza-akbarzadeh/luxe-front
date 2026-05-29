@@ -1,10 +1,11 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { usePostStoresSlugFollow } from '@/services/-stores-{slug}-follow-post';
-import { useDeleteStoresSlugFollow } from '@/services/-stores-{slug}-follow-delete';
-import { getGetStoresSlugQueryKey } from '@/services/-stores-{slug}-get';
 import { toast } from 'sonner';
+
+import { useDeleteStoresSlugFollow } from '@/services/-stores-{slug}-follow-delete';
+import { usePostStoresSlugFollow } from '@/services/-stores-{slug}-follow-post';
+import { getGetStoresSlugQueryKey } from '@/services/-stores-{slug}-get';
 
 interface UseStoreFollowProps {
   slug: string;

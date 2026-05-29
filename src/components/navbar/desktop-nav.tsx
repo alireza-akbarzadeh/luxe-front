@@ -1,8 +1,10 @@
 'use client';
 
+import { IconArrowRight } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { IconArrowRight } from '@tabler/icons-react';
+
+import { Badge } from '@/components/ui/badge';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,9 +13,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/ui/navigation-menu';
-import { Badge } from '@/components/ui/badge';
+import { type NavMegaMenu,navMenuItems } from '@/lib/nav-menu-data';
 import { cn } from '@/lib/utils';
-import { navMenuItems, type NavMegaMenu } from '@/lib/nav-menu-data';
 
 const triggerClassName = cn(
   'bg-transparent h-auto px-0 py-0 text-sm font-medium',

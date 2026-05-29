@@ -1,6 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
+
 import type { DtoUserResponse } from '@/services/-auth-login-post.schemas';
+
 import { isAccessTokenExpired, refreshSessionFromCookies } from './auth-refresh';
 
 export interface UserPayload extends DtoUserResponse {
@@ -16,7 +18,7 @@ export async function getServerUser(options?: {
   forceRefresh?: boolean;
 }): Promise<UserPayload | null> {
   const cookieStore = await cookies();
-  let accessToken = cookieStore.get('access_token')?.value;
+  const accessToken = cookieStore.get('access_token')?.value;
   const refreshToken = cookieStore.get('refresh_token')?.value;
 
   if (!accessToken && !refreshToken) {

@@ -1,5 +1,6 @@
 import { IconCreditCard } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+
 import { OrderStatus } from '~/src/lib/constants/enum-statuses';
 import type { ModelsPayment } from '~/src/services/-checkout-post.schemas';
 

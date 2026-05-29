@@ -1,6 +1,6 @@
 import { IconCreditCard, IconMapPin, IconPackage } from '@tabler/icons-react';
-import { parseAsStringLiteral, useQueryState } from 'nuqs';
 import { useRouter } from 'next/navigation';
+import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
 export type CheckoutSteps = 'Shipping' | 'Payment' | 'Review';
 export const stepNames = ['Shipping', 'Payment', 'Review'] as const;

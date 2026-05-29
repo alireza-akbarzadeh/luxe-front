@@ -1,6 +1,7 @@
 'use client';
+import { IconCheck,IconDiscount2 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import { IconDiscount2, IconCheck } from '@tabler/icons-react';
+
 import {
   Accordion,
   AccordionContent,

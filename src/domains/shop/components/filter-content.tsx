@@ -2,12 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useProductFilters } from '../useProductFilters';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
 import { useGetCategories } from '~/src/services/-categories-get';
+
+import { useProductFilters } from '../useProductFilters';
 
 export function FilterContent() {
   const {

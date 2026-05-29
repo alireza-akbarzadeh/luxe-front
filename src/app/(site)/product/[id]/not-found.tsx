@@ -1,9 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { IconArrowLeft, IconHome, IconPackageExport } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
 
 export default function ProductNotFound() {
   return (

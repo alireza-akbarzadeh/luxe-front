@@ -1,5 +1,4 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import {
   IconCalendar,
   IconCheckbox,
@@ -13,6 +12,8 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+
+import { Button } from '@/components/ui/button';
 import { FollowButton } from '~/src/components/buttons/follow-button';
 import type { StoreEssentialsType } from '~/src/domains/store/store.utils';
 import { useSharing } from '~/src/hooks/useSharing';

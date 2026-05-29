@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
 import { IconChevronLeft, IconChevronRight, IconPackage } from '@tabler/icons-react';
 import { format } from 'date-fns';
-import { statusColors } from '../data';
+import Image from 'next/image';
+import { useState } from 'react';
+
 import { useGetOrdersMy } from '@/services/-orders-my-get';
+
+import { statusColors } from '../data';
 
 const PAGE_SIZE = 5;
 

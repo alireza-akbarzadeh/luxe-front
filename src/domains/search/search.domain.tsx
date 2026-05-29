@@ -1,20 +1,22 @@
 'use client';
 
+import { IconClock, IconFilter2, IconLoader2 } from '@tabler/icons-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { IconClock, IconFilter2, IconLoader2 } from '@tabler/icons-react';
+import { mapSortToAPI } from '~/src/domains/search/search.utils';
+import { useGetCategories } from '~/src/services/-categories-get';
+import { useGetSearch } from '~/src/services/-search-get';
+import type { GetSearchParams } from '~/src/services/-search-get.schemas';
+
 import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
 import { ProductGridList } from './containers/product-grid-list';
+import { ResultHeader } from './containers/result-header';
 import { SearchHero } from './containers/search-hero';
 import { useSearchParams } from './hooks/useSearchParams';
 import { useSearchStore } from './search.store';
-import { ResultHeader } from './containers/result-header';
-import { useGetSearch } from '~/src/services/-search-get';
-import { mapSortToAPI } from '~/src/domains/search/search.utils';
-import { useGetCategories } from '~/src/services/-categories-get';
-import type { GetSearchParams } from '~/src/services/-search-get.schemas';
 
 export default function SearchDomain() {
   const searchParams = useSearchParams();

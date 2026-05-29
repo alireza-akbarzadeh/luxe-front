@@ -1,5 +1,13 @@
 'use client';
 
+import {
+  IconArrowsHorizontal,
+  IconLayoutGrid,
+  IconLayoutGridRemove,
+  IconSearch
+} from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -11,13 +19,7 @@ import {
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { sortOptions } from '@/lib/data';
-import {
-  IconArrowsHorizontal,
-  IconLayoutGrid,
-  IconLayoutGridRemove,
-  IconSearch
-} from '@tabler/icons-react';
-import { motion } from 'framer-motion';
+
 import { useProductFilters } from '../useProductFilters';
 import { FilterContent } from './filter-content';
 

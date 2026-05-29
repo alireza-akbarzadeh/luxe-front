@@ -1,7 +1,8 @@
-import type { ComponentProps } from 'react';
 import type { TablerIcon } from '@tabler/icons-react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '@/lib/utils';
+
 import { Input } from '../ui/input';
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';

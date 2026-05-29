@@ -1,6 +1,7 @@
 'use client';
-import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+
 import { useDashboardStore } from './admin.store';
 
 export function useDashboardShortcuts() {

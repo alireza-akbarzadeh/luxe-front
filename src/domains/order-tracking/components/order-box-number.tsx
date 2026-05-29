@@ -1,8 +1,9 @@
 'use clinet';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { IconCheck, IconCopy } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
 
 interface OrderBoxNumber {
   order_number: string;

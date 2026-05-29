@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/lib/api-client.ts
 import Axios, {
   AxiosError,
-  HttpStatusCode,
-  isCancel,
   type AxiosRequestConfig,
   type AxiosResponse,
-  type InternalAxiosRequestConfig
+  HttpStatusCode,
+  type InternalAxiosRequestConfig,
+  isCancel
 } from 'axios';
-
 import { toast } from 'sonner';
+
 import { APP_CONFIG } from '../config';
-import { handleApiError } from './handle-api-error';
-import type { ApiClientOptions, ApiErrorResponse } from './type';
 import { isRequestCancelled } from './api-utils';
+import { handleApiError } from './handle-api-error';
 import { logger } from './logger';
+import type { ApiClientOptions, ApiErrorResponse } from './type';
 
 export const BASE_URL = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:8080/api/v1';
 

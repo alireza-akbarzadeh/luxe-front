@@ -1,8 +1,9 @@
+import { IconChevronRight, IconDotsVertical } from '@tabler/icons-react';
 import type { ComponentProps } from 'react';
+
 import type { AsChildProps } from '@/components/ui/slot';
 import { Slot } from '@/components/ui/slot';
 import { cn } from '@/lib/utils';
-import { IconChevronRight, IconDotsVertical } from '@tabler/icons-react';
 
 function Breadcrumb(props: ComponentProps<'nav'>) {
   return (

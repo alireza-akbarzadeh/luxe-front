@@ -1,15 +1,16 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import {
   IconDiamond,
   IconHeadphones,
   IconShield,
   IconTruck
 } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+
 import { features } from '../lib/home-mock-data';
-import { SectionHeader } from './section-header';
 import { sectionContainerClass } from '../lib/home-utils';
+import { SectionHeader } from './section-header';
 
 const iconMap = {
   truck: IconTruck,

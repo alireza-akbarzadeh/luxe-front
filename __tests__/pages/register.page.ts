@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+
 import type { RegisterUser } from '~/__tests__/utils/factories/user.factory';
 
 import { BasePage } from './base.page';

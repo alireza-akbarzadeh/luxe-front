@@ -1,9 +1,10 @@
 import { IconCheck, IconStar } from '@tabler/icons-react';
+import { IconLoader2 } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
+
 import { Badge } from '~/src/components/ui/badge';
 import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 import { useGetReviews } from '~/src/services/-reviews-get';
-import { IconLoader2 } from '@tabler/icons-react';
 
 interface ProductReviewsProps {
   product: DtoProductResponse;

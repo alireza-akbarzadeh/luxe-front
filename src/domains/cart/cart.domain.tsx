@@ -2,15 +2,14 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-
-import { Button } from '@/components/ui/button';
+import { notFound } from 'next/navigation';
 
 import { useCartController } from '~/src/hooks/useCartController';
+
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartItem } from './components/cart-item';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestion';
-import { notFound } from 'next/navigation';
 
 export default function CartPage() {
   const { items, isLoading, error } = useCartController();

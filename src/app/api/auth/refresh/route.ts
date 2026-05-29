@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { refreshAccessToken } from '@/actions/auth.actions';
 
 export async function POST(_req: NextRequest) {

@@ -1,11 +1,12 @@
 'use client';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
-import TanstackQueryProvider from './client/tanstack-query';
 import { Toaster } from '@/components/ui/sonner';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
-import { ThemeProvider } from './client/theme';
+
 import { DirectionProvider } from '../ui/direction';
+import TanstackQueryProvider from './client/tanstack-query';
+import { ThemeProvider } from './client/theme';
 
 type TRootProvider = Readonly<PropsWithChildren>;
 

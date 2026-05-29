@@ -1,4 +1,14 @@
 import {
+  IconAlertTriangle,
+  IconArrowsHorizontal,
+  IconChevronDown,
+  IconClock,
+  IconFilter,
+  IconUserCheck,
+  IconUserMinus,
+  IconX
+} from '@tabler/icons-react';
+import {
   type ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
@@ -6,10 +16,11 @@ import {
   type Row,
   useReactTable
 } from '@tanstack/react-table';
-
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import type { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
+
 import { AppDialog } from '@/components/app-dialog';
 import { Table } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
@@ -20,22 +31,11 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { downloadCSV } from '@/lib/utils';
-import {
-  IconAlertTriangle,
-  IconArrowsHorizontal,
-  IconChevronDown,
-  IconClock,
-  IconFilter,
-  IconUserCheck,
-  IconUserMinus,
-  IconX
-} from '@tabler/icons-react';
-
-import { useRouter } from 'next/navigation';
-import { userColumns } from './userColumns';
 import { AdvancedFilterContent } from '~/src/components/table/advanced-filter-content';
 import { useGetUsers } from '~/src/services/-users-get';
 import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
+
+import { userColumns } from './userColumns';
 
 export function UserManagementTable() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);

@@ -1,7 +1,5 @@
 'use client';
 
-import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
-import { SORT_OPTIONS } from '../constants';
 import {
   Select,
   SelectContent,
@@ -9,7 +7,10 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
 import type { SortKey } from '@/domains/store/store.types';
+
+import { SORT_OPTIONS } from '../constants';
 
 export function SortDropdown() {
   const { filters, setFilters } = useStoresFilters();

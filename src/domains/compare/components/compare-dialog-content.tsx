@@ -1,6 +1,10 @@
 'use client';
+import { IconPlus } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -8,11 +12,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { IconPlus } from '@tabler/icons-react';
-import Image from 'next/image';
-import { useGetProducts } from '~/src/services/-products-get';
 import useCompareController from '~/src/domains/compare/hooks/useCompareController';
+import { useGetProducts } from '~/src/services/-products-get';
 
 export function CompareDialogContent() {
   const [searchQuery, setSearchQuery] = useState('');

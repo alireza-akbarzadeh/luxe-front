@@ -1,6 +1,7 @@
 'use client';
 
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
+
 import type { AccountTab } from '../data';
 
 const tabs = ['overview', 'orders', 'wishlist', 'addresses', 'payment', 'settings'] as const;

@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import { ProductCard } from '../shop/components/product-card';
 import { useParams } from 'next/navigation';
+
 import { useGetProductsIdRelated } from '~/src/services/-products-{id}-related-get';
+
+import { ProductCard } from '../shop/components/product-card';
 
 export default function RelatedProduct() {
   const { id } = useParams();

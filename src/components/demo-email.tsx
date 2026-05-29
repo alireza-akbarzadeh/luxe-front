@@ -1,6 +1,6 @@
 'use client';
-import { motion } from 'framer-motion';
 import { IconCheck } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 
 export function DemoEmail() {
   return (

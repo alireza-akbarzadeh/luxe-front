@@ -1,6 +1,7 @@
 'use client';
+import { animate,useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { useInView, animate } from 'framer-motion';
+
 import { formatCount } from '@/domains/store/store.utils';
 
 export function AnimatedCounter({ value, className }: { value: number; className?: string }) {

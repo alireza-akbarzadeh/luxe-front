@@ -1,4 +1,5 @@
 import { IconCheck } from '@tabler/icons-react';
+
 import { logger } from '~/src/lib/api/logger';
 
 interface ProductColorsProps {

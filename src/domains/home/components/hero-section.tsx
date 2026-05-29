@@ -1,13 +1,15 @@
 'use client';
 
+import { IconArrowRight, IconSparkles } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { IconArrowRight, IconSparkles } from '@tabler/icons-react';
+
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '~/src/services/-products-get';
-import { HOME_STATS, HERO_FALLBACK_IMAGE } from '../lib/home-mock-data';
+
+import { HERO_FALLBACK_IMAGE,HOME_STATS } from '../lib/home-mock-data';
 import { formatPrice, fullBleedClass, resolveProducts, sectionContainerClass } from '../lib/home-utils';
 
 export function HeroSection() {

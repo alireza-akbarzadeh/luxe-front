@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
 import {
-  useQueryStates,
+  parseAsBoolean,
   parseAsInteger,
   parseAsString,
-  parseAsBoolean,
-  parseAsStringLiteral
-} from 'nuqs';
+  parseAsStringLiteral,
+  useQueryStates} from 'nuqs';
+import { useMemo } from 'react';
+
 import type { GetProductsParams, GetProductsSort } from '~/src/services/-products-get.schemas';
 
 type GridCols = 3 | 4;

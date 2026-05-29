@@ -2,6 +2,7 @@
 import { IconTrendingUp } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
+
 import { AnimatedCounter } from '~/src/domains/store/components/animate-counter';
 import { StoreCardCompact } from '~/src/domains/store/components/store-compact-card';
 import { mapStoreToView } from '~/src/domains/store/store.utils';

@@ -1,7 +1,9 @@
 'use client';
 import { motion } from 'framer-motion';
+
 import { stagger } from '~/src/domains/store/store.utils';
 import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
+
 import { StoreCard } from '../components/store-card';
 
 export function StoresGrid({

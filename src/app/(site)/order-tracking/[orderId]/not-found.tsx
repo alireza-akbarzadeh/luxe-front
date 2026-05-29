@@ -1,9 +1,10 @@
 'use client';
 
+import { IconArrowLeft, IconBuildingStore } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+
 import { Button } from '@/components/ui/button';
-import { IconArrowLeft, IconBuildingStore } from '@tabler/icons-react';
 
 export default function OrderNotFound() {
   return (

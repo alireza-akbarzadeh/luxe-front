@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+
 import { cn } from '@/lib/utils';
 
 function Heading1({ className, ...props }: ComponentProps<'h1'>) {

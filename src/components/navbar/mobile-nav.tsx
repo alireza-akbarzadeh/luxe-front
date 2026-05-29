@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { IconArrowRight } from '@tabler/icons-react';
+import Link from 'next/link';
+
 import {
   Accordion,
   AccordionContent,

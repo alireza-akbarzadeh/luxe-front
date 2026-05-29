@@ -1,11 +1,13 @@
+import { IconCalendarUp } from '@tabler/icons-react';
 import { format } from 'date-fns';
 import * as React from 'react';
 import type { DateRange } from 'react-day-picker';
+
 import { cn } from '@/lib/utils';
+
 import { Button } from './button';
 import { Calendar } from './calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import { IconCalendarUp } from '@tabler/icons-react';
 
 interface DateRangePickerProps extends Omit<
   React.ComponentPropsWithRef<typeof Button>,

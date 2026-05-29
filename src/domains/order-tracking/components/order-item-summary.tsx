@@ -1,6 +1,7 @@
 import { IconShoppingBag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+
 import type { ModelsOrderItem } from '~/src/services/-checkout-post.schemas';
 
 interface OrderItemSummaryProps {

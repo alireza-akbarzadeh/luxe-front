@@ -1,7 +1,9 @@
-import { type DatePickerProps, DatePicker as ShadcnDatePicker } from '@/components/ui/date-picker';
+import type { TablerIcon } from '@tabler/icons-react';
+
+import { DatePicker as ShadcnDatePicker,type DatePickerProps } from '@/components/ui/date-picker';
+
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
-import type { TablerIcon } from '@tabler/icons-react';
 
 interface TextFieldProps extends DatePickerProps {
   label?: string;

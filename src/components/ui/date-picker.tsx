@@ -1,12 +1,14 @@
+import { IconCalendar } from '@tabler/icons-react';
 import { format } from 'date-fns';
-import { useState, useEffect, type ComponentPropsWithRef } from 'react';
+import { type ComponentPropsWithRef,useEffect, useState } from 'react';
 import type { PropsBase, PropsSingle } from 'react-day-picker';
 import type { Except, Simplify } from 'type-fest';
+
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
 import { Button } from './button';
 import { Calendar, type CalendarBaseProps } from './calendar';
-import { IconCalendar } from '@tabler/icons-react';
 
 type CalendarProps = Simplify<
   Except<PropsBase & PropsSingle, 'mode'> &

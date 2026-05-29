@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
+import { NextRequest, NextResponse } from 'next/server';
+
 import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth-cookies';
 import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth-refresh';
 

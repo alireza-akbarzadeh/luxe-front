@@ -1,3 +1,10 @@
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight
+} from '@tabler/icons-react';
+
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -7,13 +14,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+
 import { useTableContext } from './table-context';
-import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight
-} from '@tabler/icons-react';
 
 export function TablePagination<TData>() {
   const { table } = useTableContext<TData>();

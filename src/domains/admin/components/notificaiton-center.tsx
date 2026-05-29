@@ -1,21 +1,21 @@
+import {
+  IconBell,
+  IconCheck,
+  IconExternalLink,
+  IconMessage2,
+  IconTrash} from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  IconBell,
-  IconCheck,
-  IconTrash,
-  IconExternalLink,
-  IconMessage2
-} from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
-import { useDashboardStore } from '../admin.store';
+
 import type {
-  NotificationItem as NotificationItemType,
-  MessageItem as MessageItemType
-} from '../admin.store';
+  MessageItem as MessageItemType,
+  NotificationItem as NotificationItemType} from '../admin.store';
+import { useDashboardStore } from '../admin.store';
 
 export function NotificationCenter() {
   const notifications = useDashboardStore((state) => state.notifications);

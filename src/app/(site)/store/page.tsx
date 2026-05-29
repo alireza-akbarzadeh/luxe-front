@@ -1,7 +1,8 @@
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { dehydrate,HydrationBoundary } from '@tanstack/react-query';
+
+import { StoresDomain } from '@/domains/store/containers/stores.domain';
 import { getQueryClient } from '@/lib/query-client';
 import { getGetStoresQueryOptions } from '@/services/-stores-get';
-import { StoresDomain } from '@/domains/store/containers/stores.domain';
 
 export default async function StorePage() {
   const queryClient = getQueryClient();

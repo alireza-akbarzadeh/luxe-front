@@ -2,8 +2,10 @@
 
 import { IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useProductFilters } from '../useProductFilters';
+
 import { useGetCategories } from '~/src/services/-categories-get';
+
+import { useProductFilters } from '../useProductFilters';
 
 export function ActiveFilter() {
   const {

@@ -1,11 +1,11 @@
 'use client';
 
 import { IconDownload, IconPlus } from '@tabler/icons-react';
+import Link from 'next/link';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import { UserManagementTable } from '~/src/domains/users/components/user-table';
 
 export default function UserManagementPage() {

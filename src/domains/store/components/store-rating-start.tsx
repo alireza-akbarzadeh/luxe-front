@@ -1,4 +1,5 @@
 import { IconStar } from '@tabler/icons-react';
+
 import { formatRating } from '~/src/domains/store/store.utils';
 
 export function StoreRatingStars({

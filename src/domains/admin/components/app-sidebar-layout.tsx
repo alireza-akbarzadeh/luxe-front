@@ -1,14 +1,15 @@
 'use client';
+import { usePathname } from 'next/navigation';
+
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { TooltipProvider } from '@/components/ui/tooltip';
-
 import { useUser } from '~/src/hooks/useUser';
+
 import { useDashboardStore } from '../admin.store';
-import { usePathname } from 'next/navigation';
+import { dashboard_SIDEBAR } from '../data';
 import { AdminSidebar } from './admin-sidebar';
 import { AppHeader } from './app-header';
 import { SearchSide } from './search-dashboard';
-import { dashboard_SIDEBAR } from '../data';
 
 interface AppSidebarLayoutProps {
   children: React.ReactNode;

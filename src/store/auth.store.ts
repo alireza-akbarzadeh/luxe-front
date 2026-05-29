@@ -1,11 +1,12 @@
 'use client';
 
 import { create } from 'zustand';
+
 import { postAuthLogin } from '~/src/services/-auth-login-post';
 import type { DtoLoginRequest, DtoLoginResponse } from '~/src/services/-auth-login-post.schemas';
+import type { DtoUserResponse } from '~/src/services/-auth-login-post.schemas';
 import { postAuthLogout } from '~/src/services/-auth-logout-post';
 import { postAuthRegister } from '~/src/services/-auth-register-post';
-import type { DtoUserResponse } from '~/src/services/-auth-login-post.schemas';
 import type {
   DtoRegisterRequest,
   DtoRegisterResponse
@@ -126,9 +127,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   logout: async () => {
     set({ isLoading: true });
-    try {
-      await postAuthLogout();
-    } catch {}
+    await postAuthLogout();
     set({
       user: null,
       isAuthenticated: false,

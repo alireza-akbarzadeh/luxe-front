@@ -6,6 +6,7 @@ import {
   IconRefresh,
   IconTruck
 } from '@tabler/icons-react';
+
 import { TRUST_ITEMS } from '../lib/home-mock-data';
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
 

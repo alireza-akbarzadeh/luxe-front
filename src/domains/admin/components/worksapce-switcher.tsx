@@ -1,4 +1,12 @@
+import {
+  IconBrandZapier,
+  IconChevronDown,
+  IconGlobe,
+  IconLayout2,
+  IconPlus
+} from '@tabler/icons-react';
 import * as React from 'react';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,13 +16,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import {
-  IconBrandZapier,
-  IconChevronDown,
-  IconGlobe,
-  IconLayout2,
-  IconPlus
-} from '@tabler/icons-react';
 
 export function WorkspaceSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
   const workspaces = [

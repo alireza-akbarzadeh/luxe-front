@@ -1,7 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   IconArrowRight,
   IconClock,
@@ -16,9 +14,14 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useGetCategories } from '~/src/services/-categories-get'; // assuming you have this endpoint
 import { useGetSearchSuggestions } from '~/src/services/-search-suggestions-get';
+import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.schemas';
 import { useGetSearchTrending } from '~/src/services/-search-trending-get';
+
 import { useSearchParams } from '../hooks/useSearchParams';
 import { useSearchStore } from '../search.store';
 
@@ -32,11 +35,6 @@ export function SearchHero() {
   const searchParams = useSearchParams();
 
   const [inputValue, setInputValue] = useState(searchParams.query);
-
-  // Sync input with URL param
-  useEffect(() => {
-    setInputValue(searchParams.query);
-  }, [searchParams.query]);
 
   // Global keyboard shortcut
   useEffect(() => {
@@ -115,16 +113,16 @@ export function SearchHero() {
     }
   };
 
-  const handleSuggestionClick = (suggestion: any) => {
+  const handleSuggestionClick = (suggestion: DtoSuggestionItem) => {
     if (suggestion.type === 'product') {
       window.open(`/product/${suggestion.id}`, '_blank');
     } else if (suggestion.type === 'store') {
       window.open(`/store/${suggestion.slug}`, '_blank');
     } else if (suggestion.type === 'category') {
-      searchParams.toggleCategory(suggestion.name);
+      searchParams.toggleCategory(suggestion.name ?? '');
       setShowSuggestions(false);
     } else {
-      handleSearch(suggestion.name);
+      handleSearch(suggestion.name ?? '');
     }
   };
 

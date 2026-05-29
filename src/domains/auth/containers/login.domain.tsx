@@ -1,14 +1,16 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useAppForm } from '~/src/components/forms/useAppForm';
-import { loginFormSchema } from '../auth.schema';
-import { toast } from 'sonner';
 import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+
 import { loginAction } from '@/actions/auth.actions';
+import { Button } from '@/components/ui/button';
+import { useAppForm } from '~/src/components/forms/useAppForm';
+
+import { loginFormSchema } from '../auth.schema';
 import { LoginSidebar } from '../components/login-sidebar';
 
 export function LoginDomain() {

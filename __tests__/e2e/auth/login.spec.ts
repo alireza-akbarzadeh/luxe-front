@@ -1,7 +1,7 @@
-import { expect, test } from '~/__tests__/fixtures/test.fixture';
-import { createUser } from '~/__tests__/utils/factories/user.factory';
 import { testEnv } from '~/__tests__/config/env';
+import { expect, test } from '~/__tests__/fixtures/test.fixture';
 import { skipUnlessIntegration } from '~/__tests__/helpers/integration';
+import { createUser } from '~/__tests__/utils/factories/user.factory';
 
 const invalidUser = createUser();
 

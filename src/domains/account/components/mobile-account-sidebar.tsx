@@ -1,6 +1,7 @@
 'use client';
 
 import { Tabs, TabsList, TabsTrigger } from '~/src/components/ui/tabs';
+
 import { menuItems } from '../data';
 import { useSidebarTab } from '../hooks/useSidebarTab';
 

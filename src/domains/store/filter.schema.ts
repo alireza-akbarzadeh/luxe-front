@@ -1,11 +1,10 @@
 import {
-  parseAsString,
-  parseAsInteger,
-  parseAsFloat,
+  parseAsArrayOf,
   parseAsBoolean,
-  parseAsStringEnum,
-  parseAsArrayOf
-} from 'nuqs';
+  parseAsFloat,
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum} from 'nuqs';
 
 import type { SortKey, ViewMode } from '@/domains/store/store.types';
 

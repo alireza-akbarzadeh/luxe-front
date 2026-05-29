@@ -1,6 +1,7 @@
 'use client';
 import { useQueryStates } from 'nuqs';
 import { useCallback } from 'react';
+
 import { storeFiltersParsers } from '~/src/domains/store/filter.schema';
 
 export function useStoresFilters() {
