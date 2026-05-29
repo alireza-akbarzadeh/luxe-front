@@ -1,4 +1,5 @@
 'use client';
+
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useMemo, useRef } from 'react';
 
@@ -9,9 +10,10 @@ import { StoreListItem } from '../components/store-list-item';
 import type { ModelsStoreReview } from '../store.types';
 
 export function StoresVirtualList({ stores }: { stores: DtoStoreResponse[] }) {
+  'use no memo';
   const mappedStores = useMemo(() => stores.map(mapStoreToView), [stores]);
-
   const parentRef = useRef<HTMLDivElement>(null);
+
   const rowVirtualizer = useVirtualizer({
     count: mappedStores.length,
     getScrollElement: () => parentRef.current,

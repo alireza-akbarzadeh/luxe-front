@@ -32,6 +32,7 @@ export function CommandDialog({ children, ...props }: CommandDialogProps) {
   // We use a state to ensure we don't get hydration errors
   // between server-side and client-side rendering
   const [mounted, setMounted] = React.useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   React.useEffect(() => setMounted(true), []);
 
   const CommandContent = (

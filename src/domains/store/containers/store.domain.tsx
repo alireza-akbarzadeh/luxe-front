@@ -40,7 +40,7 @@ export function StoreDomain({ slug }: { slug: string }) {
 
   const categoryId = useMemo(() => {
     if (!category || !store) return undefined;
-    const catObj = store.categories?.find((c: any) => c.name === category);
+    const catObj = store.categories?.find((c) => c.name === category);
     return catObj?.id;
   }, [category, store]);
 

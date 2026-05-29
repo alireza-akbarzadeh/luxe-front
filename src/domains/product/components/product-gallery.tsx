@@ -1,6 +1,7 @@
 'use client';
 import { IconShare2 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -54,7 +55,7 @@ export function ProductGallery(props: ProductGalleryProps) {
               selectedImage === i ? 'border-accent' : 'hover:border-border border-transparent'
             }`}
           >
-            <img src={img} alt='' className='h-full w-full object-cover' />
+            <Image src={img} alt={img} className='h-full w-full object-cover' />
           </button>
         ))}
       </div>

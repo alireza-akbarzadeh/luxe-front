@@ -37,8 +37,7 @@ export function WorkspaceSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
           )}
         >
           <div className='bg-primary text-primary-foreground shadow-primary/20 flex size-9 shrink-0 items-center justify-center rounded-lg shadow-lg'>
-            {/* @ts-ignore */}
-            <activeWorkspace.icon className='size-5' />
+            {activeWorkspace && <activeWorkspace.icon className='size-5' />}
           </div>
 
           {!isCollapsed && (

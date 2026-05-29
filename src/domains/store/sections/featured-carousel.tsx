@@ -13,7 +13,7 @@ export function FeaturedCarousel({ stores, title }: { stores: DtoStoreResponse[]
 
   const top = useMemo(
     () => [...mappedStores].sort((a, b) => b.trendingScore - a.trendingScore).slice(0, 10),
-    [stores]
+    [mappedStores]
   );
   if (top.length === 0) return null;
 

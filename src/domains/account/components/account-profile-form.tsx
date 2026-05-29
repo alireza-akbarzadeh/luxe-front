@@ -2,7 +2,7 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { type Dispatch, type SetStateAction,useTransition } from 'react';
+import { type Dispatch, type SetStateAction, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { AppDialog } from '~/src/components/app-dialog';
@@ -45,6 +45,7 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
           await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
           toast.success('Profile updated successfully');
           onClose();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           const message = error?.response?.data?.message || 'Failed to update profile';
           toast.error(message);

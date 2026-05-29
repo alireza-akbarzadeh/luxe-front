@@ -127,7 +127,7 @@ const NavigationMenuListItem = React.forwardRef<
 >(({ className, title, children, ...props }, ref) => (
   <li>
     <NavigationMenuLink asChild>
-      {/* @ts-ignore  FIXME: find the problem */}
+      {/* @ts-expect-error  FIXME: find the problem */}
       <a
         ref={ref}
         className={cn(
@@ -154,4 +154,5 @@ export {
   NavigationMenuList,
   NavigationMenuListItem,
   NavigationMenuTrigger,
-  NavigationMenuViewport};
+  NavigationMenuViewport
+};

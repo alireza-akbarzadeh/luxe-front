@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 // https://shadcn-phone-input.vercel.app/
 // FIXME: getVirtualItems() always returns an empty array with React Compiler, 'use no memo' is a temporary solution
 

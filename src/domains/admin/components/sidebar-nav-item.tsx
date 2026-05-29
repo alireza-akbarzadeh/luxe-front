@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 import { IconChevronDown } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -46,7 +47,7 @@ export function SidebarNavItem({
   );
 
   const renderIcon = (iconName?: string, active?: boolean) => {
-    // @ts-ignore
+    // @ts-expect-error find the problem
     const IconComponent = iconName ? ICON_MAP[iconName] : null;
     return (
       <div

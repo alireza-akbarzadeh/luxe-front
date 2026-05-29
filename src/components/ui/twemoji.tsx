@@ -19,6 +19,7 @@ function Twemoji({ emoji, format = 'svg', className, ...props }: TwemojiProps) {
   const url = `${BASE}/assets/${folder}/${codePoint}.${format}`;
 
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={url}
       alt={decodedEmoji}

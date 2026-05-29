@@ -5,6 +5,7 @@ import {
   IconShieldCheck,
   IconUserCircle
 } from '@tabler/icons-react';
+import Image from 'next/image';
 
 import { AnimatePresence, motion } from '@/components/motion';
 import {
@@ -61,7 +62,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
           >
             {/* Avatar Section */}
             <div className='relative shrink-0'>
-              <img
+              <Image
                 alt={userName}
                 src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`}
                 className={cn(

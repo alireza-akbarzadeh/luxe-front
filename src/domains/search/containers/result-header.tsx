@@ -12,6 +12,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { type SortBy } from '@/domains/search/hooks/useSearchParams';
 import type { DtoCategoryResponse, DtoProductResponse } from '@/services/-products-get.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 
@@ -72,7 +73,10 @@ export function ResultHeader(props: ResultHeaderProps) {
         </Sheet>
 
         {/* Sort */}
-        <Select value={searchParams.sortBy} onValueChange={(v) => searchParams.setSortBy(v as any)}>
+        <Select
+          value={searchParams.sortBy}
+          onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
+        >
           <SelectTrigger className='w-44'>
             <SelectValue placeholder='Sort by' />
           </SelectTrigger>

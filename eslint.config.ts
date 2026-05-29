@@ -80,7 +80,7 @@ export default [
        */
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-
+      'react-hooks/incompatible-library': 'off',
       /**
        * TS rules
        */

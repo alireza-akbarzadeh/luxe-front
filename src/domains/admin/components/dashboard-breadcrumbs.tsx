@@ -7,10 +7,9 @@ import { dashboard_SIDEBAR } from '../data';
 export function DashboardBreadcrumbs({ pathname }: { pathname: string }) {
   const breadcrumbs = useMemo(() => {
     const paths = pathname.split('/').filter(Boolean);
-    let currentPath = '';
 
     return paths.map((segment, index) => {
-      currentPath += `/${segment}`;
+      const currentPath = '/' + paths.slice(0, index + 1).join('/');
 
       let label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
 

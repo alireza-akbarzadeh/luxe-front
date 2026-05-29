@@ -1,6 +1,6 @@
 import { IconCalendar } from '@tabler/icons-react';
 import { format } from 'date-fns';
-import { type ComponentPropsWithRef,useEffect, useState } from 'react';
+import { type ComponentPropsWithRef, useEffect, useState } from 'react';
 import type { PropsBase, PropsSingle } from 'react-day-picker';
 import type { Except, Simplify } from 'type-fest';
 
@@ -34,6 +34,7 @@ function DatePicker({ calendar, className, ...props }: DatePickerProps) {
   // Sync internal state when defaultSelected changes (uncontrolled)
   useEffect(() => {
     if (!isControlled && calendar?.defaultSelected) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInternalDate(calendar.defaultSelected);
     }
   }, [isControlled, calendar?.defaultSelected]);

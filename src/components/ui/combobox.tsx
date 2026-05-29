@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 'use no memo';
 
 import { IconCheck, IconChevronDown } from '@tabler/icons-react';

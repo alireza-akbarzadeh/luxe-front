@@ -1,11 +1,12 @@
 import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { type CartItemPayload,useCartController } from '@/hooks/useCartController';
+import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 
 export interface ProductCardProps {
@@ -71,9 +72,9 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
         <div
           className={`bg-muted relative aspect-4/5 overflow-hidden ${isCompact ? 'rounded-t-2xl' : ''}`}
         >
-          <img
+          <Image
             src={product?.images?.[0] || '/placeholder.png'}
-            alt={product.name}
+            alt={product.name ?? ''}
             loading='lazy'
             className='h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]'
           />

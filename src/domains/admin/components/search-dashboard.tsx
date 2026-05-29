@@ -90,8 +90,9 @@ export function SearchSide({ data }: CommandSettingProps) {
                 className='group flex cursor-pointer items-center gap-3 py-3'
               >
                 <div className='bg-muted/50 group-aria-selected:bg-background flex h-9 w-9 items-center justify-center rounded-xl border transition-colors'>
-                  {/* @ts-ignore */}
-                  <Icon className='text-muted-foreground group-aria-selected:text-primary h-4 w-4 transition-colors' />
+                  {Icon && (
+                    <Icon className='text-muted-foreground group-aria-selected:text-primary h-4 w-4 transition-colors' />
+                  )}
                 </div>
                 <div className='flex flex-col'>
                   <span className='group-aria-selected:text-primary text-sm font-semibold transition-colors'>

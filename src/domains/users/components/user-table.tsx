@@ -59,7 +59,6 @@ export function UserManagementTable() {
     }
     toast.success(`Switched to ${segment} segment`);
   };
-
   const table = useReactTable({
     data: data?.data?.users || [],
     columns: userColumns,

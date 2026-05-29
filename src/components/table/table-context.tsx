@@ -2,10 +2,11 @@ import type { Table } from '@tanstack/react-table';
 import * as React from 'react';
 
 // Define the context with a generic TData
-interface TableContextValue<TData = any> {
+interface TableContextValue<TData = unknown> {
   table: Table<TData>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TableContext = React.createContext<TableContextValue<any> | null>(null);
 
 export function useTableContext<TData>() {

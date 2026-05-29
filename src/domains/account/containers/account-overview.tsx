@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 import { Button } from '~/src/components/ui/button';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
+import type { DtoDefaultAddressDTO } from '~/src/services/-account-summary-get.schemas';
 
 import { AccountProfileForm } from '../components/account-profile-form';
 import { statusColors } from '../data';
@@ -33,7 +34,7 @@ export function AccountOverview() {
   };
 
   // Format address for display
-  const formatAddress = (address: any) => {
+  const formatAddress = (address: DtoDefaultAddressDTO) => {
     if (!address) return 'No address set';
     const parts = [
       address.address_line1,
@@ -139,14 +140,18 @@ export function AccountOverview() {
               <IconHome className='text-accent h-5 w-5' />
               <h3 className='font-medium'>Shipping Address</h3>
             </div>
-            <p className='text-muted-foreground text-sm'>{formatAddress(defaultShipping)}</p>
+            <p className='text-muted-foreground text-sm'>
+              {formatAddress(defaultShipping as DtoDefaultAddressDTO)}
+            </p>
           </div>
           <div className='bg-muted/50 rounded-xl p-4'>
             <div className='mb-2 flex items-center gap-2'>
               <IconCreditCard className='text-accent h-5 w-5' />
               <h3 className='font-medium'>Billing Address</h3>
             </div>
-            <p className='text-muted-foreground text-sm'>{formatAddress(defaultBilling)}</p>
+            <p className='text-muted-foreground text-sm'>
+              {formatAddress(defaultBilling as DtoDefaultAddressDTO)}
+            </p>
           </div>
         </div>
       </div>
@@ -187,29 +192,36 @@ export function AccountOverview() {
               No orders yet.
             </div>
           ) : (
-            recentOrders.map((order: any) => (
-              <div
-                key={order.id}
-                className='bg-muted/50 flex items-center justify-between rounded-xl p-4'
-              >
-                <div>
-                  <p className='font-medium'>{order.order_number}</p>
-                  <p className='text-muted-foreground text-sm'>
-                    {new Date(order.created_at).toLocaleDateString()}
-                  </p>
+            recentOrders.map((order) => {
+              const orderNumber = order.order_number ?? 'N/A';
+              const createdAt = order.created_at ?? '';
+              const status = order.status ?? '';
+              const totalAmount = order.total_amount ?? 0;
+
+              return (
+                <div
+                  key={order.id}
+                  className='bg-muted/50 flex items-center justify-between rounded-xl p-4'
+                >
+                  <div>
+                    <p className='font-medium'>{orderNumber}</p>
+                    <p className='text-muted-foreground text-sm'>
+                      {createdAt ? new Date(createdAt).toLocaleDateString() : 'No date'}
+                    </p>
+                  </div>
+                  <div className='text-right'>
+                    <span
+                      className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
+                        statusColors[status] || ''
+                      }`}
+                    >
+                      {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown'}
+                    </span>
+                    <p className='mt-1 text-sm font-medium'>${totalAmount.toFixed(2)}</p>
+                  </div>
                 </div>
-                <div className='text-right'>
-                  <span
-                    className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
-                      statusColors[order.status] || ''
-                    }`}
-                  >
-                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                  </span>
-                  <p className='mt-1 text-sm font-medium'>${order.total_amount.toFixed(2)}</p>
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>

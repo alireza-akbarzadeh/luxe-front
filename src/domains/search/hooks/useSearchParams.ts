@@ -6,10 +6,11 @@ import {
   parseAsInteger,
   parseAsString,
   parseAsStringLiteral,
-  useQueryStates} from 'nuqs';
+  useQueryStates
+} from 'nuqs';
 import { useMemo } from 'react';
 
-type SortBy = 'relevance' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'popular';
+export type SortBy = 'relevance' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'popular';
 type ViewMode = 'grid' | 'list';
 
 const sortValues = ['relevance', 'newest', 'price-asc', 'price-desc', 'rating', 'popular'] as const;
