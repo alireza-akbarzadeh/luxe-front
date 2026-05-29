@@ -1,5 +1,11 @@
-import SearchDomain from '~/src/domains/search/search.domain';
+import { Suspense } from 'react';
+
+import SearchDomain from '@/domains/search/search.domain';
 
 export default function SearchPage() {
-  return <SearchDomain />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchDomain />
+    </Suspense>
+  );
 }

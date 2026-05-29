@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 import { StoreDomain } from '~/src/domains/store/containers/store.domain';
 import { prefetchWithAuth } from '~/src/lib/prefetch-with-auth';
@@ -15,7 +16,9 @@ export default async function StorePage(props: StorePageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <StoreDomain slug={slug} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <StoreDomain slug={slug} />
+      </Suspense>
     </HydrationBoundary>
   );
 }

@@ -1,4 +1,5 @@
-import { dehydrate,HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 
 import { StoresDomain } from '@/domains/store/containers/stores.domain';
 import { getQueryClient } from '@/lib/query-client';
@@ -11,7 +12,9 @@ export default async function StorePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <StoresDomain />
+      <Suspense fallback={<div>Loading...</div>}>
+        <StoresDomain />
+      </Suspense>
     </HydrationBoundary>
   );
 }
