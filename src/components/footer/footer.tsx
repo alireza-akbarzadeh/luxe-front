@@ -11,10 +11,15 @@ import {
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-import { legalLinks } from '~/src/components/footer/footer.data';
+import {
+  footerSections,
+  legalLinks,
+  paymentMethods,
+  socialLinks
+} from '~/src/components/footer/footer.data';
+import { FooterLinkColumn } from '~/src/components/footer/footer-link-column';
 import { Newsletter } from '~/src/components/footer/news-letter';
 import { TrustStrip } from '~/src/components/footer/trust-stripe';
-
 
 function BackToTop() {
   return (
@@ -36,7 +41,7 @@ export function Footer() {
       {/* Top gradient hairline */}
       <div
         aria-hidden
-        className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-transparent'
+        className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent'
       />
       <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
         {/* Newsletter */}
@@ -98,7 +103,7 @@ export function Footer() {
                     whileTap={{ scale: 0.95 }}
                     className='group border-border/60 bg-card/60 text-muted-foreground hover:border-accent/40 hover:text-accent flex size-10 items-center justify-center rounded-xl border backdrop-blur transition-colors'
                   >
-                    <s.icon className='size-[18px]' />
+                    <s.icon className='size-4.5' />
                   </motion.a>
                 ))}
               </div>
@@ -187,7 +192,7 @@ export function Footer() {
           aria-hidden
           className='pointer-events-none -mt-4 overflow-hidden pb-2 text-center select-none'
         >
-          <div className='from-foreground/[0.08] bg-gradient-to-b to-transparent bg-clip-text text-[18vw] leading-[0.9] font-black tracking-tighter text-transparent'>
+          <div className='from-foreground/8 bg-linear-to-b to-transparent bg-clip-text text-[18vw] leading-[0.9] font-black tracking-tighter text-transparent'>
             LUXE
           </div>
         </div>

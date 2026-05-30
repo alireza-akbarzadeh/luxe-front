@@ -54,6 +54,7 @@ export default function RootLayout({ children }: TRootLayout) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootProvider>{children}</RootProvider>
       </body>
+      <SpeedInsights />
     </html>
   );
 }
