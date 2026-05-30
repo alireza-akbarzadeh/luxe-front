@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 import { getClientUser } from '@/actions/users.actions';
-import type { UserPayload } from '@/lib/auth-server';
+import type { UserPayload } from '~/src/lib/auth/auth-server';
 
 export function useUser() {
   const [user, setUser] = useState<UserPayload | null>(null);

@@ -106,7 +106,7 @@ type OpenGraphType = 'website' | 'article' | 'book' | 'profile' | 'product' | 'p
 
 type TwitterCard = 'summary' | 'summary_large_image';
 
-interface Metadata {
+export interface SiteMetaInput {
   charSet?: LiteralUnion<'utf-8', string>;
   title?: string;
   description?: string;
@@ -117,16 +117,18 @@ interface Metadata {
   images?: ImageMetadata[];
   openGraph?: {
     url?: string;
+    siteName?: string;
     type?: LiteralUnion<OpenGraphType, string>;
     locale?: string;
   };
   twitter?: {
     site?: string;
+    creator?: string;
     card?: LiteralUnion<TwitterCard, string>;
   };
 }
 
-export function createMetadata(metadata: Metadata): Meta[] {
+export function createMetadata(metadata: SiteMetaInput): Meta[] {
   const meta: Meta[] = [];
 
   if (metadata.charSet) {
@@ -153,11 +155,13 @@ export function createMetadata(metadata: Metadata): Meta[] {
   addMetaTag('property', 'og:title', metadata.title);
   addMetaTag('property', 'og:description', metadata.description);
   addMetaTag('property', 'og:url', metadata?.openGraph?.url);
+  addMetaTag('property', 'og:site_name', metadata?.openGraph?.siteName);
   addMetaTag('property', 'og:type', metadata?.openGraph?.type);
   addMetaTag('property', 'og:locale', metadata?.openGraph?.locale);
 
   addMetaTag('name', 'twitter:card', metadata?.twitter?.card);
   addMetaTag('name', 'twitter:site', metadata?.twitter?.site);
+  addMetaTag('name', 'twitter:creator', metadata?.twitter?.creator);
   addMetaTag('name', 'twitter:title', metadata.title);
   addMetaTag('name', 'twitter:description', metadata.description);
 
@@ -181,6 +185,51 @@ export function createMetadata(metadata: Metadata): Meta[] {
   }
 
   return meta;
+}
+
+export function toNextMetadata(
+  metadata: SiteMetaInput,
+  options?: { metadataBase?: URL; category?: string }
+): import('next').Metadata {
+  const ogImages =
+    metadata.images
+      ?.filter((image) => image.url)
+      .map((image) => ({
+        url: image.url!,
+        width: image.width,
+        height: image.height,
+        alt: image.alt,
+        type: image.format
+      })) ?? [];
+
+  const primaryImage = metadata.images?.[0];
+
+  return {
+    ...(options?.metadataBase ? { metadataBase: options.metadataBase } : {}),
+    title: metadata.title,
+    description: metadata.description,
+    keywords: metadata.keywords,
+    ...(metadata.author ? { authors: [{ name: metadata.author }] } : {}),
+    ...(metadata.robots ? { robots: metadata.robots } : {}),
+    ...(options?.category ? { category: options.category } : {}),
+    openGraph: {
+      title: metadata.title ?? '',
+      description: metadata.description ?? '',
+      url: metadata.openGraph?.url ?? '',
+      siteName: metadata.openGraph?.siteName ?? '',
+      type: metadata.openGraph?.type ?? 'website',
+      locale: metadata.openGraph?.locale ?? '',
+      images: ogImages
+    },
+    twitter: {
+      card: metadata.twitter?.card ?? 'summary_large_image',
+      site: metadata.twitter?.site ?? '',
+      creator: metadata.twitter?.creator,
+      title: metadata.title,
+      description: metadata.description,
+      images: primaryImage?.url ? [primaryImage.url] : undefined
+    }
+  };
 }
 
 export function generateSlug(slug: string) {

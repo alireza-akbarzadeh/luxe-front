@@ -153,6 +153,13 @@ export function SearchFilterContent({
         <div className='space-y-2'>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox
+              checked={searchParams.inStock}
+              onCheckedChange={(checked) => searchParams.setInStock(!!checked)}
+            />
+            <span className='text-sm'>In Stock</span>
+          </label>
+          <label className='flex cursor-pointer items-center gap-2'>
+            <Checkbox
               checked={searchParams.onSale}
               onCheckedChange={(checked) => searchParams.setOnSale(!!checked)}
             />

@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth-cookies';
-import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth-refresh';
+import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth/auth-cookies';
+import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth/auth-refresh';
 
 const protectedRoutes = ['/account', '/orders', '/profile', '/wishlist', '/checkout'];
 const authRoutes = ['/login', '/register'];

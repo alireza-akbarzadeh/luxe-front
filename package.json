@@ -39,6 +39,7 @@
     "@tanstack/react-virtual": "^3.13.24",
     "@tanstack/zod-adapter": "^1.166.9",
     "@twemoji/api": "^17.0.2",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.16.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",

@@ -1,11 +1,11 @@
 import '../styles/globals.css';
-import '../styles/globals.scss';
 
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Nunito_Sans } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
 
-import config from '@/_config';
+import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
 
 const nunitoSans = Nunito_Sans({ variable: '--font-sans' });
@@ -21,15 +21,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: config.metadata.title,
-  description: config.metadata.description,
-  keywords: config.metadata.keywords,
+  ...siteMetadata,
   icons: '/favicon.svg',
-  manifest: '/app.webmanifest'
+  manifest: '/app.webmanifest',
+  applicationName: 'Luxe',
+  appleWebApp: {
+    capable: true,
+    title: 'Luxe',
+    statusBarStyle: 'black-translucent'
+  },
+  formatDetection: {
+    telephone: false
+  }
 };
 
 export const viewport: Viewport = {
-  themeColor: '#000'
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000'
 };
 
 type TRootLayout = Readonly<PropsWithChildren>;
@@ -44,6 +53,7 @@ export default function RootLayout({ children }: TRootLayout) {
     >
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <RootProvider>{children}</RootProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import type { NextResponse } from 'next/server';
 
-import { APP_CONFIG } from './config';
+import { APP_CONFIG } from '../config';
 
 export const AUTH_COOKIE_OPTIONS = {
   httpOnly: true,

@@ -3,9 +3,9 @@ import { cookies } from 'next/headers';
 
 import type { DtoRefreshResponse } from '@/services/-auth-refresh-post.schemas';
 
-import { BASE_URL } from './api/api-client';
+import { BASE_URL } from '../api/api-client';
 import { AUTH_COOKIE_OPTIONS } from './auth-cookies';
-import { APP_CONFIG } from './config';
+import { APP_CONFIG } from '../config';
 
 export type RefreshedTokens = {
   accessToken: string;
@@ -26,9 +26,7 @@ export function isAccessTokenExpired(token: string, bufferMs = TOKEN_EXPIRY_BUFF
 /**
  * Call the backend refresh endpoint. Does not read or write cookies.
  */
-export async function requestTokenRefresh(
-  refreshToken: string
-): Promise<RefreshedTokens | null> {
+export async function requestTokenRefresh(refreshToken: string): Promise<RefreshedTokens | null> {
   try {
     const res = await fetch(`${BASE_URL}/auth/refresh`, {
       method: 'POST',

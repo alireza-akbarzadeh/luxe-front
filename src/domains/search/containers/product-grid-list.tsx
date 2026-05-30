@@ -13,21 +13,18 @@ import { useSearchParams } from '../hooks/useSearchParams';
 
 interface ProductGridListProps {
   products: DtoProductResponse[];
+  total: number;
 }
 
 export function ProductGridList(props: ProductGridListProps) {
-  const { products } = props;
+  const { products, total } = props;
   const searchParams = useSearchParams();
 
-  const totalPages = Math.ceil(products.length / searchParams.perPage);
-  const paginatedProducts = products.slice(
-    (searchParams.page - 1) * searchParams.perPage,
-    searchParams.page * searchParams.perPage
-  );
+  const totalPages = Math.ceil(total / searchParams.perPage);
 
   return (
     <>
-      {paginatedProducts.length > 0 ? (
+      {products.length > 0 ? (
         <>
           <div
             className={
@@ -36,7 +33,7 @@ export function ProductGridList(props: ProductGridListProps) {
                 : 'flex flex-col gap-4'
             }
           >
-            {paginatedProducts.map((product, index) =>
+            {products.map((product, index) =>
               searchParams.view === 'grid' ? (
                 <ProductCard key={product.id} product={product} index={index} />
               ) : (

@@ -37,15 +37,20 @@ interface ResultHeaderProps {
 }
 
 export function ResultHeader(props: ResultHeaderProps) {
-  const { productCount, products, stores, categories } = props;
+  const { productCount, total, products, stores, categories } = props;
   const searchParams = useSearchParams();
+  const resultLabel =
+    total > 0
+      ? `${total} product${total === 1 ? '' : 's'} found`
+      : `${productCount} product${productCount === 1 ? '' : 's'} found`;
+
   return (
     <div className='mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
       <div>
         <h2 className='text-lg font-semibold'>
           {searchParams.query ? <>Results for &quot;{searchParams.query}&quot;</> : 'All Products'}
         </h2>
-        <p className='text-muted-foreground text-sm'>{productCount} products found</p>
+        <p className='text-muted-foreground text-sm'>{resultLabel}</p>
       </div>
 
       <div className='flex items-center gap-2'>
