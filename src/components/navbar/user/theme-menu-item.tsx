@@ -36,11 +36,6 @@ export function ThemeMenuItem() {
         <span className='text-sm font-medium'>Appearance</span>
         <span className='text-muted-foreground block text-xs'>Switch between light & dark</span>
       </div>
-
-      <IconChevronRight
-        size={16}
-        className='text-muted-foreground transition-transform group-hover:translate-x-1'
-      />
     </button>
   );
 }

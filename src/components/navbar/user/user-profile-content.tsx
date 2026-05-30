@@ -1,3 +1,5 @@
+import { Separator } from '~/src/components/ui/separator';
+
 import { AuthMenuItem } from './auth-menu-item';
 import { MenuRow } from './menu-row';
 import { ThemeMenuItem } from './theme-menu-item';
@@ -11,6 +13,7 @@ export function UserProfileContent() {
 
         return (
           <MenuRow
+            href={item.href}
             key={item.title}
             icon={<Icon size={18} />}
             title={item.title}
@@ -18,7 +21,7 @@ export function UserProfileContent() {
           />
         );
       })}
-
+      <Separator />
       <ThemeMenuItem />
       <AuthMenuItem />
     </div>

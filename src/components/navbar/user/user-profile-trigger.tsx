@@ -25,7 +25,6 @@ export function UserProfileTrigger(props: UserProfileTriggerProps) {
           whileHover={{ scale: 1.05 }}
           className={cn(
             'from-primary via-primary/80 to-secondary flex items-center justify-center rounded-xl bg-linear-to-br shadow-lg',
-            // 🔥 responsive sizing (IMPORTANT FIX)
             'h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-11 lg:w-11',
             'rounded-xl md:rounded-2xl'
           )}

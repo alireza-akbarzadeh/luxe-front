@@ -1,5 +1,8 @@
 'use client';
 
+import { IconChevronRight } from '@tabler/icons-react';
+import Link from 'next/link';
+
 import { cn } from '@/lib/utils';
 
 type MenuRowProps = {
@@ -10,21 +13,38 @@ type MenuRowProps = {
   href?: string;
 };
 
-export function MenuRow({ icon, title, subtitle, onClickAction }: MenuRowProps) {
-  return (
-    <button
-      onClick={onClickAction}
-      className={cn(
-        'flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-colors',
-        'hover:bg-accent/50'
-      )}
-    >
+export function MenuRow({ icon, title, subtitle, onClickAction, href }: MenuRowProps) {
+  const content = (
+    <>
       <div className='text-muted-foreground'>{icon}</div>
 
       <div className='flex-1'>
         <div className='text-sm font-medium'>{title}</div>
         {subtitle && <div className='text-muted-foreground text-xs'>{subtitle}</div>}
       </div>
+      <IconChevronRight
+        size={16}
+        className='text-muted-foreground transition-transform group-hover:translate-x-1'
+      />
+    </>
+  );
+
+  const className = cn(
+    'flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-colors',
+    'hover:bg-accent/50'
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <button onClick={onClickAction} className={className}>
+      {content}
     </button>
   );
 }

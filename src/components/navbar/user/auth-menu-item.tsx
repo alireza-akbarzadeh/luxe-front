@@ -36,11 +36,6 @@ export function AuthMenuItem() {
           {isLoggedIn ? 'End current session' : 'Access your account'}
         </span>
       </div>
-
-      <IconChevronRight
-        size={16}
-        className='text-muted-foreground transition-transform group-hover:translate-x-1'
-      />
     </button>
   );
 }
