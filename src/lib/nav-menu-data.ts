@@ -1,3 +1,5 @@
+import type { TablerIcon } from '@tabler/icons-react';
+
 export type NavSubLink = {
   title: string;
   href: string;
@@ -30,6 +32,7 @@ export type NavSimpleLink = {
   label: string;
   href: string;
   badge?: string;
+  Icon?: TablerIcon;
 };
 
 export type NavItem = NavMegaMenu | NavSimpleLink;
@@ -77,8 +80,7 @@ export const navMenuItems: NavItem[] = [
         title: 'New Arrivals',
         description: 'Fresh edits for the season',
         href: '/shop?sortBy=newest&showOnlyNew=true',
-        image:
-          'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=800&fit=crop',
+        image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=800&fit=crop',
         badge: 'New'
       }
     ]
@@ -123,8 +125,7 @@ export const navMenuItems: NavItem[] = [
         title: 'Essential Tailoring',
         description: 'Refined silhouettes for every occasion',
         href: '/shop?categoryId=2&searchQuery=suits',
-        image:
-          'https://images.unsplash.com/photo-1617137984095-74e4e91032ab?w=600&h=800&fit=crop'
+        image: 'https://images.unsplash.com/photo-1617137984095-74e4e91032ab?w=600&h=800&fit=crop'
       }
     ]
   },
@@ -168,8 +169,7 @@ export const navMenuItems: NavItem[] = [
         title: 'Icon Watches',
         description: 'Timepieces that define your look',
         href: '/shop?searchQuery=watches',
-        image:
-          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop',
+        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop',
         badge: 'Trending'
       }
     ]
@@ -213,8 +213,7 @@ export const navMenuItems: NavItem[] = [
         title: 'Curated Interiors',
         description: 'Elevate every room',
         href: '/shop?categoryId=2',
-        image:
-          'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&h=800&fit=crop'
+        image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&h=800&fit=crop'
       }
     ]
   },
@@ -248,6 +247,11 @@ export const navMenuItems: NavItem[] = [
         ]
       }
     ]
+  },
+  {
+    type: 'link',
+    label: 'Store',
+    href: '/store'
   },
   {
     type: 'link',

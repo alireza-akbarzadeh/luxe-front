@@ -28,10 +28,8 @@ interface UserProfileProps {
 export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserProfileProps) {
   const isHeader = variant === 'header';
 
-  // Get real user data from auth context
   const { user } = useUser();
 
-  // Fallback values if no user is logged in
   const avatarSeed = user?.email || 'Guest';
   const userName = user?.first_name || 'Guest User';
   const userEmail = user?.email || 'guest@verc.com';

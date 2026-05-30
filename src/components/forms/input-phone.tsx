@@ -68,7 +68,7 @@ function InputComponent({ className, ...props }: ComponentProps<typeof Input>) {
   return (
     <Input
       className={cn(
-        'h-full w-full rounded-s-none rounded-e-xl border-none bg-transparent text-white outline-none placeholder:text-slate-500',
+        'h-full w-full rounded-s-none rounded-e-xl border-none bg-transparent outline-none placeholder:text-slate-500 dark:text-white',
         className
       )}
       {...props}

@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react';
 
-import { Footer } from '@/components/footer';
-import { Navbar } from '~/src/components/navbar/navbar';
-import { cn } from '~/src/lib/utils';
+import { Footer } from '@/components/footer/footer';
+import { Navbar } from '@/components/navbar/navbar';
+import { cn } from '@/lib/utils';
 
 type TRootLayout = Readonly<PropsWithChildren>;
 

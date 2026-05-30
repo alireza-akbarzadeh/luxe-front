@@ -17,8 +17,8 @@ export function CompareDomain() {
   }
 
   return (
-    <div className='mx-auto max-w-7xl px-4 py-8 pt-24'>
-      <DynamicBreadcrumb segments={['Compare Products']} />
+    <div className='app-container py-8 pt-24'>
+      <DynamicBreadcrumb direction='column' segments={['Compare Products']} />
       <CompareHeader
         itemCount={items.length}
         maxCompare={4}

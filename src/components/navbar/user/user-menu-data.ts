@@ -1,8 +1,9 @@
 import {
   IconBell,
+  IconBuildingStore,
   IconDashboard,
-  IconGitCompare,
   IconHeart,
+  IconLayersIntersect2,
   IconSettings,
   IconUserCircle
 } from '@tabler/icons-react';
@@ -31,10 +32,17 @@ export const profileMenuItems = [
   },
   {
     type: 'link',
+    href: '/store',
+    title: 'Stores',
+    subtitle: 'Browse all available stores',
+    icon: IconBuildingStore
+  },
+  {
+    type: 'link',
     href: '/compare',
     subtitle: 'Find your perfect match',
     title: 'Compare',
-    icon: IconGitCompare
+    icon: IconLayersIntersect2
   },
   {
     type: 'button',

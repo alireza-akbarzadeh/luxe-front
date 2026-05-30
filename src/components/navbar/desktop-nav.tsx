@@ -1,6 +1,7 @@
 'use client';
 
 import { IconArrowRight } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,8 +14,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/ui/navigation-menu';
-import { type NavMegaMenu,navMenuItems } from '@/lib/nav-menu-data';
+import { type NavMegaMenu, navMenuItems } from '@/lib/nav-menu-data';
 import { cn } from '@/lib/utils';
+import { GlowBadge } from '~/src/components/badges/glow-badge';
 
 const triggerClassName = cn(
   'bg-transparent h-auto px-0 py-0 text-sm font-medium',
@@ -27,7 +29,7 @@ function MegaMenuPanel({ item }: { item: NavMegaMenu }) {
   const hasFeatured = (item.featured?.length ?? 0) > 0;
 
   return (
-    <div className={cn('w-full', hasFeatured ? 'md:w-[820px]' : 'md:w-[640px]')}>
+    <div className={cn('w-full', hasFeatured ? 'md:w-205' : 'md:w-160')}>
       <div className='flex gap-6 p-6'>
         <div
           className={cn(
@@ -61,14 +63,14 @@ function MegaMenuPanel({ item }: { item: NavMegaMenu }) {
         </div>
 
         {hasFeatured && item.featured && (
-          <aside className='hidden w-[180px] shrink-0 sm:block'>
+          <aside className='hidden w-45 shrink-0 sm:block'>
             {item.featured.map((card) => (
               <NavigationMenuLink key={card.title} asChild>
                 <Link
                   href={card.href}
-                  className='group bg-muted/40 hover:bg-muted/70 relative block overflow-hidden rounded-xl outline-none transition-colors'
+                  className='group bg-muted/40 hover:bg-muted/70 relative block overflow-hidden rounded-xl transition-colors outline-none'
                 >
-                  <div className='relative aspect-[4/5] w-full'>
+                  <div className='relative aspect-4/5 w-full'>
                     <Image
                       src={card.image}
                       alt={card.title}
@@ -76,7 +78,7 @@ function MegaMenuPanel({ item }: { item: NavMegaMenu }) {
                       className='object-cover transition-transform duration-500 group-hover:scale-105'
                       sizes='180px'
                     />
-                    <div className='from-foreground/70 absolute inset-0 bg-gradient-to-t to-transparent' />
+                    <div className='from-foreground/70 absolute inset-0 bg-linear-to-t to-transparent' />
                     {card.badge && (
                       <Badge className='absolute top-3 left-3' variant='secondary'>
                         {card.badge}
@@ -129,9 +131,9 @@ export function DesktopNav() {
                 >
                   {item.label}
                   {item.badge && (
-                    <Badge variant='destructive' size='sm'>
+                    <GlowBadge size='sm' variant='destructive'>
                       {item.badge}
-                    </Badge>
+                    </GlowBadge>
                   )}
                 </Link>
               </NavigationMenuLink>

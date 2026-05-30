@@ -11,7 +11,7 @@ interface CompareHeaderProps {
 export function CompareHeader(props: CompareHeaderProps) {
   const { itemCount, maxCompare, clearAll, highlightDiffs, setHighlightDiffs } = props;
   return (
-    <div className='mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
+    <div className='my-8 flex flex-col justify-between gap-4 md:flex-row md:items-center'>
       <div>
         <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>Compare Products</h1>
         <p className='text-muted-foreground mt-1'>
