@@ -25,18 +25,62 @@ function DrawerOverlay({ className, ...props }: ComponentProps<typeof DrawerPrim
   );
 }
 
-function DrawerContent({ className, ...props }: ComponentProps<typeof DrawerPrimitive.Content>) {
+type DrawerVariant = 'default' | 'ios';
+type Radius = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+interface DrawerContentProps extends React.ComponentProps<typeof DrawerPrimitive.Content> {
+  variant?: DrawerVariant;
+  showHandle?: boolean;
+  radius?: Radius;
+}
+
+const radiusMap: Record<Radius, string> = {
+  sm: 'rounded-t-md',
+  md: 'rounded-t-lg',
+  lg: 'rounded-t-xl',
+  xl: 'rounded-t-2xl',
+  full: 'rounded-t-[28px]'
+};
+
+function DrawerContent({
+  className,
+  variant = 'default',
+  showHandle = false,
+  radius = 'xl',
+  ...props
+}: DrawerContentProps) {
   return (
     <DrawerPortal>
-      <DrawerOverlay />
+      <DrawerOverlay className='fixed inset-0 z-50 bg-black/40 backdrop-blur-sm' />
+
       <DrawerPrimitive.Content
         aria-describedby={undefined}
         className={cn(
-          'bg-background fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border',
+          // base
+          'bg-background fixed inset-x-0 bottom-0 z-50 flex h-auto flex-col border-t shadow-2xl',
+
+          // animation-safe padding
+          'animate-in slide-in-from-bottom duration-300',
+
+          // radius control
+          radiusMap[radius],
+
+          // iOS style variant
+          variant === 'ios' && 'px-4 pt-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.25)]',
+
           className
         )}
         {...props}
-      />
+      >
+        {/* iOS drag handle */}
+        {showHandle && (
+          <div className='flex justify-center py-2'>
+            <div className='bg-muted-foreground/30 h-1.5 w-12 rounded-full' />
+          </div>
+        )}
+
+        {props.children}
+      </DrawerPrimitive.Content>
     </DrawerPortal>
   );
 }

@@ -11,7 +11,7 @@ import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
 import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
-import { UserProfile } from './user-profile';
+import { UserProfile } from './user/user-profile';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

@@ -2,16 +2,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 interface ProductGridSkeletonProps {
   count?: number;
-  columns?: 2 | 4 | 6;
+  columns?: 2 | 4 | 5 | 6;
 }
 
 export function ProductGridSkeleton({ count = 8, columns = 4 }: ProductGridSkeletonProps) {
   const gridClass =
     columns === 6
       ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'
-      : columns === 4
-        ? 'grid-cols-2 lg:grid-cols-4'
-        : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
+      : columns === 5 // Added 5 columns case
+        ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
+        : columns === 4
+          ? 'grid-cols-2 lg:grid-cols-4'
+          : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'; // Default for 2 columns
 
   return (
     <div className={`grid gap-4 sm:gap-6 ${gridClass}`}>

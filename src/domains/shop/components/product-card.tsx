@@ -70,13 +70,14 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
         className='group border-border/60 bg-card hover:border-border hover:shadow-primary/5 flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg'
       >
         <div
-          className={`bg-muted relative aspect-4/5 overflow-hidden ${isCompact ? 'rounded-t-2xl' : ''}`}
+          className={`bg-muted elative relative aspect-4/5 h-full w-full overflow-hidden ${isCompact ? 'rounded-t-2xl' : ''}`}
         >
           <Image
             src={product?.images?.[0] || '/placeholder.png'}
             alt={product.name ?? ''}
+            fill
             loading='lazy'
-            className='h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]'
+            className='object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]'
           />
 
           <div className='from-foreground/25 pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />

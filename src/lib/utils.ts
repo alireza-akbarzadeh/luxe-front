@@ -103,7 +103,6 @@ interface ImageMetadata {
 }
 
 type OpenGraphType = 'website' | 'article' | 'book' | 'profile' | 'product' | 'place' | 'event';
-
 type TwitterCard = 'summary' | 'summary_large_image';
 
 export interface SiteMetaInput {
@@ -118,13 +117,13 @@ export interface SiteMetaInput {
   openGraph?: {
     url?: string;
     siteName?: string;
-    type?: LiteralUnion<OpenGraphType, string>;
+    type?: OpenGraphType; // Changed from LiteralUnion to specific type
     locale?: string;
   };
   twitter?: {
     site?: string;
     creator?: string;
-    card?: LiteralUnion<TwitterCard, string>;
+    card?: TwitterCard;
   };
 }
 
@@ -199,7 +198,7 @@ export function toNextMetadata(
         width: image.width,
         height: image.height,
         alt: image.alt,
-        type: image.format
+        type: image.format as 'jpg' | 'png' | 'webp' | 'gif' | undefined
       })) ?? [];
 
   const primaryImage = metadata.images?.[0];
@@ -217,7 +216,7 @@ export function toNextMetadata(
       description: metadata.description ?? '',
       url: metadata.openGraph?.url ?? '',
       siteName: metadata.openGraph?.siteName ?? '',
-      type: metadata.openGraph?.type ?? 'website',
+      type: 'website',
       locale: metadata.openGraph?.locale ?? '',
       images: ogImages
     },

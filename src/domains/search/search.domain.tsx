@@ -124,7 +124,11 @@ export default function SearchDomain() {
             </div>
             <div className='grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
               {recentlyViewedProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
+                <ProductCard
+                  key={product?.product?.id}
+                  product={{ ...product.product, is_liked: product.is_liked ?? false }}
+                  index={index}
+                />
               ))}
             </div>
           </section>

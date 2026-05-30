@@ -12,13 +12,11 @@ type TRootProvider = Readonly<PropsWithChildren>;
 
 export default function RootProvider({ children }: TRootProvider) {
   return (
-    <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-      <DirectionProvider dir='ltr'>
-        <NuqsAdapter>
-          <Toaster />
-          <TanstackQueryProvider>{children}</TanstackQueryProvider>
-        </NuqsAdapter>
-      </DirectionProvider>
-    </ThemeProvider>
+    <DirectionProvider dir='ltr'>
+      <NuqsAdapter>
+        <Toaster />
+        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      </NuqsAdapter>
+    </DirectionProvider>
   );
 }

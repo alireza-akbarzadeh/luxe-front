@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
-import { AUTH_COOKIE_OPTIONS } from './auth-cookies';
 import { APP_CONFIG } from '../config';
+import { AUTH_COOKIE_OPTIONS } from './auth-cookies';
 
 /**
  * Set authentication cookies (access token and refresh token)

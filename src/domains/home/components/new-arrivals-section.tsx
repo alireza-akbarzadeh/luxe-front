@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetProducts } from '~/src/services/-products-get';
 
@@ -10,23 +8,30 @@ import { ProductGridSkeleton } from './product-grid-skeleton';
 import { SectionHeader } from './section-header';
 
 export function NewArrivalsSection() {
-  const { data, isLoading, isError } = useGetProducts({
-    status: 'active',
-    limit: 6,
-    offset: 0,
-    is_new: true,
-    sort: 'newest'
-  });
-
-  const products = useMemo(
-    () =>
-      resolveProducts(data?.data?.products)
-        .slice(0, 6)
-        .map((element) => mapProductForCard(element)),
-    [data?.data?.products]
+  const { data, isLoading, isError } = useGetProducts(
+    {
+      status: 'active',
+      limit: 5,
+      offset: 0,
+      is_new: true,
+      sort: 'newest'
+    },
+    {
+      query: {
+        select: (response) => {
+          return resolveProducts(response?.data?.products)
+            ?.slice(0, 5)
+            .map((element) => mapProductForCard(element));
+        }
+      }
+    }
   );
 
-  const usingMock = isError || !data?.data?.products?.length;
+  // Now data is already transformed and limited to 5 products
+  const products = data ?? []; // No need for useMemo anymore
+
+  // Check if we're using mock data
+  const usingMock = isError || !data?.length;
 
   return (
     <section className='border-border/50 border-y py-16 sm:py-20 lg:py-28'>
@@ -47,9 +52,11 @@ export function NewArrivalsSection() {
         )}
 
         {isLoading ? (
-          <ProductGridSkeleton count={6} columns={6} />
+          <ProductGridSkeleton count={5} columns={5} />
         ) : (
-          <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6 lg:gap-4'>
+          <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 lg:gap-4'>
+            {' '}
+            {/* Changed to grid-cols-5 */}
             {products.map((product, index) => (
               <ProductCard
                 key={product.id ?? index}
