@@ -58,7 +58,7 @@ const footerSections = [
   {
     title: 'Help & Support',
     links: [
-      { name: 'Order Tracking', href: '/orders/track' },
+      { name: 'Order Tracking', href: '/help/order-tracking' },
       { name: 'Shipping & Delivery', href: '/help/shipping' },
       { name: 'Returns & Refunds', href: '/help/returns' },
       { name: 'Size Guide', href: '/help/size-guide' },

@@ -1,7 +1,6 @@
 'use client';
-import { IconChevronRight, IconMoon, IconSun } from '@tabler/icons-react';
-import { AnimatePresence } from 'framer-motion';
-import { motion } from 'framer-motion';
+import { IconMoon, IconSun } from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 
 export function ThemeMenuItem() {

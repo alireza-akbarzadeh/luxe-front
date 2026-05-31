@@ -28,7 +28,7 @@ const glowBadgeVariants = cva(
   }
 );
 
-type GlowBadgeProps = React.HTMLAttributes<HTMLSpanElement> &
+type GlowBadgeProps = React.ComponentPropsWithoutRef<'span'> &
   VariantProps<typeof glowBadgeVariants> & {
     withPulse?: boolean;
   };
@@ -41,28 +41,8 @@ export function GlowBadge({
   children,
   ...props
 }: GlowBadgeProps) {
-  return (
-    <motion.span
-      className={cn(glowBadgeVariants({ variant, size }), className)}
-      animate={
-        withPulse
-          ? {
-              opacity: [0.8, 1, 0.8],
-              scale: [0.98, 1.02, 0.98]
-            }
-          : {}
-      }
-      transition={
-        withPulse
-          ? {
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }
-          : {}
-      }
-      {...props}
-    >
+  const Content = (
+    <span className={cn(glowBadgeVariants({ variant, size }), className)} {...props}>
       {withPulse && (
         <span className='relative flex h-1.5 w-1.5'>
           <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-75' />
@@ -70,6 +50,27 @@ export function GlowBadge({
         </span>
       )}
       {children}
-    </motion.span>
+    </span>
   );
+
+  if (withPulse) {
+    return (
+      <motion.div
+        animate={{
+          opacity: [0.8, 1, 0.8],
+          scale: [0.98, 1.02, 0.98]
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: 'easeInOut'
+        }}
+        className='inline-flex'
+      >
+        {Content}
+      </motion.div>
+    );
+  }
+
+  return Content;
 }

@@ -1,5 +1,5 @@
 'use client';
-import { IconChevronRight, IconLogout, IconUserCircle } from '@tabler/icons-react';
+import { IconLogout, IconUserCircle } from '@tabler/icons-react';
 
 import { cn } from '@/lib/utils';
 import { useNavbarProfile } from '~/src/components/navbar/user/useNavbarProfile';
