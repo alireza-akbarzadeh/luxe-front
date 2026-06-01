@@ -14,10 +14,10 @@ import { Separator } from '@/components/ui/separator';
 import { navMenuItems, navUtilityLinks } from '@/lib/nav-menu-data';
 
 type MobileNavProps = {
-  onNavigate?: () => void;
+  onNavigateAction?: () => void;
 };
 
-export function MobileNav({ onNavigate }: MobileNavProps) {
+export function MobileNav({ onNavigateAction }: MobileNavProps) {
   const megaItems = navMenuItems.filter((item) => item.type === 'mega');
   const linkItems = navMenuItems.filter((item) => item.type === 'link');
 
@@ -41,7 +41,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
                         <li key={link.title}>
                           <Link
                             href={link.href}
-                            onClick={onNavigate}
+                            onClick={onNavigateAction}
                             className='text-muted-foreground hover:text-foreground block py-2 text-sm transition-colors'
                           >
                             {link.title}
@@ -54,7 +54,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
                 {item.viewAll && (
                   <Link
                     href={item.viewAll.href}
-                    onClick={onNavigate}
+                    onClick={onNavigateAction}
                     className='text-accent inline-flex items-center gap-1 text-sm font-medium'
                   >
                     {item.viewAll.label}
@@ -74,7 +74,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
           <Link
             key={item.label}
             href={item.href}
-            onClick={onNavigate}
+            onClick={onNavigateAction}
             className='hover:text-foreground flex items-center gap-2 py-3 text-base font-medium transition-colors'
           >
             {item.label}
@@ -97,7 +97,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
           <Link
             key={link.label}
             href={link.href}
-            onClick={onNavigate}
+            onClick={onNavigateAction}
             className='text-muted-foreground hover:text-foreground block py-2 text-sm transition-colors'
           >
             {link.label}
@@ -105,7 +105,7 @@ export function MobileNav({ onNavigate }: MobileNavProps) {
         ))}
         <Link
           href='/shop'
-          onClick={onNavigate}
+          onClick={onNavigateAction}
           className='text-accent inline-flex items-center gap-1 py-2 text-sm font-medium'
         >
           Shop all products

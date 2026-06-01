@@ -17,7 +17,7 @@ export function AuthMenuItem() {
     >
       <div
         className={cn(
-          'bg-muted group-hover:bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
+          'bg-muted group-hover:bg-primary/10 flex h-9 w-9 items-center justify-center rounded-xl transition-colors',
           isLoggedIn && 'group-hover:bg-destructive/20'
         )}
       >

@@ -93,7 +93,7 @@ export function Navbar() {
               className='bg-background/95 border-border border-b backdrop-blur-xl md:hidden'
             >
               <div className='px-4 py-6'>
-                <MobileNav onNavigate={() => setIsMobileMenuOpen(false)} />
+                <MobileNav onNavigateAction={() => setIsMobileMenuOpen(false)} />
               </div>
             </motion.div>
           )}

@@ -51,11 +51,11 @@ export function ProductGallery(props: ProductGalleryProps) {
           <button
             key={i}
             onClick={() => setSelectedImage(i)}
-            className={`aspect-square overflow-hidden rounded-lg border-2 transition ${
+            className={`relative aspect-square overflow-hidden rounded-lg border-2 transition ${
               selectedImage === i ? 'border-accent' : 'hover:border-border border-transparent'
             }`}
           >
-            <Image src={img} alt={img} className='h-full w-full object-cover' />
+            <Image fill src={img} alt={img} className='h-full w-full object-cover' />
           </button>
         ))}
       </div>

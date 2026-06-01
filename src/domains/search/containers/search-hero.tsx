@@ -4,6 +4,7 @@ import {
   IconArrowRight,
   IconClock,
   IconCommand,
+  IconCornerDownLeft,
   IconLoader2,
   IconSearch,
   IconSparkles,
@@ -13,118 +14,34 @@ import {
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useGetCategories } from '~/src/services/-categories-get'; // assuming you have this endpoint
-import { useGetSearchSuggestions } from '~/src/services/-search-suggestions-get';
-import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.schemas';
-import { useGetSearchTrending } from '~/src/services/-search-trending-get';
-
-import { useSearchParams } from '../hooks/useSearchParams';
-import { useSearchStore } from '../search.store';
+import { Separator } from '@/components/ui/separator';
+import { useSearchHeroController } from '@/domains/search/hooks/useSearchHeroController';
+import { useSearchParams } from '@/domains/search/hooks/useSearchParams';
 
 export function SearchHero() {
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const [focusedSuggestion, setFocusedSuggestion] = useState(-1);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const suggestionsRef = useRef<HTMLDivElement>(null);
-  const searchStore = useSearchStore();
+  const {
+    isSearching,
+    handleSearch,
+    trendingSearches,
+    handleKeyDown,
+    handleSuggestionClick,
+    suggestionsLoading,
+    suggestionsRef,
+    popularCategories,
+    setInputValue,
+    inputRef,
+    inputValue,
+    setShowSuggestions,
+    setFocusedSuggestion,
+    showSuggestions,
+    searchStore,
+    suggestions,
+    focusedSuggestion
+  } = useSearchHeroController();
   const searchParams = useSearchParams();
-
-  const [inputValue, setInputValue] = useState(searchParams.query);
-
-  // Global keyboard shortcut
-  useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-    document.addEventListener('keydown', handleGlobalKeyDown);
-    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
-  }, []);
-
-  // Fetch suggestions (only when input has value)
-  const { data: suggestionsData, isLoading: suggestionsLoading } = useGetSearchSuggestions(
-    {
-      q: inputValue,
-      limit: 8
-    },
-    {
-      query: {
-        enabled: inputValue.trim().length > 0 && showSuggestions
-      }
-    }
-  );
-  const suggestions = suggestionsData?.data?.suggestions || [];
-
-  // Fetch trending searches
-  const { data: trendingData } = useGetSearchTrending({ limit: 6 });
-  const trendingSearches = trendingData?.data?.trending?.map((t) => t.query) || [];
-
-  // Fetch popular categories (limit 6)
-  const { data: categoriesData } = useGetCategories({ limit: 6, sort: 'popular' });
-  const popularCategories = categoriesData?.data?.categories?.map((c) => c.name) || [];
-
-  const handleSearch = useCallback(
-    (query: string) => {
-      setShowSuggestions(false);
-      setIsSearching(true);
-      searchParams.setQuery(query);
-      // Result count is not known immediately; we can pass 0 or fetch later
-      searchStore.addRecentSearch(query, 0);
-      searchStore.incrementSearchCount();
-      setTimeout(() => setIsSearching(false), 300);
-    },
-    [searchParams, searchStore]
-  );
-
-  // Keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      if (focusedSuggestion >= 0 && suggestions[focusedSuggestion]) {
-        const suggestion = suggestions[focusedSuggestion];
-        if (suggestion.type === 'product') {
-          window.open(`/product/${suggestion.id}`, '_blank');
-        } else if (suggestion.type === 'store') {
-          window.open(`/store/${suggestion.slug}`, '_blank');
-        } else if (suggestion.type === 'category') {
-          searchParams.toggleCategory(suggestion.name ?? '');
-          setShowSuggestions(false);
-        } else {
-          handleSearch(suggestion.name ?? '');
-        }
-      } else {
-        handleSearch(inputValue);
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setFocusedSuggestion((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setFocusedSuggestion((prev) => (prev > 0 ? prev - 1 : -1));
-    } else if (e.key === 'Escape') {
-      setShowSuggestions(false);
-      inputRef.current?.blur();
-    }
-  };
-
-  const handleSuggestionClick = (suggestion: DtoSuggestionItem) => {
-    if (suggestion.type === 'product') {
-      window.open(`/product/${suggestion.id}`, '_blank');
-    } else if (suggestion.type === 'store') {
-      window.open(`/store/${suggestion.slug}`, '_blank');
-    } else if (suggestion.type === 'category') {
-      searchParams.toggleCategory(suggestion.name ?? '');
-      setShowSuggestions(false);
-    } else {
-      handleSearch(suggestion.name ?? '');
-    }
-  };
 
   return (
     <section className='from-secondary/50 to-background relative border-b bg-linear-to-b pt-20'>
@@ -176,9 +93,9 @@ export function SearchHero() {
                   variant='ghost'
                   size='icon'
                   className='h-8 w-8'
-                  onClick={() => {
+                  onClick={async () => {
                     setInputValue('');
-                    searchParams.setQuery('');
+                    await searchParams.setQuery('');
                     inputRef.current?.focus();
                   }}
                 >
@@ -266,6 +183,13 @@ export function SearchHero() {
                           <IconArrowRight className='text-muted-foreground h-4 w-4' />
                         </button>
                       ))}
+                      <Separator />
+                      <div className='flex items-center gap-2 pt-2'>
+                        <div className='rounded-xs border p-px'>
+                          <IconCornerDownLeft className='h-4 w-4' />
+                        </div>
+                        <span className='text-foreground text-xs'>Go to Page</span>
+                      </div>
                     </div>
                   )}
 

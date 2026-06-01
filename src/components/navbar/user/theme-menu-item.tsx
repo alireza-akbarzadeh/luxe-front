@@ -13,7 +13,7 @@ export function ThemeMenuItem() {
       onClick={() => setTheme(nextTheme)}
       className='group hover:bg-accent/60 flex w-full cursor-pointer items-center gap-3 rounded-2xl p-3 transition-all'
     >
-      <div className='bg-muted group-hover:bg-primary/10 flex h-10 w-10 items-center justify-center rounded-xl transition-colors'>
+      <div className='bg-muted group-hover:bg-primary/10 flex h-9 w-9 items-center justify-center rounded-xl transition-colors'>
         <AnimatePresence mode='wait'>
           <motion.div
             key={theme}
@@ -23,9 +23,9 @@ export function ThemeMenuItem() {
             transition={{ duration: 0.2 }}
           >
             {theme === 'dark' ? (
-              <IconSun size={18} className='text-foreground' />
+              <IconSun size={16} className='text-foreground' />
             ) : (
-              <IconMoon size={18} className='text-foreground' />
+              <IconMoon size={16} className='text-foreground' />
             )}
           </motion.div>
         </AnimatePresence>
