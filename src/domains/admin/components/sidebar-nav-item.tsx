@@ -15,15 +15,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import type { DtoMenuItemResponse } from '@/services/-user-menu-structure-get.schemas';
 
-import { ICON_MAP, type SidebarItem } from '../data';
+import { ICON_MAP } from '../data';
 
 export function SidebarNavItem({
   item,
   isCollapsed,
   pathname
 }: {
-  item: SidebarItem;
+  item: DtoMenuItemResponse;
   isCollapsed: boolean;
   pathname: string;
 }) {

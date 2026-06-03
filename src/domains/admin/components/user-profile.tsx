@@ -5,7 +5,6 @@ import {
   IconShieldCheck,
   IconUserCircle
 } from '@tabler/icons-react';
-import Image from 'next/image';
 
 import { AnimatePresence, motion } from '@/components/motion';
 import {
@@ -22,7 +21,7 @@ import { useUser } from '~/src/hooks/useUser';
 
 interface UserProfileProps {
   variant?: 'sidebar' | 'header';
-  isCollapsed?: boolean; // Only used for sidebar
+  isCollapsed?: boolean;
 }
 
 export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserProfileProps) {
@@ -30,7 +29,6 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
 
   const { user } = useUser();
 
-  const avatarSeed = user?.email || 'Guest';
   const userName = user?.first_name || 'Guest User';
   const userEmail = user?.email || 'guest@verc.com';
   const userRole = user?.role || 'USER';
@@ -60,14 +58,15 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
           >
             {/* Avatar Section */}
             <div className='relative shrink-0'>
-              <Image
-                alt={userName}
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${avatarSeed}`}
-                className={cn(
-                  'ring-border group-hover:ring-primary/50 rounded-lg object-cover shadow-sm ring-1 transition-all',
-                  isHeader ? 'h-8 w-8' : 'h-9 w-9'
-                )}
-              />
+              {/*<Image*/}
+              {/*  fill*/}
+              {/*  alt={userName}*/}
+              {/*  src={`${avatarSeed}`}*/}
+              {/*  className={cn(*/}
+              {/*    'ring-border group-hover:ring-primary/50 rounded-lg object-cover shadow-sm ring-1 transition-all',*/}
+              {/*    isHeader ? 'h-8 w-8' : 'h-9 w-9'*/}
+              {/*  )}*/}
+              {/*/>*/}
               {/* Animated Status Indicator */}
               <div className='absolute -right-0.5 -bottom-0.5 flex items-center justify-center'>
                 <motion.div

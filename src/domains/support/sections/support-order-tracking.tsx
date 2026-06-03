@@ -1,3 +1,4 @@
+'use client';
 import { IconMail, IconMapPin } from '@tabler/icons-react';
 
 import { SectionHeading, SectionShell } from '@/domains/support/components/section-shell';

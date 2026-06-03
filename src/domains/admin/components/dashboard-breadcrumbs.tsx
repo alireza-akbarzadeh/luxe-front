@@ -2,35 +2,116 @@ import { IconChevronRight, IconHome } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useMemo } from 'react';
 
-import { dashboard_SIDEBAR } from '../data';
+import type {
+  DtoMenuGroupResponse,
+  DtoMenuItemResponse
+} from '@/services/-user-menu-structure-get.schemas';
 
-export function DashboardBreadcrumbs({ pathname }: { pathname: string }) {
+export function DashboardBreadcrumbs({
+  pathname,
+  sidebar_menu
+}: {
+  pathname: string;
+  sidebar_menu: DtoMenuGroupResponse[];
+}) {
   const breadcrumbs = useMemo(() => {
-    const paths = pathname.split('/').filter(Boolean);
+    const findMenuItemByHref = (
+      items: DtoMenuItemResponse[],
+      href: string
+    ): DtoMenuItemResponse | null => {
+      for (const item of items) {
+        if (item.href === href) return item;
+        if (item.children?.length) {
+          const found = findMenuItemByHref(item.children, href);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
 
-    return paths.map((segment, index) => {
-      const currentPath = '/' + paths.slice(0, index + 1).join('/');
+    // 2. Build the ancestor chain (from root to target item)
+    const buildAncestorChain = (
+      items: DtoMenuItemResponse[],
+      targetHref: string,
+      ancestors: DtoMenuItemResponse[] = []
+    ): DtoMenuItemResponse[] | null => {
+      for (const item of items) {
+        if (item.href === targetHref) {
+          return [...ancestors, item];
+        }
+        if (item.children?.length) {
+          const result = buildAncestorChain(item.children, targetHref, [...ancestors, item]);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
 
-      let label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+    // Collect all items from all groups (flat list for searching)
+    const allItems = sidebar_menu.flatMap((group) => group.items || []);
 
-      dashboard_SIDEBAR.forEach((group) => {
-        group.items.forEach((item) => {
-          if (item.href === currentPath) label = item.label;
-          item.children?.forEach((child) => {
-            if (child.href === currentPath) label = child.label;
-          });
-        });
+    // Try to find the exact menu item for the current pathname
+    let matchedItem = findMenuItemByHref(allItems, pathname);
+
+    if (!matchedItem) {
+      // Fallback: try to match against a "normalized" path (remove trailing slash, etc.)
+      const normalizedPath = pathname.replace(/\/$/, '');
+      matchedItem = findMenuItemByHref(allItems, normalizedPath);
+    }
+
+    let breadcrumbItems: Array<{ label: string; href: string; isLast: boolean }> = [];
+
+    if (matchedItem) {
+      // Build the full ancestor chain (including the matched item)
+      const chain = buildAncestorChain(allItems, matchedItem.href as string);
+      if (chain) {
+        breadcrumbItems = chain.map((item, idx) => ({
+          label: item.label ?? '',
+          href: item.href ?? '',
+          isLast: idx === chain.length - 1
+        }));
+      }
+    } else {
+      // Fallback to URL‑based breadcrumbs (original behaviour)
+      const paths = pathname.split('/').filter(Boolean);
+      breadcrumbItems = paths.map((segment, index) => {
+        const currentPath = '/' + paths.slice(0, index + 1).join('/');
+        let label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+
+        // Try to find a label from the menu (shallow search)
+        for (const group of sidebar_menu) {
+          for (const item of group.items ?? []) {
+            if (item.href === currentPath) {
+              label = item.label || '';
+              break;
+            }
+            if (item.children) {
+              const child = item.children.find((c) => c.href === currentPath);
+              if (child) {
+                label = child.label || '';
+                break;
+              }
+            }
+          }
+        }
+
+        return {
+          label,
+          href: currentPath,
+          isLast: index === paths.length - 1
+        };
       });
+    }
 
-      return {
-        label,
-        href: currentPath,
-        isLast: index === paths.length - 1
-      };
-    });
-  }, [pathname]);
+    // If the only breadcrumb is the dashboard home, hide it (optional)
+    if (breadcrumbItems.length === 1 && breadcrumbItems?.[0]?.href === '/dashboard') {
+      return null;
+    }
 
-  if (breadcrumbs.length <= 1) return null;
+    return breadcrumbItems;
+  }, [pathname, sidebar_menu]);
+
+  if (!breadcrumbs || breadcrumbs.length === 0) return null;
 
   return (
     <nav className='hidden items-center gap-2 text-sm lg:flex'>

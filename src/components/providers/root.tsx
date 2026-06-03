@@ -6,19 +6,18 @@ import { Toaster } from '@/components/ui/sonner';
 
 import { DirectionProvider } from '../ui/direction';
 import TanstackQueryProvider from './client/tanstack-query';
-import { ThemeProvider } from './client/theme';
 
 type TRootProvider = Readonly<PropsWithChildren>;
 
 export default function RootProvider({ children }: TRootProvider) {
   return (
-    <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-      <DirectionProvider dir='ltr'>
-        <NuqsAdapter>
-          <Toaster />
-          <TanstackQueryProvider>{children}</TanstackQueryProvider>
-        </NuqsAdapter>
-      </DirectionProvider>
-    </ThemeProvider>
+    // <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+    <DirectionProvider dir='ltr'>
+      <NuqsAdapter>
+        <Toaster />
+        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      </NuqsAdapter>
+    </DirectionProvider>
+    // </ThemeProvider>
   );
 }

@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
-import type { SidebarGroup } from '../data';
 import { SidebarNavItem } from './sidebar-nav-item';
 import { UserProfile } from './user-profile';
 import { WorkspaceSwitcher } from './worksapce-switcher';
@@ -19,7 +19,7 @@ export function AdminSidebar({
   isMobile = false,
   className
 }: {
-  groups: SidebarGroup[];
+  groups: DtoMenuGroupResponse[];
   pathname: string;
   isMobile?: boolean;
   className?: string;
@@ -109,14 +109,14 @@ export function AdminSidebar({
           )}
         >
           {groups.map((group) => (
-            <div key={group.group} className='w-full space-y-1'>
+            <div key={group.id} className='w-full space-y-1'>
               {!effectiveCollapsed && (
                 <h4 className='text-muted-foreground/40 mb-2 px-3 text-[10px] font-bold tracking-[0.2em] whitespace-nowrap uppercase'>
-                  {group.group}
+                  {group.name}
                 </h4>
               )}
               <div className='space-y-0.5'>
-                {group.items.map((item) => (
+                {group?.items?.map((item) => (
                   <SidebarNavItem
                     key={item.label}
                     item={item}

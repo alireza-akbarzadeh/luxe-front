@@ -1,6 +1,12 @@
-import { IconFileText, IconSettings, IconUser } from '@tabler/icons-react';
+import {
+  IconArrowRight,
+  IconCornerDownLeft,
+  IconFileText,
+  IconSettings,
+  IconUser
+} from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import {
   CommandDialog,
@@ -11,15 +17,15 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command';
+import { ICON_MAP } from '@/domains/admin/data';
+import type {
+  DtoMenuGroupResponse,
+  DtoMenuItemResponse
+} from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
-import { ICON_MAP, type SidebarGroup } from '../data';
 
 type IconMapType = Record<string, React.ComponentType<{ className?: string }>>;
-
-interface CommandSettingProps {
-  data: SidebarGroup[];
-}
 
 export type FlatSearchItem = {
   label: string;
@@ -30,44 +36,15 @@ export type FlatSearchItem = {
   permission?: string;
 };
 
+interface CommandSettingProps {
+  data: DtoMenuGroupResponse[];
+}
+
 export function SearchSide({ data }: CommandSettingProps) {
   const { push } = useRouter();
-
   const searchOpen = useDashboardStore((state) => state.searchOpen);
   const setSearchOpen = useDashboardStore((state) => state.setSearchOpen);
-
-  const flatItems = useMemo(() => {
-    const items: FlatSearchItem[] = [];
-    data.forEach((group) => {
-      group.items.forEach((item) => {
-        if (item.href) {
-          items.push({
-            label: item.label,
-            href: item.href,
-            icon: item.icon,
-            groupName: group.group,
-            parentLabel: null,
-            permission: item.permission
-          });
-        }
-        if (item.children) {
-          item.children.forEach((child) => {
-            if (child.href) {
-              items.push({
-                label: child.label,
-                href: child.href,
-                icon: child.icon || item.icon,
-                groupName: group.group,
-                parentLabel: item.label,
-                permission: child.permission || item.permission
-              });
-            }
-          });
-        }
-      });
-    });
-    return items;
-  }, [data]);
+  const flatItems = useMemo(() => flattenMenu(data), [data]);
 
   const onSelect = (href: string) => {
     setSearchOpen(false);
@@ -76,56 +53,117 @@ export function SearchSide({ data }: CommandSettingProps) {
 
   return (
     <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-      <CommandInput placeholder='Search pages, tools, or staff settings...' />
-      <CommandList className='custom-scrollbar'>
+      <CommandInput
+        placeholder='Search pages, tools, or staff settings...'
+        className='border-border bg-background text-foreground border-b'
+      />
+      <CommandList className='max-h-120'>
         <CommandEmpty>No results found.</CommandEmpty>
 
-        <CommandGroup heading='Navigation'>
-          {flatItems.map((item, index) => {
+        <CommandGroup heading='Navigation' className='px-2 py-2'>
+          {flatItems.map((item, idx) => {
             const Icon = item.icon ? (ICON_MAP as IconMapType)[item.icon] : IconFileText;
             return (
               <CommandItem
-                key={`${item.href}-${index}`}
-                onSelect={() => item.href && onSelect(item.href)}
-                className='group flex cursor-pointer items-center gap-3 py-3'
+                key={`${item.href}-${idx}`}
+                onSelect={() => onSelect(item.href)}
+                className='group aria-selected:text-accent-foreground flex cursor-pointer items-center justify-between px-3 py-2.5 transition-colors aria-selected:bg-gray-200'
               >
-                <div className='bg-muted/50 group-aria-selected:bg-background flex h-9 w-9 items-center justify-center rounded-xl border transition-colors'>
-                  {Icon && (
-                    <Icon className='text-muted-foreground group-aria-selected:text-primary h-4 w-4 transition-colors' />
-                  )}
-                </div>
-                <div className='flex flex-col'>
-                  <span className='group-aria-selected:text-primary text-sm font-semibold transition-colors'>
-                    {item.label}
-                  </span>
-                  <div className='text-muted-foreground flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase'>
-                    <span>{item.groupName}</span>
-                    {item.parentLabel && (
-                      <>
-                        <span className='opacity-40'>/</span>
-                        <span className='text-primary/70'>{item.parentLabel}</span>
-                      </>
+                <div className='flex items-center gap-3 overflow-hidden'>
+                  <div className='border-border bg-muted group-aria-selected:border-primary group-aria-selected:bg-primary/10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors'>
+                    {Icon && (
+                      <Icon className='text-muted-foreground group-aria-selected:text-primary h-4 w-4 transition-colors' />
                     )}
                   </div>
+                  <div className='flex flex-col overflow-hidden'>
+                    <span className='group-aria-selected:text-primary truncate text-sm font-semibold transition-colors'>
+                      {item.label}
+                    </span>
+                    <div className='text-muted-foreground flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase'>
+                      <span>{item.groupName}</span>
+                      {item.parentLabel && (
+                        <>
+                          <span className='opacity-40'>/</span>
+                          <span className='text-primary/70'>{item.parentLabel}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
+                {/* Enter icon hint */}
+                <IconArrowRight className='text-muted-foreground ml-auto h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-aria-selected:opacity-100' />
               </CommandItem>
             );
           })}
         </CommandGroup>
 
-        <CommandSeparator />
-
-        <CommandGroup heading='Quick Actions'>
-          <CommandItem onSelect={() => onSelect('/dashboard/settings')}>
-            <IconSettings className='text-muted-foreground mr-3 h-4 w-4' />
-            <span className='text-sm font-medium'>System Settings</span>
-          </CommandItem>
-          <CommandItem onSelect={() => onSelect('/dashboard/library')}>
-            <IconUser className='text-muted-foreground mr-3 h-4 w-4' />
-            <span className='text-sm font-medium'>My Profile</span>
-          </CommandItem>
-        </CommandGroup>
+        {/* Sticky quick actions at bottom */}
       </CommandList>
+      <div className='bg-background sticky bottom-0 pt-1'>
+        <CommandSeparator className='bg-border' />
+        <CommandGroup heading='Quick Actions' className='px-2 py-2'>
+          <CommandItem
+            onSelect={() => onSelect('/dashboard/settings')}
+            className='aria-selected:bg-accent flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors'
+          >
+            <div className='flex items-center gap-3'>
+              <IconSettings className='text-muted-foreground h-4 w-4' />
+              <span className='text-sm font-medium'>System Settings</span>
+            </div>
+            <IconArrowRight className='text-muted-foreground ml-auto h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity aria-selected:opacity-100' />
+          </CommandItem>
+          <CommandItem
+            onSelect={() => onSelect('/dashboard/library')}
+            className='aria-selected:bg-accent flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors'
+          >
+            <div className='flex items-center gap-3'>
+              <IconUser className='text-muted-foreground h-4 w-4' />
+              <span className='text-sm font-medium'>My Profile</span>
+            </div>
+            <IconArrowRight className='text-muted-foreground ml-auto h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity aria-selected:opacity-100' />
+          </CommandItem>
+          <div className='ml-2 flex items-center gap-2 pt-2'>
+            <div className='rounded-xs border p-px'>
+              <IconCornerDownLeft className='h-4 w-4' />
+            </div>
+            <span className='text-foreground text-xs'>Go to Page</span>
+          </div>
+        </CommandGroup>
+      </div>
     </CommandDialog>
   );
+}
+
+// Helper: recursively flatten groups -> items -> children
+function flattenMenu(groups: DtoMenuGroupResponse[]): FlatSearchItem[] {
+  const result: FlatSearchItem[] = [];
+  for (const group of groups) {
+    if (group.items?.length) {
+      flattenItems(group.items, group.name as string, null, result);
+    }
+  }
+  return result;
+}
+
+function flattenItems(
+  items: DtoMenuItemResponse[],
+  groupName: string,
+  parentLabel: string | null,
+  accumulator: FlatSearchItem[]
+) {
+  for (const item of items) {
+    if (item.href) {
+      accumulator.push({
+        label: item.label ?? '',
+        href: item.href,
+        icon: item.icon,
+        groupName: groupName,
+        parentLabel: parentLabel,
+        permission: item.permission
+      });
+    }
+    if (item.children?.length) {
+      flattenItems(item.children, groupName, item.label as string, accumulator);
+    }
+  }
 }

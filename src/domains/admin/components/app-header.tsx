@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
 import { useDashboardShortcuts } from '../useDahboardShortcut';
@@ -30,9 +31,10 @@ import { UserProfile } from './user-profile';
 
 interface AppHeaderProps {
   pathname: string;
+  sidebar_menu: DtoMenuGroupResponse[];
 }
 
-export function AppHeader({ pathname }: AppHeaderProps) {
+export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   useDashboardShortcuts();
@@ -67,7 +69,7 @@ export function AppHeader({ pathname }: AppHeaderProps) {
       <div className='flex min-w-0 flex-1 items-center gap-4'>
         <div className='text-muted-foreground bg-muted/20 border-border/40 hidden items-center gap-2 rounded-full border px-3 py-1 text-sm lg:flex'>
           <IconBrandZapier className='text-primary h-3.5 w-3.5 animate-pulse' />
-          <DashboardBreadcrumbs pathname={pathname} />
+          <DashboardBreadcrumbs sidebar_menu={sidebar_menu} pathname={pathname} />
           <div className='group hidden cursor-help items-center gap-4 rounded-full border border-emerald-500/10 bg-emerald-500/5 px-3 py-1 transition-all hover:bg-emerald-500/10 xl:flex'>
             <div className='flex items-center gap-1.5'>
               <div className='relative flex h-2 w-2'>

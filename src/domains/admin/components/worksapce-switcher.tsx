@@ -19,8 +19,8 @@ import { cn } from '@/lib/utils';
 
 export function WorkspaceSwitcher({ isCollapsed }: { isCollapsed: boolean }) {
   const workspaces = [
-    { name: 'Verc Main', icon: IconLayout2, plan: 'Enterprise' },
-    { name: 'Verc Events', icon: IconBrandZapier, plan: 'Pro' },
+    { name: 'Luxe Main', icon: IconLayout2, plan: 'Enterprise' },
+    { name: 'Luxe Events', icon: IconBrandZapier, plan: 'Pro' },
     { name: 'Global Admin', icon: IconGlobe, plan: 'Internal' }
   ];
 
