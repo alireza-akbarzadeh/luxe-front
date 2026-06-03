@@ -11,36 +11,38 @@ import {
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { navMenuItems, navUtilityLinks } from '@/lib/nav-menu-data';
+import { navUtilityLinks } from '@/lib/nav-menu-data';
+import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 
 type MobileNavProps = {
   onNavigateAction?: () => void;
+  navMenus: DtoNavItemResponse[] | undefined;
 };
 
-export function MobileNav({ onNavigateAction }: MobileNavProps) {
-  const megaItems = navMenuItems.filter((item) => item.type === 'mega');
-  const linkItems = navMenuItems.filter((item) => item.type === 'link');
+export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
+  const megaItems = navMenus?.filter((item) => item.type === 'mega');
+  const linkItems = navMenus?.filter((item) => item.type === 'link');
 
   return (
     <div className='space-y-2'>
       <Accordion type='multiple' className='w-full'>
-        {megaItems.map((item) => (
-          <AccordionItem key={item.label} value={item.label} className='border-border/60'>
+        {megaItems?.map((item) => (
+          <AccordionItem key={item.label} value={item.label as string} className='border-border/60'>
             <AccordionTrigger className='py-3 text-base font-medium hover:no-underline'>
               {item.label}
             </AccordionTrigger>
             <AccordionContent className='pb-4'>
               <div className='space-y-6 pl-1'>
-                {item.columns.map((column) => (
+                {item?.columns?.map((column) => (
                   <div key={column.title}>
                     <p className='text-muted-foreground mb-2 text-xs font-semibold tracking-wider uppercase'>
                       {column.title}
                     </p>
                     <ul className='space-y-1'>
-                      {column.links.map((link) => (
+                      {column?.links?.map((link) => (
                         <li key={link.title}>
                           <Link
-                            href={link.href}
+                            href={link.href as string}
                             onClick={onNavigateAction}
                             className='text-muted-foreground hover:text-foreground block py-2 text-sm transition-colors'
                           >
@@ -53,7 +55,7 @@ export function MobileNav({ onNavigateAction }: MobileNavProps) {
                 ))}
                 {item.viewAll && (
                   <Link
-                    href={item.viewAll.href}
+                    href={item.viewAll.href as string}
                     onClick={onNavigateAction}
                     className='text-accent inline-flex items-center gap-1 text-sm font-medium'
                   >
@@ -70,10 +72,10 @@ export function MobileNav({ onNavigateAction }: MobileNavProps) {
       <Separator className='my-2' />
 
       <div className='space-y-1'>
-        {linkItems.map((item) => (
+        {linkItems?.map((item) => (
           <Link
             key={item.label}
-            href={item.href}
+            href={item.href as string}
             onClick={onNavigateAction}
             className='hover:text-foreground flex items-center gap-2 py-3 text-base font-medium transition-colors'
           >

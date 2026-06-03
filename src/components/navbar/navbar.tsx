@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
@@ -16,6 +17,7 @@ import { UserProfile } from './user/user-profile';
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: { data: navMenus } = {} } = useGetNavMenus();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +53,7 @@ export function Navbar() {
 
             {/* Desktop Navigation */}
             <div className='hidden flex-1 justify-center px-6 md:flex'>
-              <DesktopNav />
+              <DesktopNav navMenus={navMenus} />
             </div>
 
             {/* Right Side Actions */}
@@ -93,7 +95,10 @@ export function Navbar() {
               className='bg-background/95 border-border border-b backdrop-blur-xl md:hidden'
             >
               <div className='px-4 py-6'>
-                <MobileNav onNavigateAction={() => setIsMobileMenuOpen(false)} />
+                <MobileNav
+                  navMenus={navMenus}
+                  onNavigateAction={() => setIsMobileMenuOpen(false)}
+                />
               </div>
             </motion.div>
           )}
