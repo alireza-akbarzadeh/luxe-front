@@ -55,9 +55,9 @@ export function SearchSide({ data }: CommandSettingProps) {
     <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
       <CommandInput
         placeholder='Search pages, tools, or staff settings...'
-        className='border-border bg-background text-foreground border-b'
+        className='text-foreground border-b border-none bg-transparent'
       />
-      <CommandList className='max-h-120'>
+      <CommandList className='max-h-90'>
         <CommandEmpty>No results found.</CommandEmpty>
 
         <CommandGroup heading='Navigation' className='px-2 py-2'>

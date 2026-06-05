@@ -77,9 +77,9 @@ export function AdminSidebar({
       <div className='mb-4 shrink-0 px-3'>
         <Button
           variant='outline'
-          size='sm'
+          size='lg'
           className={cn(
-            'bg-muted/30 hover:bg-muted/50 text-muted-foreground border-none shadow-inner transition-all',
+            'bg-muted/30 hover:bg-muted/50 text-muted-foreground rounded-sm! border-none shadow-inner transition-all',
             effectiveCollapsed
               ? 'mx-auto h-10 w-10 justify-center rounded-xl p-0'
               : 'w-full justify-start gap-2 rounded-xl'

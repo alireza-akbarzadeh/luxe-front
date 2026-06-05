@@ -1,3 +1,5 @@
+import { DashboardDomain } from '@/domains/dashboard/dashboard.domain';
+
 export default function DashboardPage() {
-  return <div>Dashboard</div>;
+  return <DashboardDomain />;
 }

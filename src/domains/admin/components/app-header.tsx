@@ -1,33 +1,14 @@
-import {
-  IconBrandZapier,
-  IconLayoutGrid,
-  IconMenu,
-  IconMenuOrder,
-  IconMusic,
-  IconPlus,
-  IconSearch,
-  IconUsers
-} from '@tabler/icons-react';
-import Link from 'next/link';
+import { IconBrandZapier, IconMenu, IconSearch } from '@tabler/icons-react';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+import { HeaderActions } from '@/domains/admin/components/header-action';
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
 import { useDashboardShortcuts } from '../useDahboardShortcut';
 import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
-import { NotificationCenter } from './notificaiton-center';
-import { UserProfile } from './user-profile';
 
 interface AppHeaderProps {
   pathname: string;
@@ -106,87 +87,7 @@ export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
         </div>
       </div>
 
-      <div className='ml-auto flex items-center gap-1.5'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant='ghost'
-              className='hover:bg-primary/10 hover:text-primary hidden h-9 gap-2 rounded-xl px-3 transition-all sm:flex'
-            >
-              <IconPlus className='h-4 w-4' />
-              <span className='text-xs font-bold tracking-wider uppercase'>Create</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align='end'
-            className='border-border/40 bg-popover/95 w-56 rounded-2xl p-2 shadow-2xl backdrop-blur-md'
-          >
-            <DropdownMenuLabel className='text-muted-foreground px-3 py-2 text-[10px] font-bold tracking-widest uppercase'>
-              Quick Actions
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className='opacity-50' />
-            <DropdownMenuItem
-              asChild
-              className='flex cursor-pointer items-center gap-3 rounded-xl p-2.5'
-            >
-              <Link href='/dashboard/movies/create'>
-                <div className='rounded-lg bg-blue-500/10 p-2'>
-                  <IconMenuOrder className='h-4 w-4 text-blue-500' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='text-sm font-medium'>New Movie</span>
-                  <span className='text-muted-foreground font-mono text-[10px]'>N</span>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              asChild
-              className='flex cursor-pointer items-center gap-3 rounded-xl p-2.5'
-            >
-              <Link href='/dashboard/music/create'>
-                <div className='rounded-lg bg-blue-500/10 p-2'>
-                  <IconMusic className='h-4 w-4 text-pink-500' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='text-sm font-medium'>New Music</span>
-                  <span className='text-muted-foreground font-mono text-[10px]'>N</span>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              asChild
-              className='flex cursor-pointer items-center gap-3 rounded-xl p-2.5'
-            >
-              <Link href='/dashboard/series/create'>
-                <div className='rounded-lg bg-purple-500/10 p-2'>
-                  <IconLayoutGrid className='h-4 w-4 text-purple-500' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='text-sm font-medium'>New Series</span>
-                  <span className='text-muted-foreground font-mono text-[10px]'>S</span>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              asChild
-              className='flex cursor-pointer items-center gap-3 rounded-xl p-2.5'
-            >
-              <Link href='/dashboard/users/create'>
-                <div className='rounded-lg bg-emerald-500/10 p-2'>
-                  <IconUsers className='h-4 w-4 text-emerald-500' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='text-sm font-medium'>New Staff</span>
-                  <span className='text-muted-foreground font-mono text-[10px]'>U</span>
-                </div>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <div className='bg-border/40 mx-2 hidden h-6 w-px sm:block' />
-        <NotificationCenter />
-        <UserProfile variant='header' />
-      </div>
+      <HeaderActions />
     </header>
   );
 }

@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { UserManagementTable } from '~/src/domains/users/components/user-table';
 
 export default function UserManagementPage() {
   const handleExport = () => {
@@ -18,7 +17,7 @@ export default function UserManagementPage() {
   };
 
   return (
-    <div className='relative min-h-screen space-y-6 p-4 md:p-8'>
+    <div className='relative min-h-screen space-y-6'>
       {/* 1. Page Header */}
       <div className='flex flex-col justify-between gap-4 md:flex-row md:items-center'>
         <div>
@@ -72,7 +71,7 @@ export default function UserManagementPage() {
 
       {/* 3. The Main Table Area */}
       <div className='border-border/40 bg-card/30 overflow-hidden rounded-[2.5rem] border shadow-2xl shadow-black/5 backdrop-blur-xl'>
-        <UserManagementTable />
+        {/*<UserManagementTable />*/}
       </div>
     </div>
   );
