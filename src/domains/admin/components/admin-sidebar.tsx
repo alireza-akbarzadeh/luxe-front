@@ -1,6 +1,5 @@
 import { IconChevronLeft, IconSearch } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, type Transition } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -24,17 +23,22 @@ export function AdminSidebar({
   isMobile?: boolean;
   className?: string;
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const effectiveCollapsed = isMobile ? false : isCollapsed;
-  const { setSearchOpen } = useDashboardStore();
+  const { setSearchOpen, isSidebarCollapsed, setSidebarCollapsed } = useDashboardStore();
+
+  const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
+  const springTransition: Transition = {
+    type: 'spring',
+    stiffness: 380,
+    damping: 35
+  };
   return (
     <motion.aside
       initial={false}
       animate={{ width: effectiveCollapsed ? 76 : 280 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      transition={springTransition}
       className={cn(
         'bg-card/50 relative z-30 flex h-full shrink-0 flex-col border-r backdrop-blur-md',
-        'overflow-visible', // Crucial for tooltips/dropdowns
+        'overflow-visible',
         className
       )}
     >
@@ -62,7 +66,7 @@ export function AdminSidebar({
             'hover:bg-primary/10 h-7 w-7 transition-all',
             effectiveCollapsed ? 'mx-auto' : 'ml-auto'
           )}
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
         >
           <IconChevronLeft
             className={cn(

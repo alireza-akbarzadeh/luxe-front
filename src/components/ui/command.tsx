@@ -23,10 +23,11 @@ function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive
 
 interface CommandDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
   children: React.ReactNode;
+  dialogClassName?: string;
 }
 
 // FIX: Ensure this is the ONLY declaration of CommandDialog in this file
-export function CommandDialog({ children, ...props }: CommandDialogProps) {
+export function CommandDialog({ children, dialogClassName, ...props }: CommandDialogProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // We use a state to ensure we don't get hydration errors
@@ -46,7 +47,9 @@ export function CommandDialog({ children, ...props }: CommandDialogProps) {
   if (isDesktop) {
     return (
       <Dialog {...props}>
-        <DialogContent className='overflow-hidden p-0 shadow-lg'>{CommandContent}</DialogContent>
+        <DialogContent className={cn('overflow-hidden p-0 shadow-lg', dialogClassName)}>
+          {CommandContent}
+        </DialogContent>
       </Dialog>
     );
   }

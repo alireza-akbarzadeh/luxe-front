@@ -52,7 +52,7 @@ export function SearchSide({ data }: CommandSettingProps) {
   };
 
   return (
-    <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+    <CommandDialog dialogClassName='border-6' open={searchOpen} onOpenChange={setSearchOpen}>
       <CommandInput
         placeholder='Search pages, tools, or staff settings...'
         className='text-foreground border-b border-none bg-transparent'
@@ -67,7 +67,7 @@ export function SearchSide({ data }: CommandSettingProps) {
               <CommandItem
                 key={`${item.href}-${idx}`}
                 onSelect={() => onSelect(item.href)}
-                className='group aria-selected:text-accent-foreground flex cursor-pointer items-center justify-between px-3 py-2.5 transition-colors aria-selected:bg-gray-200'
+                className='group aria-selected:text-accent-foreground aria-selected:bg-accent/20 flex cursor-pointer items-center justify-between px-3 py-2.5 transition-colors'
               >
                 <div className='flex items-center gap-3 overflow-hidden'>
                   <div className='border-border bg-muted group-aria-selected:border-primary group-aria-selected:bg-primary/10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors'>
@@ -104,7 +104,7 @@ export function SearchSide({ data }: CommandSettingProps) {
         <CommandGroup heading='Quick Actions' className='px-2 py-2'>
           <CommandItem
             onSelect={() => onSelect('/dashboard/settings')}
-            className='aria-selected:bg-accent flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors'
+            className='aria-selected:bg-accent/20 flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors aria-selected:text-black'
           >
             <div className='flex items-center gap-3'>
               <IconSettings className='text-muted-foreground h-4 w-4' />
@@ -114,7 +114,7 @@ export function SearchSide({ data }: CommandSettingProps) {
           </CommandItem>
           <CommandItem
             onSelect={() => onSelect('/dashboard/library')}
-            className='aria-selected:bg-accent flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors'
+            className='aria-selected:bg-accent/20 flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 transition-colors aria-selected:text-black'
           >
             <div className='flex items-center gap-3'>
               <IconUser className='text-muted-foreground h-4 w-4' />

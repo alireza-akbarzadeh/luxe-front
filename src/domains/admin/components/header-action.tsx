@@ -39,7 +39,7 @@ export function HeaderActions() {
           {/* New Product */}
           <DropdownMenuItem
             asChild
-            className='hover:bg-muted/80 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
+            className='hover:bg-muted/20 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
           >
             <Link href='/dashboard/products/create'>
               <div className='shrink-0 rounded-lg bg-blue-500/10 p-2'>

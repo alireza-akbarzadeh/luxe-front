@@ -38,6 +38,7 @@ export interface DashboardState {
   notifications: NotificationItem[];
   messages: MessageItem[];
   searchOpen: boolean;
+  isSidebarCollapsed: boolean;
   notificationOpen: boolean;
   mobileSidebarOpen: boolean;
   selectedPeriod: TimePeriod;
@@ -55,6 +56,7 @@ interface DashboardActions {
   setPeriod: (period: TimePeriod) => void;
   setSearchOpen: (open: boolean) => void;
   setMobileSidebarOpen: (open: boolean) => void;
+  setSidebarCollapsed: (open: boolean) => void;
   markAsRead: (id: string) => void;
   markAllRead: () => void;
   addNotification: (notif: Omit<NotificationItem, 'id' | 'read' | 'time'>) => void;
@@ -92,6 +94,7 @@ export const useDashboardStore = create<DashboardState & DashboardActions>()((se
     }
   ],
   searchOpen: false,
+  isSidebarCollapsed: false,
   notificationOpen: false,
   mobileSidebarOpen: false,
   selectedPeriod: '24h',
@@ -134,6 +137,7 @@ export const useDashboardStore = create<DashboardState & DashboardActions>()((se
     }),
 
   setPeriod: (period) => set({ selectedPeriod: period }),
+  setSidebarCollapsed: (state) => set({ isSidebarCollapsed: state }),
 
   setSearchOpen: (open) => set({ searchOpen: open }),
 

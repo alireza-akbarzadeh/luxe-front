@@ -114,7 +114,7 @@ export function DashboardBreadcrumbs({
   if (!breadcrumbs || breadcrumbs.length === 0) return null;
 
   return (
-    <nav className='hidden items-center gap-2 text-sm lg:flex'>
+    <nav className='text-muted-foreground bg-muted/20 border-border/40 hidden items-center gap-2 rounded-full border p-2.5 text-sm lg:flex'>
       <Link
         href='/dashboard'
         className='text-muted-foreground hover:text-primary transition-colors'
