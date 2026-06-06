@@ -1,11 +1,4 @@
-import {
-  IconBrandZapier,
-  IconChevronLeft,
-  IconChevronRight,
-  IconMenu,
-  IconMoon,
-  IconSearch
-} from '@tabler/icons-react';
+import { IconBrandZapier, IconMenu, IconMoon, IconSearch } from '@tabler/icons-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 
@@ -15,7 +8,6 @@ import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
-import { useDashboardShortcuts } from '../useDahboardShortcut';
 import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
 
 interface AppHeaderProps {
@@ -25,13 +17,9 @@ interface AppHeaderProps {
 
 export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
   const [isScrolled, setIsScrolled] = React.useState(false);
-  const setIsSidebarCollapsed = useDashboardStore((store) => store.setSidebarCollapsed);
-  const isSidebarCollapsed = useDashboardStore((store) => store.isSidebarCollapsed);
 
   const { setTheme, theme } = useTheme();
   const nextTheme = theme === 'light' ? 'dark' : 'light';
-
-  useDashboardShortcuts();
 
   React.useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -59,19 +47,6 @@ export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
       >
         <IconMenu className='h-5 w-5' />
       </Button>
-      <div className='text-muted-foreground bg-muted/20 border-border/40 hidden items-center gap-2 rounded-full border p-3 text-sm lg:flex'>
-        {isSidebarCollapsed ? (
-          <IconChevronRight
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className='text-primary h-4 w-4 animate-pulse'
-          />
-        ) : (
-          <IconChevronLeft
-            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className='text-primary h-4 w-4 animate-pulse'
-          />
-        )}
-      </div>
       <div className='text-muted-foreground bg-muted/20 border-border/40 hidden items-center gap-2 rounded-full border p-3 text-sm lg:flex'>
         {theme === 'dark' ? (
           <IconBrandZapier

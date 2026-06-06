@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { useDashboardShortcuts } from '@/domains/admin/useDahboardShortcut';
 import { useGetUserMenuStructure } from '@/services/-user-menu-structure-get';
 
 import { useDashboardStore } from '../admin.store';
@@ -18,7 +19,9 @@ interface AppSidebarLayoutProps {
 export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
   const { mobileSidebarOpen, setMobileSidebarOpen } = useDashboardStore();
   const pathname = usePathname();
+  useDashboardShortcuts();
   const { data: { data: sidebar_menu = [] } = {} } = useGetUserMenuStructure({});
+
   return (
     <TooltipProvider delayDuration={0}>
       <div className='bg-background flex h-screen w-full overflow-hidden'>
@@ -28,7 +31,7 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
         {/* Mobile Sidebar - controlled by store */}
         <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
           <SheetContent side='left' className='w-72 border-none p-0'>
-            <AdminSidebar pathname={pathname} groups={sidebar_menu} isMobile />
+            <AdminSidebar pathname={pathname} groups={sidebar_menu} />
           </SheetContent>
         </Sheet>
 

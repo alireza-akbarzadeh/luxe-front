@@ -6,8 +6,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10041',
     customer_name: 'Sophia Bennett',
     customer_email: 'sophia.bennett@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Delivered',
     payment_status: 'Paid',
     payment_method: 'Visa •••• 4242',
@@ -116,8 +115,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10042',
     customer_name: 'Marcus Delray',
     customer_email: 'marcus.delray@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Processing',
     payment_status: 'Paid',
     payment_method: 'PayPal',
@@ -198,8 +196,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10043',
     customer_name: 'Aisha Patel',
     customer_email: 'aisha.patel@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Cancelled',
     payment_status: 'Refunded',
     payment_method: 'Mastercard •••• 5555',
@@ -275,8 +272,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10044',
     customer_name: 'Jordan Whitfield',
     customer_email: 'jordan.whitfield@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Pending',
     payment_status: 'Unpaid',
     payment_method: 'Bank Transfer',
@@ -381,8 +377,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10045',
     customer_name: 'Elena Vasquez',
     customer_email: 'elena.vasquez@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Shipped',
     payment_status: 'Paid',
     payment_method: 'Apple Pay',
@@ -468,8 +463,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10046',
     customer_name: 'Ryan Cho',
     customer_email: 'ryan.cho@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Fulfilled',
     payment_status: 'Paid',
     payment_method: 'Visa •••• 8891',
@@ -551,8 +545,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10047',
     customer_name: 'Priya Nair',
     customer_email: 'priya.nair@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Refunded',
     payment_status: 'Refunded',
     payment_method: 'Stripe',
@@ -640,8 +633,7 @@ export const MOCK_ORDERS: Order[] = [
     order_number: 'ORD-2024-10048',
     customer_name: 'Connor Walsh',
     customer_email: 'connor.walsh@example.com',
-    customer_avatar:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
+    customer_avatar: '/avatar.jpg',
     status: 'Processing',
     payment_status: 'Partial',
     payment_method: 'Split: Card + Store Credit',

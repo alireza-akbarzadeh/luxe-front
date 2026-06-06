@@ -1,9 +1,9 @@
-import { IconChevronLeft, IconSearch } from '@tabler/icons-react';
 import { AnimatePresence, motion, type Transition } from 'framer-motion';
 
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { ToggleSidebarAction } from '@/domains/admin/components/toggle-sidebar-action';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
@@ -12,22 +12,18 @@ import { SidebarNavItem } from './sidebar-nav-item';
 import { UserProfile } from './user-profile';
 import { WorkspaceSwitcher } from './worksapce-switcher';
 
-export function AdminSidebar({
-  groups,
-  pathname,
-  isMobile = false,
-  className
-}: {
+interface AdminSidebarProps {
   groups: DtoMenuGroupResponse[];
   pathname: string;
-  isMobile?: boolean;
   className?: string;
-}) {
-  const { setSearchOpen, isSidebarCollapsed, setSidebarCollapsed } = useDashboardStore();
+}
 
+export function AdminSidebar(props: AdminSidebarProps) {
+  const { groups, pathname, className } = props;
+  const { isMobile } = useMediaDevices();
+  const isSidebarCollapsed = useDashboardStore((store) => store.isSidebarCollapsed);
   const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
 
-  // High performance spring curve configuration
   const springTransition: Transition = {
     type: 'spring',
     stiffness: 400,
@@ -47,65 +43,9 @@ export function AdminSidebar({
       )}
     >
       {/* 1. Workspace Switcher - Pinned at Top */}
-      <div className='shrink-0 p-2'>
+      <div className='flex shrink-0 items-center p-2'>
         <WorkspaceSwitcher isCollapsed={effectiveCollapsed} />
-      </div>
-
-      {/* 2. Header & Collapse Toggle */}
-      <div className='flex h-12 shrink-0 items-center justify-between px-4'>
-        <AnimatePresence mode='wait'>
-          {!effectiveCollapsed && (
-            <motion.span
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.15 }}
-              className='text-muted-foreground/50 pl-2 text-[10px] font-bold tracking-[0.2em] whitespace-nowrap uppercase'
-            >
-              Management
-            </motion.span>
-          )}
-        </AnimatePresence>
-
-        <Button
-          variant='ghost'
-          size='icon'
-          className={cn(
-            'h-7 w-7', // Removed layout-breaking class rules here
-            effectiveCollapsed ? 'mx-auto' : 'ml-auto'
-          )}
-          onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-        >
-          <IconChevronLeft
-            className={cn(
-              'text-muted-foreground h-4 w-4 transition-transform duration-200',
-              effectiveCollapsed && 'rotate-180'
-            )}
-          />
-        </Button>
-      </div>
-
-      {/* 3. Quick Search */}
-      <div className='mb-4 shrink-0 px-3'>
-        <Button
-          variant='outline'
-          size='lg'
-          className={cn(
-            'bg-muted/30 hover:bg-muted/50 text-muted-foreground border-none shadow-inner',
-            effectiveCollapsed
-              ? 'mx-auto h-10 w-10 justify-center rounded-xl p-0'
-              : 'w-full justify-start gap-2 rounded-xl'
-          )}
-          onClick={() => setSearchOpen(true)}
-        >
-          <IconSearch className='h-4 w-4 shrink-0' />
-          {!effectiveCollapsed && <span className='text-xs font-medium'>Quick Search...</span>}
-          {!effectiveCollapsed && (
-            <kbd className='bg-background pointer-events-none ml-auto inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100'>
-              ⌘K
-            </kbd>
-          )}
-        </Button>
+        {!isSidebarCollapsed && <ToggleSidebarAction />}
       </div>
 
       <Separator
@@ -118,6 +58,7 @@ export function AdminSidebar({
         <div
           className={cn('flex flex-col gap-8 pb-10', effectiveCollapsed ? 'items-center' : 'px-3')}
         >
+          {isSidebarCollapsed && <ToggleSidebarAction />}
           {groups.map((group) => (
             <div key={group.id} className='w-full space-y-1'>
               <AnimatePresence initial={false}>

@@ -9,6 +9,8 @@ export function useDashboardShortcuts() {
   const setSearchOpen = useDashboardStore((state) => state.setSearchOpen);
   const setNotificationOpen = useDashboardStore((state) => state.setNotificationOpen);
   const setMobileSidebarOpen = useDashboardStore((state) => state.setMobileSidebarOpen);
+  const setSidebarCollapsed = useDashboardStore((state) => state.setSidebarCollapsed);
+  const isSidebarCollapsed = useDashboardStore((state) => state.isSidebarCollapsed);
 
   // For key sequence detection (e.g., 'g' then 'd')
   const keyBufferRef = useRef<string[]>([]);
@@ -16,7 +18,6 @@ export function useDashboardShortcuts() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore shortcuts when typing in inputs or textareas
       const target = e.target as HTMLElement;
       const isTyping =
         target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
@@ -35,6 +36,12 @@ export function useDashboardShortcuts() {
       if (isMod && key === 'k') {
         e.preventDefault();
         setSearchOpen(true);
+        keyBufferRef.current = [];
+        return;
+      }
+      if (isMod && key === 'b') {
+        e.preventDefault();
+        setSidebarCollapsed(!isSidebarCollapsed);
         keyBufferRef.current = [];
         return;
       }
@@ -67,13 +74,15 @@ export function useDashboardShortcuts() {
       // If we have a sequence starting with 'g' and we get a second key
       if (keyBufferRef.current[0] === 'g' && keyBufferRef.current.length === 1) {
         e.preventDefault();
-        const secondKey = key;
-        switch (secondKey) {
+        switch (key) {
           case 'd':
             router.push('/dashboard');
             break;
-          case 'm':
-            router.push('/dashboard/movies');
+          case 'p':
+            router.push('/dashboard/products');
+            break;
+          case 'o':
+            router.push('/dashboard/orders');
             break;
           case 'u':
             router.push('/dashboard/users');
@@ -98,7 +107,14 @@ export function useDashboardShortcuts() {
       window.removeEventListener('keydown', handleKeyDown);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [router, setSearchOpen, setNotificationOpen, setMobileSidebarOpen]);
+  }, [
+    router,
+    setSearchOpen,
+    setNotificationOpen,
+    setMobileSidebarOpen,
+    setSidebarCollapsed,
+    isSidebarCollapsed
+  ]);
 
   // No return value – the hook just sets up the event listener
 }
