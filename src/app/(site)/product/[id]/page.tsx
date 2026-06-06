@@ -4,11 +4,11 @@ import ProductDetailDomain from '~/src/domains/product/product-detail-domain';
 import { prefetchWithAuth } from '~/src/lib/prefetch-with-auth';
 import { getGetProductsIdQueryOptions } from '~/src/services/-products-{id}-get';
 
-interface ProductPagePageProps {
+interface ProductPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function ProductDetailsPage(props: ProductPagePageProps) {
+export default async function ProductDetailsPage(props: ProductPageProps) {
   const { params } = props;
   const { id } = await params;
 

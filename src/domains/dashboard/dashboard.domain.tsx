@@ -1,5 +1,6 @@
 'use client';
 import { IconArrowDownRight, IconArrowUpRight, IconPackage } from '@tabler/icons-react';
+import Link from 'next/link';
 import {
   Area,
   AreaChart,
@@ -368,7 +369,15 @@ export function DashboardDomain() {
                   <CardTitle>Recent orders</CardTitle>
                   <CardDescription>Latest activity across all checkouts</CardDescription>
                 </div>
-                <Badge variant='secondary'>{recentOrders.length} new</Badge>
+                <div className='flex items-center'>
+                  <Link
+                    href='/dashboard/orders'
+                    className='text-xs font-semibold transition-all duration-75 hover:underline'
+                  >
+                    View All
+                  </Link>
+                  <Badge variant='secondary'>{recentOrders.length} new</Badge>
+                </div>
               </div>
             </CardHeader>
             <CardContent>

@@ -11,8 +11,13 @@ import {
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { navUtilityLinks } from '@/lib/nav-menu-data';
 import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
+
+export const navUtilityLinks = [
+  { label: 'Stores', href: '/store/luxe-accessories' },
+  { label: 'Wishlist', href: '/wishlist' },
+  { label: 'My Account', href: '/account' }
+];
 
 type MobileNavProps = {
   onNavigateAction?: () => void;

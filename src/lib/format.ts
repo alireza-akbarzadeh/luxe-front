@@ -1,5 +1,2 @@
-export const navUtilityLinks = [
-  { label: 'Stores', href: '/store/luxe-accessories' },
-  { label: 'Wishlist', href: '/wishlist' },
-  { label: 'My Account', href: '/account' }
-];
+export const formatCurrency = (amount: number, currency = 'USD') =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount);
