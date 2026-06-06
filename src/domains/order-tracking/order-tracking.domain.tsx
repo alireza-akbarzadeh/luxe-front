@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
-import { OrderBoxNumebr } from './components/order-box-number';
+import { OrderBoxNumber } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
 import { OrderTrackingProgress } from './components/order-tracking-progress';
@@ -145,7 +145,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
         </motion.div>
 
         {/* Order Number Box */}
-        <OrderBoxNumebr order_number={currentOrder.order_number || ''} />
+        <OrderBoxNumber order_number={currentOrder.order_number || ''} />
 
         {/* Order Progress */}
         <OrderTrackingProgress stepsCompleted={stepsCompleted} connected={connected} />

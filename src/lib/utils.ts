@@ -2,6 +2,7 @@
 import type { Row } from '@tanstack/react-table';
 import { type ClassValue, clsx } from 'clsx';
 import type { JSX } from 'react';
+import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 export type StringNumber = `${number}`;
@@ -396,3 +397,12 @@ export const securityHeaders = [
     value: 'camera=(), microphone=(), geolocation=()'
   }
 ];
+
+export const copyToClipboard = async (text: string, description: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success(`${description} copied to clipboard`);
+  } catch {
+    toast.error('Failed to copy value');
+  }
+};

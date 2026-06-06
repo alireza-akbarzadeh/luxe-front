@@ -1,7 +1,7 @@
 // hooks/useStoreShare.ts
 'use client';
 
-import { toast } from 'sonner';
+import { copyToClipboard } from '@/lib/utils';
 
 export function useSharing(slug: string, name: string) {
   const share = async () => {
@@ -15,14 +15,11 @@ export function useSharing(slug: string, name: string) {
         });
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
-          // Fallback to clipboard
-          await navigator.clipboard.writeText(url);
-          toast.success('Link copied to clipboard');
+          await copyToClipboard(url, 'Link');
         }
       }
     } else {
-      await navigator.clipboard.writeText(url);
-      toast.success('Link copied to clipboard');
+      await copyToClipboard(url, 'Link');
     }
   };
 

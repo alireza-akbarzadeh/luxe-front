@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { copyToClipboard } from '@/lib/utils';
 import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 import { useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 
@@ -42,9 +43,8 @@ export function WishlistHeader(properties: Readonly<WishlistHeaderProperties>) {
         // User cancelled share window or native interface threw error
       }
     } else {
-      await navigator.clipboard.writeText(globalThis.location.href);
+      await copyToClipboard(globalThis.location.href, 'location');
       setIsCopied(true);
-      toast.success('Link copied to clipboard!');
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);

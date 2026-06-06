@@ -9,7 +9,6 @@ import {
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -27,6 +26,7 @@ import {
 } from '@/domains/orders/components/order-statuses-badge';
 import type { Order } from '@/domains/orders/orders-types';
 import { formatCurrency } from '@/lib/format';
+import { copyToClipboard } from '@/lib/utils';
 
 export const orderColumns: ColumnDef<Order>[] = [
   {
@@ -189,8 +189,7 @@ export const orderColumns: ColumnDef<Order>[] = [
             <DropdownMenuItem
               className='gap-2 text-[11px] font-semibold'
               onClick={async () => {
-                await navigator.clipboard.writeText(order.order_number);
-                toast.success('Copied!');
+                await copyToClipboard(order.order_number, 'order number');
               }}
             >
               <IconCopy className='h-3.5 w-3.5' /> Copy Order #

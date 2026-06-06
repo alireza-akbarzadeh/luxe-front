@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 
 import { Table } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
+import { ContextMenuItem, ContextMenuShortcut } from '@/components/ui/context-menu';
 import {
   Sheet,
   SheetContent,
@@ -285,6 +286,21 @@ export default function OrdersTable({ data }: OrdersTableProps) {
         <div className='p-2'>
           <Table.Body<Order>
             onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
+            getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
+            extendMenuActions={(row) => {
+              const order = row.original;
+              return (
+                <>
+                  <ContextMenuItem disabled={order.status === 'Fulfilled'}>
+                    Mark as Shipped
+                    <ContextMenuShortcut>⌘⇧S</ContextMenuShortcut>
+                  </ContextMenuItem>
+                  <ContextMenuItem className='text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950/30'>
+                    Cancel Order
+                  </ContextMenuItem>
+                </>
+              );
+            }}
             columnsCount={orderColumns.length}
           />
         </div>

@@ -1,21 +1,23 @@
-'use clinet';
 import { IconCheck, IconCopy } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { copyToClipboard } from '@/lib/utils';
+
+('use clinet');
 
 interface OrderBoxNumber {
   order_number: string;
 }
 
-export function OrderBoxNumebr(props: OrderBoxNumber) {
+export function OrderBoxNumber(props: OrderBoxNumber) {
   const { order_number } = props;
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (order_number) {
-      navigator.clipboard.writeText(order_number);
+      await copyToClipboard(order_number, 'order number');
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
