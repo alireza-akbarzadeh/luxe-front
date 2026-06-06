@@ -82,15 +82,17 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
             <div className='md:col-span-2'>
               <OrderRevenueChart />
             </div>
-            <div>
+            <div className='md:col-span-2'>
               <OrderStatusDonut />
             </div>
-            <div>
+          </div>
+          <div className='mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4'>
+            <div className='md:col-span-2'>
+              <TopProductsTable />
+            </div>
+            <div className='md:col-span-2'>
               <OrderVolumeChart />
             </div>
-          </div>
-          <div className='mt-5'>
-            <TopProductsTable />
           </div>
         </div>
 
