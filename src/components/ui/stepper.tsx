@@ -22,7 +22,7 @@ type StepIndicators = {
   loading?: React.ReactNode;
 };
 
-type StepDefinition = {
+export type StepDefinition = {
   id: string;
   title?: string;
   description?: string;

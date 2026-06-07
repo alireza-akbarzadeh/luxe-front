@@ -1,3 +1,5 @@
+import { ProductsDomains } from '@/domains/product-dashboard/containers/products.domains';
+
 export default function ProductsPage() {
-  return <div>products</div>;
+  return <ProductsDomains />;
 }

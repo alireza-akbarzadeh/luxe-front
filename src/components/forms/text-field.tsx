@@ -14,15 +14,17 @@ interface TextFieldProps extends ComponentProps<typeof Input> {
   endIcon?: TablerIcon;
 }
 
-export function TextField({
-  label,
-  detail,
-  placeholder,
-  startIcon: StartIcon,
-  endIcon: EndIcon,
-  className,
-  ...props
-}: TextFieldProps) {
+export function TextField(props: TextFieldProps) {
+  const {
+    label,
+    detail,
+    placeholder,
+    startIcon: StartIcon,
+    endIcon: EndIcon,
+    className,
+    ...rest
+  } = props;
+
   const field = useFieldContext<string>();
 
   return (
@@ -33,7 +35,7 @@ export function TextField({
         )}
 
         <Input
-          {...props}
+          {...rest}
           name={field.name}
           value={field.state.value}
           placeholder={placeholder}

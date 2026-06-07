@@ -6,14 +6,16 @@ import { useFieldContext } from './useFormContext';
 
 export function Switch({
   label,
+  description,
   ...props
 }: {
   label: string;
+  description?: string;
 } & ComponentProps<typeof ShadcnSwitch>) {
   const field = useFieldContext<boolean>();
 
   return (
-    <FieldContainer label={label}>
+    <FieldContainer label={label} detail={description}>
       <ShadcnSwitch
         {...props}
         name={field.name}

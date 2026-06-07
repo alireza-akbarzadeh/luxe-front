@@ -8,15 +8,17 @@ import { useFieldContext } from './useFormContext';
 export function TextArea({
   label,
   rows = 3,
+  description,
   ...props
 }: {
   label?: string;
   rows?: number;
+  description?: string;
 } & ComponentProps<typeof ShadcnTextarea>) {
   const field = useFieldContext<string>();
 
   return (
-    <FieldContainer label={label}>
+    <FieldContainer label={label} detail={description}>
       <ShadcnTextarea
         {...props}
         name={field.name}
