@@ -23,7 +23,6 @@ export function ToggleSidebarAction() {
           )}
         </button>
       </TooltipTrigger>
-      {/* Swapped the text strings so they make logical sense to the admin */}
       <TooltipContent
         side='right'
         sideOffset={12}
