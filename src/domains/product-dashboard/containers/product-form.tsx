@@ -45,8 +45,6 @@ import { MediaStep } from '@/domains/product-dashboard/sections/media';
 import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
 import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
 
-// ─── Step definitions ─────────────────────────────────────────────────────────
-
 const STEPS = [
   {
     id: 'basic-info' as StepId,
@@ -125,7 +123,7 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
     }
   });
 
-  async function validateStep(formApi: typeof form, stepId: StepId): Promise<boolean> {
+  const validateStep = useCallback(async (formApi: typeof form, stepId: StepId) => {
     const fields = stepFields[stepId];
 
     await Promise.all(
@@ -136,9 +134,7 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
 
     const meta = formApi.state.fieldMeta;
     return fields.every((f) => !meta[f as keyof typeof meta]?.errors?.length);
-  }
-
-  // ── Navigation ────────────────────────────────────────────────────────────
+  }, []);
 
   const markCompleted = useCallback((stepId: StepId) => {
     setCompletedSteps((prev) => new Set(prev).add(stepId));
@@ -157,7 +153,7 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
       markCompleted(currentStepId);
       setCurrentStepId(targetId);
     },
-    [currentIdx, isEditMode, markCompleted, currentStepId, form]
+    [currentIdx, isEditMode, markCompleted, currentStepId, validateStep, form]
   );
 
   const handleNext = useCallback(async () => {

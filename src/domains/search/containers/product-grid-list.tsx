@@ -7,12 +7,12 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
 
 interface ProductGridListProps {
-  products: DtoProductResponse[];
+  products: DtoProductWithLike[];
   total: number;
 }
 

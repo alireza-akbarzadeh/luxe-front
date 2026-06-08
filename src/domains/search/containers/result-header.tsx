@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { type SortBy } from '@/domains/search/hooks/useSearchParams';
-import type { DtoCategoryResponse, DtoProductResponse } from '@/services/-products-get.schemas';
+import type { DtoCategoryResponse, DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 
 import { SearchFilterContent } from '../components/search-filter-content';
@@ -31,7 +31,7 @@ const sortOptions = [
 interface ResultHeaderProps {
   productCount: number;
   total: number;
-  products: DtoProductResponse[];
+  products: DtoProductWithLike[];
   stores: DtoStoreResponse[];
   categories?: DtoCategoryResponse[];
 }

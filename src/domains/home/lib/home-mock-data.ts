@@ -1,5 +1,5 @@
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
 
 export const HOME_STATS = [
   { label: 'Happy customers', value: '50K+' },
@@ -164,17 +164,13 @@ export const testimonials = [
   }
 ] as const;
 
-const mockProduct = (
-  partial: NonNullable<GetProducts200DataProductsItem['items']>
-): GetProducts200DataProductsItem => ({
+const mockProduct = (partial: NonNullable<DtoProductWithLike>): DtoProductWithLike => ({
   is_liked: false,
-  items: {
-    status: 'active',
-    ...partial
-  }
+  status: 'active',
+  ...partial
 });
 
-export const MOCK_FEATURED_PRODUCTS: GetProducts200DataProductsItem[] = [
+export const MOCK_FEATURED_PRODUCTS: DtoProductWithLike[] = [
   mockProduct({
     id: 9001,
     name: 'Heritage Leather Weekender',

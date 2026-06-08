@@ -1,6 +1,5 @@
-import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
-import type { ModelsProduct } from '~/src/services/-categories-get.schemas';
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
+import type { ModelsCategory, ModelsProduct } from '~/src/services/-categories-get.schemas';
 
 import {
   CATEGORY_IMAGES,
@@ -29,8 +28,8 @@ export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCateg
   return MOCK_CATEGORIES;
 }
 
-export function mapProductForCard(item: GetProducts200DataProductsItem) {
-  const product = item.items;
+export function mapProductForCard(item: DtoProductWithLike) {
+  const product = item;
   return {
     id: product?.id,
     name: product?.name ?? 'Product',
@@ -49,9 +48,9 @@ export function mapProductForCard(item: GetProducts200DataProductsItem) {
 }
 
 export function resolveProducts(
-  apiProducts?: GetProducts200DataProductsItem[],
+  apiProducts?: DtoProductWithLike[],
   fallback = MOCK_FEATURED_PRODUCTS
-): GetProducts200DataProductsItem[] {
+): DtoProductWithLike[] {
   if (apiProducts && apiProducts.length > 0) {
     return apiProducts;
   }

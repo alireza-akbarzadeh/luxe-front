@@ -7,8 +7,8 @@ import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { type CartItemPayload,useCartController } from '@/hooks/useCartController';
-import type { DtoProductResponse } from '@/services/-products-get.schemas';
+import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { ProductBadges } from './product-badges';
 import ProductColors from './product-colors';
@@ -16,7 +16,7 @@ import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
 
 interface ProductInfoProps {
-  product: DtoProductResponse;
+  product: DtoProductWithLike;
   is_liked: boolean;
 }
 
@@ -31,7 +31,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
   const stock = product.stock ?? 0;
   const productQuantity = cartItem?.quantity ?? 0;
 
-  const mapToBasket = (values: DtoProductResponse): CartItemPayload => {
+  const mapToBasket = (values: DtoProductWithLike): CartItemPayload => {
     return {
       color: selectedColor,
       size: selectedSize as string,

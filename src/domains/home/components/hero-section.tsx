@@ -9,8 +9,13 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '~/src/services/-products-get';
 
-import { HERO_FALLBACK_IMAGE,HOME_STATS } from '../lib/home-mock-data';
-import { formatPrice, fullBleedClass, resolveProducts, sectionContainerClass } from '../lib/home-utils';
+import { HERO_FALLBACK_IMAGE, HOME_STATS } from '../lib/home-mock-data';
+import {
+  formatPrice,
+  fullBleedClass,
+  resolveProducts,
+  sectionContainerClass
+} from '../lib/home-utils';
 
 export function HeroSection() {
   const { data } = useGetProducts({
@@ -21,15 +26,17 @@ export function HeroSection() {
   });
 
   const spotlight = resolveProducts(data?.data?.products).slice(0, 3);
-  const heroImage = spotlight[0]?.items?.images?.[0] ?? HERO_FALLBACK_IMAGE;
+  const heroImage = spotlight[0]?.images?.[0] ?? HERO_FALLBACK_IMAGE;
 
   return (
     <section className={`${fullBleedClass} relative overflow-hidden`}>
-      <div className='from-background via-background to-secondary/30 absolute inset-0 bg-gradient-to-b' />
-      <div className='bg-accent/8 dark:bg-accent/12 pointer-events-none absolute -top-32 right-0 h-[28rem] w-[28rem] rounded-full blur-3xl' />
+      <div className='from-background via-background to-secondary/30 absolute inset-0 bg-linear-to-b' />
+      <div className='bg-accent/8 dark:bg-accent/12 pointer-events-none absolute -top-32 right-0 h-112 w-md rounded-full blur-3xl' />
       <div className='bg-accent/5 pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full blur-3xl' />
 
-      <div className={`${sectionContainerClass} relative pt-6 pb-16 sm:pt-10 sm:pb-20 lg:pt-14 lg:pb-28`}>
+      <div
+        className={`${sectionContainerClass} relative pt-6 pb-16 sm:pt-10 sm:pb-20 lg:pt-14 lg:pb-28`}
+      >
         <div className='grid items-center gap-10 lg:grid-cols-12 lg:gap-14'>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -90,7 +97,7 @@ export function HeroSection() {
             className='lg:col-span-6'
           >
             <div className='grid grid-cols-12 gap-3 sm:gap-4'>
-              <div className='relative col-span-7 aspect-[4/5] overflow-hidden rounded-2xl shadow-2xl sm:rounded-3xl'>
+              <div className='relative col-span-7 aspect-4/5 overflow-hidden rounded-2xl shadow-2xl sm:rounded-3xl'>
                 <Image
                   src={heroImage}
                   alt='Featured collection'
@@ -99,17 +106,17 @@ export function HeroSection() {
                   sizes='(max-width: 1024px) 60vw, 35vw'
                   className='object-cover'
                 />
-                <div className='from-foreground/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent' />
+                <div className='from-foreground/70 absolute inset-0 bg-linear-to-t via-transparent to-transparent' />
                 <div className='absolute right-0 bottom-0 left-0 p-4 sm:p-5'>
                   <p className='text-primary-foreground/80 text-xs tracking-widest uppercase'>
                     Editor&apos;s pick
                   </p>
                   <p className='text-primary-foreground font-display mt-1 text-lg font-medium sm:text-xl'>
-                    {spotlight[0]?.items?.name ?? 'The Signature Edit'}
+                    {spotlight[0]?.name ?? 'The Signature Edit'}
                   </p>
-                  {spotlight[0]?.items?.price !== undefined && (
+                  {spotlight[0]?.price !== undefined && (
                     <p className='text-primary-foreground/90 mt-1 text-sm'>
-                      From {formatPrice(spotlight[0].items.price)}
+                      From {formatPrice(spotlight[0].price)}
                     </p>
                   )}
                 </div>
@@ -118,20 +125,20 @@ export function HeroSection() {
               <div className='col-span-5 flex flex-col gap-3 sm:gap-4'>
                 {spotlight.slice(1, 3).map((product, index) => (
                   <Link
-                    key={product.items?.id ?? index}
-                    href={product.items?.id ? `/product/${product.items.id}` : '/shop'}
+                    key={product?.id ?? index}
+                    href={product?.id ? `/product/${product.id}` : '/shop'}
                     className='group bg-card border-border/60 relative aspect-square overflow-hidden rounded-2xl border shadow-lg sm:rounded-3xl'
                   >
                     <Image
-                      src={product.items?.images?.[0] ?? HERO_FALLBACK_IMAGE}
-                      alt={product.items?.name ?? 'Product'}
+                      src={product?.images?.[0] ?? HERO_FALLBACK_IMAGE}
+                      alt={product?.name ?? 'Product'}
                       fill
                       sizes='25vw'
                       className='object-cover transition-transform duration-500 group-hover:scale-105'
                     />
-                    <div className='from-foreground/60 absolute inset-0 bg-gradient-to-t to-transparent opacity-80' />
+                    <div className='from-foreground/60 absolute inset-0 bg-linear-to-t to-transparent opacity-80' />
                     <p className='text-primary-foreground absolute right-3 bottom-3 left-3 line-clamp-2 text-xs font-medium sm:text-sm'>
-                      {product.items?.name}
+                      {product?.name}
                     </p>
                   </Link>
                 ))}

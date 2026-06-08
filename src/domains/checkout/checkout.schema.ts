@@ -32,3 +32,25 @@ export const checkoutSchema = z.object({
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;
+
+export const checkoutDefaultValues: CheckoutFormValues = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  phone: '',
+  newsletter: false,
+  saveInfo: false,
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  state: '',
+  zip: '',
+  country: 'United States',
+  couponCode: '',
+  paymentMethod: 'credit_card',
+  cardNumber: '',
+  expiryMonth: '',
+  expiryYear: '',
+  cvv: '',
+  shippingProviderId: null
+};

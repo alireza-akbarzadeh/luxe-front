@@ -25,7 +25,7 @@ export function CompareDialogContent() {
 
   // Safely extract product items and filter
   const availableProducts = products.filter((p) => {
-    const product = p.items;
+    const product = p;
     if (!product) return false;
     const matchesSearch =
       product.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -36,9 +36,7 @@ export function CompareDialogContent() {
   });
 
   const categories = Array.from(
-    new Set(
-      products.map((p) => p.items?.category?.name).filter((name): name is string => Boolean(name))
-    )
+    new Set(products.map((p) => p?.category?.name).filter((name): name is string => Boolean(name)))
   ) as string[];
 
   return (
@@ -63,14 +61,14 @@ export function CompareDialogContent() {
       </Select>
       <ScrollArea className='h-75'>
         <div className='space-y-2'>
-          {availableProducts.map(({ items: product }) => {
+          {availableProducts.map((product) => {
             if (!product) return null;
             return (
               <div
                 key={product.id}
                 className='hover:bg-muted flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors'
-                onClick={() => {
-                  if (canAddMore) addItem(product.id!);
+                onClick={async () => {
+                  if (canAddMore) await addItem(product.id!);
                 }}
               >
                 <div className='bg-secondary relative h-12 w-12 overflow-hidden rounded-md'>

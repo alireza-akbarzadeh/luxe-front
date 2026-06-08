@@ -2,23 +2,19 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
-import type { GetProducts200DataProductsItem } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { useProductFilters } from '../useProductFilters';
 import { ProductCard } from './product-card';
 
 interface ProductGridDataProps {
-  products: GetProducts200DataProductsItem[];
+  products: DtoProductWithLike[];
 }
 
 export function ProductGrid(props: ProductGridDataProps) {
   const { products } = props;
   const { gridCols, clearFilters } = useProductFilters();
-  const mappedProduct = products?.map((p) => ({
-    ...p.items,
-    name: p.items?.name || '',
-    isLike: p.is_liked || false
-  }));
+
   return (
     <div className='flex-1'>
       {products?.length === 0 ? (
@@ -40,7 +36,7 @@ export function ProductGrid(props: ProductGridDataProps) {
           }`}
         >
           <AnimatePresence mode='popLayout'>
-            {mappedProduct?.map((product, index) => (
+            {products?.map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}
           </AnimatePresence>

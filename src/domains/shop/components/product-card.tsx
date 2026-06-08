@@ -2,22 +2,23 @@ import { IconBasketCheck, IconShoppingBag, IconStar } from '@tabler/icons-react'
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
-import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 export interface ProductCardProps {
-  product: DtoProductResponse & { is_liked?: boolean };
+  product: DtoProductWithLike;
   index?: number;
   size?: 'default' | 'compact';
 }
 
 export function ProductCard({ product, index = 0, size = 'default' }: ProductCardProps) {
   const isCompact = size === 'compact';
-  const { increment, isLoading, items: cartItems } = useCartController(); // Get cart items
+  const { increment, isLoading, items: cartItems } = useCartController();
 
   const discountPercent = product.compare_at_price
     ? Math.round(
@@ -25,11 +26,10 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
       )
     : 0;
 
-  // Find quantity of this product in the cart
   const cartItem = cartItems?.find((item) => item.product_id === product.id);
   const cartQuantity = cartItem?.quantity ?? 0;
 
-  const mapToBasket = (values: DtoProductResponse & { is_liked?: boolean }): CartItemPayload => {
+  const mapToBasket = (values: DtoProductWithLike): CartItemPayload => {
     return {
       color: values.colors?.[0]?.toString(),
       size: values.colors?.[0]?.toString(),
@@ -80,7 +80,7 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
             className='object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]'
           />
 
-          <div className='from-foreground/25 pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+          <div className='from-foreground/25 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
 
           <div
             className={`absolute top-2.5 left-2.5 flex flex-col gap-1 ${isCompact ? 'top-2 left-2' : 'top-3 left-3 gap-1.5'}`}
@@ -91,7 +91,7 @@ export function ProductCard({ product, index = 0, size = 'default' }: ProductCar
               </Badge>
             )}
             {discountPercent > 0 && (
-              <Badge variant='accentOutline' size={isCompact ? 'sm' : 'default'}>
+              <Badge variant='outline' size={isCompact ? 'sm' : 'default'}>
                 -{discountPercent}%
               </Badge>
             )}

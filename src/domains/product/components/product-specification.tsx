@@ -1,7 +1,7 @@
-import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 interface ProductSpecificationsProps {
-  product: DtoProductResponse;
+  product: DtoProductWithLike;
 }
 
 export function ProductSpecifications(props: ProductSpecificationsProps) {

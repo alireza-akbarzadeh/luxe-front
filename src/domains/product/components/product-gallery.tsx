@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { Badge } from '~/src/components/ui/badge';
-import type { DtoProductResponse } from '~/src/services/-products-get.schemas';
 
 interface ProductGalleryProps {
-  product: DtoProductResponse;
+  product: DtoProductWithLike;
   discount: number;
 }
 
@@ -47,7 +47,7 @@ export function ProductGallery(props: ProductGalleryProps) {
       </div>
 
       <div className='mt-4 grid grid-cols-4 gap-3'>
-        {product.images?.map((img, i) => (
+        {product.images?.map((img: string, i: number) => (
           <button
             key={i}
             onClick={() => setSelectedImage(i)}
