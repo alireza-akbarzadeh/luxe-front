@@ -30,7 +30,7 @@ export const InventoryStep = withForm({
                   <field.TextField
                     label='SKU (Stock Keeping Unit)'
                     placeholder='e.g. SHOE-001-BLK'
-                    description='Internal identifier for your product'
+                    detail='Internal identifier for your product'
                   />
                 )}
               />
@@ -72,13 +72,13 @@ export const InventoryStep = withForm({
                 <form.AppField
                   name='quantity'
                   children={(field) => (
-                    <field.TextField
+                    <field.NumberField
                       label='Quantity in stock'
                       type='number'
                       min={0}
                       step={1}
+                      detail='How meny in stock'
                       placeholder='0'
-                      onChange={(e) => field.handleChange(parseInt(e.target.value, 10) || 0)}
                     />
                   )}
                 />
@@ -88,14 +88,13 @@ export const InventoryStep = withForm({
                 <form.AppField
                   name='lowStockThreshold'
                   children={(field) => (
-                    <field.TextField
+                    <field.NumberField
                       label='Low stock alert threshold'
                       type='number'
                       min={0}
                       step={1}
                       placeholder='5'
-                      description='Get notified when stock drops below this'
-                      onChange={(e) => field.handleChange(parseInt(e.target.value, 10) || 0)}
+                      detail='Get notified when stock drops below this'
                     />
                   )}
                 />
@@ -145,7 +144,7 @@ export const InventoryStep = withForm({
               <field.TextField
                 label='Location / bin'
                 placeholder='e.g. Shelf A3, Bin 12'
-                description='Optional — helps staff find the item quickly'
+                detail='Optional — helps staff find the item quickly'
               />
             )}
           />

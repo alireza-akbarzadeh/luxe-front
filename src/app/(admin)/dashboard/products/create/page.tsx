@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function CreateProductPage() {
   return (
-    <Flex direction='column' spacing={6} className='mx-auto max-w-4xl px-4 py-8'>
+    <Flex direction='column' spacing={6} className='px-4 py-8'>
       <Flex direction='column' spacing={1}>
         <h1 className='text-2xl font-semibold tracking-tight'>Create product</h1>
         <p className='text-muted-foreground text-sm'>

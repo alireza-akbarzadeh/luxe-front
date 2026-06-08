@@ -71,15 +71,14 @@ export function CompactMultiSelect<TOption>({
           variant='outline'
           role='combobox'
           className={cn(
-            'h-auto min-h-9 w-full justify-between rounded-md border px-3 py-2 text-base shadow-xs transition-all md:text-sm',
+            'border-input bg-background h-auto min-h-9 w-full justify-between rounded-md border px-3 py-2 text-base shadow-xs transition-all md:text-sm',
             'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-            'dark:bg-input/30 border-input bg-transparent',
-            currentValues.length > 0 ? 'text-white' : 'text-muted-foreground',
+            currentValues.length > 0 ? 'text-foreground' : 'text-muted-foreground',
             baseStyles
           )}
         >
           <div className='flex min-h-7 flex-1 flex-wrap items-center gap-2'>
-            {Icon && <Icon className='size-4 shrink-0 text-slate-400' />}
+            {Icon && <Icon className='text-muted-foreground size-4 shrink-0' />}
             {currentValues.length === 0 ? (
               <span className='truncate'>{placeholder}</span>
             ) : (
@@ -88,13 +87,13 @@ export function CompactMultiSelect<TOption>({
                   <Badge
                     key={getValue(opt)}
                     variant='secondary'
-                    className='border-blue-400/20 bg-blue-400/10 text-blue-400 hover:bg-blue-400/20'
+                    className='border-primary/20 bg-primary/10 text-primary hover:bg-primary/20'
                   >
                     {getLabel(opt)}
                     <button
                       type='button'
                       onClick={(e) => removeOption(getValue(opt), e)}
-                      className='ml-1 hover:text-blue-300'
+                      className='hover:text-primary/80 ml-1'
                     >
                       <IconX className='size-3' />
                     </button>
@@ -105,27 +104,28 @@ export function CompactMultiSelect<TOption>({
           </div>
           <IconChevronDown
             className={cn(
-              'ml-2 size-4 shrink-0 opacity-50 transition-transform duration-200',
+              'text-muted-foreground ml-2 size-4 shrink-0 transition-transform duration-200',
               open && 'rotate-180'
             )}
           />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent
         align='start'
         sideOffset={6}
         style={{ width: 'var(--radix-popover-trigger-width)' }}
-        className='overflow-hidden rounded-md border-white/10 bg-[#0d1117] p-0 shadow-2xl'
+        className='border-border bg-popover text-popover-foreground overflow-hidden rounded-md border p-0 shadow-lg'
       >
         <Command className='w-full border-none bg-transparent font-sans'>
-          <div className='flex items-center border-b border-white/5 px-2'>
+          <div className='border-border flex items-center border-b px-2'>
             <CommandInput
               placeholder={`Search ${label || ''}...`}
-              className='h-11 w-full border-none bg-transparent text-sm text-white focus:ring-0'
+              className='text-foreground h-11 w-full border-none bg-transparent text-sm focus:ring-0'
             />
           </div>
           <CommandList className='scrollbar-none max-h-75 overflow-y-auto'>
-            <CommandEmpty className='py-8 text-center text-xs font-bold tracking-widest text-slate-500 uppercase'>
+            <CommandEmpty className='text-muted-foreground py-8 text-center text-xs font-bold tracking-widest uppercase'>
               No matching records
             </CommandEmpty>
             <CommandGroup className='p-0'>
@@ -139,15 +139,15 @@ export function CompactMultiSelect<TOption>({
                     value={getLabel(opt)}
                     onSelect={() => toggleOption(optValue)}
                     className={cn(
-                      'flex cursor-pointer items-center gap-3 border-b border-white/2 px-4 py-3.5 transition-all last:border-none',
-                      'aria-selected:bg-white/5 aria-selected:text-white',
-                      isSelected ? 'bg-blue-400/5 text-blue-400' : 'text-slate-400'
+                      'border-border/40 flex cursor-pointer items-center gap-3 rounded-none border-b px-4 py-3.5 transition-all last:border-none',
+                      'aria-selected:bg-accent aria-selected:text-shadow-accent-foreground',
+                      isSelected ? 'bg-primary/5 text-primary' : 'text-muted-foreground'
                     )}
                   >
                     <div className='flex-1 truncate text-sm font-medium'>
                       {renderOptionContent(opt)}
                     </div>
-                    {isSelected && <IconCheck className='size-4 stroke-3 text-blue-400' />}
+                    {isSelected && <IconCheck className='text-primary size-4 stroke-3' />}
                   </CommandItem>
                 );
               })}

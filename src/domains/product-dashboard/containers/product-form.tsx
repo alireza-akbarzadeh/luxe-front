@@ -96,7 +96,7 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
 
   const form = useAppForm({
     defaultValues: { ...productDefaultValues, ...initialValues } as ProductFormValues,
-    // @ts-ignore
+    // @ts-expect-error issuw with multi step form
     validators: { onChange: productSchema, onSubmit: productSchema },
     onSubmit: async ({ value }) => {
       const valid = await validateStep(form, currentStepId);
@@ -157,7 +157,7 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
       markCompleted(currentStepId);
       setCurrentStepId(targetId);
     },
-    [currentIdx, isEditMode, markCompleted, currentStepId, validateStep, form]
+    [currentIdx, isEditMode, markCompleted, currentStepId, form]
   );
 
   const handleNext = useCallback(async () => {
@@ -189,7 +189,6 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
   return (
     <>
       <LeaveGuard isDirty={form.state.isDirty && !isSubmitting} />
-
       <form.AppForm>
         <form.Root
           onSubmit={async (e) => {

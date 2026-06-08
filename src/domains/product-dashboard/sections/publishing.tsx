@@ -162,7 +162,9 @@ export const PublishingStep = withForm({
                     { value: 'sale', label: 'Sale' },
                     { value: 'featured', label: 'Featured' },
                     { value: 'best-seller', label: 'Best seller' }
-                  ]
+                  ],
+                  getOptionValue: (opt) => opt.value,
+                  getOptionLabel: (opt) => opt.label
                 }}
               />
             )}

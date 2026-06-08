@@ -18,6 +18,7 @@ import { productDefaultValues } from '../prodcut-schema';
 
 export const VariantsPricingStep = withForm({
   defaultValues: productDefaultValues,
+
   render: function PriceStepRender({ form }) {
     const [newAttrName, setNewAttrName] = useState('');
     const [newAttrValue, setNewAttrValue] = useState<Record<number, string>>({});
@@ -31,35 +32,30 @@ export const VariantsPricingStep = withForm({
               <form.AppField
                 name='price'
                 children={(field) => (
-                  <field.TextField
+                  <field.NumberField
                     label='Price'
-                    type='number'
                     min={0}
                     step={0.01}
                     placeholder='0.00'
-                    required
                     prefix='$'
-                    detail='For pice product'
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value) || 0)}
+                    required
+                    detail='Price of product'
                   />
                 )}
               />
             </GridItem>
+
             <GridItem>
               <form.AppField
                 name='compareAtPrice'
                 children={(field) => (
-                  <field.TextField
+                  <field.NumberField
                     label='Compare-at price'
-                    type='number'
                     min={0}
                     step={0.01}
                     placeholder='0.00'
                     prefix='$'
                     detail='Show a strikethrough price'
-                    onChange={(e) =>
-                      field.handleChange(e.target.value ? parseFloat(e.target.value) : null)
-                    }
                   />
                 )}
               />
@@ -69,29 +65,23 @@ export const VariantsPricingStep = withForm({
               <form.AppField
                 name='costPerItem'
                 children={(field) => (
-                  <field.TextField
+                  <field.NumberField
                     label='Cost per item'
-                    type='number'
                     min={0}
                     step={0.01}
                     placeholder='0.00'
                     prefix='$'
                     detail='Not shown to customers'
-                    onChange={(e) =>
-                      field.handleChange(e.target.value ? parseFloat(e.target.value) : null)
-                    }
                   />
                 )}
               />
             </GridItem>
           </Grid>
-
           <form.AppField
             name='taxable'
             children={(field) => <field.Switch label='Charge tax on this product' />}
           />
         </Flex>
-
         <Separator />
 
         {/* ── Attributes / Variants ─────────────────────────────────── */}

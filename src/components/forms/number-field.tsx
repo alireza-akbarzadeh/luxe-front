@@ -1,31 +1,33 @@
+'use client';
+
 import type { TablerIcon } from '@tabler/icons-react';
 import type { ComponentProps } from 'react';
 
+import { useFieldContext } from '@/components/forms/useFormContext';
+import { NumberInput } from '@/components/ui/number-input';
 import { cn } from '@/lib/utils';
 
-import { Input } from '../ui/input';
 import { FieldContainer } from './form';
-import { useFieldContext } from './useFormContext';
 
-interface TextFieldProps extends ComponentProps<typeof Input> {
+interface NumberFieldProps extends Omit<
+  ComponentProps<typeof NumberInput>,
+  'value' | 'onValueChange'
+> {
   label?: string;
   detail?: string;
   startIcon?: TablerIcon;
   endIcon?: TablerIcon;
 }
 
-export function TextField(props: TextFieldProps) {
-  const {
-    label,
-    detail,
-    placeholder,
-    startIcon: StartIcon,
-    endIcon: EndIcon,
-    className,
-    ...rest
-  } = props;
-
-  const field = useFieldContext<string>();
+export function NumberField({
+  label,
+  detail,
+  startIcon: StartIcon,
+  endIcon: EndIcon,
+  className,
+  ...props
+}: NumberFieldProps) {
+  const field = useFieldContext<number | null>();
 
   return (
     <FieldContainer label={label} detail={detail}>
@@ -33,15 +35,15 @@ export function TextField(props: TextFieldProps) {
         {StartIcon && (
           <StartIcon className='text-muted-foreground pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2' />
         )}
-        <Input
-          {...rest}
-          name={field.name}
+
+        <NumberInput
+          {...props}
           value={field.state.value}
-          placeholder={placeholder}
+          onValueChange={field.handleChange}
           onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.value)}
           className={cn(StartIcon && 'pl-12', EndIcon && 'pr-12', className)}
         />
+
         {EndIcon && (
           <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2' />
         )}

@@ -1,13 +1,12 @@
 import { z } from 'zod';
 
+import { money, slug } from '@/lib/base-schema';
+
 // ─── Basic Info ───────────────────────────────────────────────────────────────
 
 export const basicInfoSchema = z.object({
   name: z.string().min(1, 'Product name is required').max(255),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens only'),
+  slug: slug,
   description: z.string().min(1, 'Description is required'),
   brandId: z.string().min(1, 'Brand is required'),
   categoryId: z.string().min(1, 'Category is required')
@@ -21,29 +20,9 @@ export const variantAttributeSchema = z.object({
 });
 
 export const variantsPricingSchema = z.object({
-  price: z
-    .number({
-      error: 'Price is required'
-    })
-    .positive('Price must be greater than 0')
-    .multipleOf(0.01, 'Max 2 decimal places'),
-
-  compareAtPrice: z
-    .number({ error: 'Compare-at price must be a number' })
-    .positive('Compare-at price must be positive')
-    .multipleOf(0.01, 'Max 2 decimal places')
-    .nullable()
-    .optional(),
-
-  costPerItem: z
-    .number({
-      error: 'Cost per item must be a number'
-    })
-    .positive('Cost per item must be positive')
-    .multipleOf(0.01, 'Max 2 decimal places')
-    .nullable()
-    .optional(),
-
+  price: money,
+  compareAtPrice: money.nullable().optional(),
+  costPerItem: money.nullable().optional(),
   taxable: z.boolean().default(true),
   attributes: z.array(variantAttributeSchema).default([])
 });
@@ -104,7 +83,7 @@ export const productDefaultValues: ProductFormValues = {
   brandId: '',
   categoryId: '',
   // pricing
-  price: 0.0,
+  price: 0,
   compareAtPrice: null,
   costPerItem: null,
   taxable: true,

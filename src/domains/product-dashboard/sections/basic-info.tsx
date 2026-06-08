@@ -54,7 +54,7 @@ export const BasicInfoStep = withForm({
                     label='URL slug'
                     placeholder='classic-running-shoe'
                     required
-                    description='Auto-generated from name. Lowercase letters, numbers and hyphens only.'
+                    detail='Auto-generated from name. Lowercase letters, numbers and hyphens only.'
                   />
                 </Flex>
               )}

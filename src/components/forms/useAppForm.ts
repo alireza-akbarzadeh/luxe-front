@@ -1,5 +1,7 @@
 import { createFormHook } from '@tanstack/react-form';
 
+import { NumberField } from '@/components/forms/number-field';
+
 import { Checkbox } from './checkbox';
 import { ComboboxField } from './combox-box';
 import { DatePicker } from './date-picker';
@@ -19,6 +21,7 @@ export const { useAppForm, extendForm, useTypedAppFormContext, withFieldGroup, w
   createFormHook({
     fieldComponents: {
       TextField,
+      NumberField,
       TextArea,
       Switch,
       Checkbox,
