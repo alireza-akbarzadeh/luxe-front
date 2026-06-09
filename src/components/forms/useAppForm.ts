@@ -1,9 +1,10 @@
 import { createFormHook } from '@tanstack/react-form';
 
 import { NumberField } from '@/components/forms/number-field';
+import { JsonField } from '~/src/components/editor/json-field';
 
 import { Checkbox } from './checkbox';
-import { ComboboxField } from './combox-box';
+import { ComboboxField } from './combo-box';
 import { DatePicker } from './date-picker';
 import { ErrorMessages } from './error-message';
 import { FormRoot } from './form-root';
@@ -27,6 +28,7 @@ export const { useAppForm, extendForm, useTypedAppFormContext, withFieldGroup, w
       Checkbox,
       MultiSelect,
       DatePicker,
+      JsonField,
       Select: SelectController,
       InputPassword: InputPassword,
       InputPhone: InputPhone,
