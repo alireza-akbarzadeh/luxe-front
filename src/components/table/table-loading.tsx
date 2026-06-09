@@ -7,29 +7,35 @@ export const TableLoading = ({
   columnsCount: number;
   rowsCount?: number;
 }) => {
+  const safeColumns = Math.max(1, columnsCount);
+  const safeRows = Math.max(1, rowsCount);
+  const gridTemplate = `repeat(${safeColumns}, minmax(0, 1fr))`;
+
   return (
-    <div className='border-border/40 bg-card/20 overflow-hidden rounded-4xl border shadow-2xl backdrop-blur-2xl'>
-      <div className='w-full'>
-        {/* Skeleton Header */}
-        <div className='bg-muted/50 border-border/40 flex border-b p-4'>
-          {Array.from({ length: columnsCount }).map((_, i) => (
-            <div key={i + columnsCount} className='flex-1 px-2'>
-              <Skeleton className='bg-muted-foreground/20 h-3 w-20' />
-            </div>
-          ))}
-        </div>
-        {/* Skeleton Body */}
-        <div className='divide-border/20 divide-y'>
-          {Array.from({ length: rowsCount }).map((_, rowIndex) => (
-            <div key={rowIndex + rowsCount} className='flex p-4'>
-              {Array.from({ length: columnsCount }).map((_, colIndex) => (
-                <div key={colIndex + columnsCount} className='flex-1 px-2'>
-                  <Skeleton className='bg-muted/40 h-4 w-[80%]' />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+    <div className='border-border bg-background w-full overflow-hidden rounded-lg border'>
+      {/* Header */}
+      <div
+        className='border-border bg-muted/30 border-b px-4 py-3'
+        style={{ display: 'grid', gridTemplateColumns: gridTemplate, gap: '1rem' }}
+      >
+        {Array.from({ length: safeColumns }).map((_, i) => (
+          <Skeleton key={`h-${i}`} className='h-4 w-24' />
+        ))}
+      </div>
+
+      {/* Rows */}
+      <div className='divide-border divide-y'>
+        {Array.from({ length: safeRows }).map((_, rowIdx) => (
+          <div
+            key={rowIdx}
+            className='px-4 py-3'
+            style={{ display: 'grid', gridTemplateColumns: gridTemplate, gap: '1rem' }}
+          >
+            {Array.from({ length: safeColumns }).map((_, colIdx) => (
+              <Skeleton key={`c-${rowIdx}-${colIdx}`} className='h-5 w-full' />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );

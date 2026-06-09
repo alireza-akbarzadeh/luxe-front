@@ -3,3 +3,7 @@ export const formatCurrency = (amount: number, currency = 'USD') =>
 
 export const fmtChartDigit = (n: number) =>
   `$${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n)}`;
+
+export function truncate(str: string, len: number) {
+  return str.length > len ? str.slice(0, len) + '…' : str;
+}
