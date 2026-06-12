@@ -9,7 +9,7 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 
-import { productDefaultValues } from '../prodcut-schema';
+import { productDefaultValues } from '../product-schema';
 
 export const InventoryStep = withForm({
   defaultValues: productDefaultValues,

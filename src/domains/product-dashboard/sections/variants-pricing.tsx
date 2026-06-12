@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
-import { productDefaultValues } from '../prodcut-schema';
+import { productDefaultValues } from '../product-schema';
 
 export const VariantsPricingStep = withForm({
   defaultValues: productDefaultValues,

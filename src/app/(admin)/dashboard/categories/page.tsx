@@ -1,3 +1,5 @@
+import { CategoriesDomains } from '~/src/domains/categories/categories.domain';
+
 export default function CategoriesPage() {
-  return <div>categories</div>;
+  return <CategoriesDomains />;
 }

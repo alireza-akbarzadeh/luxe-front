@@ -1,11 +1,14 @@
-import { TableBody } from './table-body';
+import { TableContainer } from '~/src/components/table/table-container';
+
 import { TableBulkActions } from './table-bulk-actions';
 import { TableRoot } from './table-context';
 import { TableFilterTabs } from './table-filter-tabs';
+import { TableGrid } from './table-grid';
 import { TableLoading } from './table-loading';
 import { TablePagination } from './table-pagination';
 import { TableSearch } from './table-search';
 import { TableStatusFilters } from './table-status-filters';
+import { TableToolbar } from './table-toolbar';
 
 /**
  * # Unified Data Table System
@@ -32,7 +35,7 @@ import { TableStatusFilters } from './table-status-filters';
  * <Table.Search placeholder="Search..." />
  * <Table.BulkActions onDelete={(rows) => purge(rows)} />
  * </div>
- * * <Table.Body columnsCount={5} />
+ * * <Table.Grid columnsCount={5} />
  * * <Table.Pagination />
  * </Table.Root>
  * ```
@@ -42,8 +45,10 @@ export const Table = {
   Search: TableSearch,
   FilterTabs: TableFilterTabs,
   StatusFilters: TableStatusFilters,
-  Body: TableBody,
+  Grid: TableGrid,
   Pagination: TablePagination,
   BulkActions: TableBulkActions,
-  Loading: TableLoading
+  Loading: TableLoading,
+  Toolbar: TableToolbar,
+  Container: TableContainer
 };

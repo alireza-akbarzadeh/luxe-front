@@ -1,6 +1,6 @@
 // ─── FormData builder (fully typed) ──────────────────────────────────────────
 
-import type { MediaFile, ProductFormValues } from '@/domains/product-dashboard/prodcut-schema';
+import type { MediaFile, ProductFormValues } from '~/src/domains/product-dashboard/product-schema';
 
 export function buildFormData(values: ProductFormValues): FormData {
   const fd = new FormData();

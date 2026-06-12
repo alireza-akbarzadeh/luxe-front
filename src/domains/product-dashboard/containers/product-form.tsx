@@ -31,19 +31,19 @@ import {
   StepperTrigger
 } from '@/components/ui/stepper';
 import { LeaveGuard } from '@/domains/product-dashboard/components/product-leave-guard';
-import {
-  productDefaultValues,
-  type ProductFormValues,
-  productSchema,
-  stepFields,
-  type StepId
-} from '@/domains/product-dashboard/prodcut-schema';
 import { buildFormData } from '@/domains/product-dashboard/product.utils';
 import { BasicInfoStep } from '@/domains/product-dashboard/sections/basic-info';
 import { InventoryStep } from '@/domains/product-dashboard/sections/inventory';
 import { MediaStep } from '@/domains/product-dashboard/sections/media';
 import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
 import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
+import {
+  productDefaultValues,
+  type ProductFormValues,
+  productSchema,
+  stepFields,
+  type StepId
+} from '~/src/domains/product-dashboard/product-schema';
 
 const STEPS = [
   {
@@ -104,7 +104,6 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
       try {
         const formData = buildFormData(value);
 
-        // TODO: replace with actual API call
         await new Promise((r) => setTimeout(r, 1200));
         console.log('FormData entries:', [...formData.entries()]);
 

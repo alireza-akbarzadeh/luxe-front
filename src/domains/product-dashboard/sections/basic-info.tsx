@@ -6,12 +6,14 @@ import { withForm } from '@/components/forms/useAppForm';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
+import { useGetBrands } from '~/src/services/-brands-get';
+import { useGetCategories } from '~/src/services/-categories-get';
 
-import { mockBrands, mockCategories, productDefaultValues } from '../prodcut-schema';
+import { productDefaultValues } from '../product-schema';
 
 export const BasicInfoStep = withForm({
   defaultValues: productDefaultValues,
-  render: ({ form }) => {
+  render: function BasicInfo({ form }) {
     // Auto-generate slug from name
     const handleNameChange = (value: string) => {
       const slug = value
@@ -22,6 +24,9 @@ export const BasicInfoStep = withForm({
         .replace(/-+/g, '-');
       form.setFieldValue('slug', slug);
     };
+
+    const { data: brands } = useGetBrands();
+    const { data: categories } = useGetCategories();
 
     return (
       <Flex direction='column' spacing={6}>
@@ -70,7 +75,12 @@ export const BasicInfoStep = withForm({
                   label='Brand'
                   placeholder='Select brand'
                   required
-                  options={mockBrands}
+                  options={
+                    brands?.data?.map((brand) => ({
+                      value: brand.id?.toString() ?? '',
+                      label: brand.name ?? ''
+                    })) || []
+                  }
                 />
               )}
             />
@@ -85,7 +95,12 @@ export const BasicInfoStep = withForm({
                   label='Category'
                   placeholder='Select category'
                   required
-                  options={mockCategories}
+                  options={
+                    categories?.data?.categories?.map((brand) => ({
+                      value: brand.id?.toString() ?? '',
+                      label: brand.name ?? ''
+                    })) || []
+                  }
                 />
               )}
             />

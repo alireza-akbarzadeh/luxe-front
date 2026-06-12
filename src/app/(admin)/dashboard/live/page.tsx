@@ -1,3 +1,5 @@
+import { LiveSaleFeedDomain } from '~/src/domains/sales-feed/salese-feed';
+
 export default function LivePage() {
-  return <div>Live</div>;
+  return <LiveSaleFeedDomain />;
 }

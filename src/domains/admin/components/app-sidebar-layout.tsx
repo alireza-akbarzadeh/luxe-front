@@ -37,9 +37,8 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
 
         <div className='relative flex min-w-0 flex-1 flex-col overflow-hidden'>
           <AppHeader sidebar_menu={sidebar_menu} pathname={pathname} />
-
-          <main className='bg-muted/20 flex-1 overflow-y-auto scroll-smooth'>
-            <div className='container mx-auto min-h-full max-w-400 p-2 md:p-5'>{children}</div>
+          <main className='flex-1 overflow-y-auto scroll-smooth p-px'>
+            <div className='bg-card container mx-auto min-h-full max-w-400 p-2'>{children}</div>
           </main>
         </div>
 

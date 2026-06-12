@@ -1,0 +1,118 @@
+const FIRST_NAMES = [
+  'Alice',
+  'Bob',
+  'Carlos',
+  'Diana',
+  'Ethan',
+  'Fiona',
+  'George',
+  'Hannah',
+  'Ivan',
+  'Julia',
+  'Kevin',
+  'Luna',
+  'Marcus',
+  'Nina',
+  'Oscar',  
+  'Petra',
+  'Quinn',
+  'Rachel',
+  'Sam',
+  'Tina'
+];
+const LAST_NAMES = [
+  'Smith',
+  'Johnson',
+  'Williams',
+  'Brown',
+  'Jones',
+  'Garcia',
+  'Miller',
+  'Davis',
+  'Wilson',
+  'Moore'
+];
+
+const EVENT_TEMPLATES = {
+  new_order: (name: string, order: string, amount: number) => ({
+    title: `New order from ${name}`,
+    subtitle: `${order} · $${amount.toFixed(2)}`
+  }),
+  status_change: (name: string, order: string) => ({
+    title: `Order ${order} updated`,
+    subtitle: `${name}'s order moved to Processing`
+  }),
+  payment: (name: string, order: string, amount: number) => ({
+    title: `Payment received`,
+    subtitle: `${name} paid $${amount.toFixed(2)} for ${order}`
+  }),
+  cancellation: (name: string, order: string) => ({
+    title: `Order cancelled`,
+    subtitle: `${name} cancelled ${order}`
+  }),
+  refund: (name: string, order: string, amount: number) => ({
+    title: `Refund issued`,
+    subtitle: `$${amount.toFixed(2)} refunded to ${name} · ${order}`
+  }),
+  shipment: (name: string, order: string) => ({
+    title: `Order shipped`,
+    subtitle: `${order} for ${name} is on its way`
+  })
+};
+
+let idCounter = 1000;
+
+export function generateEvent() {
+  const types = [
+    'new_order',
+    'new_order',
+    'new_order',
+    'payment',
+    'status_change',
+    'shipment',
+    'cancellation',
+    'refund'
+  ];
+  const type = types[Math.floor(Math.random() * types.length)];
+  const name = `${FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)]}`;
+  const order = `ORD-${String(Math.floor(Math.random() * 90000) + 10000)}`;
+  const amount = parseFloat((Math.random() * 800 + 20).toFixed(2));
+  const tpl = EVENT_TEMPLATES[type as keyof typeof EVENT_TEMPLATES](name, order, amount);
+  return {
+    id: String(idCounter++),
+    type,
+    title: tpl.title,
+    subtitle: tpl.subtitle,
+    amount,
+    currency: 'USD',
+    timestamp: new Date()
+  };
+}
+
+export function generateRevenueSnapshot() {
+  const now = new Date();
+  return {
+    time: `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
+    revenue: parseFloat((Math.random() * 3000 + 500).toFixed(2)),
+    orders: Math.floor(Math.random() * 30 + 5)
+  };
+}
+
+export const STATUS_COLORS = {
+  Pending: '#f59e0b',
+  Processing: '#3b82f6',
+  Fulfilled: '#8b5cf6',
+  Shipped: '#06b6d4',
+  Delivered: '#22c55e',
+  Cancelled: '#ef4444',
+  Refunded: '#ec4899'
+};
+
+export const EVENT_TYPE_META = {
+  new_order: { label: 'New Order', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  status_change: { label: 'Status', color: 'text-blue-600', bg: 'bg-blue-50' },
+  payment: { label: 'Payment', color: 'text-violet-600', bg: 'bg-violet-50' },
+  cancellation: { label: 'Cancelled', color: 'text-red-600', bg: 'bg-red-50' },
+  refund: { label: 'Refund', color: 'text-pink-600', bg: 'bg-pink-50' },
+  shipment: { label: 'Shipped', color: 'text-cyan-600', bg: 'bg-cyan-50' }
+};

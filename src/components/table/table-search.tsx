@@ -18,40 +18,37 @@ export const TableSearch = ({
   const { table } = useTableContext();
 
   const externalValue = columnId
-    ? (table.getColumn(columnId)?.getFilterValue() as string)
-    : (table.getState().globalFilter as string);
+    ? (table.getColumn(columnId)?.getFilterValue() as string | undefined)
+    : (table.getState().globalFilter as string | undefined);
 
-  // 1. Store BOTH the local typing text and the last known external value in state
-  const [{ localValue, lastExternalValue }, setValues] = React.useState({
-    localValue: externalValue ?? '',
-    lastExternalValue: externalValue ?? ''
-  });
+  const [localValue, setLocalValue] = React.useState(externalValue ?? '');
+  const lastExternalRef = React.useRef(externalValue ?? '');
 
-  // 2. Adjust state inline during render when externalValue changes (e.g., when clicking Reset)
-  // This avoids cascading effects entirely and updates everything in a single render pass
-  if (externalValue !== lastExternalValue) {
-    setValues({
-      localValue: externalValue ?? '',
-      lastExternalValue: externalValue ?? ''
-    });
-  }
+  // Sync down: external value changed from outside (e.g. Clear button) -> update local
+  React.useEffect(() => {
+    if (externalValue !== lastExternalRef.current) {
+      lastExternalRef.current = externalValue ?? '';
+      setLocalValue(externalValue ?? '');
+    }
+  }, [externalValue]);
 
-  // 3. Debounce local value changes back up to the master table
+  // Sync up: debounce local typing back to the table
   React.useEffect(() => {
     const handler = setTimeout(() => {
+      if (localValue === lastExternalRef.current) return;
+
+      lastExternalRef.current = localValue;
+
       if (columnId) {
-        if (table.getColumn(columnId)?.getFilterValue() !== localValue) {
-          table.getColumn(columnId)?.setFilterValue(localValue);
-        }
+        table.getColumn(columnId)?.setFilterValue(localValue);
       } else {
-        if (table.getState().globalFilter !== localValue) {
-          table.setGlobalFilter(localValue);
-        }
+        table.setGlobalFilter(localValue);
       }
     }, 200);
 
     return () => clearTimeout(handler);
-  }, [localValue, columnId, table]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localValue, columnId]);
 
   return (
     <div className={cn('relative w-full max-w-md', className)}>
@@ -59,13 +56,8 @@ export const TableSearch = ({
       <Input
         placeholder={placeholder}
         value={localValue}
-        onChange={(e) =>
-          setValues((prev) => ({
-            ...prev,
-            localValue: e.target.value
-          }))
-        }
-        className='bg-card/40 border-border/40 h-11 rounded-2xl pl-9 text-xs font-medium'
+        onChange={(e) => setLocalValue(e.target.value)}
+        className='bg-card/40 border-border/40 h-11 rounded-none border-none pl-9 text-xs font-medium outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
       />
     </div>
   );

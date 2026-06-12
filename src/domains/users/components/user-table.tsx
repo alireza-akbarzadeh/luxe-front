@@ -249,7 +249,7 @@ export function UserManagementTable() {
           {isLoading ? (
             <Table.Loading columnsCount={8} rowsCount={10} />
           ) : (
-            <Table.Body<GetUsers200DataUsersItem>
+            <Table.Grid<GetUsers200DataUsersItem>
               onRowDoubleClick={(row) => push(`/dashboard/users/edit/${row.original.id}`)}
               columnsCount={8}
             />

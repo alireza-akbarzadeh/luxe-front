@@ -32,10 +32,8 @@ export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 flex h-14 shrink-0 items-center gap-4 px-4 transition-all duration-300 md:px-6',
-        isScrolled
-          ? 'bg-card/90 border-b shadow-sm backdrop-blur-xl'
-          : 'border-b border-transparent bg-transparent'
+        'sticky top-0 z-20 flex h-18 shrink-0 items-center gap-4 border-b px-4 transition-all duration-300 md:px-6',
+        isScrolled ? 'bg-card/90 border-b shadow-sm backdrop-blur-xl' : 'bg-card border-b'
       )}
     >
       {/* Mobile Menu Toggle - Uses Store Action */}

@@ -4,8 +4,10 @@ import {
   IconChevronsLeft,
   IconChevronsRight
 } from '@tabler/icons-react';
+import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input'; // make sure you have this
 import {
   Select,
   SelectContent,
@@ -17,96 +19,137 @@ import { cn } from '@/lib/utils';
 
 import { useTableContext } from './table-context';
 
-export function TablePagination<TData>() {
+interface TablePaginationProps {
+  /** Show "Rows per page" selector (default true) */
+  showPageSize?: boolean;
+  /** Show total row count (default true) */
+  showTotalRows?: boolean;
+  /** Show jump to page input (default false – advanced) */
+  showJumpToPage?: boolean;
+  /** Available page size options */
+  pageSizeOptions?: number[];
+}
+
+export function TablePagination<TData>({
+  showPageSize = true,
+  showTotalRows = true,
+  showJumpToPage = false,
+  pageSizeOptions = [10, 25, 50, 100, 250, 500]
+}: TablePaginationProps) {
   const { table } = useTableContext<TData>();
+  const [jumpPage, setJumpPage] = React.useState('');
 
   const pageIndex = table.getState().pagination.pageIndex;
   const pageSize = table.getState().pagination.pageSize;
   const pageCount = table.getPageCount();
   const rowCount = table.getRowCount();
 
-  // Calculate visible page numbers with smart ellipsis
+  // Smart page numbers with ellipsis
   const getPageNumbers = () => {
-    const maxVisible = 7;
+    const maxVisible = 5; // show max 5 numbers before ellipsis
     if (pageCount <= maxVisible) {
       return Array.from({ length: pageCount }, (_, i) => i);
     }
 
     const pages: (number | string)[] = [];
-
-    // Always show first page
     pages.push(0);
 
-    if (pageIndex <= 3) {
-      // Near start
-      for (let i = 1; i < Math.min(5, pageCount - 1); i++) {
-        pages.push(i);
-      }
-      if (pageCount > 5) pages.push('ellipsis-end');
-    } else if (pageIndex >= pageCount - 4) {
-      // Near end
-      pages.push('ellipsis-start');
-      for (let i = Math.max(1, pageCount - 5); i < pageCount - 1; i++) {
-        pages.push(i);
-      }
-    } else {
-      // Middle
-      pages.push('ellipsis-start');
-      for (let i = pageIndex - 1; i <= pageIndex + 1; i++) {
-        pages.push(i);
-      }
-      pages.push('ellipsis-end');
+    let start = Math.max(1, pageIndex - 1);
+    let end = Math.min(pageCount - 2, pageIndex + 1);
+
+    if (pageIndex <= 2) {
+      start = 1;
+      end = 3;
+    } else if (pageIndex >= pageCount - 3) {
+      start = pageCount - 4;
+      end = pageCount - 2;
     }
 
-    // Always show last page
-    if (pageCount > 1) {
-      pages.push(pageCount - 1);
-    }
+    if (start > 1) pages.push('ellipsis-start');
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (end < pageCount - 2) pages.push('ellipsis-end');
 
+    if (pageCount > 1) pages.push(pageCount - 1);
     return pages;
   };
 
   const pageNumbers = getPageNumbers();
 
-  return (
-    <div className='flex w-full flex-col items-center justify-between gap-4 px-2 py-3 sm:flex-row'>
-      {/* Left Side: Page Size Selector & Info */}
-      <div className='flex items-center gap-4'>
-        <div className='flex items-center gap-2'>
-          <span className='text-muted-foreground text-xs whitespace-nowrap'>Rows per page:</span>
-          <Select
-            value={String(pageSize)}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
-          >
-            <SelectTrigger className='h-8 w-17.5 text-xs'>
-              <SelectValue placeholder={String(pageSize)} />
-            </SelectTrigger>
-            <SelectContent side='top'>
-              {[10, 25, 50, 100, 250, 500].map((size) => (
-                <SelectItem key={size} value={String(size)} className='text-xs'>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+  // Handle jump to page
+  const handleJump = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      let page = parseInt(jumpPage, 10) - 1;
+      if (isNaN(page)) page = 0;
+      page = Math.min(Math.max(page, 0), pageCount - 1);
+      table.setPageIndex(page);
+      setJumpPage('');
+    }
+  };
 
-        <div className='text-muted-foreground hidden text-xs md:block'>
-          Showing {pageIndex * pageSize + 1} to {Math.min((pageIndex + 1) * pageSize, rowCount)} of{' '}
-          {rowCount} rows
-        </div>
+  return (
+    <div className='border-border/40 bg-card/40 flex w-full flex-col items-center justify-between gap-4 rounded-b-xl border border-t-0 px-4 py-3 backdrop-blur-2xl sm:flex-row'>
+      {/* Left side: Page size + row info */}
+      <div className='flex flex-wrap items-center gap-4'>
+        {showPageSize && (
+          <div className='flex items-center gap-2'>
+            <span className='text-muted-foreground text-xs whitespace-nowrap'>Rows per page:</span>
+            <Select
+              value={String(pageSize)}
+              onValueChange={(value) => table.setPageSize(Number(value))}
+            >
+              <SelectTrigger className='border-border/40 bg-card/40 h-8 w-17.5 text-xs'>
+                <SelectValue placeholder={String(pageSize)} />
+              </SelectTrigger>
+              <SelectContent side='top'>
+                {pageSizeOptions.map((size) => (
+                  <SelectItem key={size} value={String(size)} className='text-xs'>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {showTotalRows && (
+          <div className='text-muted-foreground hidden text-xs md:block'>
+            Showing{' '}
+            <span className='text-foreground font-medium'>
+              {rowCount === 0 ? 0 : pageIndex * pageSize + 1}
+            </span>{' '}
+            to{' '}
+            <span className='text-foreground font-medium'>
+              {Math.min((pageIndex + 1) * pageSize, rowCount)}
+            </span>{' '}
+            of <span className='text-foreground font-medium'>{rowCount}</span> rows
+          </div>
+        )}
       </div>
 
-      {/* Right Side: Navigation */}
-      <div className='flex items-center gap-2'>
-        <span className='text-muted-foreground mr-2 text-xs font-medium'>
-          Page {pageIndex + 1} of {pageCount}
-        </span>
+      {/* Right side: Navigation + jump to page */}
+      <div className='flex flex-wrap items-center justify-center gap-2'>
+        <div className='flex items-center gap-2'>
+          <span className='text-muted-foreground text-xs font-medium'>
+            Page {pageIndex + 1} of {Math.max(pageCount, 1)}
+          </span>
+
+          {showJumpToPage && (
+            <div className='flex items-center gap-1'>
+              <Input
+                type='number'
+                placeholder='Go to'
+                value={jumpPage}
+                onChange={(e) => setJumpPage(e.target.value)}
+                onKeyDown={handleJump}
+                className='border-border/40 bg-card/40 h-8 w-16 text-xs'
+                min={1}
+                max={pageCount}
+              />
+            </div>
+          )}
+        </div>
 
         <div className='flex items-center gap-1'>
-          {/* First Page */}
           <Button
             variant='outline'
             size='icon'
@@ -117,7 +160,6 @@ export function TablePagination<TData>() {
             <IconChevronsLeft className='size-4' />
           </Button>
 
-          {/* Previous Page */}
           <Button
             variant='outline'
             size='icon'
@@ -128,27 +170,25 @@ export function TablePagination<TData>() {
             <IconChevronLeft className='size-4' />
           </Button>
 
-          {/* Page Numbers */}
           <div className='hidden items-center gap-1 sm:flex'>
             {pageNumbers.map((pageNum) => {
               if (typeof pageNum === 'string') {
                 return (
-                  <span key={`ellipsis-${pageNum}`} className='text-muted-foreground px-2'>
-                    ...
+                  <span key={pageNum} className='text-muted-foreground px-1 text-xs'>
+                    ···
                   </span>
                 );
               }
-
               return (
                 <Button
                   key={pageNum}
-                  variant={pageIndex === pageNum ? 'default' : 'ghost'}
+                  variant={pageIndex === pageNum ? 'default' : 'outline'}
                   size='sm'
                   className={cn(
                     'size-8 rounded-lg text-xs font-bold transition-all',
                     pageIndex === pageNum
                       ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'hover:bg-muted'
+                      : 'border-border/40 bg-card/40 hover:bg-background'
                   )}
                   onClick={() => table.setPageIndex(pageNum)}
                 >
@@ -158,7 +198,6 @@ export function TablePagination<TData>() {
             })}
           </div>
 
-          {/* Next Page */}
           <Button
             variant='outline'
             size='icon'
@@ -169,7 +208,6 @@ export function TablePagination<TData>() {
             <IconChevronRight className='size-4' />
           </Button>
 
-          {/* Last Page */}
           <Button
             variant='outline'
             size='icon'

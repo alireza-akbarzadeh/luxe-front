@@ -2,6 +2,7 @@
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
+import { ThemeProvider } from '@/components/providers/client/theme';
 import { Toaster } from '@/components/ui/sonner';
 
 import { DirectionProvider } from '../ui/direction';

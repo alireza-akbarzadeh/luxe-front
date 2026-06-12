@@ -1,4 +1,5 @@
 import type { Row } from '@tanstack/react-table';
+import type { ReactNode } from 'react';
 
 interface StatusOption {
   label: string;
@@ -35,10 +36,59 @@ interface BulkActionsProps<TData> {
   deleteDescription?: string;
 }
 
+// ---------- Main TableToolbar Component (Enhanced) ----------
+
+interface BaseTableToolbarProps {
+  searchPlaceholder?: string;
+  globalFilter?: string;
+  isLoading?: boolean;
+  showSearch?: boolean;
+  children?: ReactNode;
+
+  showColumnVisibility?: boolean;
+  showSorting?: boolean;
+  showExport?: boolean;
+  showBulkActions?: boolean;
+}
+
+interface WithRefresh {
+  showRefresh: true;
+  onRefresh: () => void;
+}
+interface WithoutRefresh {
+  showRefresh?: false;
+  onRefresh?: never;
+}
+
+interface WithCreate {
+  showCreate: true;
+  onCreate: () => void;
+}
+interface WithoutCreate {
+  showCreate?: false;
+  onCreate?: never;
+}
+
+interface WithClear {
+  showClear: true;
+  onClearFilter: () => void;
+}
+interface WithoutClear {
+  showClear?: false;
+  onClearFilter?: never;
+}
+
+type TableToolbarProps = BaseTableToolbarProps &
+  (WithRefresh | WithoutRefresh) &
+  (WithCreate | WithoutCreate) &
+  (WithClear | WithoutClear);
+
 export type {
   BodyProps,
   BulkActionsProps,
   FilterTabsProps,
   SearchProps,
   StatusFiltersProps,
-  StatusOption};
+  StatusOption,
+  TableToolbarProps
+};

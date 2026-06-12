@@ -135,21 +135,3 @@ export const stepFields = {
 } as const;
 
 export type StepId = keyof typeof stepFields;
-
-// ─── Mock data ────────────────────────────────────────────────────────────────
-
-export const mockBrands = [
-  { value: 'brand-1', label: 'Nike' },
-  { value: 'brand-2', label: 'Adidas' },
-  { value: 'brand-3', label: 'Puma' },
-  { value: 'brand-4', label: 'New Balance' },
-  { value: 'brand-5', label: 'Under Armour' }
-];
-
-export const mockCategories = [
-  { value: 'cat-1', label: 'Footwear' },
-  { value: 'cat-2', label: 'Apparel' },
-  { value: 'cat-3', label: 'Accessories' },
-  { value: 'cat-4', label: 'Equipment' },
-  { value: 'cat-5', label: 'Electronics' }
-];

@@ -6,7 +6,7 @@ import { withForm } from '@/components/forms/useAppForm';
 import { ImageUploader } from '@/components/image-uploader';
 import { Flex } from '@/components/ui/flex';
 
-import { productDefaultValues } from '../prodcut-schema';
+import { productDefaultValues } from '../product-schema';
 
 export const MediaStep = withForm({
   defaultValues: productDefaultValues,

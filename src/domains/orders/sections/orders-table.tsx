@@ -284,7 +284,7 @@ export default function OrdersTable({ data }: OrdersTableProps) {
 
         {/* Table body */}
         <div className='p-2'>
-          <Table.Body<Order>
+          <Table.Grid<Order>
             onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
             getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
             extendMenuActions={(row) => {

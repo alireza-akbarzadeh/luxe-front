@@ -11,7 +11,7 @@ import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
-import { productDefaultValues } from '../prodcut-schema';
+import { productDefaultValues } from '../product-schema';
 
 const STATUS_OPTIONS = [
   {
