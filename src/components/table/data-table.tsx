@@ -9,6 +9,9 @@ import { TablePagination } from './table-pagination';
 import { TableSearch } from './table-search';
 import { TableStatusFilters } from './table-status-filters';
 import { TableToolbar } from './table-toolbar';
+import { useTableState } from './use-table-state';
+
+export { useTableState };
 
 /**
  * # Unified Data Table System

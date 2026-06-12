@@ -7,21 +7,13 @@ import {
   IconUserMinus,
   IconX
 } from '@tabler/icons-react';
-import {
-  type ColumnFiltersState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type Row,
-  type SortingState,
-  useReactTable
-} from '@tanstack/react-table';
+import type { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 
 import { Table } from '@/components/table/data-table';
+import { useTableContext } from '@/components/table/table-context';
 import { Button } from '@/components/ui/button';
 import { ContextMenuItem, ContextMenuShortcut } from '@/components/ui/context-menu';
 import {
@@ -54,8 +46,6 @@ const STATUS_TABS: readonly (OrderStatus | 'All')[] = [
 ];
 
 export default function OrdersTable({ data }: OrdersTableProps) {
-  const router = useRouter();
-
   const {
     search,
     setSearch,
@@ -75,10 +65,10 @@ export default function OrdersTable({ data }: OrdersTableProps) {
 
   const { advancedOpen, setAdvancedOpen } = useOrdersFilterStore();
 
-  // 1. Derive sorting state directly
+  // Derive sorting state directly
   const sorting: SortingState = sortKey ? [{ id: sortKey, desc: sortDir === 'desc' }] : [];
 
-  // 2. DERIVE columnFilters directly from URL state (Removes 3 useEffects entirely!)
+  // Derive columnFilters directly from URL state
   const derivedColumnFilters = React.useMemo(() => {
     const filters: ColumnFiltersState = [];
 
@@ -96,85 +86,140 @@ export default function OrdersTable({ data }: OrdersTableProps) {
     return filters;
   }, [statusTab, advancedFilters]);
 
-  // Create table instance
-  const table = useReactTable({
-    data,
-    columns: orderColumns,
-    state: {
-      sorting,
-      columnFilters: derivedColumnFilters,
-      pagination: { pageIndex: page, pageSize },
-      globalFilter: search
-    },
-    onSortingChange: async (updater) => {
-      const newSorting = typeof updater === 'function' ? updater(sorting) : updater;
-      const sort = newSorting[0];
+  const handleSortingChange = async (
+    updater: SortingState | ((old: SortingState) => SortingState)
+  ) => {
+    const newSorting = typeof updater === 'function' ? updater(sorting) : updater;
+    const sort = newSorting[0];
 
-      if (sort) {
-        const validSortKeys = ['order_number', 'total', 'ordered_at'] as const;
-        if ((validSortKeys as readonly string[]).includes(sort.id)) {
-          await setSortKey(sort.id as (typeof validSortKeys)[number]);
-          await setSortDir(sort.desc ? 'desc' : 'asc');
-        }
-      } else {
-        await setSortKey(null);
-        await setSortDir('asc');
+    if (sort) {
+      const validSortKeys = ['order_number', 'total', 'ordered_at'] as const;
+      if ((validSortKeys as readonly string[]).includes(sort.id)) {
+        await setSortKey(sort.id as (typeof validSortKeys)[number]);
+        await setSortDir(sort.desc ? 'desc' : 'asc');
       }
-      await setPage(0);
-    },
-    onColumnFiltersChange: async (updater) => {
-      const newFilters = typeof updater === 'function' ? updater(derivedColumnFilters) : updater;
-
-      const statusFilter = newFilters.find((f) => f.id === 'status');
-      const filterValue = statusFilter ? (statusFilter.value as string[])[0] : undefined;
-      const newStatus = filterValue ? (filterValue as OrderStatus) : 'All';
-
-      if (newStatus !== statusTab) {
-        await setStatusTab(newStatus);
-        await setPage(0);
-      }
-    },
-    onPaginationChange: async (updater) => {
-      const newPagination =
-        typeof updater === 'function' ? updater({ pageIndex: page, pageSize }) : updater;
-      await setPage(newPagination.pageIndex);
-      await setPageSize(newPagination.pageSize);
-    },
-    onGlobalFilterChange: async (updater) => {
-      const newValue = typeof updater === 'function' ? updater(search) : updater;
-      const newSearch = newValue ?? '';
-      if (newSearch !== search) {
-        await setSearch(newSearch);
-        await setPage(0);
-      }
-    },
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    filterFns: {
-      multiSelect: (row, columnId, filterValue) => {
-        if (!filterValue || (Array.isArray(filterValue) && filterValue.length === 0)) return true;
-        const rowValue = String(row.getValue(columnId)).toLowerCase();
-        if (Array.isArray(filterValue)) {
-          return filterValue.some((val) => String(val).toLowerCase() === rowValue);
-        }
-        return String(filterValue).toLowerCase() === rowValue;
-      }
-    },
-    globalFilterFn: (row: Row<Order>, _columnId: string, filterValue) => {
-      const searchStr = String(filterValue).toLowerCase();
-      if (!searchStr) return true;
-      const orderNumber = row.getValue('order_number') as string;
-      const customerName = row.getValue('customer_name') as string;
-      const customerEmail = row.original.customer_email;
-      return (
-        orderNumber?.toLowerCase().includes(searchStr) ||
-        customerName?.toLowerCase().includes(searchStr) ||
-        customerEmail?.toLowerCase().includes(searchStr)
-      );
+    } else {
+      await setSortKey(null);
+      await setSortDir('asc');
     }
-  });
+    await setPage(0);
+  };
+
+  const handleColumnFiltersChange = async (
+    updater: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)
+  ) => {
+    const newFilters = typeof updater === 'function' ? updater(derivedColumnFilters) : updater;
+
+    const statusFilter = newFilters.find((f) => f.id === 'status');
+    const filterValue = statusFilter ? (statusFilter.value as string[])[0] : undefined;
+    const newStatus = filterValue ? (filterValue as OrderStatus) : 'All';
+
+    if (newStatus !== statusTab) {
+      await setStatusTab(newStatus);
+      await setPage(0);
+    }
+  };
+
+  const handlePaginationChange = async (
+    updater:
+      | {
+          pageIndex: number;
+          pageSize: number;
+        }
+      | ((old: { pageIndex: number; pageSize: number }) => { pageIndex: number; pageSize: number })
+  ) => {
+    const newPagination =
+      typeof updater === 'function' ? updater({ pageIndex: page, pageSize }) : updater;
+    await setPage(newPagination.pageIndex);
+    await setPageSize(newPagination.pageSize);
+  };
+
+  const handleGlobalFilterChange = async (newValue: string) => {
+    const newSearch = newValue ?? '';
+    if (newSearch !== search) {
+      await setSearch(newSearch);
+      await setPage(0);
+    }
+  };
+
+  const filterFns = {
+    multiSelect: (row: Row<Order>, columnId: string, filterValue: string[] | null) => {
+      if (!filterValue || (Array.isArray(filterValue) && filterValue.length === 0)) return true;
+      const rowValue = String(row.getValue(columnId)).toLowerCase();
+      if (Array.isArray(filterValue)) {
+        return filterValue.some((val) => String(val).toLowerCase() === rowValue);
+      }
+      return String(filterValue).toLowerCase() === rowValue;
+    }
+  };
+
+  const globalFilterFn = (row: Row<Order>, _columnId: string, filterValue: string | null) => {
+    const searchStr = String(filterValue ?? '').toLowerCase();
+    if (!searchStr) return true;
+    const orderNumber = row.getValue('order_number') as string;
+    const customerName = row.getValue('customer_name') as string;
+    const customerEmail = row.original.customer_email;
+    return (
+      orderNumber?.toLowerCase().includes(searchStr) ||
+      customerName?.toLowerCase().includes(searchStr) ||
+      customerEmail?.toLowerCase().includes(searchStr)
+    );
+  };
+
+  return (
+    <Table.Root
+      data={data}
+      columns={orderColumns}
+      pagination={{ pageIndex: page, pageSize }}
+      onPaginationChange={handlePaginationChange}
+      globalFilter={search}
+      onGlobalFilterChange={handleGlobalFilterChange}
+      sorting={sorting}
+      onSortingChange={handleSortingChange}
+      columnFilters={derivedColumnFilters}
+      onColumnFiltersChange={handleColumnFiltersChange}
+      manualPagination
+      manualFiltering
+      manualSorting
+      enableRowSelection
+      meta={{
+        filterFns,
+        globalFilterFn
+      }}
+    >
+      <OrdersTableContent
+        resetAllFilters={resetAllFilters}
+        search={search}
+        derivedColumnFilters={derivedColumnFilters}
+        advancedFilters={advancedFilters}
+        setAdvancedOpen={setAdvancedOpen}
+        advancedOpen={advancedOpen}
+      />
+    </Table.Root>
+  );
+}
+
+// Nested component to access table context
+function OrdersTableContent({
+  resetAllFilters,
+  setAdvancedOpen,
+  advancedOpen,
+  search,
+  derivedColumnFilters,
+  advancedFilters
+}: {
+  resetAllFilters: () => Promise<void>;
+  setAdvancedOpen: (open: boolean) => void;
+  advancedOpen: boolean;
+  search: string;
+  derivedColumnFilters: ColumnFiltersState;
+  advancedFilters: Array<{
+    id: string;
+    value: string[] | ((old: string[]) => string[] | null) | null;
+  }>;
+}) {
+  const { table } = useTableContext<Order>();
+  const router = useRouter();
 
   const handleExport = () => {
     const rows = table.getSelectedRowModel().rows;
@@ -208,107 +253,105 @@ export default function OrdersTable({ data }: OrdersTableProps) {
   const hasFilters = derivedColumnFilters.length > 0 || !!search;
 
   return (
-    <Table.Root table={table}>
-      <div className='space-y-0'>
-        {/* Command bar */}
-        <div className='bg-muted/5 border-border/40 flex flex-col items-center gap-3 border-b px-6 py-5 md:flex-row'>
-          <div className='w-full flex-1 md:w-auto'>
-            <Table.Search placeholder='Search by order #, customer name or email…' />
-          </div>
+    <div className='space-y-0'>
+      {/* Command bar */}
+      <div className='bg-muted/5 border-border/40 flex flex-col items-center gap-3 border-b px-6 py-5 md:flex-row'>
+        <div className='w-full flex-1 md:w-auto'>
+          <Table.Search placeholder='Search by order #, customer name or email…' />
+        </div>
 
-          <div className='flex w-full items-center gap-2 md:w-auto'>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => setAdvancedOpen(true)}
-              className='h-9 gap-2 rounded-xl border-dashed text-[10px] font-bold tracking-wide uppercase'
-            >
-              <IconAdjustmentsHorizontal className='h-3.5 w-3.5' />
-              Advanced
-              {advancedFilters.length > 0 && (
-                <span className='bg-primary text-primary-foreground flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-black'>
-                  {advancedFilters.length}
-                </span>
-              )}
-            </Button>
-
-            {hasFilters && (
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleReset}
-                className='text-destructive hover:bg-destructive/5 h-9 gap-1.5 rounded-xl px-3 text-[10px] font-black uppercase'
-              >
-                <IconX className='h-3 w-3' /> Reset
-              </Button>
+        <div className='flex w-full items-center gap-2 md:w-auto'>
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => setAdvancedOpen(true)}
+            className='h-9 gap-2 rounded-xl border-dashed text-[10px] font-bold tracking-wide uppercase'
+          >
+            <IconAdjustmentsHorizontal className='h-3.5 w-3.5' />
+            Advanced
+            {advancedFilters.length > 0 && (
+              <span className='bg-primary text-primary-foreground flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-black'>
+                {advancedFilters.length}
+              </span>
             )}
+          </Button>
 
-            <div className='bg-border mx-2 hidden h-4 w-px md:block' />
+          {hasFilters && (
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={handleReset}
+              className='text-destructive hover:bg-destructive/5 h-9 gap-1.5 rounded-xl px-3 text-[10px] font-black uppercase'
+            >
+              <IconX className='h-3 w-3' /> Reset
+            </Button>
+          )}
 
-            <Table.FilterTabs
-              columnId='status'
-              options={STATUS_TABS.map((tab) => (tab === 'All' ? 'All' : tab))}
-            />
+          <div className='bg-border mx-2 hidden h-4 w-px md:block' />
 
-            <div className='bg-primary/10 border-primary/20 text-primary rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-              {table.getFilteredRowModel().rows.length} Results
-            </div>
-          </div>
-        </div>
-
-        {/* Sub-bar with status filters & bulk actions */}
-        <div className='bg-background/50 border-border/40 flex items-center justify-between border-b px-6 py-4'>
-          <Table.StatusFilters
+          <Table.FilterTabs
             columnId='status'
-            title='Order Status'
-            options={[
-              { label: 'Pending', icon: IconClock, color: 'text-amber-500' },
-              { label: 'Processing', icon: IconClock, color: 'text-amber-500' },
-              { label: 'Fulfilled', icon: IconUserCheck, color: 'text-emerald-500' },
-              { label: 'Shipped', icon: IconUserCheck, color: 'text-emerald-500' },
-              { label: 'Delivered', icon: IconUserCheck, color: 'text-emerald-500' },
-              { label: 'Cancelled', icon: IconUserMinus, color: 'text-destructive' },
-              { label: 'Refunded', icon: IconRefresh, color: 'text-muted-foreground' }
-            ]}
+            options={STATUS_TABS.map((tab) => (tab === 'All' ? 'All' : tab))}
           />
 
-          <div className='flex items-center gap-3'>
-            <Table.BulkActions
-              onDelete={(rows) => toast.error(`Cancelling ${rows.length} orders`)}
-              onDownload={handleExport}
-              deleteTitle='Cancel Orders'
-              deleteDescription='This action cannot be undone. Orders will be cancelled immediately.'
-            />
+          <div className='bg-primary/10 border-primary/20 text-primary rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
+            {table.getFilteredRowModel().rows.length} Results
           </div>
         </div>
+      </div>
 
-        {/* Table body */}
-        <div className='p-2'>
-          <Table.Grid<Order>
-            onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
-            getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
-            extendMenuActions={(row) => {
-              const order = row.original;
-              return (
-                <>
-                  <ContextMenuItem disabled={order.status === 'Fulfilled'}>
-                    Mark as Shipped
-                    <ContextMenuShortcut>⌘⇧S</ContextMenuShortcut>
-                  </ContextMenuItem>
-                  <ContextMenuItem className='text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950/30'>
-                    Cancel Order
-                  </ContextMenuItem>
-                </>
-              );
-            }}
-            columnsCount={orderColumns.length}
+      {/* Sub-bar with status filters & bulk actions */}
+      <div className='bg-background/50 border-border/40 flex items-center justify-between border-b px-6 py-4'>
+        <Table.StatusFilters
+          columnId='status'
+          title='Order Status'
+          options={[
+            { label: 'Pending', icon: IconClock, color: 'text-amber-500' },
+            { label: 'Processing', icon: IconClock, color: 'text-amber-500' },
+            { label: 'Fulfilled', icon: IconUserCheck, color: 'text-emerald-500' },
+            { label: 'Shipped', icon: IconUserCheck, color: 'text-emerald-500' },
+            { label: 'Delivered', icon: IconUserCheck, color: 'text-emerald-500' },
+            { label: 'Cancelled', icon: IconUserMinus, color: 'text-destructive' },
+            { label: 'Refunded', icon: IconRefresh, color: 'text-muted-foreground' }
+          ]}
+        />
+
+        <div className='flex items-center gap-3'>
+          <Table.BulkActions
+            onDelete={(rows) => toast.error(`Cancelling ${rows.length} orders`)}
+            onDownload={handleExport}
+            deleteTitle='Cancel Orders'
+            deleteDescription='This action cannot be undone. Orders will be cancelled immediately.'
           />
         </div>
+      </div>
 
-        {/* Pagination */}
-        <div className='border-border/40 border-t px-6 py-4'>
-          <Table.Pagination />
-        </div>
+      {/* Table body */}
+      <div className='p-2'>
+        <Table.Grid<Order>
+          onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
+          getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
+          extendMenuActions={(row) => {
+            const order = row.original;
+            return (
+              <>
+                <ContextMenuItem disabled={order.status === 'Fulfilled'}>
+                  Mark as Shipped
+                  <ContextMenuShortcut>⌘⇧S</ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem className='text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950/30'>
+                  Cancel Order
+                </ContextMenuItem>
+              </>
+            );
+          }}
+          columnsCount={orderColumns.length}
+        />
+      </div>
+
+      {/* Pagination */}
+      <div className='border-border/40 border-t px-6 py-4'>
+        <Table.Pagination />
       </div>
 
       {/* Advanced filter sheet */}
@@ -327,6 +370,6 @@ export default function OrdersTable({ data }: OrdersTableProps) {
           </div>
         </SheetContent>
       </Sheet>
-    </Table.Root>
+    </div>
   );
 }

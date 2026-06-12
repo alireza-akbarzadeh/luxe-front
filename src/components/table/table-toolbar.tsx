@@ -4,12 +4,9 @@ import {
   IconColumns,
   IconDatabase,
   IconDownload,
-  IconLayoutCards,
   IconPlus,
-  IconRefresh,
-  IconTable
+  IconRefresh
 } from '@tabler/icons-react';
-import * as React from 'react';
 
 import { useTableContext } from '@/components/table/table-context';
 import { TableSearch } from '@/components/table/table-search';
@@ -41,33 +38,35 @@ function ColumnVisibilityDropdown<TData>() {
   if (columns.length === 0) return null;
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <TooltipProvider delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button variant='outline' size='icon' className='size-8 rounded-lg'>
                 <IconColumns className='size-4' />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side='top'>Show/hide columns</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-40'>
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {columns.map((column) => (
-          <DropdownMenuCheckboxItem
-            key={column.id}
-            checked={column.getIsVisible()}
-            onCheckedChange={(value) => column.toggleVisibility(!!value)}
-          >
-            {typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id}
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-40'>
+              <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {columns.map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {typeof column.columnDef.header === 'string'
+                    ? column.columnDef.header
+                    : column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TooltipTrigger>
+        <TooltipContent side='top'>Show/hide columns</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

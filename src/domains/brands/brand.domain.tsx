@@ -1,55 +1,42 @@
 'use client';
-import { getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
-import { useDeferredValue, useState } from 'react';
+import { useDeferredValue } from 'react';
 
-import { Table } from '~/src/components/table/data-table';
+import { Table, useTableState } from '~/src/components/table/data-table';
 import { brandColumns } from '~/src/domains/brands/sections/brand-columns';
 import { useGetBrands } from '~/src/services/-brands-get';
 import type { ModelsCategory } from '~/src/services/-checkout-post.schemas';
 
 export function BrandsDomains() {
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
-  const [globalFilter, setGlobalFilter] = useState('');
-  const deferredFilter = useDeferredValue(globalFilter);
-  const [rowSelection, setRowSelection] = useState({});
   const { push } = useRouter();
+  const tableState = useTableState({ initialPageSize: 20 });
+  const deferredFilter = useDeferredValue(tableState.globalFilter);
 
   const { data, isLoading, isFetching, refetch } = useGetBrands({
-    limit: pagination.pageSize,
-    page: pagination.pageIndex * pagination.pageSize,
+    limit: tableState.pagination.pageSize,
+    page: tableState.pagination.pageIndex * tableState.pagination.pageSize,
     search: deferredFilter
   });
 
-  const total = data?.data?.length ?? 0;
   const brands = data?.data ?? [];
-
-  const table = useReactTable({
-    data: brands,
-    columns: brandColumns,
-    getRowId: (row) => String(row.id),
-    state: {
-      pagination,
-      globalFilter,
-      rowSelection
-    },
-    onPaginationChange: setPagination,
-    onGlobalFilterChange: (value) => {
-      setGlobalFilter(value);
-      setPagination((p) => ({ ...p, pageIndex: 0 }));
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    pageCount: Math.ceil(total / pagination.pageSize),
-    manualPagination: true,
-    manualFiltering: true,
-    rowCount: total,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel()
-  });
+  // TODO: Update API to return total count in response
+  // For now, use current page length as estimate
+  const total = brands.length > 0 ? brands.length : 0;
 
   return (
-    <Table.Root table={table}>
+    <Table.Root
+      data={brands}
+      columns={brandColumns}
+      pagination={tableState.pagination}
+      onPaginationChange={tableState.setPagination}
+      globalFilter={tableState.globalFilter}
+      onGlobalFilterChange={tableState.setGlobalFilter}
+      pageCount={Math.ceil(total / tableState.pagination.pageSize)}
+      rowCount={total}
+      manualPagination
+      manualFiltering
+      enableRowSelection
+    >
       <Table.Toolbar
         searchPlaceholder='Search by name'
         showRefresh
@@ -58,19 +45,17 @@ export function BrandsDomains() {
         showCreate
         onCreate={() => push('/dashboard/products/create')}
         showClear
-        onClearFilter={() => setGlobalFilter('')}
+        onClearFilter={() => tableState.setGlobalFilter('')}
         showColumnVisibility
         showBulkActions
-        globalFilter={globalFilter}
+        globalFilter={tableState.globalFilter}
       />
-      {isLoading ? (
-        <Table.Loading columnsCount={8} rowsCount={20} />
-      ) : (
-        <Table.Grid<ModelsCategory>
-          onRowDoubleClick={(row) => push(`/dashboard/brands/edit/${row.original.id}`)}
-          columnsCount={8}
-        />
-      )}
+
+      <Table.Grid<ModelsCategory>
+        isLoading={isLoading}
+        onRowDoubleClick={(row) => push(`/dashboard/brands/edit/${row.original.id}`)}
+        columnsCount={8}
+      />
       <Table.Pagination
         showPageSize
         showTotalRows

@@ -20,6 +20,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { TableLoading } from '~/src/components/table/table-loading';
 
 import { useTableContext } from './table-context';
 
@@ -29,15 +30,12 @@ interface TableGridProps<TData> {
   onClick?: (row: Row<TData>) => void;
   getDetailsUrl?: (row: Row<TData>) => string;
   extendMenuActions?: (row: Row<TData>) => React.ReactNode;
+  isLoading?: boolean;
 }
 
-export function TableGrid<TData>({
-  columnsCount,
-  onRowDoubleClick,
-  onClick,
-  getDetailsUrl,
-  extendMenuActions
-}: TableGridProps<TData>) {
+export function TableGrid<TData>(props: TableGridProps<TData>) {
+  const { columnsCount, onRowDoubleClick, onClick, getDetailsUrl, extendMenuActions, isLoading } =
+    props;
   const { table } = useTableContext<TData>();
   const rows = table.getRowModel().rows;
 
@@ -52,12 +50,9 @@ export function TableGrid<TData>({
     }
   };
 
-  const density = table.options.meta?.density || 'normal';
-  const cellPadding = {
-    compact: 'py-1 px-2',
-    normal: 'py-3 px-4',
-    relaxed: 'py-5 px-6'
-  }[density];
+  if (isLoading) {
+    return <TableLoading columnsCount={columnsCount} rowsCount={20} />;
+  }
 
   return (
     <div className='border-border/40 bg-card/20 overflow-hidden overflow-x-auto border-x backdrop-blur-2xl'>
@@ -106,7 +101,6 @@ export function TableGrid<TData>({
                       onMouseDown={() => setActiveColumnId(cell.column.id)}
                       key={cell.id}
                       className={cn(
-                        cellPadding,
                         'p-4 whitespace-normal',
                         cell.column.id === 'name' &&
                           'border-border/20 bg-card/40 sticky left-0 z-10 border-r backdrop-blur-md'
