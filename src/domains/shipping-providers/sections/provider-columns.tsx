@@ -1,16 +1,14 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { formatPrice } from '@/domains/home/lib/home-utils';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
-import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
+import type { ModelsShippingProviders } from '~/src/services/-checkout-post.schemas';
 
-export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
+export const shippingProviderColumns: ColumnDef<ModelsShippingProviders>[] = [
   {
     id: 'select',
-    enableSorting: false,
-    enableHiding: false,
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
@@ -20,39 +18,41 @@ export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
       />
     )
   },
+
   {
-    accessorKey: 'email',
-    header: 'User',
+    accessorKey: 'name',
+    header: 'Provider',
     cell: ({ row }) => (
       <div className='flex flex-col'>
-        <span className='font-medium'>
-          {row.original.first_name || ''} {row.original.last_name || ''}
-        </span>
-        <span className='text-muted-foreground text-xs'>{row.original.email || '—'}</span>
+        <span className='font-medium'>{row.original.name || '—'}</span>
+        {row.original.id && (
+          <span className='text-muted-foreground text-xs'>ID: {row.original.id}</span>
+        )}
       </div>
     )
   },
+
   {
-    accessorKey: 'phone',
-    header: 'Phone',
-    cell: ({ row }) => <span className='text-sm'>{row.original.phone || '—'}</span>
-  },
-  {
-    accessorKey: 'role',
-    header: 'Role',
-    filterFn: 'multiSelect',
+    accessorKey: 'description',
+    header: 'Description',
     cell: ({ row }) => {
-      const role = row.original.role || 'user';
-      const variant =
-        role === 'admin' ? 'destructive' : role === 'moderator' ? 'default' : 'secondary';
-      return <Badge variant={variant}>{role}</Badge>;
+      const desc = row.original.description;
+      return <span className='line-clamp-2 max-w-[280px] text-sm'>{desc || '—'}</span>;
     }
   },
+
   {
-    id: 'status',
+    accessorKey: 'price',
+    header: 'Price',
+    cell: ({ row }) => {
+      const price = row.original.price;
+      return <span className='font-mono text-sm'>{formatPrice(price ?? 0)}</span>;
+    }
+  },
+
+  {
     accessorKey: 'is_active',
     header: 'Status',
-    filterFn: 'multiSelect',
     cell: ({ row }) => {
       const isActive = row.original.is_active;
       return (
@@ -68,9 +68,16 @@ export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
   {
     accessorKey: 'created_at',
     header: 'Created',
-    filterFn: 'dateRange',
     cell: ({ row }) => {
       const date = row.original.created_at;
+      return <div className='text-xs'>{date ? formatDate(date, DATE_FORMATS.SHORT) : '—'}</div>;
+    }
+  },
+  {
+    accessorKey: 'updated_at',
+    header: 'Updated',
+    cell: ({ row }) => {
+      const date = row.original.updated_at;
       return <div className='text-xs'>{date ? formatDate(date, DATE_FORMATS.SHORT) : '—'}</div>;
     }
   }

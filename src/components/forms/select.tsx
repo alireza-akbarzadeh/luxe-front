@@ -40,8 +40,12 @@ export function SelectController({
         <SelectContent className='bg-background text-foreground'>
           <SelectGroup>
             <SelectLabel>{label}</SelectLabel>
-            {options.map((item) => (
-              <SelectItem key={item.value} value={item.value} className='text-foreground'>
+            {options.map((item, index) => (
+              <SelectItem
+                key={`${item.value}-${item.label}-${index}`}
+                value={item.value}
+                className='text-foreground'
+              >
                 {item.label}
               </SelectItem>
             ))}

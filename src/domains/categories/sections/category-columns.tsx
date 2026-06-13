@@ -10,6 +10,22 @@ import type { ModelsCategory } from '~/src/services/-categories-get.schemas'; //
 export const categoryColumns: ColumnDef<ModelsCategory>[] = [
   {
     id: 'select',
+    enableSorting: false,
+    enableHiding: false,
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected()
+            ? true
+            : table.getIsSomePageRowsSelected()
+              ? 'indeterminate'
+              : false
+        }
+        onClick={(e) => e.stopPropagation()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        className='border-muted-foreground/30 rounded-md'
+      />
+    ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}

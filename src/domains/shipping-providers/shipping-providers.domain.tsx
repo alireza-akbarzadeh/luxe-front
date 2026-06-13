@@ -1,29 +1,23 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useDeferredValue } from 'react';
 
-import { Table, useTableState } from '~/src/components/table/data-table';
-import { buildCategoryTree } from '~/src/domains/categories/categories.util';
-import { categoryColumns } from '~/src/domains/categories/sections/category-columns';
-import { useGetCategories } from '~/src/services/-categories-get';
-import type { ModelsCategory } from '~/src/services/-checkout-post.schemas';
+import { Table, useTableState } from '@/components/table/data-table';
+import { shippingProviderColumns } from '@/domains/shipping-providers/sections/provider-columns';
+import type { ModelsCategory } from '@/services/-checkout-post.schemas';
+import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
-export function CategoriesDomains() {
+export function ShippingProvidersDomains() {
   const { push } = useRouter();
   const tableState = useTableState();
-  const deferredFilter = useDeferredValue(tableState.globalFilter);
 
-  const { data, isLoading, isFetching, refetch } = useGetCategories({
-    search: deferredFilter
-  });
+  const { data, isLoading, isFetching, refetch } = useGetShippingProviders();
 
-  const flatCategories = data?.data?.categories ?? [];
-  const treeData = buildCategoryTree(flatCategories);
+  const shippingProviders = data?.data ?? [];
 
   return (
     <Table.Root
-      data={treeData}
-      columns={categoryColumns}
+      data={shippingProviders}
+      columns={shippingProviderColumns}
       globalFilter={tableState.globalFilter}
       onGlobalFilterChange={tableState.setGlobalFilter}
       sorting={tableState.sorting}
@@ -31,10 +25,6 @@ export function CategoriesDomains() {
       columnFilters={tableState.columnFilters}
       onColumnFiltersChange={tableState.setColumnFilters}
       expanded={tableState.expanded}
-      onExpandedChange={tableState.setExpanded}
-      getSubRows={(row: ModelsCategory) => {
-        return row.children;
-      }}
     >
       <Table.Toolbar
         searchPlaceholder='Search by name or SKU'
@@ -42,7 +32,7 @@ export function CategoriesDomains() {
         onRefresh={refetch}
         isLoading={isFetching}
         showCreate
-        onCreate={() => push('/dashboard/categories/create')}
+        onCreate={() => push('/dashboard/products/create')}
         showClear
         onClearFilter={() => tableState.setGlobalFilter('')}
         showColumnVisibility
@@ -50,7 +40,7 @@ export function CategoriesDomains() {
         globalFilter={tableState.globalFilter}
       />
       <Table.Grid<ModelsCategory>
-        onRowDoubleClick={(row) => push(`/dashboard/categories/edit/${row.original.id}`)}
+        onRowDoubleClick={(row) => push(`/dashboard/shipments/edit/${row.original.id}`)}
         columnsCount={8}
         isLoading={isLoading}
       />

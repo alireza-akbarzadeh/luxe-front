@@ -1,0 +1,129 @@
+# Project Stack & Conventions
+
+## Core Stack
+- Next.js 16 (App Router, React Compiler enabled)
+- React 19, TypeScript (strict mode)
+- Tailwind CSS v4 + shadcn/ui (radix-ui primitives)
+- Zustand for client state
+- TanStack Query for server state/data fetching
+- TanStack Table (wrapped in custom DataTable component)
+- TanStack Form (wrapped in custom `useAppForm` hook)
+- Zod v4 for schema validation
+- Orval for API client generation from OpenAPI specs
+
+---
+
+## State Management Rules
+
+### Zustand
+- Every domain/feature gets its own store slice in `src/stores/<feature>-store.ts`
+- Always type stores explicitly with an interface, never `any`
+- Use the `create<T>()(...)` curried syntax for proper type inference
+- Separate state and actions in the interface:
+```ts
+  interface FeatureState {
+    items: Item[];
+    selectedId: string | null;
+  }
+  interface FeatureActions {
+    setItems: (items: Item[]) => void;
+    selectItem: (id: string | null) => void;
+    reset: () => void;
+  }
+  type FeatureStore = FeatureState & FeatureActions;
+```
+- Use selectors when consuming store in components to avoid unnecessary re-renders:
+```ts
+  const items = useFeatureStore((state) => state.items);
+```
+- Never put server data (fetched via TanStack Query) into Zustand — Zustand is for client-only UI/app state (filters, modals, selections, drafts)
+- Add a `reset()` action to every store for cleanup on unmount/logout
+- Use `persist` middleware only when explicitly required (e.g., user preferences), and always scope storage keys per feature
+
+---
+
+## Forms — useAppForm
+
+- ALWAYS use the existing custom `useAppForm` hook (`src/hooks/use-app-form.ts` or wherever it's defined) for all forms — never use raw `useForm` from `@tanstack/react-form` directly
+- Define Zod schemas in `src/schemas/<feature>-schema.ts` and infer types with `z.infer<typeof schema>`
+- Use `@tanstack/zod-adapter` for validation integration
+- Form field components must come from the shared form field components (built on shadcn Input, Select, etc.) — do not hand-roll raw `<input>` elements
+- Submission handlers should:
+  - Call TanStack Query mutations, never raw axios calls inline
+  - Show loading state via `isSubmitting` / mutation `isPending`
+  - Show errors via `sonner` toast, not inline alerts, unless the design requires inline field errors
+- Example pattern to follow:
+```tsx
+  const form = useAppForm({
+    defaultValues: schema.parse({}) /* or explicit defaults */,
+    validators: { onSubmit: schema },
+    onSubmit: async ({ value }) => {
+      await mutation.mutateAsync(value);
+    },
+  });
+```
+
+---
+
+## Tables — Custom DataTable
+
+- ALWAYS use the existing custom `DataTable` component (built on `@tanstack/react-table` + `@tanstack/react-virtual`) — never instantiate `useReactTable` directly in feature components
+- Column definitions go in `src/components/<feature>/columns.tsx`, typed as `ColumnDef<TData, TValue>[]`
+- Use `@tanstack/zod-adapter` + `nuqs` for table state synced to URL search params (pagination, filters, sorting) — never store table state in Zustand
+- Server-driven tables: fetch via TanStack Query with the URL-derived params as the query key
+- Row actions (edit/delete) dispatch through Zustand UI state (e.g., `selectedRow`, `isDeleteDialogOpen`) — never manage dialog open state with local `useState` scattered across files if shared across components
+
+---
+
+## Data Fetching — TanStack Query
+
+- All API calls go through Orval-generated hooks/clients in `src/services/` — never call `axios` directly in components
+- Query keys follow Orval's generated key factories — do not hand-write query keys
+- Use `staleTime` and `gcTime` deliberately; don't rely on defaults for frequently-changing data
+- Mutations must invalidate the relevant query keys on success
+- Wrap pages/layouts needing hydration with proper `HydrationBoundary` for SSR prefetching where applicable
+
+---
+
+## Component Architecture (Senior-Level Guidelines)
+
+- **Server Components by default.** Only add `"use client"` when the component needs hooks, event handlers, browser APIs, or third-party client libs (Zustand, TanStack Query hooks, etc.)
+- **Co-location**: feature code lives under `src/features/<feature>/` with `components/`, `hooks/`, `schemas/`, `stores/`, `api/` subfolders. Shared UI primitives stay in `src/components/ui/` (shadcn)
+- **No prop drilling beyond 2 levels** — lift to Zustand (client state) or Context only when truly cross-cutting
+- **Composition over configuration** — prefer compound components (e.g., `<Card><Card.Header/><Card.Body/></Card>`) over components with 15 boolean props
+- **Strict typing**: no `any`, no `as` casts unless justified with a comment; use `type-fest` utilities for advanced type transforms
+- **Error boundaries**: every async data-fetching segment should have `error.tsx` and `loading.tsx` at the route level (App Router convention)
+- **Accessibility**: all interactive elements must be keyboard-navigable and have proper ARIA attributes (enforced via `eslint-plugin-jsx-a11y`)
+- **Performance**: rely on React Compiler for memoization — avoid manual `useMemo`/`useCallback` unless profiling shows a real need
+- **File naming**: kebab-case for files (`user-profile-card.tsx`), PascalCase for component names, camelCase for hooks/functions
+- **Imports**: follow `eslint-plugin-simple-import-sort` ordering — do not manually reorder imports against the linter
+
+---
+
+## Styling
+
+- Tailwind v4 utility-first; use `cn()` (clsx + tailwind-merge) for conditional classes
+- Use `class-variance-authority` (cva) for component variants (buttons, badges, etc.)
+- Never write raw CSS/SCSS unless for truly global styles (`globals.css`) — prefer Tailwind utilities and shadcn theme tokens
+- Respect `prettier-plugin-tailwindcss` class ordering — don't fight the formatter
+
+---
+
+## Code Quality Gates
+
+- Before considering a task done, code must pass: `pnpm typecheck` and `pnpm lint:fix`
+- Follow conventional commits (enforced by commitlint) — `feat:`, `fix:`, `chore:`, `refactor:`, etc.
+- New shared logic (hooks, utils, stores) requires a brief JSDoc comment explaining purpose and usage
+- Avoid introducing new dependencies — check if existing stack (Tailwind, Radix, TanStack, Zustand) already solves the problem first
+
+---
+
+## Anti-Patterns to Avoid
+- ❌ `useState` for server data (use TanStack Query)
+- ❌ Raw `fetch`/`axios` in components (use Orval-generated services)
+- ❌ Raw `useReactTable` (use custom DataTable)
+- ❌ Raw `useForm` from TanStack Form (use `useAppForm`)
+- ❌ Putting fetched data into Zustand
+- ❌ Manual `useMemo`/`useCallback` everywhere (trust React Compiler)
+- ❌ Inline styles or untracked CSS
+- ❌ `any` types or unchecked `as` casts

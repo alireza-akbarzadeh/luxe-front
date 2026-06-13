@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type {
   ColumnDef,
   ColumnFiltersState,
   ExpandedState,
   OnChangeFn,
   PaginationState,
+  RowSelectionState,
   SortingState,
   Table,
   TableOptions
@@ -47,6 +49,8 @@ interface TableRootProps<TData> {
   pagination?: PaginationState;
   onPaginationChange?: OnChangeFn<PaginationState>;
   globalFilter?: string;
+
+  onRowSelectionChange?: OnChangeFn<RowSelectionState>;
   onGlobalFilterChange?: (value: string) => void;
   sorting?: SortingState;
   onSortingChange?: OnChangeFn<SortingState>;
@@ -56,6 +60,7 @@ interface TableRootProps<TData> {
   // ===== PAGINATION CONFIG =====
   pageCount?: number;
   rowCount?: number;
+  rowSelection?: RowSelectionState;
   manualPagination?: boolean;
 
   // ===== FILTERING CONFIG =====
@@ -93,6 +98,8 @@ export function TableRoot<TData>({
   onSortingChange,
   columnFilters,
   onColumnFiltersChange,
+  rowSelection: rowSelectionProp,
+  onRowSelectionChange: onRowSelectionChangeProp,
   pageCount,
   rowCount,
   manualPagination = false,
@@ -106,43 +113,78 @@ export function TableRoot<TData>({
   onExpandedChange,
   meta
 }: TableRootProps<TData>) {
-  const tableOptions: TableOptions<TData> = {
+  // Internal fallback state if consumer doesn't control rowSelection
+  const [internalRowSelection, setInternalRowSelection] = React.useState<RowSelectionState>({});
+
+  const rowSelection = rowSelectionProp ?? internalRowSelection;
+  const onRowSelectionChange = onRowSelectionChangeProp ?? setInternalRowSelection;
+
+  const tableOptions = React.useMemo<TableOptions<TData>>(() => {
+    return {
+      data,
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getExpandedRowModel: getExpandedRowModel(),
+      enableRowSelection,
+      enableColumnPinning,
+      enableSorting,
+      manualPagination,
+      manualFiltering,
+      manualSorting,
+      state: {
+        ...(pagination && { pagination }),
+        ...(globalFilter !== undefined && { globalFilter }),
+        ...(sorting && { sorting }),
+        ...(columnFilters && { columnFilters }),
+        rowSelection,
+        ...(expanded !== undefined && { expanded })
+      },
+      onRowSelectionChange,
+      ...(onPaginationChange && { onPaginationChange }),
+      ...(onGlobalFilterChange && { onGlobalFilterChange }),
+      ...(onSortingChange && { onSortingChange }),
+      ...(onColumnFiltersChange && { onColumnFiltersChange }),
+      ...(onExpandedChange && { onExpandedChange }),
+      ...(pageCount !== undefined && { pageCount }),
+      ...(rowCount !== undefined && { rowCount }),
+      ...(getSubRows && { getSubRows }),
+      ...(meta?.filterFns && { filterFns: meta.filterFns }),
+      ...(meta?.globalFilterFn && { globalFilterFn: meta.globalFilterFn }),
+      ...(meta && {
+        meta: Object.fromEntries(
+          Object.entries(meta).filter(([key]) => !['filterFns', 'globalFilterFn'].includes(key))
+        )
+      })
+    } as TableOptions<TData>;
+  }, [
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    enableRowSelection,
-    enableColumnPinning,
-    enableSorting,
+    pagination,
+    onPaginationChange,
+    globalFilter,
+    onGlobalFilterChange,
+    sorting,
+    onSortingChange,
+    columnFilters,
+    onColumnFiltersChange,
+    rowSelection,
+    onRowSelectionChange,
+    pageCount,
+    rowCount,
     manualPagination,
     manualFiltering,
     manualSorting,
-    state: {
-      ...(pagination && { pagination }),
-      ...(globalFilter !== undefined && { globalFilter }),
-      ...(sorting && { sorting }),
-      ...(columnFilters && { columnFilters }),
-      ...(expanded !== undefined && { expanded })
-    },
-    ...(onPaginationChange && { onPaginationChange }),
-    ...(onGlobalFilterChange && { onGlobalFilterChange }),
-    ...(onSortingChange && { onSortingChange }),
-    ...(onColumnFiltersChange && { onColumnFiltersChange }),
-    ...(onExpandedChange && { onExpandedChange }),
-    ...(pageCount !== undefined && { pageCount }),
-    ...(rowCount !== undefined && { rowCount }),
-    ...(getSubRows && { getSubRows }),
-    ...(meta?.filterFns && { filterFns: meta.filterFns }),
-    ...(meta?.globalFilterFn && { globalFilterFn: meta.globalFilterFn }),
-    ...(meta && {
-      meta: Object.fromEntries(
-        Object.entries(meta).filter(([key]) => !['filterFns', 'globalFilterFn'].includes(key))
-      )
-    })
-  };
+    enableRowSelection,
+    enableColumnPinning,
+    enableSorting,
+    getSubRows,
+    expanded,
+    onExpandedChange,
+    meta
+  ]);
 
   const table = useReactTable(tableOptions);
 

@@ -3,6 +3,7 @@ import type {
   ColumnFiltersState,
   OnChangeFn,
   PaginationState,
+  RowSelectionState,
   SortingState
 } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
@@ -24,13 +25,13 @@ export function useTableState<TData = unknown>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [expanded, setExpanded] = useState({});
+  const [rowSelection, setRowSelectionState] = useState<RowSelectionState>({});
 
   // Handlers that accept both value and updater functions (TanStack OnChangeFn)
   const handlePaginationChange = useCallback<OnChangeFn<PaginationState>>((updaterOrValue) => {
-    setPagination((old) => {
-      const newValue = typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue;
-      return newValue;
-    });
+    setPagination((old) =>
+      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
+    );
   }, []);
 
   // Reset pagination when filters change
@@ -41,29 +42,31 @@ export function useTableState<TData = unknown>({
 
   const handleColumnFiltersChange = useCallback<OnChangeFn<ColumnFiltersState>>(
     (updaterOrValue) => {
-      setColumnFilters((old) => {
-        const newValue =
-          typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue;
-        return newValue;
-      });
+      setColumnFilters((old) =>
+        typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
+      );
       setPagination((p) => ({ ...p, pageIndex: 0 }));
     },
     []
   );
 
   const handleSortingChange = useCallback<OnChangeFn<SortingState>>((updaterOrValue) => {
-    setSorting((old) => {
-      const newValue = typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue;
-      return newValue;
-    });
+    setSorting((old) =>
+      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
+    );
     setPagination((p) => ({ ...p, pageIndex: 0 }));
   }, []);
 
   const handleExpandedChange = useCallback<OnChangeFn<any>>((updaterOrValue) => {
-    setExpanded((old) => {
-      const newValue = typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue;
-      return newValue;
-    });
+    setExpanded((old) =>
+      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
+    );
+  }, []);
+
+  const handleRowSelectionChange = useCallback<OnChangeFn<RowSelectionState>>((updaterOrValue) => {
+    setRowSelectionState((old) =>
+      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
+    );
   }, []);
 
   // Slice data for current page when using manual pagination
@@ -76,6 +79,13 @@ export function useTableState<TData = unknown>({
     [pagination.pageIndex, pagination.pageSize]
   );
 
+  const selectedRowCount = useMemo(
+    () => Object.values(rowSelection).filter(Boolean).length,
+    [rowSelection]
+  );
+
+  const resetRowSelection = useCallback(() => setRowSelectionState({}), []);
+
   return useMemo(
     () => ({
       // State
@@ -84,6 +94,8 @@ export function useTableState<TData = unknown>({
       sorting,
       columnFilters,
       expanded,
+      rowSelection,
+      selectedRowCount,
 
       // Setters (compatible with TanStack's OnChangeFn)
       setPagination: handlePaginationChange,
@@ -91,10 +103,12 @@ export function useTableState<TData = unknown>({
       setSorting: handleSortingChange,
       setColumnFilters: handleColumnFiltersChange,
       setExpanded: handleExpandedChange,
+      setRowSelection: handleRowSelectionChange,
 
       // Utilities
       getPageData,
-      resetPagination: () => setPagination((p) => ({ ...p, pageIndex: 0 }))
+      resetPagination: () => setPagination((p) => ({ ...p, pageIndex: 0 })),
+      resetRowSelection
     }),
     [
       pagination,
@@ -102,12 +116,16 @@ export function useTableState<TData = unknown>({
       sorting,
       columnFilters,
       expanded,
+      rowSelection,
+      selectedRowCount,
       handleGlobalFilterChange,
       handleSortingChange,
       handleColumnFiltersChange,
       handleExpandedChange,
+      handleRowSelectionChange,
       handlePaginationChange,
-      getPageData
+      getPageData,
+      resetRowSelection
     ]
   );
 }

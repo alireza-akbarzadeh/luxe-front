@@ -406,3 +406,12 @@ export const copyToClipboard = async (text: string, description: string) => {
     toast.error('Failed to copy value');
   }
 };
+
+
+export function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
