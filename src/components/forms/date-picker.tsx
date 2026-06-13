@@ -1,6 +1,6 @@
 import type { TablerIcon } from '@tabler/icons-react';
 
-import { DatePicker as ShadcnDatePicker,type DatePickerProps } from '@/components/ui/date-picker';
+import { DatePicker as ShadcnDatePicker, type DatePickerProps } from '@/components/ui/date-picker';
 
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
@@ -12,8 +12,10 @@ interface TextFieldProps extends DatePickerProps {
 }
 
 export function DatePicker({ label, detail, icon: Icon, ...props }: TextFieldProps) {
-  const field = useFieldContext<number>();
-  const currentYear = field.state.value ? new Date(field.state.value, 0, 1) : new Date();
+  const field = useFieldContext<string>();
+
+  const selectedDate = field.state.value ? new Date(field.state.value) : undefined;
+
   return (
     <FieldContainer label={label} detail={detail}>
       <div className='relative w-full'>
@@ -22,10 +24,12 @@ export function DatePicker({ label, detail, icon: Icon, ...props }: TextFieldPro
         )}
         <ShadcnDatePicker
           calendar={{
-            selected: currentYear,
+            selected: selectedDate,
             onSelect: (date) => {
               if (date) {
-                field.handleChange(date.getFullYear());
+                field.handleChange(date.toISOString());
+              } else {
+                field.handleChange('');
               }
             }
           }}

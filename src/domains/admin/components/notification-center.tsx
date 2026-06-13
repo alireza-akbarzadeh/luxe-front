@@ -3,7 +3,8 @@ import {
   IconCheck,
   IconExternalLink,
   IconMessage2,
-  IconTrash} from '@tabler/icons-react';
+  IconTrash
+} from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,8 @@ import { cn } from '@/lib/utils';
 
 import type {
   MessageItem as MessageItemType,
-  NotificationItem as NotificationItemType} from '../admin.store';
+  NotificationItem as NotificationItemType
+} from '../admin.store';
 import { useDashboardStore } from '../admin.store';
 
 export function NotificationCenter() {
@@ -54,7 +56,7 @@ export function NotificationCenter() {
             />
           </motion.div>
           {totalUnread > 0 && (
-            <span className='bg-primary ring-background absolute top-2 right-2 h-2 w-2 animate-pulse rounded-full ring-2' />
+            <span className='bg-primary ring-background absolute top-1 right-2 h-2 w-2 animate-pulse rounded-full ring-2' />
           )}
         </Button>
       </PopoverTrigger>

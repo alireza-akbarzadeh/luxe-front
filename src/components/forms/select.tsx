@@ -16,17 +16,19 @@ import { useFieldContext } from './useFormContext';
 export function SelectController({
   label,
   options,
+  description,
   placeholder,
   ...props
 }: {
   label: string;
+  description?: string;
   options: Array<{ label: string; value: string }>;
   placeholder?: string;
 } & ComponentProps<typeof Select>) {
   const field = useFieldContext<string>();
 
   return (
-    <FieldContainer label={label}>
+    <FieldContainer label={label} detail={description}>
       <Select
         {...props}
         name={field.name}

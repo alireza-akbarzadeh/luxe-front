@@ -1,3 +1,5 @@
+import { DiscountForm } from '~/src/domains/discounts/sections/discount-form';
+
 export default function CreateDiscountPage() {
-  return <div>CreateDiscountPage</div>;
+  return <DiscountForm />;
 }

@@ -10,8 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { NotificationCenter } from '@/domains/admin/components/notificaiton-center';
-import { UserProfile } from '@/domains/admin/components/user-profile';
+import { NotificationCenter } from '@/domains/admin/components/notification-center';
 
 export function HeaderActions() {
   return (
@@ -132,7 +131,6 @@ export function HeaderActions() {
 
       <div className='bg-border/40 mx-2 hidden h-6 w-px sm:block' />
       <NotificationCenter />
-      <UserProfile variant='header' />
     </div>
   );
 }

@@ -33,15 +33,11 @@ export function JsonField({ label, height = 220 }: JsonFieldProps) {
   };
 
   const handleFormat = () => {
-    try {
-      field.handleChange(formatJson(value));
-    } catch {}
+    field.handleChange(formatJson(value));
   };
 
   const handleMinify = () => {
-    try {
-      field.handleChange(minifyJson(value));
-    } catch {}
+    field.handleChange(minifyJson(value));
   };
 
   const handleCopy = async () => {
