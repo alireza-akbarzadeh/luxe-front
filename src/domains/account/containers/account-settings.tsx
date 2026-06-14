@@ -12,12 +12,16 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { ActiveSessionsPanel } from '../components/active-sessions-panel';
+import { ChangePasswordPanel } from '../components/change-password-panel';
+import { EmailVerificationPanel } from '../components/email-verification-panel';
 
 export function AccountSetting() {
   return (
     <div className='space-y-6'>
       <h2 className='mb-4 text-xl font-semibold'>Account Settings</h2>
 
+      <ChangePasswordPanel />
+      <EmailVerificationPanel />
       <ActiveSessionsPanel />
 
       {/* Email Preferences */}

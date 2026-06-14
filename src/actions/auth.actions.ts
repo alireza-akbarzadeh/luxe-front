@@ -176,6 +176,107 @@ export async function forgotPasswordAction(email: string): Promise<{ success: bo
   }
 }
 
+export async function resetPasswordAction(
+  token: string,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!token || !newPassword) {
+    return { success: false, error: 'Token and new password are required' };
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({ token, new_password: newPassword })
+    });
+
+    const json = (await res.json()) as { success?: boolean; message?: string };
+
+    if (!res.ok || !json.success) {
+      return { success: false, error: json.message ?? 'Unable to reset password' };
+    }
+
+    await clearAuthCookies();
+    return { success: true };
+  } catch {
+    return { success: false, error: 'Unable to reset password' };
+  }
+}
+
+export async function changePasswordAction(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!currentPassword || !newPassword) {
+    return { success: false, error: 'Current and new passwords are required' };
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/change-password`, {
+      method: 'POST',
+      headers: await getAuthorizedHeaders(),
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword
+      })
+    });
+
+    const json = (await res.json()) as { success?: boolean; message?: string };
+
+    if (!res.ok || !json.success) {
+      return { success: false, error: json.message ?? 'Unable to change password' };
+    }
+
+    return { success: true };
+  } catch {
+    return { success: false, error: 'Unable to change password' };
+  }
+}
+
+export async function verifyEmailAction(token: string): Promise<{ success: boolean; error?: string }> {
+  if (!token) {
+    return { success: false, error: 'Verification token is required' };
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/verify-email?token=${encodeURIComponent(token)}`, {
+      method: 'GET',
+      headers: await getClientRequestHeaders(),
+      cache: 'no-store'
+    });
+
+    const json = (await res.json()) as { success?: boolean; message?: string };
+
+    if (!res.ok || !json.success) {
+      return { success: false, error: json.message ?? 'Email verification failed' };
+    }
+
+    return { success: true };
+  } catch {
+    return { success: false, error: 'Email verification failed' };
+  }
+}
+
+export async function sendVerificationEmailAction(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/send-verification`, {
+      method: 'POST',
+      headers: await getAuthorizedHeaders()
+    });
+
+    const json = (await res.json()) as { success?: boolean; message?: string };
+
+    if (!res.ok || !json.success) {
+      return { success: false, error: json.message ?? 'Unable to send verification email' };
+    }
+
+    return { success: true };
+  } catch {
+    return { success: false, error: 'Unable to send verification email' };
+  }
+}
+
 export async function revokeServerSession(): Promise<void> {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get('refresh_token')?.value;

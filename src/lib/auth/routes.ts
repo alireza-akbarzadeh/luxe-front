@@ -12,7 +12,8 @@ export const AUTH_ROUTES = {
     '/dashboard',
     '/order-tracking'
   ],
-  auth: ['/login', '/register', '/forgot-password'],
+  guestOnly: ['/login', '/register', '/forgot-password'],
+  publicAuth: ['/reset-password', '/verify-email'],
   admin: ['/dashboard']
 } as const;
 
@@ -20,8 +21,17 @@ export function isProtectedPath(pathname: string): boolean {
   return AUTH_ROUTES.protected.some((route) => pathname.startsWith(route));
 }
 
+export function isGuestOnlyAuthPath(pathname: string): boolean {
+  return AUTH_ROUTES.guestOnly.some((route) => pathname.startsWith(route));
+}
+
+export function isPublicAuthPath(pathname: string): boolean {
+  return AUTH_ROUTES.publicAuth.some((route) => pathname.startsWith(route));
+}
+
+/** Guest-only auth pages (login, register, forgot password). */
 export function isAuthPath(pathname: string): boolean {
-  return AUTH_ROUTES.auth.some((route) => pathname.startsWith(route));
+  return isGuestOnlyAuthPath(pathname);
 }
 
 export function isAdminPath(pathname: string): boolean {

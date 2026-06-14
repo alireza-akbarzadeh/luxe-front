@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth/auth-cookies';
 import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth/auth-refresh';
-import { isAdminPath, isAuthPath, isProtectedPath } from './lib/auth/routes';
+import { isAdminPath, isGuestOnlyAuthPath, isProtectedPath } from './lib/auth/routes';
 
 function decodeToken(token: string) {
   try {
@@ -24,7 +24,7 @@ export async function proxy(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh_token')?.value;
 
   const isProtectedRoute = isProtectedPath(pathname);
-  const isAuthRoute = isAuthPath(pathname);
+  const isGuestOnlyAuthRoute = isGuestOnlyAuthPath(pathname);
   const isAdminRoute = isAdminPath(pathname);
 
   let refreshedTokens: Awaited<ReturnType<typeof requestTokenRefresh>> | null = null;
@@ -83,7 +83,7 @@ export async function proxy(request: NextRequest) {
     return clearAuthCookiesOnResponse(NextResponse.redirect(url));
   }
 
-  if (isAuthRoute) {
+  if (isGuestOnlyAuthRoute) {
     if (effectiveAccessToken && !isAccessTokenExpired(effectiveAccessToken)) {
       return withRefreshedCookies(NextResponse.redirect(new URL('/account', request.url)));
     }
