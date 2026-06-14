@@ -37,6 +37,7 @@ export interface DtoDashboardSummaryResponse {
   default_billing_address?: DtoDefaultAddressDTO;
   default_shipping_address?: DtoDefaultAddressDTO;
   email?: string;
+  email_verified_at?: string;
   first_name?: string;
   id?: number;
   is_active?: boolean;

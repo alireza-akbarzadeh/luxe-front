@@ -13,7 +13,7 @@ export function MobileAccountSidebar() {
   const { activeTab, handleTabChange } = useSidebarTab();
 
   return (
-    <div className='space-y-3 lg:hidden'>
+    <div className='bg-background/95 sticky top-20 z-30 space-y-3 pb-2 backdrop-blur-sm sm:top-24 lg:hidden'>
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList className='bg-muted/50 h-auto w-full justify-start gap-1 overflow-x-auto p-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
           {menuItems.map((item) => {

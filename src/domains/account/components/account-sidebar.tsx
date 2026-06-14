@@ -17,7 +17,7 @@ export function AccountSidebar() {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.1 }}
-      className='space-y-2'
+      className='sticky top-24 self-start space-y-2'
     >
       {menuItems.map((item) => {
         const Icon = item.icon;

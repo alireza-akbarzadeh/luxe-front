@@ -1,43 +1,94 @@
 'use client';
 
-import { IconMail } from '@tabler/icons-react';
-import { useTransition } from 'react';
+import { IconCircleCheck, IconMail } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-import { sendVerificationEmailAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
+import { extractErrorMessage } from '@/lib/api/api-utils';
+import type { ApiErrorResponse } from '@/lib/api/type';
+import {
+  getGetAccountSummaryQueryKey,
+  useGetAccountSummary
+} from '~/src/services/-account-summary-get';
+import { usePostAuthSendVerification } from '~/src/services/-auth-send-verification-post';
 
 export function EmailVerificationPanel() {
-  const [isPending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
+  const { data: summaryResponse, isLoading } = useGetAccountSummary();
+  const { mutateAsync, isPending } = usePostAuthSendVerification();
 
-  const handleSendVerification = () => {
-    startTransition(async () => {
-      const result = await sendVerificationEmailAction();
-      if (result.success) {
-        toast.success('Verification email sent');
-        return;
-      }
-      toast.error(result.error ?? 'Unable to send verification email');
-    });
+  const email = summaryResponse?.data?.email;
+  const isVerified = Boolean(summaryResponse?.data?.email_verified_at);
+
+  const handleSendVerification = async () => {
+    try {
+      await mutateAsync();
+      toast.success('Verification email sent — check your inbox');
+    } catch (error) {
+      toast.error(extractErrorMessage(error as AxiosError<ApiErrorResponse>));
+    }
+  };
+
+  const handleRefreshStatus = () => {
+    void queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+    toast.message('Verification status refreshed');
   };
 
   return (
-    <div className='bg-card border-border rounded-2xl border p-6'>
-      <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+    <div className='bg-card border-border rounded-2xl border p-6 sm:p-7'>
+      <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
         <div className='flex gap-3'>
-          <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-lg'>
-            <IconMail className='text-muted-foreground h-5 w-5' />
+          <div
+            className={
+              isVerified
+                ? 'bg-emerald-500/10 flex size-10 shrink-0 items-center justify-center rounded-lg'
+                : 'bg-muted flex size-10 shrink-0 items-center justify-center rounded-lg'
+            }
+          >
+            {isVerified ? (
+              <IconCircleCheck className='size-5 text-emerald-600 dark:text-emerald-400' />
+            ) : (
+              <IconMail className='text-muted-foreground size-5' />
+            )}
           </div>
           <div>
-            <h3 className='font-semibold'>Email verification</h3>
-            <p className='text-muted-foreground text-sm'>
-              Verify your email address to secure your account and receive important updates.
+            <h3 className='font-display text-lg font-semibold tracking-tight'>
+              Email verification
+            </h3>
+            <p className='text-muted-foreground mt-1 text-sm'>
+              {isLoading
+                ? 'Checking verification status…'
+                : isVerified
+                  ? `${email ?? 'Your email'} is verified.`
+                  : `Verify ${email ?? 'your email'} to secure your account and receive order updates.`}
             </p>
           </div>
         </div>
-        <Button variant='outline' size='sm' disabled={isPending} onClick={handleSendVerification}>
-          Send verification email
-        </Button>
+
+        <div className='flex flex-wrap gap-2'>
+          {!isVerified ? (
+            <Button
+              variant='outline'
+              size='sm'
+              className='rounded-full'
+              disabled={isPending || isLoading}
+              onClick={() => void handleSendVerification()}
+            >
+              Send verification email
+            </Button>
+          ) : null}
+          <Button
+            variant='ghost'
+            size='sm'
+            className='rounded-full'
+            disabled={isLoading}
+            onClick={handleRefreshStatus}
+          >
+            Refresh status
+          </Button>
+        </div>
       </div>
     </div>
   );

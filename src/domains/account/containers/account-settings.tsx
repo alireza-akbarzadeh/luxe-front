@@ -1,15 +1,6 @@
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { IconBell, IconShieldLock } from '@tabler/icons-react';
 
 import { ActiveSessionsPanel } from '../components/active-sessions-panel';
 import { ChangePasswordPanel } from '../components/change-password-panel';
@@ -18,67 +9,46 @@ import { EmailVerificationPanel } from '../components/email-verification-panel';
 export function AccountSetting() {
   return (
     <div className='space-y-6'>
-      <h2 className='mb-4 text-xl font-semibold'>Account Settings</h2>
+      <div>
+        <h2 className='font-display text-2xl font-semibold tracking-tight'>Account Settings</h2>
+        <p className='text-muted-foreground mt-1 text-sm'>
+          Security, verification, and session management
+        </p>
+      </div>
 
       <ChangePasswordPanel />
       <EmailVerificationPanel />
       <ActiveSessionsPanel />
 
-      {/* Email Preferences */}
-      <div className='bg-card border-border rounded-2xl border p-6'>
-        <h3 className='mb-4 font-semibold'>Email Preferences</h3>
-        <div className='space-y-4'>
-          {[
-            { label: 'Order updates', desc: 'Receive updates about your orders' },
-            { label: 'Promotions', desc: 'Get notified about sales and promotions' },
-            { label: 'New arrivals', desc: 'Be the first to know about new products' },
-            { label: 'Newsletter', desc: 'Weekly style tips and inspiration' }
-          ].map((pref) => (
-            <div key={pref.label} className='flex items-center justify-between'>
-              <div>
-                <p className='font-medium'>{pref.label}</p>
-                <p className='text-muted-foreground text-sm'>{pref.desc}</p>
-              </div>
-              <Button variant='outline' size='sm'>
-                Enabled
-              </Button>
-            </div>
-          ))}
+      <div className='bg-card border-border rounded-2xl border p-6 sm:p-7'>
+        <div className='mb-4 flex items-start gap-3'>
+          <div className='bg-muted flex size-10 shrink-0 items-center justify-center rounded-lg'>
+            <IconBell className='text-muted-foreground size-5' />
+          </div>
+          <div>
+            <h3 className='font-display text-lg font-semibold tracking-tight'>Email preferences</h3>
+            <p className='text-muted-foreground mt-1 text-sm'>
+              Marketing and newsletter controls are not available yet. Order and account emails
+              related to your purchases will still be sent when needed.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Danger Zone */}
-      <div className='rounded-2xl border border-red-200 bg-red-50 p-6 dark:border-red-900 dark:bg-red-950/20'>
-        <h3 className='mb-4 font-semibold text-red-600'>Danger Zone</h3>
-        <div className='flex items-center justify-between'>
-          <div>
-            <p className='font-medium'>Delete Account</p>
-            <p className='text-muted-foreground text-sm'>
-              Permanently delete your account and all data
-            </p>
+      <div className='border-border/80 bg-muted/30 rounded-2xl border p-6 sm:p-7'>
+        <div className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
+          <div className='flex gap-3'>
+            <div className='bg-background flex size-10 shrink-0 items-center justify-center rounded-lg border'>
+              <IconShieldLock className='text-muted-foreground size-5' />
+            </div>
+            <div>
+              <h3 className='font-display text-lg font-semibold tracking-tight'>Delete account</h3>
+              <p className='text-muted-foreground mt-1 max-w-xl text-sm'>
+                Self-service account deletion is not enabled yet. Contact support if you need your
+                account and data permanently removed.
+              </p>
+            </div>
           </div>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant='outline' className='border-red-300 text-red-600 hover:bg-red-100'>
-                Delete Account
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your account and remove
-                  all your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction className='bg-red-600 hover:bg-red-700'>
-                  Delete Account
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </div>
       </div>
     </div>

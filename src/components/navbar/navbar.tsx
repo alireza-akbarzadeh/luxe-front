@@ -5,13 +5,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
 import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
+import { NavbarActionButton } from './navbar-action-button';
 import { UserProfile } from './user/user-profile';
 
 export function Navbar() {
@@ -33,75 +33,76 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`app-container fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-background/80 border-border/50 border-b shadow-sm backdrop-blur-xl'
+            ? 'border-border/50 bg-background/85 border-b shadow-sm backdrop-blur-xl'
             : 'bg-transparent'
         }`}
       >
-        <nav className={'xs:px-4 app-container sm:px-6'}>
-          <div className='flex h-16 items-center justify-between lg:h-20'>
-            {/* Logo */}
-            <Link href='/' className='flex items-center gap-2'>
+        <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <div className='flex h-16 items-center gap-4 lg:h-20'>
+            <Link href='/' className='flex shrink-0 items-center'>
               <motion.span
-                className='text-2xl font-bold tracking-tight'
+                className='font-display text-2xl font-semibold tracking-tight'
                 whileHover={{ scale: 1.02 }}
               >
                 LUXE
               </motion.span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className='hidden flex-1 justify-center px-6 md:flex'>
+            <div className='hidden flex-1 justify-center md:flex'>
               <DesktopNav navMenus={navMenus} />
             </div>
 
-            {/* Right Side Actions */}
-            <div className='flex items-center gap-2'>
-              <Link href='/search' className='cursor-pointer'>
-                <Button variant='ghost' size='icon' className='rounded-full'>
-                  <IconSearch className='h-5 w-5' />
-                  <span className='sr-only'>Search</span>
-                </Button>
-              </Link>
+            <div className='ml-auto flex items-center gap-0.5 sm:gap-1'>
+              <NavbarActionButton asChild>
+                <Link href='/search' aria-label='Search'>
+                  <IconSearch className='size-5' stroke={1.75} />
+                </Link>
+              </NavbarActionButton>
+
               <CartButton />
+
+              <span
+                className='bg-border/70 mx-1 hidden h-5 w-px sm:mx-1.5 md:inline-block'
+                aria-hidden
+              />
+
               <UserProfile />
-              {/* Mobile Menu Button */}
-              <Button
-                variant='ghost'
-                size='icon'
-                className='rounded-full md:hidden'
+
+              <NavbarActionButton
+                className='md:hidden'
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {isMobileMenuOpen ? (
-                  <IconX className='h-5 w-5' />
+                  <IconX className='size-5' stroke={1.75} />
                 ) : (
-                  <IconMenu className='h-5 w-5' />
+                  <IconMenu className='size-5' stroke={1.75} />
                 )}
-                <span className='sr-only'>Menu</span>
-              </Button>
+              </NavbarActionButton>
             </div>
           </div>
         </nav>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
-          {isMobileMenuOpen && (
+          {isMobileMenuOpen ? (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className='bg-background/95 border-border border-b backdrop-blur-xl md:hidden'
+              className='border-border bg-background/95 border-b backdrop-blur-xl md:hidden'
             >
-              <div className='px-4 py-6'>
+              <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6'>
                 <MobileNav
                   navMenus={navMenus}
                   onNavigateAction={() => setIsMobileMenuOpen(false)}
                 />
               </div>
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
       </motion.header>
       <CartSheet />

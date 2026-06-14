@@ -1,15 +1,17 @@
 'use client';
 
-import { useTransition } from 'react';
+import type { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-import { changePasswordAction } from '@/actions/auth.actions';
+import { extractErrorMessage } from '@/lib/api/api-utils';
+import type { ApiErrorResponse } from '@/lib/api/type';
 import { useAppForm } from '~/src/components/forms/useAppForm';
+import { usePostAuthChangePassword } from '~/src/services/-auth-change-password-post';
 
 import { changePasswordFormSchema } from '../../auth/auth.schema';
 
 export function ChangePasswordPanel() {
-  const [isPending, startTransition] = useTransition();
+  const { mutateAsync, isPending } = usePostAuthChangePassword();
 
   const form = useAppForm({
     defaultValues: {
@@ -18,36 +20,38 @@ export function ChangePasswordPanel() {
       confirmPassword: ''
     },
     validators: {
-      onChange: changePasswordFormSchema,
-      onBlur: changePasswordFormSchema
+      onSubmit: changePasswordFormSchema
     },
     onSubmit: async ({ value, formApi }) => {
-      startTransition(async () => {
-        const result = await changePasswordAction(value.currentPassword, value.newPassword);
+      try {
+        await mutateAsync({
+          data: {
+            current_password: value.currentPassword,
+            new_password: value.newPassword
+          }
+        });
+        toast.success('Password updated successfully');
+        formApi.reset();
+      } catch (error) {
+        const message = extractErrorMessage(error as AxiosError<ApiErrorResponse>);
+        toast.error(message);
 
-        if (result.success) {
-          toast.success('Password changed successfully');
-          formApi.reset();
-          return;
-        }
-
-        toast.error(result.error ?? 'Unable to change password');
-        if (result.error?.toLowerCase().includes('current password')) {
+        if (message.toLowerCase().includes('current password')) {
           formApi.setFieldMeta('currentPassword', (prev) => ({
             ...prev,
-            error: result.error
+            error: message
           }));
         }
-      });
+      }
     }
   });
 
   return (
-    <div className='bg-card border-border rounded-2xl border p-6'>
-      <div className='mb-4'>
-        <h3 className='font-semibold'>Change password</h3>
-        <p className='text-muted-foreground text-sm'>
-          Update your password to keep your account secure
+    <div className='bg-card border-border rounded-2xl border p-6 sm:p-7'>
+      <div className='mb-5'>
+        <h3 className='font-display text-lg font-semibold tracking-tight'>Change password</h3>
+        <p className='text-muted-foreground mt-1 text-sm'>
+          Use at least 8 characters. Updating your password keeps your account secure.
         </p>
       </div>
 
@@ -56,7 +60,7 @@ export function ChangePasswordPanel() {
           onSubmit={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            form.handleSubmit();
+            void form.handleSubmit();
           }}
           className='space-y-4'
         >
@@ -81,7 +85,7 @@ export function ChangePasswordPanel() {
             )}
           </form.AppField>
 
-          <form.Submit isPending={isPending} label='Update password' />
+          <form.Submit isPending={isPending} label='Update password' className='max-w-xs' />
         </form.Root>
       </form.AppForm>
     </div>
