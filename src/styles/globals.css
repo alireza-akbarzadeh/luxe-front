@@ -152,6 +152,18 @@
     scrollbar-width: thin;
     scrollbar-color: color-mix(in oklab, var(--gold) 45%, transparent) transparent;
   }
+
+  /* Hide number input stepper arrows globally */
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 @utility text-gold-gradient {

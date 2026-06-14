@@ -1,199 +1,211 @@
 'use client';
 
-import { IconChevronLeft, IconChevronRight,IconHeart, IconHeartFilled } from '@tabler/icons-react';
+import {
+  IconArrowRight,
+  IconChevronLeft,
+  IconChevronRight,
+  IconHeart,
+  IconShoppingBag
+} from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { Button } from '~/src/components/ui/button';
-import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
-import { getGetAccountWishlistQueryKey } from '~/src/services/-account-wishlist-get';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { getGetAccountSummaryQueryKey } from '~/src/services/-account-summary-get';
+import {
+  getGetAccountWishlistQueryKey,
+  useGetAccountWishlist
+} from '~/src/services/-account-wishlist-get';
 import { usePostProductsIdLike } from '~/src/services/-products-{id}-like-post';
+
+import { AccountWishlistItemCard } from '../components/account-wishlist-item-card';
+import { AccountWishlistSkeleton } from '../components/account-wishlist-skeleton';
+import { formatOrderAmount } from '../lib/order-utils';
 
 const PAGE_SIZE = 9;
 
+type WishlistSort = 'name' | 'price-asc' | 'price-desc';
+
 export function AccountWishlist() {
   const [page, setPage] = useState(0);
+  const [sort, setSort] = useState<WishlistSort>('name');
+  const [removingProductId, setRemovingProductId] = useState<number | null>(null);
   const offset = page * PAGE_SIZE;
   const queryClient = useQueryClient();
 
   const {
     data: response,
     isLoading,
-    isError
+    isError,
+    refetch
   } = useGetAccountWishlist({
     limit: PAGE_SIZE,
-    offset
+    offset,
+    sort
   });
 
   const items = response?.data?.items ?? [];
   const total = response?.data?.total ?? 0;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   const { mutateAsync: toggleLike } = usePostProductsIdLike();
 
+  const totalSavings = items.reduce((sum, item) => {
+    if (item.old_price && item.price && item.old_price > item.price) {
+      return sum + (item.old_price - item.price);
+    }
+    return sum;
+  }, 0);
+
   const handleRemove = async (productId: number) => {
+    setRemovingProductId(productId);
     try {
       await toggleLike({ id: productId, data: { like: false } });
-      // Invalidate and refetch wishlist
       await queryClient.invalidateQueries({ queryKey: getGetAccountWishlistQueryKey() });
+      await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+
+      if (items.length === 1 && page > 0) {
+        setPage((current) => Math.max(0, current - 1));
+      }
+
       toast.success('Removed from wishlist');
     } catch {
-      toast.error('Failed to remove');
+      toast.error('Failed to remove item');
+    } finally {
+      setRemovingProductId(null);
     }
   };
 
-  const handlePrev = () => setPage((p) => Math.max(0, p - 1));
-  const handleNext = () => setPage((p) => Math.min(totalPages - 1, p + 1));
+  const handleSortChange = (value: WishlistSort) => {
+    setSort(value);
+    setPage(0);
+  };
+
+  const handlePrev = () => setPage((current) => Math.max(0, current - 1));
+  const handleNext = () => setPage((current) => Math.min(totalPages - 1, current + 1));
 
   if (isLoading) {
-    return (
-      <div className='space-y-4'>
-        <div className='grid grid-cols-2 gap-4 md:grid-cols-3'>
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className='bg-card border-border animate-pulse rounded-xl border p-4'>
-              <div className='bg-muted mb-3 aspect-square rounded-lg' />
-              <div className='h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700' />
-              <div className='mt-2 h-4 w-1/2 rounded bg-gray-200 dark:bg-gray-700' />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <AccountWishlistSkeleton />;
   }
 
   if (isError) {
     return (
-      <div className='bg-card border-border rounded-2xl border p-12 text-center'>
-        <p className='text-destructive'>Failed to load wishlist. Please try again.</p>
-        <Button variant='outline' className='mt-4' onClick={() => window.location.reload()}>
+      <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-12'>
+        <p className='text-destructive font-medium'>Failed to load wishlist.</p>
+        <p className='text-muted-foreground mt-2 text-sm'>
+          Please check your connection and try again.
+        </p>
+        <Button variant='outline' className='mt-5' onClick={() => void refetch()}>
           Retry
         </Button>
       </div>
     );
   }
 
-  if (!items.length) {
+  if (total === 0) {
     return (
-      <div className='bg-card border-border rounded-2xl border p-12 text-center'>
-        <IconHeart className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
-        <h3 className='text-lg font-medium'>Your wishlist is empty</h3>
-        <p className='text-muted-foreground mt-1'>
-          Save your favourite items by clicking the heart icon on any product.
+      <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-14'>
+        <div className='bg-muted/60 mx-auto mb-5 flex size-16 items-center justify-center rounded-full'>
+          <IconHeart className='text-muted-foreground size-8' />
+        </div>
+        <h3 className='font-display text-xl font-semibold'>Your wishlist is empty</h3>
+        <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
+          Save items you love with the heart icon on any product, then find them here.
         </p>
+        <Button asChild className='mt-6'>
+          <Link href='/shop'>
+            <IconShoppingBag className='size-4' />
+            Explore products
+          </Link>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
-        <h2 className='text-xl font-semibold'>My Wishlist</h2>
-        {totalPages > 1 && (
-          <div className='flex items-center gap-2'>
-            <button
-              onClick={handlePrev}
-              disabled={page === 0}
-              className='rounded-lg border p-2 disabled:opacity-40'
-            >
-              <IconChevronLeft className='h-4 w-4' />
-            </button>
-            <span className='text-muted-foreground text-sm'>
-              Page {page + 1} of {totalPages}
-            </span>
-            <button
-              onClick={handleNext}
-              disabled={page + 1 >= totalPages}
-              className='rounded-lg border p-2 disabled:opacity-40'
-            >
-              <IconChevronRight className='h-4 w-4' />
-            </button>
-          </div>
-        )}
+      <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
+        <div>
+          <h2 className='font-display text-2xl font-semibold tracking-tight'>My Wishlist</h2>
+          <p className='text-muted-foreground mt-1 text-sm'>
+            {total} saved {total === 1 ? 'item' : 'items'}
+            {totalSavings > 0 ? (
+              <>
+                {' '}
+                · save up to{' '}
+                <span className='text-accent font-medium'>
+                  {formatOrderAmount(totalSavings)}
+                </span>{' '}
+                on this page
+              </>
+            ) : null}
+          </p>
+        </div>
+
+        <div className='flex flex-wrap items-center gap-2'>
+          <Select value={sort} onValueChange={(value) => handleSortChange(value as WishlistSort)}>
+            <SelectTrigger className='w-[180px] rounded-full'>
+              <SelectValue placeholder='Sort by' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='name'>Name (A–Z)</SelectItem>
+              <SelectItem value='price-asc'>Price: low to high</SelectItem>
+              <SelectItem value='price-desc'>Price: high to low</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Button asChild variant='outline' size='sm'>
+            <Link href='/wishlist'>
+              Full wishlist
+              <IconArrowRight className='size-4' />
+            </Link>
+          </Button>
+
+          {totalPages > 1 ? (
+            <div className='flex items-center gap-1'>
+              <Button variant='outline' size='icon-sm' onClick={handlePrev} disabled={page === 0}>
+                <IconChevronLeft className='size-4' />
+              </Button>
+              <span className='text-muted-foreground min-w-24 text-center text-sm tabular-nums'>
+                Page {page + 1} of {totalPages}
+              </span>
+              <Button
+                variant='outline'
+                size='icon-sm'
+                onClick={handleNext}
+                disabled={page + 1 >= totalPages}
+              >
+                <IconChevronRight className='size-4' />
+              </Button>
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <div className='grid grid-cols-2 gap-4 md:grid-cols-3'>
-        {items.map((item) => (
-          <div
-            key={item.product_id}
-            className='bg-card border-border group relative overflow-hidden rounded-xl border transition-all hover:shadow-md'
-          >
-            <div className='relative aspect-square overflow-hidden'>
-              {item.image_url ? (
-                <Image
-                  src={item.image_url}
-                  alt={item.product_name || ''}
-                  width={400}
-                  height={400}
-                  className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-105'
-                />
-              ) : (
-                <div className='bg-muted flex h-full w-full items-center justify-center text-gray-400'>
-                  No image
-                </div>
-              )}
-
-              {/* Discount badge */}
-              {item.discount_percent && item.discount_percent > 0 && (
-                <div className='absolute top-2 left-2 rounded-md bg-red-500 px-2 py-1 text-xs font-bold text-white'>
-                  -{item.discount_percent}%
-                </div>
-              )}
-
-              {/* Remove from wishlist button */}
-              <button
-                onClick={() => handleRemove(item.product_id as number)}
-                className='bg-background/80 absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full text-red-500 backdrop-blur transition-colors hover:bg-red-500 hover:text-white'
-                aria-label='Remove from wishlist'
-              >
-                <IconHeartFilled className='h-4 w-4 fill-current' />
-              </button>
-
-              {/* Out of stock overlay */}
-              {!item.is_in_stock && (
-                <div className='absolute inset-0 flex items-center justify-center bg-black/50'>
-                  <span className='rounded-full bg-black/70 px-3 py-1 text-sm font-semibold text-white'>
-                    Out of Stock
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className='p-4'>
-              <h3 className='line-clamp-1 font-medium'>{item.product_name}</h3>
-              <div className='mt-1 flex items-baseline gap-2'>
-                {item.old_price ? (
-                  <>
-                    <span className='text-accent font-semibold'>${item.price?.toFixed(2)}</span>
-                    <span className='text-muted-foreground text-sm line-through'>
-                      ${item.old_price.toFixed(2)}
-                    </span>
-                  </>
-                ) : (
-                  <span className='text-accent font-semibold'>${item.price?.toFixed(2)}</span>
-                )}
-              </div>
-
-              <Button
-                size='sm'
-                className='mt-3 w-full'
-                disabled={!item.is_in_stock}
-                // Add cart logic here when ready
-                onClick={() => {
-                  // e.g., addToCart(item.product_id)
-                  toast.info('Add to cart coming soon');
-                }}
-              >
-                {item.is_in_stock ? 'Add to Cart' : 'Notify Me'}
-              </Button>
-            </div>
-          </div>
-        ))}
+        {items.map((item) =>
+          item.product_id ? (
+            <AccountWishlistItemCard
+              key={item.product_id}
+              item={item}
+              isRemoving={removingProductId === item.product_id}
+              onRemove={handleRemove}
+            />
+          ) : null
+        )}
       </div>
 
-      {totalPages > 1 && (
-        <div className='flex justify-center gap-2 pt-4'>
+      {totalPages > 1 ? (
+        <div className='flex justify-center gap-2 pt-2'>
           <Button variant='outline' onClick={handlePrev} disabled={page === 0}>
             Previous
           </Button>
@@ -201,7 +213,7 @@ export function AccountWishlist() {
             Next
           </Button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -25,13 +25,16 @@ export function getOrderStatusStyle(status?: string): string {
   return ORDER_STATUS_STYLES[status.toLowerCase()] ?? ORDER_STATUS_STYLES['pending']!;
 }
 
-export function formatOrderAmount(value?: number): string {
+export function formatOrderAmount(value?: number | string): string {
+  const amount = typeof value === 'string' ? Number(value) : (value ?? 0);
+  const safeAmount = Number.isFinite(amount) ? amount : 0;
+
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).format(value ?? 0);
+  }).format(safeAmount);
 }
 
 export function countOrderItems(items?: ModelsOrderItem[]): number {
