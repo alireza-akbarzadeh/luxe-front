@@ -1,8 +1,8 @@
-import { IconBrandZapier, IconMenu, IconMoon, IconSearch } from '@tabler/icons-react';
-import { useTheme } from 'next-themes';
+import { IconMenu, IconSearch } from '@tabler/icons-react';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
+import ThemeToggle from '@/components/ui/theme-toggle';
 import { HeaderActions } from '@/domains/admin/components/header-action';
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
@@ -17,9 +17,6 @@ interface AppHeaderProps {
 
 export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
   const [isScrolled, setIsScrolled] = React.useState(false);
-
-  const { setTheme, theme } = useTheme();
-  const nextTheme = theme === 'light' ? 'dark' : 'light';
 
   React.useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -45,18 +42,8 @@ export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
       >
         <IconMenu className='h-5 w-5' />
       </Button>
-      <div className='text-muted-foreground bg-muted/20 border-border/40 hidden items-center gap-2 rounded-full border p-3 text-sm lg:flex'>
-        {theme === 'dark' ? (
-          <IconBrandZapier
-            onClick={() => setTheme(nextTheme)}
-            className='text-primary h-4 w-4 animate-pulse'
-          />
-        ) : (
-          <IconMoon
-            onClick={() => setTheme(nextTheme)}
-            className='text-primary h-4 w-4 animate-pulse'
-          />
-        )}
+      <div className='hidden lg:flex'>
+        <ThemeToggle />
       </div>
       <DashboardBreadcrumbs sidebar_menu={sidebar_menu} pathname={pathname} />
       <div className='flex min-w-0 flex-1 items-center gap-4'>
