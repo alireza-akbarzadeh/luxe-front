@@ -11,6 +11,7 @@ import { useDeleteCartItemsId } from '../services/-cart-items-{id}-delete';
 import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 import { useDeleteCartItems } from '../services/-cart-items-delete';
 import { usePostCartItems } from '../services/-cart-items-post';
+import { useCartStore } from '../store/card.store';
 import { useUser } from './useUser';
 
 export interface CartItemPayload {
@@ -26,6 +27,7 @@ export interface CartItemPayload {
 
 export const useCartController = () => {
   const { isAuthenticated } = useUser();
+  const openCart = useCartStore((state) => state.openCart);
 
   const queryClient = useQueryClient();
 
@@ -321,6 +323,12 @@ export const useCartController = () => {
       return;
     }
 
+    if (!isAuthenticated) {
+      toast.error('Sign in to add items to your cart');
+      openCart();
+      return;
+    }
+
     const cartItem = items.find((item) => item.product_id === product.product_id);
 
     const currentQty = Number(cartItem?.quantity ?? 0);
@@ -334,43 +342,48 @@ export const useCartController = () => {
     }
 
     if (cartItem) {
-      updateQuantityMutation.mutate({
-        id: Number(cartItem.id),
-
-        data: {
-          quantity: currentQty + 1
+      updateQuantityMutation.mutate(
+        {
+          id: Number(cartItem.id),
+          data: {
+            quantity: currentQty + 1
+          }
+        },
+        {
+          onSuccess: () => {
+            toast.success(`Added 1 × ${product.product_name}`);
+            openCart();
+          }
         }
-      });
-
-      toast.success(`Added 1 × ${product.product_name}`);
+      );
     } else {
       const itemColor = Array.isArray(product.color) ? product.color[0] : product.color;
 
       const itemSize = Array.isArray(product.size) ? product.size[0] : product.size;
 
-      addItemMutation.mutate({
-        data: {
-          product_id: product.product_id,
-
-          quantity: 1,
-
-          color: itemColor ?? '',
-
-          size: itemSize ?? ''
+      addItemMutation.mutate(
+        {
+          data: {
+            product_id: product.product_id,
+            quantity: 1,
+            color: itemColor ?? '',
+            size: itemSize ?? ''
+          },
+          // @ts-expect-error find out about this problem
+          custom_metadata: {
+            name: product.product_name,
+            price: product.price,
+            image: product.image_url,
+            stock: product.stock
+          }
         },
-        // @ts-expect-error find out about this problem
-        custom_metadata: {
-          name: product.product_name,
-
-          price: product.price,
-
-          image: product.image_url,
-
-          stock: product.stock
+        {
+          onSuccess: () => {
+            toast.success(`${product.product_name} added to cart`);
+            openCart();
+          }
         }
-      });
-
-      toast.success(`${product.product_name} added to cart`);
+      );
     }
   };
 

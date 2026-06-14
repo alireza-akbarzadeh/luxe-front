@@ -1,47 +1,92 @@
 'use client';
+
 import { IconMinus, IconPlus, IconShoppingBag, IconTrash } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import { formatPrice } from '@/domains/home/lib/home-utils';
 import { useCartController } from '@/hooks/useCartController';
+import { useUser } from '@/hooks/useUser';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 import { useCartStore } from '~/src/store/card.store';
 
-export function CartSheet() {
-  const setOpen = useCartStore((s) => s.setOpen);
-  const isOpen = useCartStore((s) => s.isOpen);
+function getItemImage(item: DtoCartItemDetail) {
+  if (typeof item.image === 'string' && item.image.length > 0) return item.image;
+  return '/placeholder.png';
+}
 
+function getItemName(item: DtoCartItemDetail) {
+  return item.name || item.product_name || 'Product';
+}
+
+export function CartSheet() {
+  const isOpen = useCartStore((s) => s.isOpen);
+  const setOpen = useCartStore((s) => s.setOpen);
+  const closeCart = useCartStore((s) => s.closeCart);
+
+  const { isAuthenticated } = useUser();
   const { increment, decrement, items, isLoading, itemCount, subtotal } = useCartController();
 
   const getItemVariant = (item: DtoCartItemDetail) => {
     const parts = [item.selected_color, item.selected_size].filter(Boolean);
-    return parts.length ? ` · ${parts.join(' · ')}` : '';
+    return parts.length ? parts.join(' · ') : '';
   };
 
-  const mapBasketItemToPayload = (item: DtoCartItemDetail) => {
-    return {
-      color: item.selected_color,
-      image_url: item.image?.[0],
-      is_in_stock: item.is_in_stock,
-      price: item.price,
-      product_id: item.product_id,
-      product_name: item.product_name,
-      size: item.selected_size,
-      stock: item.stock
-    };
-  };
+  const mapBasketItemToPayload = (item: DtoCartItemDetail) => ({
+    color: item.selected_color,
+    image_url: getItemImage(item),
+    is_in_stock: item.is_in_stock,
+    price: item.price,
+    product_id: item.product_id,
+    product_name: getItemName(item),
+    size: item.selected_size,
+    stock: item.stock
+  });
 
-  if (isLoading) {
-    return (
-      <Sheet open={isOpen} onOpenChange={setOpen}>
-        <SheetContent className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
-          <SheetHeader className='border-border border-b px-6 py-5'>
-            <SheetTitle className='font-display text-xl'>Your Cart · loading...</SheetTitle>
-          </SheetHeader>
+  return (
+    <Sheet open={isOpen} onOpenChange={setOpen}>
+      <SheetContent className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
+        <SheetHeader className='border-border border-b px-6 py-5 text-left'>
+          <SheetTitle className='font-display text-xl'>
+            Your cart{itemCount > 0 ? ` · ${itemCount}` : ''}
+          </SheetTitle>
+          <SheetDescription className='sr-only'>
+            Review items in your shopping cart
+          </SheetDescription>
+        </SheetHeader>
+
+        {!isAuthenticated ? (
+          <div className='flex flex-1 flex-col items-center justify-center gap-4 px-6 py-12 text-center'>
+            <div className='bg-secondary rounded-full p-5'>
+              <IconShoppingBag className='text-muted-foreground h-7 w-7' />
+            </div>
+            <div className='space-y-1'>
+              <p className='font-display text-lg'>Sign in to view your cart</p>
+              <p className='text-muted-foreground text-sm'>
+                Save items across devices and checkout securely.
+              </p>
+            </div>
+            <div className='flex w-full max-w-xs flex-col gap-2'>
+              <Button asChild className='rounded-full' onClick={closeCart}>
+                <Link href='/login'>Sign in</Link>
+              </Button>
+              <Button asChild variant='outline' className='rounded-full' onClick={closeCart}>
+                <Link href='/shop'>Continue shopping</Link>
+              </Button>
+            </div>
+          </div>
+        ) : isLoading ? (
           <div className='flex-1 space-y-4 overflow-y-auto px-6 py-4'>
             {[1, 2].map((i) => (
               <div key={i} className='flex gap-4'>
@@ -54,19 +99,7 @@ export function CartSheet() {
               </div>
             ))}
           </div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  return (
-    <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
-        <SheetHeader className='border-border border-b px-6 py-5'>
-          <SheetTitle className='font-display text-xl'>Your Cart · {itemCount}</SheetTitle>
-        </SheetHeader>
-
-        {items.length === 0 ? (
+        ) : items.length === 0 ? (
           <div className='flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center'>
             <div className='bg-secondary rounded-full p-5'>
               <IconShoppingBag className='text-muted-foreground h-7 w-7' />
@@ -75,7 +108,7 @@ export function CartSheet() {
             <p className='text-muted-foreground text-sm'>
               Discover pieces designed to last a decade.
             </p>
-            <Button asChild onClick={() => setOpen(false)} className='mt-2'>
+            <Button asChild className='mt-2 rounded-full' onClick={closeCart}>
               <Link href='/shop'>Continue shopping</Link>
             </Button>
           </div>
@@ -85,32 +118,35 @@ export function CartSheet() {
               <ul className='divide-border divide-y'>
                 {items.map((item) => {
                   const controllerPayload = mapBasketItemToPayload(item);
+                  const lineTotal = (item.price ?? 0) * (item.quantity ?? 0);
 
                   return (
                     <li key={item.id} className='flex gap-4 py-4'>
-                      {/* Clickable image */}
                       <Link
                         href={`/product/${item.product_id}`}
-                        onClick={() => setOpen(false)}
+                        onClick={closeCart}
                         className='shrink-0'
                       >
-                        <div className='bg-muted h-24 w-20 overflow-hidden rounded-md'>
+                        <div className='bg-muted relative h-24 w-20 overflow-hidden rounded-lg'>
                           <Image
-                            src={item.image || '/placeholder.png'}
-                            alt={item.name || 'Product'}
-                            className='h-full w-full object-cover transition-transform hover:scale-105'
+                            src={getItemImage(item)}
+                            alt={getItemName(item)}
+                            fill
+                            sizes='80px'
+                            className='object-cover transition-transform hover:scale-105'
                           />
                         </div>
                       </Link>
-                      <div className='flex flex-1 flex-col'>
+
+                      <div className='flex min-w-0 flex-1 flex-col'>
                         <div className='flex items-start justify-between gap-2'>
-                          <div>
+                          <div className='min-w-0'>
                             <Link
                               href={`/product/${item.product_id}`}
-                              onClick={() => setOpen(false)}
-                              className='hover:text-primary leading-tight font-medium transition-colors'
+                              onClick={closeCart}
+                              className='hover:text-accent line-clamp-2 leading-tight font-medium transition-colors'
                             >
-                              {item.name}
+                              {getItemName(item)}
                             </Link>
                             {getItemVariant(item) && (
                               <p className='text-muted-foreground mt-0.5 text-xs'>
@@ -119,34 +155,40 @@ export function CartSheet() {
                             )}
                           </div>
                           <button
+                            type='button'
                             onClick={() => decrement(controllerPayload)}
-                            disabled={isLoading}
-                            className='text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50'
-                            aria-label='Remove'
+                            className='text-muted-foreground hover:text-destructive shrink-0 transition-colors'
+                            aria-label='Remove item'
                           >
                             <IconTrash className='h-4 w-4' />
                           </button>
                         </div>
-                        <div className='mt-auto flex items-center justify-between'>
+
+                        <div className='mt-auto flex items-center justify-between pt-3'>
                           <div className='border-border flex items-center rounded-full border'>
                             <button
+                              type='button'
                               onClick={() => decrement(controllerPayload)}
-                              disabled={isLoading || (item.quantity ?? 0) <= 0}
+                              disabled={(item.quantity ?? 0) <= 0}
                               className='hover:bg-secondary rounded-l-full p-1.5 disabled:opacity-40'
+                              aria-label='Decrease quantity'
                             >
                               <IconMinus className='h-3 w-3' />
                             </button>
-                            <span className='w-7 text-center text-sm'>{item.quantity ?? 0}</span>
+                            <span className='w-7 text-center text-sm tabular-nums'>
+                              {item.quantity ?? 0}
+                            </span>
                             <button
+                              type='button'
                               onClick={() => increment(controllerPayload)}
-                              disabled={isLoading}
                               className='hover:bg-secondary rounded-r-full p-1.5 disabled:opacity-40'
+                              aria-label='Increase quantity'
                             >
                               <IconPlus className='h-3 w-3' />
                             </button>
                           </div>
-                          <p className='text-sm font-semibold'>
-                            ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
+                          <p className='text-sm font-semibold tabular-nums'>
+                            {formatPrice(lineTotal)}
                           </p>
                         </div>
                       </div>
@@ -156,40 +198,40 @@ export function CartSheet() {
               </ul>
             </div>
 
-            <SheetFooter className='border-border bg-secondary/50 border-t p-6'>
-              <div className='w-full space-y-2'>
+            <SheetFooter className='border-border bg-muted/30 border-t p-6'>
+              <div className='w-full space-y-3'>
                 <div className='flex justify-between text-sm'>
                   <span className='text-muted-foreground'>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span className='font-medium tabular-nums'>{formatPrice(subtotal)}</span>
                 </div>
-                <Separator className='my-2' />
+                <Separator />
                 <div className='flex justify-between text-base font-semibold'>
                   <span>Total</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span className='tabular-nums'>{formatPrice(subtotal)}</span>
                 </div>
                 <p className='text-muted-foreground text-xs'>Shipping calculated at checkout.</p>
 
-                <div className='mt-3 flex flex-col gap-2'>
-                  <div className='flex items-center justify-between gap-2'>
+                <div className='flex flex-col gap-2 pt-1'>
+                  <Button asChild className='h-11 w-full rounded-full' size='lg'>
+                    <Link href='/checkout' onClick={closeCart}>
+                      Proceed to checkout
+                    </Link>
+                  </Button>
+                  <div className='grid grid-cols-2 gap-2'>
                     <Button
                       variant='outline'
                       size='lg'
-                      className='flex-1 rounded-lg'
-                      onClick={() => setOpen(false)}
+                      className='rounded-full'
+                      onClick={closeCart}
                     >
-                      Continue shopping
+                      Keep shopping
                     </Button>
-                    <Button asChild variant='outline' size='lg' className='flex-1 rounded-lg'>
-                      <Link href='/cart' onClick={() => setOpen(false)}>
-                        View Full Cart
+                    <Button asChild variant='outline' size='lg' className='rounded-full'>
+                      <Link href='/cart' onClick={closeCart}>
+                        Full cart
                       </Link>
                     </Button>
                   </div>
-                  <Button asChild className='w-full' size='lg'>
-                    <Link href='/checkout' onClick={() => setOpen(false)}>
-                      Proceed to Checkout
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </SheetFooter>

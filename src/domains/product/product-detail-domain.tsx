@@ -8,18 +8,26 @@ import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 import { useGetProductsId } from '~/src/services/-products-{id}-get';
 
 import ProductDescription from './components/product-description';
+import { ProductDetailSkeleton } from './components/product-detail-skeleton';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import ProductReviews from './components/product-reviews';
 import { ProductSpecifications } from './components/product-specification';
+import { ProductVideoPlayer } from './components/product-video-player';
 import RelatedProduct from './related-product';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
-  const { data } = useGetProductsId(productId);
+  const { data, isPending, isError } = useGetProductsId(productId);
+
+  if (isPending) {
+    return <ProductDetailSkeleton />;
+  }
 
   const product = data?.data?.product;
 
-  if (!product) throw notFound();
+  if (isError || !product) {
+    notFound();
+  }
 
   const discount = product.compare_at_price
     ? Math.round(
@@ -27,14 +35,20 @@ export default function ProductDetailDomain({ productId }: { productId: string }
       )
     : 0;
 
+  const tabs = [
+    { value: 'description', label: 'Description' },
+    { value: 'video', label: 'Video' },
+    { value: 'specs', label: 'Specifications' },
+    { value: 'reviews', label: `Reviews (${product.reviews_count ?? 0})` }
+  ] as const;
+
   return (
-    <div className='app-container mt-20 py-8'>
-      {/* Breadcrumb */}
+    <div className='app-container mt-20 pb-16'>
       <DynamicBreadcrumb
         items={[
           { label: 'Shop', href: '/shop' },
-          { label: product.category?.name || '' },
-          { label: product.name || '' }
+          { label: product.category?.name || 'Category' },
+          { label: product.name || 'Product' }
         ]}
         direction='column'
         separator={<IconChevronRight className='h-3 w-3' />}
@@ -42,48 +56,52 @@ export default function ProductDetailDomain({ productId }: { productId: string }
         breadcrumbClassName='flex items-center gap-1.5'
       />
 
-      {/* Main */}
-      <div className='mt-6 grid gap-10 lg:grid-cols-2'>
-        {/* Gallery */}
+      <div className='mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12 xl:gap-16'>
         <ProductGallery discount={discount} product={product} />
-        {/* Info */}
         <ProductInfo is_liked={data.data?.is_liked || false} product={product} />
       </div>
 
-      {/* Tabs */}
-      <div className='mt-20'>
-        <Tabs defaultValue='description'>
-          <TabsList className='border-border h-auto w-full justify-start gap-2 rounded-none border-b bg-transparent p-0'>
-            {[
-              ['description', 'Description'],
-              ['specs', 'Specifications'],
-              ['reviews', `Reviews (${product.reviews_count})`]
-            ].map(([v, l]) => (
+      <section className='mt-20 lg:mt-24'>
+        <Tabs defaultValue='description' className='w-full'>
+          <TabsList className='border-border h-auto w-full justify-start gap-1 overflow-x-auto rounded-none border-b bg-transparent p-0'>
+            {tabs.map(({ value, label }) => (
               <TabsTrigger
-                key={v}
-                value={v || ''}
-                className='data-[state=active]:border-foreground rounded-none border-b-2 border-transparent bg-transparent px-4 pt-2 pb-3 data-[state=active]:bg-transparent data-[state=active]:shadow-none'
+                key={value}
+                value={value}
+                className='data-[state=active]:border-accent data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent bg-transparent px-4 pt-2 pb-3 text-sm font-medium data-[state=active]:bg-transparent data-[state=active]:shadow-none'
               >
-                {l}
+                {label}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          <TabsContent
-            value='description'
-            className='text-muted-foreground mt-8 max-w-3xl space-y-4'
-          >
+          <TabsContent value='description' className='mt-10 max-w-3xl'>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>About this piece</h2>
             <ProductDescription description={product.description || ''} />
           </TabsContent>
-          <TabsContent value='specs' className='mt-8 max-w-3xl'>
-            <ProductSpecifications product={product} />
+
+          <TabsContent value='video' className='mt-10 max-w-3xl'>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>Product video</h2>
+            <p className='text-muted-foreground mb-6 text-sm leading-relaxed'>
+              Watch how this piece looks, moves, and fits — a closer look before you add it to your
+              cart.
+            </p>
+            <ProductVideoPlayer product={product} className='max-w-2xl' />
           </TabsContent>
-          <TabsContent value='reviews' className='mt-8 grid gap-10 lg:grid-cols-[280px_1fr]'>
+
+          <TabsContent value='specs' className='mt-10 max-w-3xl'>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>Specifications</h2>
+            <div className='border-border/60 bg-card rounded-2xl border p-6'>
+              <ProductSpecifications product={product} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value='reviews' className='mt-10 grid gap-10 lg:grid-cols-[280px_1fr]'>
             <ProductReviews productId={productId} product={product} />
           </TabsContent>
         </Tabs>
-      </div>
-      {/* Related */}
+      </section>
+
       <RelatedProduct />
     </div>
   );

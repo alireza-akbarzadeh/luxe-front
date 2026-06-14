@@ -15,7 +15,7 @@ export function ProductSpecifications(props: ProductSpecificationsProps) {
         ['Weight', product.weight],
         ['Dimensions', '10" x 8" x 4"'],
         ['Origin', 'Italy'],
-        ['isDigital', product.is_digital ? 'Yes' : 'No'],
+        ['Digital product', product.is_digital ? 'Yes' : 'No'],
         ['Barcode', product.barcode ?? '-']
       ].map(([k, v]) => (
         <div key={k} className='flex justify-between py-3 text-sm'>

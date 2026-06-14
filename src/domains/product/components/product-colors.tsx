@@ -1,6 +1,6 @@
 import { IconCheck } from '@tabler/icons-react';
 
-import { logger } from '~/src/lib/api/logger';
+import { cn } from '@/lib/utils';
 
 interface ProductColorsProps {
   selected: string | null;
@@ -11,7 +11,8 @@ interface ProductColorsProps {
 export default function ProductColors(props: ProductColorsProps) {
   const { colors, onSetSelected, selected } = props;
 
-  logger.info({ colors, selected });
+  if (!colors?.length) return null;
+
   return (
     <div>
       <div className='mb-3 flex items-center justify-between'>
@@ -23,9 +24,10 @@ export default function ProductColors(props: ProductColorsProps) {
           <button
             key={color}
             onClick={() => onSetSelected(color)}
-            className={`relative h-10 w-10 rounded-full border-2 transition-all ${
+            className={cn(
+              'relative h-10 w-10 rounded-full border-2 transition-all',
               selected === color ? 'border-accent scale-110' : 'border-border hover:scale-105'
-            }`}
+            )}
             style={{ backgroundColor: color }}
             title={color}
           >
