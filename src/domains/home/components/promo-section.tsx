@@ -4,37 +4,25 @@ import { IconArrowRight, IconTag } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { useCountdown } from '@/hooks/useCountdown';
 import { cn } from '@/lib/utils';
 
+import { CATEGORY_IMAGES } from '../lib/home-mock-data';
 import { sectionContainerClass } from '../lib/home-utils';
 
 const PROMO_END = new Date('2026-06-30T23:59:59');
-
-function useCountdown(target: Date) {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-
-  useEffect(() => {
-    const tick = () => {
-      const diff = Math.max(0, target.getTime() - Date.now());
-      setTimeLeft({
-        hours: Math.floor(diff / (1000 * 60 * 60)) % 24,
-        minutes: Math.floor(diff / (1000 * 60)) % 60,
-        seconds: Math.floor(diff / 1000) % 60
-      });
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, [target]);
-
-  return timeLeft;
-}
+const PROMO_IMAGE = CATEGORY_IMAGES.lifestyle;
 
 export function PromoSection() {
   const { hours, minutes, seconds } = useCountdown(PROMO_END);
+
+  const countdownItems = [
+    { value: String(hours).padStart(2, '0'), label: 'Hours' },
+    { value: String(minutes).padStart(2, '0'), label: 'Min' },
+    { value: String(seconds).padStart(2, '0'), label: 'Sec' }
+  ];
 
   return (
     <section className='py-16 sm:py-20 lg:py-28'>
@@ -44,48 +32,51 @@ export function PromoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55 }}
-          className='border-border/60 relative overflow-hidden rounded-2xl border shadow-lg sm:rounded-3xl'
+          className='border-border/60 bg-card dark:border-border/40 relative overflow-hidden rounded-2xl border shadow-sm sm:rounded-3xl dark:shadow-none'
         >
-          <div className='relative grid min-h-[28rem] lg:grid-cols-2 lg:min-h-[24rem]'>
+          <div className='relative grid min-h-[28rem] lg:min-h-[24rem] lg:grid-cols-2'>
             <div className='relative min-h-[14rem] lg:min-h-full'>
               <Image
-                src='https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1200&h=900&fit=crop'
-                alt='Seasonal sale'
+                src={PROMO_IMAGE}
+                alt='Curated seasonal sale collection'
                 fill
                 className='object-cover'
                 sizes='(max-width: 1024px) 100vw, 50vw'
               />
-              <div className='from-foreground/40 absolute inset-0 bg-gradient-to-r to-transparent lg:hidden' />
+              <div className='from-background/80 via-background/30 absolute inset-0 bg-linear-to-r to-transparent lg:hidden' />
+              <div className='from-card via-card/40 absolute inset-0 bg-linear-to-t to-transparent lg:hidden' />
+              <div className='from-card/90 absolute inset-0 hidden bg-linear-to-l to-transparent lg:block' />
             </div>
 
-            <div className='bg-foreground text-primary-foreground relative flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 lg:py-16'>
-              <div className='bg-accent/20 pointer-events-none absolute -top-20 right-0 h-56 w-56 rounded-full blur-3xl' />
+            <div className='bg-card text-card-foreground relative flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 lg:py-16'>
+              <div className='bg-gold/10 dark:bg-gold/15 pointer-events-none absolute -top-20 right-0 h-56 w-56 rounded-full blur-3xl' />
+              <div className='bg-accent/5 dark:bg-accent/10 pointer-events-none absolute bottom-0 left-0 h-40 w-40 rounded-full blur-3xl' />
 
-              <span className='bg-primary-foreground/10 text-primary-foreground inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-xs font-medium'>
-                <IconTag className='h-3.5 w-3.5' />
+              <span className='border-gold/30 bg-surface/90 text-foreground dark:bg-muted/50 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-sm'>
+                <IconTag className='text-gold h-3.5 w-3.5' />
                 Limited time
               </span>
 
-              <h2 className='font-display mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
+              <h2 className='font-display text-foreground mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
                 30% off your first order
               </h2>
-              <p className='text-primary-foreground/75 mt-4 max-w-md text-sm leading-relaxed sm:text-base'>
+              <p className='text-muted-foreground mt-4 max-w-md text-sm leading-relaxed sm:text-base'>
                 Join the LUXE community and unlock exclusive access to private sales, early drops,
                 and member-only styling sessions. Use code{' '}
-                <span className='text-primary-foreground font-semibold'>WELCOME30</span> at checkout.
+                <span className='text-gold-strong dark:text-gold font-semibold'>WELCOME30</span> at
+                checkout.
               </p>
 
-              <div className='mt-8 flex flex-wrap gap-6'>
-                {[
-                  { value: String(hours).padStart(2, '0'), label: 'Hours' },
-                  { value: String(minutes).padStart(2, '0'), label: 'Min' },
-                  { value: String(seconds).padStart(2, '0'), label: 'Sec' }
-                ].map((item) => (
-                  <div key={item.label} className='text-center'>
-                    <div className='font-display text-3xl font-semibold tabular-nums sm:text-4xl'>
+              <div className='mt-8 flex flex-wrap gap-3 sm:gap-4'>
+                {countdownItems.map((item) => (
+                  <div
+                    key={item.label}
+                    className='border-border/60 bg-muted/60 dark:bg-muted/30 min-w-[4.5rem] rounded-xl border px-4 py-3 text-center'
+                  >
+                    <div className='font-display text-foreground text-3xl font-semibold tabular-nums sm:text-4xl'>
                       {item.value}
                     </div>
-                    <div className='text-primary-foreground/50 text-xs tracking-widest uppercase'>
+                    <div className='text-muted-foreground text-xs tracking-widest uppercase'>
                       {item.label}
                     </div>
                   </div>
@@ -97,7 +88,7 @@ export function PromoSection() {
                   href='/shop'
                   className={cn(
                     buttonVariants({ size: 'lg' }),
-                    'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8'
+                    'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8 shadow-sm'
                   )}
                 >
                   Shop the sale
@@ -106,7 +97,7 @@ export function PromoSection() {
                 <Button
                   variant='outline'
                   size='lg'
-                  className='border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10 h-12 rounded-full px-8'
+                  className='border-border text-foreground hover:bg-muted/70 dark:hover:bg-muted/40 h-12 rounded-full px-8'
                   asChild
                 >
                   <Link href='/register'>Create account</Link>

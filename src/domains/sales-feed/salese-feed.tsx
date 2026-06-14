@@ -15,20 +15,20 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useSalesFeedSocket } from '@/domains/sales-feed/hooks/useSalesFeedSocket';
 import { STATUS_COLORS } from '@/domains/sales-feed/mock-data';
+import { useSalesFeedStore } from '@/domains/sales-feed/sales-store';
 import { LiveEventFeed } from '@/domains/sales-feed/sections/live-event-feed';
 import { LiveStatCard } from '@/domains/sales-feed/sections/live-stats-card';
+import { RevenueSparkling } from '@/domains/sales-feed/sections/revenue-sparkling';
 import { StatusDonutChart } from '@/domains/sales-feed/sections/status-donut-chart';
 import { cn } from '@/lib/utils';
-import { useSalesFeedStore } from '~/src/domains/sales-feed/sales-store';
-import { RevenueSparkling } from '~/src/domains/sales-feed/sections/revenue-sparkling';
 
 const MAX_REVENUE_POINTS = 30;
 
 function buildStatusData(counts: Record<string, number>) {
-  return Object.keys(counts).map((s) => ({
-    name: s,
-    value: counts[s],
-    color: STATUS_COLORS[s as keyof typeof STATUS_COLORS]
+  return Object.keys(counts).map((name) => ({
+    name,
+    value: counts[name] ?? 0,
+    color: STATUS_COLORS[name as keyof typeof STATUS_COLORS]
   }));
 }
 
@@ -61,7 +61,7 @@ export function LiveSaleFeedDomain() {
         <div className='mx-auto max-w-[1600px] px-6 py-4'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-4'>
-              <Link href='/'>
+              <Link href='/dashboard/orders'>
                 <Button
                   variant='ghost'
                   size='sm'

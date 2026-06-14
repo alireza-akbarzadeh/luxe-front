@@ -2,29 +2,39 @@ import { create } from 'zustand';
 
 import { STATUS_COLORS } from './mock-data';
 
+export type SaleEventType =
+  | 'new_order'
+  | 'status_change'
+  | 'cancellation'
+  | 'shipment'
+  | 'payment'
+  | 'refund';
+
 export type SaleEvent = {
   id: string;
-  type: 'new_order' | 'status_change' | 'cancellation' | 'shipment';
-  message: string;
+  type: SaleEventType;
+  title: string;
+  subtitle: string;
   amount?: number;
-  timestamp: number;
+  timestamp: number | Date;
 };
 
 export type RevenueSnapshot = {
-  timestamp: number;
+  time: string;
   revenue: number;
+  orders: number;
 };
 
 export type StatusCounts = Record<keyof typeof STATUS_COLORS, number>;
 
 const INITIAL_STATUS_COUNTS: StatusCounts = {
-  Pending: 12,
-  Processing: 8,
-  Fulfilled: 34,
-  Shipped: 21,
-  Delivered: 55,
-  Cancelled: 7,
-  Refunded: 4
+  Pending: 0,
+  Processing: 0,
+  Fulfilled: 0,
+  Shipped: 0,
+  Delivered: 0,
+  Cancelled: 0,
+  Refunded: 0
 };
 
 const MAX_REVENUE_POINTS = 30;
@@ -50,16 +60,15 @@ interface SalesFeedState {
   ingestRevenueSnapshot: (snap: RevenueSnapshot) => void;
   setActiveUsers: (n: number) => void;
   setEventsPerMin: (n: number) => void;
-  hydrate: (events: SaleEvent[], revenueData: RevenueSnapshot[]) => void;
 }
 
 export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
   events: [],
   revenueData: [],
   statusCounts: INITIAL_STATUS_COUNTS,
-  totalOrders: 141,
-  totalRevenue: 24850.5,
-  activeUsers: 38,
+  totalOrders: 0,
+  totalRevenue: 0,
+  activeUsers: 0,
   eventsPerMin: 0,
   paused: false,
   connected: false,
@@ -69,8 +78,6 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
   setPaused: (paused) => set({ paused }),
   setConnected: (connected) => set({ connected }),
   clearEvents: () => set({ events: [] }),
-
-  hydrate: (events, revenueData) => set({ events, revenueData }),
 
   ingestEvent: (evt) => {
     if (get().paused) return;
@@ -84,6 +91,7 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
 
       switch (evt.type) {
         case 'new_order':
+        case 'payment':
           totalOrders += 1;
           lastOrderDelta = 2.1;
           totalRevenue += evt.amount ?? 0;
@@ -95,6 +103,9 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
           break;
         case 'cancellation':
           statusCounts.Cancelled += 1;
+          break;
+        case 'refund':
+          statusCounts.Refunded += 1;
           break;
         case 'shipment':
           statusCounts.Shipped += 1;

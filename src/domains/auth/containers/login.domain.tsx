@@ -102,6 +102,7 @@ export function LoginDomain() {
                     data-testid='password-input'
                     label='Password'
                     placeholder='Enter your password'
+                    showForgotLink
                   />
                 )}
               </form.AppField>

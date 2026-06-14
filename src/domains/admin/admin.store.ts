@@ -57,6 +57,8 @@ interface DashboardActions {
   setSearchOpen: (open: boolean) => void;
   setMobileSidebarOpen: (open: boolean) => void;
   setSidebarCollapsed: (open: boolean) => void;
+  setNotifications: (notifications: NotificationItem[]) => void;
+  prependNotification: (notification: NotificationItem) => void;
   markAsRead: (id: string) => void;
   markAllRead: () => void;
   addNotification: (notif: Omit<NotificationItem, 'id' | 'read' | 'time'>) => void;
@@ -66,24 +68,7 @@ interface DashboardActions {
 
 export const useDashboardStore = create<DashboardState & DashboardActions>()((set) => ({
   // initial state
-  notifications: [
-    {
-      id: '1',
-      title: 'New System Update',
-      description: 'v2.4.0 is now live.',
-      time: '2m ago',
-      read: false,
-      type: 'system'
-    },
-    {
-      id: '2',
-      title: 'Server Warning',
-      description: 'High CPU usage detected.',
-      time: '15m ago',
-      read: false,
-      type: 'alert'
-    }
-  ],
+  notifications: [],
   messages: [
     {
       id: '1',
@@ -142,6 +127,16 @@ export const useDashboardStore = create<DashboardState & DashboardActions>()((se
   setSearchOpen: (open) => set({ searchOpen: open }),
 
   setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
+
+  setNotifications: (notifications) => set({ notifications }),
+
+  prependNotification: (notification) =>
+    set((state) => ({
+      notifications: [
+        notification,
+        ...state.notifications.filter((item) => item.id !== notification.id)
+      ].slice(0, 30)
+    })),
 
   markAsRead: (id) =>
     set((state) => ({

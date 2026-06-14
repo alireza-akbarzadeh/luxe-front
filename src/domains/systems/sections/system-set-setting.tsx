@@ -5,14 +5,15 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { AppDialog } from '@/components/app-dialog';
+import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { useSettingsDialogStore } from '@/domains/systems/system.store';
-import { useAppForm } from '~/src/components/forms/useAppForm';
-import { usePutSettingsKey } from '~/src/services/-settings-{key}-put';
+import { usePutSettingsKey } from '@/services/-settings-{key}-put';
+import type { DtoSetSettingRequest } from '@/services/-settings-{key}-put.schemas';
 
 const settingFormSchema = z.object({
   key: z.string().min(1, 'Key is required'),
-  description: z.string().optional(),
+  description: z.string(),
   value: z.string().refine(
     (val) => {
       try {
@@ -52,10 +53,9 @@ export function SystemsSetSetting({ onSuccess }: SystemSetSettingProps) {
         const result = await putSetting({
           key: value.key,
           data: {
-            // @ts-expect-error the backend type is wrong should int be number []
-            value: parsedValue as unknown as any,
+            value: parsedValue,
             description: value.description || undefined
-          }
+          } as DtoSetSettingRequest
         });
 
         if (!result.success) {
@@ -64,7 +64,7 @@ export function SystemsSetSetting({ onSuccess }: SystemSetSettingProps) {
         }
 
         toast.success(editingSetting ? 'Setting updated' : 'Setting created');
-        onSuccess();
+        onSuccess?.();
         close();
         formApi.reset();
       } catch (err) {

@@ -1,3 +1,5 @@
+import type { SaleEvent, SaleEventType } from './sales-store';
+
 const FIRST_NAMES = [
   'Alice',
   'Bob',
@@ -13,7 +15,7 @@ const FIRST_NAMES = [
   'Luna',
   'Marcus',
   'Nina',
-  'Oscar',  
+  'Oscar',
   'Petra',
   'Quinn',
   'Rachel',
@@ -62,8 +64,8 @@ const EVENT_TEMPLATES = {
 
 let idCounter = 1000;
 
-export function generateEvent() {
-  const types = [
+export function generateEvent(): SaleEvent {
+  const types: SaleEventType[] = [
     'new_order',
     'new_order',
     'new_order',
@@ -73,19 +75,18 @@ export function generateEvent() {
     'cancellation',
     'refund'
   ];
-  const type = types[Math.floor(Math.random() * types.length)];
+  const type = types[Math.floor(Math.random() * types.length)] ?? 'new_order';
   const name = `${FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)]} ${LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)]}`;
   const order = `ORD-${String(Math.floor(Math.random() * 90000) + 10000)}`;
   const amount = parseFloat((Math.random() * 800 + 20).toFixed(2));
-  const tpl = EVENT_TEMPLATES[type as keyof typeof EVENT_TEMPLATES](name, order, amount);
+  const tpl = EVENT_TEMPLATES[type](name, order, amount);
   return {
     id: String(idCounter++),
     type,
     title: tpl.title,
     subtitle: tpl.subtitle,
     amount,
-    currency: 'USD',
-    timestamp: new Date()
+    timestamp: Date.now()
   };
 }
 

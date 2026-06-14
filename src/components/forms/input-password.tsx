@@ -13,13 +13,13 @@ import { useFieldContext } from './useFormContext';
 
 export function InputPassword({
   label = 'Password',
-  email,
+  showForgotLink = false,
   placeholder,
   className,
   ...props
 }: {
   label?: string;
-  email?: string;
+  showForgotLink?: boolean;
   placeholder?: string;
 } & ComponentProps<typeof Input>) {
   const field = useFieldContext<string>();
@@ -29,16 +29,16 @@ export function InputPassword({
   return (
     <FieldContainer label={label}>
       <div className='space-y-2'>
-        {email && (
+        {showForgotLink ? (
           <div className='flex justify-end'>
             <Link
               href='/forgot-password'
-              className='text-sm text-purple-400 transition-colors hover:text-purple-300'
+              className='text-accent text-sm font-medium transition-colors hover:underline'
             >
-              Forgot?
+              Forgot password?
             </Link>
           </div>
-        )}
+        ) : null}
 
         <div className={cn('relative w-full', className)}>
           <IconLock className='absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-500' />

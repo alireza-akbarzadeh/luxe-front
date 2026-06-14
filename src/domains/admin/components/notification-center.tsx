@@ -6,6 +6,7 @@ import {
   IconTrash
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -18,15 +19,15 @@ import type {
   NotificationItem as NotificationItemType
 } from '../admin.store';
 import { useDashboardStore } from '../admin.store';
+import { useAdminNotificationActions } from '../hooks/use-admin-notifications';
 
 export function NotificationCenter() {
   const notifications = useDashboardStore((state) => state.notifications);
   const messages = useDashboardStore((state) => state.messages);
   const isOpen = useDashboardStore((state) => state.notificationOpen);
   const setNotificationOpen = useDashboardStore((state) => state.setNotificationOpen);
-  const markAsRead = useDashboardStore((state) => state.markAsRead);
-  const markAllRead = useDashboardStore((state) => state.markAllRead);
   const markMessageRead = useDashboardStore((state) => state.markMessageRead);
+  const { markAsRead, markAllRead } = useAdminNotificationActions();
 
   const unreadNotifs = notifications.filter((n) => !n.read).length;
   const unreadMsgs = messages.filter((m) => m.unread).length;
@@ -135,10 +136,14 @@ export function NotificationCenter() {
 
           <div className='bg-muted/20 border-t p-2'>
             <Button
+              asChild
               variant='outline'
               className='hover:bg-primary h-9 w-full gap-2 rounded-xl text-[10px] font-bold tracking-widest uppercase shadow-sm transition-all hover:text-white'
             >
-              Management Console <IconExternalLink className='h-3 w-3' />
+              <Link href='/dashboard/live'>
+                Live sales feed
+                <IconExternalLink className='h-3 w-3' />
+              </Link>
             </Button>
           </div>
         </Tabs>

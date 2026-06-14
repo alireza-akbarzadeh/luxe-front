@@ -6,8 +6,15 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 import { EVENT_TYPE_META } from '../mock-data';
+import type { SaleEvent } from '../sales-store';
 
-export function LiveEventFeed({ events, maxVisible = 30 }: { events: any[]; maxVisible?: number }) {
+export function LiveEventFeed({
+  events,
+  maxVisible = 30
+}: {
+  events: SaleEvent[];
+  maxVisible?: number;
+}) {
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (listRef.current) {
@@ -18,8 +25,9 @@ export function LiveEventFeed({ events, maxVisible = 30 }: { events: any[]; maxV
   return (
     <div ref={listRef} className='flex max-h-[480px] flex-col gap-0 overflow-y-auto pr-1'>
       <AnimatePresence initial={false}>
-        {events.slice(0, maxVisible).map((evt: any, i: number) => {
-          const meta = EVENT_TYPE_META[evt.type as keyof typeof EVENT_TYPE_META];
+        {events.slice(0, maxVisible).map((evt, i) => {
+          const meta = EVENT_TYPE_META[evt.type];
+          const timestamp = evt.timestamp instanceof Date ? evt.timestamp : new Date(evt.timestamp);
           return (
             <motion.div
               key={evt.id}
@@ -47,7 +55,7 @@ export function LiveEventFeed({ events, maxVisible = 30 }: { events: any[]; maxV
                 <p className='text-muted-foreground truncate text-[10px]'>{evt.subtitle}</p>
               </div>
               <div className='text-muted-foreground shrink-0 text-[9px] font-bold whitespace-nowrap tabular-nums'>
-                {formatDistanceToNowStrict(evt.timestamp, { addSuffix: true })}
+                {formatDistanceToNowStrict(timestamp, { addSuffix: true })}
               </div>
             </motion.div>
           );
