@@ -13,14 +13,18 @@ import { CartGuestState } from './components/cart-guest-state';
 import { CartItem } from './components/cart-item';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
+import { CartVariantAlert } from './components/cart-variant-alert';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestion';
-import { calculateCartTotals, cartHasIncompleteVariants } from './lib/cart-utils';
+import { useCartCheckoutAction } from './hooks/use-cart-checkout-action';
+import { useCartOrderEstimate } from './hooks/use-cart-order-estimate';
 
 export default function CartPage() {
   const { isAuthenticated } = useUser();
   const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
     useCartController();
+  const { total } = useCartOrderEstimate(items, subtotal);
+  const { proceedToCheckout } = useCartCheckoutAction(items);
 
   if (!isAuthenticated) {
     return <CartGuestState />;
@@ -64,9 +68,6 @@ export default function CartPage() {
     );
   }
 
-  const { total } = calculateCartTotals(items, subtotal);
-  const hasIncompleteVariants = cartHasIncompleteVariants(items);
-
   return (
     <>
       <main className='pt-24 pb-28 lg:pb-16'>
@@ -87,6 +88,8 @@ export default function CartPage() {
 
           <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
             <div className='space-y-4 lg:col-span-2'>
+              <CartVariantAlert items={items} />
+
               <AnimatePresence mode='popLayout'>
                 {items.map((item, index) => (
                   <CartItem
@@ -111,8 +114,7 @@ export default function CartPage() {
       <CartMobileCheckoutBar
         total={total}
         itemCount={itemCount}
-        checkoutDisabled={hasIncompleteVariants}
-        disabledReason={hasIncompleteVariants ? 'Select options for all items' : undefined}
+        onCheckout={() => proceedToCheckout()}
       />
     </>
   );

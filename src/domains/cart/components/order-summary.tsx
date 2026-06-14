@@ -23,18 +23,20 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { formatPrice } from '@/domains/home/lib/home-utils';
+import { cn } from '@/lib/utils';
 import { useCartController } from '~/src/hooks/useCartController';
 
-import { calculateCartTotals, cartHasIncompleteVariants } from '../lib/cart-utils';
+import { useCartCheckoutAction } from '../hooks/use-cart-checkout-action';
+import { useCartOrderEstimate } from '../hooks/use-cart-order-estimate';
+import { formatEstimatedTaxLabel } from '../lib/cart-commerce-settings';
+import { cartMoneyClassName, formatCartMoney } from '../lib/cart-utils';
 import { FreeShippingProgress } from './free-shipping-progress';
 
 export function OrderSummary() {
   const { subtotal, items, itemCount, clearCart, isClearing } = useCartController();
-
-  const { totalDiscount, shipping, total } = calculateCartTotals(items, subtotal);
-  const hasIncompleteVariants = cartHasIncompleteVariants(items);
-  const checkoutDisabled = hasIncompleteVariants || itemCount === 0;
+  const { totalDiscount, shipping, tax, total, settings } = useCartOrderEstimate(items, subtotal);
+  const { hasIncompleteVariants, proceedToCheckout } = useCartCheckoutAction(items);
+  const checkoutDisabled = itemCount === 0;
 
   return (
     <div className='lg:col-span-1'>
@@ -56,57 +58,64 @@ export function OrderSummary() {
         <div className='space-y-3 text-sm'>
           <div className='flex justify-between'>
             <span className='text-muted-foreground'>Subtotal</span>
-            <span className='tabular-nums'>{formatPrice(subtotal)}</span>
+            <span className={cartMoneyClassName}>{formatCartMoney(subtotal)}</span>
           </div>
           {totalDiscount > 0 && (
             <div className='text-success flex justify-between'>
               <span>Savings</span>
-              <span className='tabular-nums'>-{formatPrice(totalDiscount)}</span>
+              <span className={cartMoneyClassName}>-{formatCartMoney(totalDiscount)}</span>
             </div>
           )}
           <div className='flex justify-between'>
             <span className='text-muted-foreground'>Shipping</span>
-            <span className='tabular-nums'>
+            <span className={cartMoneyClassName}>
               {shipping === 0 ? (
                 <span className='text-success font-medium'>Free</span>
               ) : (
-                formatPrice(shipping)
+                formatCartMoney(shipping)
               )}
             </span>
           </div>
+          {settings.estimatedTaxEnabled && tax > 0 ? (
+            <div className='flex justify-between'>
+              <span className='text-muted-foreground'>
+                Est. tax ({formatEstimatedTaxLabel(settings.estimatedTaxRate)})
+              </span>
+              <span className={cartMoneyClassName}>{formatCartMoney(tax)}</span>
+            </div>
+          ) : null}
         </div>
 
         <Separator />
 
         <div className='flex items-center justify-between'>
           <span className='font-semibold'>Estimated total</span>
-          <span className='font-display text-2xl font-semibold tabular-nums'>
-            {formatPrice(total)}
+          <span className={cn('text-2xl font-semibold', cartMoneyClassName)}>
+            {formatCartMoney(total)}
           </span>
         </div>
 
-        <p className='text-muted-foreground text-xs'>Taxes calculated at checkout.</p>
+        <p className='text-muted-foreground text-xs'>
+          {settings.estimatedTaxEnabled
+            ? 'Final tax is confirmed at checkout based on your address.'
+            : 'Taxes calculated at checkout.'}
+        </p>
 
-        {hasIncompleteVariants && (
+        {hasIncompleteVariants ? (
           <p className='text-warning text-xs leading-relaxed'>
-            Please select color or size for highlighted items before checkout.
+            Select color or size for the highlighted items, then tap checkout again.
           </p>
-        )}
+        ) : null}
 
         <Button
-          asChild={!checkoutDisabled}
+          type='button'
           className='h-11 w-full rounded-full'
           size='lg'
           disabled={checkoutDisabled}
+          onClick={() => proceedToCheckout()}
         >
-          {checkoutDisabled ? (
-            <span>Proceed to Checkout</span>
-          ) : (
-            <Link href='/checkout'>
-              Proceed to Checkout
-              <IconArrowRight className='ml-2 h-4 w-4' />
-            </Link>
-          )}
+          Proceed to Checkout
+          <IconArrowRight className='ml-2 h-4 w-4' />
         </Button>
 
         <div className='flex items-center gap-2 rounded-xl border border-dashed px-3 py-2.5 text-xs'>
@@ -153,7 +162,9 @@ export function OrderSummary() {
         <div className='grid grid-cols-3 gap-2 border-t pt-4'>
           <div className='p-1 text-center'>
             <IconTruck className='text-muted-foreground mx-auto mb-1 h-5 w-5' />
-            <p className='text-muted-foreground text-[10px] leading-tight'>Free over $100</p>
+            <p className='text-muted-foreground text-[10px] leading-tight'>
+              Free over {formatCartMoney(settings.freeShippingThreshold)}
+            </p>
           </div>
           <div className='p-1 text-center'>
             <IconShieldCheck className='text-muted-foreground mx-auto mb-1 h-5 w-5' />

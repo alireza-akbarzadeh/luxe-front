@@ -15,6 +15,28 @@ vi.mock('@/hooks/useUser', () => ({
   useUser: () => useUserMock()
 }));
 
+vi.mock('@/domains/cart/hooks/use-cart-commerce-settings', () => ({
+  useCartCommerceSettings: () => ({
+    settings: {
+      freeShippingThreshold: 100,
+      defaultShippingRate: 12,
+      estimatedTaxRate: 0.08,
+      estimatedTaxEnabled: true
+    },
+    isLoading: false,
+    isError: false,
+    refetch: vi.fn()
+  })
+}));
+
+vi.mock('@/domains/cart/hooks/use-cart-checkout-action', () => ({
+  useCartCheckoutAction: () => ({
+    hasIncompleteVariants: false,
+    incompleteItems: [],
+    proceedToCheckout: vi.fn()
+  })
+}));
+
 describe('CartSheet', () => {
   beforeEach(() => {
     useCartStore.setState({ isOpen: true });
@@ -22,10 +44,16 @@ describe('CartSheet', () => {
     useCartControllerMock.mockReturnValue({
       increment: vi.fn(),
       decrement: vi.fn(),
+      updateCartItemQuantity: vi.fn(),
+      removeCartItem: vi.fn(),
       items: [],
       isLoading: false,
       itemCount: 0,
-      subtotal: 0
+      subtotal: 0,
+      error: null,
+      refetch: vi.fn(),
+      updatingItemId: null,
+      removingItemId: null
     });
   });
 
@@ -33,7 +61,10 @@ describe('CartSheet', () => {
     render(<CartSheet />);
 
     expect(screen.getByText('Sign in to view your cart')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/login');
+    expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute(
+      'href',
+      '/login?callbackUrl=/cart'
+    );
   });
 
   it('shows empty state for authenticated users with no items', () => {
@@ -53,6 +84,8 @@ describe('CartSheet', () => {
     useCartControllerMock.mockReturnValue({
       increment: vi.fn(),
       decrement: vi.fn(),
+      updateCartItemQuantity: vi.fn(),
+      removeCartItem: vi.fn(),
       items: [
         {
           id: 1,
@@ -65,16 +98,18 @@ describe('CartSheet', () => {
       ],
       isLoading: false,
       itemCount: 2,
-      subtotal: 598
+      subtotal: 598,
+      error: null,
+      refetch: vi.fn(),
+      updatingItemId: null,
+      removingItemId: null
     });
 
     render(<CartSheet />);
 
     expect(screen.getByText('Silk Blazer')).toBeInTheDocument();
-    expect(screen.getAllByText('$598').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole('link', { name: 'Proceed to checkout' })).toHaveAttribute(
-      'href',
-      '/checkout'
-    );
+    expect(screen.getAllByText('$598.00').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('$645.84').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('button', { name: 'Proceed to checkout' })).toBeInTheDocument();
   });
 });

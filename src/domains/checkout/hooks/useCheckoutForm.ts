@@ -2,6 +2,8 @@
 // app/checkout/hooks/useCheckoutForm.ts
 import { useEffect, useRef } from 'react';
 
+import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
+import { calculateEstimatedTax } from '@/domains/cart/lib/cart-utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
@@ -103,12 +105,13 @@ export function useCheckoutTotals({
   shippingProviderId: number | null;
 }) {
   const { data: providersData } = useGetShippingProviders();
+  const { settings } = useCartCommerceSettings();
   const shippingProvider = providersData?.data?.find((p) => p.id === shippingProviderId);
   const shippingPrice = shippingProvider?.price ?? 0;
 
   const subtotal = items.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0);
-  const tax = subtotal * 0.08;
+  const tax = calculateEstimatedTax(subtotal, settings);
   const total = subtotal + shippingPrice + tax - couponDiscount;
 
-  return { subtotal, tax, total, shippingPrice };
+  return { subtotal, tax, total, shippingPrice, settings };
 }

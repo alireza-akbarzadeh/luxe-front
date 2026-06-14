@@ -5,12 +5,14 @@ import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { cn } from '@/lib/utils';
 import { useCartController } from '~/src/hooks/useCartController';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 
 import {
+  cartMoneyClassName,
+  formatCartMoney,
+  getCartItemElementId,
   getCartItemImage,
   getCartItemName,
   getStockStatus,
@@ -55,6 +57,7 @@ export function CartItem({ cart, index, cartItemId, isUpdating, isRemoving }: Ca
 
   return (
     <motion.div
+      id={getCartItemElementId(cartItemId)}
       layout
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
@@ -210,17 +213,17 @@ export function CartItem({ cart, index, cartItemId, isUpdating, isRemoving }: Ca
           </div>
 
           <div className='text-right'>
-            <p className='text-base font-semibold tabular-nums sm:text-lg'>
-              {formatPrice(lineTotal)}
+            <p className={cn('text-base font-semibold sm:text-lg', cartMoneyClassName)}>
+              {formatCartMoney(lineTotal)}
             </p>
             {lineOriginal !== null && lineOriginal > lineTotal && (
-              <p className='text-muted-foreground text-xs tabular-nums line-through'>
-                {formatPrice(lineOriginal)}
+              <p className={cn('text-muted-foreground text-xs line-through', cartMoneyClassName)}>
+                {formatCartMoney(lineOriginal)}
               </p>
             )}
             {(cart.quantity ?? 0) > 1 && (
-              <p className='text-muted-foreground text-[11px] tabular-nums'>
-                {formatPrice(cart.price ?? 0)} each
+              <p className={cn('text-muted-foreground text-[11px]', cartMoneyClassName)}>
+                {formatCartMoney(cart.price ?? 0)} each
               </p>
             )}
           </div>

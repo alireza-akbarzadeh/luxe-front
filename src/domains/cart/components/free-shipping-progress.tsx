@@ -1,9 +1,9 @@
 import { IconTruck } from '@tabler/icons-react';
 
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { cn } from '@/lib/utils';
 
-import { FREE_SHIPPING_THRESHOLD, getFreeShippingRemaining } from '../lib/cart-utils';
+import { useCartCommerceSettings } from '../hooks/use-cart-commerce-settings';
+import { formatCartMoney, getFreeShippingRemaining } from '../lib/cart-utils';
 
 interface FreeShippingProgressProps {
   subtotal: number;
@@ -11,8 +11,10 @@ interface FreeShippingProgressProps {
 }
 
 export function FreeShippingProgress({ subtotal, className }: FreeShippingProgressProps) {
-  const remaining = getFreeShippingRemaining(subtotal);
-  const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const { settings } = useCartCommerceSettings();
+  const threshold = settings.freeShippingThreshold;
+  const remaining = getFreeShippingRemaining(subtotal, threshold);
+  const progress = threshold > 0 ? Math.min(100, (subtotal / threshold) * 100) : 100;
   const qualified = remaining <= 0;
 
   return (
@@ -25,14 +27,18 @@ export function FreeShippingProgress({ subtotal, className }: FreeShippingProgre
     >
       <div className='mb-2 flex items-center gap-2 text-sm'>
         <IconTruck
-          className={cn('h-4 w-4 shrink-0', qualified ? 'text-accent' : 'text-muted-foreground')}
+          className={cn('size-4 shrink-0', qualified ? 'text-accent' : 'text-muted-foreground')}
         />
         {qualified ? (
           <span className='text-accent font-medium'>You qualify for free shipping</span>
         ) : (
           <span>
             Add{' '}
-            <span className='text-accent font-semibold tabular-nums'>{formatPrice(remaining)}</span>{' '}
+            <span
+              className={cn('text-accent font-semibold', 'font-sans tracking-tight tabular-nums')}
+            >
+              {formatCartMoney(remaining)}
+            </span>{' '}
             more for free shipping
           </span>
         )}

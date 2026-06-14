@@ -8,6 +8,13 @@ import Image from 'next/image';
 
 import { withForm } from '@/components/forms/useAppForm';
 import { Separator } from '@/components/ui/separator';
+import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
+import { formatEstimatedTaxLabel } from '@/domains/cart/lib/cart-commerce-settings';
+import {
+  calculateEstimatedTax,
+  cartMoneyClassName,
+  formatCartMoney
+} from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
 import { useCheckoutStore } from '@/domains/checkout/store/checkout.store';
 import { useCartController } from '@/hooks/useCartController';
@@ -19,6 +26,7 @@ export const CheckoutSummary = withForm({
     const { items } = useCartController();
     const { couponDiscount, appliedCouponCode } = useCheckoutStore();
     const { data: providersData } = useGetShippingProviders();
+    const { settings } = useCartCommerceSettings();
 
     const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
 
@@ -26,7 +34,7 @@ export const CheckoutSummary = withForm({
     const shippingCost = selectedShipping?.price ?? 0;
 
     const subtotal = items.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0);
-    const tax = subtotal * 0.08;
+    const tax = calculateEstimatedTax(subtotal, settings);
     const total = subtotal + shippingCost + tax - couponDiscount;
 
     return (
@@ -79,8 +87,12 @@ export const CheckoutSummary = withForm({
             </span>
           </div>
           <div className='flex justify-between'>
-            <span className='text-muted-foreground'>Tax (8%)</span>
-            <span>${tax.toFixed(2)}</span>
+            <span className='text-muted-foreground'>
+              {settings.estimatedTaxEnabled
+                ? `Est. tax (${formatEstimatedTaxLabel(settings.estimatedTaxRate)})`
+                : 'Tax'}
+            </span>
+            <span className={cartMoneyClassName}>{formatCartMoney(tax)}</span>
           </div>
           {couponDiscount > 0 && (
             <div className='flex justify-between text-green-600'>
