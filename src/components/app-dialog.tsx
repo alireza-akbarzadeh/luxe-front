@@ -14,8 +14,10 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer';
+import { cn } from '@/lib/utils';
 
 import { useMediaDevices } from '../hooks/useMediaDevices';
+import { type AppDialogSize, getAppDialogClasses } from './app-dialog.sizes';
 import {
   Sheet,
   SheetContent,
@@ -34,6 +36,8 @@ interface AppDialogProps {
   onOpenChange?: (open: boolean) => void;
   component?: 'sheet' | 'drawer';
   className?: string;
+  contentClassName?: string;
+  size?: AppDialogSize;
   side?: 'bottom' | 'top' | 'right' | 'left' | undefined;
 }
 
@@ -47,27 +51,34 @@ export function AppDialog(props: AppDialogProps) {
     onOpenChange,
     component,
     className,
+    contentClassName,
+    size = 'md',
     side = 'left'
   } = props;
   const { isMobile } = useMediaDevices();
+  const sizeClasses = getAppDialogClasses(size, className);
 
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-        <DrawerContent className={className}>
-          {/* iPhone Styled Handle Bar */}
+        <DrawerContent className={sizeClasses.drawer}>
           <div className='mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20' />
 
-          <DrawerHeader className='mt-2'>
-            {title && (
-              <DrawerTitle className='text-center text-lg font-semibold'>{title}</DrawerTitle>
-            )}
-            {description && (
-              <DrawerDescription className='text-center'>{description}</DrawerDescription>
-            )}
-          </DrawerHeader>
-          <div className='mt-2 px-4 pb-8'>{children}</div>
+          {(title || description) && (
+            <DrawerHeader className='mt-2 shrink-0'>
+              {title && (
+                <DrawerTitle className='text-center text-lg font-semibold'>{title}</DrawerTitle>
+              )}
+              {description && (
+                <DrawerDescription className='text-center'>{description}</DrawerDescription>
+              )}
+            </DrawerHeader>
+          )}
+
+          <div className={cn('mt-2 flex min-h-0 flex-1 flex-col px-4 pb-8', contentClassName)}>
+            {children}
+          </div>
         </DrawerContent>
       </Drawer>
     );
@@ -77,12 +88,12 @@ export function AppDialog(props: AppDialogProps) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
         {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-        <SheetContent side={side} className={className}>
+        <SheetContent side={side} className={sizeClasses.sheet}>
           <SheetHeader>
             {title && <SheetTitle>{title}</SheetTitle>}
             {description && <SheetDescription>{description}</SheetDescription>}
           </SheetHeader>
-          <div className='mt-4'>{children}</div>
+          <div className={cn('mt-4', contentClassName)}>{children}</div>
         </SheetContent>
       </Sheet>
     );
@@ -91,13 +102,17 @@ export function AppDialog(props: AppDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={className}>
-        <DialogHeader>
-          {title && <DialogTitle>{title}</DialogTitle>}
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
-        <div className='py-4'>{children}</div>
+      <DialogContent className={sizeClasses.dialog}>
+        {(title || description) && (
+          <DialogHeader>
+            {title && <DialogTitle>{title}</DialogTitle>}
+            {description && <DialogDescription>{description}</DialogDescription>}
+          </DialogHeader>
+        )}
+        <div className={cn('py-4', contentClassName)}>{children}</div>
       </DialogContent>
     </Dialog>
   );
 }
+
+export type { AppDialogSize };

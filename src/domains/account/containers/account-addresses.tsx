@@ -6,6 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
+import { AppDialog } from '@/components/app-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,13 +19,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog';
+import type { GeocodedAddress, GeoCoordinates } from '@/lib/geocoding/types';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { getGetAccountSummaryQueryKey } from '~/src/services/-account-summary-get';
 import { usePatchAddressesIdDefault } from '~/src/services/-addresses-{id}-default-patch';
@@ -39,10 +34,13 @@ import type {
 } from '~/src/services/-addresses-post.schemas';
 
 import { addressFormSchema } from '../account.schema';
+import { AddressMapPickerDialog } from '../components/address-map-picker-dialog';
 
 export function AccountAddresses() {
   const queryClient = useQueryClient();
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
+  const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
+  const [mapCoordinates, setMapCoordinates] = useState<GeoCoordinates | null>(null);
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -138,7 +136,21 @@ export function AccountAddresses() {
       isDefault: false,
       address_type: 'both'
     });
+    setMapCoordinates(null);
     setIsAddressDialogOpen(true);
+  };
+
+  const applyGeocodedAddress = (address: GeocodedAddress) => {
+    form.setFieldValue('street', address.street);
+    form.setFieldValue('city', address.city);
+    form.setFieldValue('state', address.state);
+    form.setFieldValue('zipCode', address.zipCode);
+    form.setFieldValue('country', address.country);
+    setMapCoordinates({
+      latitude: address.latitude,
+      longitude: address.longitude
+    });
+    toast.success('Delivery location applied to the form');
   };
 
   const handleEditAddress = (address: ModelsAddress) => {
@@ -161,6 +173,7 @@ export function AccountAddresses() {
       isDefault: address.is_default ?? false,
       address_type: address.address_type ?? ''
     });
+    setMapCoordinates(null);
     setIsAddressDialogOpen(true);
   };
 
@@ -205,88 +218,97 @@ export function AccountAddresses() {
     <div>
       <div className='mb-4 flex items-center justify-between'>
         <h2 className='text-xl font-semibold'>Saved Addresses</h2>
-        <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={handleAddNewAddress}>
-              <IconPlus className='mr-2 h-4 w-4' />
-              Add Address
-            </Button>
-          </DialogTrigger>
-          <DialogContent className='max-w-lg'>
-            <DialogHeader>
-              <DialogTitle>{editingAddressId ? 'Edit Address' : 'Add New Address'}</DialogTitle>
-            </DialogHeader>
-
-            <form.AppForm>
-              <form.Root
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  form.handleSubmit();
-                }}
-                className='mt-4 grid grid-cols-2 gap-4'
-              >
-                <form.AppField name='label'>
-                  {(field) => (
-                    <field.TextField
-                      label='Label (e.g., Home, Work)'
-                      placeholder='Home, Work, etc.'
-                      className='col-span-2'
-                    />
-                  )}
-                </form.AppField>
-                <form.AppField name='firstName'>
-                  {(field) => <field.TextField label='First Name' />}
-                </form.AppField>
-                <form.AppField name='lastName'>
-                  {(field) => <field.TextField label='Last Name' />}
-                </form.AppField>
-                <form.AppField name='street'>
-                  {(field) => <field.TextField label='Street Address' className='col-span-2' />}
-                </form.AppField>
-                <form.AppField name='apartment'>
-                  {(field) => (
-                    <field.TextField
-                      label='Apartment, suite, etc. (optional)'
-                      className='col-span-2'
-                    />
-                  )}
-                </form.AppField>
-                <form.AppField name='city'>
-                  {(field) => <field.TextField label='City' />}
-                </form.AppField>
-                <form.AppField name='state'>
-                  {(field) => <field.TextField label='State' />}
-                </form.AppField>
-                <form.AppField name='zipCode'>
-                  {(field) => <field.TextField label='ZIP Code' />}
-                </form.AppField>
-                <form.AppField name='phone'>
-                  {(field) => <field.InputPhone label='Phone' />}
-                </form.AppField>
-                <form.AppField name='country'>
-                  {(field) => <field.TextField label='Country' />}
-                </form.AppField>
-                <form.AppField name='isDefault'>
-                  {(field) => (
-                    <field.Checkbox label='Set as default address' className='col-span-2 mt-2' />
-                  )}
-                </form.AppField>
-                <div className='col-span-2 mt-4 flex justify-end gap-2'>
-                  <Button
-                    variant='outline'
-                    type='button'
-                    onClick={() => setIsAddressDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <form.Submit isPending={isPending} label='Save Address' />
-                </div>
-              </form.Root>
-            </form.AppForm>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={handleAddNewAddress}>
+          <IconPlus className='mr-2 h-4 w-4' />
+          Add Address
+        </Button>
       </div>
+
+      <AppDialog
+        open={isAddressDialogOpen}
+        onOpenChange={setIsAddressDialogOpen}
+        title={editingAddressId ? 'Edit Address' : 'Add New Address'}
+        description='Fill in your details or pick a precise delivery point on the map.'
+        size='lg'
+        contentClassName='max-h-[min(72dvh,720px)] overflow-y-auto'
+      >
+        <form.AppForm>
+          <form.Root
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              form.handleSubmit();
+            }}
+            className='grid grid-cols-2 gap-4'
+          >
+            <div className='col-span-2'>
+              <Button
+                type='button'
+                variant='outline'
+                className='w-full rounded-full sm:w-auto'
+                onClick={() => setIsMapPickerOpen(true)}
+              >
+                <IconMapPin className='mr-2 h-4 w-4' />
+                Pick delivery location on map
+              </Button>
+            </div>
+            <form.AppField name='label'>
+              {(field) => (
+                <field.TextField
+                  label='Label (e.g., Home, Work)'
+                  placeholder='Home, Work, etc.'
+                  className='col-span-2'
+                />
+              )}
+            </form.AppField>
+            <form.AppField name='firstName'>
+              {(field) => <field.TextField label='First Name' />}
+            </form.AppField>
+            <form.AppField name='lastName'>
+              {(field) => <field.TextField label='Last Name' />}
+            </form.AppField>
+            <form.AppField name='street'>
+              {(field) => <field.TextField label='Street Address' className='col-span-2' />}
+            </form.AppField>
+            <form.AppField name='apartment'>
+              {(field) => (
+                <field.TextField label='Apartment, suite, etc. (optional)' className='col-span-2' />
+              )}
+            </form.AppField>
+            <form.AppField name='city'>{(field) => <field.TextField label='City' />}</form.AppField>
+            <form.AppField name='state'>
+              {(field) => <field.TextField label='State' />}
+            </form.AppField>
+            <form.AppField name='zipCode'>
+              {(field) => <field.TextField label='ZIP Code' />}
+            </form.AppField>
+            <form.AppField name='phone'>
+              {(field) => <field.InputPhone label='Phone' />}
+            </form.AppField>
+            <form.AppField name='country'>
+              {(field) => <field.TextField label='Country' />}
+            </form.AppField>
+            <form.AppField name='isDefault'>
+              {(field) => (
+                <field.Checkbox label='Set as default address' className='col-span-2 mt-2' />
+              )}
+            </form.AppField>
+            <div className='col-span-2 mt-4 flex justify-end gap-2'>
+              <Button variant='outline' type='button' onClick={() => setIsAddressDialogOpen(false)}>
+                Cancel
+              </Button>
+              <form.Submit isPending={isPending} label='Save Address' />
+            </div>
+          </form.Root>
+        </form.AppForm>
+      </AppDialog>
+
+      <AddressMapPickerDialog
+        open={isMapPickerOpen}
+        onOpenChange={setIsMapPickerOpen}
+        initialCoordinates={mapCoordinates}
+        onConfirm={applyGeocodedAddress}
+      />
 
       {addresses.length > 0 ? (
         <div className='grid grid-cols-2 gap-4'>
