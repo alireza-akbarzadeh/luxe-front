@@ -1,11 +1,29 @@
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { refreshAccessToken } from '@/actions/auth.actions';
+import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from '@/lib/auth/auth-cookies';
+import { requestTokenRefresh } from '@/lib/auth/auth-refresh';
 
 export async function POST(_req: NextRequest) {
-  const newToken = await refreshAccessToken();
-  if (newToken) {
-    return NextResponse.json({ access_token: newToken });
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get('refresh_token')?.value;
+
+  if (!refreshToken) {
+    return clearAuthCookiesOnResponse(
+      NextResponse.json({ error: 'Refresh failed' }, { status: 401 })
+    );
   }
-  return NextResponse.json({ error: 'Refresh failed' }, { status: 401 });
+
+  const tokens = await requestTokenRefresh(refreshToken);
+
+  if (!tokens) {
+    return clearAuthCookiesOnResponse(
+      NextResponse.json({ error: 'Refresh failed' }, { status: 401 })
+    );
+  }
+
+  const response = NextResponse.json({ access_token: tokens.accessToken });
+  applyAuthCookiesToResponse(response, tokens.accessToken, tokens.refreshToken);
+
+  return response;
 }

@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { logoutAction } from '~/src/actions/auth.actions';
+import { clearClientAccessToken } from '~/src/lib/auth/auth-token-client';
 import { useUser } from '~/src/hooks/useUser';
 
 interface UserProfileProps {
@@ -35,6 +36,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
   const userId = user?.id || 'GUEST';
 
   const handleSignOut = async () => {
+    clearClientAccessToken();
     await logoutAction();
   };
 

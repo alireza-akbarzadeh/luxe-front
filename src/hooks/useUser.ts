@@ -1,20 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
 
-import { getClientUser } from '@/actions/users.actions';
-import type { UserPayload } from '~/src/lib/auth/auth-server';
+import { useAuth } from '@/components/providers/auth-provider';
 
+/** @deprecated Prefer `useAuth()` directly — kept for backward compatibility. */
 export function useUser() {
-  const [user, setUser] = useState<UserPayload | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isLoading, isAuthenticated, refreshUser } = useAuth();
 
-  useEffect(() => {
-    getClientUser().then((data) => {
-      setUser(data);
-      setLoading(false);
-    });
-  }, []);
-
-  const isAuthenticated = !!user;
-  return { user, loading, isAuthenticated };
+  return {
+    user,
+    loading: isLoading,
+    isAuthenticated,
+    refreshUser
+  };
 }

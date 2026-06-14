@@ -2,10 +2,13 @@ import { useTheme } from 'next-themes';
 import { useState } from 'react';
 
 import { logoutAction } from '@/actions/auth.actions';
+import { useAuth } from '@/components/providers/auth-provider';
 import { useUser } from '@/hooks/useUser';
+import { clearClientAccessToken } from '@/lib/auth/auth-token-client';
 
 export function useNavbarProfile() {
   const { user, isAuthenticated } = useUser();
+  const { clearSession } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -19,6 +22,8 @@ export function useNavbarProfile() {
   const avatarFallback = userName.charAt(0).toUpperCase();
 
   const handleLogout = async () => {
+    clearSession();
+    clearClientAccessToken();
     await logoutAction();
   };
 

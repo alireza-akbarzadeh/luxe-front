@@ -20,7 +20,8 @@ export function LoginDomain() {
   const form = useAppForm({
     defaultValues: {
       email: '',
-      password: ''
+      password: '',
+      rememberMe: false
     },
     validators: {
       onChange: loginFormSchema,
@@ -31,6 +32,7 @@ export function LoginDomain() {
         const formData = new FormData();
         formData.append('email', value.email);
         formData.append('password', value.password);
+        formData.append('rememberMe', String(value.rememberMe ?? false));
 
         const result = await loginAction(formData);
         setError(result?.error as string);
@@ -103,6 +105,16 @@ export function LoginDomain() {
                   />
                 )}
               </form.AppField>
+
+              <form.AppField name='rememberMe'>
+                {(field) => (
+                  <field.Checkbox
+                    label='Remember me for 7 days'
+                    data-testid='remember-me-checkbox'
+                  />
+                )}
+              </form.AppField>
+
               <form.Submit data-testid='login-submit' isPending={isPending} label='login' />
             </form.Root>
           </form.AppForm>

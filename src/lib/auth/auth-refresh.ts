@@ -1,4 +1,3 @@
-import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 
 import type { DtoRefreshResponse } from '@/services/-auth-refresh-post.schemas';
@@ -7,21 +6,12 @@ import { BASE_URL } from '../api/api-client';
 import { APP_CONFIG } from '../config';
 import { AUTH_COOKIE_OPTIONS } from './auth-cookies';
 
+export { isAccessTokenExpired } from './auth-jwt';
+
 export type RefreshedTokens = {
   accessToken: string;
   refreshToken?: string;
 };
-
-const TOKEN_EXPIRY_BUFFER_MS = 30_000;
-
-export function isAccessTokenExpired(token: string, bufferMs = TOKEN_EXPIRY_BUFFER_MS): boolean {
-  try {
-    const decoded = jwtDecode<{ exp?: number }>(token);
-    return (decoded.exp ?? 0) * 1000 < Date.now() + bufferMs;
-  } catch {
-    return true;
-  }
-}
 
 /**
  * Call the backend refresh endpoint. Does not read or write cookies.
@@ -69,6 +59,8 @@ export async function refreshSessionFromCookies(): Promise<string | null> {
   const tokens = await requestTokenRefresh(refreshToken);
 
   if (!tokens) {
+    cookieStore.delete('access_token');
+    cookieStore.delete('refresh_token');
     return null;
   }
 

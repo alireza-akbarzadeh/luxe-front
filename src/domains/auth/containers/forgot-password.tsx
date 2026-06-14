@@ -8,24 +8,24 @@ import {
   IconLoader2,
   IconMail
 } from '@tabler/icons-react';
-import { AnimatePresence,motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
 
+import { forgotPasswordAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuthStore } from '@/store/auth.store';
 
 export function ForgotPasswordDomain() {
-  const { resetPassword, isLoading } = useAuthStore();
-
+  const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     setError(null);
 
     if (!email) {
@@ -33,14 +33,26 @@ export function ForgotPasswordDomain() {
       return;
     }
 
-    const success = await resetPassword(email);
-    if (success) {
-      setIsSubmitted(true);
-    }
+    startTransition(async () => {
+      const result = await forgotPasswordAction(email);
+      if (result.success) {
+        setIsSubmitted(true);
+        return;
+      }
+      setError(result.error ?? 'Unable to send reset email');
+      toast.error(result.error ?? 'Unable to send reset email');
+    });
   };
 
-  const handleResend = async () => {
-    await resetPassword(email);
+  const handleResend = () => {
+    startTransition(async () => {
+      const result = await forgotPasswordAction(email);
+      if (result.success) {
+        toast.success('Reset link sent again');
+        return;
+      }
+      toast.error(result.error ?? 'Unable to resend reset email');
+    });
   };
 
   return (
@@ -51,7 +63,6 @@ export function ForgotPasswordDomain() {
         transition={{ duration: 0.5 }}
         className='w-full max-w-md'
       >
-        {/* Back Link */}
         <Link
           href='/login'
           className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
@@ -69,35 +80,20 @@ export function ForgotPasswordDomain() {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
             >
-              {/* Icon */}
               <div className='mb-6'>
                 <div className='bg-accent/10 flex h-16 w-16 items-center justify-center rounded-2xl'>
                   <IconKeyFilled className='text-accent h-8 w-8' />
                 </div>
               </div>
 
-              {/* Header */}
               <div className='mb-8'>
-                <h1 className='mb-2 text-3xl font-bold'>Forgot your password?</h1>
+                <h1 className='mb-2 text-3xl font-bold'>Forgot password?</h1>
                 <p className='text-muted-foreground'>
-                  No worries! Enter your email address and we&apos;ll send you instructions to reset
-                  your password.
+                  Enter your email and we&apos;ll send you a reset link.
                 </p>
               </div>
 
-              {/* Error Message */}
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className='bg-destructive/10 border-destructive/20 text-destructive mb-6 rounded-xl border p-4 text-sm'
-                >
-                  {error}
-                </motion.div>
-              )}
-
-              {/* Form */}
-              <form onSubmit={handleSubmit} className='space-y-5'>
+              <form onSubmit={handleSubmit} className='space-y-6'>
                 <div className='space-y-2'>
                   <Label htmlFor='email'>Email address</Label>
                   <div className='relative'>
@@ -105,42 +101,29 @@ export function ForgotPasswordDomain() {
                     <Input
                       id='email'
                       type='email'
-                      placeholder='name@example.com'
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder='name@example.com'
                       className='h-12 pl-10'
-                      required
                     />
                   </div>
+                  {error ? <p className='text-sm text-red-500'>{error}</p> : null}
                 </div>
 
-                <Button
-                  type='submit'
-                  size='lg'
-                  className='bg-accent hover:bg-accent/90 text-accent-foreground h-12 w-full'
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
+                <Button type='submit' className='h-12 w-full' disabled={isPending}>
+                  {isPending ? (
                     <>
-                      <IconLoader2 className='mr-2 h-5 w-5 animate-spin' />
+                      <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />
                       Sending...
                     </>
                   ) : (
                     <>
-                      Send reset instructions
-                      <IconArrowRight className='ml-2 h-5 w-5' />
+                      Send reset link
+                      <IconArrowRight className='ml-2 h-4 w-4' />
                     </>
                   )}
                 </Button>
               </form>
-
-              {/* Help Text */}
-              <p className='text-muted-foreground mt-8 text-center text-sm'>
-                Remember your password?{' '}
-                <Link href='/login' className='text-accent font-medium hover:underline'>
-                  Sign in
-                </Link>
-              </p>
             </motion.div>
           ) : (
             <motion.div
@@ -151,87 +134,17 @@ export function ForgotPasswordDomain() {
               transition={{ duration: 0.3 }}
               className='text-center'
             >
-              {/* Success Icon */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', delay: 0.2 }}
-                className='mb-6 inline-flex'
-              >
-                <div className='flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30'>
-                  <IconCheckbox className='h-10 w-10 text-green-600 dark:text-green-400' />
-                </div>
-              </motion.div>
-
-              {/* Success Message */}
-              <h1 className='mb-2 text-3xl font-bold'>Check your email</h1>
-              <p className='text-muted-foreground mb-2'>
-                We&apos;ve sent password reset instructions to:
-              </p>
-              <p className='mb-8 text-lg font-medium'>{email}</p>
-
-              {/* Instructions */}
-              <div className='bg-muted/50 mb-8 rounded-xl p-6 text-left'>
-                <h3 className='mb-3 font-medium'>What to do next:</h3>
-                <ol className='text-muted-foreground space-y-2 text-sm'>
-                  <li className='flex items-start gap-2'>
-                    <span className='bg-accent/20 text-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-medium'>
-                      1
-                    </span>
-                    Check your inbox (and spam folder)
-                  </li>
-                  <li className='flex items-start gap-2'>
-                    <span className='bg-accent/20 text-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-medium'>
-                      2
-                    </span>
-                    Click the reset link in the email
-                  </li>
-                  <li className='flex items-start gap-2'>
-                    <span className='bg-accent/20 text-accent flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-xs font-medium'>
-                      3
-                    </span>
-                    Create a new secure password
-                  </li>
-                </ol>
+              <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30'>
+                <IconCheckbox className='h-8 w-8 text-emerald-600' />
               </div>
-
-              {/* Actions */}
-              <div className='space-y-4'>
-                <Link href='/login'>
-                  <Button
-                    size='lg'
-                    className='bg-accent hover:bg-accent/90 text-accent-foreground h-12 w-full'
-                  >
-                    Return to sign in
-                    <IconArrowRight className='ml-2 h-5 w-5' />
-                  </Button>
-                </Link>
-
-                <Button
-                  variant='ghost'
-                  size='lg'
-                  className='h-12 w-full'
-                  onClick={handleResend}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <IconLoader2 className='mr-2 h-5 w-5 animate-spin' />
-                      Resending...
-                    </>
-                  ) : (
-                    "Didn't receive the email? Resend"
-                  )}
-                </Button>
-              </div>
-
-              {/* Support Link */}
-              <p className='text-muted-foreground mt-8 text-sm'>
-                Still having trouble?{' '}
-                <Link href='/contact' className='text-accent font-medium hover:underline'>
-                  Contact support
-                </Link>
+              <h1 className='mb-2 text-2xl font-bold'>Check your email</h1>
+              <p className='text-muted-foreground mb-8'>
+                If an account exists for <strong>{email}</strong>, you&apos;ll receive a password
+                reset link shortly.
               </p>
+              <Button variant='outline' onClick={handleResend} disabled={isPending}>
+                Resend email
+              </Button>
             </motion.div>
           )}
         </AnimatePresence>

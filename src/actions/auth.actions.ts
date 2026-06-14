@@ -8,6 +8,15 @@ import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas
 import { clearAuthCookies, setAuthCookies } from '~/src/lib/auth/auth-helpers';
 import { refreshSessionFromCookies } from '~/src/lib/auth/auth-refresh';
 
+export interface AuthSessionItem {
+  id: number;
+  user_agent: string;
+  ip_address: string;
+  last_used_at: string;
+  created_at: string;
+  is_current: boolean;
+}
+
 function isNextRedirectError(error: unknown): error is { digest: string } {
   return (
     error !== null &&
@@ -18,9 +27,31 @@ function isNextRedirectError(error: unknown): error is { digest: string } {
   );
 }
 
-/**
- * Get callback URL from referer header
- */
+async function getClientRequestHeaders(): Promise<Record<string, string>> {
+  const headersList = await headers();
+
+  return {
+    'Content-Type': 'application/json',
+    ...(headersList.get('user-agent')
+      ? { 'User-Agent': headersList.get('user-agent')! }
+      : {}),
+    ...(headersList.get('x-forwarded-for')
+      ? { 'X-Forwarded-For': headersList.get('x-forwarded-for')! }
+      : {}),
+    ...(headersList.get('x-real-ip') ? { 'X-Real-IP': headersList.get('x-real-ip')! } : {})
+  };
+}
+
+async function getAuthorizedHeaders(): Promise<Record<string, string>> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
+
+  return {
+    ...(await getClientRequestHeaders()),
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {})
+  };
+}
+
 async function getCallbackUrlFromReferer(): Promise<string | null> {
   const headersList = await headers();
   const referer = headersList.get('referer');
@@ -34,9 +65,6 @@ async function getCallbackUrlFromReferer(): Promise<string | null> {
   }
 }
 
-/**
- * Generic handler for authentication responses
- */
 async function handleAuthResponse<
   T extends {
     success?: boolean;
@@ -72,16 +100,14 @@ export async function loginAction(formData: FormData) {
 
     const res = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-      credentials: 'include'
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({ email, password })
     });
 
     const json = (await res.json()) as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json, rememberMe);
     if (error) return error;
   } catch (error) {
-    // Rethrow Next.js redirect errors so the framework can handle them
     if (isNextRedirectError(error)) {
       throw error;
     }
@@ -104,22 +130,20 @@ export async function registerAction(formData: FormData) {
 
     const res = await fetch(`${BASE_URL}/auth/register`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: await getClientRequestHeaders(),
       body: JSON.stringify({
         email,
         password,
         first_name: firstName,
         last_name: lastName,
         phone
-      }),
-      credentials: 'include'
+      })
     });
 
     const json = (await res.json()) as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json);
     if (error) return error;
   } catch (error) {
-    // Rethrow Next.js redirect errors
     if (isNextRedirectError(error)) {
       throw error;
     }
@@ -128,29 +152,52 @@ export async function registerAction(formData: FormData) {
   }
 }
 
-/**
- * Logout action
- */
-export async function logoutAction() {
-  try {
-    const cookieStore = await cookies();
-    const refreshToken = cookieStore.get('refresh_token')?.value;
+export async function forgotPasswordAction(email: string): Promise<{ success: boolean; error?: string }> {
+  if (!email) {
+    return { success: false, error: 'Email is required' };
+  }
 
-    if (refreshToken) {
-      try {
-        await fetch(`${BASE_URL}/auth/logout`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ refresh_token: refreshToken }),
-          credentials: 'include'
-        });
-      } catch (error) {
-        // Ignore network errors – still clear local cookies
-        console.error('Logout request failed:', error);
-      }
+  try {
+    const res = await fetch(`${BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({ email })
+    });
+
+    const json = (await res.json()) as { success?: boolean; message?: string };
+
+    if (!res.ok || !json.success) {
+      return { success: false, error: json.message ?? 'Unable to send reset email' };
     }
 
-    await clearAuthCookies();
+    return { success: true };
+  } catch {
+    return { success: false, error: 'Unable to send reset email' };
+  }
+}
+
+export async function revokeServerSession(): Promise<void> {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get('refresh_token')?.value;
+
+  if (refreshToken) {
+    try {
+      await fetch(`${BASE_URL}/auth/logout`, {
+        method: 'POST',
+        headers: await getAuthorizedHeaders(),
+        body: JSON.stringify({ refresh_token: refreshToken })
+      });
+    } catch (error) {
+      console.error('Logout request failed:', error);
+    }
+  }
+
+  await clearAuthCookies();
+}
+
+export async function logoutAction() {
+  try {
+    await revokeServerSession();
   } catch (error) {
     console.error('Logout error:', error);
   } finally {
@@ -158,9 +205,57 @@ export async function logoutAction() {
   }
 }
 
-/**
- * Refresh access token — used by /api/auth/refresh and the API client interceptor
- */
+export async function getAuthSessionsAction(): Promise<AuthSessionItem[]> {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/sessions`, {
+      method: 'GET',
+      headers: await getAuthorizedHeaders(),
+      cache: 'no-store'
+    });
+
+    if (!res.ok) return [];
+
+    const json = (await res.json()) as {
+      success?: boolean;
+      data?: { sessions?: AuthSessionItem[] };
+    };
+
+    return json.data?.sessions ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function revokeAuthSessionAction(sessionId: number): Promise<{ success: boolean }> {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/sessions/${sessionId}`, {
+      method: 'DELETE',
+      headers: await getAuthorizedHeaders()
+    });
+
+    return { success: res.ok };
+  } catch {
+    return { success: false };
+  }
+}
+
+export async function revokeOtherSessionsAction(): Promise<{ success: boolean }> {
+  try {
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get('refresh_token')?.value;
+
+    const res = await fetch(`${BASE_URL}/auth/sessions`, {
+      method: 'DELETE',
+      headers: await getAuthorizedHeaders(),
+      body: JSON.stringify({ refresh_token: refreshToken ?? '' })
+    });
+
+    return { success: res.ok };
+  } catch {
+    return { success: false };
+  }
+}
+
 export async function refreshAccessToken(): Promise<string | null> {
   try {
     return await refreshSessionFromCookies();
@@ -169,9 +264,7 @@ export async function refreshAccessToken(): Promise<string | null> {
     return null;
   }
 }
-/**
- * Validate current session
- */
+
 export async function validateSession(): Promise<boolean> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('access_token')?.value;
@@ -181,7 +274,6 @@ export async function validateSession(): Promise<boolean> {
     return false;
   }
 
-  // If only refresh token exists, try to get a new access token
   if (!accessToken && refreshToken) {
     const newAccessToken = await refreshAccessToken();
     return newAccessToken !== null;

@@ -3,10 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth/auth-cookies';
 import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth/auth-refresh';
-
-const protectedRoutes = ['/account', '/orders', '/profile', '/wishlist', '/checkout'];
-const authRoutes = ['/login', '/register'];
-const adminRoutes = ['/admin'];
+import { isAdminPath, isAuthPath, isProtectedPath } from './lib/auth/routes';
 
 function decodeToken(token: string) {
   try {
@@ -16,8 +13,8 @@ function decodeToken(token: string) {
   }
 }
 
-async function tryRefreshSession(refreshToken: string) {
-  return requestTokenRefresh(refreshToken);
+function isAllowedAdmin(role?: string) {
+  return role === 'admin' || role === 'moderator';
 }
 
 export async function proxy(request: NextRequest) {
@@ -26,14 +23,13 @@ export async function proxy(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
 
-  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
+  const isProtectedRoute = isProtectedPath(pathname);
+  const isAuthRoute = isAuthPath(pathname);
+  const isAdminRoute = isAdminPath(pathname);
 
-  // Silent refresh on any navigation when access token expired but refresh token exists
-  let refreshedTokens: Awaited<ReturnType<typeof tryRefreshSession>> | null = null;
+  let refreshedTokens: Awaited<ReturnType<typeof requestTokenRefresh>> | null = null;
   if (refreshToken && (!accessToken || isAccessTokenExpired(accessToken))) {
-    refreshedTokens = await tryRefreshSession(refreshToken);
+    refreshedTokens = await requestTokenRefresh(refreshToken);
   }
 
   const effectiveAccessToken = refreshedTokens?.accessToken ?? accessToken;
@@ -59,7 +55,7 @@ export async function proxy(request: NextRequest) {
     if (effectiveAccessToken && !isAccessTokenExpired(effectiveAccessToken)) {
       if (isAdminRoute) {
         const decoded = decodeToken(effectiveAccessToken);
-        if (decoded?.role !== 'admin') {
+        if (!isAllowedAdmin(decoded?.role)) {
           return NextResponse.redirect(new URL('/unauthorized', request.url));
         }
       }
@@ -75,7 +71,7 @@ export async function proxy(request: NextRequest) {
     if (refreshedTokens) {
       if (isAdminRoute) {
         const decoded = decodeToken(refreshedTokens.accessToken);
-        if (decoded?.role !== 'admin') {
+        if (!isAllowedAdmin(decoded?.role)) {
           return NextResponse.redirect(new URL('/unauthorized', request.url));
         }
       }
@@ -96,7 +92,6 @@ export async function proxy(request: NextRequest) {
       return withRefreshedCookies(NextResponse.redirect(new URL('/account', request.url)));
     }
 
-    // Expired refresh token on login page — clear stale cookies so user can sign in again
     if (refreshToken && !refreshedTokens) {
       return clearAuthCookiesOnResponse(NextResponse.next());
     }
@@ -104,7 +99,3 @@ export async function proxy(request: NextRequest) {
 
   return withRefreshedCookies(NextResponse.next());
 }
-
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|_next).*)']
-};

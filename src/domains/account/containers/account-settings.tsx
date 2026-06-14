@@ -11,10 +11,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 
+import { ActiveSessionsPanel } from '../components/active-sessions-panel';
+
 export function AccountSetting() {
   return (
     <div className='space-y-6'>
       <h2 className='mb-4 text-xl font-semibold'>Account Settings</h2>
+
+      <ActiveSessionsPanel />
 
       {/* Email Preferences */}
       <div className='bg-card border-border rounded-2xl border p-6'>

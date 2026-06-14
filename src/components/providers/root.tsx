@@ -2,6 +2,7 @@
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
+import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/client/theme';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -16,7 +17,9 @@ export default function RootProvider({ children }: TRootProvider) {
       <DirectionProvider dir='ltr'>
         <NuqsAdapter>
           <Toaster />
-          <TanstackQueryProvider>{children}</TanstackQueryProvider>
+          <TanstackQueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </TanstackQueryProvider>
         </NuqsAdapter>
       </DirectionProvider>
     </ThemeProvider>

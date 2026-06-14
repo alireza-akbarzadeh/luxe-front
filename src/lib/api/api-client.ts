@@ -10,6 +10,11 @@ import Axios, {
 } from 'axios';
 import { toast } from 'sonner';
 
+import {
+  clearClientAccessToken,
+  ensureClientAccessToken,
+  setClientAccessToken
+} from '../auth/auth-token-client';
 import { APP_CONFIG } from '../config';
 import { isRequestCancelled } from './api-utils';
 import { handleApiError } from './handle-api-error';
@@ -58,6 +63,16 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
+AXIOS_INSTANCE.interceptors.request.use(async (config) => {
+  const token = await ensureClientAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 // Response interceptor with improved refresh logic
 AXIOS_INSTANCE.interceptors.response.use(
   (response) => response,
@@ -102,6 +117,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 
     // Don't retry if this is a refresh endpoint or already retried
     if (originalRequest.url?.includes('/auth/refresh') || originalRequest._retry) {
+      clearClientAccessToken();
       toast.error('Session expired. Please log in again.');
 
       // Clear local storage/cookies if needed
@@ -117,6 +133,7 @@ AXIOS_INSTANCE.interceptors.response.use(
 
     // Max retry limit
     if (originalRequest._retryCount >= APP_CONFIG.MAX_RETRY_LIMIT) {
+      clearClientAccessToken();
       toast.error('Authentication failed. Please log in again.');
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
@@ -146,11 +163,29 @@ AXIOS_INSTANCE.interceptors.response.use(
         throw new Error('No access token in refresh response');
       }
 
+      setClientAccessToken(newAccessToken);
       processQueue(null, newAccessToken);
 
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return AXIOS_INSTANCE(originalRequest);
     } catch (refreshError) {
+      try {
+        const tokenResponse = await NEXT_API.get('/api/auth/token', {
+          withCredentials: true
+        });
+        const fallbackToken = tokenResponse.data?.access_token as string | undefined;
+
+        if (tokenResponse.status === 200 && fallbackToken) {
+          setClientAccessToken(fallbackToken);
+          processQueue(null, fallbackToken);
+          originalRequest.headers.Authorization = `Bearer ${fallbackToken}`;
+          return AXIOS_INSTANCE(originalRequest);
+        }
+      } catch {
+        // Fall through to session expiry handling.
+      }
+
+      clearClientAccessToken();
       processQueue(refreshError as Error, null);
       if (typeof window !== 'undefined') {
         const currentPath = window.location.pathname + window.location.search;
