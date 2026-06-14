@@ -55,7 +55,7 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
   });
 
   return (
-    <AppDialog open={open} onOpenChange={onOpenChange}>
+    <AppDialog title='Profile Information' open={open} onOpenChange={onOpenChange}>
       <form.AppForm>
         <form.Root
           onSubmit={(e) => {
@@ -78,10 +78,14 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
             {(field) => <field.TextField label='Phone' placeholder='+1 (555) 000-0000' />}
           </form.AppField>
           <div className='col-span-2 flex items-center justify-end gap-2'>
-            <Button type='button' variant='outline' onClick={onClose}>
+            <Button className='flex-1' size='lg' type='button' variant='outline' onClick={onClose}>
               Cancel
             </Button>
-            <form.Submit isPending={isPending || isMutating} label='Save Changes' />
+            <form.Submit
+              className='flex-1'
+              isPending={isPending || isMutating}
+              label='Save Changes'
+            />
           </div>
         </form.Root>
       </form.AppForm>

@@ -2,84 +2,118 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
+import { Button } from '@/components/ui/button';
 import { useCartController } from '~/src/hooks/useCartController';
+import { useUser } from '~/src/hooks/useUser';
 
 import CartBreadcrumb from './components/cart-breadcrumb';
+import { CartEmptyState } from './components/cart-empty-state';
+import { CartGuestState } from './components/cart-guest-state';
 import { CartItem } from './components/cart-item';
+import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
+import { CartPageSkeleton } from './components/cart-page-skeleton';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestion';
+import { calculateCartTotals, cartHasIncompleteVariants } from './lib/cart-utils';
 
 export default function CartPage() {
-  const { items, isLoading, error } = useCartController();
+  const { isAuthenticated } = useUser();
+  const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
+    useCartController();
+
+  if (!isAuthenticated) {
+    return <CartGuestState />;
+  }
 
   if (isLoading) {
+    return <CartPageSkeleton />;
+  }
+
+  if (error) {
     return (
       <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-center py-20'>
-            <div className='border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent' />
-          </div>
+        <div className='mx-auto max-w-lg px-4 text-center sm:px-6'>
+          <h1 className='font-display mb-2 text-2xl font-semibold'>Couldn&apos;t load your cart</h1>
+          <p className='text-muted-foreground mb-6 text-sm'>
+            Something went wrong while fetching your items. Please try again.
+          </p>
+          <Button onClick={() => void refetch()} className='rounded-full'>
+            Retry
+          </Button>
         </div>
       </main>
     );
   }
-  if (error || items.length === 0) {
-    return notFound();
+
+  if (items.length === 0) {
+    return (
+      <main className='pt-24 pb-16'>
+        <div className='mx-auto max-w-3xl px-4 sm:px-6 lg:px-8'>
+          <CartBreadcrumb />
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className='font-display mb-8 text-3xl font-semibold md:text-4xl'
+          >
+            Shopping Cart
+          </motion.h1>
+          <CartEmptyState />
+        </div>
+      </main>
+    );
   }
 
+  const { total } = calculateCartTotals(items, subtotal);
+  const hasIncompleteVariants = cartHasIncompleteVariants(items);
+
   return (
-    <main className='pt-24 pb-16'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        {/* Breadcrumb */}
-        <CartBreadcrumb />
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className='mb-8 text-3xl font-bold md:text-4xl'
-        >
-          Shopping Cart
-        </motion.h1>
-        <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
-          {/* Cart Items */}
-          <div className='space-y-4 lg:col-span-2'>
-            <div className='mb-4 flex items-center justify-between'>
-              <span className='text-muted-foreground'>
-                {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
-              </span>
-              <Link href='/shop' className='text-accent text-sm font-medium hover:underline'>
-                Continue Shopping
-              </Link>
-            </div>
+    <>
+      <main className='pt-24 pb-28 lg:pb-16'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+          <CartBreadcrumb />
 
-            <AnimatePresence mode='popLayout'>
-              {items.map((item, index) => {
-                const cartItemId = item.id;
-                const isUpdatingThis = isLoading && item.id === cartItemId;
-                const isRemovingThis = isLoading && item.id === cartItemId;
-
-                return (
-                  <CartItem
-                    cartItemId={cartItemId || 0}
-                    index={index}
-                    key={item.id}
-                    isUpdatingThis={isUpdatingThis}
-                    isRemovingThis={isRemovingThis}
-                    cart={item}
-                  />
-                );
-              })}
-            </AnimatePresence>
-
-            {/* Suggested Products */}
-            <ProductSuggestion />
+          <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <h1 className='font-display text-3xl font-semibold md:text-4xl'>Shopping Cart</h1>
+              <p className='text-muted-foreground mt-2 text-sm'>
+                {itemCount} {itemCount === 1 ? 'item' : 'items'} · Review before checkout
+              </p>
+            </motion.div>
+            <Button asChild variant='outline' className='rounded-full'>
+              <Link href='/shop'>Continue shopping</Link>
+            </Button>
           </div>
 
-          {/* Order Summary */}
-          <OrderSummary />
+          <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
+            <div className='space-y-4 lg:col-span-2'>
+              <AnimatePresence mode='popLayout'>
+                {items.map((item, index) => (
+                  <CartItem
+                    key={item.id}
+                    cart={item}
+                    index={index}
+                    cartItemId={item.id ?? 0}
+                    isUpdating={updatingItemId === item.id}
+                    isRemoving={removingItemId === item.id}
+                  />
+                ))}
+              </AnimatePresence>
+
+              <ProductSuggestion />
+            </div>
+
+            <OrderSummary />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+
+      <CartMobileCheckoutBar
+        total={total}
+        itemCount={itemCount}
+        checkoutDisabled={hasIncompleteVariants}
+        disabledReason={hasIncompleteVariants ? 'Select options for all items' : undefined}
+      />
+    </>
   );
 }

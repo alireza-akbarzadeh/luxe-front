@@ -3,12 +3,19 @@ import Link from 'next/link';
 
 export default function CartBreadcrumb() {
   return (
-    <nav className='text-muted-foreground mb-8 flex items-center gap-2 text-sm'>
+    <nav
+      aria-label='Breadcrumb'
+      className='text-muted-foreground mb-8 flex items-center gap-2 text-sm'
+    >
       <Link href='/' className='hover:text-foreground transition-colors'>
         Home
       </Link>
-      <IconChevronRight className='h-4 w-4' />
-      <span className='text-foreground'>Shopping Cart</span>
+      <IconChevronRight className='h-4 w-4' aria-hidden />
+      <Link href='/shop' className='hover:text-foreground transition-colors'>
+        Shop
+      </Link>
+      <IconChevronRight className='h-4 w-4' aria-hidden />
+      <span className='text-foreground font-medium'>Cart</span>
     </nav>
   );
 }

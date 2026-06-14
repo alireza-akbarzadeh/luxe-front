@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
 import {
   createContext,
   type PropsWithChildren,
@@ -13,6 +14,7 @@ import {
 import { getClientUser } from '@/actions/users.actions';
 import type { UserPayload } from '@/lib/auth/auth-server';
 import { bootstrapAuthSession, clearClientAccessToken } from '@/lib/auth/auth-session';
+import { AUTH_SESSION_CHANGED_EVENT } from '@/lib/auth/auth-session-events';
 
 import { AuthSessionManager } from '../auth/auth-session-manager';
 
@@ -30,10 +32,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    void bootstrapAuthSession();
-  }, []);
+  const pathname = usePathname();
 
   const {
     data: user,
@@ -42,19 +41,34 @@ export function AuthProvider({ children }: PropsWithChildren) {
   } = useQuery({
     queryKey: AUTH_USER_QUERY_KEY,
     queryFn: () => getClientUser(),
-    staleTime: 60_000,
+    staleTime: 0,
+    refetchOnMount: 'always',
     retry: false
   });
 
   const refreshUser = useCallback(async () => {
     await bootstrapAuthSession();
+    await queryClient.invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY });
     await refetch();
-  }, [refetch]);
+  }, [queryClient, refetch]);
 
   const clearSession = useCallback(() => {
     clearClientAccessToken();
     queryClient.setQueryData(AUTH_USER_QUERY_KEY, null);
   }, [queryClient]);
+
+  useEffect(() => {
+    void refreshUser();
+  }, [pathname, refreshUser]);
+
+  useEffect(() => {
+    const onSessionChanged = () => {
+      void refreshUser();
+    };
+
+    window.addEventListener(AUTH_SESSION_CHANGED_EVENT, onSessionChanged);
+    return () => window.removeEventListener(AUTH_SESSION_CHANGED_EVENT, onSessionChanged);
+  }, [refreshUser]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

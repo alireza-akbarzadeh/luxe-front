@@ -135,7 +135,9 @@
 
   /* Editorial serif headlines get tighter tracking + ligatures */
   .font-display {
-    font-feature-settings: 'liga' 1, 'dlig' 1;
+    font-feature-settings:
+      'liga' 1,
+      'dlig' 1;
     letter-spacing: -0.01em;
   }
 
@@ -162,4 +164,27 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* Delivery map picker — custom pin + selection cursor */
+.delivery-map-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.delivery-map-marker svg {
+  display: block;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 22%));
+}
+
+.delivery-location-map.leaflet-container {
+  cursor: crosshair;
+}
+
+.delivery-location-map .leaflet-marker-icon {
+  cursor: grab;
+}
+
+.delivery-location-map .leaflet-marker-icon:active {
+  cursor: grabbing;
 }

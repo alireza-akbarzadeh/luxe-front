@@ -11,13 +11,15 @@ import {
 } from '@tabler/icons-react';
 import { useState } from 'react';
 
+import { OrderNumber } from '@/components/order-number';
 import { Button } from '~/src/components/ui/button';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 import type { DtoDefaultAddressDTO } from '~/src/services/-account-summary-get.schemas';
 
 import { AccountProfileForm } from '../components/account-profile-form';
-import { statusColors } from '../data';
+import { OrderStatusBadge } from '../components/order-status-badge';
 import { useSidebarTab } from '../hooks/useSidebarTab';
+import { formatOrderAmount } from '../lib/order-utils';
 
 export function AccountOverview() {
   const { setActiveTab } = useSidebarTab();
@@ -203,21 +205,17 @@ export function AccountOverview() {
                   key={order.id}
                   className='bg-muted/50 flex flex-col gap-3 rounded-xl p-4 sm:flex-row sm:items-center sm:justify-between'
                 >
-                  <div>
-                    <p className='font-medium'>{orderNumber}</p>
+                  <div className='min-w-0'>
+                    <OrderNumber value={orderNumber} size='sm' />
                     <p className='text-muted-foreground text-sm'>
                       {createdAt ? new Date(createdAt).toLocaleDateString() : 'No date'}
                     </p>
                   </div>
-                  <div className='sm:text-right'>
-                    <span
-                      className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
-                        statusColors[status] || ''
-                      }`}
-                    >
-                      {status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown'}
-                    </span>
-                    <p className='mt-1 text-sm font-medium'>${totalAmount.toFixed(2)}</p>
+                  <div className='flex flex-col gap-2 sm:items-end'>
+                    <OrderStatusBadge status={status} />
+                    <p className='text-sm font-medium tabular-nums'>
+                      {formatOrderAmount(totalAmount)}
+                    </p>
                   </div>
                 </div>
               );

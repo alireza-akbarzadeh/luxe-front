@@ -34,7 +34,8 @@ export const useCartController = () => {
   const {
     data: cartData,
     isLoading,
-    error
+    error,
+    refetch
   } = useGetCart({
     query: {
       enabled: isAuthenticated,
@@ -481,8 +482,19 @@ export const useCartController = () => {
     removeCartItem,
     clearCart: async () => {
       await clearCartMutation.mutateAsync();
-      // Also clear the cache optimistically
       updateCartCache((old: any) => ({ ...old, data: { ...old.data, items: [] } }));
-    }
+      toast.success('Cart cleared');
+    },
+    refetch,
+    updatingItemId:
+      updateQuantityMutation.isPending && updateQuantityMutation.variables
+        ? Number(updateQuantityMutation.variables.id)
+        : updateVariantMutation.isPending && updateVariantMutation.variables
+          ? Number(updateVariantMutation.variables.id)
+          : null,
+    removingItemId:
+      removeItemMutation.isPending && removeItemMutation.variables
+        ? Number(removeItemMutation.variables.id)
+        : null
   };
 };

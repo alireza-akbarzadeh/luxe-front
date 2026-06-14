@@ -1,16 +1,18 @@
 'use client';
 
-import { IconAlertCircle } from '@tabler/icons-react';
+import { IconAlertCircle, IconPlus } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useCartController } from '~/src/hooks/useCartController';
+import { formatPrice } from '@/domains/home/lib/home-utils';
+import { type CartItemPayload, useCartController } from '~/src/hooks/useCartController';
 import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
 
 export function ProductSuggestion() {
-  const { items } = useCartController();
+  const { items, increment } = useCartController();
 
   // Create a stable key from the product IDs (sorted, unique, joined)
   const productIdsKey = useMemo(() => {
@@ -29,8 +31,7 @@ export function ProductSuggestion() {
     reset
   } = usePostProductsSuggestions();
 
-  // Fetch only when the stable key changes (i.e., product IDs set changes)
-  React.useEffect(() => {
+  useEffect(() => {
     if (!productIdsKey) {
       reset();
       return;
@@ -72,37 +73,62 @@ export function ProductSuggestion() {
   }
 
   return (
-    <div className='mt-12'>
-      <h3 className='mb-4 text-lg font-semibold'>You might also like</h3>
+    <div className='mt-12 border-t pt-10'>
+      <div className='mb-5 flex items-end justify-between gap-4'>
+        <div>
+          <p className='text-accent mb-1 text-xs font-medium tracking-[0.2em] uppercase'>
+            Complete the look
+          </p>
+          <h3 className='font-display text-xl font-semibold'>You might also like</h3>
+        </div>
+      </div>
       <div className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
-        {suggestions.map((product) => (
-          <Link
-            key={product.id}
-            href={`/product/${product.id}`}
-            className='group transition-transform hover:scale-[1.02]'
-          >
-            <div className='bg-muted relative mb-2 aspect-square overflow-hidden rounded-xl'>
-              <Image
-                src={product.images?.[0] || '/placeholder.png'}
-                alt={product.name as string}
-                fill
-                className='object-cover transition-transform duration-300 group-hover:scale-105'
-                sizes='(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw'
-              />
+        {suggestions.map((product) => {
+          const payload: CartItemPayload = {
+            product_id: product.id,
+            product_name: product.name,
+            price: product.price,
+            image_url: product.images?.[0],
+            stock: product.stock
+          };
+
+          return (
+            <div key={product.id} className='group relative'>
+              <Link href={`/product/${product.id}`} className='block'>
+                <div className='bg-muted relative mb-2 aspect-square overflow-hidden rounded-xl'>
+                  <Image
+                    src={product.images?.[0] || '/placeholder.png'}
+                    alt={product.name as string}
+                    fill
+                    className='object-cover transition-transform duration-300 group-hover:scale-105'
+                    sizes='(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw'
+                  />
+                </div>
+                <p className='group-hover:text-accent line-clamp-2 text-sm leading-snug font-medium transition-colors'>
+                  {product.name}
+                </p>
+                <div className='mt-1 flex items-baseline gap-1.5 text-sm'>
+                  <span className='font-semibold tabular-nums'>{formatPrice(product.price)}</span>
+                  {product.compare_at_price && product.compare_at_price > Number(product.price) && (
+                    <span className='text-muted-foreground text-xs tabular-nums line-through'>
+                      {formatPrice(product.compare_at_price)}
+                    </span>
+                  )}
+                </div>
+              </Link>
+              <Button
+                type='button'
+                size='icon-sm'
+                variant='secondary'
+                className='absolute top-2 right-2 rounded-full opacity-0 shadow-sm transition-opacity group-hover:opacity-100'
+                aria-label={`Add ${product.name} to cart`}
+                onClick={() => increment(payload)}
+              >
+                <IconPlus className='h-4 w-4' />
+              </Button>
             </div>
-            <p className='group-hover:text-accent line-clamp-1 text-sm font-medium transition-colors'>
-              {product.name}
-            </p>
-            <div className='flex items-baseline gap-1.5 text-sm'>
-              <span className='font-semibold'>${product.price}</span>
-              {product.compare_at_price && product.compare_at_price > Number(product.price) && (
-                <span className='text-muted-foreground text-xs line-through'>
-                  ${product.compare_at_price}
-                </span>
-              )}
-            </div>
-          </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

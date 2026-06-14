@@ -19,7 +19,9 @@ import {
 import type { GeocodedAddress, GeoCoordinates } from '@/lib/geocoding/types';
 import { cn } from '@/lib/utils';
 
-import { configureLeafletIcons } from './leaflet-icon';
+import { createDeliveryMapIcon } from './leaflet-icon';
+
+const DEFAULT_MAP_HEIGHT = 'h-[min(52vh,420px)] min-h-[280px] sm:min-h-[360px]';
 
 const DEFAULT_CENTER: GeoCoordinates = {
   latitude: 40.7128,
@@ -31,6 +33,10 @@ const SELECTED_ZOOM = 16;
 
 interface DeliveryLocationPickerProps {
   value?: GeoCoordinates | null;
+  initialAddress?: GeocodedAddress | null;
+  initialSearchQuery?: string;
+  skipInitialReverseGeocode?: boolean;
+  mapClassName?: string;
   onChange: (coords: GeoCoordinates) => void;
   onAddressResolved?: (address: GeocodedAddress) => void;
   className?: string;
@@ -128,22 +134,35 @@ function InitialGeocodeResolver({
  */
 export function DeliveryLocationPicker({
   value,
+  initialAddress,
+  initialSearchQuery,
+  skipInitialReverseGeocode = false,
+  mapClassName,
   onChange,
   onAddressResolved,
   className
 }: DeliveryLocationPickerProps) {
+  const markerIcon = useMemo(() => createDeliveryMapIcon(), []);
   const [position, setPosition] = useState<GeoCoordinates>(value ?? DEFAULT_CENTER);
-  const [resolvedAddress, setResolvedAddress] = useState<GeocodedAddress | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [resolvedAddress, setResolvedAddress] = useState<GeocodedAddress | null>(
+    initialAddress ?? null
+  );
+  const [searchQuery, setSearchQuery] = useState(
+    initialSearchQuery ?? initialAddress?.displayName ?? ''
+  );
   const [searchResults, setSearchResults] = useState<GeocodedAddress[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
-  const [flyTarget, setFlyTarget] = useState<GeoCoordinates | null>(null);
+  const [flyTarget, setFlyTarget] = useState<GeoCoordinates | null>(value ?? null);
+  const externalValueKey = value ? `${value.latitude},${value.longitude}` : null;
+  const [syncedExternalValueKey, setSyncedExternalValueKey] = useState(externalValueKey);
 
-  useEffect(() => {
-    configureLeafletIcons();
-  }, []);
+  if (value && externalValueKey !== syncedExternalValueKey) {
+    setSyncedExternalValueKey(externalValueKey);
+    setPosition(value);
+    setFlyTarget(value);
+  }
 
   const markerPosition = useMemo<LatLngExpression>(
     () => [position.latitude, position.longitude],
@@ -278,7 +297,7 @@ export function DeliveryLocationPicker({
           center={markerPosition}
           zoom={DEFAULT_ZOOM}
           scrollWheelZoom
-          className='z-0 h-[min(52vh,420px)] min-h-[280px] w-full sm:min-h-[360px]'
+          className={cn('delivery-location-map z-0 w-full', mapClassName ?? DEFAULT_MAP_HEIGHT)}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -291,17 +310,20 @@ export function DeliveryLocationPicker({
               onComplete={() => setFlyTarget(null)}
             />
           )}
-          <InitialGeocodeResolver
-            coords={position}
-            onResolved={(address) => {
-              setResolvedAddress(address);
-              onAddressResolved?.(address);
-            }}
-            onResolvingChange={setIsResolving}
-          />
+          {!skipInitialReverseGeocode && (
+            <InitialGeocodeResolver
+              coords={position}
+              onResolved={(address) => {
+                setResolvedAddress(address);
+                onAddressResolved?.(address);
+              }}
+              onResolvingChange={setIsResolving}
+            />
+          )}
           <MapClickHandler onSelect={updatePosition} />
           <Marker
             draggable
+            icon={markerIcon}
             position={markerPosition}
             eventHandlers={{
               dragend(event) {

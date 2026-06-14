@@ -3,7 +3,7 @@
 
 import { IconCheck, IconEdit, IconMapPin, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { AppDialog } from '@/components/app-dialog';
@@ -33,7 +33,13 @@ import type {
   DtoCreateAddressRequestAddressType
 } from '~/src/services/-addresses-post.schemas';
 
-import { addressFormSchema } from '../account.schema';
+import { addressFormSchema, type AddressFormValues } from '../account.schema';
+import {
+  addressToFormValues,
+  EMPTY_ADDRESS_FORM_VALUES,
+  formValuesToGeocodedSeed,
+  mergeGeocodedAddress
+} from '../address-form-utils';
 import { AddressMapPickerDialog } from '../components/address-map-picker-dialog';
 
 export function AccountAddresses() {
@@ -41,6 +47,9 @@ export function AccountAddresses() {
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
   const [mapCoordinates, setMapCoordinates] = useState<GeoCoordinates | null>(null);
+  const [mapPickerSeed, setMapPickerSeed] = useState<GeocodedAddress | null>(null);
+  const [dialogInitialValues, setDialogInitialValues] =
+    useState<AddressFormValues>(EMPTY_ADDRESS_FORM_VALUES);
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -55,20 +64,7 @@ export function AccountAddresses() {
   const deleteAddress = useDeleteAddressesId();
 
   const form = useAppForm({
-    defaultValues: {
-      label: '',
-      firstName: '',
-      lastName: '',
-      street: '',
-      apartment: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: 'United States',
-      phone: '',
-      isDefault: false,
-      address_type: 'both'
-    },
+    defaultValues: EMPTY_ADDRESS_FORM_VALUES,
     validators: {
       onChange: addressFormSchema,
       onBlur: addressFormSchema
@@ -110,6 +106,7 @@ export function AccountAddresses() {
 
           setIsAddressDialogOpen(false);
           setEditingAddressId(null);
+          setDialogInitialValues(EMPTY_ADDRESS_FORM_VALUES);
           form.reset();
         } catch (error: any) {
           const message = error?.response?.data?.message || 'Something went wrong';
@@ -119,60 +116,41 @@ export function AccountAddresses() {
     }
   });
 
+  useEffect(() => {
+    if (!isAddressDialogOpen) return;
+    form.reset(dialogInitialValues);
+  }, [dialogInitialValues, form, isAddressDialogOpen]);
+
   const handleAddNewAddress = () => {
     setEditingAddressId(null);
-
-    form.reset({
-      label: '',
-      firstName: '',
-      lastName: '',
-      street: '',
-      apartment: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: 'United States',
-      phone: '',
-      isDefault: false,
-      address_type: 'both'
-    });
+    setDialogInitialValues(EMPTY_ADDRESS_FORM_VALUES);
     setMapCoordinates(null);
     setIsAddressDialogOpen(true);
   };
 
+  const handleOpenMapPicker = () => {
+    setMapPickerSeed(formValuesToGeocodedSeed(form.state.values, mapCoordinates));
+    setIsMapPickerOpen(true);
+  };
+
   const applyGeocodedAddress = (address: GeocodedAddress) => {
-    form.setFieldValue('street', address.street);
-    form.setFieldValue('city', address.city);
-    form.setFieldValue('state', address.state);
-    form.setFieldValue('zipCode', address.zipCode);
-    form.setFieldValue('country', address.country);
+    const merged = mergeGeocodedAddress(form.state.values, address);
+
+    form.setFieldValue('street', merged.street);
+    form.setFieldValue('city', merged.city);
+    form.setFieldValue('state', merged.state);
+    form.setFieldValue('zipCode', merged.zipCode);
+    form.setFieldValue('country', merged.country);
     setMapCoordinates({
       latitude: address.latitude,
       longitude: address.longitude
     });
-    toast.success('Delivery location applied to the form');
+    toast.success('Delivery location updated');
   };
 
   const handleEditAddress = (address: ModelsAddress) => {
     setEditingAddressId(address.id as number);
-    // Extract first/last name from recipient_name
-    const nameParts = (address.recipient_name || '').split(' ');
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
-    form.reset({
-      label: address.instructions || '',
-      firstName,
-      lastName,
-      street: address.address_line1,
-      apartment: address.address_line2 || '',
-      city: address.city,
-      state: address.state ?? '',
-      zipCode: address.postal_code,
-      country: address.country,
-      phone: address.phone,
-      isDefault: address.is_default ?? false,
-      address_type: address.address_type ?? ''
-    });
+    setDialogInitialValues(addressToFormValues(address));
     setMapCoordinates(null);
     setIsAddressDialogOpen(true);
   };
@@ -246,7 +224,7 @@ export function AccountAddresses() {
                 type='button'
                 variant='outline'
                 className='w-full rounded-full sm:w-auto'
-                onClick={() => setIsMapPickerOpen(true)}
+                onClick={handleOpenMapPicker}
               >
                 <IconMapPin className='mr-2 h-4 w-4' />
                 Pick delivery location on map
@@ -307,6 +285,7 @@ export function AccountAddresses() {
         open={isMapPickerOpen}
         onOpenChange={setIsMapPickerOpen}
         initialCoordinates={mapCoordinates}
+        initialAddress={mapPickerSeed}
         onConfirm={applyGeocodedAddress}
       />
 

@@ -21,7 +21,11 @@ import { handleApiError } from './handle-api-error';
 import { logger } from './logger';
 import type { ApiClientOptions, ApiErrorResponse } from './type';
 
+/** Direct Go API URL for server-side calls (Server Actions, route handlers). */
 export const BASE_URL = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:8080/api/v1';
+
+/** Same-origin path proxied to BASE_URL via next.config rewrites (browser only). */
+const BROWSER_API_BASE_URL = '/api/v1';
 
 const NEXT_API = Axios.create({
   baseURL: '',
@@ -29,7 +33,7 @@ const NEXT_API = Axios.create({
 });
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: BASE_URL,
+  baseURL: typeof window === 'undefined' ? BASE_URL : BROWSER_API_BASE_URL,
   withCredentials: true,
   timeout: APP_CONFIG.API_DEFAULT_TIMEOUT,
   headers: {

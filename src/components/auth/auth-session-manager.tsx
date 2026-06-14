@@ -20,14 +20,6 @@ export function AuthSessionManager() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-      return;
-    }
-
     const scheduleRefresh = () => {
       const token = getClientAccessToken();
       if (!token || shouldRefreshAccessToken(token)) {
@@ -77,16 +69,29 @@ export function AuthSessionManager() {
           }
         }
 
-        clearSession();
+        if (isAuthenticated) {
+          clearSession();
+        }
       } catch {
-        clearSession();
+        if (isAuthenticated) {
+          clearSession();
+        }
       }
     };
 
-    void bootstrapAuthSession().then(() => scheduleRefresh());
+    void bootstrapAuthSession().then((token) => {
+      if (token) {
+        scheduleRefresh();
+      }
+    });
 
     const onFocus = () => {
-      void bootstrapAuthSession().then(() => scheduleRefresh());
+      void bootstrapAuthSession().then((token) => {
+        if (token) {
+          void refreshUser();
+          scheduleRefresh();
+        }
+      });
     };
 
     window.addEventListener('focus', onFocus);

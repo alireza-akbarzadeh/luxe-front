@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 import { notFound } from 'next/navigation';
 
+import { OrderNumber } from '@/components/order-number';
 import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
@@ -135,7 +136,8 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
         >
           <h1 className='mb-2 text-3xl font-bold md:text-4xl'>Thank you for your order!</h1>
           <p className='text-muted-foreground text-lg'>
-            Order #{currentOrder.order_number} –{' '}
+            Order{' '}
+            <OrderNumber value={currentOrder.order_number ?? '—'} size='lg' className='inline' /> –{' '}
             <span className='font-medium text-green-600 capitalize'>{currentStatus}</span>
           </p>
           <p className='text-muted-foreground mt-1 flex items-center justify-center gap-1 text-sm'>

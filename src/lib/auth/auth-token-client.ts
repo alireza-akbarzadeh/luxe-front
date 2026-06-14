@@ -5,6 +5,7 @@
  */
 
 import { isAccessTokenExpired } from './auth-jwt';
+import { notifyAuthSessionChanged } from './auth-session-events';
 
 let accessToken: string | null = null;
 let tokenPromise: Promise<string | null> | null = null;
@@ -15,11 +16,13 @@ export function getClientAccessToken(): string | null {
 
 export function setClientAccessToken(token: string | null): void {
   accessToken = token;
+  notifyAuthSessionChanged();
 }
 
 export function clearClientAccessToken(): void {
   accessToken = null;
   tokenPromise = null;
+  notifyAuthSessionChanged();
 }
 
 /**
