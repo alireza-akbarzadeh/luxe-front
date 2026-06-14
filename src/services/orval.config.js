@@ -315,6 +315,9 @@ module.exports = [
                 email: {
                   type: 'string'
                 },
+                email_verified_at: {
+                  type: 'string'
+                },
                 first_name: {
                   type: 'string'
                 },
@@ -24050,10 +24053,7 @@ module.exports = [
                   type: 'string'
                 },
                 value: {
-                  items: {
-                    type: 'integer'
-                  },
-                  type: 'array'
+                  type: 'object'
                 }
               },
               type: 'object'
@@ -24291,10 +24291,7 @@ module.exports = [
                   type: 'string'
                 },
                 value: {
-                  items: {
-                    type: 'integer'
-                  },
-                  type: 'array'
+                  type: 'object'
                 }
               },
               type: 'object'
@@ -24438,10 +24435,7 @@ module.exports = [
                   type: 'string'
                 },
                 value: {
-                  items: {
-                    type: 'integer'
-                  },
-                  type: 'array'
+                  type: 'object'
                 }
               },
               required: ['value'],
@@ -24479,10 +24473,7 @@ module.exports = [
                   type: 'string'
                 },
                 value: {
-                  items: {
-                    type: 'integer'
-                  },
-                  type: 'array'
+                  type: 'object'
                 }
               },
               type: 'object'

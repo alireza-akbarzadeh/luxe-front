@@ -5,9 +5,11 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
+export type DtoSetSettingRequestValue = { [key: string]: unknown };
+
 export interface DtoSetSettingRequest {
   description?: string;
-  value: number[];
+  value: DtoSetSettingRequestValue;
 }
 
 export interface UtilsResponse {
@@ -17,12 +19,14 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
+export type DtoSettingResponseValue = { [key: string]: unknown };
+
 export interface DtoSettingResponse {
   created_at?: string;
   description?: string;
   key?: string;
   updated_at?: string;
-  value?: number[];
+  value?: DtoSettingResponseValue;
 }
 
 export type PutSettingsKey200 = UtilsResponse & {

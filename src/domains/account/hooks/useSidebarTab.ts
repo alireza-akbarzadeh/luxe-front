@@ -4,7 +4,15 @@ import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import type { AccountTab } from '../data';
 
-const tabs = ['overview', 'orders', 'wishlist', 'addresses', 'payment', 'settings'] as const;
+const tabs = [
+  'overview',
+  'orders',
+  'wishlist',
+  'addresses',
+  'payment',
+  'notifications',
+  'settings'
+] as const;
 
 export function useSidebarTab() {
   const [activeTab, setActiveTab] = useQueryState(

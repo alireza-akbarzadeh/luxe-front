@@ -12,12 +12,14 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
+export type DtoSettingResponseValue = { [key: string]: unknown };
+
 export interface DtoSettingResponse {
   created_at?: string;
   description?: string;
   key?: string;
   updated_at?: string;
-  value?: number[];
+  value?: DtoSettingResponseValue;
 }
 
 export type GetSettingsKey200 = UtilsResponse & {

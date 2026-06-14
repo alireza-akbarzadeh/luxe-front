@@ -1,4 +1,5 @@
 import {
+  IconBell,
   IconHeart,
   IconMapPin,
   IconPackage,
@@ -8,7 +9,14 @@ import {
   type TablerIcon
 } from '@tabler/icons-react';
 
-export type AccountTab = 'overview' | 'orders' | 'wishlist' | 'addresses' | 'payment' | 'settings';
+export type AccountTab =
+  | 'overview'
+  | 'orders'
+  | 'wishlist'
+  | 'addresses'
+  | 'payment'
+  | 'notifications'
+  | 'settings';
 
 type MenuItems = {
   id: AccountTab;
@@ -22,6 +30,7 @@ const menuItems: MenuItems[] = [
   { id: 'wishlist', label: 'Wishlist', icon: IconHeart },
   { id: 'addresses', label: 'Addresses', icon: IconMapPin },
   { id: 'payment', label: 'Wallet', icon: IconWallet },
+  { id: 'notifications', label: 'Notifications', icon: IconBell },
   { id: 'settings', label: 'Settings', icon: IconSettings }
 ];
 
