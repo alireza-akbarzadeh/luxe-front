@@ -127,4 +127,19 @@ const codeGenerator = async (baseURL, destination) => {
 };
 
 const destination = './src';
-codeGenerator('http://localhost:8080', destination);
+
+function resolveOpenApiBaseUrl() {
+  const explicit = process.env['OPENAPI_BASE_URL']?.replace(/\/$/, '');
+  if (explicit) return explicit;
+
+  const apiUrl = process.env['NEXT_PUBLIC_API_URL']?.replace(/\/$/, '');
+  if (apiUrl) {
+    return apiUrl.replace(/\/api\/v1$/i, '');
+  }
+
+  return 'http://localhost:8080';
+}
+
+const openApiBaseUrl = resolveOpenApiBaseUrl();
+log(`Using OpenAPI base URL: ${openApiBaseUrl}`);
+codeGenerator(openApiBaseUrl, destination);

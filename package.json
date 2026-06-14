@@ -16,6 +16,7 @@
     "postinstall": "node scripts/playwright-install.mjs",
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "pnpm api:gen",
     "preview": "next start",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm lint:fix",
