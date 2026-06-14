@@ -40,18 +40,38 @@ export function ColumnVisibilityDropdown<TData>() {
           </Tooltip>
         </TooltipProvider>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-40'>
+      <DropdownMenuContent align='end' className='w-48'>
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {columns.map((column) => (
           <DropdownMenuCheckboxItem
             key={column.id}
             checked={column.getIsVisible()}
-            onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            onSelect={(event) => event.preventDefault()}
+            onCheckedChange={(value) => table.getColumn(column.id)?.toggleVisibility(!!value)}
           >
             {typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id}
           </DropdownMenuCheckboxItem>
         ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          checked={columns.every((col) => col.getIsVisible())}
+          onSelect={(event) => event.preventDefault()}
+          onCheckedChange={() => {
+            table.toggleAllColumnsVisible(true);
+          }}
+        >
+          Show all
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={columns.every((col) => !col.getIsVisible())}
+          onSelect={(event) => event.preventDefault()}
+          onCheckedChange={() => {
+            table.toggleAllColumnsVisible(false);
+          }}
+        >
+          Hide all
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -127,21 +147,25 @@ export function ExportButton<TData>() {
   );
 }
 
-export function BulkActionsBar<TData>() {
-  const { table } = useTableContext<TData>();
-  const selectedRows = table.getSelectedRowModel().rows;
+interface BulkActionsBarProps {
+  onDelete?: () => void;
+}
 
-  if (selectedRows.length === 0) return null;
+export function BulkActionsBar<TData>({ onDelete }: BulkActionsBarProps) {
+  const { table, state } = useTableContext<TData>();
+  const selectedCount = state.selectedRowCount;
+
+  if (selectedCount === 0) return null;
 
   return (
     <div className='bg-primary/10 flex items-center gap-3 rounded-lg px-3 py-1.5 text-sm'>
-      <span className='font-medium'>{selectedRows.length} selected</span>
+      <span className='font-medium'>{selectedCount} selected</span>
       <Button
         variant='destructive'
         size='sm'
         className='h-7 px-2 text-xs'
         onClick={() => {
-          table.resetRowSelection();
+          onDelete?.();
         }}
       >
         Delete

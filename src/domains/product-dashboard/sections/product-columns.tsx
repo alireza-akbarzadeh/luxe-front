@@ -2,31 +2,14 @@ import type { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import { formatPrice } from '~/src/domains/home/lib/home-utils';
 import { StoreRatingStars } from '~/src/domains/store/components/store-rating-start';
 import type { DtoProductWithLike } from '~/src/services/-products-get.schemas';
 
 export const productColumns: ColumnDef<DtoProductWithLike>[] = [
-  // Selection checkbox
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<DtoProductWithLike>(),
   // Product Image (first)
   {
     accessorKey: 'images',

@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { useDeferredValue } from 'react';
 
@@ -24,34 +25,23 @@ export function CategoriesDomains() {
     <Table.Root
       data={treeData}
       columns={categoryColumns}
-      globalFilter={tableState.globalFilter}
-      onGlobalFilterChange={tableState.setGlobalFilter}
-      sorting={tableState.sorting}
-      onSortingChange={tableState.setSorting}
-      columnFilters={tableState.columnFilters}
-      onColumnFiltersChange={tableState.setColumnFilters}
-      expanded={tableState.expanded}
-      onExpandedChange={tableState.setExpanded}
-      getSubRows={(row: ModelsCategory) => {
-        return row.children;
-      }}
+      tableState={tableState}
+      getSubRows={(row: ModelsCategory) => row.children}
     >
       <Table.Toolbar
-        searchPlaceholder='Search by name or SKU'
+        searchPlaceholder='Search by name or slug'
         showRefresh
         onRefresh={refetch}
         isLoading={isFetching}
         showCreate
         onCreate={() => push('/dashboard/categories/create')}
         showClear
-        onClearFilter={() => tableState.setGlobalFilter('')}
         showColumnVisibility
         showBulkActions
-        globalFilter={tableState.globalFilter}
+        onDelete={() => console.log('jere')}
       />
       <Table.Grid<ModelsCategory>
         onRowDoubleClick={(row) => push(`/dashboard/categories/edit/${row.original.id}`)}
-        columnsCount={8}
         isLoading={isLoading}
       />
       <Table.Pagination

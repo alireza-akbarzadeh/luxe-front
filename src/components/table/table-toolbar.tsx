@@ -18,7 +18,6 @@ export function TableToolbar<TData>(props: TableToolbarProps) {
   const {
     showSearch = true,
     searchPlaceholder,
-    globalFilter,
     isLoading,
     children,
     showRefresh,
@@ -30,22 +29,32 @@ export function TableToolbar<TData>(props: TableToolbarProps) {
     showColumnVisibility = true,
     showSorting = true,
     showExport = true,
-    showBulkActions = true
+    showBulkActions = true,
+    onDelete
   } = props;
 
-  const { table } = useTableContext<TData>();
+  const { table, state } = useTableContext<TData>();
+  const globalFilter = table.getState().globalFilter ?? state.globalFilter;
   const filteredCount = table.getFilteredRowModel().rows.length;
+
+  const handleClearFilter = () => {
+    if (onClearFilter) {
+      onClearFilter();
+      return;
+    }
+    state.resetFilters();
+  };
 
   return (
     <div className='border-border/40 bg-card/40 flex flex-wrap items-center gap-3 rounded-t-xl border border-b-0 p-3 backdrop-blur-2xl'>
       {showSearch && (
         <div className='flex min-w-50 flex-1 items-center gap-2'>
           <TableSearch placeholder={searchPlaceholder ?? 'Search by name or slug'} />
-          {globalFilter && showClear && onClearFilter && (
+          {globalFilter && showClear && (
             <Button
               variant='ghost'
               size='sm'
-              onClick={onClearFilter}
+              onClick={handleClearFilter}
               className='text-muted-foreground hover:text-foreground h-8 px-2 text-xs'
             >
               Clear
@@ -117,7 +126,7 @@ export function TableToolbar<TData>(props: TableToolbarProps) {
         {children}
       </div>
 
-      {showBulkActions && <BulkActionsBar<TData> />}
+      {showBulkActions && onDelete && <BulkActionsBar<TData> onDelete={onDelete} />}
     </div>
   );
 }

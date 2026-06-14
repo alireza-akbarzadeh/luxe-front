@@ -1,23 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import { DATE_FORMATS, formatDate } from '~/src/lib/date';
 import type { DtoBrandResponse } from '~/src/services/-brands-get.schemas';
 
 export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
-  {
-    id: 'select',
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<DtoBrandResponse>(),
 
   {
     id: 'logo',

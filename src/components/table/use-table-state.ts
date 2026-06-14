@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   ColumnFiltersState,
+  ExpandedState,
   OnChangeFn,
   PaginationState,
   RowSelectionState,
@@ -8,76 +8,68 @@ import type {
 } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
 
+export interface UseTableStateOptions {
+  initialPageSize?: number;
+  initialPageIndex?: number;
+}
+
 /**
- * Unified table state management hook
- * Reduces prop drilling and encapsulates all table state logic
+ * Unified table state hook.
+ * All setters accept TanStack's OnChangeFn pattern (value or updater function).
  */
-export function useTableState<TData = unknown>({
+export function useTableState({
   initialPageSize = 20,
   initialPageIndex = 0
-}: { initialPageSize?: number; initialPageIndex?: number } = {}) {
-  const [pagination, setPagination] = useState<PaginationState>({
+}: UseTableStateOptions = {}) {
+  const [pagination, setPaginationState] = useState<PaginationState>({
     pageIndex: initialPageIndex,
     pageSize: initialPageSize
   });
-
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [expanded, setExpanded] = useState({});
+  const [globalFilter, setGlobalFilterState] = useState('');
+  const [sorting, setSortingState] = useState<SortingState>([]);
+  const [columnFilters, setColumnFiltersState] = useState<ColumnFiltersState>([]);
+  const [expanded, setExpandedState] = useState<ExpandedState>({});
   const [rowSelection, setRowSelectionState] = useState<RowSelectionState>({});
+  const [columnVisibility, setColumnVisibilityState] = useState<Record<string, boolean>>({});
 
-  // Handlers that accept both value and updater functions (TanStack OnChangeFn)
-  const handlePaginationChange = useCallback<OnChangeFn<PaginationState>>((updaterOrValue) => {
-    setPagination((old) =>
-      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
-    );
+  const resolveUpdater = <T>(updaterOrValue: T | ((old: T) => T), old: T): T =>
+    typeof updaterOrValue === 'function'
+      ? (updaterOrValue as (old: T) => T)(old)
+      : updaterOrValue;
+
+  const setPagination = useCallback<OnChangeFn<PaginationState>>((updaterOrValue) => {
+    setPaginationState((old) => resolveUpdater(updaterOrValue, old));
   }, []);
 
-  // Reset pagination when filters change
-  const handleGlobalFilterChange = useCallback((value: string) => {
-    setGlobalFilter(value);
-    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  const setGlobalFilter = useCallback<OnChangeFn<string>>((updaterOrValue) => {
+    setGlobalFilterState((old) => {
+      const next = resolveUpdater(updaterOrValue, old);
+      return next;
+    });
+    setPaginationState((p) => ({ ...p, pageIndex: 0 }));
   }, []);
 
-  const handleColumnFiltersChange = useCallback<OnChangeFn<ColumnFiltersState>>(
-    (updaterOrValue) => {
-      setColumnFilters((old) =>
-        typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
-      );
-      setPagination((p) => ({ ...p, pageIndex: 0 }));
-    },
-    []
-  );
-
-  const handleSortingChange = useCallback<OnChangeFn<SortingState>>((updaterOrValue) => {
-    setSorting((old) =>
-      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
-    );
-    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  const setSorting = useCallback<OnChangeFn<SortingState>>((updaterOrValue) => {
+    setSortingState((old) => resolveUpdater(updaterOrValue, old));
+    setPaginationState((p) => ({ ...p, pageIndex: 0 }));
   }, []);
 
-  const handleExpandedChange = useCallback<OnChangeFn<any>>((updaterOrValue) => {
-    setExpanded((old) =>
-      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
-    );
+  const setColumnFilters = useCallback<OnChangeFn<ColumnFiltersState>>((updaterOrValue) => {
+    setColumnFiltersState((old) => resolveUpdater(updaterOrValue, old));
+    setPaginationState((p) => ({ ...p, pageIndex: 0 }));
   }, []);
 
-  const handleRowSelectionChange = useCallback<OnChangeFn<RowSelectionState>>((updaterOrValue) => {
-    setRowSelectionState((old) =>
-      typeof updaterOrValue === 'function' ? updaterOrValue(old) : updaterOrValue
-    );
+  const setExpanded = useCallback<OnChangeFn<ExpandedState>>((updaterOrValue) => {
+    setExpandedState((old) => resolveUpdater(updaterOrValue, old));
   }, []);
 
-  // Slice data for current page when using manual pagination
-  const getPageData = useCallback(
-    (data: TData[]): TData[] => {
-      const start = pagination.pageIndex * pagination.pageSize;
-      const end = start + pagination.pageSize;
-      return data.slice(start, end);
-    },
-    [pagination.pageIndex, pagination.pageSize]
-  );
+  const setRowSelection = useCallback<OnChangeFn<RowSelectionState>>((updaterOrValue) => {
+    setRowSelectionState((old) => resolveUpdater(updaterOrValue, old));
+  }, []);
+
+  const setColumnVisibility = useCallback<OnChangeFn<Record<string, boolean>>>((updaterOrValue) => {
+    setColumnVisibilityState((old) => resolveUpdater(updaterOrValue, old));
+  }, []);
 
   const selectedRowCount = useMemo(
     () => Object.values(rowSelection).filter(Boolean).length,
@@ -85,30 +77,36 @@ export function useTableState<TData = unknown>({
   );
 
   const resetRowSelection = useCallback(() => setRowSelectionState({}), []);
+  const resetPagination = useCallback(
+    () => setPaginationState((p) => ({ ...p, pageIndex: 0 })),
+    []
+  );
+  const resetFilters = useCallback(() => {
+    setGlobalFilterState('');
+    setColumnFiltersState([]);
+    setPaginationState((p) => ({ ...p, pageIndex: 0 }));
+  }, []);
 
   return useMemo(
     () => ({
-      // State
       pagination,
       globalFilter,
       sorting,
       columnFilters,
       expanded,
       rowSelection,
+      columnVisibility,
       selectedRowCount,
-
-      // Setters (compatible with TanStack's OnChangeFn)
-      setPagination: handlePaginationChange,
-      setGlobalFilter: handleGlobalFilterChange,
-      setSorting: handleSortingChange,
-      setColumnFilters: handleColumnFiltersChange,
-      setExpanded: handleExpandedChange,
-      setRowSelection: handleRowSelectionChange,
-
-      // Utilities
-      getPageData,
-      resetPagination: () => setPagination((p) => ({ ...p, pageIndex: 0 })),
-      resetRowSelection
+      setPagination,
+      setGlobalFilter,
+      setSorting,
+      setColumnFilters,
+      setExpanded,
+      setRowSelection,
+      setColumnVisibility,
+      resetPagination,
+      resetRowSelection,
+      resetFilters
     }),
     [
       pagination,
@@ -117,15 +115,20 @@ export function useTableState<TData = unknown>({
       columnFilters,
       expanded,
       rowSelection,
+      columnVisibility,
       selectedRowCount,
-      handleGlobalFilterChange,
-      handleSortingChange,
-      handleColumnFiltersChange,
-      handleExpandedChange,
-      handleRowSelectionChange,
-      handlePaginationChange,
-      getPageData,
-      resetRowSelection
+      setPagination,
+      setGlobalFilter,
+      setSorting,
+      setColumnFilters,
+      setExpanded,
+      setRowSelection,
+      setColumnVisibility,
+      resetPagination,
+      resetRowSelection,
+      resetFilters
     ]
   );
 }
+
+export type TableState = ReturnType<typeof useTableState>;

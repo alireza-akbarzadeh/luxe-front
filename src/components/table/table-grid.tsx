@@ -25,7 +25,8 @@ import { TableLoading } from '~/src/components/table/table-loading';
 import { useTableContext } from './table-context';
 
 interface TableGridProps<TData> {
-  columnsCount: number;
+  /** Auto-derived from visible columns when omitted */
+  columnsCount?: number;
   onRowDoubleClick?: (row: Row<TData>) => void;
   onClick?: (row: Row<TData>) => void;
   getDetailsUrl?: (row: Row<TData>) => string;
@@ -38,6 +39,7 @@ export function TableGrid<TData>(props: TableGridProps<TData>) {
     props;
   const { table } = useTableContext<TData>();
   const rows = table.getRowModel().rows;
+  const resolvedColumnsCount = columnsCount ?? table.getVisibleLeafColumns().length;
 
   const [activeColumnId, setActiveColumnId] = React.useState<string | null>(null);
 
@@ -51,7 +53,7 @@ export function TableGrid<TData>(props: TableGridProps<TData>) {
   };
 
   if (isLoading) {
-    return <TableLoading columnsCount={columnsCount} rowsCount={20} />;
+    return <TableLoading columnsCount={resolvedColumnsCount} rowsCount={20} />;
   }
 
   return (
@@ -91,9 +93,14 @@ export function TableGrid<TData>(props: TableGridProps<TData>) {
                     'hover:bg-primary/5 data-[state=selected]:bg-primary/5 cursor-pointer transition-colors'
                   )}
                   onDoubleClick={() => onRowDoubleClick?.(row)}
-                  onClick={() => {
+                  onClick={(event) => {
+                    const target = event.target as HTMLElement;
+                    if (
+                      target.closest('button, input, a, [role="checkbox"], [data-slot="checkbox"]')
+                    ) {
+                      return;
+                    }
                     onClick?.(row);
-                    row.toggleSelected(!row.getIsSelected());
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -171,7 +178,7 @@ export function TableGrid<TData>(props: TableGridProps<TData>) {
           ) : (
             <TableRow className='hover:bg-transparent'>
               <TableCell
-                colSpan={columnsCount}
+                colSpan={resolvedColumnsCount}
                 className='text-muted-foreground h-48 text-center italic'
               >
                 No results found

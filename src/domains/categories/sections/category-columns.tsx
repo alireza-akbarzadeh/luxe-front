@@ -2,39 +2,13 @@ import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import { DATE_FORMATS, formatDate } from '~/src/lib/date';
 import type { ModelsCategory } from '~/src/services/-categories-get.schemas'; // adjust import path
 
 export const categoryColumns: ColumnDef<ModelsCategory>[] = [
-  {
-    id: 'select',
-    enableSorting: false,
-    enableHiding: false,
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected()
-            ? true
-            : table.getIsSomePageRowsSelected()
-              ? 'indeterminate'
-              : false
-        }
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<ModelsCategory>(),
   {
     id: 'expander',
     header: '',

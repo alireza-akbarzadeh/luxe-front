@@ -3,54 +3,88 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ──────────────────────────────────────────────────────────────
+   THEME: Obsidian Gold
+   A warm, editorial luxury palette. Neutrals are warm-tinted,
+   gold drives every accent, headlines use a high-contrast serif.
+   ────────────────────────────────────────────────────────────── */
+
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.94 0.04 95);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Surfaces & text — warm luxury neutrals */
+  --background: #ffffff;
+  --foreground: #0a0a0b;
+  --card: #ffffff;
+  --card-foreground: #0a0a0b;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0b;
+
+  /* Primary — obsidian for CTAs (black on warm white) */
+  --primary: #0a0a0b;
+  --primary-foreground: #f5f3ef;
+
+  /* Secondary / muted — warm sand surface */
+  --secondary: #f5f3ef;
+  --secondary-foreground: #0a0a0b;
+  --muted: #f0ede6;
+  --muted-foreground: #6b6760;
+
+  /* Accent — signature gold */
+  --accent: #c9a96e;
+  --accent-foreground: #0a0a0b;
+
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+
+  --border: #e7e2d8;
+  --input: #e7e2d8;
+  --ring: #c9a96e;
   --radius: 0.75rem;
+
+  /* Brand gold scale (dedicated, theme-agnostic usage) */
+  --gold: #c9a96e;
+  --gold-strong: #8b6914;
+  --gold-foreground: #0a0a0b;
+  --surface: #f5f3ef;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.32 0.04 95);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0a0a0b;
+  --foreground: #f5f3ef;
+  --card: #1a1a1f;
+  --card-foreground: #f5f3ef;
+  --popover: #1a1a1f;
+  --popover-foreground: #f5f3ef;
+
+  /* Primary — warm cream for CTAs (light on obsidian) */
+  --primary: #f5f3ef;
+  --primary-foreground: #0a0a0b;
+
+  --secondary: #1a1a1f;
+  --secondary-foreground: #f5f3ef;
+  --muted: #232328;
+  --muted-foreground: #9a9690;
+
+  /* Accent — warm gold reads brighter on dark */
+  --accent: #e8d5b7;
+  --accent-foreground: #0a0a0b;
+
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
+
   --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 18%);
-  --ring: oklch(0.556 0 0);
+  --input: oklch(1 0 0 / 16%);
+  --ring: #c9a96e;
+
+  --gold: #e8d5b7;
+  --gold-strong: #c9a96e;
+  --gold-foreground: #0a0a0b;
+  --surface: #1a1a1f;
 }
 
 @theme inline {
   --font-sans: 'Geist', 'Geist Fallback';
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-display: var(--font-playfair), 'Playfair Display', Georgia, 'Times New Roman', serif;
 
   /* v4 Variable Color Bindings */
   --color-background: var(--background);
@@ -73,6 +107,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  /* Brand gold utilities → text-gold, bg-gold, border-gold-strong, etc. */
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-surface: var(--surface);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -83,9 +123,43 @@
   * {
     @apply border-border outline-none;
   }
+
   body {
     @apply bg-background text-foreground;
     background-color: var(--background);
     color: var(--foreground);
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
+
+  /* Editorial serif headlines get tighter tracking + ligatures */
+  .font-display {
+    font-feature-settings: 'liga' 1, 'dlig' 1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Gold selection — a subtle luxury signature */
+  ::selection {
+    background-color: color-mix(in oklab, var(--gold) 35%, transparent);
+    color: var(--foreground);
+  }
+
+  /* Refined, on-brand scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--gold) 45%, transparent) transparent;
+  }
+}
+
+@utility text-gold-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--gold-strong) 0%,
+    var(--gold) 45%,
+    color-mix(in oklab, var(--gold) 70%, white) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }

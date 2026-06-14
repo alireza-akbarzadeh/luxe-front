@@ -1,23 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import type { ModelsShippingProviders } from '~/src/services/-checkout-post.schemas';
 
 export const shippingProviderColumns: ColumnDef<ModelsShippingProviders>[] = [
-  {
-    id: 'select',
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<ModelsShippingProviders>(),
 
   {
     accessorKey: 'name',

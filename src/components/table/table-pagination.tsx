@@ -36,11 +36,11 @@ export function TablePagination<TData>({
   showJumpToPage = false,
   pageSizeOptions = [10, 25, 50, 100, 250, 500]
 }: TablePaginationProps) {
-  const { table } = useTableContext<TData>();
+  const { table, state } = useTableContext<TData>();
   const [jumpPage, setJumpPage] = React.useState('');
 
-  const pageIndex = table.getState().pagination.pageIndex;
-  const pageSize = table.getState().pagination.pageSize;
+  const pageIndex = state.pagination.pageIndex;
+  const pageSize = state.pagination.pageSize;
   const pageCount = table.getPageCount();
   const rowCount = table.getRowCount();
 

@@ -1,24 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import { formatPrice } from '~/src/domains/home/lib/home-utils';
 import type { ModelsCoupon } from '~/src/services/-coupons-get.schemas';
 
 export const couponColumns: ColumnDef<ModelsCoupon>[] = [
-  // Selection column
-  {
-    id: 'select',
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<ModelsCoupon>(),
 
   // Coupon code (primary)
   {

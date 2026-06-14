@@ -10,12 +10,13 @@ import {
   IconUserMinus
 } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
+import { type ComponentType,useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 
 import { AppDialog } from '@/components/app-dialog';
 import { AdvancedFilterContent } from '@/components/table/advanced-filter-content';
-import { Table, useTableState } from '@/components/table/data-table';
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -25,60 +26,73 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { useGetUsers } from '@/services/-users-get';
-import type { GetUsers200DataUsersItem, GetUsersRole } from '@/services/-users-get.schemas';
+import type {
+  GetUsers200,
+  GetUsers200DataUsersItem,
+  GetUsersRole
+} from '@/services/-users-get.schemas';
 
 import { userColumns } from '../components/userColumns';
 
 export function UserManagementTable() {
   const { push } = useRouter();
-  const tableState = useTableState({ initialPageSize: 20 });
-  const deferredFilter = React.useDeferredValue(tableState.globalFilter);
 
-  // Derive server-side filter params from columnFilters
-  // API only supports: is_active (boolean) and role (exact match)
-  const isActiveFilter = tableState.columnFilters.find((f) => f.id === 'status')?.value as
-    | boolean
-    | undefined;
-  const roleFilter = tableState.columnFilters.find((f) => f.id === 'role')?.value as
-    | GetUsersRole
-    | undefined;
+  const getQueryParams = useCallback((state: TableState, filter: string) => {
+    const isActiveFilter = state.columnFilters.find((f) => f.id === 'status')?.value as
+      | boolean
+      | undefined;
+    const roleFilter = state.columnFilters.find((f) => f.id === 'role')?.value as
+      | GetUsersRole
+      | undefined;
 
-  const { data, error, isLoading, isFetching, refetch } = useGetUsers({
-    limit: tableState.pagination.pageSize,
-    offset: tableState.pagination.pageIndex * tableState.pagination.pageSize,
-    email: deferredFilter || undefined,
-    first_name: deferredFilter || undefined,
-    last_name: deferredFilter || undefined,
-    is_active: isActiveFilter,
-    role: roleFilter
+    return {
+      limit: state.pagination.pageSize,
+      offset: state.pagination.pageIndex * state.pagination.pageSize,
+      email: filter || undefined,
+      first_name: filter || undefined,
+      last_name: filter || undefined,
+      is_active: isActiveFilter,
+      role: roleFilter
+    };
+  }, []);
+
+  const getRows = useCallback(
+    (data: GetUsers200 | undefined) => data?.data?.users ?? [],
+    []
+  );
+
+  const getTotal = useCallback((data: GetUsers200 | undefined) => data?.data?.total ?? 0, []);
+
+  const serverTable = useServerTable({
+    columns: userColumns,
+    initialPageSize: 20,
+    getQueryParams,
+    getRows,
+    getTotal,
+    useQuery: useGetUsers
   });
 
-  const users = React.useMemo(() => data?.data?.users ?? [], [data?.data?.users]);
-  const total = data?.data?.total ?? 0;
-
-  const selectedUsers = React.useMemo(() => {
-    const selectedIds = Object.keys(tableState.rowSelection).filter(
-      (id) => tableState.rowSelection[id]
+  const selectedUsers = useMemo(() => {
+    const selectedIds = Object.keys(serverTable.tableState.rowSelection).filter(
+      (id) => serverTable.tableState.rowSelection[id]
     );
-    return users.filter((user) => selectedIds.includes(String(user.id)));
-  }, [tableState.rowSelection, users]);
+    return serverTable.rows.filter((user) => selectedIds.includes(String(user.id)));
+  }, [serverTable.tableState.rowSelection, serverTable.rows]);
 
-  // Segments mapped to is_active (the only status-like field the API supports)
   const applySegment = (segment: 'all' | 'active' | 'inactive' | 'admins') => {
     switch (segment) {
       case 'active':
-        tableState.setColumnFilters([{ id: 'status', value: true }]);
+        serverTable.tableState.setColumnFilters([{ id: 'status', value: true }]);
         break;
       case 'inactive':
-        tableState.setColumnFilters([{ id: 'status', value: false }]);
+        serverTable.tableState.setColumnFilters([{ id: 'status', value: false }]);
         break;
       case 'admins':
-        tableState.setColumnFilters([{ id: 'role', value: 'admin' }]);
+        serverTable.tableState.setColumnFilters([{ id: 'role', value: 'admin' }]);
         break;
       default:
-        tableState.setColumnFilters([]);
+        serverTable.tableState.setColumnFilters([]);
     }
-    tableState.setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     toast.success(`Switched to ${segment} segment`);
   };
 
@@ -89,39 +103,58 @@ export function UserManagementTable() {
 
   const handleDelete = () => {
     toast.error(`Suspending ${selectedUsers[0]?.id} users`);
-    // API call would go here
   };
 
-  if (error?.error) {
+  if (serverTable.isError && serverTable.error) {
+    const message =
+      typeof serverTable.error === 'object' &&
+      serverTable.error !== null &&
+      'message' in serverTable.error
+        ? String((serverTable.error as { message?: string }).message)
+        : 'Failed to load users';
+
     return (
       <div className='rounded-4xl border-2 border-dashed p-16 text-center'>
         <IconAlertTriangle className='text-destructive mx-auto mb-4 h-12 w-12' />
         <h3 className='text-lg font-bold tracking-tight uppercase italic'>Sync Error</h3>
-        <p className='text-muted-foreground text-sm font-medium'>{error.message}</p>
+        <p className='text-muted-foreground text-sm font-medium'>{message}</p>
       </div>
     );
   }
 
   return (
-    <Table.Root<GetUsers200DataUsersItem>
-      data={users}
-      columns={userColumns}
-      pagination={tableState.pagination}
-      onPaginationChange={tableState.setPagination}
-      globalFilter={tableState.globalFilter}
-      onGlobalFilterChange={tableState.setGlobalFilter}
-      sorting={tableState.sorting}
-      onSortingChange={tableState.setSorting}
-      columnFilters={tableState.columnFilters}
-      onColumnFiltersChange={tableState.setColumnFilters}
-      rowSelection={tableState.rowSelection}
-      onRowSelectionChange={tableState.setRowSelection}
-      manualPagination
-      pageCount={Math.ceil(total / tableState.pagination.pageSize)}
-      rowCount={total}
-      manualFiltering
-      enableRowSelection
-    >
+    <UserTableContent
+      serverTable={serverTable}
+      push={push}
+      applySegment={applySegment}
+      userStatusOptions={userStatusOptions}
+      handleDelete={handleDelete}
+    />
+  );
+}
+
+function UserTableContent({
+  serverTable,
+  push,
+  applySegment,
+  userStatusOptions,
+  handleDelete
+}: {
+  serverTable: ReturnType<typeof useServerTable<GetUsers200DataUsersItem, GetUsers200, object>>;
+  push: (path: string) => void;
+  applySegment: (segment: 'all' | 'active' | 'inactive' | 'admins') => void;
+  userStatusOptions: Array<{
+    label: string;
+    value: boolean;
+    icon: ComponentType<{ className?: string }>;
+    color: string;
+  }>;
+  handleDelete: () => void;
+}) {
+  const { tableState, isLoading, isFetching, refetch } = serverTable;
+
+  return (
+    <Table.Root {...serverTable.rootProps}>
       <Table.Toolbar
         searchPlaceholder='Search by name or email...'
         showRefresh
@@ -130,15 +163,11 @@ export function UserManagementTable() {
         showCreate
         onCreate={() => push('/dashboard/users/create')}
         showClear
-        onClearFilter={() => {
-          tableState.setGlobalFilter('');
-          tableState.setColumnFilters([]);
-        }}
+        onClearFilter={() => tableState.resetFilters()}
         showColumnVisibility
         showSorting
         showExport
         showBulkActions
-        globalFilter={tableState.globalFilter}
       >
         <Button variant='outline' className='border-none' onClick={handleDelete}>
           <IconTrash className='size-5' />
@@ -186,7 +215,6 @@ export function UserManagementTable() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Advanced Filter Dialog */}
         <AppDialog
           component='drawer'
           title='Advanced Parameters'
@@ -214,7 +242,6 @@ export function UserManagementTable() {
         </AppDialog>
       </Table.Toolbar>
 
-      {/* Status filter buttons (outside toolbar) */}
       <div className='border-border/40 bg-background/50 flex flex-wrap items-center justify-between border-b px-6 py-4'>
         <div className='flex flex-wrap gap-2'>
           {userStatusOptions.map((option) => {
@@ -238,7 +265,6 @@ export function UserManagementTable() {
                       { id: 'status', value: option.value }
                     ]);
                   }
-                  tableState.setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                 }}
               >
                 <option.icon className={cn('h-3.5 w-3.5', option.color)} />
@@ -248,13 +274,12 @@ export function UserManagementTable() {
           })}
         </div>
         <div className='text-primary bg-primary/10 border-primary/20 rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-          {users.length} Results
+          {serverTable.rows.length} Results
         </div>
       </div>
 
       <Table.Grid<GetUsers200DataUsersItem>
         onRowDoubleClick={(row) => push(`/dashboard/users/edit/${row.original.id}`)}
-        columnsCount={8}
         isLoading={isLoading}
       />
 

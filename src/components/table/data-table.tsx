@@ -9,37 +9,40 @@ import { TablePagination } from './table-pagination';
 import { TableSearch } from './table-search';
 import { TableStatusFilters } from './table-status-filters';
 import { TableToolbar } from './table-toolbar';
+import { useServerTable } from './use-server-table';
 import { useTableState } from './use-table-state';
 
-export { useTableState };
+export { useServerTable, useTableState };
+export { createSelectColumn } from './table-select-column';
+export type { TableControlledState } from './table-context';
+export type { TableState } from './use-table-state';
 
 /**
- * # Unified Data Table System
- * A compound component system powered by TanStack Table and React Context.
- * * ## Core Concepts:
- * 1. **Context Driven**: All sub-components must be wrapped in `<Table.Root>`.
- * 2. **Modular UI**: Sub-components (Search, Pagination, etc.) can be placed anywhere
- * within the Root to allow for flexible layouts (Mobile vs Desktop).
- * 3. **Prop-less Sync**: Sub-components pull the `table` instance automatically via context.
- * * ## Component Registry:
- * - `Root`: The Provider. Pass the `useReactTable` instance here.
- * - `Search`: Global or column-specific text filtering.
- * - `FilterTabs`: Categorical filtering (e.g., Roles).
- * - `StatusFilters`: Searchable dropdown for status-based filtering.
- * - `Body`: The actual table grid with sticky headers and scroll management.
- * - `Pagination`: Page navigation and row selection summary.
- * - `BulkActions`: Contextual buttons (Delete/Export) that appear when rows are selected.
- * - `Loading`: Skeleton state matching the table layout.
- * * @example
+ * Compound table system powered by TanStack Table + React Context.
+ *
+ * ## Quick start (server-driven)
  * ```tsx
- * const table = useReactTable({ ... });
- * * <Table.Root table={table}>
- * <div className="header">
- * <Table.Search placeholder="Search..." />
- * <Table.BulkActions onDelete={(rows) => purge(rows)} />
- * </div>
- * * <Table.Grid columnsCount={5} />
- * * <Table.Pagination />
+ * const serverTable = useServerTable({
+ *   columns: productColumns,
+ *   getQueryParams: (state, filter) => ({ limit: state.pagination.pageSize, ... }),
+ *   getRows: (data) => data?.data?.products ?? [],
+ *   getTotal: (data) => data?.data?.total ?? 0,
+ *   useQuery: useGetProducts,
+ * });
+ *
+ * <Table.Root {...serverTable.rootProps}>
+ *   <Table.Toolbar searchPlaceholder="Search..." showRefresh onRefresh={serverTable.refetch} />
+ *   <Table.Grid isLoading={serverTable.isLoading} />
+ *   <Table.Pagination />
+ * </Table.Root>
+ * ```
+ *
+ * ## Client-driven (no server pagination)
+ * ```tsx
+ * <Table.Root data={rows} columns={columns}>
+ *   <Table.Toolbar searchPlaceholder="Search..." />
+ *   <Table.Grid />
+ *   <Table.Pagination />
  * </Table.Root>
  * ```
  */

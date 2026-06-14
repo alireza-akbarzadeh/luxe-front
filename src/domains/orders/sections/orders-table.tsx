@@ -134,10 +134,10 @@ export default function OrdersTable({ data }: OrdersTableProps) {
     await setPageSize(newPagination.pageSize);
   };
 
-  const handleGlobalFilterChange = async (newValue: string) => {
-    const newSearch = newValue ?? '';
+  const handleGlobalFilterChange = async (updaterOrValue: string | ((old: string) => string)) => {
+    const newSearch = typeof updaterOrValue === 'function' ? updaterOrValue(search) : updaterOrValue;
     if (newSearch !== search) {
-      await setSearch(newSearch);
+      await setSearch(newSearch ?? '');
       await setPage(0);
     }
   };
@@ -345,7 +345,6 @@ function OrdersTableContent({
               </>
             );
           }}
-          columnsCount={orderColumns.length}
         />
       </div>
 

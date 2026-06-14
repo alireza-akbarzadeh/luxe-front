@@ -1,25 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 import type { GetUsers200DataUsersItem } from '~/src/services/-users-get.schemas';
 
 export const userColumns: ColumnDef<GetUsers200DataUsersItem>[] = [
-  {
-    id: 'select',
-    enableSorting: false,
-    enableHiding: false,
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onClick={(e) => e.stopPropagation()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        className='border-muted-foreground/30 rounded-md'
-      />
-    )
-  },
+  createSelectColumn<GetUsers200DataUsersItem>(),
   {
     accessorKey: 'email',
     header: 'User',

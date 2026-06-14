@@ -2,7 +2,7 @@ import '../styles/globals.css';
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono, Nunito_Sans } from 'next/font/google';
+import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
@@ -18,6 +18,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin']
+});
+
+const playfairDisplay = Playfair_Display({
+  variable: '--font-playfair',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  display: 'swap'
 });
 
 export const metadata: Metadata = {
@@ -47,7 +55,7 @@ export default function RootLayout({ children }: TRootLayout) {
   return (
     <html
       lang='en'
-      className={nunitoSans.variable}
+      className={`${nunitoSans.variable} ${playfairDisplay.variable}`}
       suppressHydrationWarning
       data-scroll-behavior='smooth'
     >

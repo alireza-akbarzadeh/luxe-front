@@ -11,7 +11,6 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,28 +26,10 @@ import {
 import type { Order } from '@/domains/orders/orders-types';
 import { formatCurrency } from '@/lib/format';
 import { copyToClipboard } from '@/lib/utils';
+import { createSelectColumn } from '~/src/components/table/data-table';
 
 export const orderColumns: ColumnDef<Order>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        onClick={(e) => e.stopPropagation()}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false
-  },
+  createSelectColumn<Order>(),
   {
     accessorKey: 'order_number',
     header: ({ column }) => (

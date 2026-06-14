@@ -40,7 +40,6 @@ interface BulkActionsProps<TData> {
 
 interface BaseTableToolbarProps {
   searchPlaceholder?: string;
-  globalFilter?: string;
   isLoading?: boolean;
   showSearch?: boolean;
   children?: ReactNode;
@@ -49,6 +48,7 @@ interface BaseTableToolbarProps {
   showSorting?: boolean;
   showExport?: boolean;
   showBulkActions?: boolean;
+  onDelete?: () => void;
 }
 
 interface WithRefresh {
@@ -71,7 +71,7 @@ interface WithoutCreate {
 
 interface WithClear {
   showClear: true;
-  onClearFilter: () => void;
+  onClearFilter?: () => void;
 }
 interface WithoutClear {
   showClear?: false;
