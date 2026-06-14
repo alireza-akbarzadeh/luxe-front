@@ -35,7 +35,12 @@ export function ProductGridList(props: ProductGridListProps) {
           >
             {products.map((product, index) =>
               searchParams.view === 'grid' ? (
-                <ProductCard key={product.id} product={product} index={index} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  index={index}
+                  priority={index === 0}
+                />
               ) : (
                 <motion.div
                   key={product.id}

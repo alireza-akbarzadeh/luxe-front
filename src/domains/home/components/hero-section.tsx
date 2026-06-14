@@ -181,6 +181,7 @@ export function HeroSection() {
                       src={product?.images?.[0] ?? HERO_FALLBACK_IMAGE}
                       alt={product?.name ?? 'Product'}
                       fill
+                      priority={index === 0}
                       sizes='25vw'
                       className='object-cover transition-transform duration-500 group-hover:scale-105'
                     />

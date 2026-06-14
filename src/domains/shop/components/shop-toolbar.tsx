@@ -4,6 +4,7 @@ import {
   IconArrowsHorizontal,
   IconLayoutGrid,
   IconLayoutGridRemove,
+  IconLoader2,
   IconSearch
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -19,16 +20,20 @@ import {
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { sortOptions } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
 import { useProductFilters } from '../useProductFilters';
 import { FilterContent } from './filter-content';
 
 interface ShopToolbarProps {
   total: number;
+  rangeStart: number;
+  rangeEnd: number;
+  isFetching?: boolean;
 }
 
 export function ShopToolbar(props: ShopToolbarProps) {
-  const { total } = props;
+  const { total, rangeStart, rangeEnd, isFetching = false } = props;
   const {
     sortBy,
     searchQuery,
@@ -36,8 +41,16 @@ export function ShopToolbar(props: ShopToolbarProps) {
     setSortBy,
     setSearchQuery,
     setGridCols,
-    hasActiveFilters
+    hasActiveFilters,
+    activeFilterCount
   } = useProductFilters();
+
+  const resultsLabel =
+    total === 0
+      ? 'No products'
+      : total <= rangeEnd - rangeStart + 1
+        ? `${total} product${total === 1 ? '' : 's'}`
+        : `${rangeStart}–${rangeEnd} of ${total}`;
 
   return (
     <motion.div
@@ -47,31 +60,29 @@ export function ShopToolbar(props: ShopToolbarProps) {
       className='border-border mb-8 flex flex-col items-start justify-between gap-4 border-b pb-8 sm:flex-row sm:items-center'
     >
       <div className='flex w-full items-center gap-4 sm:w-auto'>
-        {/* Mobile Filter Button */}
         <Sheet>
           <SheetTrigger asChild>
             <Button variant='outline' className='gap-2 lg:hidden'>
               <IconArrowsHorizontal className='h-4 w-4' />
               Filters
-              {hasActiveFilters && (
-                <span className='bg-accent text-accent-foreground ml-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
-                  !
+              {activeFilterCount > 0 && (
+                <span className='bg-accent text-accent-foreground ml-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold'>
+                  {activeFilterCount}
                 </span>
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side='left' className='w-80'>
+          <SheetContent side='left' className='w-80 overflow-y-auto'>
             <SheetHeader>
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
-            <div className='mt-6'>
+            <div className='mt-6 pb-8'>
               <FilterContent />
             </div>
           </SheetContent>
         </Sheet>
 
-        {/* Search */}
-        <div className='relative flex-1 sm:w-64 sm:flex-initial'>
+        <div className='relative min-w-0 flex-1 sm:w-72 sm:flex-initial'>
           <IconSearch className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
           <Input
             placeholder='Search products...'
@@ -82,42 +93,59 @@ export function ShopToolbar(props: ShopToolbarProps) {
         </div>
       </div>
 
-      <div className='flex items-center gap-4'>
-        <span className='text-muted-foreground hidden text-sm sm:block'>{total} products</span>
-        {/* Sort */}
-        <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className='w-44 gap-2'>
-            <SelectValue placeholder='Sort by' />
-          </SelectTrigger>
-          <SelectContent>
-            {sortOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className='flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end'>
+        <span
+          className={cn(
+            'text-muted-foreground flex items-center gap-2 text-sm tabular-nums',
+            isFetching && 'opacity-70'
+          )}
+        >
+          {isFetching && <IconLoader2 className='h-3.5 w-3.5 animate-spin' />}
+          {resultsLabel}
+        </span>
 
-        {/* Grid Toggle */}
-        <div className='border-border hidden items-center gap-1 rounded-lg border p-1 md:flex'>
-          <Button
-            variant={gridCols === 3 ? 'secondary' : 'ghost'}
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => setGridCols(3)}
-          >
-            <IconLayoutGridRemove className='h-4 w-4' />
-          </Button>
-          <Button
-            variant={gridCols === 4 ? 'secondary' : 'ghost'}
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => setGridCols(4)}
-          >
-            <IconLayoutGrid className='h-4 w-4' />
-          </Button>
+        <div className='flex items-center gap-3'>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className='w-40 gap-2 sm:w-44'>
+              <SelectValue placeholder='Sort by' />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <div className='border-border hidden items-center gap-1 rounded-lg border p-1 md:flex'>
+            <Button
+              variant={gridCols === 3 ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8'
+              onClick={() => setGridCols(3)}
+              aria-label='3 column grid'
+            >
+              <IconLayoutGridRemove className='h-4 w-4' />
+            </Button>
+            <Button
+              variant={gridCols === 4 ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8'
+              onClick={() => setGridCols(4)}
+              aria-label='4 column grid'
+            >
+              <IconLayoutGrid className='h-4 w-4' />
+            </Button>
+          </div>
         </div>
       </div>
+
+      {hasActiveFilters && (
+        <p className='text-muted-foreground w-full text-xs sm:hidden'>
+          {activeFilterCount} filter{activeFilterCount === 1 ? '' : 's'} active
+        </p>
+      )}
     </motion.div>
   );
 }

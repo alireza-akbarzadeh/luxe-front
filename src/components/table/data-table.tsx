@@ -13,8 +13,8 @@ import { useServerTable } from './use-server-table';
 import { useTableState } from './use-table-state';
 
 export { useServerTable, useTableState };
-export { createSelectColumn } from './table-select-column';
 export type { TableControlledState } from './table-context';
+export { createSelectColumn } from './table-select-column';
 export type { TableState } from './use-table-state';
 
 /**

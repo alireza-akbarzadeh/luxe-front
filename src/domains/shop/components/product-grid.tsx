@@ -37,7 +37,12 @@ export function ProductGrid(props: ProductGridDataProps) {
         >
           <AnimatePresence mode='popLayout'>
             {products?.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                index={index}
+                priority={index === 0}
+              />
             ))}
           </AnimatePresence>
         </motion.div>

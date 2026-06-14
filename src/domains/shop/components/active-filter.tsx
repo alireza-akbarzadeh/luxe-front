@@ -18,9 +18,11 @@ export function ActiveFilter() {
     minReviews,
     maxReviews,
     isDigital,
+    searchQuery,
     hasActiveFilters,
     setCategoryId,
     setPriceRange,
+    setSearchQuery,
     setShowOnlyNew,
     setShowOnlySale,
     setRatingRange,
@@ -43,7 +45,7 @@ export function ActiveFilter() {
           className='mb-8 flex flex-wrap gap-2'
         >
           {/* Category badge (if any) */}
-          {categoryId !== null && categoryId !== 0 && selectedCategory && (
+          {categoryId > 0 && selectedCategory && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -51,7 +53,21 @@ export function ActiveFilter() {
               className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
             >
               {selectedCategory.name}
-              <button onClick={() => setCategoryId(0)} className='hover:text-foreground'>
+              <button onClick={() => setCategoryId(null)} className='hover:text-foreground'>
+                <IconX className='h-3 w-3' />
+              </button>
+            </motion.span>
+          )}
+
+          {searchQuery && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+            >
+              Search: &ldquo;{searchQuery}&rdquo;
+              <button onClick={() => setSearchQuery('')} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>

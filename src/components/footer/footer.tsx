@@ -192,7 +192,7 @@ export function Footer() {
           aria-hidden
           className='pointer-events-none -mt-4 overflow-hidden pb-2 text-center select-none'
         >
-          <div className='from-foreground/8 bg-linear-to-b to-transparent bg-clip-text text-[18vw] leading-[0.9] font-black tracking-tighter text-transparent'>
+          <div className='from-foreground/20 via-foreground/8 dark:from-foreground/10 dark:via-foreground/4 bg-linear-to-b to-transparent bg-clip-text text-[18vw] leading-[0.9] font-black tracking-tighter text-transparent'>
             LUXE
           </div>
         </div>

@@ -1,6 +1,6 @@
 // components/products-grid.tsx
 import { IconPackage } from '@tabler/icons-react';
-import { AnimatePresence,motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import type { DtoProductResponse } from '@/services/-stores-{slug}-products-get.schemas';
@@ -81,7 +81,7 @@ export function StoreProductsGrid({ apiProducts, totalProducts }: ProductsGridPr
       >
         <AnimatePresence mode='popLayout'>
           {adaptedProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
+            <ProductCard key={product.id} product={product} index={index} priority={index === 0} />
           ))}
         </AnimatePresence>
       </motion.div>

@@ -41,7 +41,7 @@ export function FilterContent() {
       <div>
         <h3 className='mb-4 font-semibold'>Categories</h3>
         <RadioGroup
-          value={categoryId?.toString() ?? ''}
+          value={categoryId > 0 ? categoryId.toString() : ''}
           onValueChange={(val) => setCategoryId(val ? Number(val) : null)}
           className='space-y-3'
         >
