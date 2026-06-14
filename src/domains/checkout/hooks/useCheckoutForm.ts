@@ -2,11 +2,8 @@
 // app/checkout/hooks/useCheckoutForm.ts
 import { useEffect, useRef } from 'react';
 
-import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
-import { calculateEstimatedTax } from '@/domains/cart/lib/cart-utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
-import { useGetShippingProviders } from '~/src/services/-shipping-providers-get';
 
 import type { CheckoutFormValues } from '../checkout.schema';
 import { checkoutSchema } from '../checkout.schema';
@@ -93,25 +90,3 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
 }
 
 export type CheckoutFormApi = ReturnType<typeof useCheckoutForm>;
-
-// Also move useCheckoutTotals to a separate file or export from here
-export function useCheckoutTotals({
-  items,
-  couponDiscount,
-  shippingProviderId // number | null
-}: {
-  items: Array<{ price?: number; quantity?: number }>;
-  couponDiscount: number;
-  shippingProviderId: number | null;
-}) {
-  const { data: providersData } = useGetShippingProviders();
-  const { settings } = useCartCommerceSettings();
-  const shippingProvider = providersData?.data?.find((p) => p.id === shippingProviderId);
-  const shippingPrice = shippingProvider?.price ?? 0;
-
-  const subtotal = items.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0);
-  const tax = calculateEstimatedTax(subtotal, settings);
-  const total = subtotal + shippingPrice + tax - couponDiscount;
-
-  return { subtotal, tax, total, shippingPrice, settings };
-}

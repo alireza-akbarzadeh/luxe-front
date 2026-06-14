@@ -88,42 +88,58 @@ export const CheckoutShipping = withForm({
             <p className='text-muted-foreground text-sm'>Loading shipping options…</p>
           ) : (
             <form.AppField name='shippingProviderId'>
-              {(field) => (
-                <RadioGroup
-                  value={field.state.value ? String(field.state.value) : ''}
-                  onValueChange={(val) => field.handleChange(Number(val))}
-                  className='space-y-3'
-                >
-                  {shippingProviders.map((provider) => {
-                    const isSelected = field.state.value === provider.id;
-                    return (
-                      <Label
-                        key={provider.id}
-                        htmlFor={`shipping-${provider.id}`}
-                        className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${
-                          isSelected
-                            ? 'border-accent bg-accent/5'
-                            : 'border-border hover:border-accent/50'
-                        }`}
-                      >
-                        <div className='flex items-center gap-3'>
-                          <RadioGroupItem
-                            value={String(provider.id)}
-                            id={`shipping-${provider.id}`}
-                          />
-                          <div>
-                            <div className='font-medium'>{provider.name || 'Unnamed'} Shipping</div>
-                            <p className='text-muted-foreground text-sm'>{provider.description}</p>
-                          </div>
-                        </div>
-                        <span className='font-medium'>
-                          {provider.price === 0 ? 'Free' : `$${(provider.price ?? 0).toFixed(2)}`}
-                        </span>
-                      </Label>
-                    );
-                  })}
-                </RadioGroup>
-              )}
+              {(field) => {
+                const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+                return (
+                  <>
+                    <RadioGroup
+                      value={field.state.value ? String(field.state.value) : ''}
+                      onValueChange={(val) => field.handleChange(Number(val))}
+                      className='space-y-3'
+                    >
+                      {shippingProviders.map((provider) => {
+                        const isSelected = field.state.value === provider.id;
+                        return (
+                          <Label
+                            key={provider.id}
+                            htmlFor={`shipping-${provider.id}`}
+                            className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${
+                              isSelected
+                                ? 'border-accent bg-accent/5'
+                                : 'border-border hover:border-accent/50'
+                            }`}
+                          >
+                            <div className='flex items-center gap-3'>
+                              <RadioGroupItem
+                                value={String(provider.id)}
+                                id={`shipping-${provider.id}`}
+                              />
+                              <div>
+                                <div className='font-medium'>
+                                  {provider.name || 'Unnamed'} Shipping
+                                </div>
+                                <p className='text-muted-foreground text-sm'>
+                                  {provider.description}
+                                </p>
+                              </div>
+                            </div>
+                            <span className='font-medium'>
+                              {provider.price === 0
+                                ? 'Free'
+                                : `$${(provider.price ?? 0).toFixed(2)}`}
+                            </span>
+                          </Label>
+                        );
+                      })}
+                    </RadioGroup>
+                    {hasError && (
+                      <p className='text-destructive mt-2 text-[10px] font-bold'>
+                        Select a shipping method
+                      </p>
+                    )}
+                  </>
+                );
+              }}
             </form.AppField>
           )}
         </div>

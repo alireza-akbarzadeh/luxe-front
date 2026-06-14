@@ -1,6 +1,7 @@
 'use client';
 
 import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
+import { useStore } from '@tanstack/react-form';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 
@@ -8,6 +9,12 @@ import { withForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
+import {
+  detectCardBrand,
+  formatCardNumber,
+  getCardBrandLabel,
+  paymentMethodRequiresCard
+} from '@/domains/checkout/lib/checkout-utils';
 import { useGetCouponsMy } from '@/services/-coupons-my-get';
 
 import { AvailableCoupons } from '../components/available-coupons';
@@ -16,12 +23,20 @@ import { useCheckoutTotals } from '../hooks/useCartTotal';
 import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
 import { useCheckoutStore } from '../store/checkout.store';
 
+const onlyDigits = (max: number) => (value: string) => value.replace(/\D/g, '').slice(0, max);
+
 export const CheckoutPayment = withForm({
   defaultValues: checkoutDefaultValues,
 
   render: function PaymentRender({ form }) {
-    const { subtotal, couponDiscount, total } = useCheckoutTotals();
+    const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
+    const paymentMethod = useStore(form.store, (s) => s.values.paymentMethod);
+    const cardNumberValue = useStore(form.store, (s) => s.values.cardNumber);
+    const { subtotal, couponDiscount, total } = useCheckoutTotals(shippingProviderId);
     const couponCode = form.state.values.couponCode; // reactive value
+
+    const requiresCard = paymentMethodRequiresCard(paymentMethod);
+    const cardBrand = detectCardBrand(cardNumberValue ?? '');
 
     const { data: couponsData, isLoading: couponsLoading } = useGetCouponsMy({
       order_total: total ?? 0
@@ -89,36 +104,72 @@ export const CheckoutPayment = withForm({
           </div>
 
           <div className='space-y-4'>
-            {/* Card Number */}
-            <form.AppField name='cardNumber'>
-              {(field) => (
-                <div className='relative'>
-                  <field.TextField
-                    startIcon={IconCreditCard}
-                    label='Card Number'
-                    placeholder='1234 5678 9012 3456'
-                    className='pl-10'
-                  />
+            {requiresCard && (
+              <>
+                {/* Card Number */}
+                <form.AppField name='cardNumber'>
+                  {(field) => (
+                    <div className='relative'>
+                      <field.TextField
+                        startIcon={IconCreditCard}
+                        label='Card Number'
+                        placeholder='1234 5678 9012 3456'
+                        inputMode='numeric'
+                        autoComplete='cc-number'
+                        transform={formatCardNumber}
+                      />
+                      {cardBrand !== 'unknown' && (
+                        <span className='text-muted-foreground absolute top-9 right-4 text-xs font-medium'>
+                          {getCardBrandLabel(cardBrand)}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </form.AppField>
+
+                {/* Expiry Fields (split) */}
+                <div className='grid grid-cols-2 gap-4'>
+                  <form.AppField name='expiryMonth'>
+                    {(field) => (
+                      <field.TextField
+                        label='Expiry Month'
+                        placeholder='MM'
+                        inputMode='numeric'
+                        autoComplete='cc-exp-month'
+                        maxLength={2}
+                        transform={onlyDigits(2)}
+                      />
+                    )}
+                  </form.AppField>
+                  <form.AppField name='expiryYear'>
+                    {(field) => (
+                      <field.TextField
+                        label='Expiry Year'
+                        placeholder='YYYY'
+                        inputMode='numeric'
+                        autoComplete='cc-exp-year'
+                        maxLength={4}
+                        transform={onlyDigits(4)}
+                      />
+                    )}
+                  </form.AppField>
                 </div>
-              )}
-            </form.AppField>
 
-            {/* Expiry Fields (split) */}
-            <div className='grid grid-cols-2 gap-4'>
-              <form.AppField name='expiryMonth'>
-                {(field) => <field.TextField label='Expiry Month' placeholder='MM' maxLength={2} />}
-              </form.AppField>
-              <form.AppField name='expiryYear'>
-                {(field) => (
-                  <field.TextField label='Expiry Year' placeholder='YYYY' maxLength={4} />
-                )}
-              </form.AppField>
-            </div>
-
-            {/* CVC */}
-            <form.AppField name='cvv'>
-              {(field) => <field.TextField label='CVC' placeholder='123' maxLength={4} />}
-            </form.AppField>
+                {/* CVC */}
+                <form.AppField name='cvv'>
+                  {(field) => (
+                    <field.TextField
+                      label='CVC'
+                      placeholder='123'
+                      inputMode='numeric'
+                      autoComplete='cc-csc'
+                      maxLength={4}
+                      transform={onlyDigits(4)}
+                    />
+                  )}
+                </form.AppField>
+              </>
+            )}
 
             {/* Save info toggle (UI only) */}
             <div className='flex items-center gap-2 pt-2'>

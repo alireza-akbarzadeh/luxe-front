@@ -1,10 +1,13 @@
-// hooks/useCheckoutSteps.ts
+// hooks/useCheckoutSteps.tsx
 'use client';
 
 import { IconClipboardCheck, IconCreditCard, IconTruckDelivery } from '@tabler/icons-react';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import type { StepDefinition } from '@/components/ui/stepper';
+
+import { CHECKOUT_STEP_IDS, type CheckoutStepId } from '../checkout.schema';
+import { useCheckoutStore } from '../store/checkout.store';
 
 const STEPS: StepDefinition[] = [
   {
@@ -27,34 +30,41 @@ const STEPS: StepDefinition[] = [
   }
 ];
 
-export type CheckoutStepId = (typeof STEPS)[number]['id'];
+export type { CheckoutStepId };
 
 export function useCheckoutSteps() {
-  const [currentStepId, setCurrentStepId] = useState<CheckoutStepId>('shipping');
-  const stepIds = STEPS.map((s) => s.id);
-  const currentIndex = stepIds.indexOf(currentStepId);
+  const currentStepId = useCheckoutStore((s) => s.currentStep);
+  const completedSteps = useCheckoutStore((s) => s.completedSteps);
+  const setCurrentStep = useCheckoutStore((s) => s.setCurrentStep);
+  const markStepCompleted = useCheckoutStore((s) => s.markStepCompleted);
+
+  const currentIndex = CHECKOUT_STEP_IDS.indexOf(currentStepId);
+
+  const goToStep = useCallback((step: CheckoutStepId) => setCurrentStep(step), [setCurrentStep]);
 
   const handleNext = useCallback(() => {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < stepIds.length) {
-      setCurrentStepId(stepIds[nextIndex] as CheckoutStepId);
+    const nextStep = CHECKOUT_STEP_IDS[currentIndex + 1];
+    if (nextStep) {
+      markStepCompleted(currentStepId);
+      setCurrentStep(nextStep);
     }
-  }, [currentIndex, stepIds]);
+  }, [currentIndex, currentStepId, markStepCompleted, setCurrentStep]);
 
   const handleBack = useCallback(() => {
-    const prevIndex = currentIndex - 1;
-    if (prevIndex >= 0) {
-      setCurrentStepId(stepIds[prevIndex] as CheckoutStepId);
-    }
-  }, [currentIndex, stepIds]);
+    const prevStep = CHECKOUT_STEP_IDS[currentIndex - 1];
+    if (prevStep) setCurrentStep(prevStep);
+  }, [currentIndex, setCurrentStep]);
 
   return {
     steps: STEPS,
     currentStepId,
     currentIndex,
+    completedSteps,
+    goToStep,
+    markStepCompleted,
     handleNext,
     handleBack,
     isFirst: currentIndex === 0,
-    isLast: currentIndex === stepIds.length - 1
+    isLast: currentIndex === CHECKOUT_STEP_IDS.length - 1
   };
 }

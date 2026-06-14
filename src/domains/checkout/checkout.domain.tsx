@@ -1,8 +1,11 @@
 // app/checkout/checkout-domain.tsx
 'use client';
 
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { useEffect } from 'react';
+import { IconCheck, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { useStore } from '@tanstack/react-form';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,37 +18,129 @@ import {
   StepperSeparator,
   StepperTrigger
 } from '@/components/ui/stepper';
+import { formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { useCartController } from '@/hooks/useCartController';
 
+import { CHECKOUT_STEP_IDS, checkoutStepFields, type CheckoutStepId } from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
+import { CheckoutPlacingOrderOverlay } from './components/checkout-placing-order-overlay';
 import { CheckoutSummary } from './components/checkout-summary';
 import { EmptyCart } from './components/empty-checkout';
 import { CheckoutPayment } from './containers/checkout-payment';
 import { CheckoutReview } from './containers/checkout-review';
 import { CheckoutShipping } from './containers/checkout-shipping';
-import { useCheckoutForm, useCheckoutTotals } from './hooks/useCheckoutForm';
+import { useCheckoutTotals } from './hooks/useCartTotal';
+import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useCheckoutSteps } from './hooks/useCheckoutSteps';
 import { useCheckoutSubmit } from './hooks/useCheckoutSubmit';
 import { useCheckoutStore } from './store/checkout.store';
 
 export default function CheckoutDomain() {
+  const router = useRouter();
   const { items, isLoading: isLoadingCart } = useCartController();
-  const { steps, currentStepId, handleNext, handleBack, isFirst, isLast } = useCheckoutSteps();
+  const {
+    steps,
+    currentStepId,
+    currentIndex,
+    completedSteps,
+    goToStep,
+    markStepCompleted,
+    handleNext,
+    handleBack,
+    isFirst,
+    isLast
+  } = useCheckoutSteps();
 
   const { submitOrder, isPending } = useCheckoutSubmit();
   const form = useCheckoutForm({ onSubmit: submitOrder });
-  const { couponDiscount } = useCheckoutStore();
 
-  const { total } = useCheckoutTotals({
-    items,
-    couponDiscount,
-    shippingProviderId: form.state.values.shippingProviderId as number
-  });
+  const agreedToTerms = useCheckoutStore((s) => s.agreedToTerms);
+  const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
+  const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
+  const { total } = useCheckoutTotals(shippingProviderId);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStepId]);
+
+  const validateStep = useCallback(
+    async (stepId: CheckoutStepId) => {
+      const fields = checkoutStepFields[stepId];
+      await Promise.all(fields.map((name) => form.validateField(name, 'submit')));
+      const meta = form.state.fieldMeta;
+      return fields.every((field) => !meta[field]?.errors?.length);
+    },
+    [form]
+  );
+
+  const onNext = useCallback(async () => {
+    const valid = await validateStep(currentStepId);
+    if (!valid) {
+      toast.error('Please complete the highlighted fields before continuing.');
+      return;
+    }
+    handleNext();
+  }, [validateStep, currentStepId, handleNext]);
+
+  const handleStepperClick = useCallback(
+    async (stepId: CheckoutStepId) => {
+      if (isPending) return;
+      const targetIndex = CHECKOUT_STEP_IDS.indexOf(stepId);
+      // Backwards / already-completed navigation is always allowed.
+      if (targetIndex <= currentIndex || completedSteps.includes(stepId)) {
+        goToStep(stepId);
+        return;
+      }
+      // Jumping ahead requires the current step to be valid.
+      const valid = await validateStep(currentStepId);
+      if (!valid) {
+        toast.error('Please complete the highlighted fields before continuing.');
+        return;
+      }
+      markStepCompleted(currentStepId);
+      goToStep(stepId);
+    },
+    [
+      currentIndex,
+      completedSteps,
+      goToStep,
+      validateStep,
+      currentStepId,
+      markStepCompleted,
+      isPending
+    ]
+  );
+
+  const handlePlaceOrder = useCallback(async () => {
+    if (isPending) return;
+
+    if (!agreedToTerms) {
+      toast.error('Please accept the terms to place your order.');
+      return;
+    }
+
+    setSubmitError(null);
+
+    for (const stepId of ['shipping', 'payment'] as CheckoutStepId[]) {
+      const valid = await validateStep(stepId);
+      if (!valid) {
+        toast.error(
+          stepId === 'shipping'
+            ? 'Please complete your shipping details.'
+            : 'Please complete your payment details.'
+        );
+        goToStep(stepId);
+        return;
+      }
+    }
+
+    try {
+      await form.handleSubmit();
+    } catch {
+      // Errors are surfaced via toast + submitError in useCheckoutSubmit
+    }
+  }, [isPending, agreedToTerms, setSubmitError, validateStep, goToStep, form]);
 
   const isLoadingPage = isLoadingCart;
   if (isLoadingPage) return <CheckoutLoading />;
@@ -59,17 +154,26 @@ export default function CheckoutDomain() {
         <Stepper
           steps={steps}
           value={currentStepId}
+          onValueChange={(id) => handleStepperClick(id as CheckoutStepId)}
           orientation='horizontal'
           responsive
           className='mb-8'
         >
           <StepperNav>
             {steps.map((step, index) => {
-              const isCompleted = index < steps.findIndex((s) => s.id === currentStepId);
+              const isCompleted = completedSteps.includes(step.id as CheckoutStepId);
+              const isClickable = isCompleted || index <= currentIndex;
               return (
-                <StepperItem key={step.id} stepId={step.id} completed={isCompleted} disabled>
+                <StepperItem
+                  key={step.id}
+                  stepId={step.id}
+                  completed={isCompleted}
+                  disabled={!isClickable && step.id !== currentStepId}
+                >
                   <StepperTrigger className='flex flex-col items-center gap-1 py-2 md:flex-row'>
-                    <StepperIndicator>{step.icon}</StepperIndicator>
+                    <StepperIndicator>
+                      {isCompleted ? <IconCheck className='size-4' /> : step.icon}
+                    </StepperIndicator>
                     <div className='hidden flex-col md:flex'>
                       <span className='text-sm font-medium'>{step.title}</span>
                       <span className='text-muted-foreground text-xs'>{step.description}</span>
@@ -85,12 +189,7 @@ export default function CheckoutDomain() {
             <div className='grid gap-8 lg:grid-cols-5 lg:gap-12'>
               <div className='lg:col-span-3'>
                 <form.AppForm>
-                  <form.Root
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (isLast) form.handleSubmit();
-                    }}
-                  >
+                  <form.Root className='space-y-0'>
                     <StepperContent value='shipping' forceMount>
                       {currentStepId === 'shipping' && <CheckoutShipping form={form} />}
                     </StepperContent>
@@ -98,36 +197,55 @@ export default function CheckoutDomain() {
                       {currentStepId === 'payment' && <CheckoutPayment form={form} />}
                     </StepperContent>
                     <StepperContent value='review' forceMount>
-                      {currentStepId === 'review' && <CheckoutReview form={form} />}
+                      {currentStepId === 'review' && (
+                        <div className='relative'>
+                          {isPending && <CheckoutPlacingOrderOverlay />}
+                          <CheckoutReview form={form} />
+                        </div>
+                      )}
                     </StepperContent>
 
                     {/* Navigation */}
                     <div className='flex justify-between pt-6'>
                       {isLast ? (
                         <>
-                          <Button onClick={handleBack} variant='link' className='px-6 py-4.5'>
+                          <Button
+                            type='button'
+                            onClick={handleBack}
+                            variant='link'
+                            disabled={isPending}
+                            className='px-6 py-4.5'
+                          >
                             <IconChevronLeft className='mr-2 h-4 w-4' />
                             Back to payment
                           </Button>
-                          <form.Submit
-                            className='bg-accent text-accent-foreground w-50 rounded-full py-4.5'
-                            isPending={isPending}
-                            label={`Place Order – $${total.toFixed(2)}`}
-                          />
+                          <Button
+                            type='button'
+                            onClick={handlePlaceOrder}
+                            loading={isPending}
+                            disabled={!agreedToTerms || isPending}
+                            aria-busy={isPending}
+                            className='bg-accent text-accent-foreground w-56 rounded-full py-4.5'
+                          >
+                            {isPending
+                              ? 'Placing order…'
+                              : `Place Order – ${formatCartMoney(total)}`}
+                          </Button>
                         </>
                       ) : (
                         <div className='flex w-full items-center justify-between'>
                           <Button
-                            onClick={handleBack}
+                            type='button'
+                            onClick={() => (isFirst ? router.push('/cart') : handleBack())}
                             variant='link'
-                            disabled={isFirst}
                             className='px-6 py-4.5'
                           >
                             <IconChevronLeft className='mr-2 h-4 w-4' />
                             {currentStepId === 'shipping' ? 'Back to cart' : 'Back to shipping'}
                           </Button>
                           <Button
-                            onClick={handleNext}
+                            type='button'
+                            onClick={onNext}
                             className='bg-accent text-accent-foreground rounded-full px-6 py-4.5'
                           >
                             {currentStepId === 'shipping' ? 'Payment' : 'Review'}

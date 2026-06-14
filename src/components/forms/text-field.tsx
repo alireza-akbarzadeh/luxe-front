@@ -12,6 +12,8 @@ interface TextFieldProps extends ComponentProps<typeof Input> {
   detail?: string;
   startIcon?: TablerIcon;
   endIcon?: TablerIcon;
+  /** Optional normaliser applied to the raw input before it is stored. */
+  transform?: (value: string) => string;
 }
 
 export function TextField(props: TextFieldProps) {
@@ -22,6 +24,7 @@ export function TextField(props: TextFieldProps) {
     startIcon: StartIcon,
     endIcon: EndIcon,
     className,
+    transform,
     ...rest
   } = props;
 
@@ -39,7 +42,9 @@ export function TextField(props: TextFieldProps) {
           value={field.state.value}
           placeholder={placeholder}
           onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.value)}
+          onChange={(e) =>
+            field.handleChange(transform ? transform(e.target.value) : e.target.value)
+          }
           className={cn(StartIcon && 'pl-12', EndIcon && 'pr-12', className)}
         />
         {EndIcon && (

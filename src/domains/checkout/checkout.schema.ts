@@ -1,35 +1,83 @@
 import { z } from 'zod';
 
-export const checkoutSchema = z.object({
-  // --- UI fields (not sent to backend) ---
-  email: z.string().email().optional(), // if you still want to display it
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  phone: z.string().optional(),
-  newsletter: z.boolean().default(false),
-  saveInfo: z.boolean().default(false),
+const CARD_PAYMENT_METHODS = ['credit_card', 'debit_card'] as const;
 
-  // --- Backend fields ---
-  addressLine1: z.string().min(1, 'Address is required'),
-  addressLine2: z.string().optional().default(''),
-  city: z.string().min(1, 'City is required'),
-  state: z.string().min(1, 'State is required'),
-  zip: z.string().min(1, 'ZIP code is required'),
-  country: z.string().min(1, 'Country is required'),
+export const checkoutSchema = z
+  .object({
+    // --- Contact ---
+    email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+    firstName: z.string().min(1, 'First name is required'),
+    lastName: z.string().min(1, 'Last name is required'),
+    phone: z.string().min(1, 'Phone number is required'),
+    newsletter: z.boolean().default(false),
+    saveInfo: z.boolean().default(false),
 
-  // coupon
-  couponCode: z.string().optional().default(''),
+    // --- Shipping address ---
+    addressLine1: z.string().min(1, 'Address is required'),
+    addressLine2: z.string().optional().default(''),
+    city: z.string().min(1, 'City is required'),
+    state: z.string().min(1, 'State is required'),
+    zip: z.string().min(1, 'ZIP code is required'),
+    country: z.string().min(1, 'Country is required'),
 
-  // payment
-  paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
-  cardNumber: z.string().min(16).max(19, 'Card number must be 16-19 digits'),
-  expiryMonth: z.string().regex(/^(0[1-9]|1[0-2])$/, 'Month must be 01-12'),
-  expiryYear: z.string().regex(/^\d{4}$/, 'Year must be 4 digits'),
-  cvv: z.string().regex(/^\d{3,4}$/, 'Invalid CVV'),
+    // --- Coupon ---
+    couponCode: z.string().optional().default(''),
 
-  // shipping
-  shippingProviderId: z.number().nullable().optional()
-});
+    // --- Payment ---
+    paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
+    cardNumber: z.string().optional().default(''),
+    expiryMonth: z.string().optional().default(''),
+    expiryYear: z.string().optional().default(''),
+    cvv: z.string().optional().default(''),
+
+    // --- Shipping method ---
+    shippingProviderId: z.number().nullable().optional()
+  })
+  .superRefine((val, ctx) => {
+    if (val.shippingProviderId == null) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['shippingProviderId'],
+        message: 'Select a shipping method'
+      });
+    }
+
+    const requiresCard = (CARD_PAYMENT_METHODS as readonly string[]).includes(val.paymentMethod);
+    if (!requiresCard) return;
+
+    const digits = (val.cardNumber ?? '').replace(/\s/g, '');
+    if (!/^\d{16,19}$/.test(digits)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['cardNumber'],
+        message: 'Enter a valid 16–19 digit card number'
+      });
+    }
+
+    const monthValid = /^(0[1-9]|1[0-2])$/.test(val.expiryMonth ?? '');
+    const yearValid = /^\d{4}$/.test(val.expiryYear ?? '');
+
+    if (!monthValid) {
+      ctx.addIssue({ code: 'custom', path: ['expiryMonth'], message: 'MM' });
+    }
+    if (!yearValid) {
+      ctx.addIssue({ code: 'custom', path: ['expiryYear'], message: 'YYYY' });
+    }
+
+    if (monthValid && yearValid) {
+      const month = Number(val.expiryMonth);
+      const year = Number(val.expiryYear);
+      // Last moment of the expiry month.
+      const expiresAt = new Date(year, month, 0, 23, 59, 59);
+      if (expiresAt.getTime() < Date.now()) {
+        ctx.addIssue({ code: 'custom', path: ['expiryYear'], message: 'Card has expired' });
+      }
+    }
+
+    if (!/^\d{3,4}$/.test(val.cvv ?? '')) {
+      ctx.addIssue({ code: 'custom', path: ['cvv'], message: 'Invalid CVV' });
+    }
+  });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
@@ -53,4 +101,27 @@ export const checkoutDefaultValues: CheckoutFormValues = {
   expiryYear: '',
   cvv: '',
   shippingProviderId: null
+};
+
+// ─── Step navigation + per-step validation ──────────────────────────────────
+
+export const CHECKOUT_STEP_IDS = ['shipping', 'payment', 'review'] as const;
+export type CheckoutStepId = (typeof CHECKOUT_STEP_IDS)[number];
+
+/** Fields validated before a user can advance past each step. */
+export const checkoutStepFields: Record<CheckoutStepId, (keyof CheckoutFormValues)[]> = {
+  shipping: [
+    'email',
+    'firstName',
+    'lastName',
+    'phone',
+    'addressLine1',
+    'city',
+    'state',
+    'zip',
+    'country',
+    'shippingProviderId'
+  ],
+  payment: ['paymentMethod', 'cardNumber', 'expiryMonth', 'expiryYear', 'cvv'],
+  review: []
 };

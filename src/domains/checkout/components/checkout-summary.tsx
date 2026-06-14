@@ -8,34 +8,23 @@ import Image from 'next/image';
 
 import { withForm } from '@/components/forms/useAppForm';
 import { Separator } from '@/components/ui/separator';
-import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
 import { formatEstimatedTaxLabel } from '@/domains/cart/lib/cart-commerce-settings';
-import {
-  calculateEstimatedTax,
-  cartMoneyClassName,
-  formatCartMoney
-} from '@/domains/cart/lib/cart-utils';
+import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
-import { useCheckoutStore } from '@/domains/checkout/store/checkout.store';
 import { useCartController } from '@/hooks/useCartController';
-import { useGetShippingProviders } from '@/services/-shipping-providers-get';
+import { cn } from '@/lib/utils';
+
+import { useCheckoutTotals } from '../hooks/useCartTotal';
 
 export const CheckoutSummary = withForm({
   defaultValues: checkoutDefaultValues,
   render: function SummaryRender({ form }) {
     const { items } = useCartController();
-    const { couponDiscount, appliedCouponCode } = useCheckoutStore();
-    const { data: providersData } = useGetShippingProviders();
-    const { settings } = useCartCommerceSettings();
 
     const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
 
-    const selectedShipping = providersData?.data?.find((m) => m.id === shippingProviderId);
-    const shippingCost = selectedShipping?.price ?? 0;
-
-    const subtotal = items.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0);
-    const tax = calculateEstimatedTax(subtotal, settings);
-    const total = subtotal + shippingCost + tax - couponDiscount;
+    const { subtotal, shippingPrice, tax, couponDiscount, appliedCouponCode, total, settings } =
+      useCheckoutTotals(shippingProviderId);
 
     return (
       <motion.div
@@ -64,8 +53,8 @@ export const CheckoutSummary = withForm({
                   </p>
                 )}
               </div>
-              <p className='text-sm font-medium'>
-                ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
+              <p className={cn(cartMoneyClassName, 'text-sm font-medium')}>
+                {formatCartMoney((item.price ?? 0) * (item.quantity ?? 0))}
               </p>
             </div>
           ))}
@@ -74,15 +63,15 @@ export const CheckoutSummary = withForm({
         <div className='space-y-2 text-sm'>
           <div className='flex justify-between'>
             <span className='text-muted-foreground'>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span className={cartMoneyClassName}>{formatCartMoney(subtotal)}</span>
           </div>
           <div className='flex justify-between'>
             <span className='text-muted-foreground'>Shipping</span>
-            <span>
-              {shippingCost === 0 ? (
+            <span className={cartMoneyClassName}>
+              {shippingPrice === 0 ? (
                 <span className='text-green-600'>Free</span>
               ) : (
-                `$${shippingCost.toFixed(2)}`
+                formatCartMoney(shippingPrice)
               )}
             </span>
           </div>
@@ -96,15 +85,17 @@ export const CheckoutSummary = withForm({
           </div>
           {couponDiscount > 0 && (
             <div className='flex justify-between text-green-600'>
-              <span>Coupon Discount ({appliedCouponCode})</span>
-              <span>-${couponDiscount.toFixed(2)}</span>
+              <span>Coupon Discount{appliedCouponCode ? ` (${appliedCouponCode})` : ''}</span>
+              <span className={cartMoneyClassName}>−{formatCartMoney(couponDiscount)}</span>
             </div>
           )}
         </div>
         <Separator className='my-4' />
         <div className='flex items-center justify-between'>
           <span className='font-semibold'>Total</span>
-          <span className='text-2xl font-bold'>${total.toFixed(2)}</span>
+          <span className={cn(cartMoneyClassName, 'text-2xl font-bold')}>
+            {formatCartMoney(total)}
+          </span>
         </div>
         <div className='border-border mt-6 flex items-center justify-center gap-4 border-t pt-4'>
           <div className='text-muted-foreground flex items-center gap-1 text-xs'>
