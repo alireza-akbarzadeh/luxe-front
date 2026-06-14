@@ -23,7 +23,8 @@ test.describe('Cart sheet @smoke', () => {
     await page.getByRole('button', { name: /open cart/i }).click();
     await expect(page.getByRole('heading', { name: /your cart/i })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Close' }).click();
+    const sheet = page.getByRole('dialog');
+    await sheet.getByRole('button', { name: 'Close' }).click();
     await expect(page.getByRole('heading', { name: /your cart/i })).toBeHidden();
   });
 });
