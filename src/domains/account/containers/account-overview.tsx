@@ -56,7 +56,7 @@ export function AccountOverview() {
     return (
       <div className='animate-pulse space-y-6'>
         <div className='bg-card border-border h-32 rounded-2xl border p-6' />
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
           <div className='bg-card border-border h-24 rounded-xl border p-6' />
           <div className='bg-card border-border h-24 rounded-xl border p-6' />
           <div className='bg-card border-border h-24 rounded-xl border p-6' />
@@ -114,7 +114,7 @@ export function AccountOverview() {
             phone: user?.phone ?? ''
           }}
         />
-        <div className='flex items-center gap-6'>
+        <div className='flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6'>
           <div className='bg-accent/20 flex h-20 w-20 items-center justify-center rounded-full'>
             <span className='text-accent text-2xl font-semibold'>
               {user.first_name?.[0]}
@@ -157,7 +157,7 @@ export function AccountOverview() {
       </div>
 
       {/* Quick Stats using real data from summary API */}
-      <div className='grid grid-cols-3 gap-4'>
+      <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
         {[
           { label: 'Total Orders', value: recentOrders.length, icon: IconPackage },
           { label: 'Wishlist Items', value: likedProductsCount, icon: IconHeart },
@@ -167,7 +167,7 @@ export function AccountOverview() {
           return (
             <div
               key={stat.label}
-              className='bg-card border-border rounded-xl border p-6 text-center'
+              className='bg-card border-border rounded-xl border p-4 text-center sm:p-6'
             >
               <Icon className='text-accent mx-auto mb-3 h-8 w-8' />
               <p className='text-3xl font-bold'>{stat.value}</p>
@@ -201,7 +201,7 @@ export function AccountOverview() {
               return (
                 <div
                   key={order.id}
-                  className='bg-muted/50 flex items-center justify-between rounded-xl p-4'
+                  className='bg-muted/50 flex flex-col gap-3 rounded-xl p-4 sm:flex-row sm:items-center sm:justify-between'
                 >
                   <div>
                     <p className='font-medium'>{orderNumber}</p>
@@ -209,7 +209,7 @@ export function AccountOverview() {
                       {createdAt ? new Date(createdAt).toLocaleDateString() : 'No date'}
                     </p>
                   </div>
-                  <div className='text-right'>
+                  <div className='sm:text-right'>
                     <span
                       className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
                         statusColors[status] || ''

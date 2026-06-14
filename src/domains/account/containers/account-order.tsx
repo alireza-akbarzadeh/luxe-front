@@ -73,7 +73,7 @@ export function AccountOrder() {
 
   return (
     <div className='space-y-6'>
-      <div className='flex items-center justify-between'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <h2 className='text-xl font-semibold'>Order History</h2>
         {totalPages > 1 && (
           <div className='flex gap-2'>

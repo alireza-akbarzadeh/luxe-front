@@ -5,10 +5,10 @@ import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
+  type AuthSessionItem,
   getAuthSessionsAction,
   revokeAuthSessionAction,
-  revokeOtherSessionsAction,
-  type AuthSessionItem
+  revokeOtherSessionsAction
 } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
 
@@ -64,7 +64,7 @@ export function ActiveSessionsPanel() {
 
   return (
     <div className='bg-card border-border rounded-2xl border p-6'>
-      <div className='mb-4 flex items-center justify-between gap-4'>
+      <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <div>
           <h3 className='font-semibold'>Active sessions</h3>
           <p className='text-muted-foreground text-sm'>
@@ -88,7 +88,7 @@ export function ActiveSessionsPanel() {
           sessions.map((session) => (
             <div
               key={session.id}
-              className='border-border flex items-start justify-between gap-4 rounded-xl border p-4'
+              className='border-border flex flex-col gap-4 rounded-xl border p-4 sm:flex-row sm:items-start sm:justify-between'
             >
               <div className='flex gap-3'>
                 <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-lg'>
@@ -103,7 +103,9 @@ export function ActiveSessionsPanel() {
                       </span>
                     ) : null}
                   </p>
-                  <p className='text-muted-foreground text-sm'>{session.ip_address || 'Unknown IP'}</p>
+                  <p className='text-muted-foreground text-sm'>
+                    {session.ip_address || 'Unknown IP'}
+                  </p>
                   <p className='text-muted-foreground text-xs'>
                     Last active {formatSessionDate(session.last_used_at || session.created_at)}
                   </p>

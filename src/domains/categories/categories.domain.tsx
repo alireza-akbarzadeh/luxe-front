@@ -38,7 +38,6 @@ export function CategoriesDomains() {
         showClear
         showColumnVisibility
         showBulkActions
-        onDelete={() => console.log('jere')}
       />
       <Table.Grid<ModelsCategory>
         onRowDoubleClick={(row) => push(`/dashboard/categories/edit/${row.original.id}`)}

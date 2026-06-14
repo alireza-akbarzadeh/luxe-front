@@ -23,7 +23,7 @@ export function EmailVerificationPanel() {
 
   return (
     <div className='bg-card border-border rounded-2xl border p-6'>
-      <div className='flex items-start justify-between gap-4'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
         <div className='flex gap-3'>
           <div className='bg-muted flex h-10 w-10 items-center justify-center rounded-lg'>
             <IconMail className='text-muted-foreground h-5 w-5' />
