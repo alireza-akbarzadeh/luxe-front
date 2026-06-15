@@ -11,10 +11,11 @@ import ProductDescription from './components/product-description';
 import { ProductDetailSkeleton } from './components/product-detail-skeleton';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
-import ProductReviews from './components/product-reviews';
 import { ProductSpecifications } from './components/product-specification';
 import { ProductVideoPlayer } from './components/product-video-player';
+import { hasCustomProductVideo } from './lib/product-media-utils';
 import RelatedProduct from './related-product';
+import { ProductReviewsSection } from './sections/product-reviews-section';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
   const { data, isPending, isError } = useGetProductsId(productId);
@@ -29,6 +30,9 @@ export default function ProductDetailDomain({ productId }: { productId: string }
     notFound();
   }
 
+  const numericProductId = Number(product.id ?? productId);
+  const showVideoTab = hasCustomProductVideo(product) || Boolean(product.is_digital);
+
   const discount = product.compare_at_price
     ? Math.round(
         ((product.compare_at_price - Number(product.price)) / product.compare_at_price) * 100
@@ -37,10 +41,10 @@ export default function ProductDetailDomain({ productId }: { productId: string }
 
   const tabs = [
     { value: 'description', label: 'Description' },
-    { value: 'video', label: 'Video' },
-    { value: 'specs', label: 'Specifications' },
+    ...(showVideoTab ? [{ value: 'video' as const, label: 'Video' }] : []),
+    { value: 'details', label: 'Details & specs' },
     { value: 'reviews', label: `Reviews (${product.reviews_count ?? 0})` }
-  ] as const;
+  ];
 
   return (
     <div className='app-container mt-20 pb-16'>
@@ -68,7 +72,7 @@ export default function ProductDetailDomain({ productId }: { productId: string }
               <TabsTrigger
                 key={value}
                 value={value}
-                className='data-[state=active]:border-accent data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent bg-transparent px-4 pt-2 pb-3 text-sm font-medium data-[state=active]:bg-transparent data-[state=active]:shadow-none'
+                className='data-[state=active]:border-accent data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent bg-transparent px-4 pt-2 pb-3 text-sm font-medium whitespace-nowrap data-[state=active]:bg-transparent data-[state=active]:shadow-none'
               >
                 {label}
               </TabsTrigger>
@@ -77,27 +81,40 @@ export default function ProductDetailDomain({ productId }: { productId: string }
 
           <TabsContent value='description' className='mt-10 max-w-3xl'>
             <h2 className='font-display mb-4 text-2xl font-semibold'>About this piece</h2>
-            <ProductDescription description={product.description || ''} />
+            <ProductDescription description={product.description || ''} tags={product.tags} />
           </TabsContent>
 
-          <TabsContent value='video' className='mt-10 max-w-3xl'>
-            <h2 className='font-display mb-4 text-2xl font-semibold'>Product video</h2>
-            <p className='text-muted-foreground mb-6 text-sm leading-relaxed'>
-              Watch how this piece looks, moves, and fits — a closer look before you add it to your
-              cart.
-            </p>
-            <ProductVideoPlayer product={product} className='max-w-2xl' />
-          </TabsContent>
+          {showVideoTab && (
+            <TabsContent value='video' className='mt-10 max-w-3xl'>
+              <h2 className='font-display mb-4 text-2xl font-semibold'>Product video</h2>
+              <p className='text-muted-foreground mb-6 text-sm leading-relaxed'>
+                Watch how this piece looks, moves, and fits — a closer look before you add it to
+                your cart.
+              </p>
+              <ProductVideoPlayer product={product} className='max-w-2xl' />
+            </TabsContent>
+          )}
 
-          <TabsContent value='specs' className='mt-10 max-w-3xl'>
-            <h2 className='font-display mb-4 text-2xl font-semibold'>Specifications</h2>
-            <div className='border-border/60 bg-card rounded-2xl border p-6'>
+          <TabsContent value='details' className='mt-10 max-w-4xl'>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>Details & specifications</h2>
+            <div className='border-border/60 bg-card rounded-2xl border p-6 sm:p-8'>
               <ProductSpecifications product={product} />
             </div>
           </TabsContent>
 
-          <TabsContent value='reviews' className='mt-10 grid gap-10 lg:grid-cols-[280px_1fr]'>
-            <ProductReviews productId={productId} product={product} />
+          <TabsContent value='reviews' className='mt-10'>
+            <div className='mb-8 max-w-3xl'>
+              <h2 className='font-display text-2xl font-semibold tracking-tight md:text-3xl'>
+                Customer reviews
+              </h2>
+              <p className='text-muted-foreground mt-2 text-sm md:text-base'>
+                Read what shoppers say about {product.name}, or share your own experience.
+              </p>
+            </div>
+            <ProductReviewsSection
+              productId={numericProductId}
+              productName={product.name ?? 'this product'}
+            />
           </TabsContent>
         </Tabs>
       </section>

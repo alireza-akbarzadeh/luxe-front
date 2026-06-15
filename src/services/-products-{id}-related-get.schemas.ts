@@ -39,6 +39,20 @@ export interface DtoCategoryResponse {
   slug?: string;
 }
 
+export interface DtoProductStoreSummary {
+  follower_count?: number;
+  id?: number;
+  is_verified?: boolean;
+  location?: string;
+  logo_url?: string;
+  name?: string;
+  rating?: number;
+  return_policy?: string;
+  review_count?: number;
+  shipping_info?: string;
+  slug?: string;
+}
+
 export interface DtoProductResponse {
   allow_backorder?: boolean;
   attributes?: DtoProductAttributeResponse[];
@@ -70,6 +84,8 @@ export interface DtoProductResponse {
   slug?: string;
   status?: string;
   stock?: number;
+  store?: DtoProductStoreSummary;
+  store_id?: number;
   tags?: string[];
   track_inventory?: boolean;
   updated_at?: string;

@@ -12,18 +12,11 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type GetReviewsParams = {
-/**
- * Product ID
- */
-product_id: number;
-/**
- * Items per page
- */
-limit?: number;
-/**
- * Offset
- */
-offset?: number;
+export interface DtoStockNotificationStatusResponse {
+  subscribed?: boolean;
+}
+
+export type DeleteProductsIdStockNotifications200 = UtilsResponse & {
+  data?: DtoStockNotificationStatusResponse;
 };
 

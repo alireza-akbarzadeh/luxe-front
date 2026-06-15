@@ -2,31 +2,37 @@ import { IconCheck } from '@tabler/icons-react';
 
 interface ProductDescriptionProps {
   description: string;
+  tags?: string[];
 }
 
-export default function ProductDescription(props: ProductDescriptionProps) {
-  const { description } = props;
+export default function ProductDescription({ description, tags = [] }: ProductDescriptionProps) {
+  const trimmedDescription = description.trim();
+
   return (
-    <>
-      <p>{description}</p>
-      <p>
-        Crafted with meticulous attention to detail, this product represents the pinnacle of modern
-        design and functionality. Each piece undergoes rigorous quality control.
-      </p>
-      <h3 className='font-display text-foreground mt-6 text-xl'>Key features</h3>
-      <ul className='space-y-2'>
-        {[
-          'Premium materials sourced from trusted suppliers',
-          'Designed for durability and everyday use',
-          'Timeless aesthetic that complements any wardrobe',
-          'Eco-friendly packaging and sustainable practices'
-        ].map((f) => (
-          <li key={f} className='flex gap-2'>
-            <IconCheck className='text-accent mt-0.5 h-4 w-4' />
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
-    </>
+    <div className='space-y-6'>
+      {trimmedDescription ? (
+        <div className='text-muted-foreground space-y-4 text-sm leading-relaxed whitespace-pre-line'>
+          {trimmedDescription}
+        </div>
+      ) : (
+        <p className='text-muted-foreground text-sm'>
+          A detailed description has not been added for this product yet.
+        </p>
+      )}
+
+      {tags.length > 0 && (
+        <div>
+          <h3 className='font-display text-foreground text-xl'>Highlights</h3>
+          <ul className='mt-4 space-y-2'>
+            {tags.map((tag) => (
+              <li key={tag} className='flex gap-2 text-sm'>
+                <IconCheck className='text-accent mt-0.5 h-4 w-4 shrink-0' />
+                <span>{tag}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }

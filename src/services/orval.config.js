@@ -12895,6 +12895,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "store_logo": {
                   "type": "string"
                 },
@@ -12993,6 +12999,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -19291,6 +19335,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -19380,6 +19430,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -19796,6 +19884,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -19885,6 +19979,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -20452,6 +20584,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -20541,6 +20679,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -20811,6 +20987,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -20900,6 +21082,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -21121,6 +21341,9 @@ module.exports = [
                                   },
                                   "product": {
                                     "$ref": "#/components/schemas/dto.ProductResponse"
+                                  },
+                                  "stock_subscribed": {
+                                    "type": "boolean"
                                   }
                                 },
                                 "type": "object"
@@ -21298,6 +21521,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -21387,6 +21616,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -21819,6 +22086,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -21908,6 +22181,437 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-alternatives-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/alternatives": {
+            "get": {
+              "description": "Lists the same product model from other stores (matched by barcode)",
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Max items",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 6,
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "properties": {
+                                  "alternatives": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/dto.ProductAlternativeResponse"
+                                    },
+                                    "type": "array"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "Get cross-store product alternatives",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAlternativeResponse": {
+              "properties": {
+                "allow_backorder": {
+                  "type": "boolean"
+                },
+                "attributes": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ProductAttributeResponse"
+                  },
+                  "type": "array"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "brand": {
+                  "$ref": "#/components/schemas/dto.BrandResponse"
+                },
+                "brand_id": {
+                  "type": "integer"
+                },
+                "category": {
+                  "$ref": "#/components/schemas/dto.CategoryResponse"
+                },
+                "category_id": {
+                  "type": "integer"
+                },
+                "channels": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "colors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "compare_at_price": {
+                  "type": "number"
+                },
+                "cost": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "images": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "is_digital": {
+                  "type": "boolean"
+                },
+                "is_new": {
+                  "type": "boolean"
+                },
+                "low_stock_threshold": {
+                  "type": "integer"
+                },
+                "meta_description": {
+                  "type": "string"
+                },
+                "meta_title": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "published_at": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "reviews_count": {
+                  "type": "integer"
+                },
+                "sizes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
+                "store_logo": {
+                  "type": "string"
+                },
+                "store_name": {
+                  "type": "string"
+                },
+                "store_rating": {
+                  "type": "number"
+                },
+                "store_slug": {
+                  "type": "string"
+                },
+                "tags": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "track_inventory": {
+                  "type": "boolean"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "visibility": {
+                  "description": "Publishing extras",
+                  "type": "string"
+                },
+                "warehouse_location": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAttributeResponse": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.BrandResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -22238,6 +22942,741 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-price-history-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/price-history": {
+            "get": {
+              "description": "Returns price snapshots over time for PDP charts",
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Number of days to include",
+                  "in": "query",
+                  "name": "days",
+                  "schema": {
+                    "default": 90,
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "properties": {
+                                  "points": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/dto.PriceHistoryPoint"
+                                    },
+                                    "type": "array"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "Get product price history",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.PriceHistoryPoint": {
+              "properties": {
+                "compare_at_price": {
+                  "type": "number"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "recorded_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/questions": {
+            "get": {
+              "description": "Paginated buyer questions and answers for a product",
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 10,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "default": 0,
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "properties": {
+                                  "limit": {
+                                    "type": "integer"
+                                  },
+                                  "offset": {
+                                    "type": "integer"
+                                  },
+                                  "questions": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/dto.ProductQuestionResponse"
+                                    },
+                                    "type": "array"
+                                  },
+                                  "total": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "List product Q&A",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductQuestionResponse": {
+              "properties": {
+                "answers": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ProductAnswerResponse"
+                  },
+                  "type": "array"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_owner": {
+                  "type": "boolean"
+                },
+                "product_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAnswerResponse": {
+              "properties": {
+                "author": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_ai_reply": {
+                  "type": "boolean"
+                },
+                "is_store_reply": {
+                  "type": "boolean"
+                },
+                "question_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/questions": {
+            "post": {
+              "description": "Post a buyer question on the product detail page",
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateProductQuestionRequest"
+                    }
+                  }
+                },
+                "description": "Question body",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ProductQuestionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Ask a product question",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateProductQuestionRequest": {
+              "properties": {
+                "body": {
+                  "maxLength": 1000,
+                  "minLength": 5,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "body"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductQuestionResponse": {
+              "properties": {
+                "answers": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ProductAnswerResponse"
+                  },
+                  "type": "array"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_owner": {
+                  "type": "boolean"
+                },
+                "product_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAnswerResponse": {
+              "properties": {
+                "author": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_ai_reply": {
+                  "type": "boolean"
+                },
+                "is_store_reply": {
+                  "type": "boolean"
+                },
+                "question_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-{questionId}-answers-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/questions/{questionId}/answers": {
+            "post": {
+              "description": "Post an answer; store owners are marked as store replies",
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Question ID",
+                  "in": "path",
+                  "name": "questionId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateProductAnswerRequest"
+                    }
+                  }
+                },
+                "description": "Answer body",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ProductAnswerResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Answer a product question",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateProductAnswerRequest": {
+              "properties": {
+                "body": {
+                  "maxLength": 2000,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "body"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAnswerResponse": {
+              "properties": {
+                "author": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_ai_reply": {
+                  "type": "boolean"
+                },
+                "is_store_reply": {
+                  "type": "boolean"
+                },
+                "question_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-related-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -22485,6 +23924,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -22578,6 +24023,428 @@ module.exports = [
                 },
                 "slug": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/stock-notifications": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StockNotificationStatusResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Unsubscribe from back-in-stock notifications",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StockNotificationStatusResponse": {
+              "properties": {
+                "subscribed": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/stock-notifications": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StockNotificationStatusResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get back-in-stock subscription status",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StockNotificationStatusResponse": {
+              "properties": {
+                "subscribed": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/stock-notifications": {
+            "post": {
+              "parameters": [
+                {
+                  "description": "Product ID or slug",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StockNotificationStatusResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Subscribe to back-in-stock notifications",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StockNotificationStatusResponse": {
+              "properties": {
+                "subscribed": {
+                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -22957,7 +24824,7 @@ module.exports = [
         "paths": {
           "/reviews": {
             "get": {
-              "description": "Returns paginated reviews for a specific product",
+              "description": "Returns paginated reviews and rating summary for a specific product",
               "parameters": [
                 {
                   "description": "Product ID",
@@ -22973,7 +24840,7 @@ module.exports = [
                   "in": "query",
                   "name": "limit",
                   "schema": {
-                    "default": 20,
+                    "default": 10,
                     "type": "integer"
                   }
                 },
@@ -22992,36 +24859,7 @@ module.exports = [
                   "content": {
                     "application/json": {
                       "schema": {
-                        "allOf": [
-                          {
-                            "$ref": "#/components/schemas/utils.Response"
-                          },
-                          {
-                            "properties": {
-                              "data": {
-                                "properties": {
-                                  "limit": {
-                                    "type": "integer"
-                                  },
-                                  "offset": {
-                                    "type": "integer"
-                                  },
-                                  "reviews": {
-                                    "items": {
-                                      "$ref": "#/components/schemas/dto.ReviewResponse"
-                                    },
-                                    "type": "array"
-                                  },
-                                  "total": {
-                                    "type": "integer"
-                                  }
-                                },
-                                "type": "object"
-                              }
-                            },
-                            "type": "object"
-                          }
-                        ]
+                        "$ref": "#/components/schemas/utils.Response"
                       }
                     }
                   },
@@ -23050,41 +24888,6 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "dto.ReviewResponse": {
-              "properties": {
-                "author": {
-                  "type": "string"
-                },
-                "comment": {
-                  "type": "string"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_verified": {
-                  "type": "boolean"
-                },
-                "product_id": {
-                  "type": "integer"
-                },
-                "rating": {
-                  "type": "integer"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
                 }
               },
               "type": "object"
@@ -23158,7 +24961,7 @@ module.exports = [
                           {
                             "properties": {
                               "data": {
-                                "$ref": "#/components/schemas/models.Review"
+                                "$ref": "#/components/schemas/dto.ReviewResponse"
                               }
                             },
                             "type": "object"
@@ -23244,19 +25047,22 @@ module.exports = [
               },
               "type": "object"
             },
-            "models.Review": {
+            "dto.ReviewResponse": {
               "properties": {
+                "author": {
+                  "type": "string"
+                },
                 "comment": {
                   "type": "string"
                 },
                 "created_at": {
                   "type": "string"
                 },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
                 "id": {
                   "type": "integer"
+                },
+                "is_owner": {
+                  "type": "boolean"
                 },
                 "is_verified": {
                   "type": "boolean"
@@ -23265,8 +25071,6 @@ module.exports = [
                   "type": "integer"
                 },
                 "rating": {
-                  "maximum": 5,
-                  "minimum": 1,
                   "type": "integer"
                 },
                 "title": {
@@ -23280,15 +25084,152 @@ module.exports = [
                 }
               },
               "type": "object"
-            },
-            "gorm.DeletedAt": {
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-me-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/reviews/me": {
+            "get": {
+              "description": "Returns the authenticated user's review for a product, if any",
+              "parameters": [
+                {
+                  "description": "Product ID",
+                  "in": "query",
+                  "name": "product_id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ReviewResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get my product review",
+              "tags": [
+                "Reviews"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
               "properties": {
-                "time": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
                   "type": "string"
                 },
-                "valid": {
-                  "description": "Valid is true if Time is not NULL",
+                "message": {
+                  "type": "string"
+                },
+                "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ReviewResponse": {
+              "properties": {
+                "author": {
+                  "type": "string"
+                },
+                "comment": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_owner": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -23472,7 +25413,7 @@ module.exports = [
                           {
                             "properties": {
                               "data": {
-                                "$ref": "#/components/schemas/models.Review"
+                                "$ref": "#/components/schemas/dto.ReviewResponse"
                               }
                             },
                             "type": "object"
@@ -23531,19 +25472,22 @@ module.exports = [
               },
               "type": "object"
             },
-            "models.Review": {
+            "dto.ReviewResponse": {
               "properties": {
+                "author": {
+                  "type": "string"
+                },
                 "comment": {
                   "type": "string"
                 },
                 "created_at": {
                   "type": "string"
                 },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
                 "id": {
                   "type": "integer"
+                },
+                "is_owner": {
+                  "type": "boolean"
                 },
                 "is_verified": {
                   "type": "boolean"
@@ -23552,8 +25496,6 @@ module.exports = [
                   "type": "integer"
                 },
                 "rating": {
-                  "maximum": 5,
-                  "minimum": 1,
                   "type": "integer"
                 },
                 "title": {
@@ -23564,18 +25506,6 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "gorm.DeletedAt": {
-              "properties": {
-                "time": {
-                  "type": "string"
-                },
-                "valid": {
-                  "description": "Valid is true if Time is not NULL",
-                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -23961,6 +25891,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -24024,6 +25960,44 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
                   "type": "string"
                 }
               },
@@ -28015,6 +29989,12 @@ module.exports = [
                 "stock": {
                   "type": "integer"
                 },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
                 "tags": {
                   "items": {
                     "type": "string"
@@ -28104,6 +30084,44 @@ module.exports = [
                   "type": "integer"
                 },
                 "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
                   "type": "string"
                 },
                 "slug": {
@@ -28613,7 +30631,7 @@ module.exports = [
                   "name": "slug",
                   "required": true,
                   "schema": {
-                    "type": "integer"
+                    "type": "string"
                   }
                 },
                 {

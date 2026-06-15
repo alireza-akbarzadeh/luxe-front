@@ -26,6 +26,7 @@ import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import ProductColors from './product-colors';
 import ProductQuantity from './product-quantity';
 import { ProductSized } from './product-sized';
+import { ProductStockNotify } from './product-stock-notify';
 
 interface ProductInfoProps {
   product: DtoProductWithLike;
@@ -225,6 +226,14 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
             View cart ({itemCount})
           </Link>
         </Button>
+
+        {isOutOfStock && product.id && product.slug && (
+          <ProductStockNotify
+            productId={product.id}
+            productSlug={product.slug}
+            isOutOfStock={isOutOfStock}
+          />
+        )}
       </div>
 
       <div className='border-border/60 bg-muted/30 grid grid-cols-2 gap-3 rounded-xl border p-4 sm:grid-cols-3'>

@@ -5,67 +5,6 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoCreateProductRequestStatus = typeof DtoCreateProductRequestStatus[keyof typeof DtoCreateProductRequestStatus];
-
-
-export const DtoCreateProductRequestStatus = {
-  draft: 'draft',
-  active: 'active',
-  inactive: 'inactive',
-  archived: 'archived',
-} as const;
-
-export interface DtoProductAttributeInput {
-  name: string;
-  /** @minItems 1 */
-  values: string[];
-}
-
-export interface DtoCreateProductRequest {
-  allow_backorder?: boolean;
-  attributes?: DtoProductAttributeInput[];
-  barcode?: string;
-  brand_id?: number;
-  category_id?: number;
-  channels?: string[];
-  colors?: string[];
-  /** @minimum 0 */
-  compare_at_price?: number;
-  /** @minimum 0 */
-  cost?: number;
-  description?: string;
-  images?: string[];
-  is_digital?: boolean;
-  is_new?: boolean;
-  low_stock_threshold?: number;
-  meta_description?: string;
-  meta_title?: string;
-  /**
-     * @minLength 3
-     * @maxLength 255
-     */
-  name: string;
-  /** @minimum 0 */
-  price: number;
-  published_at?: string;
-  sizes?: string[];
-  /**
-     * @minLength 3
-     * @maxLength 50
-     */
-  sku: string;
-  status?: DtoCreateProductRequestStatus;
-  /** @minimum 0 */
-  stock?: number;
-  store_id?: number;
-  tags?: string[];
-  track_inventory?: boolean;
-  visibility?: string;
-  warehouse_location?: string;
-  /** @minimum 0 */
-  weight?: number;
-}
-
 export interface UtilsResponse {
   code?: number;
   error?: string;
@@ -114,7 +53,7 @@ export interface DtoProductStoreSummary {
   slug?: string;
 }
 
-export interface DtoProductResponse {
+export interface DtoProductAlternativeResponse {
   allow_backorder?: boolean;
   attributes?: DtoProductAttributeResponse[];
   barcode?: string;
@@ -147,6 +86,10 @@ export interface DtoProductResponse {
   stock?: number;
   store?: DtoProductStoreSummary;
   store_id?: number;
+  store_logo?: string;
+  store_name?: string;
+  store_rating?: number;
+  store_slug?: string;
   tags?: string[];
   track_inventory?: boolean;
   updated_at?: string;
@@ -156,7 +99,18 @@ export interface DtoProductResponse {
   weight?: number;
 }
 
-export type PostProductsBulk201 = UtilsResponse & {
-  data?: DtoProductResponse[];
+export type GetProductsIdAlternativesParams = {
+/**
+ * Max items
+ */
+limit?: number;
+};
+
+export type GetProductsIdAlternatives200Data = {
+  alternatives?: DtoProductAlternativeResponse[];
+};
+
+export type GetProductsIdAlternatives200 = UtilsResponse & {
+  data?: GetProductsIdAlternatives200Data;
 };
 

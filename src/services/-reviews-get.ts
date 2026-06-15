@@ -21,8 +21,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  GetReviews200,
-  GetReviewsParams
+  GetReviewsParams,
+  UtilsResponse
 } from './-reviews-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
@@ -33,7 +33,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Returns paginated reviews for a specific product
+ * Returns paginated reviews and rating summary for a specific product
  * @summary Get product reviews
  */
 export const getReviews = (
@@ -42,7 +42,7 @@ export const getReviews = (
 ) => {
 
 
-      return customInstance<GetReviews200>(
+      return customInstance<UtilsResponse>(
       {url: `/reviews`, method: 'GET',
         params, signal
     },

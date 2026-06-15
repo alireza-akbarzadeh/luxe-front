@@ -5,16 +5,6 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface DtoUpdateReviewRequest {
-  comment?: string;
-  /**
-     * @minimum 1
-     * @maximum 5
-     */
-  rating?: number;
-  title?: string;
-}
-
 export interface UtilsResponse {
   code?: number;
   error?: string;
@@ -36,7 +26,14 @@ export interface DtoReviewResponse {
   user_id?: number;
 }
 
-export type PutReviewsId200 = UtilsResponse & {
+export type GetReviewsMeParams = {
+/**
+ * Product ID
+ */
+product_id: number;
+};
+
+export type GetReviewsMe200 = UtilsResponse & {
   data?: DtoReviewResponse;
 };
 

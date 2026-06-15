@@ -23,23 +23,14 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export interface GormDeletedAt {
-  time?: string;
-  /** Valid is true if Time is not NULL */
-  valid?: boolean;
-}
-
-export interface ModelsReview {
+export interface DtoReviewResponse {
+  author?: string;
   comment?: string;
   created_at?: string;
-  deleted_at?: GormDeletedAt;
   id?: number;
+  is_owner?: boolean;
   is_verified?: boolean;
   product_id?: number;
-  /**
-     * @minimum 1
-     * @maximum 5
-     */
   rating?: number;
   title?: string;
   updated_at?: string;
@@ -47,6 +38,6 @@ export interface ModelsReview {
 }
 
 export type PostReviews201 = UtilsResponse & {
-  data?: ModelsReview;
+  data?: DtoReviewResponse;
 };
 

@@ -149,3 +149,6 @@ export function StoreReviewListSkeleton({ itemCount = 3 }: { itemCount?: number 
           <StoreReviewItemSkeleton key={i} />
         ))}
       </ul>
+    </div>
+  );
+}
