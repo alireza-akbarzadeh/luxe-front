@@ -1,154 +1,152 @@
 'use client';
-import { IconArrowRight, IconHeart } from '@tabler/icons-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
 
-import { Empty } from '@/components/empty';
-import { useAuth } from '@/components/providers/auth-provider';
+import { IconChevronRight } from '@tabler/icons-react';
+
 import { Button } from '@/components/ui/button';
-import { AnalyticalStats } from '~/src/domains/wishlist/components/analytical-stats';
-import InteractiveActionToolbar from '~/src/domains/wishlist/components/interactive-action-toolbar';
-import { RowWishlistItem } from '~/src/domains/wishlist/components/row-wishlist-item';
-import { StackWishlistItem } from '~/src/domains/wishlist/components/stack-wishlist-item';
-import { WishlistFooter } from '~/src/domains/wishlist/components/wishlist-footer';
-import { WishlistGuestState } from '~/src/domains/wishlist/components/wishlist-guest-state';
-import { useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
-import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
+import { useAuth } from '@/components/providers/auth-provider';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
+import { AccountWishlistItemCard } from '~/src/domains/account/components/account-wishlist-item-card';
+import { formatOrderAmount } from '~/src/domains/account/lib/order-utils';
+import { useWishlistActions } from '~/src/domains/wishlist/hooks/use-wishlist-actions';
+import { type SortOption, useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 
+import { WishlistEmptyState } from './components/wishlist-empty-state';
+import { WishlistFooter } from './components/wishlist-footer';
+import { WishlistGuestState } from './components/wishlist-guest-state';
 import { WishlistHeader } from './components/wishlist-header';
+import { WishlistPageSkeleton } from './components/wishlist-page-skeleton';
 
 export function WishlistDomain() {
   const { isAuthenticated } = useAuth();
-  const { selectedItems, sortBy, viewMode } = useWishlistStore();
-
+  const { sortBy, setSortBy } = useWishlistStore();
   const {
-    data: response,
+    items,
+    total,
     isLoading,
     isError,
-    error
-  } = useGetAccountWishlist(
-    {
-      limit: 50,
-      offset: 0,
-      sort: sortBy
-    },
-    { query: { enabled: isAuthenticated } }
-  );
+    refetch,
+    removingProductId,
+    isClearing,
+    removeItem,
+    clearAll
+  } = useWishlistActions(sortBy, isAuthenticated);
 
   if (!isAuthenticated) {
     return <WishlistGuestState />;
   }
 
-  const items = response?.data?.items ?? [];
-  const totalItems = response?.data?.total ?? 0;
+  const productIds = items
+    .map((item) => item.product_id)
+    .filter((id): id is number => typeof id === 'number' && id > 0);
 
-  const { totalSavings, priceDropsCount } = items.reduce(
-    (accumulator, item) => {
-      if (item.old_price && item.price && item.old_price > item.price) {
-        accumulator.totalSavings += item.old_price - item.price;
-        accumulator.priceDropsCount += 1;
-      }
-      return accumulator;
-    },
-    { totalSavings: 0, priceDropsCount: 0 }
-  );
+  const totalSavings = items.reduce((sum, item) => {
+    if (item.old_price && item.price && item.old_price > item.price) {
+      return sum + (item.old_price - item.price);
+    }
+    return sum;
+  }, 0);
 
   if (isLoading) {
-    return (
-      <div className='app-container flex min-h-[400px] items-center justify-center py-8 pt-24'>
-        <div className='text-muted-foreground animate-pulse text-sm'>Loading wishlist...</div>
-      </div>
-    );
+    return <WishlistPageSkeleton />;
   }
 
   if (isError) {
     return (
-      <div className='app-container flex min-h-[400px] flex-col items-center justify-center gap-4 py-8 pt-24'>
-        <p className='text-destructive font-medium'>Failed to load your wishlist</p>
-        <p className='text-muted-foreground text-xs'>
-          {error instanceof Error ? error.message : 'An unexpected error occurred.'}
-        </p>
-      </div>
+      <main className='app-container pt-24 pb-16'>
+        <DynamicBreadcrumb
+          items={[{ label: 'My Wishlist' }]}
+          direction='column'
+          separator={<IconChevronRight className='h-3 w-3' />}
+          className='text-muted-foreground text-xs'
+          breadcrumbClassName='flex items-center gap-1.5'
+        />
+        <div className='mx-auto mt-16 max-w-lg text-center'>
+          <h1 className='font-display mb-2 text-2xl font-semibold'>Couldn&apos;t load your wishlist</h1>
+          <p className='text-muted-foreground mb-6 text-sm'>
+            Something went wrong while fetching your saved items. Please try again.
+          </p>
+          <Button onClick={() => void refetch()} className='rounded-full'>
+            Retry
+          </Button>
+        </div>
+      </main>
     );
   }
 
-  const isEmpty = items.length === 0;
+  if (total === 0) {
+    return (
+      <main className='app-container pt-24 pb-16'>
+        <WishlistHeader
+          itemLength={0}
+          productIds={[]}
+          isClearing={false}
+          onClearAll={() => {}}
+        />
+        <WishlistEmptyState />
+      </main>
+    );
+  }
 
   return (
-    <div className='app-container space-y-4 py-8 pt-24'>
-      <WishlistHeader itemLength={totalItems} />
+    <main className='app-container pt-24 pb-16'>
+      <WishlistHeader
+        itemLength={total}
+        productIds={productIds}
+        isClearing={isClearing}
+        onClearAll={() => void clearAll(productIds)}
+      />
 
-      {isEmpty ? (
-        <Empty
-          title='Your wishlist is empty'
-          description='Start saving items you love'
-          icon={IconHeart}
-          content={
-            <Link href='/shop'>
-              <Button size='lg' className='gap-2 rounded-full'>
-                Explore Products
-                <IconArrowRight className='h-4 w-4' />
-              </Button>
-            </Link>
-          }
-        />
-      ) : (
-        <>
-          {/* Analytical Stats */}
-          <AnalyticalStats
-            priceDropsCount={priceDropsCount}
-            totalItems={totalItems}
-            totalSavings={totalSavings}
-          />
+      <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
+        <p className='text-muted-foreground text-sm'>
+          {total} saved {total === 1 ? 'item' : 'items'}
+          {totalSavings > 0 ? (
+            <>
+              {' '}
+              · save up to{' '}
+              <span className='text-accent font-medium'>{formatOrderAmount(totalSavings)}</span>{' '}
+              on current prices
+            </>
+          ) : null}
+        </p>
 
-          {/* Interactive Action Toolbar Component can go here */}
-          <InteractiveActionToolbar items={items} />
+        <Select
+          value={sortBy}
+          onValueChange={(value) => {
+            setSortBy(value as SortOption);
+          }}
+        >
+          <SelectTrigger className='w-[180px] rounded-full'>
+            <SelectValue placeholder='Sort by' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='name'>Name (A–Z)</SelectItem>
+            <SelectItem value='price-asc'>Price: low to high</SelectItem>
+            <SelectItem value='price-desc'>Price: high to low</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          {/* Core Content Layout View Switcher */}
-          <AnimatePresence mode='popLayout'>
-            {viewMode === 'grid' ? (
-              <motion.div
-                layout
-                className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-              >
-                {items.map((item, index) => {
-                  if (!item.product_id) {
-                    return null;
-                  }
-                  const isChecked = selectedItems.includes(item.product_id);
+      <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+        {items.map((item) =>
+          item.product_id ? (
+            <AccountWishlistItemCard
+              key={item.product_id}
+              item={item}
+              isRemoving={removingProductId === item.product_id}
+              onRemove={(productId) => void removeItem(productId)}
+            />
+          ) : null
+        )}
+      </div>
 
-                  return (
-                    <RowWishlistItem
-                      key={item.product_id}
-                      isChecked={isChecked}
-                      item={item}
-                      index={index}
-                    />
-                  );
-                })}
-              </motion.div>
-            ) : (
-              <motion.div layout className='space-y-4'>
-                {items.map((item, index) => {
-                  if (!item.product_id) {
-                    return null;
-                  }
-                  const isChecked = selectedItems.includes(item.product_id);
-                  return (
-                    <StackWishlistItem
-                      key={item.product_id}
-                      isChecked={isChecked}
-                      item={item}
-                      index={index}
-                    />
-                  );
-                })}
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <WishlistFooter />
-        </>
-      )}
-    </div>
+      <WishlistFooter />
+    </main>
   );
 }

@@ -1,3 +1,5 @@
+import type { GetProductsSort } from '@/services/-products-get.schemas';
+
 /** Curated shop collections — links map to `/shop` URL filters. */
 export interface CuratedCollection {
   id: string;
@@ -9,7 +11,7 @@ export interface CuratedCollection {
   cta: string;
   /** Optional product preview query for the collections page grid. */
   previewParams?: {
-    sort?: string;
+    sort?: GetProductsSort;
     is_new?: boolean;
     category_id?: number;
   };

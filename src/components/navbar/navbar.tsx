@@ -15,6 +15,7 @@ import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
 import { NavbarActionButton } from './navbar-action-button';
 import { UserProfile } from './user/user-profile';
+import { WishlistButton } from './wishlist-button';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -71,6 +72,8 @@ export function Navbar() {
                   <IconSearch className='size-5' stroke={1.75} />
                 </Link>
               </NavbarActionButton>
+
+              <WishlistButton />
 
               <CartButton />
 

@@ -8,6 +8,17 @@ import { cn } from '@/lib/utils';
 
 import { useFieldContext } from './useFormContext';
 
+/** Normalises TanStack Form / Zod field errors to a display string. */
+export function getFieldErrorMessage(error: unknown): string | null {
+  if (!error) return null;
+  if (typeof error === 'string') return error;
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === 'string') return message;
+  }
+  return String(error);
+}
+
 type FieldLabelProps = ComponentProps<typeof Label>;
 interface FieldDetailProps extends ComponentProps<'p'>, AsChildProps {}
 interface FieldMessageProps extends ComponentProps<'p'>, AsChildProps {}
@@ -54,12 +65,7 @@ export function FieldMessage({ asChild, className, children, ...props }: FieldMe
       ? field.state.meta.errors[0]
       : null;
 
-  const message = React.useMemo(() => {
-    if (!rawError) return null;
-    if (typeof rawError === 'string') return rawError;
-    if (typeof rawError === 'object' && 'message' in rawError) return rawError.message;
-    return String(rawError);
-  }, [rawError]);
+  const message = React.useMemo(() => getFieldErrorMessage(rawError), [rawError]);
 
   if (!message && !children) return null;
 

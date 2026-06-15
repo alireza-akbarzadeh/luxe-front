@@ -1,12 +1,13 @@
 'use client';
 
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Button } from '@/components/ui/button';
 
 import { CollectionCard } from './components/collection-card';
+import { CollectionHeroGrid } from './components/collection-hero-grid';
 import { CollectionPreviewRow } from './components/collection-preview-row';
 import { CURATED_COLLECTIONS } from './lib/collections.config';
 
@@ -35,26 +36,41 @@ export function CollectionsDomain() {
             opens a filtered view of the marketplace catalog.
           </p>
         </div>
+
+        <CollectionHeroGrid collections={CURATED_COLLECTIONS} />
       </div>
 
-      <div className='app-container mt-14 space-y-16'>
+      <div className='app-container mt-20 space-y-16 lg:mt-24 lg:space-y-20'>
         {CURATED_COLLECTIONS.map((collection, index) => (
           <section key={collection.id} className='scroll-mt-28'>
-            <CollectionCard collection={collection} index={index} />
-            <CollectionPreviewRow collection={collection} />
+            <div className='border-border/50 bg-muted/15 rounded-[2rem] border p-4 sm:rounded-[2.25rem] sm:p-5 lg:p-6'>
+              <CollectionCard collection={collection} index={index} />
+              <CollectionPreviewRow collection={collection} className='px-1 sm:px-2' />
+            </div>
           </section>
         ))}
       </div>
 
-      <div className='app-container mt-20'>
-        <div className='border-border/60 bg-muted/20 rounded-3xl border px-6 py-10 text-center sm:px-10'>
-          <h2 className='text-xl font-semibold tracking-tight'>Want the full catalog?</h2>
-          <p className='text-muted-foreground mx-auto mt-2 max-w-lg text-sm'>
-            Browse every product with filters for category, price, rating, and more.
-          </p>
-          <Button asChild className='mt-6 rounded-full' size='lg'>
-            <Link href='/shop'>Open shop</Link>
-          </Button>
+      <div className='app-container mt-20 lg:mt-24'>
+        <div className='border-border/60 from-muted/30 to-muted/10 relative overflow-hidden rounded-[2rem] border bg-gradient-to-br px-6 py-12 text-center sm:px-10 sm:py-14'>
+          <div className='bg-gold/10 pointer-events-none absolute -top-20 right-0 h-56 w-56 rounded-full blur-3xl' />
+          <div className='relative'>
+            <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
+              Full catalog
+            </p>
+            <h2 className='font-display mt-3 text-2xl font-semibold tracking-tight sm:text-3xl'>
+              Want every product in one place?
+            </h2>
+            <p className='text-muted-foreground mx-auto mt-3 max-w-lg text-sm leading-relaxed'>
+              Browse the complete marketplace with filters for category, price, rating, and more.
+            </p>
+            <Button asChild className='mt-8 rounded-full' size='lg'>
+              <Link href='/shop'>
+                Open shop
+                <IconArrowRight className='ml-2 size-4' />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </main>

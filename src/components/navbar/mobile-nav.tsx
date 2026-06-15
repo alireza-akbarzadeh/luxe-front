@@ -13,6 +13,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 
+import { navDiscoverLinks } from './nav-supplement';
+
 export const navUtilityLinks = [
   { label: 'Stores', href: '/store' },
   { label: 'Wishlist', href: '/wishlist' },
@@ -90,6 +92,24 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
                 {item.badge}
               </Badge>
             )}
+          </Link>
+        ))}
+      </div>
+
+      <Separator className='my-2' />
+
+      <div className='space-y-1'>
+        <p className='text-muted-foreground py-2 text-xs font-semibold tracking-wider uppercase'>
+          Discover
+        </p>
+        {navDiscoverLinks.map((link) => (
+          <Link
+            key={link.label}
+            href={link.href}
+            onClick={onNavigateAction}
+            className='text-muted-foreground hover:text-foreground block py-2 text-sm transition-colors'
+          >
+            {link.label}
           </Link>
         ))}
       </div>

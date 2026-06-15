@@ -26,8 +26,8 @@ export const profileMenuItems = [
   {
     type: 'link',
     href: '/wishlist',
-    title: 'Wishlist',
-    subtitle: 'Saved products & favorites',
+    title: 'My Wishlist',
+    subtitle: 'Products you saved for later',
     icon: IconHeart
   },
   {

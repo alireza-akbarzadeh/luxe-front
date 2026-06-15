@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 
 import { withForm } from '@/components/forms/useAppForm';
+import { getFieldErrorMessage } from '@/components/forms/form';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
@@ -175,7 +176,8 @@ export const CheckoutShipping = withForm({
                     </RadioGroup>
                     {showError && (
                       <p className='text-destructive mt-2 text-[10px] font-bold'>
-                        {field.state.meta.errors[0] ?? 'Select a shipping method'}
+                        {getFieldErrorMessage(field.state.meta.errors[0]) ??
+                          'Select a shipping method'}
                       </p>
                     )}
                   </>

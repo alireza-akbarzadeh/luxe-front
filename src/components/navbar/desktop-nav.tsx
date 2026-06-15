@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 import { GlowBadge } from '~/src/components/badges/glow-badge';
 
+import { navSupplementLinks } from './nav-supplement';
+
 const triggerClassName = cn(
   'bg-transparent h-auto px-0 py-0 text-sm font-medium',
   'text-muted-foreground hover:text-foreground hover:bg-transparent',
@@ -61,6 +63,15 @@ export function DesktopNav(props: DesktopNavProps) {
             </NavigationMenuItem>
           )
         )}
+        {navSupplementLinks.map((link) => (
+          <NavigationMenuItem key={link.label}>
+            <NavigationMenuLink asChild>
+              <Link href={link.href} className={cn(triggerClassName, 'inline-flex items-center gap-2')}>
+                {link.label}
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        ))}
       </NavigationMenuList>
     </NavigationMenu>
   );

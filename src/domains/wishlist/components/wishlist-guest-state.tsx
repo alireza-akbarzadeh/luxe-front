@@ -1,15 +1,24 @@
 'use client';
 
-import { IconArrowRight, IconHeart } from '@tabler/icons-react';
+import { IconArrowRight, IconChevronRight, IconHeart } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 export function WishlistGuestState() {
   return (
-    <main className='pt-24 pb-16'>
-      <div className='mx-auto max-w-lg px-4 sm:px-6'>
+    <main className='app-container pt-24 pb-16'>
+      <DynamicBreadcrumb
+        items={[{ label: 'My Wishlist' }]}
+        direction='column'
+        separator={<IconChevronRight className='h-3 w-3' />}
+        className='text-muted-foreground mb-8 text-xs'
+        breadcrumbClassName='flex items-center gap-1.5'
+      />
+
+      <div className='mx-auto max-w-lg'>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -22,8 +31,8 @@ export function WishlistGuestState() {
             Sign in to view your wishlist
           </h1>
           <p className='text-muted-foreground mb-8 text-sm leading-relaxed'>
-            Save favorites across devices, get price-drop alerts, and move items to cart when
-            you&apos;re ready to buy.
+            Save favorites across devices and move items to cart when you&apos;re ready. Your
+            wishlist is personal — separate from our curated collections.
           </p>
           <div className='flex flex-col gap-3 sm:flex-row sm:justify-center'>
             <Button asChild className='rounded-full' size='lg'>
