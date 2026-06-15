@@ -1,9 +1,10 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import { useGetCategories } from '@/services/-categories-get'; // assuming you have this endpoint
+import { useGetCategories } from '@/services/-categories-get';
 import { useGetSearchSuggestions } from '@/services/-search-suggestions-get';
 import type { DtoSuggestionItem } from '@/services/-search-suggestions-get.schemas';
 import { useGetSearchTrending } from '@/services/-search-trending-get';
@@ -11,31 +12,60 @@ import { useGetSearchTrending } from '@/services/-search-trending-get';
 import { useSearchParams } from '../hooks/useSearchParams';
 import { useSearchStore } from '../search.store';
 
-export function useSearchHeroController() {
-  const [showSuggestions, setShowSuggestions] = useState(false);
+interface UseSearchHeroControllerOptions {
+  autoFocus?: boolean;
+  closeOnNavigate?: boolean;
+}
+
+export function useSearchHeroController(options: UseSearchHeroControllerOptions = {}) {
+  const { autoFocus = false, closeOnNavigate = false } = options;
+
+  const [showSuggestions, setShowSuggestions] = useState(autoFocus);
   const [isSearching, setIsSearching] = useState(false);
   const [focusedSuggestion, setFocusedSuggestion] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const searchStore = useSearchStore();
+  const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
+  const closeSearchSheet = useSearchStore((state) => state.closeSearchSheet);
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const urlQuery = searchParams.query;
 
-  const [inputValue, setInputValue] = useState(searchParams.query);
+  const [inputValue, setInputValue] = useState(urlQuery);
+  const [syncedQuery, setSyncedQuery] = useState(urlQuery);
+
+  if (urlQuery !== syncedQuery) {
+    setSyncedQuery(urlQuery);
+    setInputValue(urlQuery);
+  }
+
   const debouncedInputValue = useDebounce(inputValue, 300);
 
-  // Global keyboard shortcut
+  useEffect(() => {
+    if (!autoFocus) return;
+    const frame = requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [autoFocus]);
+
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
+        if (window.matchMedia('(max-width: 1023px)').matches) {
+          openSearchSheet();
+          return;
+        }
         inputRef.current?.focus();
       }
     };
     document.addEventListener('keydown', handleGlobalKeyDown);
     return () => document.removeEventListener('keydown', handleGlobalKeyDown);
-  }, []);
+  }, [openSearchSheet]);
 
-  // Fetch suggestions (only when input has value)
   const { data: suggestionsData, isLoading: suggestionsLoading } = useGetSearchSuggestions(
     {
       q: debouncedInputValue,
@@ -49,42 +79,48 @@ export function useSearchHeroController() {
   );
   const suggestions = suggestionsData?.data?.suggestions || [];
 
-  // Fetch trending searches
   const { data: trendingData } = useGetSearchTrending({ limit: 6 });
-  const trendingSearches = trendingData?.data?.trending?.map((t) => t.query) || [];
+  const trendingSearches =
+    trendingData?.data?.trending?.map((t) => t.query).filter((query): query is string => Boolean(query)) ||
+    [];
 
-  // Fetch popular categories (limit 6)
   const { data: categoriesData } = useGetCategories({ limit: 6, sort: 'popular' });
   const popularCategories = categoriesData?.data?.categories?.map((c) => c.name) || [];
+
+  const navigateToSearch = useCallback(
+    (query: string) => {
+      const trimmed = query.trim();
+      if (!trimmed) return;
+
+      if (pathname === '/search') {
+        searchParams.setQuery(trimmed);
+      } else {
+        router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+      }
+
+      if (closeOnNavigate) {
+        closeSearchSheet();
+      }
+    },
+    [closeOnNavigate, closeSearchSheet, pathname, router, searchParams]
+  );
 
   const handleSearch = useCallback(
     (query: string) => {
       setShowSuggestions(false);
       setIsSearching(true);
-      searchParams.setQuery(query);
-      // Result count is not known immediately; we can pass 0 or fetch later
+      navigateToSearch(query);
       searchStore.addRecentSearch(query, 0);
       searchStore.incrementSearchCount();
       setTimeout(() => setIsSearching(false), 300);
     },
-    [searchParams, searchStore]
+    [navigateToSearch, searchStore]
   );
 
-  // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (focusedSuggestion >= 0 && suggestions[focusedSuggestion]) {
-        const suggestion = suggestions[focusedSuggestion];
-        if (suggestion.type === 'product') {
-          window.open(`/product/${suggestion.id}`, '_blank');
-        } else if (suggestion.type === 'store') {
-          window.open(`/store/${suggestion.slug}`, '_blank');
-        } else if (suggestion.type === 'category') {
-          searchParams.toggleCategory(suggestion.name ?? '');
-          setShowSuggestions(false);
-        } else {
-          handleSearch(suggestion.name ?? '');
-        }
+        handleSuggestionClick(suggestions[focusedSuggestion]);
       } else {
         handleSearch(inputValue);
       }
@@ -96,21 +132,39 @@ export function useSearchHeroController() {
       setFocusedSuggestion((prev) => (prev > 0 ? prev - 1 : -1));
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
-      inputRef.current?.blur();
+      if (closeOnNavigate) {
+        closeSearchSheet();
+      } else {
+        inputRef.current?.blur();
+      }
     }
   };
 
   const handleSuggestionClick = (suggestion: DtoSuggestionItem) => {
     if (suggestion.type === 'product') {
+      if (closeOnNavigate) closeSearchSheet();
       window.open(`/product/${suggestion.id}`, '_blank');
-    } else if (suggestion.type === 'store') {
-      window.open(`/store/${suggestion.slug}`, '_blank');
-    } else if (suggestion.type === 'category') {
-      searchParams.toggleCategory(suggestion.name ?? '');
-      setShowSuggestions(false);
-    } else {
-      handleSearch(suggestion.name ?? '');
+      return;
     }
+
+    if (suggestion.type === 'store') {
+      if (closeOnNavigate) closeSearchSheet();
+      window.open(`/store/${suggestion.slug}`, '_blank');
+      return;
+    }
+
+    if (suggestion.type === 'category') {
+      if (pathname !== '/search') {
+        router.push(`/search?categories=${encodeURIComponent(suggestion.name ?? '')}`);
+      } else {
+        searchParams.toggleCategory(suggestion.name ?? '');
+      }
+      setShowSuggestions(false);
+      if (closeOnNavigate) closeSearchSheet();
+      return;
+    }
+
+    handleSearch(suggestion.name ?? '');
   };
 
   return {

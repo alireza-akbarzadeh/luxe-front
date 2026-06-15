@@ -12,7 +12,8 @@ import { useMemo } from 'react';
 
 import {
   SEARCH_DEFAULT_PRICE_MAX,
-  SEARCH_DEFAULT_PRICE_MIN
+  SEARCH_DEFAULT_PRICE_MIN,
+  type SearchFilterDraft
 } from '../search.utils';
 
 export type SortBy = 'relevance' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'popular';
@@ -87,6 +88,21 @@ export function useSearchParams() {
   const setView = (value: ViewMode) => setParams({ view: value });
   const setPage = (value: number) => setParams({ page: value });
   const setPerPage = (value: number) => setParams({ perPage: value, page: 1 });
+
+  const applyFilters = (draft: SearchFilterDraft) => {
+    setParams({
+      categories: draft.categories,
+      stores: draft.stores,
+      priceMin: draft.priceRange[0],
+      priceMax: draft.priceRange[1],
+      minRating: draft.minRating,
+      inStock: draft.inStock,
+      onSale: draft.onSale,
+      isNew: draft.isNew,
+      isDigital: draft.isDigital,
+      page: 1
+    });
+  };
 
   const clearFilters = () => {
     setParams({
@@ -179,6 +195,7 @@ export function useSearchParams() {
     setView,
     setPage,
     setPerPage,
+    applyFilters,
     clearFilters,
     clearAll,
     // Helpers

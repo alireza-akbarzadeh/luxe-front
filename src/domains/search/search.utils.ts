@@ -6,6 +6,85 @@ export const SEARCH_DEFAULT_PRICE_MIN = 0;
 export const SEARCH_DEFAULT_PRICE_MAX = 1000;
 export const SEARCH_PRICE_STEP = 1;
 
+/** Client-side filter draft — applied to URL only when the mobile sheet is submitted. */
+export interface SearchFilterDraft {
+  categories: string[];
+  stores: string[];
+  priceRange: [number, number];
+  minRating: number;
+  inStock: boolean;
+  onSale: boolean;
+  isNew: boolean;
+  isDigital: boolean;
+}
+
+export function createEmptySearchFilterDraft(): SearchFilterDraft {
+  return {
+    categories: [],
+    stores: [],
+    priceRange: [SEARCH_DEFAULT_PRICE_MIN, SEARCH_DEFAULT_PRICE_MAX],
+    minRating: 0,
+    inStock: false,
+    onSale: false,
+    isNew: false,
+    isDigital: false
+  };
+}
+
+export function createSearchFilterDraftFromParams(
+  params: Pick<
+    SearchParams,
+    | 'categories'
+    | 'stores'
+    | 'priceRange'
+    | 'minRating'
+    | 'inStock'
+    | 'onSale'
+    | 'isNew'
+    | 'isDigital'
+  >
+): SearchFilterDraft {
+  return {
+    categories: [...params.categories],
+    stores: [...params.stores],
+    priceRange: [params.priceRange[0], params.priceRange[1]],
+    minRating: params.minRating,
+    inStock: params.inStock,
+    onSale: params.onSale,
+    isNew: params.isNew,
+    isDigital: params.isDigital
+  };
+}
+
+export function hasActiveSearchFilterDraft(draft: SearchFilterDraft): boolean {
+  return (
+    draft.categories.length > 0 ||
+    draft.stores.length > 0 ||
+    draft.priceRange[0] > SEARCH_DEFAULT_PRICE_MIN ||
+    draft.priceRange[1] < SEARCH_DEFAULT_PRICE_MAX ||
+    draft.minRating > 0 ||
+    draft.inStock ||
+    draft.onSale ||
+    draft.isNew ||
+    draft.isDigital
+  );
+}
+
+export function countSearchFilterDraft(draft: SearchFilterDraft): number {
+  let count = 0;
+  if (draft.categories.length > 0) count += draft.categories.length;
+  if (draft.stores.length > 0) count += draft.stores.length;
+  if (draft.priceRange[0] > SEARCH_DEFAULT_PRICE_MIN || draft.priceRange[1] < SEARCH_DEFAULT_PRICE_MAX) {
+    count++;
+  }
+  if (draft.minRating > 0) count++;
+  if (draft.inStock) count++;
+  if (draft.onSale) count++;
+  if (draft.isNew) count++;
+  if (draft.isDigital) count++;
+  return count;
+}
+
 export function isSearchPriceFilterActive(priceRange: [number, number]): boolean {
   return (
     priceRange[0] > SEARCH_DEFAULT_PRICE_MIN || priceRange[1] < SEARCH_DEFAULT_PRICE_MAX

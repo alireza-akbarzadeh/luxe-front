@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
+import { useSearchStore } from '@/domains/search/search.store';
 import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 import { CartButton } from '../cart/cart-button';
@@ -17,6 +19,7 @@ import { UserProfile } from './user/user-profile';
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
   const { data: { data: navMenus } = {} } = useGetNavMenus();
 
   useEffect(() => {
@@ -55,7 +58,15 @@ export function Navbar() {
             </div>
 
             <div className='ml-auto flex items-center gap-0.5 sm:gap-1'>
-              <NavbarActionButton asChild>
+              <NavbarActionButton
+                className='lg:hidden'
+                aria-label='Search'
+                onClick={openSearchSheet}
+              >
+                <IconSearch className='size-5' stroke={1.75} />
+              </NavbarActionButton>
+
+              <NavbarActionButton asChild className='hidden lg:inline-flex'>
                 <Link href='/search' aria-label='Search'>
                   <IconSearch className='size-5' stroke={1.75} />
                 </Link>
@@ -106,6 +117,7 @@ export function Navbar() {
         </AnimatePresence>
       </motion.header>
       <CartSheet />
+      <SearchMobileSheet />
     </>
   );
 }

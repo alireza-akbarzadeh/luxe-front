@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Slider } from '@/components/ui/slider';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { cartMoneyClassName } from '@/domains/cart/lib/cart-utils';
+import { formatPrice } from '@/domains/home/lib/home-utils';
 import { cn } from '@/lib/utils';
 
 import { useSearchParams } from '../hooks/useSearchParams';
@@ -14,25 +14,31 @@ import {
   SEARCH_PRICE_STEP
 } from '../search.utils';
 
+interface SearchPriceRangeFilterProps {
+  /** Controlled draft value — skips URL updates until parent applies. */
+  value?: [number, number];
+  onChange?: (range: [number, number]) => void;
+}
+
 /**
  * Price range slider with local drag state.
- * URL (and search API) update only when the user releases a thumb — not on every move.
+ * URL updates on release in sidebar mode; draft mode delegates to parent only.
  */
-export function SearchPriceRangeFilter() {
+export function SearchPriceRangeFilter(props: SearchPriceRangeFilterProps = {}) {
+  const { value, onChange } = props;
   const searchParams = useSearchParams();
-  const committedRange = searchParams.priceRange;
+  const committedRange = value ?? searchParams.priceRange;
+  const isDraftMode = value != null && onChange != null;
 
   const [localRange, setLocalRange] = useState<[number, number]>(committedRange);
-  const [isDragging, setIsDragging] = useState(false);
+  const [syncedRange, setSyncedRange] = useState(committedRange);
 
-  useEffect(() => {
-    if (!isDragging) {
-      setLocalRange(committedRange);
-    }
-  }, [committedRange[0], committedRange[1], isDragging]);
+  if (committedRange[0] !== syncedRange[0] || committedRange[1] !== syncedRange[1]) {
+    setSyncedRange(committedRange);
+    setLocalRange(committedRange);
+  }
 
   const handleValueChange = (values: number[]) => {
-    setIsDragging(true);
     setLocalRange([values[0] ?? SEARCH_DEFAULT_PRICE_MIN, values[1] ?? SEARCH_DEFAULT_PRICE_MAX]);
   };
 
@@ -42,7 +48,12 @@ export function SearchPriceRangeFilter() {
       values[1] ?? SEARCH_DEFAULT_PRICE_MAX
     ];
     setLocalRange(next);
-    setIsDragging(false);
+
+    if (isDraftMode) {
+      onChange(next);
+      return;
+    }
+
     searchParams.setPriceRange(next);
   };
 
@@ -51,7 +62,7 @@ export function SearchPriceRangeFilter() {
       <div className='mb-3 flex items-center justify-between gap-2'>
         <h3 className='font-semibold'>Price Range</h3>
         <span className={cn('text-muted-foreground text-xs', cartMoneyClassName)}>
-          Drag to adjust · release to apply
+          {isDraftMode ? 'Adjust range' : 'Drag to adjust · release to apply'}
         </span>
       </div>
       <Slider

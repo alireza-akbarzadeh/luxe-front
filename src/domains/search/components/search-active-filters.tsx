@@ -4,9 +4,8 @@ import { IconX } from '@tabler/icons-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
-
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
 import {

@@ -1,27 +1,51 @@
 'use client';
 
 import {
-  IconArrowRight,
-  IconClock,
   IconCommand,
-  IconCornerDownLeft,
   IconLoader2,
   IconSearch,
-  IconSparkles,
-  IconTag,
-  IconTrendingUp,
   IconX
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { useSearchHeroController } from '@/domains/search/hooks/useSearchHeroController';
 import { useSearchParams } from '@/domains/search/hooks/useSearchParams';
+import { useSearchStore } from '@/domains/search/search.store';
 
-export function SearchHero() {
+import { SearchSuggestionsPanel } from '../components/search-suggestions-panel';
+
+function SearchHeroMobileBar() {
+  const searchParams = useSearchParams();
+  const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
+
+  return (
+    <section className='from-secondary/50 to-background relative border-b bg-linear-to-b pt-20 lg:hidden'>
+      <div className='mx-auto max-w-5xl px-4 py-8'>
+        <div className='mb-6 text-center'>
+          <h1 className='mb-2 text-2xl font-bold'>Discover Your Next Favorite</h1>
+          <p className='text-muted-foreground text-sm'>
+            Search across thousands of products, stores, and categories
+          </p>
+        </div>
+
+        <button
+          type='button'
+          onClick={openSearchSheet}
+          className='bg-background hover:border-primary/40 flex h-12 w-full items-center gap-3 rounded-full border-2 px-4 text-left shadow-sm transition-colors'
+        >
+          <IconSearch className='text-muted-foreground h-5 w-5 shrink-0' />
+          <span className={searchParams.query ? 'truncate text-sm' : 'text-muted-foreground truncate text-sm'}>
+            {searchParams.query || 'Search products, stores, categories…'}
+          </span>
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function SearchHeroDesktop() {
   const {
     isSearching,
     handleSearch,
@@ -44,7 +68,7 @@ export function SearchHero() {
   const searchParams = useSearchParams();
 
   return (
-    <section className='from-secondary/50 to-background relative border-b bg-linear-to-b pt-20'>
+    <section className='from-secondary/50 to-background relative hidden border-b bg-linear-to-b pt-20 lg:block'>
       <div className='mx-auto max-w-5xl px-4 py-12 md:py-16'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,7 +81,6 @@ export function SearchHero() {
           </p>
         </motion.div>
 
-        {/* Search Input – same JSX, but note suggestions are now from API */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -112,7 +135,6 @@ export function SearchHero() {
             </div>
           </div>
 
-          {/* Keyboard shortcut hint */}
           <div className='text-muted-foreground absolute -bottom-6 left-0 flex items-center gap-1 text-xs'>
             <kbd className='bg-muted rounded px-1.5 py-0.5 font-mono text-[10px]'>
               <IconCommand className='inline h-2.5 w-2.5' />K
@@ -120,7 +142,6 @@ export function SearchHero() {
             <span>to search anywhere</span>
           </div>
 
-          {/* Suggestions Dropdown */}
           <AnimatePresence>
             {showSuggestions && (inputValue || searchStore.recentSearches.length > 0) && (
               <motion.div
@@ -131,154 +152,26 @@ export function SearchHero() {
                 className='bg-card absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border shadow-xl'
               >
                 <div className='custom-scrollbar max-h-100 overflow-y-auto'>
-                  {/* Suggestions when typing */}
-                  {inputValue && suggestions.length > 0 && (
-                    <div className='p-2'>
-                      <div className='text-muted-foreground px-3 py-2 text-xs font-medium'>
-                        Suggestions
-                      </div>
-                      {suggestions.map((suggestion, index) => (
-                        <button
-                          key={`${suggestion.type}-${suggestion.id || suggestion.name}`}
-                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 transition-colors ${
-                            index === focusedSuggestion ? 'bg-accent/20' : 'hover:bg-accent/10'
-                          }`}
-                          onMouseEnter={() => setFocusedSuggestion(index)}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                          {suggestion.type === 'product' && suggestion.image && (
-                            <Image
-                              src={suggestion.image}
-                              alt={suggestion.name ?? ''}
-                              width={40}
-                              height={40}
-                              className='rounded-lg object-cover'
-                            />
-                          )}
-                          {suggestion.type === 'store' && suggestion.image && (
-                            <Image
-                              src={suggestion.image}
-                              alt={suggestion.name ?? ''}
-                              width={40}
-                              height={40}
-                              className='rounded-full object-cover'
-                            />
-                          )}
-                          {suggestion.type === 'category' && (
-                            <div className='bg-secondary flex h-10 w-10 items-center justify-center rounded-lg'>
-                              <IconTag className='text-muted-foreground h-5 w-5' />
-                            </div>
-                          )}
-                          <div className='flex-1 text-left'>
-                            <div className='text-sm font-medium'>{suggestion.name}</div>
-                            <div className='text-muted-foreground text-xs'>
-                              {suggestion.type === 'product' && suggestion.name}
-                              {suggestion.type === 'store' && 'Store'}
-                              {suggestion.type === 'category' && 'Category'}
-                            </div>
-                          </div>
-                          {suggestion.type === 'product' && suggestion.price && (
-                            <span className='text-sm font-semibold'>${suggestion.price}</span>
-                          )}
-                          <IconArrowRight className='text-muted-foreground h-4 w-4' />
-                        </button>
-                      ))}
-                      <Separator />
-                      <div className='flex items-center gap-2 pt-2'>
-                        <div className='rounded-xs border p-px'>
-                          <IconCornerDownLeft className='h-4 w-4' />
-                        </div>
-                        <span className='text-foreground text-xs'>Go to Page</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* No input - show recent and trending */}
-                  {!inputValue && (
-                    <div className='p-2'>
-                      {/* Recent Searches */}
-                      {searchStore.recentSearches.length > 0 && (
-                        <div className='mb-4'>
-                          <div className='flex items-center justify-between px-3 py-2'>
-                            <span className='text-muted-foreground flex items-center gap-1 text-xs font-medium'>
-                              <IconClock className='h-3 w-3' />
-                              Recent Searches
-                            </span>
-                            <button
-                              className='text-primary text-xs hover:underline'
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                searchStore.clearRecentSearches();
-                              }}
-                            >
-                              Clear
-                            </button>
-                          </div>
-                          <div className='flex flex-wrap gap-2 px-3'>
-                            {searchStore.recentSearches.slice(0, 6).map((item) => (
-                              <button
-                                key={item.query}
-                                className='bg-secondary hover:bg-secondary/80 group flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors'
-                                onClick={() => handleSearch(item.query)}
-                              >
-                                <IconClock className='text-muted-foreground h-3 w-3' />
-                                {item.query}
-                                <IconX
-                                  className='text-muted-foreground h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100'
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    searchStore.removeRecentSearch(item.query);
-                                  }}
-                                />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Trending Searches */}
-                      {trendingSearches.length > 0 && (
-                        <div>
-                          <div className='text-muted-foreground flex items-center gap-1 px-3 py-2 text-xs font-medium'>
-                            <IconTrendingUp className='h-3 w-3' />
-                            Trending Searches
-                          </div>
-                          <div className='flex flex-wrap gap-2 px-3 pb-2'>
-                            {trendingSearches.map((query) => (
-                              <button
-                                key={query}
-                                className='bg-accent/20 hover:bg-accent/30 flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors'
-                                onClick={() => handleSearch(query ?? '')}
-                              >
-                                <IconSparkles className='text-primary h-3 w-3' />
-                                {query}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* No results for suggestions */}
-                  {inputValue && suggestions.length === 0 && !suggestionsLoading && (
-                    <div className='p-8 text-center'>
-                      <IconSearch className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
-                      <p className='text-muted-foreground text-sm'>
-                        No suggestions found for &quot;{inputValue}&quot;
-                      </p>
-                      <p className='text-muted-foreground mt-1 text-xs'>
-                        Press Enter to search anyway
-                      </p>
-                    </div>
-                  )}
+                  <SearchSuggestionsPanel
+                    inputValue={inputValue}
+                    suggestions={suggestions}
+                    suggestionsLoading={suggestionsLoading}
+                    focusedSuggestion={focusedSuggestion}
+                    recentSearches={searchStore.recentSearches}
+                    trendingSearches={trendingSearches}
+                    onSuggestionClick={handleSuggestionClick}
+                    onRecentSearchClick={handleSearch}
+                    onTrendingSearchClick={handleSearch}
+                    onRemoveRecentSearch={searchStore.removeRecentSearch}
+                    onClearRecentSearches={searchStore.clearRecentSearches}
+                    onFocusSuggestion={setFocusedSuggestion}
+                  />
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
 
-        {/* Popular Categories */}
         {popularCategories.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -301,5 +194,14 @@ export function SearchHero() {
         )}
       </div>
     </section>
+  );
+}
+
+export function SearchHero() {
+  return (
+    <>
+      <SearchHeroMobileBar />
+      <SearchHeroDesktop />
+    </>
   );
 }

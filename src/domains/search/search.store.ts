@@ -8,19 +8,30 @@ export interface SearchHistoryItem {
   resultCount: number;
 }
 
-interface SearchStore {
+interface SearchStoreState {
   recentSearches: SearchHistoryItem[];
+  recentlyViewedProducts: number[];
+  searchCount: number;
+  isSearchSheetOpen: boolean;
+  isFilterSheetOpen: boolean;
+}
+
+interface SearchStoreActions {
   addRecentSearch: (query: string, resultCount: number) => void;
   removeRecentSearch: (query: string) => void;
   clearRecentSearches: () => void;
-
-  recentlyViewedProducts: number[];
   addRecentlyViewedProduct: (productId: number) => void;
   clearRecentlyViewedProducts: () => void;
-
-  searchCount: number;
   incrementSearchCount: () => void;
+  setSearchSheetOpen: (open: boolean) => void;
+  openSearchSheet: () => void;
+  closeSearchSheet: () => void;
+  setFilterSheetOpen: (open: boolean) => void;
+  openFilterSheet: () => void;
+  closeFilterSheet: () => void;
 }
+
+type SearchStore = SearchStoreState & SearchStoreActions;
 
 export const useSearchStore = create<SearchStore>()(
   persist(
@@ -28,6 +39,15 @@ export const useSearchStore = create<SearchStore>()(
       recentSearches: [],
       recentlyViewedProducts: [],
       searchCount: 0,
+      isSearchSheetOpen: false,
+      isFilterSheetOpen: false,
+
+      setSearchSheetOpen: (open) => set({ isSearchSheetOpen: open }),
+      openSearchSheet: () => set({ isSearchSheetOpen: true }),
+      closeSearchSheet: () => set({ isSearchSheetOpen: false }),
+      setFilterSheetOpen: (open) => set({ isFilterSheetOpen: open }),
+      openFilterSheet: () => set({ isFilterSheetOpen: true }),
+      closeFilterSheet: () => set({ isFilterSheetOpen: false }),
 
       addRecentSearch: (query, resultCount) => {
         if (!query.trim()) return;
