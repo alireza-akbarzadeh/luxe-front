@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/scroll-area';
 import { TwemojiFlag } from '@/components/ui/twemoji';
 import { useDynamicNode } from '@/hooks/useDynamicNode';
+import { DEFAULT_PHONE_COUNTRY, toPhoneInputValue } from '@/lib/phone-utils';
 import { cn } from '@/lib/utils';
 import { createContextFactory } from '~/src/hooks/useContextFactory';
 import { useMediaDevices } from '~/src/hooks/useMediaDevices';
@@ -42,17 +43,23 @@ type InputPhoneProps = Omit<
 > & {
   label?: string;
 };
-export function InputPhone({ label, className, ...props }: InputPhoneProps) {
-  const field = useFieldContext<PhoneInputPrimitive.Value>();
+export function InputPhone({
+  label,
+  className,
+  defaultCountry = DEFAULT_PHONE_COUNTRY,
+  ...props
+}: InputPhoneProps) {
+  const field = useFieldContext<string>();
+  const phoneValue = toPhoneInputValue(field.state.value, defaultCountry);
 
   return (
     <FieldContainer label={label}>
       <PhoneInputPrimitive.default
         {...props}
-        value={field.state.value}
+        defaultCountry={defaultCountry}
+        value={phoneValue}
         onChange={(value) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          field.handleChange(() => value as any);
+          field.handleChange(value ?? '');
         }}
         onBlur={field.handleBlur}
         className={cn('flex', className)}

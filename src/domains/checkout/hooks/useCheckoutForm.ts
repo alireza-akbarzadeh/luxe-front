@@ -2,6 +2,7 @@
 // app/checkout/hooks/useCheckoutForm.ts
 import { useEffect, useRef } from 'react';
 
+import { normalizePhoneForInput } from '@/lib/phone-utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 
@@ -26,7 +27,7 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
     email: userEmail || '',
     firstName: userFirstName || '',
     lastName: userLastName || '',
-    phone: userPhone || '',
+    phone: normalizePhoneForInput(userPhone) ?? userPhone ?? '',
     newsletter: false,
     saveInfo: false,
 
@@ -74,7 +75,7 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
       state: defaultAddress?.state || '',
       zip: defaultAddress?.postal_code || '',
       country: defaultAddress?.country || 'United States',
-      phone: userPhone || ''
+      phone: normalizePhoneForInput(userPhone) ?? userPhone ?? ''
     };
 
     Object.entries(updates).forEach(([key, value]) => {

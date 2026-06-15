@@ -125,6 +125,26 @@ export function getFreeShippingRemaining(
   return Math.max(0, freeShippingThreshold - subtotal);
 }
 
+/** Whether the cart subtotal qualifies for the configured free-shipping threshold. */
+export function qualifiesForFreeShipping(
+  subtotal: number,
+  freeShippingThreshold: number = DEFAULT_CART_COMMERCE_SETTINGS.freeShippingThreshold
+): boolean {
+  return subtotal >= freeShippingThreshold;
+}
+
+/**
+ * Applies commerce free-shipping rules to a provider rate.
+ * When the threshold is met, shipping is always $0 regardless of provider list price.
+ */
+export function getEffectiveShippingPrice(
+  providerPrice: number,
+  subtotal: number,
+  settings: Pick<CartCommerceSettings, 'freeShippingThreshold'> = DEFAULT_CART_COMMERCE_SETTINGS
+): number {
+  return qualifiesForFreeShipping(subtotal, settings.freeShippingThreshold) ? 0 : providerPrice;
+}
+
 export function calculateCartTotals(
   items: DtoCartItemDetail[],
   subtotal: number,

@@ -90,6 +90,8 @@ export const CheckoutReview = withForm({
     const {
       subtotal,
       shippingPrice,
+      providerRate,
+      hasFreeShipping,
       tax,
       couponDiscount,
       appliedCouponCode,
@@ -180,7 +182,16 @@ export const CheckoutReview = withForm({
               </div>
               <span className={cn(cartMoneyClassName, 'font-medium')}>
                 {shippingPrice === 0 ? (
-                  <span className='text-green-600'>Free</span>
+                  hasFreeShipping && providerRate > 0 ? (
+                    <span className='flex items-center gap-2'>
+                      <span className='text-muted-foreground line-through'>
+                        {formatCartMoney(providerRate)}
+                      </span>
+                      <span className='text-green-600'>Free</span>
+                    </span>
+                  ) : (
+                    <span className='text-green-600'>Free</span>
+                  )
                 ) : (
                   formatCartMoney(shippingPrice)
                 )}
@@ -261,7 +272,16 @@ export const CheckoutReview = withForm({
               <dt className='text-muted-foreground'>Shipping</dt>
               <dd className={cartMoneyClassName}>
                 {shippingPrice === 0 ? (
-                  <span className='text-green-600'>Free</span>
+                  hasFreeShipping && providerRate > 0 ? (
+                    <span className='flex items-center gap-2'>
+                      <span className='text-muted-foreground line-through'>
+                        {formatCartMoney(providerRate)}
+                      </span>
+                      <span className='text-green-600'>Free</span>
+                    </span>
+                  ) : (
+                    <span className='text-green-600'>Free</span>
+                  )
                 ) : (
                   formatCartMoney(shippingPrice)
                 )}

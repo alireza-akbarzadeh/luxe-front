@@ -8,8 +8,14 @@ import Image from 'next/image';
 
 import { withForm } from '@/components/forms/useAppForm';
 import { Separator } from '@/components/ui/separator';
+import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
 import { formatEstimatedTaxLabel } from '@/domains/cart/lib/cart-commerce-settings';
-import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
+import {
+  cartMoneyClassName,
+  formatCartMoney,
+  getCartItemImage,
+  getCartItemName
+} from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
 import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
@@ -23,8 +29,17 @@ export const CheckoutSummary = withForm({
 
     const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
 
-    const { subtotal, shippingPrice, tax, couponDiscount, appliedCouponCode, total, settings } =
-      useCheckoutTotals(shippingProviderId);
+    const {
+      subtotal,
+      shippingPrice,
+      providerRate,
+      hasFreeShipping,
+      tax,
+      couponDiscount,
+      appliedCouponCode,
+      total,
+      settings
+    } = useCheckoutTotals(shippingProviderId);
 
     return (
       <motion.div
@@ -34,17 +49,24 @@ export const CheckoutSummary = withForm({
         className='bg-card border-border/50 sticky top-24 rounded-2xl border p-6'
       >
         <h2 className='mb-4 text-lg font-semibold'>Order Summary</h2>
+        <FreeShippingProgress subtotal={subtotal} className='mb-4' />
         <div className='mb-4 max-h-64 space-y-3 overflow-y-auto'>
           {items.map((item) => (
             <div key={`${item.id}-${item.color}-${item.size}`} className='flex items-center gap-3'>
               <div className='bg-muted relative h-14 w-14 shrink-0 overflow-hidden rounded-xl'>
-                <Image src={item.image || ''} alt={item.name || ''} fill className='object-cover' />
+                <Image
+                  src={getCartItemImage(item)}
+                  alt={getCartItemName(item)}
+                  fill
+                  className='object-cover'
+                  sizes='56px'
+                />
                 <span className='bg-accent text-accent-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
                   {item.quantity}
                 </span>
               </div>
               <div className='min-w-0 flex-1'>
-                <p className='truncate text-sm font-medium'>{item.name}</p>
+                <p className='truncate text-sm font-medium'>{getCartItemName(item)}</p>
                 {(item.color || item.size) && (
                   <p className='text-muted-foreground text-xs'>
                     {item.color && `${item.color}`}
@@ -69,7 +91,16 @@ export const CheckoutSummary = withForm({
             <span className='text-muted-foreground'>Shipping</span>
             <span className={cartMoneyClassName}>
               {shippingPrice === 0 ? (
-                <span className='text-green-600'>Free</span>
+                hasFreeShipping && providerRate > 0 ? (
+                  <span className='flex items-center gap-2'>
+                    <span className='text-muted-foreground line-through'>
+                      {formatCartMoney(providerRate)}
+                    </span>
+                    <span className='font-medium text-green-600'>Free</span>
+                  </span>
+                ) : (
+                  <span className='text-green-600'>Free</span>
+                )
               ) : (
                 formatCartMoney(shippingPrice)
               )}

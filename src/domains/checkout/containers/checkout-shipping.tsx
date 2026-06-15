@@ -5,7 +5,17 @@ import { motion } from 'framer-motion';
 import { withForm } from '@/components/forms/useAppForm';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
+import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
+import {
+  cartMoneyClassName,
+  formatCartMoney,
+  getEffectiveShippingPrice,
+  qualifiesForFreeShipping
+} from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
+import { useCartController } from '@/hooks/useCartController';
+import { cn } from '@/lib/utils';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
 
@@ -13,8 +23,11 @@ export const CheckoutShipping = withForm({
   defaultValues: checkoutDefaultValues,
 
   render: function ShippingRender({ form }) {
+    const { subtotal } = useCartController();
+    const { settings } = useCartCommerceSettings();
     const { data: providersData, isLoading: isLoadingShipping } = useGetShippingProviders();
     const shippingProviders: ModelsShippingProviders[] = providersData?.data || [];
+    const hasFreeShipping = qualifiesForFreeShipping(subtotal, settings.freeShippingThreshold);
 
     return (
       <motion.div
@@ -75,7 +88,7 @@ export const CheckoutShipping = withForm({
               </form.AppField>
             </div>
             <form.AppField name='phone'>
-              {(field) => <field.InputPhone label='Phone' placeholder='(555) 123-4567' />}
+              {(field) => <field.InputPhone label='Phone' placeholder='0938 122 3880' />}
             </form.AppField>
           </div>
         </div>
@@ -84,30 +97,47 @@ export const CheckoutShipping = withForm({
         <div className='pt-6'>
           <h3 className='mb-4 font-medium'>Shipping Method</h3>
 
+          <FreeShippingProgress subtotal={subtotal} className='mb-4' />
+
           {isLoadingShipping ? (
             <p className='text-muted-foreground text-sm'>Loading shipping options…</p>
+          ) : shippingProviders.length === 0 ? (
+            <p className='text-destructive text-sm'>No shipping options are available right now.</p>
           ) : (
             <form.AppField name='shippingProviderId'>
               {(field) => {
-                const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+                const showError = field.state.meta.errors.length > 0;
+
                 return (
                   <>
                     <RadioGroup
                       value={field.state.value ? String(field.state.value) : ''}
-                      onValueChange={(val) => field.handleChange(Number(val))}
+                      onValueChange={(val) => {
+                        field.handleChange(Number(val));
+                        field.handleBlur();
+                      }}
                       className='space-y-3'
                     >
                       {shippingProviders.map((provider) => {
                         const isSelected = field.state.value === provider.id;
+                        const providerRate = provider.price ?? 0;
+                        const effectivePrice = getEffectiveShippingPrice(
+                          providerRate,
+                          subtotal,
+                          settings
+                        );
+
                         return (
                           <Label
                             key={provider.id}
                             htmlFor={`shipping-${provider.id}`}
-                            className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors ${
+                            className={cn(
+                              'flex cursor-pointer items-center justify-between rounded-xl border p-4 transition-colors',
                               isSelected
                                 ? 'border-accent bg-accent/5'
-                                : 'border-border hover:border-accent/50'
-                            }`}
+                                : 'border-border hover:border-accent/50',
+                              showError && !field.state.value && 'border-destructive/40'
+                            )}
                           >
                             <div className='flex items-center gap-3'>
                               <RadioGroupItem
@@ -123,18 +153,29 @@ export const CheckoutShipping = withForm({
                                 </p>
                               </div>
                             </div>
-                            <span className='font-medium'>
-                              {provider.price === 0
-                                ? 'Free'
-                                : `$${(provider.price ?? 0).toFixed(2)}`}
+                            <span className={cn('text-right font-medium', cartMoneyClassName)}>
+                              {effectivePrice === 0 ? (
+                                hasFreeShipping && providerRate > 0 ? (
+                                  <span className='flex flex-col items-end gap-0.5'>
+                                    <span className='text-muted-foreground text-xs line-through'>
+                                      {formatCartMoney(providerRate)}
+                                    </span>
+                                    <span className='text-success'>Free</span>
+                                  </span>
+                                ) : (
+                                  <span className='text-success'>Free</span>
+                                )
+                              ) : (
+                                formatCartMoney(effectivePrice)
+                              )}
                             </span>
                           </Label>
                         );
                       })}
                     </RadioGroup>
-                    {hasError && (
+                    {showError && (
                       <p className='text-destructive mt-2 text-[10px] font-bold'>
-                        Select a shipping method
+                        {field.state.meta.errors[0] ?? 'Select a shipping method'}
                       </p>
                     )}
                   </>

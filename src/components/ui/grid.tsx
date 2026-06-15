@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import React from 'react';
 
-import { type SpacingKey, spacingMap } from '@/components/theme/spacing';
+import { applySpacing } from '@/components/theme/helper';
+import { type SpacingKey } from '@/components/theme/spacing';
 import { Slot } from '@/components/ui/slot';
 import { cn } from '@/lib/utils';
 
@@ -53,8 +54,58 @@ const gridVariants = cva('grid', {
       around: 'justify-around',
       evenly: 'justify-evenly'
     },
+    alignContent: {
+      start: 'content-start',
+      center: 'content-center',
+      end: 'content-end',
+      between: 'content-between',
+      around: 'content-around',
+      evenly: 'content-evenly',
+      stretch: 'content-stretch'
+    },
+    placeItems: {
+      start: 'place-items-start',
+      center: 'place-items-center',
+      end: 'place-items-end',
+      stretch: 'place-items-stretch'
+    },
     inline: {
       true: 'inline-grid'
+    },
+    fullWidth: {
+      true: 'w-full'
+    },
+    fullHeight: {
+      true: 'h-full'
+    },
+    /** Responsive layout presets for common page patterns */
+    template: {
+      /** 1 col → 2 cols at sm */
+      '1-2': 'grid-cols-1 sm:grid-cols-2',
+      /** 1 col → 3 cols at lg */
+      '1-3': 'grid-cols-1 lg:grid-cols-3',
+      /** 2 cols → 4 cols at lg */
+      '2-4': 'grid-cols-2 lg:grid-cols-4',
+      /** Standard form: 1 col → 2 cols at md */
+      form: 'grid-cols-1 md:grid-cols-2',
+      /** Sidebar + main content */
+      sidebar: 'grid-cols-1 lg:grid-cols-[minmax(14rem,18rem)_1fr]',
+      /** Dashboard stat cards */
+      stats: 'grid-cols-2 lg:grid-cols-4'
+    },
+    /** Auto-fit columns with minimum child width */
+    autoFit: {
+      sm: 'grid-cols-[repeat(auto-fit,minmax(8rem,1fr))]',
+      md: 'grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]',
+      lg: 'grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]',
+      xl: 'grid-cols-[repeat(auto-fit,minmax(20rem,1fr))]'
+    },
+    /** Auto-fill (fixed column count, may leave empty tracks) */
+    autoFill: {
+      sm: 'grid-cols-[repeat(auto-fill,minmax(8rem,1fr))]',
+      md: 'grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]',
+      lg: 'grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]',
+      xl: 'grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]'
     }
   },
   defaultVariants: {
@@ -67,31 +118,69 @@ export interface GridProps
   gap?: SpacingKey;
   gapX?: SpacingKey;
   gapY?: SpacingKey;
+  p?: SpacingKey;
+  px?: SpacingKey;
+  py?: SpacingKey;
   asChild?: boolean;
 }
 
-const gapXMap = Object.fromEntries(
-  Object.entries(spacingMap).map(([k, v]) => [k, v.replace('gap-', 'gap-x-')])
-) as Record<SpacingKey, string>;
-
-const gapYMap = Object.fromEntries(
-  Object.entries(spacingMap).map(([k, v]) => [k, v.replace('gap-', 'gap-y-')])
-) as Record<SpacingKey, string>;
-
 const Grid = React.forwardRef<HTMLDivElement, GridProps>(
   (
-    { className, cols, rows, flow, align, justify, inline, gap, gapX, gapY, asChild, ...props },
+    {
+      className,
+      cols,
+      rows,
+      flow,
+      align,
+      justify,
+      alignContent,
+      placeItems,
+      inline,
+      fullWidth,
+      fullHeight,
+      template,
+      autoFit,
+      autoFill,
+      gap,
+      gapX,
+      gapY,
+      p,
+      px,
+      py,
+      asChild,
+      ...props
+    },
     ref
   ) => {
     const Comp = asChild ? Slot : 'div';
+    const usesPreset = Boolean(template || autoFit || autoFill);
+
     return (
       <Comp
         ref={ref}
+        data-slot='grid'
         className={cn(
-          gridVariants({ cols, rows, flow, align, justify, inline }),
-          gap !== undefined ? spacingMap[gap] : '',
-          gapX !== undefined ? gapXMap[gapX] : '',
-          gapY !== undefined ? gapYMap[gapY] : '',
+          gridVariants({
+            cols: usesPreset ? undefined : cols,
+            rows,
+            flow,
+            align,
+            justify,
+            alignContent,
+            placeItems,
+            inline,
+            fullWidth,
+            fullHeight,
+            template,
+            autoFit,
+            autoFill
+          }),
+          applySpacing(gap),
+          applySpacing(gapX, 'gap-x'),
+          applySpacing(gapY, 'gap-y'),
+          applySpacing(p, 'p'),
+          applySpacing(px, 'px'),
+          applySpacing(py, 'py'),
           className
         )}
         {...props}

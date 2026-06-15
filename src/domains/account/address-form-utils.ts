@@ -1,4 +1,5 @@
 import type { GeocodedAddress, GeoCoordinates } from '@/lib/geocoding/types';
+import { normalizePhoneForInput } from '@/lib/phone-utils';
 import type { ModelsAddress } from '~/src/services/-addresses-get.schemas';
 
 import type { AddressFormValues } from './account.schema';
@@ -39,7 +40,7 @@ export function addressToFormValues(address: ModelsAddress): AddressFormValues {
     state: address.state ?? '',
     zipCode: address.postal_code ?? '',
     country: address.country ?? 'United States',
-    phone: address.phone ?? '',
+    phone: normalizePhoneForInput(address.phone) ?? address.phone ?? '',
     isDefault: address.is_default ?? false,
     address_type: normalizedType
   };

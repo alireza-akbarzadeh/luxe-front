@@ -31,7 +31,7 @@ export const checkoutSchema = z
     cvv: z.string().optional().default(''),
 
     // --- Shipping method ---
-    shippingProviderId: z.number().nullable().optional()
+    shippingProviderId: z.number().int().positive().nullable()
   })
   .superRefine((val, ctx) => {
     if (val.shippingProviderId == null) {
@@ -125,3 +125,27 @@ export const checkoutStepFields: Record<CheckoutStepId, (keyof CheckoutFormValue
   payment: ['paymentMethod', 'cardNumber', 'expiryMonth', 'expiryYear', 'cvv'],
   review: []
 };
+
+/** Collects schema errors scoped to a single checkout step (includes superRefine rules). */
+export function getCheckoutStepErrors(
+  values: CheckoutFormValues,
+  stepId: CheckoutStepId
+): Partial<Record<keyof CheckoutFormValues, string[]>> {
+  const fields = checkoutStepFields[stepId];
+  const parsed = checkoutSchema.safeParse(values);
+
+  if (parsed.success) return {};
+
+  const errors: Partial<Record<keyof CheckoutFormValues, string[]>> = {};
+
+  for (const issue of parsed.error.issues) {
+    const fieldName = issue.path[0];
+    if (typeof fieldName !== 'string') continue;
+    if (!fields.includes(fieldName as keyof CheckoutFormValues)) continue;
+
+    const key = fieldName as keyof CheckoutFormValues;
+    errors[key] = [...(errors[key] ?? []), issue.message];
+  }
+
+  return errors;
+}

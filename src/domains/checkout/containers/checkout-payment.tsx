@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { withForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
 import {
   detectCardBrand,
@@ -246,7 +247,7 @@ export const CheckoutPayment = withForm({
                   animate={{ opacity: 1, y: 0 }}
                   className='mt-2 text-sm text-green-600'
                 >
-                  ✓ Coupon applied! You saved ${couponDiscount.toFixed(2)}
+                  ✓ Coupon applied! You saved {formatCartMoney(couponDiscount)}
                 </motion.p>
               )}
               {couponError && (

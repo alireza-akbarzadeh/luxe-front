@@ -21,7 +21,12 @@ import {
 import { formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { useCartController } from '@/hooks/useCartController';
 
-import { CHECKOUT_STEP_IDS, checkoutStepFields, type CheckoutStepId } from './checkout.schema';
+import {
+  CHECKOUT_STEP_IDS,
+  type CheckoutFormValues,
+  checkoutStepFields,
+  type CheckoutStepId,
+  getCheckoutStepErrors} from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutPlacingOrderOverlay } from './components/checkout-placing-order-overlay';
@@ -76,6 +81,19 @@ export default function CheckoutDomain() {
     async (stepId: CheckoutStepId) => {
       const fields = checkoutStepFields[stepId];
       await Promise.all(fields.map((name) => form.validateField(name, 'submit')));
+
+      const stepErrors = getCheckoutStepErrors(form.state.values, stepId);
+      for (const [fieldName, messages] of Object.entries(stepErrors)) {
+        if (!messages?.length) continue;
+        form.setFieldMeta(fieldName as keyof CheckoutFormValues, (prev) => ({
+          ...prev,
+          errors: messages,
+          isTouched: true
+        }));
+      }
+
+      if (Object.keys(stepErrors).length > 0) return false;
+
       const meta = form.state.fieldMeta;
       return fields.every((field) => !meta[field]?.errors?.length);
     },

@@ -1,7 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-import { type SpacingKey, spacingMap } from '@/components/theme/spacing';
+import { applySpacing } from '@/components/theme/helper';
+import { type SpacingKey } from '@/components/theme/spacing';
 import { Slot } from '@/components/ui/slot';
 import { cn } from '@/lib/utils';
 
@@ -35,6 +36,22 @@ const flexVariants = cva('flex', {
     },
     inline: {
       true: 'inline-flex'
+    },
+    /** Shorthand for align + justify center */
+    center: {
+      true: 'items-center justify-center'
+    },
+    fullWidth: {
+      true: 'w-full'
+    },
+    fullHeight: {
+      true: 'h-full'
+    },
+    grow: {
+      true: 'flex-1'
+    },
+    shrink: {
+      true: 'shrink-0'
     }
   },
   defaultVariants: {
@@ -47,19 +64,70 @@ const flexVariants = cva('flex', {
 
 export interface FlexProps
   extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof flexVariants> {
+  /** Gap between children (alias: `gap`) */
   spacing?: SpacingKey;
+  /** Alias for `spacing` — matches Grid API */
+  gap?: SpacingKey;
+  gapX?: SpacingKey;
+  gapY?: SpacingKey;
+  p?: SpacingKey;
+  px?: SpacingKey;
+  py?: SpacingKey;
   asChild?: boolean;
 }
 
 const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
-  ({ className, direction, align, justify, wrap, inline, spacing, asChild, ...props }, ref) => {
+  (
+    {
+      className,
+      direction,
+      align,
+      justify,
+      wrap,
+      inline,
+      center,
+      fullWidth,
+      fullHeight,
+      grow,
+      shrink,
+      spacing,
+      gap,
+      gapX,
+      gapY,
+      p,
+      px,
+      py,
+      asChild,
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : 'div';
+    const gapValue = gap ?? spacing;
+
     return (
       <Comp
         ref={ref}
+        data-slot='flex'
         className={cn(
-          flexVariants({ direction, align, justify, wrap, inline }),
-          spacing !== undefined ? spacingMap[spacing] : '',
+          flexVariants({
+            direction,
+            align: center ? undefined : align,
+            justify: center ? undefined : justify,
+            wrap,
+            inline,
+            center,
+            fullWidth,
+            fullHeight,
+            grow,
+            shrink
+          }),
+          applySpacing(gapValue),
+          applySpacing(gapX, 'gap-x'),
+          applySpacing(gapY, 'gap-y'),
+          applySpacing(p, 'p'),
+          applySpacing(px, 'px'),
+          applySpacing(py, 'py'),
           className
         )}
         {...props}
