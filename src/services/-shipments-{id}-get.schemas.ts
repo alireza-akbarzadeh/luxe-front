@@ -56,3 +56,4 @@ export interface ModelsShipment {
 export type GetShipmentsId200 = UtilsResponse & {
   data?: ModelsShipment;
 };
+

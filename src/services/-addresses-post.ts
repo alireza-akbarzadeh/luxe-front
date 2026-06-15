@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,88 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Adds a new shipping, billing, or both type address for the current user.
  * @summary Create address
  */
 export const postAddresses = (
-  dtoCreateAddressRequest: DtoCreateAddressRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateAddressRequest: DtoCreateAddressRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoAddressSingleResponse>(
-    {
-      url: `/addresses`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateAddressRequest,
-      signal
+
+
+      return customInstance<DtoAddressSingleResponse>(
+      {url: `/addresses`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateAddressRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAddressesMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAddresses>>,
-    TError,
-    { data: DtoCreateAddressRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAddresses>>,
-  TError,
-  { data: DtoCreateAddressRequest },
-  TContext
-> => {
-  const mutationKey = ['postAddresses'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAddresses>>,
-    { data: DtoCreateAddressRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAddresses(data, requestOptions);
-  };
+export const getPostAddressesMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAddresses>>, TError,{data: DtoCreateAddressRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAddresses>>, TError,{data: DtoCreateAddressRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAddresses'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAddressesMutationResult = NonNullable<Awaited<ReturnType<typeof postAddresses>>>;
-export type PostAddressesMutationBody = DtoCreateAddressRequest;
-export type PostAddressesMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAddresses>>, {data: DtoCreateAddressRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAddresses(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAddressesMutationResult = NonNullable<Awaited<ReturnType<typeof postAddresses>>>
+    export type PostAddressesMutationBody = DtoCreateAddressRequest
+    export type PostAddressesMutationError = UtilsResponse
+
+    /**
  * @summary Create address
  */
-export const usePostAddresses = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAddresses>>,
-      TError,
-      { data: DtoCreateAddressRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAddresses>>,
-  TError,
-  { data: DtoCreateAddressRequest },
-  TContext
-> => {
-  return useMutation(getPostAddressesMutationOptions(options), queryClient);
-};
+export const usePostAddresses = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAddresses>>, TError,{data: DtoCreateAddressRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAddresses>>,
+        TError,
+        {data: DtoCreateAddressRequest},
+        TContext
+      > => {
+      return useMutation(getPostAddressesMutationOptions(options), queryClient);
+    }
+

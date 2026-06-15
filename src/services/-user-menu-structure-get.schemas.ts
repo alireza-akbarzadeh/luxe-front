@@ -36,12 +36,13 @@ export interface DtoMenuGroupResponse {
 }
 
 export type GetUserMenuStructureParams = {
-  /**
-   * Search by label or href
-   */
-  search?: string;
+/**
+ * Search by label or href
+ */
+search?: string;
 };
 
 export type GetUserMenuStructure200 = UtilsResponse & {
   data?: DtoMenuGroupResponse[];
 };
+

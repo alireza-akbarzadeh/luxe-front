@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,85 +15,77 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoMessageResponse } from './-auth-send-verification-post.schemas';
+import type {
+  DtoMessageResponse
+} from './-auth-send-verification-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Sends an email verification link to the authenticated user's email.
  * @summary Send verification email
  */
 export const postAuthSendVerification = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoMessageResponse>(
-    { url: `/auth/send-verification`, method: 'POST', signal },
-    options
-  );
-};
 
-export const getPostAuthSendVerificationMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthSendVerification>>,
-    TError,
-    void,
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthSendVerification>>,
-  TError,
-  void,
-  TContext
-> => {
-  const mutationKey = ['postAuthSendVerification'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthSendVerification>>,
-    void
-  > = () => {
-    return postAuthSendVerification(requestOptions);
-  };
+      return customInstance<DtoMessageResponse>(
+      {url: `/auth/send-verification`, method: 'POST', signal
+    },
+      options);
+    }
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type PostAuthSendVerificationMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthSendVerification>>
->;
 
-export type PostAuthSendVerificationMutationError = DtoMessageResponse;
+export const getPostAuthSendVerificationMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthSendVerification>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthSendVerification>>, TError,void, TContext> => {
 
-/**
+const mutationKey = ['postAuthSendVerification'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthSendVerification>>, void> = () => {
+
+
+          return  postAuthSendVerification(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthSendVerificationMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthSendVerification>>>
+
+    export type PostAuthSendVerificationMutationError = DtoMessageResponse
+
+    /**
  * @summary Send verification email
  */
-export const usePostAuthSendVerification = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthSendVerification>>,
-      TError,
-      void,
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthSendVerification>>,
-  TError,
-  void,
-  TContext
-> => {
-  return useMutation(getPostAuthSendVerificationMutationOptions(options), queryClient);
-};
+export const usePostAuthSendVerification = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthSendVerification>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthSendVerification>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getPostAuthSendVerificationMutationOptions(options), queryClient);
+    }
+

@@ -39,3 +39,4 @@ export interface ModelsMenuItem {
 export type PostAdminMenuItems201 = UtilsResponse & {
   data?: ModelsMenuItem;
 };
+

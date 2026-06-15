@@ -5,19 +5,19 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoCreateCouponRequestDiscountType =
-  (typeof DtoCreateCouponRequestDiscountType)[keyof typeof DtoCreateCouponRequestDiscountType];
+export type DtoCreateCouponRequestDiscountType = typeof DtoCreateCouponRequestDiscountType[keyof typeof DtoCreateCouponRequestDiscountType];
+
 
 export const DtoCreateCouponRequestDiscountType = {
   percentage: 'percentage',
-  fixed: 'fixed'
+  fixed: 'fixed',
 } as const;
 
 export interface DtoCreateCouponRequest {
   /**
-   * @minLength 3
-   * @maxLength 50
-   */
+     * @minLength 3
+     * @maxLength 50
+     */
   code: string;
   description?: string;
   discount_type: DtoCreateCouponRequestDiscountType;
@@ -35,19 +35,19 @@ export interface GormDeletedAt {
   valid?: boolean;
 }
 
-export type ModelsCouponDiscountType =
-  (typeof ModelsCouponDiscountType)[keyof typeof ModelsCouponDiscountType];
+export type ModelsCouponDiscountType = typeof ModelsCouponDiscountType[keyof typeof ModelsCouponDiscountType];
+
 
 export const ModelsCouponDiscountType = {
   percentage: 'percentage',
-  fixed: 'fixed'
+  fixed: 'fixed',
 } as const;
 
 export interface ModelsCoupon {
   /**
-   * @minLength 3
-   * @maxLength 50
-   */
+     * @minLength 3
+     * @maxLength 50
+     */
   code: string;
   created_at?: string;
   deleted_at?: GormDeletedAt;
@@ -82,3 +82,4 @@ export interface UtilsResponse {
   message?: string;
   success?: boolean;
 }
+

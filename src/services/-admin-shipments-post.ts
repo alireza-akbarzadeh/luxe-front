@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates a shipment record and triggers a background job to process it (e.g., call carrier API).
  * @summary Create a shipment
  */
 export const postAdminShipments = (
-  postAdminShipmentsBody: PostAdminShipmentsBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    postAdminShipmentsBody: PostAdminShipmentsBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostAdminShipments201>(
-    {
-      url: `/admin/shipments`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: postAdminShipmentsBody,
-      signal
+
+
+      return customInstance<PostAdminShipments201>(
+      {url: `/admin/shipments`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAdminShipmentsBody, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAdminShipmentsMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAdminShipments>>,
-    TError,
-    { data: PostAdminShipmentsBody },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAdminShipments>>,
-  TError,
-  { data: PostAdminShipmentsBody },
-  TContext
-> => {
-  const mutationKey = ['postAdminShipments'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAdminShipments>>,
-    { data: PostAdminShipmentsBody }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAdminShipments(data, requestOptions);
-  };
+export const getPostAdminShipmentsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminShipments>>, TError,{data: PostAdminShipmentsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminShipments>>, TError,{data: PostAdminShipmentsBody}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAdminShipments'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAdminShipmentsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAdminShipments>>
->;
-export type PostAdminShipmentsMutationBody = PostAdminShipmentsBody;
-export type PostAdminShipmentsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminShipments>>, {data: PostAdminShipmentsBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminShipments(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminShipmentsMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminShipments>>>
+    export type PostAdminShipmentsMutationBody = PostAdminShipmentsBody
+    export type PostAdminShipmentsMutationError = UtilsResponse
+
+    /**
  * @summary Create a shipment
  */
-export const usePostAdminShipments = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAdminShipments>>,
-      TError,
-      { data: PostAdminShipmentsBody },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAdminShipments>>,
-  TError,
-  { data: PostAdminShipmentsBody },
-  TContext
-> => {
-  return useMutation(getPostAdminShipmentsMutationOptions(options), queryClient);
-};
+export const usePostAdminShipments = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminShipments>>, TError,{data: PostAdminShipmentsBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminShipments>>,
+        TError,
+        {data: PostAdminShipmentsBody},
+        TContext
+      > => {
+      return useMutation(getPostAdminShipmentsMutationOptions(options), queryClient);
+    }
+

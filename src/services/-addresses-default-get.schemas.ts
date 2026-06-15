@@ -5,13 +5,13 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type ModelsAddressAddressType =
-  (typeof ModelsAddressAddressType)[keyof typeof ModelsAddressAddressType];
+export type ModelsAddressAddressType = typeof ModelsAddressAddressType[keyof typeof ModelsAddressAddressType];
+
 
 export const ModelsAddressAddressType = {
   shipping: 'shipping',
   billing: 'billing',
-  both: 'both'
+  both: 'both',
 } as const;
 
 export interface GormDeletedAt {
@@ -54,16 +54,17 @@ export interface UtilsResponse {
 }
 
 export type GetAddressesDefaultParams = {
-  /**
-   * Address type (shipping/billing)
-   */
-  type?: GetAddressesDefaultType;
+/**
+ * Address type (shipping/billing)
+ */
+type?: GetAddressesDefaultType;
 };
 
-export type GetAddressesDefaultType =
-  (typeof GetAddressesDefaultType)[keyof typeof GetAddressesDefaultType];
+export type GetAddressesDefaultType = typeof GetAddressesDefaultType[keyof typeof GetAddressesDefaultType];
+
 
 export const GetAddressesDefaultType = {
   shipping: 'shipping',
-  billing: 'billing'
+  billing: 'billing',
 } as const;
+

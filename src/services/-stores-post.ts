@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,89 +15,81 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoCreateStoreRequest, PostStores201, UtilsResponse } from './-stores-post.schemas';
+import type {
+  DtoCreateStoreRequest,
+  PostStores201,
+  UtilsResponse
+} from './-stores-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Create a new store (admin only)
  * @summary Create store
  */
 export const postStores = (
-  dtoCreateStoreRequest: DtoCreateStoreRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateStoreRequest: DtoCreateStoreRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostStores201>(
-    {
-      url: `/stores`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateStoreRequest,
-      signal
+
+
+      return customInstance<PostStores201>(
+      {url: `/stores`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateStoreRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostStoresMutationOptions = <TError = UtilsResponse, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postStores>>,
-    TError,
-    { data: DtoCreateStoreRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postStores>>,
-  TError,
-  { data: DtoCreateStoreRequest },
-  TContext
-> => {
-  const mutationKey = ['postStores'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postStores>>,
-    { data: DtoCreateStoreRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postStores(data, requestOptions);
-  };
+export const getPostStoresMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postStores>>, TError,{data: DtoCreateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postStores>>, TError,{data: DtoCreateStoreRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postStores'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostStoresMutationResult = NonNullable<Awaited<ReturnType<typeof postStores>>>;
-export type PostStoresMutationBody = DtoCreateStoreRequest;
-export type PostStoresMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postStores>>, {data: DtoCreateStoreRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postStores(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostStoresMutationResult = NonNullable<Awaited<ReturnType<typeof postStores>>>
+    export type PostStoresMutationBody = DtoCreateStoreRequest
+    export type PostStoresMutationError = UtilsResponse
+
+    /**
  * @summary Create store
  */
-export const usePostStores = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postStores>>,
-      TError,
-      { data: DtoCreateStoreRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postStores>>,
-  TError,
-  { data: DtoCreateStoreRequest },
-  TContext
-> => {
-  return useMutation(getPostStoresMutationOptions(options), queryClient);
-};
+export const usePostStores = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postStores>>, TError,{data: DtoCreateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postStores>>,
+        TError,
+        {data: DtoCreateStoreRequest},
+        TContext
+      > => {
+      return useMutation(getPostStoresMutationOptions(options), queryClient);
+    }
+

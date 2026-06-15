@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Create a pending deposit transaction. In production, this would integrate with a payment gateway.
  * @summary Deposit funds
  */
 export const postWalletDeposit = (
-  dtoDepositRequest: DtoDepositRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoDepositRequest: DtoDepositRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostWalletDeposit200>(
-    {
-      url: `/wallet/deposit`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoDepositRequest,
-      signal
+
+
+      return customInstance<PostWalletDeposit200>(
+      {url: `/wallet/deposit`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoDepositRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostWalletDepositMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postWalletDeposit>>,
-    TError,
-    { data: DtoDepositRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postWalletDeposit>>,
-  TError,
-  { data: DtoDepositRequest },
-  TContext
-> => {
-  const mutationKey = ['postWalletDeposit'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postWalletDeposit>>,
-    { data: DtoDepositRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postWalletDeposit(data, requestOptions);
-  };
+export const getPostWalletDepositMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWalletDeposit>>, TError,{data: DtoDepositRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postWalletDeposit>>, TError,{data: DtoDepositRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postWalletDeposit'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostWalletDepositMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postWalletDeposit>>
->;
-export type PostWalletDepositMutationBody = DtoDepositRequest;
-export type PostWalletDepositMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWalletDeposit>>, {data: DtoDepositRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postWalletDeposit(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWalletDepositMutationResult = NonNullable<Awaited<ReturnType<typeof postWalletDeposit>>>
+    export type PostWalletDepositMutationBody = DtoDepositRequest
+    export type PostWalletDepositMutationError = UtilsResponse
+
+    /**
  * @summary Deposit funds
  */
-export const usePostWalletDeposit = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postWalletDeposit>>,
-      TError,
-      { data: DtoDepositRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postWalletDeposit>>,
-  TError,
-  { data: DtoDepositRequest },
-  TContext
-> => {
-  return useMutation(getPostWalletDepositMutationOptions(options), queryClient);
-};
+export const usePostWalletDeposit = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWalletDeposit>>, TError,{data: DtoDepositRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postWalletDeposit>>,
+        TError,
+        {data: DtoDepositRequest},
+        TContext
+      > => {
+      return useMutation(getPostWalletDepositMutationOptions(options), queryClient);
+    }
+

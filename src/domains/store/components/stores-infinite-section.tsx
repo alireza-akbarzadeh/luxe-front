@@ -5,8 +5,8 @@ import { IconCheck } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { InfiniteScrollSentinel } from '@/domains/products/components/infinite-scroll-sentinel';
 import { StoresGridSkeleton } from '@/domains/store/components/store-cart-skeleton';
-import { StoresGrid } from '@/domains/store/sections/stores-grid';
 import { StoresVirtualList } from '@/domains/store/sections/store-virtual-list';
+import { StoresGrid } from '@/domains/store/sections/stores-grid';
 import type { ViewMode } from '@/domains/store/store.types';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 

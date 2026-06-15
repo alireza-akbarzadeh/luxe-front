@@ -41,3 +41,4 @@ export type GetCart200Data = {
 export type GetCart200 = UtilsResponse & {
   data?: GetCart200Data;
 };
+

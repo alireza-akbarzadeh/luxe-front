@@ -87,3 +87,4 @@ export type GetProductsId200Data = {
 export type GetProductsId200 = UtilsResponse & {
   data?: GetProductsId200Data;
 };
+

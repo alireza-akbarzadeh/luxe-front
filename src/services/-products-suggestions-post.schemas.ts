@@ -7,9 +7,9 @@
  */
 export interface DtoSuggestionsRequest {
   /**
-   * @minimum 1
-   * @maximum 20
-   */
+     * @minimum 1
+     * @maximum 20
+     */
   limit?: number;
   /** @minItems 1 */
   product_ids: number[];
@@ -92,3 +92,4 @@ export interface DtoProductResponse {
 export type PostProductsSuggestions200 = UtilsResponse & {
   data?: DtoProductResponse[];
 };
+

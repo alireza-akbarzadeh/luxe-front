@@ -43,3 +43,4 @@ export interface ModelsMenuGroup {
 export type PutAdminMenuGroupsId200 = UtilsResponse & {
   data?: ModelsMenuGroup;
 };
+

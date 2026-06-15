@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,90 +15,81 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoUpdateReviewRequest, PutReviewsId200 } from './-reviews-{id}-put.schemas';
+import type {
+  DtoUpdateReviewRequest,
+  PutReviewsId200
+} from './-reviews-{id}-put.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Modify rating or comment of an existing review
  * @summary Update a review
  */
 export const putReviewsId = (
-  id: number,
-  dtoUpdateReviewRequest: DtoUpdateReviewRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoUpdateReviewRequest: DtoUpdateReviewRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PutReviewsId200>(
-    {
-      url: `/reviews/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoUpdateReviewRequest,
-      signal
+
+
+      return customInstance<PutReviewsId200>(
+      {url: `/reviews/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoUpdateReviewRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutReviewsIdMutationOptions = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putReviewsId>>,
-    TError,
-    { id: number; data: DtoUpdateReviewRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putReviewsId>>,
-  TError,
-  { id: number; data: DtoUpdateReviewRequest },
-  TContext
-> => {
-  const mutationKey = ['putReviewsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putReviewsId>>,
-    { id: number; data: DtoUpdateReviewRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putReviewsId(id, data, requestOptions);
-  };
+export const getPutReviewsIdMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putReviewsId>>, TError,{id: number;data: DtoUpdateReviewRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putReviewsId>>, TError,{id: number;data: DtoUpdateReviewRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putReviewsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutReviewsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putReviewsId>>>;
-export type PutReviewsIdMutationBody = DtoUpdateReviewRequest;
-export type PutReviewsIdMutationError = unknown;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putReviewsId>>, {id: number;data: DtoUpdateReviewRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putReviewsId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutReviewsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putReviewsId>>>
+    export type PutReviewsIdMutationBody = DtoUpdateReviewRequest
+    export type PutReviewsIdMutationError = unknown
+
+    /**
  * @summary Update a review
  */
-export const usePutReviewsId = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putReviewsId>>,
-      TError,
-      { id: number; data: DtoUpdateReviewRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putReviewsId>>,
-  TError,
-  { id: number; data: DtoUpdateReviewRequest },
-  TContext
-> => {
-  return useMutation(getPutReviewsIdMutationOptions(options), queryClient);
-};
+export const usePutReviewsId = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putReviewsId>>, TError,{id: number;data: DtoUpdateReviewRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putReviewsId>>,
+        TError,
+        {id: number;data: DtoUpdateReviewRequest},
+        TContext
+      > => {
+      return useMutation(getPutReviewsIdMutationOptions(options), queryClient);
+    }
+

@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -26,127 +28,103 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns products the user has liked, with product details (image, price, name)
  * @summary Get user's wishlist
  */
 export const getAccountWishlist = (
-  params?: GetAccountWishlistParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetAccountWishlistParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetAccountWishlist200>(
-    { url: `/account/wishlist`, method: 'GET', params, signal },
-    options
-  );
-};
 
-export const getGetAccountWishlistQueryKey = (params?: GetAccountWishlistParams) => {
-  return [`/account/wishlist`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetAccountWishlistQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAccountWishlist>>,
-  TError = UtilsResponse
->(
-  params?: GetAccountWishlistParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetAccountWishlist200>(
+      {url: `/account/wishlist`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAccountWishlistQueryKey = (params?: GetAccountWishlistParams,) => {
+    return [
+    `/account/wishlist`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetAccountWishlistQueryOptions = <TData = Awaited<ReturnType<typeof getAccountWishlist>>, TError = UtilsResponse>(params?: GetAccountWishlistParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAccountWishlistQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccountWishlist>>> = ({ signal }) =>
-    getAccountWishlist(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAccountWishlistQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAccountWishlist>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetAccountWishlistQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAccountWishlist>>
->;
-export type GetAccountWishlistQueryError = UtilsResponse;
 
-export function useGetAccountWishlist<
-  TData = Awaited<ReturnType<typeof getAccountWishlist>>,
-  TError = UtilsResponse
->(
-  params: undefined | GetAccountWishlistParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>> &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccountWishlist>>> = ({ signal }) => getAccountWishlist(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAccountWishlistQueryResult = NonNullable<Awaited<ReturnType<typeof getAccountWishlist>>>
+export type GetAccountWishlistQueryError = UtilsResponse
+
+
+export function useGetAccountWishlist<TData = Awaited<ReturnType<typeof getAccountWishlist>>, TError = UtilsResponse>(
+ params: undefined |  GetAccountWishlistParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAccountWishlist>>,
           TError,
           Awaited<ReturnType<typeof getAccountWishlist>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAccountWishlist<
-  TData = Awaited<ReturnType<typeof getAccountWishlist>>,
-  TError = UtilsResponse
->(
-  params?: GetAccountWishlistParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAccountWishlist<TData = Awaited<ReturnType<typeof getAccountWishlist>>, TError = UtilsResponse>(
+ params?: GetAccountWishlistParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAccountWishlist>>,
           TError,
           Awaited<ReturnType<typeof getAccountWishlist>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAccountWishlist<
-  TData = Awaited<ReturnType<typeof getAccountWishlist>>,
-  TError = UtilsResponse
->(
-  params?: GetAccountWishlistParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAccountWishlist<TData = Awaited<ReturnType<typeof getAccountWishlist>>, TError = UtilsResponse>(
+ params?: GetAccountWishlistParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get user's wishlist
  */
 
-export function useGetAccountWishlist<
-  TData = Awaited<ReturnType<typeof getAccountWishlist>>,
-  TError = UtilsResponse
->(
-  params?: GetAccountWishlistParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAccountWishlistQueryOptions(params, options);
+export function useGetAccountWishlist<TData = Awaited<ReturnType<typeof getAccountWishlist>>, TError = UtilsResponse>(
+ params?: GetAccountWishlistParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountWishlist>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAccountWishlistQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

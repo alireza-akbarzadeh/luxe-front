@@ -81,81 +81,83 @@ export interface DtoProductWithLike {
 }
 
 export type GetProductsParams = {
-  /**
-   * Items per page (default 20, max 100)
-   */
-  limit?: number;
-  /**
-   * Number of items to skip
-   */
-  offset?: number;
-  /**
-   * Product status
-   */
-  status?: GetProductsStatus;
-  /**
-   * Filter by product name
-   */
-  name?: string;
-  /**
-   * Filter by SKU
-   */
-  sku?: string;
-  /**
-   * Filter by category ID
-   */
-  category_id?: number;
-  /**
-   * Filter by brand ID
-   */
-  brand_id?: number;
-  /**
-   * Minimum price
-   */
-  min_price?: number;
-  /**
-   * Maximum price
-   */
-  max_price?: number;
-  /**
-   * Minimum rating (0–5)
-   */
-  min_rating?: number;
-  /**
-   * Maximum rating
-   */
-  max_rating?: number;
-  /**
-   * Minimum review count
-   */
-  min_reviews?: number;
-  /**
-   * Maximum review count
-   */
-  max_reviews?: number;
-  /**
-   * Digital products only
-   */
-  is_digital?: boolean;
-  /**
-   * New products only
-   */
-  is_new?: boolean;
-  /**
-   * Sort order
-   */
-  sort?: GetProductsSort;
+/**
+ * Items per page (default 20, max 100)
+ */
+limit?: number;
+/**
+ * Number of items to skip
+ */
+offset?: number;
+/**
+ * Product status
+ */
+status?: GetProductsStatus;
+/**
+ * Filter by product name
+ */
+name?: string;
+/**
+ * Filter by SKU
+ */
+sku?: string;
+/**
+ * Filter by category ID
+ */
+category_id?: number;
+/**
+ * Filter by brand ID
+ */
+brand_id?: number;
+/**
+ * Minimum price
+ */
+min_price?: number;
+/**
+ * Maximum price
+ */
+max_price?: number;
+/**
+ * Minimum rating (0–5)
+ */
+min_rating?: number;
+/**
+ * Maximum rating
+ */
+max_rating?: number;
+/**
+ * Minimum review count
+ */
+min_reviews?: number;
+/**
+ * Maximum review count
+ */
+max_reviews?: number;
+/**
+ * Digital products only
+ */
+is_digital?: boolean;
+/**
+ * New products only
+ */
+is_new?: boolean;
+/**
+ * Sort order
+ */
+sort?: GetProductsSort;
 };
 
-export type GetProductsStatus = (typeof GetProductsStatus)[keyof typeof GetProductsStatus];
+export type GetProductsStatus = typeof GetProductsStatus[keyof typeof GetProductsStatus];
+
 
 export const GetProductsStatus = {
   active: 'active',
   draft: 'draft',
-  archived: 'archived'
+  archived: 'archived',
 } as const;
 
-export type GetProductsSort = (typeof GetProductsSort)[keyof typeof GetProductsSort];
+export type GetProductsSort = typeof GetProductsSort[keyof typeof GetProductsSort];
+
 
 export const GetProductsSort = {
   rating_desc: 'rating_desc',
@@ -163,7 +165,7 @@ export const GetProductsSort = {
   newest: 'newest',
   reviews_desc: 'reviews_desc',
   price_asc: 'price_asc',
-  price_desc: 'price_desc'
+  price_desc: 'price_desc',
 } as const;
 
 export type GetProducts200Data = {
@@ -176,3 +178,4 @@ export type GetProducts200Data = {
 export type GetProducts200 = UtilsResponse & {
   data?: GetProducts200Data;
 };
+

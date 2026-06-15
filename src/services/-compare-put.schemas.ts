@@ -18,8 +18,9 @@ export interface UtilsResponse {
 }
 
 export type PutCompareParams = {
-  /**
-   * Session ID for guest users
-   */
-  session_id?: string;
+/**
+ * Session ID for guest users
+ */
+session_id?: string;
 };
+

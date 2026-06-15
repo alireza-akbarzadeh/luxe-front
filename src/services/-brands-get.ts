@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,112 +20,111 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetBrands200, GetBrandsParams, UtilsResponse } from './-brands-get.schemas';
+import type {
+  GetBrands200,
+  GetBrandsParams,
+  UtilsResponse
+} from './-brands-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns a paginated list of brands with optional search and status filtering.
  * @summary List all brands
  */
 export const getBrands = (
-  params?: GetBrandsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetBrandsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetBrands200>({ url: `/brands`, method: 'GET', params, signal }, options);
-};
 
-export const getGetBrandsQueryKey = (params?: GetBrandsParams) => {
-  return [`/brands`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetBrandsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getBrands>>,
-  TError = UtilsResponse
->(
-  params?: GetBrandsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetBrands200>(
+      {url: `/brands`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetBrandsQueryKey = (params?: GetBrandsParams,) => {
+    return [
+    `/brands`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetBrandsQueryOptions = <TData = Awaited<ReturnType<typeof getBrands>>, TError = UtilsResponse>(params?: GetBrandsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetBrandsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getBrands>>> = ({ signal }) =>
-    getBrands(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetBrandsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getBrands>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetBrandsQueryResult = NonNullable<Awaited<ReturnType<typeof getBrands>>>;
-export type GetBrandsQueryError = UtilsResponse;
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getBrands>>> = ({ signal }) => getBrands(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetBrandsQueryResult = NonNullable<Awaited<ReturnType<typeof getBrands>>>
+export type GetBrandsQueryError = UtilsResponse
+
 
 export function useGetBrands<TData = Awaited<ReturnType<typeof getBrands>>, TError = UtilsResponse>(
-  params: undefined | GetBrandsParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>> &
-      Pick<
+ params: undefined |  GetBrandsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBrands>>,
           TError,
           Awaited<ReturnType<typeof getBrands>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetBrands<TData = Awaited<ReturnType<typeof getBrands>>, TError = UtilsResponse>(
-  params?: GetBrandsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>> &
-      Pick<
+ params?: GetBrandsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getBrands>>,
           TError,
           Awaited<ReturnType<typeof getBrands>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetBrands<TData = Awaited<ReturnType<typeof getBrands>>, TError = UtilsResponse>(
-  params?: GetBrandsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+ params?: GetBrandsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List all brands
  */
 
 export function useGetBrands<TData = Awaited<ReturnType<typeof getBrands>>, TError = UtilsResponse>(
-  params?: GetBrandsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetBrandsQueryOptions(params, options);
+ params?: GetBrandsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getBrands>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetBrandsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

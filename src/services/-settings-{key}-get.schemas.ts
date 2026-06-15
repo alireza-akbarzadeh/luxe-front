@@ -25,3 +25,4 @@ export interface DtoSettingResponse {
 export type GetSettingsKey200 = UtilsResponse & {
   data?: DtoSettingResponse;
 };
+

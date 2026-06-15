@@ -13,49 +13,50 @@ export interface UtilsResponse {
 }
 
 export type GetUsersParams = {
-  /**
-   * Items per page
-   * @minimum 1
-   * @maximum 100
-   */
-  limit?: number;
-  /**
-   * Offset (skip number of items)
-   * @minimum 0
-   */
-  offset?: number;
-  /**
-   * Filter by active status
-   */
-  is_active?: boolean;
-  /**
-   * Partial match on email
-   */
-  email?: string;
-  /**
-   * Partial match on phone
-   */
-  phone?: string;
-  /**
-   * Partial match on first name
-   */
-  first_name?: string;
-  /**
-   * Partial match on last name
-   */
-  last_name?: string;
-  /**
-   * Exact match on role
-   */
-  role?: GetUsersRole;
+/**
+ * Items per page
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * Offset (skip number of items)
+ * @minimum 0
+ */
+offset?: number;
+/**
+ * Filter by active status
+ */
+is_active?: boolean;
+/**
+ * Partial match on email
+ */
+email?: string;
+/**
+ * Partial match on phone
+ */
+phone?: string;
+/**
+ * Partial match on first name
+ */
+first_name?: string;
+/**
+ * Partial match on last name
+ */
+last_name?: string;
+/**
+ * Exact match on role
+ */
+role?: GetUsersRole;
 };
 
-export type GetUsersRole = (typeof GetUsersRole)[keyof typeof GetUsersRole];
+export type GetUsersRole = typeof GetUsersRole[keyof typeof GetUsersRole];
+
 
 export const GetUsersRole = {
   user: 'user',
   admin: 'admin',
-  moderator: 'moderator'
+  moderator: 'moderator',
 } as const;
 
 export type GetUsers200DataUsersItem = {
@@ -79,3 +80,4 @@ export type GetUsers200Data = {
 export type GetUsers200 = UtilsResponse & {
   data?: GetUsers200Data;
 };
+

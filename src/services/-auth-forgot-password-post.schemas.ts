@@ -13,3 +13,4 @@ export interface DtoMessageResponse {
   message?: string;
   success?: boolean;
 }
+

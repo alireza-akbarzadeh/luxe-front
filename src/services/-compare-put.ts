@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,87 +23,75 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Save the user's compare list (replaces existing)
  * @summary Sync compare list
  */
 export const putCompare = (
-  dtoSyncCompareRequest: DtoSyncCompareRequest,
-  params?: PutCompareParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoSyncCompareRequest: DtoSyncCompareRequest,
+    params?: PutCompareParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    {
-      url: `/compare`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+
+
+      return customInstance<UtilsResponse>(
+      {url: `/compare`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
       data: dtoSyncCompareRequest,
-      params,
-      signal
+        params, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutCompareMutationOptions = <TError = UtilsResponse, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putCompare>>,
-    TError,
-    { data: DtoSyncCompareRequest; params?: PutCompareParams },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putCompare>>,
-  TError,
-  { data: DtoSyncCompareRequest; params?: PutCompareParams },
-  TContext
-> => {
-  const mutationKey = ['putCompare'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putCompare>>,
-    { data: DtoSyncCompareRequest; params?: PutCompareParams }
-  > = (props) => {
-    const { data, params } = props ?? {};
 
-    return putCompare(data, params, requestOptions);
-  };
+export const getPutCompareMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCompare>>, TError,{data: DtoSyncCompareRequest;params?: PutCompareParams}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putCompare>>, TError,{data: DtoSyncCompareRequest;params?: PutCompareParams}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putCompare'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutCompareMutationResult = NonNullable<Awaited<ReturnType<typeof putCompare>>>;
-export type PutCompareMutationBody = DtoSyncCompareRequest;
-export type PutCompareMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putCompare>>, {data: DtoSyncCompareRequest;params?: PutCompareParams}> = (props) => {
+          const {data,params} = props ?? {};
+
+          return  putCompare(data,params,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutCompareMutationResult = NonNullable<Awaited<ReturnType<typeof putCompare>>>
+    export type PutCompareMutationBody = DtoSyncCompareRequest
+    export type PutCompareMutationError = UtilsResponse
+
+    /**
  * @summary Sync compare list
  */
-export const usePutCompare = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putCompare>>,
-      TError,
-      { data: DtoSyncCompareRequest; params?: PutCompareParams },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putCompare>>,
-  TError,
-  { data: DtoSyncCompareRequest; params?: PutCompareParams },
-  TContext
-> => {
-  return useMutation(getPutCompareMutationOptions(options), queryClient);
-};
+export const usePutCompare = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCompare>>, TError,{data: DtoSyncCompareRequest;params?: PutCompareParams}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putCompare>>,
+        TError,
+        {data: DtoSyncCompareRequest;params?: PutCompareParams},
+        TContext
+      > => {
+      return useMutation(getPutCompareMutationOptions(options), queryClient);
+    }
+

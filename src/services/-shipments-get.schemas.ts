@@ -54,12 +54,13 @@ export interface ModelsShipment {
 }
 
 export type GetShipmentsParams = {
-  /**
-   * Order ID
-   */
-  order_id: number;
+/**
+ * Order ID
+ */
+order_id: number;
 };
 
 export type GetShipments200 = UtilsResponse & {
   data?: ModelsShipment[];
 };
+

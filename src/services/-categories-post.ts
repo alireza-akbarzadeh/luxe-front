@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,88 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates a new product category. Only accessible by users with the "admin" role.
  * @summary Create a new category
  */
 export const postCategories = (
-  dtoCreateCategoryRequest: DtoCreateCategoryRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateCategoryRequest: DtoCreateCategoryRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCategorySingleResponse>(
-    {
-      url: `/categories`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateCategoryRequest,
-      signal
+
+
+      return customInstance<DtoCategorySingleResponse>(
+      {url: `/categories`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateCategoryRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostCategoriesMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCategories>>,
-    TError,
-    { data: DtoCreateCategoryRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postCategories>>,
-  TError,
-  { data: DtoCreateCategoryRequest },
-  TContext
-> => {
-  const mutationKey = ['postCategories'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postCategories>>,
-    { data: DtoCreateCategoryRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postCategories(data, requestOptions);
-  };
+export const getPostCategoriesMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCategories>>, TError,{data: DtoCreateCategoryRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCategories>>, TError,{data: DtoCreateCategoryRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postCategories'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof postCategories>>>;
-export type PostCategoriesMutationBody = DtoCreateCategoryRequest;
-export type PostCategoriesMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCategories>>, {data: DtoCreateCategoryRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postCategories(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof postCategories>>>
+    export type PostCategoriesMutationBody = DtoCreateCategoryRequest
+    export type PostCategoriesMutationError = UtilsResponse
+
+    /**
  * @summary Create a new category
  */
-export const usePostCategories = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postCategories>>,
-      TError,
-      { data: DtoCreateCategoryRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postCategories>>,
-  TError,
-  { data: DtoCreateCategoryRequest },
-  TContext
-> => {
-  return useMutation(getPostCategoriesMutationOptions(options), queryClient);
-};
+export const usePostCategories = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCategories>>, TError,{data: DtoCreateCategoryRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postCategories>>,
+        TError,
+        {data: DtoCreateCategoryRequest},
+        TContext
+      > => {
+      return useMutation(getPostCategoriesMutationOptions(options), queryClient);
+    }
+

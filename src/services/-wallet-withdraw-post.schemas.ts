@@ -24,3 +24,4 @@ export type PostWalletWithdraw200Data = {
 export type PostWalletWithdraw200 = UtilsResponse & {
   data?: PostWalletWithdraw200Data;
 };
+

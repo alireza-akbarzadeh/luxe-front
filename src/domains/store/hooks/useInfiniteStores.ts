@@ -2,8 +2,8 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import type { StoresCatalogParams } from '../lib/stores.utils';
 import { getInfiniteStoresQueryOptions } from '../lib/infinite-stores-query';
+import type { StoresCatalogParams } from '../lib/stores.utils';
 
 export {
   getInfiniteStoresQueryKey,

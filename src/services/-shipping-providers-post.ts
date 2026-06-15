@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Adds a new shipping provider to the system
  * @summary Create a new shipping provider
  */
 export const postShippingProviders = (
-  dtoCreateShippingProviderRequest: DtoCreateShippingProviderRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateShippingProviderRequest: DtoCreateShippingProviderRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostShippingProviders201>(
-    {
-      url: `/shipping-providers`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateShippingProviderRequest,
-      signal
+
+
+      return customInstance<PostShippingProviders201>(
+      {url: `/shipping-providers`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateShippingProviderRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostShippingProvidersMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postShippingProviders>>,
-    TError,
-    { data: DtoCreateShippingProviderRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postShippingProviders>>,
-  TError,
-  { data: DtoCreateShippingProviderRequest },
-  TContext
-> => {
-  const mutationKey = ['postShippingProviders'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postShippingProviders>>,
-    { data: DtoCreateShippingProviderRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postShippingProviders(data, requestOptions);
-  };
+export const getPostShippingProvidersMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postShippingProviders>>, TError,{data: DtoCreateShippingProviderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postShippingProviders>>, TError,{data: DtoCreateShippingProviderRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postShippingProviders'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostShippingProvidersMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postShippingProviders>>
->;
-export type PostShippingProvidersMutationBody = DtoCreateShippingProviderRequest;
-export type PostShippingProvidersMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postShippingProviders>>, {data: DtoCreateShippingProviderRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postShippingProviders(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostShippingProvidersMutationResult = NonNullable<Awaited<ReturnType<typeof postShippingProviders>>>
+    export type PostShippingProvidersMutationBody = DtoCreateShippingProviderRequest
+    export type PostShippingProvidersMutationError = UtilsResponse
+
+    /**
  * @summary Create a new shipping provider
  */
-export const usePostShippingProviders = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postShippingProviders>>,
-      TError,
-      { data: DtoCreateShippingProviderRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postShippingProviders>>,
-  TError,
-  { data: DtoCreateShippingProviderRequest },
-  TContext
-> => {
-  return useMutation(getPostShippingProvidersMutationOptions(options), queryClient);
-};
+export const usePostShippingProviders = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postShippingProviders>>, TError,{data: DtoCreateShippingProviderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postShippingProviders>>,
+        TError,
+        {data: DtoCreateShippingProviderRequest},
+        TContext
+      > => {
+      return useMutation(getPostShippingProvidersMutationOptions(options), queryClient);
+    }
+

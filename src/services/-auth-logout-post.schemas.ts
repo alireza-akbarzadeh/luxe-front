@@ -11,3 +11,4 @@ export interface DtoMessageResponse {
 }
 
 export type PostAuthLogoutBody = { [key: string]: unknown };
+

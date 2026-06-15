@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,91 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Updates menu item details including group, parent, label, href, etc.
  * @summary Update an existing menu item
  */
 export const putAdminMenuItemsId = (
-  id: number,
-  dtoUpdateMenuItemRequest: DtoUpdateMenuItemRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoUpdateMenuItemRequest: DtoUpdateMenuItemRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PutAdminMenuItemsId200>(
-    {
-      url: `/admin/menu/items/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoUpdateMenuItemRequest,
-      signal
+
+
+      return customInstance<PutAdminMenuItemsId200>(
+      {url: `/admin/menu/items/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoUpdateMenuItemRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutAdminMenuItemsIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putAdminMenuItemsId>>,
-    TError,
-    { id: number; data: DtoUpdateMenuItemRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putAdminMenuItemsId>>,
-  TError,
-  { id: number; data: DtoUpdateMenuItemRequest },
-  TContext
-> => {
-  const mutationKey = ['putAdminMenuItemsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putAdminMenuItemsId>>,
-    { id: number; data: DtoUpdateMenuItemRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putAdminMenuItemsId(id, data, requestOptions);
-  };
+export const getPutAdminMenuItemsIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminMenuItemsId>>, TError,{id: number;data: DtoUpdateMenuItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putAdminMenuItemsId>>, TError,{id: number;data: DtoUpdateMenuItemRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putAdminMenuItemsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutAdminMenuItemsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putAdminMenuItemsId>>
->;
-export type PutAdminMenuItemsIdMutationBody = DtoUpdateMenuItemRequest;
-export type PutAdminMenuItemsIdMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putAdminMenuItemsId>>, {id: number;data: DtoUpdateMenuItemRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putAdminMenuItemsId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutAdminMenuItemsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putAdminMenuItemsId>>>
+    export type PutAdminMenuItemsIdMutationBody = DtoUpdateMenuItemRequest
+    export type PutAdminMenuItemsIdMutationError = UtilsResponse
+
+    /**
  * @summary Update an existing menu item
  */
-export const usePutAdminMenuItemsId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putAdminMenuItemsId>>,
-      TError,
-      { id: number; data: DtoUpdateMenuItemRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putAdminMenuItemsId>>,
-  TError,
-  { id: number; data: DtoUpdateMenuItemRequest },
-  TContext
-> => {
-  return useMutation(getPutAdminMenuItemsIdMutationOptions(options), queryClient);
-};
+export const usePutAdminMenuItemsId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminMenuItemsId>>, TError,{id: number;data: DtoUpdateMenuItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putAdminMenuItemsId>>,
+        TError,
+        {id: number;data: DtoUpdateMenuItemRequest},
+        TContext
+      > => {
+      return useMutation(getPutAdminMenuItemsIdMutationOptions(options), queryClient);
+    }
+

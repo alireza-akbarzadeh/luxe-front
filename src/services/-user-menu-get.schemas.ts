@@ -25,12 +25,13 @@ export interface DtoSidebarGroup {
 }
 
 export type GetUserMenuParams = {
-  /**
-   * Search by label or href
-   */
-  search?: string;
+/**
+ * Search by label or href
+ */
+search?: string;
 };
 
 export type GetUserMenu200 = UtilsResponse & {
   data?: DtoSidebarGroup[];
 };
+

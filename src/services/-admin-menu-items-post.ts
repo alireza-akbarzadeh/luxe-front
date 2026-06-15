@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Adds a new menu item (can be top-level or child of another item)
  * @summary Create a new menu item
  */
 export const postAdminMenuItems = (
-  dtoCreateMenuItemRequest: DtoCreateMenuItemRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateMenuItemRequest: DtoCreateMenuItemRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostAdminMenuItems201>(
-    {
-      url: `/admin/menu/items`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateMenuItemRequest,
-      signal
+
+
+      return customInstance<PostAdminMenuItems201>(
+      {url: `/admin/menu/items`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateMenuItemRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAdminMenuItemsMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAdminMenuItems>>,
-    TError,
-    { data: DtoCreateMenuItemRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAdminMenuItems>>,
-  TError,
-  { data: DtoCreateMenuItemRequest },
-  TContext
-> => {
-  const mutationKey = ['postAdminMenuItems'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAdminMenuItems>>,
-    { data: DtoCreateMenuItemRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAdminMenuItems(data, requestOptions);
-  };
+export const getPostAdminMenuItemsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuItems>>, TError,{data: DtoCreateMenuItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuItems>>, TError,{data: DtoCreateMenuItemRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAdminMenuItems'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAdminMenuItemsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAdminMenuItems>>
->;
-export type PostAdminMenuItemsMutationBody = DtoCreateMenuItemRequest;
-export type PostAdminMenuItemsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminMenuItems>>, {data: DtoCreateMenuItemRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminMenuItems(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminMenuItemsMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminMenuItems>>>
+    export type PostAdminMenuItemsMutationBody = DtoCreateMenuItemRequest
+    export type PostAdminMenuItemsMutationError = UtilsResponse
+
+    /**
  * @summary Create a new menu item
  */
-export const usePostAdminMenuItems = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAdminMenuItems>>,
-      TError,
-      { data: DtoCreateMenuItemRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAdminMenuItems>>,
-  TError,
-  { data: DtoCreateMenuItemRequest },
-  TContext
-> => {
-  return useMutation(getPostAdminMenuItemsMutationOptions(options), queryClient);
-};
+export const usePostAdminMenuItems = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuItems>>, TError,{data: DtoCreateMenuItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminMenuItems>>,
+        TError,
+        {data: DtoCreateMenuItemRequest},
+        TContext
+      > => {
+      return useMutation(getPostAdminMenuItemsMutationOptions(options), queryClient);
+    }
+

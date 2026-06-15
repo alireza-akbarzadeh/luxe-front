@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,91 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Like or unlike a product. Send `{"like": true}` to like, `{"like": false}` to unlike.
  * @summary Toggle product like
  */
 export const postProductsIdLike = (
-  id: number,
-  dtoToggleLikeRequest: DtoToggleLikeRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoToggleLikeRequest: DtoToggleLikeRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostProductsIdLike200>(
-    {
-      url: `/products/${id}/like`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoToggleLikeRequest,
-      signal
+
+
+      return customInstance<PostProductsIdLike200>(
+      {url: `/products/${id}/like`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoToggleLikeRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostProductsIdLikeMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postProductsIdLike>>,
-    TError,
-    { id: number; data: DtoToggleLikeRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postProductsIdLike>>,
-  TError,
-  { id: number; data: DtoToggleLikeRequest },
-  TContext
-> => {
-  const mutationKey = ['postProductsIdLike'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postProductsIdLike>>,
-    { id: number; data: DtoToggleLikeRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return postProductsIdLike(id, data, requestOptions);
-  };
+export const getPostProductsIdLikeMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postProductsIdLike>>, TError,{id: number;data: DtoToggleLikeRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postProductsIdLike>>, TError,{id: number;data: DtoToggleLikeRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postProductsIdLike'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostProductsIdLikeMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postProductsIdLike>>
->;
-export type PostProductsIdLikeMutationBody = DtoToggleLikeRequest;
-export type PostProductsIdLikeMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postProductsIdLike>>, {id: number;data: DtoToggleLikeRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  postProductsIdLike(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostProductsIdLikeMutationResult = NonNullable<Awaited<ReturnType<typeof postProductsIdLike>>>
+    export type PostProductsIdLikeMutationBody = DtoToggleLikeRequest
+    export type PostProductsIdLikeMutationError = UtilsResponse
+
+    /**
  * @summary Toggle product like
  */
-export const usePostProductsIdLike = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postProductsIdLike>>,
-      TError,
-      { id: number; data: DtoToggleLikeRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postProductsIdLike>>,
-  TError,
-  { id: number; data: DtoToggleLikeRequest },
-  TContext
-> => {
-  return useMutation(getPostProductsIdLikeMutationOptions(options), queryClient);
-};
+export const usePostProductsIdLike = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postProductsIdLike>>, TError,{id: number;data: DtoToggleLikeRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postProductsIdLike>>,
+        TError,
+        {id: number;data: DtoToggleLikeRequest},
+        TContext
+      > => {
+      return useMutation(getPostProductsIdLikeMutationOptions(options), queryClient);
+    }
+

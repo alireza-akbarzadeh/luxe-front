@@ -25,3 +25,4 @@ export type PostWalletDeposit200Data = {
 export type PostWalletDeposit200 = UtilsResponse & {
   data?: PostWalletDeposit200Data;
 };
+

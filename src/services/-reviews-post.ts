@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,88 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Leave a rating and comment for a product
  * @summary Create product review
  */
 export const postReviews = (
-  dtoCreateReviewRequest: DtoCreateReviewRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateReviewRequest: DtoCreateReviewRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostReviews201>(
-    {
-      url: `/reviews`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateReviewRequest,
-      signal
+
+
+      return customInstance<PostReviews201>(
+      {url: `/reviews`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateReviewRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostReviewsMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postReviews>>,
-    TError,
-    { data: DtoCreateReviewRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postReviews>>,
-  TError,
-  { data: DtoCreateReviewRequest },
-  TContext
-> => {
-  const mutationKey = ['postReviews'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postReviews>>,
-    { data: DtoCreateReviewRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postReviews(data, requestOptions);
-  };
+export const getPostReviewsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postReviews>>, TError,{data: DtoCreateReviewRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postReviews>>, TError,{data: DtoCreateReviewRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postReviews'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostReviewsMutationResult = NonNullable<Awaited<ReturnType<typeof postReviews>>>;
-export type PostReviewsMutationBody = DtoCreateReviewRequest;
-export type PostReviewsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postReviews>>, {data: DtoCreateReviewRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postReviews(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostReviewsMutationResult = NonNullable<Awaited<ReturnType<typeof postReviews>>>
+    export type PostReviewsMutationBody = DtoCreateReviewRequest
+    export type PostReviewsMutationError = UtilsResponse
+
+    /**
  * @summary Create product review
  */
-export const usePostReviews = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postReviews>>,
-      TError,
-      { data: DtoCreateReviewRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postReviews>>,
-  TError,
-  { data: DtoCreateReviewRequest },
-  TContext
-> => {
-  return useMutation(getPostReviewsMutationOptions(options), queryClient);
-};
+export const usePostReviews = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postReviews>>, TError,{data: DtoCreateReviewRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postReviews>>,
+        TError,
+        {data: DtoCreateReviewRequest},
+        TContext
+      > => {
+      return useMutation(getPostReviewsMutationOptions(options), queryClient);
+    }
+

@@ -29,3 +29,4 @@ export interface ModelsMenuItem {
 export type GetAdminMenuItemsId200 = UtilsResponse & {
   data?: ModelsMenuItem;
 };
+

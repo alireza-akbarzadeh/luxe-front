@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,94 +15,80 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoBulkDeleteProductsRequest, UtilsResponse } from './-products-bulk-delete.schemas';
+import type {
+  DtoBulkDeleteProductsRequest,
+  UtilsResponse
+} from './-products-bulk-delete.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Soft delete multiple products by their IDs (admin only)
  * @summary Bulk delete products
  */
 export const deleteProductsBulk = (
-  dtoBulkDeleteProductsRequest: DtoBulkDeleteProductsRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoBulkDeleteProductsRequest: DtoBulkDeleteProductsRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    {
-      url: `/products/bulk`,
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoBulkDeleteProductsRequest,
-      signal
+
+
+      return customInstance<UtilsResponse>(
+      {url: `/products/bulk`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoBulkDeleteProductsRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getDeleteProductsBulkMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteProductsBulk>>,
-    TError,
-    { data: DtoBulkDeleteProductsRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteProductsBulk>>,
-  TError,
-  { data: DtoBulkDeleteProductsRequest },
-  TContext
-> => {
-  const mutationKey = ['deleteProductsBulk'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteProductsBulk>>,
-    { data: DtoBulkDeleteProductsRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return deleteProductsBulk(data, requestOptions);
-  };
+export const getDeleteProductsBulkMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductsBulk>>, TError,{data: DtoBulkDeleteProductsRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProductsBulk>>, TError,{data: DtoBulkDeleteProductsRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['deleteProductsBulk'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type DeleteProductsBulkMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteProductsBulk>>
->;
-export type DeleteProductsBulkMutationBody = DtoBulkDeleteProductsRequest;
-export type DeleteProductsBulkMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProductsBulk>>, {data: DtoBulkDeleteProductsRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  deleteProductsBulk(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteProductsBulkMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProductsBulk>>>
+    export type DeleteProductsBulkMutationBody = DtoBulkDeleteProductsRequest
+    export type DeleteProductsBulkMutationError = UtilsResponse
+
+    /**
  * @summary Bulk delete products
  */
-export const useDeleteProductsBulk = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteProductsBulk>>,
-      TError,
-      { data: DtoBulkDeleteProductsRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteProductsBulk>>,
-  TError,
-  { data: DtoBulkDeleteProductsRequest },
-  TContext
-> => {
-  return useMutation(getDeleteProductsBulkMutationOptions(options), queryClient);
-};
+export const useDeleteProductsBulk = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductsBulk>>, TError,{data: DtoBulkDeleteProductsRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteProductsBulk>>,
+        TError,
+        {data: DtoBulkDeleteProductsRequest},
+        TContext
+      > => {
+      return useMutation(getDeleteProductsBulkMutationOptions(options), queryClient);
+    }
+

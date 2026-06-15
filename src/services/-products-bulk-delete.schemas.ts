@@ -16,3 +16,4 @@ export interface UtilsResponse {
   message?: string;
   success?: boolean;
 }
+

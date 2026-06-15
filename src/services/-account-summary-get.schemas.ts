@@ -51,3 +51,4 @@ export interface DtoDashboardSummaryResponse {
 export type GetAccountSummary200 = UtilsResponse & {
   data?: DtoDashboardSummaryResponse;
 };
+

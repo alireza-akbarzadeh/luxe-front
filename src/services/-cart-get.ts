@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,101 +20,109 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetCart200, UtilsResponse } from './-cart-get.schemas';
+import type {
+  GetCart200,
+  UtilsResponse
+} from './-cart-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Retrieve all items in the authenticated user's cart
  * @summary Get cart
  */
-export const getCart = (options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
-  return customInstance<GetCart200>({ url: `/cart`, method: 'GET', signal }, options);
-};
+export const getCart = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<GetCart200>(
+      {url: `/cart`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetCartQueryKey = () => {
-  return [`/cart`] as const;
-};
+    return [
+    `/cart`
+    ] as const;
+    }
 
-export const getGetCartQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCart>>,
-  TError = UtilsResponse
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetCartQueryKey();
+export const getGetCartQueryOptions = <TData = Awaited<ReturnType<typeof getCart>>, TError = UtilsResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCart>>> = ({ signal }) =>
-    getCart(requestOptions, signal);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getCart>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  const queryKey =  queryOptions?.queryKey ?? getGetCartQueryKey();
 
-export type GetCartQueryResult = NonNullable<Awaited<ReturnType<typeof getCart>>>;
-export type GetCartQueryError = UtilsResponse;
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCart>>> = ({ signal }) => getCart(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCartQueryResult = NonNullable<Awaited<ReturnType<typeof getCart>>>
+export type GetCartQueryError = UtilsResponse
+
 
 export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError = UtilsResponse>(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>> &
-      Pick<
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCart>>,
           TError,
           Awaited<ReturnType<typeof getCart>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError = UtilsResponse>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>> &
-      Pick<
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getCart>>,
           TError,
           Awaited<ReturnType<typeof getCart>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError = UtilsResponse>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get cart
  */
 
 export function useGetCart<TData = Awaited<ReturnType<typeof getCart>>, TError = UtilsResponse>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetCartQueryOptions(options);
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCart>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetCartQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

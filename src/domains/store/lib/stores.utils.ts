@@ -1,5 +1,5 @@
-import type { SortKey } from '@/domains/store/store.types';
 import type { StoreFiltersState } from '@/domains/store/filter.schema';
+import type { SortKey } from '@/domains/store/store.types';
 import type { GetStoresParams } from '@/services/-stores-get.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 

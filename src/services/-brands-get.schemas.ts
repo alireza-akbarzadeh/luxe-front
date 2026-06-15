@@ -24,24 +24,25 @@ export interface DtoBrandResponse {
 }
 
 export type GetBrandsParams = {
-  /**
-   * Page number
-   */
-  page?: number;
-  /**
-   * Items per page
-   */
-  limit?: number;
-  /**
-   * Search by name or slug
-   */
-  search?: string;
-  /**
-   * Filter by status
-   */
-  status?: string;
+/**
+ * Page number
+ */
+page?: number;
+/**
+ * Items per page
+ */
+limit?: number;
+/**
+ * Search by name or slug
+ */
+search?: string;
+/**
+ * Filter by status
+ */
+status?: string;
 };
 
 export type GetBrands200 = UtilsResponse & {
   data?: DtoBrandResponse[];
 };
+

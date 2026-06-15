@@ -22,12 +22,13 @@ export interface DtoTrendingResponse {
 }
 
 export type GetSearchTrendingParams = {
-  /**
-   * Number of trending terms (default 10, max 20)
-   */
-  limit?: number;
+/**
+ * Number of trending terms (default 10, max 20)
+ */
+limit?: number;
 };
 
 export type GetSearchTrending200 = UtilsResponse & {
   data?: DtoTrendingResponse;
 };
+

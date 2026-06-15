@@ -25,3 +25,4 @@ export type PutProfile200Data = {
 export type PutProfile200 = UtilsResponse & {
   data?: PutProfile200Data;
 };
+

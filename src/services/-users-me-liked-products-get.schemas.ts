@@ -19,3 +19,4 @@ export type GetUsersMeLikedProducts200Data = {
 export type GetUsersMeLikedProducts200 = UtilsResponse & {
   data?: GetUsersMeLikedProducts200Data;
 };
+

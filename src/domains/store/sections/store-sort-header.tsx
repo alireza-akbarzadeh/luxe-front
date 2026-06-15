@@ -4,10 +4,8 @@ import {
   IconCalendar,
   IconMapPin,
   IconPackage,
-  IconRotateClockwise,
   IconShare2,
   IconStar,
-  IconTruck,
   IconUsers
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -141,21 +139,6 @@ export function StoreHeader(props: StoreHeaderProps) {
               <IconShare2 className='h-4 w-4' />
             </Button>
           </motion.div>
-        </div>
-
-        <div className='border-gold/15 mt-6 flex flex-wrap gap-4 border-t pt-6'>
-          {store.shippingInfo && (
-            <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-              <IconTruck className='text-gold h-4 w-4 shrink-0' />
-              <span>{store.shippingInfo}</span>
-            </div>
-          )}
-          {store.returnPolicy && (
-            <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-              <IconRotateClockwise className='text-gold h-4 w-4 shrink-0' />
-              <span>{store.returnPolicy}</span>
-            </div>
-          )}
         </div>
       </div>
     </section>

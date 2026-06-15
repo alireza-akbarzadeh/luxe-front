@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,88 +15,77 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { UtilsResponse } from './-stores-{slug}-follow-post.schemas';
+import type {
+  UtilsResponse
+} from './-stores-{slug}-follow-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Follow a store (authenticated)
  * @summary Follow a store
  */
 export const postStoresSlugFollow = (
-  slug: string,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    slug: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    { url: `/stores/${slug}/follow`, method: 'POST', signal },
-    options
-  );
-};
 
-export const getPostStoresSlugFollowMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postStoresSlugFollow>>,
-    TError,
-    { slug: string },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postStoresSlugFollow>>,
-  TError,
-  { slug: string },
-  TContext
-> => {
-  const mutationKey = ['postStoresSlugFollow'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postStoresSlugFollow>>,
-    { slug: string }
-  > = (props) => {
-    const { slug } = props ?? {};
+      return customInstance<UtilsResponse>(
+      {url: `/stores/${slug}/follow`, method: 'POST', signal
+    },
+      options);
+    }
 
-    return postStoresSlugFollow(slug, requestOptions);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type PostStoresSlugFollowMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postStoresSlugFollow>>
->;
+export const getPostStoresSlugFollowMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postStoresSlugFollow>>, TError,{slug: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postStoresSlugFollow>>, TError,{slug: string}, TContext> => {
 
-export type PostStoresSlugFollowMutationError = UtilsResponse;
+const mutationKey = ['postStoresSlugFollow'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postStoresSlugFollow>>, {slug: string}> = (props) => {
+          const {slug} = props ?? {};
+
+          return  postStoresSlugFollow(slug,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostStoresSlugFollowMutationResult = NonNullable<Awaited<ReturnType<typeof postStoresSlugFollow>>>
+
+    export type PostStoresSlugFollowMutationError = UtilsResponse
+
+    /**
  * @summary Follow a store
  */
-export const usePostStoresSlugFollow = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postStoresSlugFollow>>,
-      TError,
-      { slug: string },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postStoresSlugFollow>>,
-  TError,
-  { slug: string },
-  TContext
-> => {
-  return useMutation(getPostStoresSlugFollowMutationOptions(options), queryClient);
-};
+export const usePostStoresSlugFollow = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postStoresSlugFollow>>, TError,{slug: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postStoresSlugFollow>>,
+        TError,
+        {slug: string},
+        TContext
+      > => {
+      return useMutation(getPostStoresSlugFollowMutationOptions(options), queryClient);
+    }
+

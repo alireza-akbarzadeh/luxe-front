@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,88 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates a new discount coupon. Only accessible by users with the "admin" role.
  * @summary Create coupon
  */
 export const postCoupons = (
-  dtoCreateCouponRequest: DtoCreateCouponRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateCouponRequest: DtoCreateCouponRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCouponSingleResponse>(
-    {
-      url: `/coupons`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateCouponRequest,
-      signal
+
+
+      return customInstance<DtoCouponSingleResponse>(
+      {url: `/coupons`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateCouponRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostCouponsMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCoupons>>,
-    TError,
-    { data: DtoCreateCouponRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postCoupons>>,
-  TError,
-  { data: DtoCreateCouponRequest },
-  TContext
-> => {
-  const mutationKey = ['postCoupons'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postCoupons>>,
-    { data: DtoCreateCouponRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postCoupons(data, requestOptions);
-  };
+export const getPostCouponsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: DtoCreateCouponRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: DtoCreateCouponRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postCoupons'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostCouponsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoupons>>>;
-export type PostCouponsMutationBody = DtoCreateCouponRequest;
-export type PostCouponsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCoupons>>, {data: DtoCreateCouponRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postCoupons(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostCouponsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoupons>>>
+    export type PostCouponsMutationBody = DtoCreateCouponRequest
+    export type PostCouponsMutationError = UtilsResponse
+
+    /**
  * @summary Create coupon
  */
-export const usePostCoupons = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postCoupons>>,
-      TError,
-      { data: DtoCreateCouponRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postCoupons>>,
-  TError,
-  { data: DtoCreateCouponRequest },
-  TContext
-> => {
-  return useMutation(getPostCouponsMutationOptions(options), queryClient);
-};
+export const usePostCoupons = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCoupons>>, TError,{data: DtoCreateCouponRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postCoupons>>,
+        TError,
+        {data: DtoCreateCouponRequest},
+        TContext
+      > => {
+      return useMutation(getPostCouponsMutationOptions(options), queryClient);
+    }
+

@@ -11,19 +11,19 @@ export interface GormDeletedAt {
   valid?: boolean;
 }
 
-export type ModelsCouponDiscountType =
-  (typeof ModelsCouponDiscountType)[keyof typeof ModelsCouponDiscountType];
+export type ModelsCouponDiscountType = typeof ModelsCouponDiscountType[keyof typeof ModelsCouponDiscountType];
+
 
 export const ModelsCouponDiscountType = {
   percentage: 'percentage',
-  fixed: 'fixed'
+  fixed: 'fixed',
 } as const;
 
 export interface ModelsCoupon {
   /**
-   * @minLength 3
-   * @maxLength 50
-   */
+     * @minLength 3
+     * @maxLength 50
+     */
   code: string;
   created_at?: string;
   deleted_at?: GormDeletedAt;
@@ -63,35 +63,36 @@ export interface UtilsResponse {
 }
 
 export type GetCouponsParams = {
-  /**
-   * Items per page
-   * @minimum 1
-   * @maximum 100
-   */
-  limit?: number;
-  /**
-   * Offset (skip number of items)
-   * @minimum 0
-   */
-  offset?: number;
-  /**
-   * Filter by coupon code (partial match)
-   */
-  code?: string;
-  /**
-   * Filter by active status
-   */
-  is_active?: boolean;
-  /**
-   * Filter by discount type (percentage/fixed)
-   */
-  discount_type?: string;
-  /**
-   * Filter by start date (ISO 8601)
-   */
-  start_date?: string;
-  /**
-   * Filter by end date (ISO 8601)
-   */
-  end_date?: string;
+/**
+ * Items per page
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * Offset (skip number of items)
+ * @minimum 0
+ */
+offset?: number;
+/**
+ * Filter by coupon code (partial match)
+ */
+code?: string;
+/**
+ * Filter by active status
+ */
+is_active?: boolean;
+/**
+ * Filter by discount type (percentage/fixed)
+ */
+discount_type?: string;
+/**
+ * Filter by start date (ISO 8601)
+ */
+start_date?: string;
+/**
+ * Filter by end date (ISO 8601)
+ */
+end_date?: string;
 };
+

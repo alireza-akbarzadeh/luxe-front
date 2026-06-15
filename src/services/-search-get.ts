@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,112 +20,111 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetSearch200, GetSearchParams, UtilsResponse } from './-search-get.schemas';
+import type {
+  GetSearch200,
+  GetSearchParams,
+  UtilsResponse
+} from './-search-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Search products, stores, and categories with advanced filters
  * @summary Global search
  */
 export const getSearch = (
-  params?: GetSearchParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetSearchParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetSearch200>({ url: `/search`, method: 'GET', params, signal }, options);
-};
 
-export const getGetSearchQueryKey = (params?: GetSearchParams) => {
-  return [`/search`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetSearchQueryOptions = <
-  TData = Awaited<ReturnType<typeof getSearch>>,
-  TError = UtilsResponse
->(
-  params?: GetSearchParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetSearch200>(
+      {url: `/search`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetSearchQueryKey = (params?: GetSearchParams,) => {
+    return [
+    `/search`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetSearchQueryOptions = <TData = Awaited<ReturnType<typeof getSearch>>, TError = UtilsResponse>(params?: GetSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetSearchQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSearch>>> = ({ signal }) =>
-    getSearch(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetSearchQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getSearch>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetSearchQueryResult = NonNullable<Awaited<ReturnType<typeof getSearch>>>;
-export type GetSearchQueryError = UtilsResponse;
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSearch>>> = ({ signal }) => getSearch(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSearchQueryResult = NonNullable<Awaited<ReturnType<typeof getSearch>>>
+export type GetSearchQueryError = UtilsResponse
+
 
 export function useGetSearch<TData = Awaited<ReturnType<typeof getSearch>>, TError = UtilsResponse>(
-  params: undefined | GetSearchParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>> &
-      Pick<
+ params: undefined |  GetSearchParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSearch>>,
           TError,
           Awaited<ReturnType<typeof getSearch>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSearch<TData = Awaited<ReturnType<typeof getSearch>>, TError = UtilsResponse>(
-  params?: GetSearchParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>> &
-      Pick<
+ params?: GetSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSearch>>,
           TError,
           Awaited<ReturnType<typeof getSearch>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSearch<TData = Awaited<ReturnType<typeof getSearch>>, TError = UtilsResponse>(
-  params?: GetSearchParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+ params?: GetSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Global search
  */
 
 export function useGetSearch<TData = Awaited<ReturnType<typeof getSearch>>, TError = UtilsResponse>(
-  params?: GetSearchParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetSearchQueryOptions(params, options);
+ params?: GetSearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetSearchQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

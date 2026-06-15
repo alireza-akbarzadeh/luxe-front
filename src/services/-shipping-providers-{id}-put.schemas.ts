@@ -33,3 +33,4 @@ export interface ModelsShippingProviders {
 export type PutShippingProvidersId200 = UtilsResponse & {
   data?: ModelsShippingProviders;
 };
+

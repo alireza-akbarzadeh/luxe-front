@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,94 +15,80 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoAdminAdjustRequest, UtilsResponse } from './-admin-wallet-adjust-post.schemas';
+import type {
+  DtoAdminAdjustRequest,
+  UtilsResponse
+} from './-admin-wallet-adjust-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Increase or decrease any user's wallet balance. Requires admin role.
  * @summary Admin adjust wallet
  */
 export const postAdminWalletAdjust = (
-  dtoAdminAdjustRequest: DtoAdminAdjustRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoAdminAdjustRequest: DtoAdminAdjustRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    {
-      url: `/admin/wallet/adjust`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoAdminAdjustRequest,
-      signal
+
+
+      return customInstance<UtilsResponse>(
+      {url: `/admin/wallet/adjust`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoAdminAdjustRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAdminWalletAdjustMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAdminWalletAdjust>>,
-    TError,
-    { data: DtoAdminAdjustRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAdminWalletAdjust>>,
-  TError,
-  { data: DtoAdminAdjustRequest },
-  TContext
-> => {
-  const mutationKey = ['postAdminWalletAdjust'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAdminWalletAdjust>>,
-    { data: DtoAdminAdjustRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAdminWalletAdjust(data, requestOptions);
-  };
+export const getPostAdminWalletAdjustMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminWalletAdjust>>, TError,{data: DtoAdminAdjustRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminWalletAdjust>>, TError,{data: DtoAdminAdjustRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAdminWalletAdjust'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAdminWalletAdjustMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAdminWalletAdjust>>
->;
-export type PostAdminWalletAdjustMutationBody = DtoAdminAdjustRequest;
-export type PostAdminWalletAdjustMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminWalletAdjust>>, {data: DtoAdminAdjustRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminWalletAdjust(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminWalletAdjustMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminWalletAdjust>>>
+    export type PostAdminWalletAdjustMutationBody = DtoAdminAdjustRequest
+    export type PostAdminWalletAdjustMutationError = UtilsResponse
+
+    /**
  * @summary Admin adjust wallet
  */
-export const usePostAdminWalletAdjust = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAdminWalletAdjust>>,
-      TError,
-      { data: DtoAdminAdjustRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAdminWalletAdjust>>,
-  TError,
-  { data: DtoAdminAdjustRequest },
-  TContext
-> => {
-  return useMutation(getPostAdminWalletAdjustMutationOptions(options), queryClient);
-};
+export const usePostAdminWalletAdjust = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminWalletAdjust>>, TError,{data: DtoAdminAdjustRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminWalletAdjust>>,
+        TError,
+        {data: DtoAdminAdjustRequest},
+        TContext
+      > => {
+      return useMutation(getPostAdminWalletAdjustMutationOptions(options), queryClient);
+    }
+

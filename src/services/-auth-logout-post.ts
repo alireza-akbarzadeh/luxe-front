@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,92 +15,80 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoMessageResponse, PostAuthLogoutBody } from './-auth-logout-post.schemas';
+import type {
+  DtoMessageResponse,
+  PostAuthLogoutBody
+} from './-auth-logout-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Invalidate the refresh token (optional specific token)
  * @summary Logout user
  */
 export const postAuthLogout = (
-  postAuthLogoutBody?: PostAuthLogoutBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    postAuthLogoutBody?: PostAuthLogoutBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoMessageResponse>(
-    {
-      url: `/auth/logout`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: postAuthLogoutBody,
-      signal
+
+
+      return customInstance<DtoMessageResponse>(
+      {url: `/auth/logout`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: postAuthLogoutBody, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAuthLogoutMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthLogout>>,
-    TError,
-    { data?: PostAuthLogoutBody },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthLogout>>,
-  TError,
-  { data?: PostAuthLogoutBody },
-  TContext
-> => {
-  const mutationKey = ['postAuthLogout'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthLogout>>,
-    { data?: PostAuthLogoutBody }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAuthLogout(data, requestOptions);
-  };
+export const getPostAuthLogoutMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthLogout>>, TError,{data?: PostAuthLogoutBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthLogout>>, TError,{data?: PostAuthLogoutBody}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAuthLogout'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAuthLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthLogout>>>;
-export type PostAuthLogoutMutationBody = PostAuthLogoutBody | undefined;
-export type PostAuthLogoutMutationError = DtoMessageResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthLogout>>, {data?: PostAuthLogoutBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthLogout(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthLogout>>>
+    export type PostAuthLogoutMutationBody = PostAuthLogoutBody | undefined
+    export type PostAuthLogoutMutationError = DtoMessageResponse
+
+    /**
  * @summary Logout user
  */
-export const usePostAuthLogout = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthLogout>>,
-      TError,
-      { data?: PostAuthLogoutBody },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthLogout>>,
-  TError,
-  { data?: PostAuthLogoutBody },
-  TContext
-> => {
-  return useMutation(getPostAuthLogoutMutationOptions(options), queryClient);
-};
+export const usePostAuthLogout = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthLogout>>, TError,{data?: PostAuthLogoutBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthLogout>>,
+        TError,
+        {data?: PostAuthLogoutBody},
+        TContext
+      > => {
+      return useMutation(getPostAuthLogoutMutationOptions(options), queryClient);
+    }
+

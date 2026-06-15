@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,112 +20,111 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetOrders200, GetOrdersParams, UtilsResponse } from './-orders-get.schemas';
+import type {
+  GetOrders200,
+  GetOrdersParams,
+  UtilsResponse
+} from './-orders-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns paginated list of all orders with filtering by status, date, amount, and user ID.
  * @summary List all orders (admin)
  */
 export const getOrders = (
-  params?: GetOrdersParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetOrdersParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetOrders200>({ url: `/orders`, method: 'GET', params, signal }, options);
-};
 
-export const getGetOrdersQueryKey = (params?: GetOrdersParams) => {
-  return [`/orders`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetOrdersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getOrders>>,
-  TError = UtilsResponse
->(
-  params?: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetOrders200>(
+      {url: `/orders`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetOrdersQueryKey = (params?: GetOrdersParams,) => {
+    return [
+    `/orders`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetOrdersQueryOptions = <TData = Awaited<ReturnType<typeof getOrders>>, TError = UtilsResponse>(params?: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({ signal }) =>
-    getOrders(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetOrdersQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getOrders>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>;
-export type GetOrdersQueryError = UtilsResponse;
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getOrders>>> = ({ signal }) => getOrders(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getOrders>>>
+export type GetOrdersQueryError = UtilsResponse
+
 
 export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = UtilsResponse>(
-  params: undefined | GetOrdersParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>> &
-      Pick<
+ params: undefined |  GetOrdersParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getOrders>>,
           TError,
           Awaited<ReturnType<typeof getOrders>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = UtilsResponse>(
-  params?: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>> &
-      Pick<
+ params?: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getOrders>>,
           TError,
           Awaited<ReturnType<typeof getOrders>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = UtilsResponse>(
-  params?: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+ params?: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List all orders (admin)
  */
 
 export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TError = UtilsResponse>(
-  params?: GetOrdersParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetOrdersQueryOptions(params, options);
+ params?: GetOrdersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getOrders>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetOrdersQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

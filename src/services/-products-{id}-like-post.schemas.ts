@@ -23,3 +23,4 @@ export interface DtoToggleLikeResponse {
 export type PostProductsIdLike200 = UtilsResponse & {
   data?: DtoToggleLikeResponse;
 };
+

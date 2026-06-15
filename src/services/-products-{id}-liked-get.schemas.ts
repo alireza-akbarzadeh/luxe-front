@@ -19,3 +19,4 @@ export type GetProductsIdLiked200Data = {
 export type GetProductsIdLiked200 = UtilsResponse & {
   data?: GetProductsIdLiked200Data;
 };
+

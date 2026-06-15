@@ -80,46 +80,46 @@ export interface DtoProductResponse {
 }
 
 export type GetStoresSlugProductsParams = {
-  /**
-   * Items per page (default 20, max 100)
-   */
-  limit?: number;
-  /**
-   * Number of items to skip
-   */
-  offset?: number;
-  /**
-   * Search by product name (partial match)
-   */
-  name?: string;
-  /**
-   * Filter by category ID
-   */
-  category_id?: number;
-  /**
-   * Minimum price
-   */
-  min_price?: number;
-  /**
-   * Maximum price
-   */
-  max_price?: number;
-  /**
-   * Minimum rating
-   */
-  min_rating?: number;
-  /**
-   * Digital products only
-   */
-  is_digital?: boolean;
-  /**
-   * New arrivals only
-   */
-  is_new?: boolean;
-  /**
-   * Sort order (price_asc,price_desc,rating_desc,newest)
-   */
-  sort?: string;
+/**
+ * Items per page (default 20, max 100)
+ */
+limit?: number;
+/**
+ * Number of items to skip
+ */
+offset?: number;
+/**
+ * Search by product name (partial match)
+ */
+name?: string;
+/**
+ * Filter by category ID
+ */
+category_id?: number;
+/**
+ * Minimum price
+ */
+min_price?: number;
+/**
+ * Maximum price
+ */
+max_price?: number;
+/**
+ * Minimum rating
+ */
+min_rating?: number;
+/**
+ * Digital products only
+ */
+is_digital?: boolean;
+/**
+ * New arrivals only
+ */
+is_new?: boolean;
+/**
+ * Sort order (price_asc,price_desc,rating_desc,newest)
+ */
+sort?: string;
 };
 
 export type GetStoresSlugProducts200Data = {
@@ -132,3 +132,4 @@ export type GetStoresSlugProducts200Data = {
 export type GetStoresSlugProducts200 = UtilsResponse & {
   data?: GetStoresSlugProducts200Data;
 };
+

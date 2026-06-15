@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -20,90 +22,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Resets password using a valid token received by email.
  * @summary Reset password
  */
 export const postAuthResetPassword = (
-  dtoResetPasswordRequest: DtoResetPasswordRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoResetPasswordRequest: DtoResetPasswordRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoMessageResponse>(
-    {
-      url: `/auth/reset-password`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoResetPasswordRequest,
-      signal
+
+
+      return customInstance<DtoMessageResponse>(
+      {url: `/auth/reset-password`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoResetPasswordRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAuthResetPasswordMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthResetPassword>>,
-    TError,
-    { data: DtoResetPasswordRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthResetPassword>>,
-  TError,
-  { data: DtoResetPasswordRequest },
-  TContext
-> => {
-  const mutationKey = ['postAuthResetPassword'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthResetPassword>>,
-    { data: DtoResetPasswordRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAuthResetPassword(data, requestOptions);
-  };
+export const getPostAuthResetPasswordMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthResetPassword>>, TError,{data: DtoResetPasswordRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthResetPassword>>, TError,{data: DtoResetPasswordRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAuthResetPassword'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAuthResetPasswordMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthResetPassword>>
->;
-export type PostAuthResetPasswordMutationBody = DtoResetPasswordRequest;
-export type PostAuthResetPasswordMutationError = DtoMessageResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthResetPassword>>, {data: DtoResetPasswordRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthResetPassword(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthResetPasswordMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthResetPassword>>>
+    export type PostAuthResetPasswordMutationBody = DtoResetPasswordRequest
+    export type PostAuthResetPasswordMutationError = DtoMessageResponse
+
+    /**
  * @summary Reset password
  */
-export const usePostAuthResetPassword = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthResetPassword>>,
-      TError,
-      { data: DtoResetPasswordRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthResetPassword>>,
-  TError,
-  { data: DtoResetPasswordRequest },
-  TContext
-> => {
-  return useMutation(getPostAuthResetPasswordMutationOptions(options), queryClient);
-};
+export const usePostAuthResetPassword = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthResetPassword>>, TError,{data: DtoResetPasswordRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthResetPassword>>,
+        TError,
+        {data: DtoResetPasswordRequest},
+        TContext
+      > => {
+      return useMutation(getPostAuthResetPasswordMutationOptions(options), queryClient);
+    }
+

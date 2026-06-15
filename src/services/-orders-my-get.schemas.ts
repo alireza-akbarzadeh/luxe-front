@@ -23,9 +23,9 @@ export interface ModelsProductAttribute {
   deleted_at?: GormDeletedAt;
   id?: number;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   name: string;
   product_id?: number;
   updated_at?: string;
@@ -53,9 +53,9 @@ export interface ModelsCategory {
   is_active?: boolean;
   level?: number;
   /**
-   * @minLength 2
-   * @maxLength 100
-   */
+     * @minLength 2
+     * @maxLength 100
+     */
   name: string;
   /** Associations */
   parent?: ModelsCategory;
@@ -66,12 +66,13 @@ export interface ModelsCategory {
   updated_at?: string;
 }
 
-export type ModelsProductStatus = (typeof ModelsProductStatus)[keyof typeof ModelsProductStatus];
+export type ModelsProductStatus = typeof ModelsProductStatus[keyof typeof ModelsProductStatus];
+
 
 export const ModelsProductStatus = {
   active: 'active',
   inactive: 'inactive',
-  archived: 'archived'
+  archived: 'archived',
 } as const;
 
 export interface ModelsUser {
@@ -81,9 +82,9 @@ export interface ModelsUser {
   email: string;
   email_verified_at?: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   first_name: string;
   /** Primary */
   id?: number;
@@ -91,9 +92,9 @@ export interface ModelsUser {
   /** Audit */
   last_login_at?: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   last_name: string;
   phone?: string;
   role?: string;
@@ -166,9 +167,9 @@ export interface ModelsProduct {
   meta_description?: string;
   meta_title?: string;
   /**
-   * @minLength 2
-   * @maxLength 255
-   */
+     * @minLength 2
+     * @maxLength 255
+     */
   name: string;
   price: number;
   published_at?: string;
@@ -279,14 +280,14 @@ export interface ModelsOrder {
 }
 
 export type GetOrdersMyParams = {
-  /**
-   * Items per page
-   */
-  limit?: number;
-  /**
-   * Offset (begin)
-   */
-  offset?: number;
+/**
+ * Items per page
+ */
+limit?: number;
+/**
+ * Offset (begin)
+ */
+offset?: number;
 };
 
 export type GetOrdersMy200Data = {
@@ -299,3 +300,4 @@ export type GetOrdersMy200Data = {
 export type GetOrdersMy200 = UtilsResponse & {
   data?: GetOrdersMy200Data;
 };
+

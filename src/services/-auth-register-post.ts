@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Create a new account and returns a pair of JWT tokens
  * @summary Register a new user
  */
 export const postAuthRegister = (
-  dtoRegisterRequest: DtoRegisterRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoRegisterRequest: DtoRegisterRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoRegisterResponse>(
-    {
-      url: `/auth/register`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoRegisterRequest,
-      signal
+
+
+      return customInstance<DtoRegisterResponse>(
+      {url: `/auth/register`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoRegisterRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAuthRegisterMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthRegister>>,
-    TError,
-    { data: DtoRegisterRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthRegister>>,
-  TError,
-  { data: DtoRegisterRequest },
-  TContext
-> => {
-  const mutationKey = ['postAuthRegister'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthRegister>>,
-    { data: DtoRegisterRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAuthRegister(data, requestOptions);
-  };
+export const getPostAuthRegisterMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthRegister>>, TError,{data: DtoRegisterRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthRegister>>, TError,{data: DtoRegisterRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAuthRegister'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAuthRegisterMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthRegister>>
->;
-export type PostAuthRegisterMutationBody = DtoRegisterRequest;
-export type PostAuthRegisterMutationError = DtoMessageResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthRegister>>, {data: DtoRegisterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthRegister(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthRegisterMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthRegister>>>
+    export type PostAuthRegisterMutationBody = DtoRegisterRequest
+    export type PostAuthRegisterMutationError = DtoMessageResponse
+
+    /**
  * @summary Register a new user
  */
-export const usePostAuthRegister = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthRegister>>,
-      TError,
-      { data: DtoRegisterRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthRegister>>,
-  TError,
-  { data: DtoRegisterRequest },
-  TContext
-> => {
-  return useMutation(getPostAuthRegisterMutationOptions(options), queryClient);
-};
+export const usePostAuthRegister = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthRegister>>, TError,{data: DtoRegisterRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthRegister>>,
+        TError,
+        {data: DtoRegisterRequest},
+        TContext
+      > => {
+      return useMutation(getPostAuthRegisterMutationOptions(options), queryClient);
+    }
+

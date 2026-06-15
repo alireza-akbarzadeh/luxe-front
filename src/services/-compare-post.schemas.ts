@@ -7,9 +7,9 @@
  */
 export interface DtoCompareRequest {
   /**
-   * @minItems 2
-   * @maxItems 4
-   */
+     * @minItems 2
+     * @maxItems 4
+     */
   product_ids: number[];
 }
 
@@ -96,3 +96,4 @@ export interface DtoCompareProductResponse {
 export type PostCompare200 = UtilsResponse & {
   data?: DtoCompareProductResponse[];
 };
+

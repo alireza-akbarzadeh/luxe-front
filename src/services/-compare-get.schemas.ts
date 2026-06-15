@@ -17,12 +17,13 @@ export interface DtoCompareListResponse {
 }
 
 export type GetCompareParams = {
-  /**
-   * Session ID for guest users
-   */
-  session_id?: string;
+/**
+ * Session ID for guest users
+ */
+session_id?: string;
 };
 
 export type GetCompare200 = UtilsResponse & {
   data?: DtoCompareListResponse;
 };
+

@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,7 +23,10 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Deletes multiple categories by their IDs. Only accessible by users with the "admin" role.
@@ -29,83 +34,63 @@ Cannot delete categories that have child categories – delete children first.
  * @summary Bulk delete categories
  */
 export const deleteAdminCategoriesBulk = (
-  deleteAdminCategoriesBulkBody: DeleteAdminCategoriesBulkBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    deleteAdminCategoriesBulkBody: DeleteAdminCategoriesBulkBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoEmptyResponse>(
-    {
-      url: `/admin/categories/bulk`,
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      data: deleteAdminCategoriesBulkBody,
-      signal
+
+
+      return customInstance<DtoEmptyResponse>(
+      {url: `/admin/categories/bulk`, method: 'DELETE',
+      headers: {'Content-Type': 'application/json', },
+      data: deleteAdminCategoriesBulkBody, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getDeleteAdminCategoriesBulkMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
-    TError,
-    { data: DeleteAdminCategoriesBulkBody },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
-  TError,
-  { data: DeleteAdminCategoriesBulkBody },
-  TContext
-> => {
-  const mutationKey = ['deleteAdminCategoriesBulk'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
-    { data: DeleteAdminCategoriesBulkBody }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return deleteAdminCategoriesBulk(data, requestOptions);
-  };
+export const getDeleteAdminCategoriesBulkMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>, TError,{data: DeleteAdminCategoriesBulkBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>, TError,{data: DeleteAdminCategoriesBulkBody}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['deleteAdminCategoriesBulk'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type DeleteAdminCategoriesBulkMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>
->;
-export type DeleteAdminCategoriesBulkMutationBody = DeleteAdminCategoriesBulkBody;
-export type DeleteAdminCategoriesBulkMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>, {data: DeleteAdminCategoriesBulkBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  deleteAdminCategoriesBulk(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAdminCategoriesBulkMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>>
+    export type DeleteAdminCategoriesBulkMutationBody = DeleteAdminCategoriesBulkBody
+    export type DeleteAdminCategoriesBulkMutationError = UtilsResponse
+
+    /**
  * @summary Bulk delete categories
  */
-export const useDeleteAdminCategoriesBulk = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
-      TError,
-      { data: DeleteAdminCategoriesBulkBody },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
-  TError,
-  { data: DeleteAdminCategoriesBulkBody },
-  TContext
-> => {
-  return useMutation(getDeleteAdminCategoriesBulkMutationOptions(options), queryClient);
-};
+export const useDeleteAdminCategoriesBulk = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>, TError,{data: DeleteAdminCategoriesBulkBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAdminCategoriesBulk>>,
+        TError,
+        {data: DeleteAdminCategoriesBulkBody},
+        TContext
+      > => {
+      return useMutation(getDeleteAdminCategoriesBulkMutationOptions(options), queryClient);
+    }
+

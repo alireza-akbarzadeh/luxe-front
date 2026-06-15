@@ -45,3 +45,4 @@ export interface DtoStoreResponse {
 export type GetStoresSlug200 = UtilsResponse & {
   data?: DtoStoreResponse;
 };
+

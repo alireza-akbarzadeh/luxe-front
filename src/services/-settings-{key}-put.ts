@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -22,89 +24,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Upserts a setting by key. If the key exists, value is updated; otherwise created.
  * @summary Create or update a setting
  */
 export const putSettingsKey = (
-  key: string,
-  dtoSetSettingRequest: DtoSetSettingRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    key: string,
+    dtoSetSettingRequest: DtoSetSettingRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PutSettingsKey200 | PutSettingsKey201>(
-    {
-      url: `/settings/${key}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoSetSettingRequest,
-      signal
+
+
+      return customInstance<PutSettingsKey200 | PutSettingsKey201>(
+      {url: `/settings/${key}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoSetSettingRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutSettingsKeyMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putSettingsKey>>,
-    TError,
-    { key: string; data: DtoSetSettingRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putSettingsKey>>,
-  TError,
-  { key: string; data: DtoSetSettingRequest },
-  TContext
-> => {
-  const mutationKey = ['putSettingsKey'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putSettingsKey>>,
-    { key: string; data: DtoSetSettingRequest }
-  > = (props) => {
-    const { key, data } = props ?? {};
 
-    return putSettingsKey(key, data, requestOptions);
-  };
+export const getPutSettingsKeyMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putSettingsKey>>, TError,{key: string;data: DtoSetSettingRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putSettingsKey>>, TError,{key: string;data: DtoSetSettingRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putSettingsKey'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutSettingsKeyMutationResult = NonNullable<Awaited<ReturnType<typeof putSettingsKey>>>;
-export type PutSettingsKeyMutationBody = DtoSetSettingRequest;
-export type PutSettingsKeyMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putSettingsKey>>, {key: string;data: DtoSetSettingRequest}> = (props) => {
+          const {key,data} = props ?? {};
+
+          return  putSettingsKey(key,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutSettingsKeyMutationResult = NonNullable<Awaited<ReturnType<typeof putSettingsKey>>>
+    export type PutSettingsKeyMutationBody = DtoSetSettingRequest
+    export type PutSettingsKeyMutationError = UtilsResponse
+
+    /**
  * @summary Create or update a setting
  */
-export const usePutSettingsKey = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putSettingsKey>>,
-      TError,
-      { key: string; data: DtoSetSettingRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putSettingsKey>>,
-  TError,
-  { key: string; data: DtoSetSettingRequest },
-  TContext
-> => {
-  return useMutation(getPutSettingsKeyMutationOptions(options), queryClient);
-};
+export const usePutSettingsKey = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putSettingsKey>>, TError,{key: string;data: DtoSetSettingRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putSettingsKey>>,
+        TError,
+        {key: string;data: DtoSetSettingRequest},
+        TContext
+      > => {
+      return useMutation(getPutSettingsKeyMutationOptions(options), queryClient);
+    }
+

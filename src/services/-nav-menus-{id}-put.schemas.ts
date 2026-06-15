@@ -5,12 +5,12 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoUpsertNavMenuRequestType =
-  (typeof DtoUpsertNavMenuRequestType)[keyof typeof DtoUpsertNavMenuRequestType];
+export type DtoUpsertNavMenuRequestType = typeof DtoUpsertNavMenuRequestType[keyof typeof DtoUpsertNavMenuRequestType];
+
 
 export const DtoUpsertNavMenuRequestType = {
   mega: 'mega',
-  link: 'link'
+  link: 'link',
 } as const;
 
 export interface DtoLink {
@@ -67,3 +67,4 @@ export interface DtoNavItemResponse {
 export type PutNavMenusId200 = UtilsResponse & {
   data?: DtoNavItemResponse;
 };
+

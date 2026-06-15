@@ -16,9 +16,9 @@ export interface ModelsProductAttribute {
   deleted_at?: GormDeletedAt;
   id?: number;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   name: string;
   product_id?: number;
   updated_at?: string;
@@ -37,12 +37,13 @@ export interface ModelsBrand {
   updated_at?: string;
 }
 
-export type ModelsProductStatus = (typeof ModelsProductStatus)[keyof typeof ModelsProductStatus];
+export type ModelsProductStatus = typeof ModelsProductStatus[keyof typeof ModelsProductStatus];
+
 
 export const ModelsProductStatus = {
   active: 'active',
   inactive: 'inactive',
-  archived: 'archived'
+  archived: 'archived',
 } as const;
 
 export interface ModelsUser {
@@ -52,9 +53,9 @@ export interface ModelsUser {
   email: string;
   email_verified_at?: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   first_name: string;
   /** Primary */
   id?: number;
@@ -62,9 +63,9 @@ export interface ModelsUser {
   /** Audit */
   last_login_at?: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   last_name: string;
   phone?: string;
   role?: string;
@@ -137,9 +138,9 @@ export interface ModelsProduct {
   meta_description?: string;
   meta_title?: string;
   /**
-   * @minLength 2
-   * @maxLength 255
-   */
+     * @minLength 2
+     * @maxLength 255
+     */
   name: string;
   price: number;
   published_at?: string;
@@ -173,9 +174,9 @@ export interface ModelsCategory {
   is_active?: boolean;
   level?: number;
   /**
-   * @minLength 2
-   * @maxLength 100
-   */
+     * @minLength 2
+     * @maxLength 100
+     */
   name: string;
   /** Associations */
   parent?: ModelsCategory;
@@ -208,31 +209,32 @@ export interface UtilsResponse {
 }
 
 export type GetCategoriesParams = {
-  /**
-   * Items per page
-   * @minimum 1
-   * @maximum 100
-   */
-  limit?: number;
-  /**
-   * Offset (skip number of items)
-   * @minimum 0
-   */
-  offset?: number;
-  /**
-   * Filter by active status (true/false)
-   */
-  is_active?: boolean;
-  /**
-   * Filter by parent category ID
-   */
-  parent_id?: number;
-  /**
-   * Filter by name  the name
-   */
-  search?: string;
-  /**
-   * Sort order (popular, name)
-   */
-  sort?: string;
+/**
+ * Items per page
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * Offset (skip number of items)
+ * @minimum 0
+ */
+offset?: number;
+/**
+ * Filter by active status (true/false)
+ */
+is_active?: boolean;
+/**
+ * Filter by parent category ID
+ */
+parent_id?: number;
+/**
+ * Filter by name  the name
+ */
+search?: string;
+/**
+ * Sort order (popular, name)
+ */
+sort?: string;
 };
+

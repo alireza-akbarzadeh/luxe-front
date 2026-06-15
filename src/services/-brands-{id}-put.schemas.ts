@@ -34,3 +34,4 @@ export interface DtoBrandResponse {
 export type PutBrandsId200 = UtilsResponse & {
   data?: DtoBrandResponse;
 };
+

@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates a menu group (e.g., "Overview", "Users & Access")
  * @summary Create a new menu group
  */
 export const postAdminMenuGroups = (
-  dtoCreateMenuGroupRequest: DtoCreateMenuGroupRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateMenuGroupRequest: DtoCreateMenuGroupRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostAdminMenuGroups201>(
-    {
-      url: `/admin/menu/groups`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateMenuGroupRequest,
-      signal
+
+
+      return customInstance<PostAdminMenuGroups201>(
+      {url: `/admin/menu/groups`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateMenuGroupRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAdminMenuGroupsMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAdminMenuGroups>>,
-    TError,
-    { data: DtoCreateMenuGroupRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAdminMenuGroups>>,
-  TError,
-  { data: DtoCreateMenuGroupRequest },
-  TContext
-> => {
-  const mutationKey = ['postAdminMenuGroups'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAdminMenuGroups>>,
-    { data: DtoCreateMenuGroupRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAdminMenuGroups(data, requestOptions);
-  };
+export const getPostAdminMenuGroupsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuGroups>>, TError,{data: DtoCreateMenuGroupRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuGroups>>, TError,{data: DtoCreateMenuGroupRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAdminMenuGroups'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAdminMenuGroupsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAdminMenuGroups>>
->;
-export type PostAdminMenuGroupsMutationBody = DtoCreateMenuGroupRequest;
-export type PostAdminMenuGroupsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminMenuGroups>>, {data: DtoCreateMenuGroupRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminMenuGroups(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminMenuGroupsMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminMenuGroups>>>
+    export type PostAdminMenuGroupsMutationBody = DtoCreateMenuGroupRequest
+    export type PostAdminMenuGroupsMutationError = UtilsResponse
+
+    /**
  * @summary Create a new menu group
  */
-export const usePostAdminMenuGroups = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAdminMenuGroups>>,
-      TError,
-      { data: DtoCreateMenuGroupRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAdminMenuGroups>>,
-  TError,
-  { data: DtoCreateMenuGroupRequest },
-  TContext
-> => {
-  return useMutation(getPostAdminMenuGroupsMutationOptions(options), queryClient);
-};
+export const usePostAdminMenuGroups = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminMenuGroups>>, TError,{data: DtoCreateMenuGroupRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminMenuGroups>>,
+        TError,
+        {data: DtoCreateMenuGroupRequest},
+        TContext
+      > => {
+      return useMutation(getPostAdminMenuGroupsMutationOptions(options), queryClient);
+    }
+

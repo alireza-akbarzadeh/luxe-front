@@ -2,12 +2,12 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
+import { StoresPageSkeleton } from '@/domains/store/components/stores-page-skeleton';
+import { StoresDomain } from '@/domains/store/containers/stores.domain';
 import {
   getInfiniteStoresQueryOptions,
   STORES_PAGE_SIZE
 } from '@/domains/store/lib/infinite-stores-query';
-import { StoresPageSkeleton } from '@/domains/store/components/stores-page-skeleton';
-import { StoresDomain } from '@/domains/store/containers/stores.domain';
 import { getQueryClient } from '@/lib/query-client';
 import { getStores } from '@/services/-stores-get';
 

@@ -58,3 +58,4 @@ export type PostAdminShipmentsBody = { [key: string]: unknown };
 export type PostAdminShipments201 = UtilsResponse & {
   data?: ModelsShipment;
 };
+

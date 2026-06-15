@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,127 +20,109 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetStoresSlug200, UtilsResponse } from './-stores-{slug}-get.schemas';
+import type {
+  GetStoresSlug200,
+  UtilsResponse
+} from './-stores-{slug}-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Fetch store details including categories and stats
  * @summary Get store by slug
  */
 export const getStoresSlug = (
-  slug: string,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    slug: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetStoresSlug200>(
-    { url: `/stores/${slug}`, method: 'GET', signal },
-    options
-  );
-};
 
-export const getGetStoresSlugQueryKey = (slug: string) => {
-  return [`/stores/${slug}`] as const;
-};
 
-export const getGetStoresSlugQueryOptions = <
-  TData = Awaited<ReturnType<typeof getStoresSlug>>,
-  TError = UtilsResponse
->(
-  slug: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetStoresSlug200>(
+      {url: `/stores/${slug}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetStoresSlugQueryKey = (slug: string,) => {
+    return [
+    `/stores/${slug}`
+    ] as const;
+    }
+
+
+export const getGetStoresSlugQueryOptions = <TData = Awaited<ReturnType<typeof getStoresSlug>>, TError = UtilsResponse>(slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetStoresSlugQueryKey(slug);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStoresSlug>>> = ({ signal }) =>
-    getStoresSlug(slug, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetStoresSlugQueryKey(slug);
 
-  return { queryKey, queryFn, enabled: !!slug, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getStoresSlug>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetStoresSlugQueryResult = NonNullable<Awaited<ReturnType<typeof getStoresSlug>>>;
-export type GetStoresSlugQueryError = UtilsResponse;
 
-export function useGetStoresSlug<
-  TData = Awaited<ReturnType<typeof getStoresSlug>>,
-  TError = UtilsResponse
->(
-  slug: string,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>> &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStoresSlug>>> = ({ signal }) => getStoresSlug(slug, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(slug), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetStoresSlugQueryResult = NonNullable<Awaited<ReturnType<typeof getStoresSlug>>>
+export type GetStoresSlugQueryError = UtilsResponse
+
+
+export function useGetStoresSlug<TData = Awaited<ReturnType<typeof getStoresSlug>>, TError = UtilsResponse>(
+ slug: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getStoresSlug>>,
           TError,
           Awaited<ReturnType<typeof getStoresSlug>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetStoresSlug<
-  TData = Awaited<ReturnType<typeof getStoresSlug>>,
-  TError = UtilsResponse
->(
-  slug: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStoresSlug<TData = Awaited<ReturnType<typeof getStoresSlug>>, TError = UtilsResponse>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getStoresSlug>>,
           TError,
           Awaited<ReturnType<typeof getStoresSlug>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetStoresSlug<
-  TData = Awaited<ReturnType<typeof getStoresSlug>>,
-  TError = UtilsResponse
->(
-  slug: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetStoresSlug<TData = Awaited<ReturnType<typeof getStoresSlug>>, TError = UtilsResponse>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get store by slug
  */
 
-export function useGetStoresSlug<
-  TData = Awaited<ReturnType<typeof getStoresSlug>>,
-  TError = UtilsResponse
->(
-  slug: string,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetStoresSlugQueryOptions(slug, options);
+export function useGetStoresSlug<TData = Awaited<ReturnType<typeof getStoresSlug>>, TError = UtilsResponse>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getStoresSlug>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetStoresSlugQueryOptions(slug,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

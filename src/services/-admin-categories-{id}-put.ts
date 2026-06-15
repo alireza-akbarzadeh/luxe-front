@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,91 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Updates an existing category by ID. Only accessible by users with the "admin" role.
  * @summary Update a category
  */
 export const putAdminCategoriesId = (
-  id: number,
-  dtoUpdateCategoryRequest: DtoUpdateCategoryRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoUpdateCategoryRequest: DtoUpdateCategoryRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCategorySingleResponse>(
-    {
-      url: `/admin/categories/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoUpdateCategoryRequest,
-      signal
+
+
+      return customInstance<DtoCategorySingleResponse>(
+      {url: `/admin/categories/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoUpdateCategoryRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutAdminCategoriesIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putAdminCategoriesId>>,
-    TError,
-    { id: number; data: DtoUpdateCategoryRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putAdminCategoriesId>>,
-  TError,
-  { id: number; data: DtoUpdateCategoryRequest },
-  TContext
-> => {
-  const mutationKey = ['putAdminCategoriesId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putAdminCategoriesId>>,
-    { id: number; data: DtoUpdateCategoryRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putAdminCategoriesId(id, data, requestOptions);
-  };
+export const getPutAdminCategoriesIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminCategoriesId>>, TError,{id: number;data: DtoUpdateCategoryRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putAdminCategoriesId>>, TError,{id: number;data: DtoUpdateCategoryRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putAdminCategoriesId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutAdminCategoriesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putAdminCategoriesId>>
->;
-export type PutAdminCategoriesIdMutationBody = DtoUpdateCategoryRequest;
-export type PutAdminCategoriesIdMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putAdminCategoriesId>>, {id: number;data: DtoUpdateCategoryRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putAdminCategoriesId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutAdminCategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putAdminCategoriesId>>>
+    export type PutAdminCategoriesIdMutationBody = DtoUpdateCategoryRequest
+    export type PutAdminCategoriesIdMutationError = UtilsResponse
+
+    /**
  * @summary Update a category
  */
-export const usePutAdminCategoriesId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putAdminCategoriesId>>,
-      TError,
-      { id: number; data: DtoUpdateCategoryRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putAdminCategoriesId>>,
-  TError,
-  { id: number; data: DtoUpdateCategoryRequest },
-  TContext
-> => {
-  return useMutation(getPutAdminCategoriesIdMutationOptions(options), queryClient);
-};
+export const usePutAdminCategoriesId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminCategoriesId>>, TError,{id: number;data: DtoUpdateCategoryRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putAdminCategoriesId>>,
+        TError,
+        {id: number;data: DtoUpdateCategoryRequest},
+        TContext
+      > => {
+      return useMutation(getPutAdminCategoriesIdMutationOptions(options), queryClient);
+    }
+

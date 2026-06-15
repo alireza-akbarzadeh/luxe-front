@@ -34,16 +34,17 @@ export interface DtoWalletDetailResponse {
 }
 
 export type GetWalletParams = {
-  /**
-   * Items per page (default 20, max 100)
-   */
-  limit?: number;
-  /**
-   * Offset
-   */
-  offset?: number;
+/**
+ * Items per page (default 20, max 100)
+ */
+limit?: number;
+/**
+ * Offset
+ */
+offset?: number;
 };
 
 export type GetWallet200 = UtilsResponse & {
   data?: DtoWalletDetailResponse;
 };
+

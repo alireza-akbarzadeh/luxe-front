@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,92 +15,81 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoCompareRequest, PostCompare200, UtilsResponse } from './-compare-post.schemas';
+import type {
+  DtoCompareRequest,
+  PostCompare200,
+  UtilsResponse
+} from './-compare-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Get product details for comparison (2–4 products)
  * @summary Compare products
  */
 export const postCompare = (
-  dtoCompareRequest: DtoCompareRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCompareRequest: DtoCompareRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostCompare200>(
-    {
-      url: `/compare`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCompareRequest,
-      signal
+
+
+      return customInstance<PostCompare200>(
+      {url: `/compare`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCompareRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostCompareMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCompare>>,
-    TError,
-    { data: DtoCompareRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postCompare>>,
-  TError,
-  { data: DtoCompareRequest },
-  TContext
-> => {
-  const mutationKey = ['postCompare'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postCompare>>,
-    { data: DtoCompareRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postCompare(data, requestOptions);
-  };
+export const getPostCompareMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCompare>>, TError,{data: DtoCompareRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCompare>>, TError,{data: DtoCompareRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postCompare'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostCompareMutationResult = NonNullable<Awaited<ReturnType<typeof postCompare>>>;
-export type PostCompareMutationBody = DtoCompareRequest;
-export type PostCompareMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCompare>>, {data: DtoCompareRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postCompare(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostCompareMutationResult = NonNullable<Awaited<ReturnType<typeof postCompare>>>
+    export type PostCompareMutationBody = DtoCompareRequest
+    export type PostCompareMutationError = UtilsResponse
+
+    /**
  * @summary Compare products
  */
-export const usePostCompare = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postCompare>>,
-      TError,
-      { data: DtoCompareRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postCompare>>,
-  TError,
-  { data: DtoCompareRequest },
-  TContext
-> => {
-  return useMutation(getPostCompareMutationOptions(options), queryClient);
-};
+export const usePostCompare = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCompare>>, TError,{data: DtoCompareRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postCompare>>,
+        TError,
+        {data: DtoCompareRequest},
+        TContext
+      > => {
+      return useMutation(getPostCompareMutationOptions(options), queryClient);
+    }
+

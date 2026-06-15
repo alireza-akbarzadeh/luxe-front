@@ -12,13 +12,13 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type ModelsAddressAddressType =
-  (typeof ModelsAddressAddressType)[keyof typeof ModelsAddressAddressType];
+export type ModelsAddressAddressType = typeof ModelsAddressAddressType[keyof typeof ModelsAddressAddressType];
+
 
 export const ModelsAddressAddressType = {
   shipping: 'shipping',
   billing: 'billing',
-  both: 'both'
+  both: 'both',
 } as const;
 
 export interface GormDeletedAt {
@@ -53,3 +53,4 @@ export type GetAddresses200Data = {
 export type GetAddresses200 = UtilsResponse & {
   data?: GetAddresses200Data;
 };
+

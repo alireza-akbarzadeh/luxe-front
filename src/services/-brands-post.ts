@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,89 +15,81 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoCreateBrandRequest, PostBrands201, UtilsResponse } from './-brands-post.schemas';
+import type {
+  DtoCreateBrandRequest,
+  PostBrands201,
+  UtilsResponse
+} from './-brands-post.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates a brand with the provided details. Defaults status to "draft" if not supplied.
  * @summary Create a new brand
  */
 export const postBrands = (
-  dtoCreateBrandRequest: DtoCreateBrandRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateBrandRequest: DtoCreateBrandRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostBrands201>(
-    {
-      url: `/brands`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateBrandRequest,
-      signal
+
+
+      return customInstance<PostBrands201>(
+      {url: `/brands`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateBrandRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostBrandsMutationOptions = <TError = UtilsResponse, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postBrands>>,
-    TError,
-    { data: DtoCreateBrandRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postBrands>>,
-  TError,
-  { data: DtoCreateBrandRequest },
-  TContext
-> => {
-  const mutationKey = ['postBrands'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postBrands>>,
-    { data: DtoCreateBrandRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postBrands(data, requestOptions);
-  };
+export const getPostBrandsMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postBrands>>, TError,{data: DtoCreateBrandRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postBrands>>, TError,{data: DtoCreateBrandRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postBrands'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostBrandsMutationResult = NonNullable<Awaited<ReturnType<typeof postBrands>>>;
-export type PostBrandsMutationBody = DtoCreateBrandRequest;
-export type PostBrandsMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postBrands>>, {data: DtoCreateBrandRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postBrands(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostBrandsMutationResult = NonNullable<Awaited<ReturnType<typeof postBrands>>>
+    export type PostBrandsMutationBody = DtoCreateBrandRequest
+    export type PostBrandsMutationError = UtilsResponse
+
+    /**
  * @summary Create a new brand
  */
-export const usePostBrands = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postBrands>>,
-      TError,
-      { data: DtoCreateBrandRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postBrands>>,
-  TError,
-  { data: DtoCreateBrandRequest },
-  TContext
-> => {
-  return useMutation(getPostBrandsMutationOptions(options), queryClient);
-};
+export const usePostBrands = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postBrands>>, TError,{data: DtoCreateBrandRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postBrands>>,
+        TError,
+        {data: DtoCreateBrandRequest},
+        TContext
+      > => {
+      return useMutation(getPostBrandsMutationOptions(options), queryClient);
+    }
+

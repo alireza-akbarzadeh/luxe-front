@@ -5,13 +5,13 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoUpdateAddressRequestAddressType =
-  (typeof DtoUpdateAddressRequestAddressType)[keyof typeof DtoUpdateAddressRequestAddressType];
+export type DtoUpdateAddressRequestAddressType = typeof DtoUpdateAddressRequestAddressType[keyof typeof DtoUpdateAddressRequestAddressType];
+
 
 export const DtoUpdateAddressRequestAddressType = {
   shipping: 'shipping',
   billing: 'billing',
-  both: 'both'
+  both: 'both',
 } as const;
 
 export interface DtoUpdateAddressRequest {
@@ -28,13 +28,13 @@ export interface DtoUpdateAddressRequest {
   state?: string;
 }
 
-export type ModelsAddressAddressType =
-  (typeof ModelsAddressAddressType)[keyof typeof ModelsAddressAddressType];
+export type ModelsAddressAddressType = typeof ModelsAddressAddressType[keyof typeof ModelsAddressAddressType];
+
 
 export const ModelsAddressAddressType = {
   shipping: 'shipping',
   billing: 'billing',
-  both: 'both'
+  both: 'both',
 } as const;
 
 export interface GormDeletedAt {
@@ -75,3 +75,4 @@ export interface UtilsResponse {
   message?: string;
   success?: boolean;
 }
+

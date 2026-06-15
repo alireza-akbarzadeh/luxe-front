@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,88 +15,77 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { UtilsResponse } from './-products-{id}-delete.schemas';
+import type {
+  UtilsResponse
+} from './-products-{id}-delete.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Soft delete a product by its ID
  * @summary Delete product
  */
 export const deleteProductsId = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    { url: `/products/${id}`, method: 'DELETE', signal },
-    options
-  );
-};
 
-export const getDeleteProductsIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteProductsId>>,
-    TError,
-    { id: number },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteProductsId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  const mutationKey = ['deleteProductsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteProductsId>>,
-    { id: number }
-  > = (props) => {
-    const { id } = props ?? {};
+      return customInstance<UtilsResponse>(
+      {url: `/products/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-    return deleteProductsId(id, requestOptions);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type DeleteProductsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteProductsId>>
->;
+export const getDeleteProductsIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteProductsId>>, TError,{id: number}, TContext> => {
 
-export type DeleteProductsIdMutationError = UtilsResponse;
+const mutationKey = ['deleteProductsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteProductsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteProductsId(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteProductsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteProductsId>>>
+
+    export type DeleteProductsIdMutationError = UtilsResponse
+
+    /**
  * @summary Delete product
  */
-export const useDeleteProductsId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteProductsId>>,
-      TError,
-      { id: number },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteProductsId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  return useMutation(getDeleteProductsIdMutationOptions(options), queryClient);
-};
+export const useDeleteProductsId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteProductsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteProductsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteProductsIdMutationOptions(options), queryClient);
+    }
+

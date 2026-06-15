@@ -19,3 +19,4 @@ export interface UtilsResponse {
 }
 
 export type DeleteAdminCategoriesBulkBody = { [key: string]: unknown };
+

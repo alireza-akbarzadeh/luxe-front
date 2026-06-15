@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,11 +15,17 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { DtoEmptyResponse, UtilsResponse } from './-admin-categories-{id}-delete.schemas';
+import type {
+  DtoEmptyResponse,
+  UtilsResponse
+} from './-admin-categories-{id}-delete.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Deletes a category by ID. Only accessible by users with the "admin" role.
@@ -25,77 +33,61 @@ Categories with child categories cannot be deleted – delete children first.
  * @summary Delete a category
  */
 export const deleteAdminCategoriesId = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoEmptyResponse>(
-    { url: `/admin/categories/${id}`, method: 'DELETE', signal },
-    options
-  );
-};
 
-export const getDeleteAdminCategoriesIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
-    TError,
-    { id: number },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  const mutationKey = ['deleteAdminCategoriesId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
-    { id: number }
-  > = (props) => {
-    const { id } = props ?? {};
+      return customInstance<DtoEmptyResponse>(
+      {url: `/admin/categories/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-    return deleteAdminCategoriesId(id, requestOptions);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type DeleteAdminCategoriesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteAdminCategoriesId>>
->;
+export const getDeleteAdminCategoriesIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesId>>, TError,{id: number}, TContext> => {
 
-export type DeleteAdminCategoriesIdMutationError = UtilsResponse;
+const mutationKey = ['deleteAdminCategoriesId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdminCategoriesId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAdminCategoriesId(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAdminCategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdminCategoriesId>>>
+
+    export type DeleteAdminCategoriesIdMutationError = UtilsResponse
+
+    /**
  * @summary Delete a category
  */
-export const useDeleteAdminCategoriesId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
-      TError,
-      { id: number },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  return useMutation(getDeleteAdminCategoriesIdMutationOptions(options), queryClient);
-};
+export const useDeleteAdminCategoriesId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminCategoriesId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAdminCategoriesId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteAdminCategoriesIdMutationOptions(options), queryClient);
+    }
+

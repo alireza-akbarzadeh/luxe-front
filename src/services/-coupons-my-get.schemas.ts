@@ -12,12 +12,12 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type ModelsCouponDiscountType =
-  (typeof ModelsCouponDiscountType)[keyof typeof ModelsCouponDiscountType];
+export type ModelsCouponDiscountType = typeof ModelsCouponDiscountType[keyof typeof ModelsCouponDiscountType];
+
 
 export const ModelsCouponDiscountType = {
   percentage: 'percentage',
-  fixed: 'fixed'
+  fixed: 'fixed',
 } as const;
 
 export interface GormDeletedAt {
@@ -28,9 +28,9 @@ export interface GormDeletedAt {
 
 export interface ModelsCoupon {
   /**
-   * @minLength 3
-   * @maxLength 50
-   */
+     * @minLength 3
+     * @maxLength 50
+     */
   code: string;
   created_at?: string;
   deleted_at?: GormDeletedAt;
@@ -49,12 +49,13 @@ export interface ModelsCoupon {
 }
 
 export type GetCouponsMyParams = {
-  /**
-   * Order total amount to filter by minimum order requirement
-   */
-  order_total?: number;
+/**
+ * Order total amount to filter by minimum order requirement
+ */
+order_total?: number;
 };
 
 export type GetCouponsMy200 = UtilsResponse & {
   data?: ModelsCoupon[];
 };
+

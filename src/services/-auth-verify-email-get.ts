@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -25,127 +27,103 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Verifies email address using a token sent via email.
  * @summary Verify email
  */
 export const getAuthVerifyEmail = (
-  params: GetAuthVerifyEmailParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params: GetAuthVerifyEmailParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoMessageResponse>(
-    { url: `/auth/verify-email`, method: 'GET', params, signal },
-    options
-  );
-};
 
-export const getGetAuthVerifyEmailQueryKey = (params?: GetAuthVerifyEmailParams) => {
-  return [`/auth/verify-email`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetAuthVerifyEmailQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-  TError = DtoMessageResponse
->(
-  params: GetAuthVerifyEmailParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<DtoMessageResponse>(
+      {url: `/auth/verify-email`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAuthVerifyEmailQueryKey = (params?: GetAuthVerifyEmailParams,) => {
+    return [
+    `/auth/verify-email`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetAuthVerifyEmailQueryOptions = <TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError = DtoMessageResponse>(params: GetAuthVerifyEmailParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAuthVerifyEmailQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthVerifyEmail>>> = ({ signal }) =>
-    getAuthVerifyEmail(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthVerifyEmailQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetAuthVerifyEmailQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAuthVerifyEmail>>
->;
-export type GetAuthVerifyEmailQueryError = DtoMessageResponse;
 
-export function useGetAuthVerifyEmail<
-  TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-  TError = DtoMessageResponse
->(
-  params: GetAuthVerifyEmailParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>> &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthVerifyEmail>>> = ({ signal }) => getAuthVerifyEmail(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAuthVerifyEmailQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthVerifyEmail>>>
+export type GetAuthVerifyEmailQueryError = DtoMessageResponse
+
+
+export function useGetAuthVerifyEmail<TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError = DtoMessageResponse>(
+ params: GetAuthVerifyEmailParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAuthVerifyEmail>>,
           TError,
           Awaited<ReturnType<typeof getAuthVerifyEmail>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAuthVerifyEmail<
-  TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-  TError = DtoMessageResponse
->(
-  params: GetAuthVerifyEmailParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthVerifyEmail<TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError = DtoMessageResponse>(
+ params: GetAuthVerifyEmailParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAuthVerifyEmail>>,
           TError,
           Awaited<ReturnType<typeof getAuthVerifyEmail>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAuthVerifyEmail<
-  TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-  TError = DtoMessageResponse
->(
-  params: GetAuthVerifyEmailParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAuthVerifyEmail<TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError = DtoMessageResponse>(
+ params: GetAuthVerifyEmailParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Verify email
  */
 
-export function useGetAuthVerifyEmail<
-  TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>,
-  TError = DtoMessageResponse
->(
-  params: GetAuthVerifyEmailParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAuthVerifyEmailQueryOptions(params, options);
+export function useGetAuthVerifyEmail<TData = Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError = DtoMessageResponse>(
+ params: GetAuthVerifyEmailParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAuthVerifyEmail>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAuthVerifyEmailQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

@@ -34,12 +34,13 @@ export interface DtoMenuListResponse {
 }
 
 export type GetAdminMenuItemsParams = {
-  /**
-   * Return flat list
-   */
-  flat?: boolean;
+/**
+ * Return flat list
+ */
+flat?: boolean;
 };
 
 export type GetAdminMenuItems200 = UtilsResponse & {
   data?: DtoMenuListResponse;
 };
+

@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -26,144 +28,110 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Fetch products from the same category, ordered by rating and review count
  * @summary Get related products
  */
 export const getProductsIdRelated = (
-  id: number,
-  params?: GetProductsIdRelatedParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    params?: GetProductsIdRelatedParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetProductsIdRelated200>(
-    { url: `/products/${id}/related`, method: 'GET', params, signal },
-    options
-  );
-};
 
-export const getGetProductsIdRelatedQueryKey = (
-  id: number,
-  params?: GetProductsIdRelatedParams
+
+      return customInstance<GetProductsIdRelated200>(
+      {url: `/products/${id}/related`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetProductsIdRelatedQueryKey = (id: number,
+    params?: GetProductsIdRelatedParams,) => {
+    return [
+    `/products/${id}/related`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetProductsIdRelatedQueryOptions = <TData = Awaited<ReturnType<typeof getProductsIdRelated>>, TError = UtilsResponse>(id: number,
+    params?: GetProductsIdRelatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  return [`/products/${id}/related`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetProductsIdRelatedQueryOptions = <
-  TData = Awaited<ReturnType<typeof getProductsIdRelated>>,
-  TError = UtilsResponse
->(
-  id: number,
-  params?: GetProductsIdRelatedParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetProductsIdRelatedQueryKey(id, params);
+  const queryKey =  queryOptions?.queryKey ?? getGetProductsIdRelatedQueryKey(id,params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductsIdRelated>>> = ({ signal }) =>
-    getProductsIdRelated(id, params, requestOptions, signal);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getProductsIdRelated>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetProductsIdRelatedQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getProductsIdRelated>>
->;
-export type GetProductsIdRelatedQueryError = UtilsResponse;
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getProductsIdRelated>>> = ({ signal }) => getProductsIdRelated(id,params, requestOptions, signal);
 
-export function useGetProductsIdRelated<
-  TData = Awaited<ReturnType<typeof getProductsIdRelated>>,
-  TError = UtilsResponse
->(
-  id: number,
-  params: undefined | GetProductsIdRelatedParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>
-    > &
-      Pick<
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetProductsIdRelatedQueryResult = NonNullable<Awaited<ReturnType<typeof getProductsIdRelated>>>
+export type GetProductsIdRelatedQueryError = UtilsResponse
+
+
+export function useGetProductsIdRelated<TData = Awaited<ReturnType<typeof getProductsIdRelated>>, TError = UtilsResponse>(
+ id: number,
+    params: undefined |  GetProductsIdRelatedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProductsIdRelated>>,
           TError,
           Awaited<ReturnType<typeof getProductsIdRelated>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetProductsIdRelated<
-  TData = Awaited<ReturnType<typeof getProductsIdRelated>>,
-  TError = UtilsResponse
->(
-  id: number,
-  params?: GetProductsIdRelatedParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductsIdRelated<TData = Awaited<ReturnType<typeof getProductsIdRelated>>, TError = UtilsResponse>(
+ id: number,
+    params?: GetProductsIdRelatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getProductsIdRelated>>,
           TError,
           Awaited<ReturnType<typeof getProductsIdRelated>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetProductsIdRelated<
-  TData = Awaited<ReturnType<typeof getProductsIdRelated>>,
-  TError = UtilsResponse
->(
-  id: number,
-  params?: GetProductsIdRelatedParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetProductsIdRelated<TData = Awaited<ReturnType<typeof getProductsIdRelated>>, TError = UtilsResponse>(
+ id: number,
+    params?: GetProductsIdRelatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get related products
  */
 
-export function useGetProductsIdRelated<
-  TData = Awaited<ReturnType<typeof getProductsIdRelated>>,
-  TError = UtilsResponse
->(
-  id: number,
-  params?: GetProductsIdRelatedParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetProductsIdRelatedQueryOptions(id, params, options);
+export function useGetProductsIdRelated<TData = Awaited<ReturnType<typeof getProductsIdRelated>>, TError = UtilsResponse>(
+ id: number,
+    params?: GetProductsIdRelatedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getProductsIdRelated>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetProductsIdRelatedQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

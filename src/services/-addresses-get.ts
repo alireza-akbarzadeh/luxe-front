@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,116 +20,109 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetAddresses200, UtilsResponse } from './-addresses-get.schemas';
+import type {
+  GetAddresses200,
+  UtilsResponse
+} from './-addresses-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns all saved addresses for the current user.
  * @summary List user addresses
  */
 export const getAddresses = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetAddresses200>({ url: `/addresses`, method: 'GET', signal }, options);
-};
+
+
+      return customInstance<GetAddresses200>(
+      {url: `/addresses`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetAddressesQueryKey = () => {
-  return [`/addresses`] as const;
-};
+    return [
+    `/addresses`
+    ] as const;
+    }
 
-export const getGetAddressesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAddresses>>,
-  TError = UtilsResponse
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAddressesQueryKey();
+export const getGetAddressesQueryOptions = <TData = Awaited<ReturnType<typeof getAddresses>>, TError = UtilsResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAddresses>>> = ({ signal }) =>
-    getAddresses(requestOptions, signal);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAddresses>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  const queryKey =  queryOptions?.queryKey ?? getGetAddressesQueryKey();
 
-export type GetAddressesQueryResult = NonNullable<Awaited<ReturnType<typeof getAddresses>>>;
-export type GetAddressesQueryError = UtilsResponse;
 
-export function useGetAddresses<
-  TData = Awaited<ReturnType<typeof getAddresses>>,
-  TError = UtilsResponse
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>> &
-      Pick<
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAddresses>>> = ({ signal }) => getAddresses(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAddressesQueryResult = NonNullable<Awaited<ReturnType<typeof getAddresses>>>
+export type GetAddressesQueryError = UtilsResponse
+
+
+export function useGetAddresses<TData = Awaited<ReturnType<typeof getAddresses>>, TError = UtilsResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAddresses>>,
           TError,
           Awaited<ReturnType<typeof getAddresses>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAddresses<
-  TData = Awaited<ReturnType<typeof getAddresses>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAddresses<TData = Awaited<ReturnType<typeof getAddresses>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAddresses>>,
           TError,
           Awaited<ReturnType<typeof getAddresses>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAddresses<
-  TData = Awaited<ReturnType<typeof getAddresses>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAddresses<TData = Awaited<ReturnType<typeof getAddresses>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List user addresses
  */
 
-export function useGetAddresses<
-  TData = Awaited<ReturnType<typeof getAddresses>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAddressesQueryOptions(options);
+export function useGetAddresses<TData = Awaited<ReturnType<typeof getAddresses>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAddresses>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAddressesQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

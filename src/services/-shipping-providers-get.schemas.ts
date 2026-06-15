@@ -25,3 +25,4 @@ export interface ModelsShippingProviders {
 export type GetShippingProviders200 = UtilsResponse & {
   data?: ModelsShippingProviders[];
 };
+

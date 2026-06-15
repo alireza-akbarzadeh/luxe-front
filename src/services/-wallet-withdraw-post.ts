@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Withdraw money from wallet. In production, this would require admin approval or integration with payout gateway.
  * @summary Withdraw funds
  */
 export const postWalletWithdraw = (
-  dtoWithdrawRequest: DtoWithdrawRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoWithdrawRequest: DtoWithdrawRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PostWalletWithdraw200>(
-    {
-      url: `/wallet/withdraw`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoWithdrawRequest,
-      signal
+
+
+      return customInstance<PostWalletWithdraw200>(
+      {url: `/wallet/withdraw`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoWithdrawRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostWalletWithdrawMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postWalletWithdraw>>,
-    TError,
-    { data: DtoWithdrawRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postWalletWithdraw>>,
-  TError,
-  { data: DtoWithdrawRequest },
-  TContext
-> => {
-  const mutationKey = ['postWalletWithdraw'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postWalletWithdraw>>,
-    { data: DtoWithdrawRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postWalletWithdraw(data, requestOptions);
-  };
+export const getPostWalletWithdrawMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWalletWithdraw>>, TError,{data: DtoWithdrawRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postWalletWithdraw>>, TError,{data: DtoWithdrawRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postWalletWithdraw'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostWalletWithdrawMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postWalletWithdraw>>
->;
-export type PostWalletWithdrawMutationBody = DtoWithdrawRequest;
-export type PostWalletWithdrawMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWalletWithdraw>>, {data: DtoWithdrawRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postWalletWithdraw(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWalletWithdrawMutationResult = NonNullable<Awaited<ReturnType<typeof postWalletWithdraw>>>
+    export type PostWalletWithdrawMutationBody = DtoWithdrawRequest
+    export type PostWalletWithdrawMutationError = UtilsResponse
+
+    /**
  * @summary Withdraw funds
  */
-export const usePostWalletWithdraw = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postWalletWithdraw>>,
-      TError,
-      { data: DtoWithdrawRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postWalletWithdraw>>,
-  TError,
-  { data: DtoWithdrawRequest },
-  TContext
-> => {
-  return useMutation(getPostWalletWithdrawMutationOptions(options), queryClient);
-};
+export const usePostWalletWithdraw = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWalletWithdraw>>, TError,{data: DtoWithdrawRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postWalletWithdraw>>,
+        TError,
+        {data: DtoWithdrawRequest},
+        TContext
+      > => {
+      return useMutation(getPostWalletWithdrawMutationOptions(options), queryClient);
+    }
+

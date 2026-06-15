@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,89 +15,81 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { PutProfile200, PutProfileBody, UtilsResponse } from './-profile-put.schemas';
+import type {
+  PutProfile200,
+  PutProfileBody,
+  UtilsResponse
+} from './-profile-put.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Updates the first name, last name, and phone number of the authenticated user
  * @summary Update user profile
  */
 export const putProfile = (
-  putProfileBody: PutProfileBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    putProfileBody: PutProfileBody,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PutProfile200>(
-    {
-      url: `/profile`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: putProfileBody,
-      signal
+
+
+      return customInstance<PutProfile200>(
+      {url: `/profile`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: putProfileBody, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutProfileMutationOptions = <TError = UtilsResponse, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putProfile>>,
-    TError,
-    { data: PutProfileBody },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putProfile>>,
-  TError,
-  { data: PutProfileBody },
-  TContext
-> => {
-  const mutationKey = ['putProfile'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putProfile>>,
-    { data: PutProfileBody }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return putProfile(data, requestOptions);
-  };
+export const getPutProfileMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: PutProfileBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: PutProfileBody}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putProfile'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutProfileMutationResult = NonNullable<Awaited<ReturnType<typeof putProfile>>>;
-export type PutProfileMutationBody = PutProfileBody;
-export type PutProfileMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putProfile>>, {data: PutProfileBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  putProfile(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutProfileMutationResult = NonNullable<Awaited<ReturnType<typeof putProfile>>>
+    export type PutProfileMutationBody = PutProfileBody
+    export type PutProfileMutationError = UtilsResponse
+
+    /**
  * @summary Update user profile
  */
-export const usePutProfile = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putProfile>>,
-      TError,
-      { data: PutProfileBody },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putProfile>>,
-  TError,
-  { data: PutProfileBody },
-  TContext
-> => {
-  return useMutation(getPutProfileMutationOptions(options), queryClient);
-};
+export const usePutProfile = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putProfile>>, TError,{data: PutProfileBody}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putProfile>>,
+        TError,
+        {data: PutProfileBody},
+        TContext
+      > => {
+      return useMutation(getPutProfileMutationOptions(options), queryClient);
+    }
+

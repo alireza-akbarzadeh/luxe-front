@@ -106,64 +106,65 @@ export interface DtoSearchResponse {
 }
 
 export type GetSearchParams = {
-  /**
-   * Search query (optional for filter-only browse)
-   */
-  q?: string;
-  /**
-   * Items per page (default 10, max 50)
-   */
-  limit?: number;
-  /**
-   * Offset for pagination
-   */
-  offset?: number;
-  /**
-   * Filter by category ID
-   */
-  category_id?: number;
-  /**
-   * Filter by category slug
-   */
-  category_slug?: string;
-  /**
-   * Filter by store ID
-   */
-  store_id?: number;
-  /**
-   * Minimum price
-   */
-  min_price?: number;
-  /**
-   * Maximum price
-   */
-  max_price?: number;
-  /**
-   * Minimum rating
-   */
-  min_rating?: number;
-  /**
-   * Digital products only
-   */
-  is_digital?: boolean;
-  /**
-   * New arrivals only
-   */
-  is_new?: boolean;
-  /**
-   * In-stock products only
-   */
-  in_stock?: boolean;
-  /**
-   * On-sale products only
-   */
-  on_sale?: boolean;
-  /**
-   * Sort order (price_asc,price_desc,rating_desc,newest,popular)
-   */
-  sort?: string;
+/**
+ * Search query (optional for filter-only browse)
+ */
+q?: string;
+/**
+ * Items per page (default 10, max 50)
+ */
+limit?: number;
+/**
+ * Offset for pagination
+ */
+offset?: number;
+/**
+ * Filter by category ID
+ */
+category_id?: number;
+/**
+ * Filter by category slug
+ */
+category_slug?: string;
+/**
+ * Filter by store ID
+ */
+store_id?: number;
+/**
+ * Minimum price
+ */
+min_price?: number;
+/**
+ * Maximum price
+ */
+max_price?: number;
+/**
+ * Minimum rating
+ */
+min_rating?: number;
+/**
+ * Digital products only
+ */
+is_digital?: boolean;
+/**
+ * New arrivals only
+ */
+is_new?: boolean;
+/**
+ * In-stock products only
+ */
+in_stock?: boolean;
+/**
+ * On-sale products only
+ */
+on_sale?: boolean;
+/**
+ * Sort order (price_asc,price_desc,rating_desc,newest,popular)
+ */
+sort?: string;
 };
 
 export type GetSearch200 = UtilsResponse & {
   data?: DtoSearchResponse;
 };
+

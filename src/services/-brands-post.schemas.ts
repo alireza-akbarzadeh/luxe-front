@@ -34,3 +34,4 @@ export interface DtoBrandResponse {
 export type PostBrands201 = UtilsResponse & {
   data?: DtoBrandResponse;
 };
+

@@ -27,3 +27,4 @@ export interface DtoTransactionResponse {
 export type GetWalletTransactionsId200 = UtilsResponse & {
   data?: DtoTransactionResponse;
 };
+

@@ -21,12 +21,13 @@ export interface DtoPaymentProviderResponse {
 }
 
 export type GetPaymentProvidersParams = {
-  /**
-   * Filter by active status (default: true)
-   */
-  is_active?: boolean;
+/**
+ * Filter by active status (default: true)
+ */
+is_active?: boolean;
 };
 
 export type GetPaymentProviders200 = UtilsResponse & {
   data?: DtoPaymentProviderResponse[];
 };
+

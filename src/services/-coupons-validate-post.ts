@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Validates a coupon code for the authenticated user's order total. Returns discount amount and final total if valid.
  * @summary Validate coupon
  */
 export const postCouponsValidate = (
-  dtoValidateRequest: DtoValidateRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoValidateRequest: DtoValidateRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCouponValidateResponse>(
-    {
-      url: `/coupons/validate`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoValidateRequest,
-      signal
+
+
+      return customInstance<DtoCouponValidateResponse>(
+      {url: `/coupons/validate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoValidateRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostCouponsValidateMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postCouponsValidate>>,
-    TError,
-    { data: DtoValidateRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postCouponsValidate>>,
-  TError,
-  { data: DtoValidateRequest },
-  TContext
-> => {
-  const mutationKey = ['postCouponsValidate'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postCouponsValidate>>,
-    { data: DtoValidateRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postCouponsValidate(data, requestOptions);
-  };
+export const getPostCouponsValidateMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCouponsValidate>>, TError,{data: DtoValidateRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCouponsValidate>>, TError,{data: DtoValidateRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postCouponsValidate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostCouponsValidateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postCouponsValidate>>
->;
-export type PostCouponsValidateMutationBody = DtoValidateRequest;
-export type PostCouponsValidateMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCouponsValidate>>, {data: DtoValidateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postCouponsValidate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostCouponsValidateMutationResult = NonNullable<Awaited<ReturnType<typeof postCouponsValidate>>>
+    export type PostCouponsValidateMutationBody = DtoValidateRequest
+    export type PostCouponsValidateMutationError = UtilsResponse
+
+    /**
  * @summary Validate coupon
  */
-export const usePostCouponsValidate = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postCouponsValidate>>,
-      TError,
-      { data: DtoValidateRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postCouponsValidate>>,
-  TError,
-  { data: DtoValidateRequest },
-  TContext
-> => {
-  return useMutation(getPostCouponsValidateMutationOptions(options), queryClient);
-};
+export const usePostCouponsValidate = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCouponsValidate>>, TError,{data: DtoValidateRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postCouponsValidate>>,
+        TError,
+        {data: DtoValidateRequest},
+        TContext
+      > => {
+      return useMutation(getPostCouponsValidateMutationOptions(options), queryClient);
+    }
+

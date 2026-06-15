@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,89 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Change quantity of a specific cart item
  * @summary Update cart item quantity
  */
 export const putCartItemsId = (
-  id: number,
-  servicesUpdateCartItemRequest: ServicesUpdateCartItemRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    servicesUpdateCartItemRequest: ServicesUpdateCartItemRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoEmptyResponse>(
-    {
-      url: `/cart/items/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: servicesUpdateCartItemRequest,
-      signal
+
+
+      return customInstance<DtoEmptyResponse>(
+      {url: `/cart/items/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: servicesUpdateCartItemRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutCartItemsIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putCartItemsId>>,
-    TError,
-    { id: number; data: ServicesUpdateCartItemRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putCartItemsId>>,
-  TError,
-  { id: number; data: ServicesUpdateCartItemRequest },
-  TContext
-> => {
-  const mutationKey = ['putCartItemsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putCartItemsId>>,
-    { id: number; data: ServicesUpdateCartItemRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putCartItemsId(id, data, requestOptions);
-  };
+export const getPutCartItemsIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCartItemsId>>, TError,{id: number;data: ServicesUpdateCartItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putCartItemsId>>, TError,{id: number;data: ServicesUpdateCartItemRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putCartItemsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutCartItemsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putCartItemsId>>>;
-export type PutCartItemsIdMutationBody = ServicesUpdateCartItemRequest;
-export type PutCartItemsIdMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putCartItemsId>>, {id: number;data: ServicesUpdateCartItemRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putCartItemsId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutCartItemsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putCartItemsId>>>
+    export type PutCartItemsIdMutationBody = ServicesUpdateCartItemRequest
+    export type PutCartItemsIdMutationError = UtilsResponse
+
+    /**
  * @summary Update cart item quantity
  */
-export const usePutCartItemsId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putCartItemsId>>,
-      TError,
-      { id: number; data: ServicesUpdateCartItemRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putCartItemsId>>,
-  TError,
-  { id: number; data: ServicesUpdateCartItemRequest },
-  TContext
-> => {
-  return useMutation(getPutCartItemsIdMutationOptions(options), queryClient);
-};
+export const usePutCartItemsId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCartItemsId>>, TError,{id: number;data: ServicesUpdateCartItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putCartItemsId>>,
+        TError,
+        {id: number;data: ServicesUpdateCartItemRequest},
+        TContext
+      > => {
+      return useMutation(getPutCartItemsIdMutationOptions(options), queryClient);
+    }
+

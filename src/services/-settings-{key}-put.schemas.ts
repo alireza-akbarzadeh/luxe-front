@@ -36,3 +36,4 @@ export type PutSettingsKey200 = UtilsResponse & {
 export type PutSettingsKey201 = UtilsResponse & {
   data?: DtoSettingResponse;
 };
+

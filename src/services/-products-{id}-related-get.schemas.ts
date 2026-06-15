@@ -80,12 +80,13 @@ export interface DtoProductResponse {
 }
 
 export type GetProductsIdRelatedParams = {
-  /**
-   * Number of related products (default 4, max 10)
-   */
-  limit?: number;
+/**
+ * Number of related products (default 4, max 10)
+ */
+limit?: number;
 };
 
 export type GetProductsIdRelated200 = UtilsResponse & {
   data?: DtoProductResponse[];
 };
+

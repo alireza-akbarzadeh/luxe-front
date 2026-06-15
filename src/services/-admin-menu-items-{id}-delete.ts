@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -13,88 +15,77 @@ import type {
   UseMutationResult
 } from '@tanstack/react-query';
 
-import type { UtilsResponse } from './-admin-menu-items-{id}-delete.schemas';
+import type {
+  UtilsResponse
+} from './-admin-menu-items-{id}-delete.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Deletes a menu item and all its children (cascade)
  * @summary Delete a menu item
  */
 export const deleteAdminMenuItemsId = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<UtilsResponse>(
-    { url: `/admin/menu/items/${id}`, method: 'DELETE', signal },
-    options
-  );
-};
 
-export const getDeleteAdminMenuItemsIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
-    TError,
-    { id: number },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  const mutationKey = ['deleteAdminMenuItemsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
-    { id: number }
-  > = (props) => {
-    const { id } = props ?? {};
+      return customInstance<UtilsResponse>(
+      {url: `/admin/menu/items/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-    return deleteAdminMenuItemsId(id, requestOptions);
-  };
 
-  return { mutationFn, ...mutationOptions };
-};
 
-export type DeleteAdminMenuItemsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteAdminMenuItemsId>>
->;
+export const getDeleteAdminMenuItemsIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminMenuItemsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdminMenuItemsId>>, TError,{id: number}, TContext> => {
 
-export type DeleteAdminMenuItemsIdMutationError = UtilsResponse;
+const mutationKey = ['deleteAdminMenuItemsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-/**
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdminMenuItemsId>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteAdminMenuItemsId(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteAdminMenuItemsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdminMenuItemsId>>>
+
+    export type DeleteAdminMenuItemsIdMutationError = UtilsResponse
+
+    /**
  * @summary Delete a menu item
  */
-export const useDeleteAdminMenuItemsId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
-      TError,
-      { id: number },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  return useMutation(getDeleteAdminMenuItemsIdMutationOptions(options), queryClient);
-};
+export const useDeleteAdminMenuItemsId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminMenuItemsId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteAdminMenuItemsId>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteAdminMenuItemsIdMutationOptions(options), queryClient);
+    }
+

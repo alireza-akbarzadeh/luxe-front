@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -25,135 +27,102 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns a single category by its numeric ID. Only accessible by users with the "admin" role.
  * @summary Get a category by ID (admin)
  */
 export const getAdminCategoriesId = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCategorySingleResponse>(
-    { url: `/admin/categories/${id}`, method: 'GET', signal },
-    options
-  );
-};
 
-export const getGetAdminCategoriesIdQueryKey = (id: number) => {
-  return [`/admin/categories/${id}`] as const;
-};
 
-export const getGetAdminCategoriesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAdminCategoriesId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<DtoCategorySingleResponse>(
+      {url: `/admin/categories/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAdminCategoriesIdQueryKey = (id: number,) => {
+    return [
+    `/admin/categories/${id}`
+    ] as const;
+    }
+
+
+export const getGetAdminCategoriesIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdminCategoriesId>>, TError = UtilsResponse>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAdminCategoriesIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminCategoriesId>>> = ({ signal }) =>
-    getAdminCategoriesId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminCategoriesIdQueryKey(id);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAdminCategoriesId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetAdminCategoriesIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAdminCategoriesId>>
->;
-export type GetAdminCategoriesIdQueryError = UtilsResponse;
 
-export function useGetAdminCategoriesId<
-  TData = Awaited<ReturnType<typeof getAdminCategoriesId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>
-    > &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminCategoriesId>>> = ({ signal }) => getAdminCategoriesId(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminCategoriesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminCategoriesId>>>
+export type GetAdminCategoriesIdQueryError = UtilsResponse
+
+
+export function useGetAdminCategoriesId<TData = Awaited<ReturnType<typeof getAdminCategoriesId>>, TError = UtilsResponse>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminCategoriesId>>,
           TError,
           Awaited<ReturnType<typeof getAdminCategoriesId>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminCategoriesId<
-  TData = Awaited<ReturnType<typeof getAdminCategoriesId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminCategoriesId<TData = Awaited<ReturnType<typeof getAdminCategoriesId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminCategoriesId>>,
           TError,
           Awaited<ReturnType<typeof getAdminCategoriesId>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminCategoriesId<
-  TData = Awaited<ReturnType<typeof getAdminCategoriesId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminCategoriesId<TData = Awaited<ReturnType<typeof getAdminCategoriesId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get a category by ID (admin)
  */
 
-export function useGetAdminCategoriesId<
-  TData = Awaited<ReturnType<typeof getAdminCategoriesId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAdminCategoriesIdQueryOptions(id, options);
+export function useGetAdminCategoriesId<TData = Awaited<ReturnType<typeof getAdminCategoriesId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminCategoriesId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAdminCategoriesIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

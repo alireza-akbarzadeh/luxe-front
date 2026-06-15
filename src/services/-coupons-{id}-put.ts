@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,89 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Updates a coupon by ID. Only accessible by users with the "admin" role.
  * @summary Update coupon
  */
 export const putCouponsId = (
-  id: number,
-  dtoUpdateCouponRequest: DtoUpdateCouponRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoUpdateCouponRequest: DtoUpdateCouponRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoCouponSingleResponse>(
-    {
-      url: `/coupons/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoUpdateCouponRequest,
-      signal
+
+
+      return customInstance<DtoCouponSingleResponse>(
+      {url: `/coupons/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoUpdateCouponRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutCouponsIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putCouponsId>>,
-    TError,
-    { id: number; data: DtoUpdateCouponRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putCouponsId>>,
-  TError,
-  { id: number; data: DtoUpdateCouponRequest },
-  TContext
-> => {
-  const mutationKey = ['putCouponsId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putCouponsId>>,
-    { id: number; data: DtoUpdateCouponRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putCouponsId(id, data, requestOptions);
-  };
+export const getPutCouponsIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: DtoUpdateCouponRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: DtoUpdateCouponRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putCouponsId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutCouponsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putCouponsId>>>;
-export type PutCouponsIdMutationBody = DtoUpdateCouponRequest;
-export type PutCouponsIdMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putCouponsId>>, {id: number;data: DtoUpdateCouponRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putCouponsId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutCouponsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putCouponsId>>>
+    export type PutCouponsIdMutationBody = DtoUpdateCouponRequest
+    export type PutCouponsIdMutationError = UtilsResponse
+
+    /**
  * @summary Update coupon
  */
-export const usePutCouponsId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putCouponsId>>,
-      TError,
-      { id: number; data: DtoUpdateCouponRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putCouponsId>>,
-  TError,
-  { id: number; data: DtoUpdateCouponRequest },
-  TContext
-> => {
-  return useMutation(getPutCouponsIdMutationOptions(options), queryClient);
-};
+export const usePutCouponsId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putCouponsId>>, TError,{id: number;data: DtoUpdateCouponRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putCouponsId>>,
+        TError,
+        {id: number;data: DtoUpdateCouponRequest},
+        TContext
+      > => {
+      return useMutation(getPutCouponsIdMutationOptions(options), queryClient);
+    }
+

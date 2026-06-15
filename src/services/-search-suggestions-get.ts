@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -26,135 +28,103 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Get autocomplete suggestions (products, stores, categories)
  * @summary Search suggestions
  */
 export const getSearchSuggestions = (
-  params: GetSearchSuggestionsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params: GetSearchSuggestionsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetSearchSuggestions200>(
-    { url: `/search/suggestions`, method: 'GET', params, signal },
-    options
-  );
-};
 
-export const getGetSearchSuggestionsQueryKey = (params?: GetSearchSuggestionsParams) => {
-  return [`/search/suggestions`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetSearchSuggestionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getSearchSuggestions>>,
-  TError = UtilsResponse
->(
-  params: GetSearchSuggestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetSearchSuggestions200>(
+      {url: `/search/suggestions`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetSearchSuggestionsQueryKey = (params?: GetSearchSuggestionsParams,) => {
+    return [
+    `/search/suggestions`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetSearchSuggestionsQueryOptions = <TData = Awaited<ReturnType<typeof getSearchSuggestions>>, TError = UtilsResponse>(params: GetSearchSuggestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetSearchSuggestionsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSearchSuggestions>>> = ({ signal }) =>
-    getSearchSuggestions(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetSearchSuggestionsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getSearchSuggestions>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetSearchSuggestionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getSearchSuggestions>>
->;
-export type GetSearchSuggestionsQueryError = UtilsResponse;
 
-export function useGetSearchSuggestions<
-  TData = Awaited<ReturnType<typeof getSearchSuggestions>>,
-  TError = UtilsResponse
->(
-  params: GetSearchSuggestionsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>
-    > &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSearchSuggestions>>> = ({ signal }) => getSearchSuggestions(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetSearchSuggestionsQueryResult = NonNullable<Awaited<ReturnType<typeof getSearchSuggestions>>>
+export type GetSearchSuggestionsQueryError = UtilsResponse
+
+
+export function useGetSearchSuggestions<TData = Awaited<ReturnType<typeof getSearchSuggestions>>, TError = UtilsResponse>(
+ params: GetSearchSuggestionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSearchSuggestions>>,
           TError,
           Awaited<ReturnType<typeof getSearchSuggestions>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetSearchSuggestions<
-  TData = Awaited<ReturnType<typeof getSearchSuggestions>>,
-  TError = UtilsResponse
->(
-  params: GetSearchSuggestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSearchSuggestions<TData = Awaited<ReturnType<typeof getSearchSuggestions>>, TError = UtilsResponse>(
+ params: GetSearchSuggestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSearchSuggestions>>,
           TError,
           Awaited<ReturnType<typeof getSearchSuggestions>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetSearchSuggestions<
-  TData = Awaited<ReturnType<typeof getSearchSuggestions>>,
-  TError = UtilsResponse
->(
-  params: GetSearchSuggestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetSearchSuggestions<TData = Awaited<ReturnType<typeof getSearchSuggestions>>, TError = UtilsResponse>(
+ params: GetSearchSuggestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Search suggestions
  */
 
-export function useGetSearchSuggestions<
-  TData = Awaited<ReturnType<typeof getSearchSuggestions>>,
-  TError = UtilsResponse
->(
-  params: GetSearchSuggestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetSearchSuggestionsQueryOptions(params, options);
+export function useGetSearchSuggestions<TData = Awaited<ReturnType<typeof getSearchSuggestions>>, TError = UtilsResponse>(
+ params: GetSearchSuggestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSearchSuggestions>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetSearchSuggestionsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

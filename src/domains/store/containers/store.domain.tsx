@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { sectionContainerClass } from '@/domains/home/lib/home-utils';
+import { StoreDetailMetaBar } from '@/domains/store/components/store-detail-breadcrumb';
 import { StoreProductsInfiniteGrid } from '@/domains/store/components/store-products-infinite-grid';
 import {
   StoreProductsGridSkeleton,
@@ -22,6 +23,7 @@ import { useGetStoresSlug } from '@/services/-stores-{slug}-get';
 import { AppDialog } from '~/src/components/app-dialog';
 import { ActiveFilters } from '~/src/domains/store/sections/store-active-filter';
 import { StoreFilterSidebar } from '~/src/domains/store/sections/store-details-filter';
+import { StoreReviewsSection } from '~/src/domains/store/sections/store-reviews-section';
 import { StoreHeader } from '~/src/domains/store/sections/store-sort-header';
 import { StoreToolbar } from '~/src/domains/store/sections/store-sort-toolbar';
 
@@ -42,8 +44,16 @@ export function StoreDomain({ slug }: { slug: string }) {
   const storeCategories = store?.categories ?? [];
 
   const filters = useStoreFilters(storeCategories.map((c) => c.name ?? ''));
-  const { category, priceRange, minRating, isDigital, showOnlyNew, sortBy, searchQuery, showOnlySale } =
-    filters;
+  const {
+    category,
+    priceRange,
+    minRating,
+    isDigital,
+    showOnlyNew,
+    sortBy,
+    searchQuery,
+    showOnlySale
+  } = filters;
 
   const catalogParams = useMemo(() => {
     if (!store) return {};
@@ -115,7 +125,12 @@ export function StoreDomain({ slug }: { slug: string }) {
   return (
     <>
       <StoreHeader store={store} totalProducts={totalProducts} />
-      <section className='pb-12'>
+      <StoreDetailMetaBar
+        storeName={store.name ?? slug}
+        returnPolicy={store.returnPolicy}
+        shippingInfo={store.shippingInfo}
+      />
+      <section className='pt-2 pb-12'>
         <div className={sectionContainerClass}>
           <StoreToolbar />
           <ActiveFilters />
@@ -164,6 +179,8 @@ export function StoreDomain({ slug }: { slug: string }) {
               )}
             </div>
           </div>
+
+          <StoreReviewsSection slug={slug} storeName={store.name ?? slug} />
         </div>
       </section>
 

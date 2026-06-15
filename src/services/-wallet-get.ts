@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,112 +20,111 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetWallet200, GetWalletParams, UtilsResponse } from './-wallet-get.schemas';
+import type {
+  GetWallet200,
+  GetWalletParams,
+  UtilsResponse
+} from './-wallet-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns the balance and paginated transaction history of the authenticated user.
  * @summary Get wallet details
  */
 export const getWallet = (
-  params?: GetWalletParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetWalletParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetWallet200>({ url: `/wallet`, method: 'GET', params, signal }, options);
-};
 
-export const getGetWalletQueryKey = (params?: GetWalletParams) => {
-  return [`/wallet`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetWalletQueryOptions = <
-  TData = Awaited<ReturnType<typeof getWallet>>,
-  TError = UtilsResponse
->(
-  params?: GetWalletParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetWallet200>(
+      {url: `/wallet`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetWalletQueryKey = (params?: GetWalletParams,) => {
+    return [
+    `/wallet`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetWalletQueryOptions = <TData = Awaited<ReturnType<typeof getWallet>>, TError = UtilsResponse>(params?: GetWalletParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetWalletQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getWallet>>> = ({ signal }) =>
-    getWallet(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetWalletQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getWallet>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetWalletQueryResult = NonNullable<Awaited<ReturnType<typeof getWallet>>>;
-export type GetWalletQueryError = UtilsResponse;
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWallet>>> = ({ signal }) => getWallet(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetWalletQueryResult = NonNullable<Awaited<ReturnType<typeof getWallet>>>
+export type GetWalletQueryError = UtilsResponse
+
 
 export function useGetWallet<TData = Awaited<ReturnType<typeof getWallet>>, TError = UtilsResponse>(
-  params: undefined | GetWalletParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>> &
-      Pick<
+ params: undefined |  GetWalletParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getWallet>>,
           TError,
           Awaited<ReturnType<typeof getWallet>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetWallet<TData = Awaited<ReturnType<typeof getWallet>>, TError = UtilsResponse>(
-  params?: GetWalletParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>> &
-      Pick<
+ params?: GetWalletParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getWallet>>,
           TError,
           Awaited<ReturnType<typeof getWallet>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetWallet<TData = Awaited<ReturnType<typeof getWallet>>, TError = UtilsResponse>(
-  params?: GetWalletParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+ params?: GetWalletParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get wallet details
  */
 
 export function useGetWallet<TData = Awaited<ReturnType<typeof getWallet>>, TError = UtilsResponse>(
-  params?: GetWalletParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetWalletQueryOptions(params, options);
+ params?: GetWalletParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWallet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetWalletQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

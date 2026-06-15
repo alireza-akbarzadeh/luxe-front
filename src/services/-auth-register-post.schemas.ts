@@ -8,14 +8,14 @@
 export interface DtoRegisterRequest {
   email: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   first_name: string;
   /**
-   * @minLength 1
-   * @maxLength 100
-   */
+     * @minLength 1
+     * @maxLength 100
+     */
   last_name: string;
   /** @minLength 8 */
   password: string;
@@ -47,3 +47,4 @@ export interface DtoMessageResponse {
   message?: string;
   success?: boolean;
 }
+

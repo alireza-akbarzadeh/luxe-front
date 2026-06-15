@@ -32,3 +32,4 @@ export type GetProfile200Data = {
 export type GetProfile200 = UtilsResponse & {
   data?: GetProfile200Data;
 };
+

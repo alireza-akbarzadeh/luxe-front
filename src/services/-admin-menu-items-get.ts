@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -26,125 +28,103 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns flat or nested menu items (use ?flat=true for flat list)
  * @summary Get all menu items
  */
 export const getAdminMenuItems = (
-  params?: GetAdminMenuItemsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params?: GetAdminMenuItemsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetAdminMenuItems200>(
-    { url: `/admin/menu/items`, method: 'GET', params, signal },
-    options
-  );
-};
 
-export const getGetAdminMenuItemsQueryKey = (params?: GetAdminMenuItemsParams) => {
-  return [`/admin/menu/items`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetAdminMenuItemsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAdminMenuItems>>,
-  TError = UtilsResponse
->(
-  params?: GetAdminMenuItemsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetAdminMenuItems200>(
+      {url: `/admin/menu/items`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAdminMenuItemsQueryKey = (params?: GetAdminMenuItemsParams,) => {
+    return [
+    `/admin/menu/items`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetAdminMenuItemsQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMenuItems>>, TError = UtilsResponse>(params?: GetAdminMenuItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAdminMenuItemsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMenuItems>>> = ({ signal }) =>
-    getAdminMenuItems(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMenuItemsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAdminMenuItems>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetAdminMenuItemsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAdminMenuItems>>
->;
-export type GetAdminMenuItemsQueryError = UtilsResponse;
 
-export function useGetAdminMenuItems<
-  TData = Awaited<ReturnType<typeof getAdminMenuItems>>,
-  TError = UtilsResponse
->(
-  params: undefined | GetAdminMenuItemsParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>> &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMenuItems>>> = ({ signal }) => getAdminMenuItems(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminMenuItemsQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMenuItems>>>
+export type GetAdminMenuItemsQueryError = UtilsResponse
+
+
+export function useGetAdminMenuItems<TData = Awaited<ReturnType<typeof getAdminMenuItems>>, TError = UtilsResponse>(
+ params: undefined |  GetAdminMenuItemsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMenuItems>>,
           TError,
           Awaited<ReturnType<typeof getAdminMenuItems>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminMenuItems<
-  TData = Awaited<ReturnType<typeof getAdminMenuItems>>,
-  TError = UtilsResponse
->(
-  params?: GetAdminMenuItemsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMenuItems<TData = Awaited<ReturnType<typeof getAdminMenuItems>>, TError = UtilsResponse>(
+ params?: GetAdminMenuItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMenuItems>>,
           TError,
           Awaited<ReturnType<typeof getAdminMenuItems>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminMenuItems<
-  TData = Awaited<ReturnType<typeof getAdminMenuItems>>,
-  TError = UtilsResponse
->(
-  params?: GetAdminMenuItemsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMenuItems<TData = Awaited<ReturnType<typeof getAdminMenuItems>>, TError = UtilsResponse>(
+ params?: GetAdminMenuItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get all menu items
  */
 
-export function useGetAdminMenuItems<
-  TData = Awaited<ReturnType<typeof getAdminMenuItems>>,
-  TError = UtilsResponse
->(
-  params?: GetAdminMenuItemsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAdminMenuItemsQueryOptions(params, options);
+export function useGetAdminMenuItems<TData = Awaited<ReturnType<typeof getAdminMenuItems>>, TError = UtilsResponse>(
+ params?: GetAdminMenuItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAdminMenuItemsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

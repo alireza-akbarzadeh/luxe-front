@@ -26,18 +26,18 @@ export interface DtoReviewResponse {
 }
 
 export type GetReviewsParams = {
-  /**
-   * Product ID
-   */
-  product_id: number;
-  /**
-   * Items per page
-   */
-  limit?: number;
-  /**
-   * Offset
-   */
-  offset?: number;
+/**
+ * Product ID
+ */
+product_id: number;
+/**
+ * Items per page
+ */
+limit?: number;
+/**
+ * Offset
+ */
+offset?: number;
 };
 
 export type GetReviews200Data = {
@@ -50,3 +50,4 @@ export type GetReviews200Data = {
 export type GetReviews200 = UtilsResponse & {
   data?: GetReviews200Data;
 };
+

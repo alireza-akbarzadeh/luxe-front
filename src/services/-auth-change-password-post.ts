@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -20,90 +22,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Change current user's password.
  * @summary Change password
  */
 export const postAuthChangePassword = (
-  dtoChangePasswordRequest: DtoChangePasswordRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoChangePasswordRequest: DtoChangePasswordRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoMessageResponse>(
-    {
-      url: `/auth/change-password`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoChangePasswordRequest,
-      signal
+
+
+      return customInstance<DtoMessageResponse>(
+      {url: `/auth/change-password`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoChangePasswordRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAuthChangePasswordMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthChangePassword>>,
-    TError,
-    { data: DtoChangePasswordRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthChangePassword>>,
-  TError,
-  { data: DtoChangePasswordRequest },
-  TContext
-> => {
-  const mutationKey = ['postAuthChangePassword'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthChangePassword>>,
-    { data: DtoChangePasswordRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAuthChangePassword(data, requestOptions);
-  };
+export const getPostAuthChangePasswordMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthChangePassword>>, TError,{data: DtoChangePasswordRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthChangePassword>>, TError,{data: DtoChangePasswordRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAuthChangePassword'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAuthChangePasswordMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthChangePassword>>
->;
-export type PostAuthChangePasswordMutationBody = DtoChangePasswordRequest;
-export type PostAuthChangePasswordMutationError = DtoMessageResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthChangePassword>>, {data: DtoChangePasswordRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthChangePassword(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthChangePasswordMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthChangePassword>>>
+    export type PostAuthChangePasswordMutationBody = DtoChangePasswordRequest
+    export type PostAuthChangePasswordMutationError = DtoMessageResponse
+
+    /**
  * @summary Change password
  */
-export const usePostAuthChangePassword = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthChangePassword>>,
-      TError,
-      { data: DtoChangePasswordRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthChangePassword>>,
-  TError,
-  { data: DtoChangePasswordRequest },
-  TContext
-> => {
-  return useMutation(getPostAuthChangePasswordMutationOptions(options), queryClient);
-};
+export const usePostAuthChangePassword = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthChangePassword>>, TError,{data: DtoChangePasswordRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthChangePassword>>,
+        TError,
+        {data: DtoChangePasswordRequest},
+        TContext
+      > => {
+      return useMutation(getPostAuthChangePasswordMutationOptions(options), queryClient);
+    }
+

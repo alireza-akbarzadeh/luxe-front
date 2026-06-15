@@ -17,3 +17,4 @@ export type DeleteShippingProvidersId200Data = { [key: string]: unknown };
 export type DeleteShippingProvidersId200 = UtilsResponse & {
   data?: DeleteShippingProvidersId200Data;
 };
+

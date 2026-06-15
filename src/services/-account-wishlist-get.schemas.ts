@@ -35,20 +35,21 @@ export interface DtoWishlistResponseData {
 }
 
 export type GetAccountWishlistParams = {
-  /**
-   * Items per page (default 10, max 50)
-   */
-  limit?: number;
-  /**
-   * Pagination offset
-   */
-  offset?: number;
-  /**
-   * Sort order (name, price-asc, price-desc)
-   */
-  sort?: string;
+/**
+ * Items per page (default 10, max 50)
+ */
+limit?: number;
+/**
+ * Pagination offset
+ */
+offset?: number;
+/**
+ * Sort order (name, price-asc, price-desc)
+ */
+sort?: string;
 };
 
 export type GetAccountWishlist200 = UtilsResponse & {
   data?: DtoWishlistResponseData;
 };
+

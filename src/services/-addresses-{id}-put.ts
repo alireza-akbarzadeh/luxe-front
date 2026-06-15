@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,89 +23,74 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Updates an address by its ID. Only owner can update. Supports partial updates.
  * @summary Update address
  */
 export const putAddressesId = (
-  id: number,
-  dtoUpdateAddressRequest: DtoUpdateAddressRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+    dtoUpdateAddressRequest: DtoUpdateAddressRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoAddressSingleResponse>(
-    {
-      url: `/addresses/${id}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoUpdateAddressRequest,
-      signal
+
+
+      return customInstance<DtoAddressSingleResponse>(
+      {url: `/addresses/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoUpdateAddressRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPutAddressesIdMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putAddressesId>>,
-    TError,
-    { id: number; data: DtoUpdateAddressRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof putAddressesId>>,
-  TError,
-  { id: number; data: DtoUpdateAddressRequest },
-  TContext
-> => {
-  const mutationKey = ['putAddressesId'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putAddressesId>>,
-    { id: number; data: DtoUpdateAddressRequest }
-  > = (props) => {
-    const { id, data } = props ?? {};
 
-    return putAddressesId(id, data, requestOptions);
-  };
+export const getPutAddressesIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAddressesId>>, TError,{id: number;data: DtoUpdateAddressRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putAddressesId>>, TError,{id: number;data: DtoUpdateAddressRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['putAddressesId'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PutAddressesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putAddressesId>>>;
-export type PutAddressesIdMutationBody = DtoUpdateAddressRequest;
-export type PutAddressesIdMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putAddressesId>>, {id: number;data: DtoUpdateAddressRequest}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putAddressesId(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutAddressesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putAddressesId>>>
+    export type PutAddressesIdMutationBody = DtoUpdateAddressRequest
+    export type PutAddressesIdMutationError = UtilsResponse
+
+    /**
  * @summary Update address
  */
-export const usePutAddressesId = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putAddressesId>>,
-      TError,
-      { id: number; data: DtoUpdateAddressRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof putAddressesId>>,
-  TError,
-  { id: number; data: DtoUpdateAddressRequest },
-  TContext
-> => {
-  return useMutation(getPutAddressesIdMutationOptions(options), queryClient);
-};
+export const usePutAddressesId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAddressesId>>, TError,{id: number;data: DtoUpdateAddressRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putAddressesId>>,
+        TError,
+        {id: number;data: DtoUpdateAddressRequest},
+        TContext
+      > => {
+      return useMutation(getPutAddressesIdMutationOptions(options), queryClient);
+    }
+

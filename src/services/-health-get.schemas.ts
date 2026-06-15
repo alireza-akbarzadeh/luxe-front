@@ -8,3 +8,4 @@
 export type GetHealth200 = { [key: string]: unknown };
 
 export type GetHealth503 = { [key: string]: unknown };
+

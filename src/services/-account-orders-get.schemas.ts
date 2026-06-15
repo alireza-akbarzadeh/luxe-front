@@ -37,16 +37,17 @@ export interface DtoOrderListResponseData {
 }
 
 export type GetAccountOrdersParams = {
-  /**
-   * Items per page (default 10, max 50)
-   */
-  limit?: number;
-  /**
-   * Pagination offset
-   */
-  offset?: number;
+/**
+ * Items per page (default 10, max 50)
+ */
+limit?: number;
+/**
+ * Pagination offset
+ */
+offset?: number;
 };
 
 export type GetAccountOrders200 = UtilsResponse & {
   data?: DtoOrderListResponseData;
 };
+

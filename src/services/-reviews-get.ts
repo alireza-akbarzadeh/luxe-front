@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,112 +20,110 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetReviews200, GetReviewsParams } from './-reviews-get.schemas';
+import type {
+  GetReviews200,
+  GetReviewsParams
+} from './-reviews-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns paginated reviews for a specific product
  * @summary Get product reviews
  */
 export const getReviews = (
-  params: GetReviewsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    params: GetReviewsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetReviews200>({ url: `/reviews`, method: 'GET', params, signal }, options);
-};
 
-export const getGetReviewsQueryKey = (params?: GetReviewsParams) => {
-  return [`/reviews`, ...(params ? [params] : [])] as const;
-};
 
-export const getGetReviewsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getReviews>>,
-  TError = unknown
->(
-  params: GetReviewsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetReviews200>(
+      {url: `/reviews`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetReviewsQueryKey = (params?: GetReviewsParams,) => {
+    return [
+    `/reviews`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetReviewsQueryOptions = <TData = Awaited<ReturnType<typeof getReviews>>, TError = unknown>(params: GetReviewsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetReviewsQueryKey(params);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getReviews>>> = ({ signal }) =>
-    getReviews(params, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetReviewsQueryKey(params);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getReviews>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetReviewsQueryResult = NonNullable<Awaited<ReturnType<typeof getReviews>>>;
-export type GetReviewsQueryError = unknown;
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReviews>>> = ({ signal }) => getReviews(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetReviewsQueryResult = NonNullable<Awaited<ReturnType<typeof getReviews>>>
+export type GetReviewsQueryError = unknown
+
 
 export function useGetReviews<TData = Awaited<ReturnType<typeof getReviews>>, TError = unknown>(
-  params: GetReviewsParams,
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>> &
-      Pick<
+ params: GetReviewsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getReviews>>,
           TError,
           Awaited<ReturnType<typeof getReviews>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetReviews<TData = Awaited<ReturnType<typeof getReviews>>, TError = unknown>(
-  params: GetReviewsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>> &
-      Pick<
+ params: GetReviewsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getReviews>>,
           TError,
           Awaited<ReturnType<typeof getReviews>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetReviews<TData = Awaited<ReturnType<typeof getReviews>>, TError = unknown>(
-  params: GetReviewsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+ params: GetReviewsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get product reviews
  */
 
 export function useGetReviews<TData = Awaited<ReturnType<typeof getReviews>>, TError = unknown>(
-  params: GetReviewsParams,
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetReviewsQueryOptions(params, options);
+ params: GetReviewsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getReviews>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetReviewsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

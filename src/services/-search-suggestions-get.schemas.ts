@@ -26,16 +26,17 @@ export interface DtoSuggestionsResponse {
 }
 
 export type GetSearchSuggestionsParams = {
-  /**
-   * Partial query
-   */
-  q: string;
-  /**
-   * Max suggestions (default 8, max 20)
-   */
-  limit?: number;
+/**
+ * Partial query
+ */
+q: string;
+/**
+ * Max suggestions (default 8, max 20)
+ */
+limit?: number;
 };
 
 export type GetSearchSuggestions200 = UtilsResponse & {
   data?: DtoSuggestionsResponse;
 };
+

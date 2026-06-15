@@ -13,3 +13,4 @@ export interface UtilsResponse {
 }
 
 export type PutAdminShipmentsIdStatusBody = { [key: string]: unknown };
+

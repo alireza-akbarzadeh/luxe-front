@@ -9,9 +9,9 @@ export interface DtoCreateReviewRequest {
   comment?: string;
   product_id: number;
   /**
-   * @minimum 1
-   * @maximum 5
-   */
+     * @minimum 1
+     * @maximum 5
+     */
   rating: number;
   title?: string;
 }
@@ -37,9 +37,9 @@ export interface ModelsReview {
   is_verified?: boolean;
   product_id?: number;
   /**
-   * @minimum 1
-   * @maximum 5
-   */
+     * @minimum 1
+     * @maximum 5
+     */
   rating?: number;
   title?: string;
   updated_at?: string;
@@ -49,3 +49,4 @@ export interface ModelsReview {
 export type PostReviews201 = UtilsResponse & {
   data?: ModelsReview;
 };
+

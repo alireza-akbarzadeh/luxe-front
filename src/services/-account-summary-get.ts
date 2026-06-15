@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,121 +20,109 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetAccountSummary200, UtilsResponse } from './-account-summary-get.schemas';
+import type {
+  GetAccountSummary200,
+  UtilsResponse
+} from './-account-summary-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns user profile, default addresses, address count, liked products count, and recent orders (max 3)
  * @summary Get user dashboard summary
  */
 export const getAccountSummary = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetAccountSummary200>(
-    { url: `/account/summary`, method: 'GET', signal },
-    options
-  );
-};
+
+
+      return customInstance<GetAccountSummary200>(
+      {url: `/account/summary`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetAccountSummaryQueryKey = () => {
-  return [`/account/summary`] as const;
-};
+    return [
+    `/account/summary`
+    ] as const;
+    }
 
-export const getGetAccountSummaryQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAccountSummary>>,
-  TError = UtilsResponse
->(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>;
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAccountSummaryQueryKey();
+export const getGetAccountSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getAccountSummary>>, TError = UtilsResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccountSummary>>> = ({ signal }) =>
-    getAccountSummary(requestOptions, signal);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAccountSummary>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
+  const queryKey =  queryOptions?.queryKey ?? getGetAccountSummaryQueryKey();
 
-export type GetAccountSummaryQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAccountSummary>>
->;
-export type GetAccountSummaryQueryError = UtilsResponse;
 
-export function useGetAccountSummary<
-  TData = Awaited<ReturnType<typeof getAccountSummary>>,
-  TError = UtilsResponse
->(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>> &
-      Pick<
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAccountSummary>>> = ({ signal }) => getAccountSummary(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAccountSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getAccountSummary>>>
+export type GetAccountSummaryQueryError = UtilsResponse
+
+
+export function useGetAccountSummary<TData = Awaited<ReturnType<typeof getAccountSummary>>, TError = UtilsResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAccountSummary>>,
           TError,
           Awaited<ReturnType<typeof getAccountSummary>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAccountSummary<
-  TData = Awaited<ReturnType<typeof getAccountSummary>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>> &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAccountSummary<TData = Awaited<ReturnType<typeof getAccountSummary>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAccountSummary>>,
           TError,
           Awaited<ReturnType<typeof getAccountSummary>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAccountSummary<
-  TData = Awaited<ReturnType<typeof getAccountSummary>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAccountSummary<TData = Awaited<ReturnType<typeof getAccountSummary>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get user dashboard summary
  */
 
-export function useGetAccountSummary<
-  TData = Awaited<ReturnType<typeof getAccountSummary>>,
-  TError = UtilsResponse
->(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAccountSummaryQueryOptions(options);
+export function useGetAccountSummary<TData = Awaited<ReturnType<typeof getAccountSummary>>, TError = UtilsResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAccountSummary>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAccountSummaryQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

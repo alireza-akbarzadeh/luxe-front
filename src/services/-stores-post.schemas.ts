@@ -57,3 +57,4 @@ export interface DtoStoreResponse {
 export type PostStores201 = UtilsResponse & {
   data?: DtoStoreResponse;
 };
+

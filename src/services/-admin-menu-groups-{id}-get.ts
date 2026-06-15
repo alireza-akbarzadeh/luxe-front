@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query';
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,139 +20,109 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import type { GetAdminMenuGroupsId200, UtilsResponse } from './-admin-menu-groups-{id}-get.schemas';
+import type {
+  GetAdminMenuGroupsId200,
+  UtilsResponse
+} from './-admin-menu-groups-{id}-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Returns a single menu group by its ID
  * @summary Get group by ID
  */
 export const getAdminMenuGroupsId = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<GetAdminMenuGroupsId200>(
-    { url: `/admin/menu/groups/${id}`, method: 'GET', signal },
-    options
-  );
-};
 
-export const getGetAdminMenuGroupsIdQueryKey = (id: number) => {
-  return [`/admin/menu/groups/${id}`] as const;
-};
 
-export const getGetAdminMenuGroupsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  }
+      return customInstance<GetAdminMenuGroupsId200>(
+      {url: `/admin/menu/groups/${id}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAdminMenuGroupsIdQueryKey = (id: number,) => {
+    return [
+    `/admin/menu/groups/${id}`
+    ] as const;
+    }
+
+
+export const getGetAdminMenuGroupsIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError = UtilsResponse>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetAdminMenuGroupsIdQueryKey(id);
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMenuGroupsId>>> = ({ signal }) =>
-    getAdminMenuGroupsId(id, requestOptions, signal);
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminMenuGroupsIdQueryKey(id);
 
-  return { queryKey, queryFn, enabled: !!id, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
 
-export type GetAdminMenuGroupsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAdminMenuGroupsId>>
->;
-export type GetAdminMenuGroupsIdQueryError = UtilsResponse;
 
-export function useGetAdminMenuGroupsId<
-  TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>
-    > &
-      Pick<
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminMenuGroupsId>>> = ({ signal }) => getAdminMenuGroupsId(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminMenuGroupsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminMenuGroupsId>>>
+export type GetAdminMenuGroupsIdQueryError = UtilsResponse
+
+
+export function useGetAdminMenuGroupsId<TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError = UtilsResponse>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
           TError,
           Awaited<ReturnType<typeof getAdminMenuGroupsId>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminMenuGroupsId<
-  TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMenuGroupsId<TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
           TError,
           Awaited<ReturnType<typeof getAdminMenuGroupsId>>
-        >,
-        'initialData'
-      >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetAdminMenuGroupsId<
-  TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminMenuGroupsId<TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get group by ID
  */
 
-export function useGetAdminMenuGroupsId<
-  TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>,
-  TError = UtilsResponse
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetAdminMenuGroupsIdQueryOptions(id, options);
+export function useGetAdminMenuGroupsId<TData = Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError = UtilsResponse>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminMenuGroupsId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  const queryOptions = getGetAdminMenuGroupsIdQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
+
+
+
+

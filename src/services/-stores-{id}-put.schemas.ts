@@ -58,3 +58,4 @@ export interface DtoStoreResponse {
 export type PutStoresId200 = UtilsResponse & {
   data?: DtoStoreResponse;
 };
+

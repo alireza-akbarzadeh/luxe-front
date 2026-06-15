@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Creates multiple categories at once. Only accessible by users with the "admin" role.
  * @summary Bulk create categories
  */
 export const postAdminCategoriesBulk = (
-  dtoCreateCategoryRequest: DtoCreateCategoryRequest[],
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    dtoCreateCategoryRequest: DtoCreateCategoryRequest[],
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoBulkCreateCategoryResponse>(
-    {
-      url: `/admin/categories/bulk`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: dtoCreateCategoryRequest,
-      signal
+
+
+      return customInstance<DtoBulkCreateCategoryResponse>(
+      {url: `/admin/categories/bulk`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: dtoCreateCategoryRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAdminCategoriesBulkMutationOptions = <
-  TError = UtilsResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
-    TError,
-    { data: DtoCreateCategoryRequest[] },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
-  TError,
-  { data: DtoCreateCategoryRequest[] },
-  TContext
-> => {
-  const mutationKey = ['postAdminCategoriesBulk'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
-    { data: DtoCreateCategoryRequest[] }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAdminCategoriesBulk(data, requestOptions);
-  };
+export const getPostAdminCategoriesBulkMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminCategoriesBulk>>, TError,{data: DtoCreateCategoryRequest[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminCategoriesBulk>>, TError,{data: DtoCreateCategoryRequest[]}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAdminCategoriesBulk'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAdminCategoriesBulkMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAdminCategoriesBulk>>
->;
-export type PostAdminCategoriesBulkMutationBody = DtoCreateCategoryRequest[];
-export type PostAdminCategoriesBulkMutationError = UtilsResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminCategoriesBulk>>, {data: DtoCreateCategoryRequest[]}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminCategoriesBulk(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminCategoriesBulkMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminCategoriesBulk>>>
+    export type PostAdminCategoriesBulkMutationBody = DtoCreateCategoryRequest[]
+    export type PostAdminCategoriesBulkMutationError = UtilsResponse
+
+    /**
  * @summary Bulk create categories
  */
-export const usePostAdminCategoriesBulk = <TError = UtilsResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
-      TError,
-      { data: DtoCreateCategoryRequest[] },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
-  TError,
-  { data: DtoCreateCategoryRequest[] },
-  TContext
-> => {
-  return useMutation(getPostAdminCategoriesBulkMutationOptions(options), queryClient);
-};
+export const usePostAdminCategoriesBulk = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminCategoriesBulk>>, TError,{data: DtoCreateCategoryRequest[]}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminCategoriesBulk>>,
+        TError,
+        {data: DtoCreateCategoryRequest[]},
+        TContext
+      > => {
+      return useMutation(getPostAdminCategoriesBulkMutationOptions(options), queryClient);
+    }
+

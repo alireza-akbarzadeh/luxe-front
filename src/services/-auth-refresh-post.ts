@@ -5,7 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from '@tanstack/react-query';
+import {
+  useMutation
+} from '@tanstack/react-query';
 import type {
   MutationFunction,
   QueryClient,
@@ -21,90 +23,73 @@ import type {
 
 import { customInstance } from '../lib/api/api-client';
 
+
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 /**
  * Obtain a new access token using a valid refresh token
  * @summary Refresh access token
  */
 export const postAuthRefresh = (
-  controllersRefreshRequest: ControllersRefreshRequest,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
+    controllersRefreshRequest: ControllersRefreshRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DtoRefreshResponse>(
-    {
-      url: `/auth/refresh`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: controllersRefreshRequest,
-      signal
+
+
+      return customInstance<DtoRefreshResponse>(
+      {url: `/auth/refresh`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: controllersRefreshRequest, signal
     },
-    options
-  );
-};
+      options);
+    }
 
-export const getPostAuthRefreshMutationOptions = <
-  TError = DtoMessageResponse,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postAuthRefresh>>,
-    TError,
-    { data: ControllersRefreshRequest },
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postAuthRefresh>>,
-  TError,
-  { data: ControllersRefreshRequest },
-  TContext
-> => {
-  const mutationKey = ['postAuthRefresh'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postAuthRefresh>>,
-    { data: ControllersRefreshRequest }
-  > = (props) => {
-    const { data } = props ?? {};
 
-    return postAuthRefresh(data, requestOptions);
-  };
+export const getPostAuthRefreshMutationOptions = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthRefresh>>, TError,{data: ControllersRefreshRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAuthRefresh>>, TError,{data: ControllersRefreshRequest}, TContext> => {
 
-  return { mutationFn, ...mutationOptions };
-};
+const mutationKey = ['postAuthRefresh'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PostAuthRefreshMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postAuthRefresh>>
->;
-export type PostAuthRefreshMutationBody = ControllersRefreshRequest;
-export type PostAuthRefreshMutationError = DtoMessageResponse;
 
-/**
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAuthRefresh>>, {data: ControllersRefreshRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAuthRefresh(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAuthRefreshMutationResult = NonNullable<Awaited<ReturnType<typeof postAuthRefresh>>>
+    export type PostAuthRefreshMutationBody = ControllersRefreshRequest
+    export type PostAuthRefreshMutationError = DtoMessageResponse
+
+    /**
  * @summary Refresh access token
  */
-export const usePostAuthRefresh = <TError = DtoMessageResponse, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postAuthRefresh>>,
-      TError,
-      { data: ControllersRefreshRequest },
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postAuthRefresh>>,
-  TError,
-  { data: ControllersRefreshRequest },
-  TContext
-> => {
-  return useMutation(getPostAuthRefreshMutationOptions(options), queryClient);
-};
+export const usePostAuthRefresh = <TError = DtoMessageResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAuthRefresh>>, TError,{data: ControllersRefreshRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAuthRefresh>>,
+        TError,
+        {data: ControllersRefreshRequest},
+        TContext
+      > => {
+      return useMutation(getPostAuthRefreshMutationOptions(options), queryClient);
+    }
+

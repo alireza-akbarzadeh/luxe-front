@@ -11,8 +11,9 @@ export interface DtoMessageResponse {
 }
 
 export type GetAuthVerifyEmailParams = {
-  /**
-   * Verification token
-   */
-  token: string;
+/**
+ * Verification token
+ */
+token: string;
 };
+

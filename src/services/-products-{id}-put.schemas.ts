@@ -5,14 +5,14 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoUpdateProductRequestStatus =
-  (typeof DtoUpdateProductRequestStatus)[keyof typeof DtoUpdateProductRequestStatus];
+export type DtoUpdateProductRequestStatus = typeof DtoUpdateProductRequestStatus[keyof typeof DtoUpdateProductRequestStatus];
+
 
 export const DtoUpdateProductRequestStatus = {
   draft: 'draft',
   active: 'active',
   inactive: 'inactive',
-  archived: 'archived'
+  archived: 'archived',
 } as const;
 
 export interface DtoProductAttributeInput {
@@ -41,18 +41,18 @@ export interface DtoUpdateProductRequest {
   meta_description?: string;
   meta_title?: string;
   /**
-   * @minLength 3
-   * @maxLength 255
-   */
+     * @minLength 3
+     * @maxLength 255
+     */
   name?: string;
   /** @minimum 0 */
   price?: number;
   published_at?: string;
   sizes?: string[];
   /**
-   * @minLength 3
-   * @maxLength 50
-   */
+     * @minLength 3
+     * @maxLength 50
+     */
   sku?: string;
   status?: DtoUpdateProductRequestStatus;
   /** @minimum 0 */
@@ -143,3 +143,4 @@ export interface DtoProductResponse {
 export type PutProductsId200 = UtilsResponse & {
   data?: DtoProductResponse;
 };
+

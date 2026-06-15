@@ -48,3 +48,4 @@ export interface DtoNavItemResponse {
 export type GetNavMenus200 = UtilsResponse & {
   data?: DtoNavItemResponse[];
 };
+
