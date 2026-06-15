@@ -1,0 +1,115 @@
+'use client';
+
+import { IconRefresh } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import { useCallback, useMemo } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { ActiveFilter } from '@/domains/shop/components/active-filter';
+import { FilterContent } from '@/domains/shop/components/filter-content';
+import { ShopProductsSkeleton } from '@/domains/shop/components/shop-products-skeleton';
+import { ShopToolbar } from '@/domains/shop/components/shop-toolbar';
+import { useProductFilters } from '@/domains/shop/useProductFilters';
+
+import { ProductsHero } from './components/products-hero';
+import { ProductsInfiniteGrid } from './components/products-infinite-grid';
+import { useInfiniteProducts } from './hooks/useInfiniteProducts';
+import {
+  filterSaleProducts,
+  flattenInfiniteProducts,
+  getInfiniteProductsTotal,
+  toProductsCatalogParams
+} from './lib/products.utils';
+
+export function ProductsDomain() {
+  const { apiParams, showOnlySale } = useProductFilters();
+  const catalogParams = useMemo(() => toProductsCatalogParams(apiParams), [apiParams]);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage
+  } = useInfiniteProducts(catalogParams);
+
+  const rawProducts = useMemo(() => flattenInfiniteProducts(data?.pages ?? []), [data?.pages]);
+
+  const products = useMemo(
+    () => (showOnlySale ? filterSaleProducts(rawProducts) : rawProducts),
+    [rawProducts, showOnlySale]
+  );
+
+  const total = getInfiniteProductsTotal(data?.pages);
+  const loadedCount = rawProducts.length;
+  const hasLoadedProducts = loadedCount > 0;
+  const isInitialLoading = isLoading && !hasLoadedProducts;
+  const isRefetching = isFetching && !isFetchingNextPage && !isInitialLoading;
+  const showFetchError = isError && !hasLoadedProducts;
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  return (
+    <>
+      <ProductsHero total={total} loadedCount={loadedCount} isFetching={isRefetching} />
+
+      <div className='pb-20'>
+        <div className='bg-background sticky top-16 z-20 pt-8 lg:top-20'>
+          <ShopToolbar
+            total={total}
+            rangeStart={loadedCount === 0 ? 0 : 1}
+            rangeEnd={loadedCount}
+            isFetching={isRefetching}
+          />
+          <ActiveFilter />
+        </div>
+
+        <div className='mt-8 flex gap-12'>
+          <motion.aside
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className='hidden w-64 shrink-0 lg:block'
+          >
+            <div className='sticky top-28'>
+              <div className='bg-card rounded-2xl border p-6 shadow-sm'>
+                <h2 className='font-display mb-4 text-lg font-semibold'>Filters</h2>
+                <FilterContent />
+              </div>
+            </div>
+          </motion.aside>
+
+          <div className='min-w-0 flex-1'>
+            {showFetchError ? (
+              <div className='border-border bg-muted/20 flex flex-col items-center justify-center gap-4 rounded-2xl border py-20 text-center'>
+                <p className='text-muted-foreground'>Could not load products. Please try again.</p>
+                <Button variant='outline' onClick={() => refetch()} className='gap-2 rounded-full'>
+                  <IconRefresh className='h-4 w-4' />
+                  Retry
+                </Button>
+              </div>
+            ) : isInitialLoading ? (
+              <ShopProductsSkeleton />
+            ) : (
+              <ProductsInfiniteGrid
+                products={products}
+                total={total}
+                hasNextPage={Boolean(hasNextPage)}
+                isFetchingNextPage={isFetchingNextPage}
+                isRefetching={isRefetching}
+                onLoadMore={handleLoadMore}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

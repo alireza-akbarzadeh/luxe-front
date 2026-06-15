@@ -111,7 +111,7 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
           </Link>
         ))}
         <Link
-          href='/shop'
+          href='/products'
           onClick={onNavigateAction}
           className='text-accent inline-flex items-center gap-1 py-2 text-sm font-medium'
         >
