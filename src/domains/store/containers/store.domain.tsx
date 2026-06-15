@@ -1,22 +1,29 @@
 'use client';
 
-import { IconFilter } from '@tabler/icons-react';
+import { IconFilter, IconRefresh } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { sectionContainerClass } from '@/domains/home/lib/home-utils';
+import { StoreProductsInfiniteGrid } from '@/domains/store/components/store-products-infinite-grid';
 import {
   StoreProductsGridSkeleton,
   StoreSkeleton
 } from '@/domains/store/components/store-skeleton-loading';
+import { useInfiniteStoreProducts } from '@/domains/store/hooks/useInfiniteStoreProducts';
+import {
+  filterStoreSaleProducts,
+  flattenInfiniteStoreProducts,
+  getInfiniteStoreProductsTotal,
+  toStoreProductsCatalogParams
+} from '@/domains/store/lib/store-products.utils';
 import { useGetStoresSlug } from '@/services/-stores-{slug}-get';
-import { useGetStoresSlugProducts } from '@/services/-stores-{slug}-products-get';
 import { AppDialog } from '~/src/components/app-dialog';
 import { ActiveFilters } from '~/src/domains/store/sections/store-active-filter';
 import { StoreFilterSidebar } from '~/src/domains/store/sections/store-details-filter';
-import { StoreProductsGrid } from '~/src/domains/store/sections/store-product-grid';
 import { StoreHeader } from '~/src/domains/store/sections/store-sort-header';
 import { StoreToolbar } from '~/src/domains/store/sections/store-sort-toolbar';
-import type { GetStoresSlugProductsParams } from '~/src/services/-stores-{slug}-products-get.schemas';
 
 import { StoreErrorState } from '../components/store-error-state';
 import { useStoreFilters } from '../hooks/useStoreFilter';
@@ -35,81 +42,81 @@ export function StoreDomain({ slug }: { slug: string }) {
   const storeCategories = store?.categories ?? [];
 
   const filters = useStoreFilters(storeCategories.map((c) => c.name ?? ''));
-  const { category, priceRange, minRating, isDigital, showOnlyNew, sortBy, page, searchQuery } =
+  const { category, priceRange, minRating, isDigital, showOnlyNew, sortBy, searchQuery, showOnlySale } =
     filters;
 
-  const categoryId = useMemo(() => {
-    if (!category || !store) return undefined;
-    const catObj = store.categories?.find((c) => c.name === category);
-    return catObj?.id;
-  }, [category, store]);
-
-  const apiParams = useMemo<GetStoresSlugProductsParams>(() => {
-    const params: GetStoresSlugProductsParams = {
-      limit: 20,
-      offset: (page - 1) * 20
-    };
-    if (categoryId) params.category_id = categoryId;
-    if (priceRange[0] > 0) params.min_price = priceRange[0];
-    if (priceRange[1] < 500) params.max_price = priceRange[1];
-    if (minRating > 0) params.min_rating = minRating;
-    if (isDigital) params.is_digital = true;
-    if (showOnlyNew) params.is_new = true;
-    if (searchQuery) params.name = searchQuery;
-    switch (sortBy) {
-      case 'price-asc':
-        params.sort = 'price_asc';
-        break;
-      case 'price-desc':
-        params.sort = 'price_desc';
-        break;
-      case 'rating':
-        params.sort = 'rating_desc';
-        break;
-      case 'newest':
-        params.sort = 'newest';
-        break;
-      default:
-        params.sort = 'rating_desc';
-    }
-    return params;
-  }, [categoryId, priceRange, minRating, isDigital, showOnlyNew, sortBy, page, searchQuery]);
+  const catalogParams = useMemo(() => {
+    if (!store) return {};
+    return toStoreProductsCatalogParams({
+      category,
+      priceRange,
+      minRating,
+      isDigital,
+      showOnlyNew,
+      sortBy,
+      searchQuery,
+      store
+    });
+  }, [category, priceRange, minRating, isDigital, showOnlyNew, sortBy, searchQuery, store]);
 
   const {
     data: productsData,
     isLoading: productsLoading,
-    error: productsError,
-    refetch: refetchProducts
-  } = useGetStoresSlugProducts(slug, apiParams);
+    isError: productsError,
+    refetch: refetchProducts,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage
+  } = useInfiniteStoreProducts(slug, catalogParams);
 
   const filterMobileSheetOpen = useStoreStore((state) => state.filterMobileSheetOpen);
   const toggleFilterMobileSheet = useStoreStore((state) => state.toggleFilterMobileSheet);
 
-  const apiProducts = productsData?.data?.products || [];
-  const totalProducts = productsData?.data?.total || 0;
+  const rawProducts = useMemo(
+    () => flattenInfiniteStoreProducts(productsData?.pages ?? []),
+    [productsData?.pages]
+  );
+
+  const apiProducts = useMemo(
+    () => (showOnlySale ? filterStoreSaleProducts(rawProducts) : rawProducts),
+    [rawProducts, showOnlySale]
+  );
+
+  const totalProducts = getInfiniteStoreProductsTotal(productsData?.pages);
+  const hasLoadedProducts = apiProducts.length > 0;
+  const isInitialProductsLoading = productsLoading && !hasLoadedProducts;
+  const isRefetchingProducts = isFetching && !isFetchingNextPage && !isInitialProductsLoading;
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (storeLoading) {
     return <StoreSkeleton />;
   }
 
-  if (storeError || productsError || !store) {
+  if (storeError || !store) {
     return (
       <StoreErrorState
-        message={storeError?.message || productsError?.message || 'Store not found'}
+        message={storeError?.message || 'Store not found'}
         onRetryAction={() => {
           refetchStore();
-          refetchProducts();
         }}
       />
     );
   }
   if (!store) notFound();
 
+  const sidebarProducts = productsData?.pages[0]?.data?.products ?? [];
+
   return (
     <>
       <StoreHeader store={store} totalProducts={totalProducts} />
-      <section className='py-8'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <section className='pb-12'>
+        <div className={sectionContainerClass}>
           <StoreToolbar />
           <ActiveFilters />
           <div className='flex gap-8'>
@@ -121,16 +128,39 @@ export function StoreDomain({ slug }: { slug: string }) {
                 </h2>
                 <StoreFilterSidebar
                   storeCategories={store.categories}
-                  apiProducts={apiProducts}
+                  apiProducts={sidebarProducts}
                   totalProducts={totalProducts}
                 />
               </div>
             </aside>
             <div className='flex-1'>
-              {productsLoading ? (
+              {productsError && !hasLoadedProducts ? (
+                <div className='border-border bg-muted/20 flex flex-col items-center justify-center gap-4 rounded-2xl border py-20 text-center'>
+                  <p className='text-muted-foreground'>
+                    Could not load products. Please try again.
+                  </p>
+                  <Button
+                    variant='outline'
+                    onClick={() => refetchProducts()}
+                    className='gap-2 rounded-full'
+                  >
+                    <IconRefresh className='h-4 w-4' />
+                    Retry
+                  </Button>
+                </div>
+              ) : isInitialProductsLoading ? (
                 <StoreProductsGridSkeleton />
               ) : (
-                <StoreProductsGrid apiProducts={apiProducts} totalProducts={totalProducts} />
+                <StoreProductsInfiniteGrid
+                  apiProducts={apiProducts}
+                  totalProducts={totalProducts}
+                  hasNextPage={Boolean(hasNextPage)}
+                  isFetchingNextPage={isFetchingNextPage}
+                  onLoadMore={handleLoadMore}
+                />
+              )}
+              {isRefetchingProducts && hasLoadedProducts && (
+                <p className='text-gold mt-4 text-center text-xs'>Updating products…</p>
               )}
             </div>
           </div>
@@ -146,7 +176,7 @@ export function StoreDomain({ slug }: { slug: string }) {
         <div className='mt-6 px-4'>
           <StoreFilterSidebar
             storeCategories={store.categories}
-            apiProducts={apiProducts}
+            apiProducts={sidebarProducts}
             totalProducts={totalProducts}
           />
         </div>

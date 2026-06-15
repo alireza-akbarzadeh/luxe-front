@@ -72,7 +72,7 @@ export function StoreFilterSidebar({
             All Products ({totalProducts})
           </button>
           {storeCategories?.map((cat) => {
-            const count = apiProducts.filter((p) => p.category === cat.name).length;
+            const count = apiProducts.filter((p) => p.category?.name === cat.name).length;
             return (
               <button
                 key={cat.id}
@@ -103,7 +103,7 @@ export function StoreFilterSidebar({
             value={priceRange}
             onValueChange={(value) => setPriceRange(value as [number, number])}
             min={0}
-            max={500_000_000}
+            max={500}
             step={10}
             className='mb-4'
           />

@@ -21,8 +21,8 @@ export function FeaturedCarousel({ stores, title }: { stores: DtoStoreResponse[]
     <section className='space-y-4'>
       <div className='flex items-end justify-between'>
         <div className='flex items-center gap-2'>
-          <IconTrendingUp className='text-accent h-4 w-4' />
-          <h2 className='text-lg font-semibold tracking-tight'>{title}</h2>
+          <IconTrendingUp className='text-gold h-4 w-4' />
+          <h2 className='font-display text-lg font-semibold tracking-tight'>{title}</h2>
         </div>
         <span className='text-muted-foreground text-xs'>
           <AnimatedCounter value={top.length} /> trending now

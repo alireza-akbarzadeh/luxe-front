@@ -3,6 +3,18 @@ import type { Variants } from 'framer-motion';
 import type { ModelsStoreReview, StoreBadge } from '@/domains/store/store.types';
 import type { DtoStoreResponse } from '~/src/services/-stores-{slug}-get.schemas';
 
+import { STORE_BANNER_FALLBACK, STORE_LOGO_FALLBACK } from './constants';
+
+/** Safe banner URL — avoids empty `src` server errors in Next/Image */
+export function resolveStoreBanner(url?: string | null): string {
+  return url?.trim() ? url.trim() : STORE_BANNER_FALLBACK;
+}
+
+/** Safe logo URL — avoids empty `src` server errors in Next/Image */
+export function resolveStoreLogo(url?: string | null): string {
+  return url?.trim() ? url.trim() : STORE_LOGO_FALLBACK;
+}
+
 /**
  * Enrich raw API Store with UI-only computed fields.
  * NOTE: productCount / shippingSpeedDays / freeShipping / trendingScore
@@ -14,17 +26,11 @@ export function mapStoreToView(store: DtoStoreResponse): ModelsStoreReview {
   const productCount = 30 + ((seed * 37) % 950);
   const shippingSpeedDays = 1 + (seed % 7);
   const freeShipping = seed % 3 === 0;
-  const daysOld = Math.max(
-    1,
-    Math.floor((Date.now() - new Date(store.joined_at as string).getTime()) / 86_400_000)
-  );
-  const isNew = daysOld < 60;
-  const trendingScore = ((store?.follower_count ?? 0) * (store.rating || 1)) / daysOld;
+  const trendingScore = (store?.follower_count ?? 0) * (store.rating || 1);
 
-  const badges: StoreBadge[] = []; // explicitly typed as badge array
+  const badges: StoreBadge[] = [];
   if (store.is_verified) badges.push('Verified');
   if (Number(store?.rating) >= 4.7) badges.push('Top Rated');
-  if (isNew) badges.push('New');
   if (freeShipping) badges.push('Free Shipping');
 
   return {
@@ -34,7 +40,7 @@ export function mapStoreToView(store: DtoStoreResponse): ModelsStoreReview {
     shippingSpeedDays,
     freeShipping,
     trendingScore,
-    isNew
+    isNew: false
   };
 }
 

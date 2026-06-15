@@ -1,13 +1,23 @@
 'use client';
-import { IconSearch, IconSparkles } from '@tabler/icons-react';
+
+import {
+  IconArrowRight,
+  IconPackage,
+  IconSearch,
+  IconSparkles,
+  IconTruck,
+  IconUsers
+} from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 import { Input } from '@/components/ui/input';
-
-import { CategoryPill } from '../components/category-pill';
-import { TRENDING_CATEGORIES } from '../constants';
-import { useStoresFilters } from '../hooks/useStoresFilter';
-import { fadeUp,stagger } from '../store.utils';
+import { fullBleedClass, sectionContainerClass } from '@/domains/home/lib/home-utils';
+import { CategoryPill } from '@/domains/store/components/category-pill';
+import { STORE_HERO_STATS, TRENDING_CATEGORIES } from '@/domains/store/constants';
+import { useStoresFilters } from '@/domains/store/hooks/useStoresFilter';
+import { fadeUp, stagger } from '@/domains/store/store.utils';
+import { cn } from '@/lib/utils';
 
 export function StoreHeroSection() {
   const { filters, setFilters } = useStoresFilters();
@@ -19,71 +29,131 @@ export function StoreHeroSection() {
       page: 1
     });
   };
+
   return (
-    <section className='border-border relative isolate overflow-hidden border-b'>
-      <div className='absolute inset-0 -z-10'>
-        <div className='from-accent/30 absolute -top-40 left-1/2 h-[600px] w-[1100px] -translate-x-1/2 rounded-full bg-gradient-to-br via-fuchsia-500/20 to-sky-500/20 blur-3xl' />
+    <section
+      className={cn(
+        fullBleedClass,
+        'from-background via-background to-surface relative overflow-hidden border-b bg-linear-to-b'
+      )}
+    >
+      <div className='bg-gold/10 dark:bg-gold/15 pointer-events-none absolute -top-32 right-0 h-112 w-md rounded-full blur-3xl' />
+      <div className='bg-gold/8 pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full blur-3xl' />
+
+      <div
+        aria-hidden
+        className='pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.06]'
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, var(--gold) 1px, transparent 1px), linear-gradient(to bottom, var(--gold) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black, transparent)'
+        }}
+      />
+
+      <div
+        className={cn(
+          sectionContainerClass,
+          'relative pt-10 pb-12 sm:pt-12 md:pb-14 lg:pt-14 lg:pb-16'
+        )}
+      >
+        <motion.div variants={stagger} initial='hidden' animate='show' className='max-w-3xl'>
+          <motion.div
+            variants={fadeUp}
+            className='border-gold/30 bg-card/80 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'
+          >
+            <IconSparkles className='text-gold h-4 w-4' />
+            <span className='text-gold-strong dark:text-gold tracking-wide'>
+              Curated marketplace
+            </span>
+            <span className='text-muted-foreground'>· Updated daily</span>
+          </motion.div>
+
+          <motion.h1
+            variants={fadeUp}
+            className='font-display text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl'
+          >
+            Discover stores you&apos;ll <span className='text-gold-gradient italic'>love</span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            className='text-muted-foreground mt-4 max-w-xl text-base leading-relaxed sm:text-lg'
+          >
+            Verified brands and independent makers — handpicked for taste, quality, and craft.
+            Follow your favorites and never miss a drop.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className='mt-8 w-full max-w-xl'>
+            <div className='border-gold/25 bg-card/70 relative flex items-center rounded-full border px-4 py-1 shadow-md backdrop-blur-sm'>
+              <IconSearch className='text-muted-foreground h-4 w-4 shrink-0' />
+              <Input
+                value={filters.search}
+                onChange={(e) => setFilters({ search: e.target.value, page: 1 })}
+                placeholder='Search brands, stores, categories…'
+                aria-label='Search stores'
+                className='border-0 bg-transparent text-base shadow-none focus-visible:ring-0'
+              />
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className='mt-6 flex flex-wrap items-center gap-2'>
+            {TRENDING_CATEGORIES.map((c) => (
+              <CategoryPill
+                key={c}
+                label={c}
+                active={filters.category.includes(c)}
+                onClick={() => toggleCategory(c)}
+              />
+            ))}
+          </motion.div>
+        </motion.div>
+
+        <motion.dl
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className='border-gold/15 mt-12 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4 lg:gap-6'
+        >
+          {STORE_HERO_STATS.map((stat) => (
+            <div key={stat.label} className='text-left'>
+              <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
+              <dd className='text-muted-foreground mt-1 text-xs tracking-wide sm:text-sm'>
+                {stat.label}
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
+
         <motion.div
-          aria-hidden
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-          className='absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_60%)]'
-        />
-      </div>
-      <motion.div
-        variants={stagger}
-        initial='hidden'
-        animate='show'
-        className='mx-auto flex max-w-screen-2xl flex-col items-center px-4 py-20 text-center lg:py-28'
-      >
-        <motion.div
-          variants={fadeUp}
-          className='border-border bg-card/60 glass mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs'
+          transition={{ delay: 0.4 }}
+          className='border-gold/15 bg-card/50 mt-8 flex flex-wrap items-center gap-4 rounded-2xl border px-5 py-4 text-sm backdrop-blur-sm'
         >
-          <IconSparkles className='text-accent h-3.5 w-3.5' />
-          <span className='text-muted-foreground'>Curated brands · Updated daily</span>
-        </motion.div>
-        <motion.h1
-          variants={fadeUp}
-          className='max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl'
-        >
-          Discover stores you'll{' '}
-          <span className='from-accent bg-gradient-to-r to-fuchsia-500 bg-clip-text text-transparent'>
-            love
+          <span className='text-gold-strong dark:text-gold inline-flex items-center gap-1.5 font-medium'>
+            <IconPackage className='h-4 w-4' />
+            Verified sellers only
           </span>
-          .
-        </motion.h1>
-        <motion.p variants={fadeUp} className='text-muted-foreground mt-4 max-w-xl text-balance'>
-          A curated marketplace of verified brands and independent makers — handpicked for taste,
-          quality, and craft.
-        </motion.p>
-        <motion.div variants={fadeUp} className='mt-8 w-full max-w-xl'>
-          <div className='glass relative flex items-center rounded-full px-4 py-1 shadow-lg'>
-            <IconSearch className='text-muted-foreground h-4 w-4' />
-            <Input
-              value={filters.search}
-              onChange={(e) => setFilters({ search: e.target.value, page: 1 })}
-              placeholder='Search brands, stores, categories…'
-              aria-label='Search stores'
-              className='border-0 bg-transparent text-base shadow-none focus-visible:ring-0'
-            />
-          </div>
+          <span className='text-muted-foreground bg-border hidden h-4 w-px sm:block' />
+          <span className='text-muted-foreground inline-flex items-center gap-1.5'>
+            <IconTruck className='h-4 w-4' />
+            Fast shipping from top stores
+          </span>
+          <span className='text-muted-foreground bg-border hidden h-4 w-px sm:block' />
+          <span className='text-muted-foreground inline-flex items-center gap-1.5'>
+            <IconUsers className='h-4 w-4' />
+            Follow stores for updates
+          </span>
+          <Link
+            href='/products'
+            className='text-gold-strong dark:text-gold ml-auto inline-flex items-center gap-1 text-sm font-medium hover:underline'
+          >
+            Shop all products
+            <IconArrowRight className='h-3.5 w-3.5' />
+          </Link>
         </motion.div>
-        <motion.div
-          variants={fadeUp}
-          className='mt-8 flex flex-wrap items-center justify-center gap-2'
-        >
-          {TRENDING_CATEGORIES.map((c) => (
-            <CategoryPill
-              key={c}
-              label={c}
-              active={filters.category.includes(c)}
-              onClick={() => toggleCategory(c)}
-            />
-          ))}
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

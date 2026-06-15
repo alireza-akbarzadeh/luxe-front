@@ -2,6 +2,20 @@ import type { SortKey } from '@/domains/store/store.types';
 
 export const PAGE_SIZE = 24;
 
+export const STORE_BANNER_FALLBACK =
+  'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1600&h=600&fit=crop';
+
+export const STORE_LOGO_FALLBACK =
+  'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200&h=200&fit=crop';
+
+/** Hero stats shown on the stores listing page */
+export const STORE_HERO_STATS = [
+  { label: 'Verified brands', value: '120+' },
+  { label: 'Independent makers', value: '850+' },
+  { label: 'Avg. store rating', value: '4.8' },
+  { label: 'Countries represented', value: '32' }
+] as const;
+
 export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: 'popular', label: 'Most Popular' },
   { value: 'top_rated', label: 'Top Rated' },

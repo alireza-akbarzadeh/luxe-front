@@ -7,8 +7,8 @@ const pill = cva(
   {
     variants: {
       active: {
-        true: 'border-foreground bg-foreground text-background',
-        false: 'border-border bg-card/40 text-foreground hover:bg-muted'
+        true: 'border-gold/40 bg-gold text-gold-foreground shadow-sm',
+        false: 'border-gold/20 bg-card/60 text-foreground hover:border-gold/35 hover:bg-gold/10'
       }
     },
     defaultVariants: { active: false }

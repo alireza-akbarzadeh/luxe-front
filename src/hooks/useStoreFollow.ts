@@ -1,35 +1,57 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { isUnauthorizedError } from '@/lib/api/api-utils';
 import { useDeleteStoresSlugFollow } from '@/services/-stores-{slug}-follow-delete';
 import { usePostStoresSlugFollow } from '@/services/-stores-{slug}-follow-post';
 import { getGetStoresSlugQueryKey } from '@/services/-stores-{slug}-get';
+import { getGetStoresQueryKey } from '@/services/-stores-get';
 
 interface UseStoreFollowProps {
   slug: string;
+  storeName?: string;
+  onFollowChange?: (isFollowed: boolean) => void;
 }
 
-export function useStoreFollow({ slug }: UseStoreFollowProps) {
+export function useStoreFollow({ slug, storeName, onFollowChange }: UseStoreFollowProps) {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const label = storeName ?? slug;
 
-  const invalidateStore = () => {
+  const invalidateStoreQueries = () => {
     queryClient.invalidateQueries({ queryKey: getGetStoresSlugQueryKey(slug) });
+    queryClient.invalidateQueries({ queryKey: getGetStoresQueryKey() });
+  };
+
+  const handleAuthError = () => {
+    toast.error('Sign in to follow stores');
+    const callbackUrl = encodeURIComponent(
+      typeof window !== 'undefined' ? window.location.pathname : `/store/${slug}`
+    );
+    router.push(`/login?callbackUrl=${callbackUrl}`);
   };
 
   const { mutate: followMutate, isPending: isFollowingPending } = usePostStoresSlugFollow();
   const { mutate: unfollowMutate, isPending: isUnFollowingPending } = useDeleteStoresSlugFollow();
 
   const follow = () => {
+    onFollowChange?.(true);
     followMutate(
       { slug },
       {
         onSuccess: () => {
-          invalidateStore();
-          toast.success(`You are now following ${slug}`);
+          invalidateStoreQueries();
+          toast.success(`You're now following ${label}`);
         },
-        onError: () => {
+        onError: (error) => {
+          onFollowChange?.(false);
+          if (isUnauthorizedError(error)) {
+            handleAuthError();
+            return;
+          }
           toast.error('Failed to follow store');
         }
       }
@@ -37,14 +59,20 @@ export function useStoreFollow({ slug }: UseStoreFollowProps) {
   };
 
   const unfollow = () => {
+    onFollowChange?.(false);
     unfollowMutate(
       { slug },
       {
         onSuccess: () => {
-          invalidateStore();
-          toast.success(`You unfollowed ${slug}`);
+          invalidateStoreQueries();
+          toast.success(`You unfollowed ${label}`);
         },
-        onError: () => {
+        onError: (error) => {
+          onFollowChange?.(true);
+          if (isUnauthorizedError(error)) {
+            handleAuthError();
+            return;
+          }
           toast.error('Failed to unfollow store');
         }
       }

@@ -1,6 +1,6 @@
 // components/products-grid.tsx
 import { IconPackage } from '@tabler/icons-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import { Button } from '@/components/ui/button';
 import type { DtoProductResponse } from '@/services/-stores-{slug}-products-get.schemas';
@@ -71,20 +71,17 @@ export function StoreProductsGrid({ apiProducts, totalProducts }: ProductsGridPr
           Showing {adaptedProducts.length} of {totalProducts} products
         </p>
       </div>
-      <motion.div
-        layout
+      <div
         className={`grid gap-4 ${
           gridCols === 3
             ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
             : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
         }`}
       >
-        <AnimatePresence mode='popLayout'>
-          {adaptedProducts.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} priority={index === 0} />
-          ))}
-        </AnimatePresence>
-      </motion.div>
+        {adaptedProducts.map((product, index) => (
+          <ProductCard key={product.id} product={product} index={index} priority={index === 0} />
+        ))}
+      </div>
     </>
   );
 }
