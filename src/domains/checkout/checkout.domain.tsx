@@ -25,6 +25,7 @@ import { CHECKOUT_STEP_IDS, checkoutStepFields, type CheckoutStepId } from './ch
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutPlacingOrderOverlay } from './components/checkout-placing-order-overlay';
+import { CheckoutRedirectingScreen } from './components/checkout-redirecting';
 import { CheckoutSummary } from './components/checkout-summary';
 import { EmptyCart } from './components/empty-checkout';
 import { CheckoutPayment } from './containers/checkout-payment';
@@ -56,6 +57,7 @@ export default function CheckoutDomain() {
   const form = useCheckoutForm({ onSubmit: submitOrder });
 
   const agreedToTerms = useCheckoutStore((s) => s.agreedToTerms);
+  const isRedirecting = useCheckoutStore((s) => s.isRedirecting);
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
   const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
   const { total } = useCheckoutTotals(shippingProviderId);
@@ -63,6 +65,12 @@ export default function CheckoutDomain() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStepId]);
+
+  // Fresh wizard when entering checkout (skip if a redirect is already in progress).
+  useEffect(() => {
+    const { isRedirecting, reset } = useCheckoutStore.getState();
+    if (!isRedirecting) reset();
+  }, []);
 
   const validateStep = useCallback(
     async (stepId: CheckoutStepId) => {
@@ -113,7 +121,7 @@ export default function CheckoutDomain() {
   );
 
   const handlePlaceOrder = useCallback(async () => {
-    if (isPending) return;
+    if (isPending || isRedirecting) return;
 
     if (!agreedToTerms) {
       toast.error('Please accept the terms to place your order.');
@@ -136,14 +144,24 @@ export default function CheckoutDomain() {
     }
 
     try {
-      await form.handleSubmit();
+      await submitOrder(form.state.values);
     } catch {
       // Errors are surfaced via toast + submitError in useCheckoutSubmit
     }
-  }, [isPending, agreedToTerms, setSubmitError, validateStep, goToStep, form]);
+  }, [
+    isPending,
+    isRedirecting,
+    agreedToTerms,
+    setSubmitError,
+    validateStep,
+    goToStep,
+    submitOrder,
+    form
+  ]);
 
   const isLoadingPage = isLoadingCart;
   if (isLoadingPage) return <CheckoutLoading />;
+  if (isRedirecting) return <CheckoutRedirectingScreen />;
   if (items.length === 0) return <EmptyCart />;
 
   return (
@@ -156,10 +174,9 @@ export default function CheckoutDomain() {
           value={currentStepId}
           onValueChange={(id) => handleStepperClick(id as CheckoutStepId)}
           orientation='horizontal'
-          responsive
           className='mb-8'
         >
-          <StepperNav>
+          <StepperNav className='w-full flex-row'>
             {steps.map((step, index) => {
               const isCompleted = completedSteps.includes(step.id as CheckoutStepId);
               const isClickable = isCompleted || index <= currentIndex;
@@ -169,17 +186,24 @@ export default function CheckoutDomain() {
                   stepId={step.id}
                   completed={isCompleted}
                   disabled={!isClickable && step.id !== currentStepId}
+                  className='min-w-0 flex-1'
                 >
-                  <StepperTrigger className='flex flex-col items-center gap-1 py-2 md:flex-row'>
-                    <StepperIndicator>
-                      {isCompleted ? <IconCheck className='size-4' /> : step.icon}
+                  <StepperTrigger className='flex w-full flex-col items-center gap-1 px-1 py-2 sm:flex-row sm:gap-2'>
+                    <StepperIndicator className='size-7 sm:size-8'>
+                      {isCompleted ? <IconCheck className='size-3.5 sm:size-4' /> : step.icon}
                     </StepperIndicator>
-                    <div className='hidden flex-col md:flex'>
-                      <span className='text-sm font-medium'>{step.title}</span>
-                      <span className='text-muted-foreground text-xs'>{step.description}</span>
+                    <div className='flex min-w-0 flex-col items-center text-center sm:items-start sm:text-left'>
+                      <span className='truncate text-[11px] font-medium sm:text-sm'>
+                        {step.title}
+                      </span>
+                      <span className='text-muted-foreground hidden text-xs sm:block'>
+                        {step.description}
+                      </span>
                     </div>
                   </StepperTrigger>
-                  {index < steps.length - 1 && <StepperSeparator />}
+                  {index < steps.length - 1 && (
+                    <StepperSeparator className='mx-1 h-0.5 flex-1 sm:mx-2' />
+                  )}
                 </StepperItem>
               );
             })}

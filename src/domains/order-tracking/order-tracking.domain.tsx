@@ -1,23 +1,29 @@
 'use client';
 
-import { IconCalendar, IconCheckbox, IconMapPin } from '@tabler/icons-react';
-import { formatDistanceToNow } from 'date-fns';
-import { motion } from 'framer-motion';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
-import { OrderNumber } from '@/components/order-number';
+import { useCheckoutStore } from '@/domains/checkout/store/checkout.store';
 import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
 import { OrderBoxNumber } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
+import { OrderTrackingActivityFeed } from './components/order-tracking-activity';
 import { OrderTrackingProgress } from './components/order-tracking-progress';
+import { OrderTrackingStatusHero } from './components/order-tracking-status-hero';
 import { OrderTrackingSummary } from './components/order-tracking-summary';
 import { PaymentDetails } from './components/payment-details';
 import { ShipmentTraking } from './components/shipment-traking';
 import { TrakingFooter } from './components/traking-footer';
-import { useOrderWebSocket } from './useOrderWebsoket';
+import { useOrderTrackingLive } from './hooks/use-order-tracking-live';
+import {
+  getOrderProgressState,
+  getOrderSubtotal,
+  getOrderTax,
+  mergeOrderWithLive
+} from './lib/order-tracking-utils';
 
 interface OrderTrackingDomainProps {
   orderId: string;
@@ -25,169 +31,74 @@ interface OrderTrackingDomainProps {
 
 export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const id = Number(orderId);
+  const searchParams = useSearchParams();
+  const isFreshCheckout = searchParams.get('confirmed') === '1';
+
   const { data: initialData, isLoading, error } = useGetOrdersId(id);
-  const order = initialData?.data;
-  const { status: liveStatus, connected } = useOrderWebSocket(id);
+  const { connectionStatus, liveState, clearPulsingStep } = useOrderTrackingLive(id);
+
+  useEffect(() => {
+    useCheckoutStore.getState().reset();
+  }, []);
 
   if (isLoading) return <OrderTrackingSkeleton />;
-  if (error || !order) return notFound();
+  if (error || !initialData?.data) return notFound();
 
-  const currentStatus = liveStatus ?? order.status ?? OrderStatus.Pending;
-  const currentOrder = { ...order, status: currentStatus };
+  const order = mergeOrderWithLive(initialData.data, liveState);
+  const currentStatus = order.status ?? OrderStatus.Pending;
+  const progress = getOrderProgressState(currentStatus);
 
-  // Order progress steps
-  const getStepStatus = (status: string) => {
-    const stepMap: Record<
-      string,
-      { confirmed: boolean; processing: boolean; shipped: boolean; delivered: boolean }
-    > = {
-      [OrderStatus.Pending]: {
-        confirmed: true,
-        processing: false,
-        shipped: false,
-        delivered: false
-      },
-      [OrderStatus.Paid]: { confirmed: true, processing: true, shipped: false, delivered: false },
-      [OrderStatus.Shipped]: { confirmed: true, processing: true, shipped: true, delivered: false },
-      [OrderStatus.Delivered]: {
-        confirmed: true,
-        processing: true,
-        shipped: true,
-        delivered: true
-      },
-      [OrderStatus.Cancelled]: {
-        confirmed: true,
-        processing: false,
-        shipped: false,
-        delivered: false
-      },
-      [OrderStatus.Refunded]: {
-        confirmed: true,
-        processing: false,
-        shipped: false,
-        delivered: false
-      }
-    };
-    return stepMap[status] || stepMap[OrderStatus.Pending];
-  };
+  const payment = order.payment;
+  const shipment = order.shipment;
 
-  const stepsCompleted = getStepStatus(currentStatus);
-
-  const payment = currentOrder.payment;
-  const shipment = currentOrder.shipment;
-
-  // Calculate order totals
-  const subtotal =
-    currentOrder.items?.reduce((sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0), 0) ??
-    0;
-
+  const subtotal = getOrderSubtotal(order.items);
   const shippingCost = shipment?.shipping_price ?? 0;
-  // FIXME: tax should come from backend
-  const tax = subtotal * 0.08;
-  const total = currentOrder.total_amount;
+  const tax = getOrderTax(subtotal, shippingCost, order.total_amount);
+  const total = order.total_amount ?? subtotal + shippingCost + tax;
 
-  const orderDateRelative = formatDistanceToNow(new Date(currentOrder.created_at as string), {
-    addSuffix: true
-  });
+  const highlightPayment = liveState.pulsingStepKey === 'processing';
+  const highlightShipment =
+    liveState.pulsingStepKey === 'shipped' || liveState.pulsingStepKey === 'processing';
 
   return (
     <div className='pt-24 pb-16'>
       <div className='mx-auto max-w-5xl px-4 sm:px-6 lg:px-8'>
-        {/* Success Animation */}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-          className='mb-8 flex justify-center'
-        >
-          <div className='relative'>
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className='flex h-24 w-24 items-center justify-center rounded-full bg-green-500/10'
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.6 }}
-                className='flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20'
-              >
-                <IconCheckbox className='h-10 w-10 text-green-500' />
-              </motion.div>
-            </motion.div>
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className='bg-accent absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full'
-            >
-              <span className='text-accent-foreground text-xs font-bold'>1</span>
-            </motion.div>
-          </div>
-        </motion.div>
+        <OrderTrackingStatusHero
+          orderNumber={order.order_number ?? '—'}
+          status={currentStatus}
+          createdAt={String(order.created_at)}
+          isFreshCheckout={isFreshCheckout}
+          connectionStatus={connectionStatus}
+        />
 
-        {/* Confirmation Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className='mb-8 text-center'
-        >
-          <h1 className='mb-2 text-3xl font-bold md:text-4xl'>Thank you for your order!</h1>
-          <p className='text-muted-foreground text-lg'>
-            Order{' '}
-            <OrderNumber value={currentOrder.order_number ?? '—'} size='lg' className='inline' /> –{' '}
-            <span className='font-medium text-green-600 capitalize'>{currentStatus}</span>
-          </p>
-          <p className='text-muted-foreground mt-1 flex items-center justify-center gap-1 text-sm'>
-            <IconCalendar className='h-4 w-4' />
-            Placed on {orderDateRelative}
-          </p>
-        </motion.div>
+        <OrderBoxNumber order_number={order.order_number || ''} />
 
-        {/* Order Number Box */}
-        <OrderBoxNumber order_number={currentOrder.order_number || ''} />
+        <OrderTrackingProgress
+          progress={progress}
+          pulsingStepKey={liveState.pulsingStepKey}
+          onPulseComplete={clearPulsingStep}
+        />
 
-        {/* Order Progress */}
-        <OrderTrackingProgress stepsCompleted={stepsCompleted} connected={connected} />
-
-        {/* Two‑column layout: Items + Order Summary */}
         <div className='mb-12 grid gap-8 lg:grid-cols-3'>
-          {/* Items List - takes 2/3 */}
-          <OrderItemSummary orderItems={currentOrder.items || []} />
-          {/* Order Summary - takes 1/3 */}
+          <OrderItemSummary orderItems={order.items || []} />
           <OrderTrackingSummary
-            currency={currentOrder.currency || ''}
+            currency={order.currency || ''}
             shippingCost={shippingCost}
             subtotal={subtotal}
             tax={tax}
-            total={total as number}
+            total={total}
           />
         </div>
 
-        {/* Payment & Shipment Details */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className='mb-12 grid gap-6 md:grid-cols-2'
-        >
-          {/* Payment Details */}
-          <PaymentDetails currentStatus={currentStatus} payment={payment || {}} />
-
-          {/* Shipment Details */}
-          <motion.div
-            whileHover={{ y: -2 }}
-            className='bg-card border-border/50 rounded-2xl border p-5 transition-shadow hover:shadow-md'
-          >
-            <div className='mb-3 flex items-center gap-2'>
-              <IconMapPin className='text-accent h-5 w-5' />
-              <h3 className='font-semibold'>Shipping Information</h3>
-            </div>
-            <ShipmentTraking shipment={shipment} />
-          </motion.div>
-        </motion.div>
+        <div className='mb-12 grid gap-6 lg:grid-cols-3'>
+          <PaymentDetails
+            currentStatus={currentStatus}
+            payment={payment}
+            highlight={highlightPayment}
+          />
+          <ShipmentTraking shipment={shipment} highlight={highlightShipment} />
+          <OrderTrackingActivityFeed activities={liveState.activities} className='lg:col-span-1' />
+        </div>
 
         <TrakingFooter />
       </div>

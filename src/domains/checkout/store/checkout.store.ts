@@ -17,6 +17,8 @@ interface CheckoutState {
 
   // Submit
   submitError: string | null;
+  /** True after a successful checkout while navigating away — prevents empty-cart flash. */
+  isRedirecting: boolean;
 }
 
 interface CheckoutActions {
@@ -29,6 +31,7 @@ interface CheckoutActions {
 
   setAgreedToTerms: (value: boolean) => void;
   setSubmitError: (value: string | null) => void;
+  setIsRedirecting: (value: boolean) => void;
 
   /** Clears all checkout-only UI state (call after a successful order). */
   reset: () => void;
@@ -42,7 +45,8 @@ const initialState: CheckoutState = {
   couponDiscount: 0,
   appliedCouponCode: '',
   agreedToTerms: false,
-  submitError: null
+  submitError: null,
+  isRedirecting: false
 };
 
 export const useCheckoutStore = create<CheckoutStore>((set) => ({
@@ -62,6 +66,7 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
 
   setAgreedToTerms: (value) => set({ agreedToTerms: value }),
   setSubmitError: (value) => set({ submitError: value }),
+  setIsRedirecting: (value) => set({ isRedirecting: value }),
 
   reset: () => set({ ...initialState })
 }));

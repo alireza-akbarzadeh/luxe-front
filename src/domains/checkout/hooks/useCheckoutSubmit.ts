@@ -1,6 +1,7 @@
 // app/checkout/hooks/useCheckoutSubmit.ts
 import type { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import { toast } from 'sonner';
 
 import { useCartController } from '@/hooks/useCartController';
@@ -8,23 +9,27 @@ import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
 import { ShippingProviders } from '@/lib/constants/enum-statuses';
 import { usePostCheckout } from '@/services/-checkout-post';
+import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
 import type { CheckoutFormValues } from '../checkout.schema';
-import { paymentMethodRequiresCard } from '../lib/checkout-utils';
+import { paymentMethodRequiresCard, resolveCheckoutOrderId } from '../lib/checkout-utils';
 import { useCheckoutStore } from '../store/checkout.store';
 
 export function useCheckoutSubmit() {
   const router = useRouter();
   const { clearCart } = useCartController();
-  const resetCheckout = useCheckoutStore((s) => s.reset);
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
+  const setIsRedirecting = useCheckoutStore((s) => s.setIsRedirecting);
   const { data: providersResponse } = useGetShippingProviders();
   const providers = providersResponse?.data ?? [];
+  const submitLockRef = useRef(false);
 
   const { mutateAsync, isPending } = usePostCheckout();
 
   const submitOrder = async (values: CheckoutFormValues): Promise<void> => {
+    if (submitLockRef.current) return;
+    submitLockRef.current = true;
     setSubmitError(null);
 
     const selectedProvider = providers.find(
@@ -34,7 +39,7 @@ export function useCheckoutSubmit() {
     const cardDigits = (values.cardNumber ?? '').replace(/\D/g, '');
 
     try {
-      const response = await mutateAsync({
+      const response: PostCheckout201 = await mutateAsync({
         data: {
           email: values.email || '',
           first_name: values.firstName || '',
@@ -67,7 +72,7 @@ export function useCheckoutSubmit() {
         throw new Error(message);
       }
 
-      const orderId = response?.data?.id;
+      const orderId = resolveCheckoutOrderId(response);
       if (!orderId) {
         const message = 'Order was created but no order ID was returned.';
         setSubmitError(message);
@@ -75,10 +80,19 @@ export function useCheckoutSubmit() {
         throw new Error(message);
       }
 
-      await clearCart();
-      resetCheckout();
-      router.push(`/order-confirmed/${orderId}`);
+      // Block empty-cart UI while client navigates — never call reset() here (it clears this flag).
+      setIsRedirecting(true);
+      toast.success('Order placed successfully!');
+
+      router.replace(`/order-tracking/${orderId}?confirmed=1`);
+
+      void clearCart().catch(() => {
+        // Cart is already cleared server-side during checkout.
+      });
     } catch (error) {
+      setIsRedirecting(false);
+      submitLockRef.current = false;
+
       const isAxiosError = error instanceof Error && 'isAxiosError' in error;
       const message = isAxiosError
         ? extractErrorMessage(error as AxiosError<ApiErrorResponse>)

@@ -1,12 +1,18 @@
+import { Suspense } from 'react';
+
+import { OrderTrackingSkeleton } from '~/src/domains/order-tracking/components/order-loading';
 import { OrderTrackingDomain } from '~/src/domains/order-tracking/order-tracking.domain';
 
-interface OrderConfirmationPageProps {
+interface OrderTrackingPageProps {
   params: Promise<{ orderId: string }>;
 }
 
-export default async function OrderConfirmationPage(props: OrderConfirmationPageProps) {
-  const { params } = props;
-  const { orderId } = await params;
+export default async function OrderTrackingPage(props: OrderTrackingPageProps) {
+  const { orderId } = await props.params;
 
-  return <OrderTrackingDomain orderId={orderId} />;
+  return (
+    <Suspense fallback={<OrderTrackingSkeleton />}>
+      <OrderTrackingDomain orderId={orderId} />
+    </Suspense>
+  );
 }

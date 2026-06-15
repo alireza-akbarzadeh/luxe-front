@@ -73,3 +73,32 @@ export const CARD_PAYMENT_METHODS = ['credit_card', 'debit_card'] as const;
 export function paymentMethodRequiresCard(method: string): boolean {
   return (CARD_PAYMENT_METHODS as readonly string[]).includes(method);
 }
+
+/** Extracts the created order id from a checkout API envelope or bare order object. */
+export function resolveCheckoutOrderId(response: unknown): number | null {
+  if (!response || typeof response !== 'object') return null;
+
+  const record = response as Record<string, unknown>;
+
+  const pickId = (value: unknown): number | null => {
+    if (typeof value === 'number' && value > 0) return value;
+    if (typeof value === 'string' && value.trim() !== '') {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    }
+    return null;
+  };
+
+  // Bare order: { id: 19, ... }
+  const directId = pickId(record['id']);
+  if (directId) return directId;
+
+  // Envelope: { success, data: { id: 19, ... } }
+  const data = record['data'];
+  if (data && typeof data === 'object') {
+    const nested = data as Record<string, unknown>;
+    return pickId(nested['id']) ?? pickId(nested['order_id']);
+  }
+
+  return null;
+}
