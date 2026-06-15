@@ -47,11 +47,11 @@ export function resolveProductAttributeKind(
   return 'text';
 }
 
-/** Attributes shown in the details tab (exclude video — has its own tab). */
+/** Attributes shown in the details tab (exclude video and variant pickers). */
 export function getDetailTabAttributes(attributes: DtoProductAttributeResponse[] = []) {
   return attributes.filter((attribute) => {
     const kind = resolveProductAttributeKind(attribute);
-    return kind !== 'video';
+    return kind !== 'video' && kind !== 'color' && kind !== 'size';
   });
 }
 
@@ -60,9 +60,35 @@ export function formatAttributeLabel(name?: string) {
   return name.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+/** Merge product_attributes with legacy colors/sizes columns when variant rows are missing. */
+export function getVariantPickerAttributes(
+  attributes: DtoProductAttributeResponse[] = [],
+  legacy?: { colors?: string[]; sizes?: string[] }
+): DtoProductAttributeResponse[] {
+  const merged = [...attributes];
+  const hasColor = merged.some((attribute) => resolveProductAttributeKind(attribute) === 'color');
+  const hasSize = merged.some((attribute) => resolveProductAttributeKind(attribute) === 'size');
+
+  if (!hasColor && legacy?.colors?.length) {
+    merged.unshift({ name: 'color', values: legacy.colors });
+  }
+  if (!hasSize && legacy?.sizes?.length) {
+    merged.unshift({ name: 'size', values: legacy.sizes });
+  }
+
+  return merged;
+}
+
 export function formatAttributeValue(value: string) {
   const normalized = value.trim().toLowerCase();
   if (normalized === 'true') return 'Yes';
   if (normalized === 'false') return 'No';
   return value;
+}
+
+/** Single-line display for feature highlight cards. */
+export function formatAttributeValues(values: string[] = [], maxLength = 72) {
+  const text = values.map(formatAttributeValue).filter(Boolean).join(', ');
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength - 1).trim()}…`;
 }

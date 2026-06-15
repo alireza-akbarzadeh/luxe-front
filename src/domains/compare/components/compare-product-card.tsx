@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import useCompareController from '~/src/domains/compare/hooks/useCompareController';
 import { type CartItemPayload,useCartController } from '~/src/hooks/useCartController';
 import type { DtoCompareProductResponse } from '~/src/services/-compare-post.schemas';
@@ -42,7 +43,7 @@ export function CompareProductCard({ product }: CompareProductCardProps) {
         <IconX className='h-4 w-4' />
       </Button>
 
-      <Link href={`/product/${product.id}`}>
+      <Link href={getProductPath(product)}>
         <div className='bg-secondary relative mb-4 aspect-square overflow-hidden rounded-lg'>
           <Image
             src={product.images?.[0] || '/placeholder.png'}

@@ -7,7 +7,7 @@ export function ProductDetailSkeleton() {
 
       <div className='grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12 xl:gap-16'>
         <div className='space-y-4'>
-          <Skeleton className='aspect-4/5 w-full rounded-2xl' />
+          <Skeleton className='aspect-[4/3] max-h-[min(480px,50vh)] w-full rounded-2xl' />
           <Skeleton className='h-2 w-full rounded-full' />
           <div className='flex gap-2'>
             {Array.from({ length: 4 }).map((_, index) => (

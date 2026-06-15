@@ -91,7 +91,7 @@ export function ProductImageMagnifier({
     <div
       ref={containerRef}
       className={cn(
-        'bg-muted relative aspect-4/5 w-full overflow-hidden rounded-2xl',
+        'bg-muted relative aspect-[4/5] w-full max-h-[min(620px,68vh)] overflow-hidden rounded-2xl',
         !canHoverMagnify && onOpenLightbox && 'cursor-zoom-in',
         canHoverMagnify && 'cursor-crosshair',
         className

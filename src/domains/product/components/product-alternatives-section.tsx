@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { useGetProductsIdAlternatives } from '@/services/-products-{id}-alternatives-get';
 
 interface ProductAlternativesSectionProps {
@@ -52,7 +53,7 @@ export function ProductAlternativesSection({
         {alternatives.map((item) => (
           <Link
             key={item.id}
-            href={`/product/${item.slug ?? item.id}`}
+            href={getProductPath(item)}
             className='border-border/60 bg-card hover:border-accent/40 group flex gap-4 rounded-2xl border p-4 transition-colors'
           >
             <div className='bg-muted relative h-20 w-20 shrink-0 overflow-hidden rounded-xl'>

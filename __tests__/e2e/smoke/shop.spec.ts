@@ -23,11 +23,11 @@ test.describe('Shop @smoke', () => {
     await page.goto('/shop');
     await expect(page.getByRole('heading', { name: 'Shop All' })).toBeVisible();
 
-    const productLink = page.locator(`a[href="/product/${product.id}"]`).first();
+    const productLink = page.locator(`a[href="/product/${product.slug}"]`).first();
     await expect(productLink).toBeVisible({ timeout: 15_000 });
     await productLink.click();
 
-    await expect(page).toHaveURL(new RegExp(`/product/${product.id}$`));
+    await expect(page).toHaveURL(new RegExp(`/product/${product.slug}$`));
     await expect(page.getByRole('heading', { level: 1, name: product.name })).toBeVisible({
       timeout: 15_000
     });

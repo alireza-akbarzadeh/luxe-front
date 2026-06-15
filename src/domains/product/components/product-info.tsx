@@ -1,44 +1,63 @@
 'use client';
 
 import {
+  IconArrowsLeftRight,
   IconBasket,
-  IconCheck,
-  IconChevronRight,
   IconPackage,
-  IconScale,
+  IconRosetteDiscountCheck,
+  IconShare2,
+  IconShieldCheck,
   IconStar,
   IconStarFilled,
   IconTruck
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { LikeButton } from '@/components/buttons/like-button';
+import { useAuth } from '@/components/providers/auth-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 import useCompareController from '@/domains/compare/hooks/useCompareController';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
+import { useCartStore } from '~/src/store/card.store';
 
-import ProductColors from './product-colors';
 import ProductQuantity from './product-quantity';
-import { ProductSized } from './product-sized';
+import { ProductFeatureHighlights } from './product-feature-highlights';
 import { ProductStockNotify } from './product-stock-notify';
+import { ProductVariantAttributes } from './product-variant-attributes';
 
 interface ProductInfoProps {
   product: DtoProductWithLike;
   is_liked: boolean;
 }
 
+const trustItems = [
+  { icon: IconTruck, label: 'Free shipping over $150' },
+  { icon: IconRosetteDiscountCheck, label: 'Authenticity guaranteed' },
+  { icon: IconShieldCheck, label: '30-day easy returns' }
+] as const;
+
+const iconActionClassName =
+  'border-border/80 bg-background hover:bg-muted h-11 w-11 shrink-0 rounded-full border shadow-sm';
+
 export function ProductInfo({ product, is_liked }: ProductInfoProps) {
+  const { isAuthenticated } = useAuth();
   const { increment, decrement, itemCount, items, isLoading } = useCartController();
+  const openCart = useCartStore((state) => state.openCart);
   const { addItem, isInCompare, canAddMore } = useCompareController();
 
-  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]);
-  const [selectedSize, setSelectedSize] = useState<string | null>(product?.sizes?.[0] ?? null);
+  const [variantSelections, setVariantSelections] = useState<Record<string, string>>({});
 
   const cartItem = items.find((item) => item.product_id === product.id);
   const stock = product.stock ?? 0;
@@ -47,6 +66,13 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
   const isLowStock = stock > 0 && stock <= 5;
   const inCompare = product.id ? isInCompare(product.id) : false;
 
+  const selectedColor =
+    variantSelections['color'] ??
+    variantSelections['colors'] ??
+    variantSelections['colour'] ??
+    variantSelections['colours'];
+  const selectedSize = variantSelections['size'] ?? variantSelections['sizes'];
+
   const discountAmount =
     product.compare_at_price && product.compare_at_price > Number(product.price ?? 0)
       ? product.compare_at_price - Number(product.price)
@@ -54,7 +80,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
   const mapToBasket = (values: DtoProductWithLike): CartItemPayload => ({
     color: selectedColor,
-    size: selectedSize as string,
+    size: selectedSize,
     image_url: values.images?.[0],
     is_in_stock: Number(values.stock) > 0,
     price: values.price,
@@ -68,60 +94,90 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
     increment(mapToBasket(product));
   };
 
+  const handleCompare = () => {
+    if (!product.id) return;
+    if (!isAuthenticated) {
+      toast.message('Sign in to compare products');
+      return;
+    }
+    if (inCompare) {
+      toast.info('Already in your compare list');
+      return;
+    }
+    void addItem(product.id);
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product.name ?? 'Product', url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard');
+    } catch {
+      toast.error('Could not share product');
+    }
+  };
+
   return (
-    <div className='border-border/60 bg-card flex flex-col gap-6 rounded-2xl border p-6 shadow-sm sm:p-8 lg:sticky lg:top-28 lg:self-start'>
-      <div className='space-y-4'>
-        <div className='flex flex-wrap items-center gap-2'>
+    <div className='flex flex-col gap-7'>
+      <div className='space-y-5'>
+        <div className='text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] tracking-[0.18em] uppercase'>
           {product.category?.name && (
             <Link
               href={`/shop?categoryId=${product.category.id ?? ''}`}
-              className='text-muted-foreground hover:text-accent text-xs tracking-[0.2em] uppercase transition-colors'
+              className='hover:text-accent transition-colors'
             >
               {product.category.name}
             </Link>
           )}
-          {product.sku && (
-            <span className='text-muted-foreground text-xs'>SKU · {product.sku}</span>
-          )}
+          {product.sku && <span>SKU · {product.sku}</span>}
         </div>
 
-        <h1 className='font-display text-3xl leading-tight font-semibold md:text-4xl lg:text-[2.75rem]'>
-          {product.name}
-        </h1>
+        <div className='space-y-4'>
+          <h1 className='font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] font-semibold tracking-tight'>
+            {product.name}
+          </h1>
 
-        <div className='flex flex-wrap items-center gap-3'>
-          <div className='flex items-center gap-0.5'>
-            {Array.from({ length: 5 }).map((_, index) => {
-              const filled = index < Math.round(product.rating || 0);
-              const Icon = filled ? IconStarFilled : IconStar;
-              return (
-                <Icon
-                  key={index}
-                  className={cn(
-                    'h-4 w-4',
-                    filled ? 'fill-accent text-accent' : 'text-muted-foreground/35'
-                  )}
-                />
-              );
-            })}
+          <div className='flex flex-wrap items-center gap-3'>
+            <div className='flex items-center gap-0.5'>
+              {Array.from({ length: 5 }).map((_, index) => {
+                const filled = index < Math.round(product.rating || 0);
+                const Icon = filled ? IconStarFilled : IconStar;
+                return (
+                  <Icon
+                    key={index}
+                    className={cn(
+                      'h-4 w-4',
+                      filled ? 'fill-accent text-accent' : 'text-muted-foreground/30'
+                    )}
+                  />
+                );
+              })}
+            </div>
+            <p className='text-muted-foreground text-sm'>
+              <span className='text-foreground font-medium'>{product.rating?.toFixed(1)}</span>
+              {product.reviews_count ? ` · ${product.reviews_count} reviews` : null}
+            </p>
           </div>
-          <p className='text-muted-foreground text-sm'>
-            <span className='text-foreground font-medium'>{product.rating?.toFixed(1)}</span>
-            {product.reviews_count ? ` · ${product.reviews_count} reviews` : null}
-          </p>
         </div>
 
-        <div className='flex flex-wrap items-end gap-3'>
-          <span className='text-3xl font-semibold tracking-tight'>
+        <div className='flex flex-wrap items-end gap-x-4 gap-y-2'>
+          <span className='text-4xl font-semibold tracking-tight tabular-nums'>
             {formatPrice(product.price)}
           </span>
           {product.compare_at_price && product.compare_at_price > Number(product.price ?? 0) && (
             <>
-              <span className='text-muted-foreground text-lg line-through'>
+              <span className='text-muted-foreground pb-1 text-lg line-through tabular-nums'>
                 {formatPrice(product.compare_at_price)}
               </span>
               {discountAmount > 0 && (
-                <Badge variant='accentOutline' className='mb-0.5'>
+                <Badge
+                  variant='outline'
+                  className='border-accent/30 bg-accent/10 text-accent mb-1 rounded-full px-3 py-1 text-xs font-medium'
+                >
                   Save {formatPrice(discountAmount)}
                 </Badge>
               )}
@@ -131,42 +187,41 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
         <div className='flex flex-wrap gap-2'>
           {isOutOfStock ? (
-            <Badge variant='destructive'>Out of stock</Badge>
+            <Badge variant='destructive' className='rounded-full px-3 py-1'>
+              Out of stock
+            </Badge>
           ) : isLowStock ? (
-            <Badge variant='outline'>Only {stock} left</Badge>
+            <Badge variant='outline' className='rounded-full px-3 py-1'>
+              Only {stock} left
+            </Badge>
           ) : (
-            <Badge variant='secondary' className='gap-1'>
-              <IconPackage className='h-3 w-3' />
+            <Badge variant='secondary' className='gap-1.5 rounded-full px-3 py-1'>
+              <IconPackage className='h-3.5 w-3.5' />
               In stock
             </Badge>
           )}
-          {product.is_digital && <Badge variant='accentOutline'>Instant download</Badge>}
+          {product.is_digital && (
+            <Badge variant='outline' className='rounded-full px-3 py-1'>
+              Instant download
+            </Badge>
+          )}
         </div>
+
+        {product.description && (
+          <p className='text-muted-foreground max-w-xl text-sm leading-relaxed sm:text-[15px]'>
+            {product.description}
+          </p>
+        )}
       </div>
 
-      {product.description && (
-        <p className='text-muted-foreground line-clamp-4 text-sm leading-relaxed sm:text-base'>
-          {product.description}
-        </p>
-      )}
+      <ProductVariantAttributes
+        attributes={product.attributes}
+        colors={product.colors}
+        sizes={product.sizes}
+        onSelectionChange={setVariantSelections}
+      />
 
-      <Separator />
-
-      {product.colors && product.colors.length > 0 && (
-        <ProductColors
-          onSetSelected={setSelectedColor}
-          selected={selectedColor || ''}
-          colors={product.colors as string[]}
-        />
-      )}
-
-      {product.sizes && product.sizes.length > 0 && (
-        <ProductSized
-          onSetSelected={setSelectedSize}
-          selected={selectedSize}
-          sizes={product.sizes as string[]}
-        />
-      )}
+      <ProductFeatureHighlights attributes={product.attributes} />
 
       <ProductQuantity
         value={productQuantity}
@@ -175,57 +230,103 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         stock={stock}
       />
 
-      <div className='flex flex-col gap-3'>
-        <div className='flex gap-3'>
-          <Button
-            onClick={handleAddToCart}
-            size='lg'
-            className='bg-accent text-accent-foreground hover:bg-accent/90 h-12 flex-1 gap-2 rounded-full text-base shadow-sm'
-            disabled={isLoading || isOutOfStock}
-          >
-            <IconCheck className='h-4 w-4' />
-            {isLoading ? 'Adding…' : isOutOfStock ? 'Sold out' : 'Add to cart'}
-          </Button>
+      <div className='space-y-3 pt-1'>
+        <TooltipProvider delayDuration={200}>
+          <div className='flex flex-wrap items-center gap-2'>
+            <Button
+              onClick={handleAddToCart}
+              size='lg'
+              className='bg-accent text-accent-foreground hover:bg-accent/90 h-14 min-w-0 flex-1 basis-[12rem] rounded-full text-base font-medium shadow-none'
+              disabled={isLoading || isOutOfStock}
+            >
+              {isLoading ? 'Adding…' : isOutOfStock ? 'Sold out' : 'Add to cart'}
+            </Button>
 
-          <LikeButton
-            productName={product.name as string}
-            isLiked={is_liked}
-            productId={product.id as number}
-            className='border-input bg-background hover:bg-muted h-12 w-12 shrink-0 rounded-full border'
-          />
-        </div>
+            <div className='flex shrink-0 items-center gap-1.5'>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='icon'
+                    className={iconActionClassName}
+                    onClick={() => void handleShare()}
+                    aria-label='Share product'
+                  >
+                    <IconShare2 className='h-4 w-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side='top'>Share product</TooltipContent>
+              </Tooltip>
 
-        <div className='flex gap-3'>
-          <Button asChild size='lg' variant='outline' className='h-11 flex-1 rounded-full'>
-            <Link href='/checkout'>
-              Buy now
-              <IconChevronRight className='h-4 w-4' />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='icon'
+                    className={cn(iconActionClassName, inCompare && 'bg-muted')}
+                    disabled={!product.id || inCompare || !canAddMore}
+                    onClick={handleCompare}
+                    aria-label={inCompare ? 'In compare list' : 'Add to compare'}
+                  >
+                    <IconArrowsLeftRight className='h-4 w-4' />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side='top'>
+                  {inCompare ? 'In compare list' : 'Add to compare'}
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='icon'
+                    className={cn(iconActionClassName, 'relative')}
+                    onClick={openCart}
+                    aria-label={`View cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
+                  >
+                    <IconBasket className='h-4 w-4' />
+                    {itemCount > 0 ? (
+                      <span className='bg-gold text-gold-foreground ring-background absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-0.5 text-[10px] font-bold ring-2'>
+                        {itemCount > 99 ? '99+' : itemCount}
+                      </span>
+                    ) : null}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side='top'>
+                  View cart{itemCount > 0 ? ` (${itemCount})` : ''}
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className='inline-flex'>
+                    <LikeButton
+                      productName={product.name as string}
+                      isLiked={is_liked}
+                      productId={product.id as number}
+                      className={iconActionClassName}
+                    />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent side='top'>
+                  {is_liked ? 'Remove from wishlist' : 'Add to wishlist'}
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </div>
+        </TooltipProvider>
+
+        {inCompare && (
+          <p className='text-right'>
+            <Link href='/compare' className='text-accent hover:text-accent/80 text-sm font-medium'>
+              Open compare list
             </Link>
-          </Button>
-          <Button
-            type='button'
-            size='lg'
-            variant='outline'
-            className='h-11 flex-1 gap-2 rounded-full'
-            disabled={!product.id || inCompare || !canAddMore}
-            onClick={() => product.id && addItem(product.id)}
-          >
-            <IconScale className='h-4 w-4' />
-            {inCompare ? 'In compare' : 'Compare'}
-          </Button>
-        </div>
-
-        <Button
-          asChild
-          size='lg'
-          variant='ghost'
-          className='h-11 rounded-full border border-dashed'
-        >
-          <Link href='/cart' className='flex items-center justify-center gap-2'>
-            <IconBasket className='size-5' />
-            View cart ({itemCount})
-          </Link>
-        </Button>
+          </p>
+        )}
 
         {isOutOfStock && product.id && product.slug && (
           <ProductStockNotify
@@ -236,20 +337,16 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         )}
       </div>
 
-      <div className='border-border/60 bg-muted/30 grid grid-cols-2 gap-3 rounded-xl border p-4 sm:grid-cols-3'>
-        {[
-          [IconTruck, 'Free shipping over $150'],
-          [IconPackage, 'Authenticity guaranteed'],
-          [IconCheck, '30-day easy returns']
-        ].map(([Icon, label]) => {
-          const TrustIcon = Icon as typeof IconTruck;
-          return (
-            <div key={label as string} className='flex items-start gap-2.5'>
-              <TrustIcon className='text-accent mt-0.5 h-4 w-4 shrink-0' />
-              <p className='text-muted-foreground text-xs leading-snug'>{label as string}</p>
+      <div className='border-border/60 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between'>
+        {trustItems.map(({ icon: Icon, label }, index) => (
+          <div key={label} className='flex items-center gap-4'>
+            {index > 0 && <div className='bg-border hidden h-8 w-px sm:block' />}
+            <div className='flex items-center gap-2.5'>
+              <Icon className='text-accent h-4 w-4 shrink-0' />
+              <p className='text-muted-foreground text-xs leading-snug sm:max-w-[9rem]'>{label}</p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

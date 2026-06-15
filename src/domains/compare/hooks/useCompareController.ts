@@ -2,39 +2,81 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { getGetCompareQueryKey,useGetCompare } from '~/src/services/-compare-get';
-import { postCompare } from '~/src/services/-compare-post';
-import { usePutCompare } from '~/src/services/-compare-put';
+import { useAuth } from '@/components/providers/auth-provider';
+import { getProductsId } from '@/services/-products-{id}-get';
+import { getGetCompareQueryKey, useGetCompare } from '@/services/-compare-get';
+import { postCompare } from '@/services/-compare-post';
+import type { DtoCompareProductResponse } from '@/services/-compare-post.schemas';
+import { usePutCompare } from '@/services/-compare-put';
 
+function toCompareProduct(
+  product: NonNullable<Awaited<ReturnType<typeof getProductsId>>['data']>['product']
+): DtoCompareProductResponse | null {
+  if (!product) return null;
+
+  const compareAt = product.compare_at_price;
+  const price = product.price ?? 0;
+  const discount =
+    compareAt && compareAt > price ? ((compareAt - price) / compareAt) * 100 : 0;
+
+  return {
+    ...product,
+    store_name: product.store?.name,
+    store_slug: product.store?.slug,
+    store_logo: product.store?.logo_url,
+    shipping_info: product.store?.shipping_info,
+    return_policy: product.store?.return_policy,
+    discount_percent: discount
+  };
+}
+
+async function fetchCompareProducts(productIds: number[]) {
+  if (productIds.length >= 2) {
+    return postCompare({ product_ids: productIds });
+  }
+
+  const responses = await Promise.all(productIds.map((id) => getProductsId(String(id))));
+  const products = responses
+    .map((response) => toCompareProduct(response.data?.product))
+    .filter((product): product is DtoCompareProductResponse => product != null);
+
+  return { data: products };
+}
+
+/** Client-side compare list backed by Orval compare APIs. */
 export default function useCompareController() {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAuth();
   const [highlightDiffs, setHighlightDiffs] = useState(true);
 
-  // 1. Get compare list (IDs)
-  const { data: compareData, isLoading: isLoadingIds, refetch } = useGetCompare();
-  const productIds = compareData?.data?.product_ids || [];
+  const { data: compareData, isLoading: isLoadingIds } = useGetCompare(undefined, {
+    query: { enabled: isAuthenticated }
+  });
+  const productIds = compareData?.data?.product_ids ?? [];
 
-  // 2. Fetch product details (POST as query)
   const { data: productsData, isLoading: isLoadingProducts } = useQuery({
     queryKey: ['compare-products', productIds],
-    queryFn: () => postCompare({ product_ids: productIds }),
-    enabled: productIds.length >= 2
+    queryFn: () => fetchCompareProducts(productIds),
+    enabled: isAuthenticated && productIds.length > 0
   });
-  const compareProducts = productsData?.data || [];
+  const compareProducts = productsData?.data ?? [];
 
-  // 3. Update mutation (PUT)
   const putCompare = usePutCompare();
   const updateList = async (newIds: number[]) => {
     try {
       await putCompare.mutateAsync({ data: { product_ids: newIds } });
       await queryClient.invalidateQueries({ queryKey: getGetCompareQueryKey() });
-      toast.success('Compare list updated');
     } catch {
       toast.error('Failed to update compare list');
+      throw new Error('compare sync failed');
     }
   };
 
   const addItem = async (productId: number) => {
+    if (!isAuthenticated) {
+      toast.message('Sign in to compare products');
+      return;
+    }
     if (productIds.length >= 4) {
       toast.warning('You can only compare up to 4 products');
       return;
@@ -43,15 +85,30 @@ export default function useCompareController() {
       toast.info('Product already in compare list');
       return;
     }
-    await updateList([...productIds, productId]);
+    try {
+      await updateList([...productIds, productId]);
+      toast.success('Added to compare');
+    } catch {
+      /* toast handled in updateList */
+    }
   };
 
   const removeItem = async (productId: number) => {
-    await updateList(productIds.filter((id) => id !== productId));
+    try {
+      await updateList(productIds.filter((id) => id !== productId));
+      toast.success('Removed from compare');
+    } catch {
+      /* toast handled in updateList */
+    }
   };
 
   const clearAll = async () => {
-    await updateList([]);
+    try {
+      await updateList([]);
+      toast.success('Compare list cleared');
+    } catch {
+      /* toast handled in updateList */
+    }
   };
 
   const isInCompare = (id: number) => productIds.includes(id);
@@ -68,6 +125,6 @@ export default function useCompareController() {
     highlightDiffs,
     setHighlightDiffs,
     isLoading: isLoadingIds || isLoadingProducts,
-    refetch
+    isAuthenticated
   };
 }

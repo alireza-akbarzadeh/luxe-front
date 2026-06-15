@@ -10,6 +10,7 @@ import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -36,7 +37,7 @@ function mapProductToCartPayload(product: DtoProductWithLike): CartItemPayload {
 export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
   const { increment, isLoading, items: cartItems } = useCartController();
 
-  const productHref = `/product/${product.id}`;
+  const productHref = getProductPath(product);
   const primaryImage = product.images?.[0] || '/placeholder.png';
   const isOutOfStock = (product.stock ?? 0) <= 0;
   const cartItem = cartItems?.find((item) => item.product_id === product.id);

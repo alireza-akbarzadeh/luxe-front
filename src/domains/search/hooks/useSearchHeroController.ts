@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useDebounce } from '@/hooks/useDebounce';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { useGetCategories } from '@/services/-categories-get';
 import { useGetSearchSuggestions } from '@/services/-search-suggestions-get';
 import type { DtoSuggestionItem } from '@/services/-search-suggestions-get.schemas';
@@ -143,7 +144,7 @@ export function useSearchHeroController(options: UseSearchHeroControllerOptions 
   const handleSuggestionClick = (suggestion: DtoSuggestionItem) => {
     if (suggestion.type === 'product') {
       if (closeOnNavigate) closeSearchSheet();
-      window.open(`/product/${suggestion.id}`, '_blank');
+      window.open(getProductPath({ slug: suggestion.slug, id: suggestion.id }), '_blank');
       return;
     }
 

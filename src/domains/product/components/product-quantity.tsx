@@ -1,8 +1,11 @@
 'use client';
+
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 
+import { cn } from '@/lib/utils';
+
 interface ProductQuantityProps {
-  value: number; // current cart count for this product
+  value: number;
   onIncrement: () => void;
   onDecrement: () => void;
   stock: number;
@@ -13,45 +16,47 @@ export default function ProductQuantity(props: ProductQuantityProps) {
   const isOutOfStock = stock <= 0;
   const isMaxReached = value >= stock;
 
-  const stockMessage = () => {
-    if (isOutOfStock) return 'Out of stock';
-    if (stock === 1) return 'Only 1 left in stock';
-    return `Only ${stock} left in stock`;
-  };
+  if (isOutOfStock) {
+    return (
+      <div className='rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive'>
+        This item is currently unavailable.
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <p className='mb-3 text-sm font-medium'>Quantity</p>
+    <div className='flex flex-wrap items-center justify-between gap-4'>
+      <div>
+        <p className='mb-2.5 text-sm font-medium'>Quantity</p>
+        <div className='border-border/80 bg-background inline-flex items-center rounded-full border shadow-sm'>
+          <button
+            type='button'
+            onClick={onDecrement}
+            disabled={value <= 0}
+            className='text-muted-foreground hover:text-foreground rounded-l-full px-4 py-3 transition disabled:opacity-40'
+            aria-label='Decrease quantity'
+          >
+            <IconMinus className='h-4 w-4' />
+          </button>
+          <span className='min-w-10 text-center text-sm font-semibold tabular-nums'>{value}</span>
+          <button
+            type='button'
+            onClick={onIncrement}
+            disabled={isMaxReached}
+            className={cn(
+              'rounded-r-full px-4 py-3 transition disabled:opacity-40',
+              'text-muted-foreground hover:text-foreground'
+            )}
+            aria-label='Increase quantity'
+          >
+            <IconPlus className='h-4 w-4' />
+          </button>
+        </div>
+      </div>
 
-      {isOutOfStock ? (
-        <div className='rounded-md border border-red-200 bg-red-50 p-3 text-center text-sm text-red-700'>
-          <p className='font-medium'>Out of stock</p>
-          <p className='text-xs'>This product is currently not available.</p>
-        </div>
-      ) : (
-        <div className='flex items-center gap-4'>
-          <div className='border-border flex items-center rounded-full border'>
-            <button
-              onClick={onDecrement}
-              disabled={value <= 0}
-              className='hover:bg-secondary rounded-l-full p-3 disabled:opacity-50'
-              aria-label='Decrease quantity'
-            >
-              <IconMinus className='h-4 w-4' />
-            </button>
-            <span className='w-10 text-center text-sm font-medium'>{value}</span>
-            <button
-              onClick={onIncrement}
-              disabled={isMaxReached}
-              className='hover:bg-secondary rounded-r-full p-3 disabled:opacity-50'
-              aria-label='Increase quantity'
-            >
-              <IconPlus className='h-4 w-4' />
-            </button>
-          </div>
-          <p className='text-muted-foreground text-xs'>{stockMessage()}</p>
-        </div>
-      )}
+      <p className='text-muted-foreground text-xs sm:text-sm'>
+        {stock <= 5 ? `Only ${stock} left in stock` : `${stock} available`}
+      </p>
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   resolveProducts,
   sectionContainerClass
 } from '../lib/home-utils';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 
 const containerVariants = {
   hidden: {},
@@ -174,7 +175,7 @@ export function HeroSection() {
                 {spotlight.slice(1, 3).map((product, index) => (
                   <Link
                     key={product?.id ?? index}
-                    href={product?.id ? `/product/${product.id}` : '/shop'}
+                    href={product ? getProductPath(product) : '/shop'}
                     className='group bg-card border-gold/15 hover:border-gold/40 relative aspect-square overflow-hidden rounded-2xl border shadow-lg transition-colors sm:rounded-3xl'
                   >
                     <Image

@@ -16,6 +16,7 @@ import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -99,7 +100,7 @@ export function ProductCard({
   const isCompact = size === 'compact';
   const { increment, isLoading, items: cartItems } = useCartController();
 
-  const productHref = `/product/${product.id}`;
+  const productHref = getProductPath(product);
   const primaryImage = product.images?.[0] || '/placeholder.png';
   const secondaryImage = product.images?.[1];
   const stockStatus = getStockStatus(product.stock);
