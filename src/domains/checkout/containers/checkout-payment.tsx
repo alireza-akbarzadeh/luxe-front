@@ -84,11 +84,15 @@ export const CheckoutPayment = withForm({
       >
         <div>
           <h2 className='mb-6 text-2xl font-bold'>Payment Details</h2>
-          <div className='bg-muted/50 border-border mb-6 flex items-center gap-3 rounded-xl border p-4'>
-            <IconLock className='text-muted-foreground h-5 w-5' />
+          <div className='bg-muted/50 border-border mb-4 flex items-center gap-3 rounded-xl border p-4'>
+            <IconLock className='text-muted-foreground h-5 w-5 shrink-0' />
             <p className='text-muted-foreground text-sm'>
               Your payment information is encrypted and secure
             </p>
+          </div>
+          <div className='border-accent/30 bg-accent/5 text-muted-foreground mb-6 rounded-xl border px-4 py-3 text-sm'>
+            Demo checkout: card details are validated locally and processed through our checkout API.
+            No real charge is made in development environments.
           </div>
 
           {/* Payment Method Selector */}

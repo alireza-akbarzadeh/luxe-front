@@ -137,6 +137,12 @@ export function HeroSection() {
                 </div>
               ))}
             </motion.dl>
+            <motion.p
+              variants={itemVariants}
+              className='text-muted-foreground mt-3 text-[11px] tracking-wide uppercase'
+            >
+              Illustrative marketplace highlights
+            </motion.p>
           </motion.div>
 
           <motion.div

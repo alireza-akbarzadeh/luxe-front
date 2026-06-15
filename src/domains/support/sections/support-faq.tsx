@@ -9,7 +9,7 @@ const groups = [
     items: [
       {
         q: 'How do I place an order?',
-        a: 'Browse a store, add items to your bag and check out. You can pay as a guest or sign in for faster checkout, saved addresses and full order history.'
+        a: 'Create a free LUXE account, browse a store, add items to your bag, and check out. Sign-in is required so we can save your cart, addresses, and order history securely.'
       },
       {
         q: 'Can I change or cancel an order after placing it?',
@@ -17,7 +17,7 @@ const groups = [
       },
       {
         q: 'How do I create an account?',
-        a: 'Click Sign In at the top right and choose Create Account. You can also sign in with Apple, Google or email — no password required for the first time.'
+        a: 'Click Sign In at the top right and choose Create Account. Register with your email and password to access cart, checkout, wishlist, and order tracking.'
       }
     ]
   },
@@ -53,7 +53,7 @@ const groups = [
       },
       {
         q: 'Can I track my order?',
-        a: 'Every order includes end-to-end tracking. You will receive a tracking link by email as soon as the vendor hands the parcel to the carrier.'
+        a: 'Every order includes end-to-end tracking. Signed-in members can open Account → Orders or use the tracking link from your confirmation email.'
       }
     ]
   },
@@ -72,6 +72,7 @@ const groups = [
     ]
   }
 ] as const;
+
 export function SupportFaq() {
   return (
     <section className='pb-24'>

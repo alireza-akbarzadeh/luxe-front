@@ -37,9 +37,16 @@ export function SupportContactForm() {
     },
     onSubmit: async ({ value }) => {
       setStatus('loading');
-      // Simulate API call
-      await new Promise((r) => setTimeout(r, 900));
-      console.log('Form submitted:', value);
+
+      const subject = encodeURIComponent(
+        `[Luxe Contact] ${value.subject}${value.orderId ? ` · Order ${value.orderId}` : ''}`
+      );
+      const body = encodeURIComponent(
+        `Name: ${value.name || 'Not provided'}\nEmail: ${value.email}\n\n${value.message}`
+      );
+
+      window.location.href = `mailto:concierge@luxe.com?subject=${subject}&body=${body}`;
+
       setStatus('success');
       form.reset();
       setTimeout(() => setStatus('idle'), 3500);
@@ -104,8 +111,8 @@ export function SupportContactForm() {
             {status === 'error'
               ? 'Please fill in your email and message.'
               : status === 'success'
-                ? 'Thanks — we’ll reply within 4 hours.'
-                : 'We typically reply within 4 hours.'}
+                ? 'Your email app should open — send the message to reach our team.'
+                : 'We typically reply within 4 hours. Submitting opens your email app.'}
           </p>
           <form.Subscribe
             selector={(state) => [state.isSubmitting]}

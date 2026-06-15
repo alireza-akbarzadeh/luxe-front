@@ -15,6 +15,24 @@ export function CollectionBanner() {
   return (
     <section className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
+        <div className='mb-8 flex flex-wrap items-end justify-between gap-4'>
+          <div>
+            <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
+              Collections
+            </p>
+            <h2 className='font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl'>
+              Curated edits
+            </h2>
+          </div>
+          <Link
+            href='/collections'
+            className='text-accent inline-flex items-center gap-1 text-sm font-medium hover:underline'
+          >
+            View all collections
+            <IconArrowRight className='h-4 w-4' />
+          </Link>
+        </div>
+
         <div className='grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6'>
           {COLLECTION_BANNERS.map((banner, index) => (
             <motion.article

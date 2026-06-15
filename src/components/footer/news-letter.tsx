@@ -1,5 +1,6 @@
 'use client';
 import { IconArrowRight, IconCheck, IconMail } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -8,14 +9,18 @@ export function Newsletter() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setStatus('error');
       return;
     }
     setStatus('loading');
-    await new Promise((r) => setTimeout(r, 900));
+
+    const subject = encodeURIComponent('Luxe Edit newsletter signup');
+    const body = encodeURIComponent(`Please add me to the Luxe Edit newsletter:\n\n${email}`);
+    window.location.href = `mailto:concierge@luxe.com?subject=${subject}&body=${body}`;
+
     setStatus('success');
     setEmail('');
     setTimeout(() => setStatus('idle'), 3500);
@@ -95,8 +100,16 @@ export function Newsletter() {
             {status === 'error'
               ? 'Please enter a valid email address.'
               : status === 'success'
-                ? 'Welcome to the Luxe Edit. Check your inbox.'
-                : 'By subscribing you agree to our Privacy Policy. Unsubscribe anytime.'}
+                ? 'Your email app should open — send the message to complete signup.'
+                : (
+                    <>
+                      Opens your email app to subscribe. Or{' '}
+                      <Link href='/register' className='text-accent hover:underline'>
+                        create an account
+                      </Link>{' '}
+                      for order updates.
+                    </>
+                  )}
           </p>
         </form>
       </div>

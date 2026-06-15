@@ -4,18 +4,21 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 
 import { Empty } from '@/components/empty';
+import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { AnalyticalStats } from '~/src/domains/wishlist/components/analytical-stats';
 import InteractiveActionToolbar from '~/src/domains/wishlist/components/interactive-action-toolbar';
 import { RowWishlistItem } from '~/src/domains/wishlist/components/row-wishlist-item';
 import { StackWishlistItem } from '~/src/domains/wishlist/components/stack-wishlist-item';
 import { WishlistFooter } from '~/src/domains/wishlist/components/wishlist-footer';
+import { WishlistGuestState } from '~/src/domains/wishlist/components/wishlist-guest-state';
 import { useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
 import { useGetAccountWishlist } from '~/src/services/-account-wishlist-get';
 
 import { WishlistHeader } from './components/wishlist-header';
 
 export function WishlistDomain() {
+  const { isAuthenticated } = useAuth();
   const { selectedItems, sortBy, viewMode } = useWishlistStore();
 
   const {
@@ -23,11 +26,18 @@ export function WishlistDomain() {
     isLoading,
     isError,
     error
-  } = useGetAccountWishlist({
-    limit: 50,
-    offset: 0,
-    sort: sortBy
-  });
+  } = useGetAccountWishlist(
+    {
+      limit: 50,
+      offset: 0,
+      sort: sortBy
+    },
+    { query: { enabled: isAuthenticated } }
+  );
+
+  if (!isAuthenticated) {
+    return <WishlistGuestState />;
+  }
 
   const items = response?.data?.items ?? [];
   const totalItems = response?.data?.total ?? 0;

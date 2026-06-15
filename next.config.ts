@@ -23,6 +23,35 @@ const config = {
       }
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/stores',
+        destination: '/store',
+        permanent: true
+      },
+      {
+        source: '/stores/:slug',
+        destination: '/store/:slug',
+        permanent: true
+      },
+      {
+        source: '/sell',
+        destination: '/contact',
+        permanent: false
+      },
+      {
+        source: '/vendor/login',
+        destination: '/login?callbackUrl=%2Fdashboard',
+        permanent: false
+      },
+      {
+        source: '/products',
+        destination: '/shop',
+        permanent: true
+      }
+    ];
+  },
   images: {
     dangerouslyAllowLocalIP: true,
     remotePatterns: [

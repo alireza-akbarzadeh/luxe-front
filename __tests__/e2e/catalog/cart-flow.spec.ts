@@ -7,10 +7,10 @@ test.describe('Checkout route guard @smoke', () => {
     await mockCatalogApi(page);
   });
 
-  test('checkout page loads without server error for guests', async ({ page }) => {
+  test('guest checkout redirects to login with callback', async ({ page }) => {
     await page.goto('/checkout');
 
-    await expect(page.locator('body')).toBeVisible();
-    await expect(page.getByRole('heading').first()).toBeVisible({ timeout: 15_000 });
+    await expect(page).toHaveURL(/\/login\?callbackUrl=%2Fcheckout/, { timeout: 15_000 });
+    await expect(page.getByRole('heading', { name: /sign in/i })).toBeVisible();
   });
 });

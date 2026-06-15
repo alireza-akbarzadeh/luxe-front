@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 
 export const navUtilityLinks = [
-  { label: 'Stores', href: '/store/luxe-accessories' },
+  { label: 'Stores', href: '/store' },
   { label: 'Wishlist', href: '/wishlist' },
   { label: 'My Account', href: '/account' }
 ];
@@ -111,7 +111,7 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
           </Link>
         ))}
         <Link
-          href='/products'
+          href='/shop'
           onClick={onNavigateAction}
           className='text-accent inline-flex items-center gap-1 py-2 text-sm font-medium'
         >

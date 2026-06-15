@@ -9,6 +9,7 @@ export const AUTH_ROUTES = {
     '/profile',
     '/wishlist',
     '/checkout',
+    '/compare',
     '/dashboard',
     '/order-tracking'
   ],

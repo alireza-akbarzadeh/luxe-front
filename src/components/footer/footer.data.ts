@@ -33,12 +33,13 @@ const trustBadges = [
     subtitle: 'Real humans, always'
   }
 ] as const;
+
 const footerSections = [
   {
     title: 'Shop',
     links: [
       { name: 'New Arrivals', href: '/shop?sortBy=newest&showOnlyNew=true', badge: 'New' },
-      { name: 'Best Sellers', href: '/store?sort=top_rated' },
+      { name: 'Best Sellers', href: '/shop?sortBy=rating_desc' },
       { name: 'Trending Now', href: '/shop?sortBy=trending' },
       { name: 'Sale', href: '/shop?showOnlySale=true', badge: '-30%' },
       { name: 'Gift Cards', href: '/gift-cards' },
@@ -48,11 +49,11 @@ const footerSections = [
   {
     title: 'Stores',
     links: [
-      { name: 'Discover Stores', href: '/stores' },
-      { name: 'Featured Brands', href: '/stores?featured=true' },
-      { name: 'Verified Vendors', href: '/stores?verified=true' },
-      { name: 'Open a Store', href: '/sell' },
-      { name: 'Vendor Login', href: '/vendor/login' }
+      { name: 'Discover Stores', href: '/store' },
+      { name: 'Top Rated', href: '/store?sort=top_rated' },
+      { name: 'Verified Vendors', href: '/store?verified=true' },
+      { name: 'Partner With Us', href: '/contact' },
+      { name: 'Vendor Login', href: '/login?callbackUrl=%2Fdashboard' }
     ]
   },
   {
@@ -69,15 +70,14 @@ const footerSections = [
   {
     title: 'Company',
     links: [
-      { name: 'About Luxe', href: '/about' },
-      { name: 'Sustainability', href: '/sustainability' },
-      { name: 'Press', href: '/press' },
-      { name: 'Careers', href: '/careers', badge: 'Hiring' },
-      { name: 'Affiliates', href: '/affiliates' },
-      { name: 'Investors', href: '/investors' }
+      { name: 'Help Center', href: '/help' },
+      { name: 'Contact Us', href: '/contact' },
+      { name: 'Shop Luxe', href: '/shop' },
+      { name: 'Our Stores', href: '/store' }
     ]
   }
 ] as const;
+
 const socialLinks = [
   { name: 'Instagram', icon: IconBrandInstagram, href: 'https://instagram.com' },
   { name: 'TikTok', icon: IconBrandTiktok, href: 'https://tiktok.com' },
@@ -86,6 +86,7 @@ const socialLinks = [
   { name: 'YouTube', icon: IconBrandYoutube, href: 'https://youtube.com' },
   { name: 'Facebook', icon: IconBrandFacebook, href: 'https://facebook.com' }
 ] as const;
+
 const paymentMethods = [
   'Visa',
   'Mastercard',
@@ -96,12 +97,12 @@ const paymentMethods = [
   'Klarna',
   'Crypto'
 ] as const;
+
 const legalLinks = [
   { name: 'Privacy Policy', href: '/legal/privacy' },
   { name: 'Terms of Service', href: '/legal/terms' },
-  { name: 'Cookie Settings', href: '/legal/cookies' },
-  { name: 'Accessibility', href: '/legal/accessibility' },
-  { name: 'Sitemap', href: '/sitemap.xml' }
+  { name: 'Cookie Policy', href: '/legal/cookies' },
+  { name: 'Accessibility', href: '/legal/accessibility' }
 ] as const;
 
 export { footerSections, legalLinks, paymentMethods, socialLinks, trustBadges };

@@ -5,7 +5,7 @@ import { copyToClipboard } from '@/lib/utils';
 
 export function useSharing(slug: string, name: string) {
   const share = async () => {
-    const url = `${window.location.origin}/stores/${slug}`;
+    const url = `${window.location.origin}/store/${slug}`;
     if (navigator.share) {
       try {
         await navigator.share({

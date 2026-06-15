@@ -15,7 +15,7 @@ export function TestimonialsSection() {
         <SectionHeader
           eyebrow='Customer stories'
           title='Loved by thousands'
-          description='Real reviews from shoppers who value craftsmanship, service, and a seamless experience.'
+          description='Editorial highlights from our community. Live product reviews appear on each product page.'
         />
 
         <div className='custom-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-5 lg:overflow-visible lg:px-0 xl:grid-cols-4'>

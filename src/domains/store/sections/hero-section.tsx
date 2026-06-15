@@ -146,7 +146,7 @@ export function StoreHeroSection() {
             Follow stores for updates
           </span>
           <Link
-            href='/products'
+            href='/shop'
             className='text-gold-strong dark:text-gold ml-auto inline-flex items-center gap-1 text-sm font-medium hover:underline'
           >
             Shop all products

@@ -78,7 +78,7 @@ export function FeaturedProducts() {
 
         <div className='flex-center mt-12 sm:mt-14'>
           <Button variant='outline' size='lg' className='rounded-full px-8' asChild>
-            <Link href='/products'>View all products</Link>
+            <Link href='/shop'>View all products</Link>
           </Button>
         </div>
       </div>

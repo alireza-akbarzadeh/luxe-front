@@ -84,7 +84,7 @@ export function useCheckoutSubmit() {
       setIsRedirecting(true);
       toast.success('Order placed successfully!');
 
-      router.replace(`/order-tracking/${orderId}?confirmed=1`);
+      router.replace(`/order-confirmed/${orderId}`);
 
       void clearCart().catch(() => {
         // Cart is already cleared server-side during checkout.

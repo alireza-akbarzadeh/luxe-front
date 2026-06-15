@@ -77,26 +77,10 @@ export const MOCK_CATEGORIES: ModelsCategory[] = [
   }
 ];
 
-export const COLLECTION_BANNERS = [
-  {
-    id: 'essentials',
-    eyebrow: 'Spring edit',
-    title: 'Modern Essentials',
-    description: 'Refined staples built for everyday luxury — limited seasonal palette.',
-    href: '/shop?sortBy=newest',
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e6155d?w=1200&h=1400&fit=crop',
-    cta: 'Shop the edit'
-  },
-  {
-    id: 'atelier',
-    eyebrow: 'Crafted to last',
-    title: 'The Atelier Collection',
-    description: 'Hand-finished pieces from independent makers worldwide.',
-    href: '/shop?sortBy=rating',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=1400&fit=crop',
-    cta: 'Explore collection'
-  }
-] as const;
+import { CURATED_COLLECTIONS } from '@/domains/collections/lib/collections.config';
+
+/** @deprecated Use CURATED_COLLECTIONS from collections domain */
+export const COLLECTION_BANNERS = CURATED_COLLECTIONS.slice(0, 2);
 
 export const features = [
   {

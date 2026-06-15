@@ -301,13 +301,25 @@ export function RegisterDomain() {
             </div>
           </div>
 
-          {/* Social */}
+          {/* Social — coming soon */}
           <div className='grid grid-cols-2 gap-4'>
-            <Button variant='outline' className='h-12'>
+            <Button
+              type='button'
+              variant='outline'
+              className='h-12'
+              disabled
+              onClick={() => toast.message('Social sign-up is coming soon — use email for now')}
+            >
               Google
             </Button>
 
-            <Button variant='outline' className='h-12'>
+            <Button
+              type='button'
+              variant='outline'
+              className='h-12'
+              disabled
+              onClick={() => toast.message('Social sign-up is coming soon — use email for now')}
+            >
               GitHub
             </Button>
           </div>
