@@ -14,6 +14,7 @@ import { CartSheet } from '../cart/cart-sheet';
 import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
 import { NavbarActionButton } from './navbar-action-button';
+import { NotificationButton } from './notification-button';
 import { UserProfile } from './user/user-profile';
 import { WishlistButton } from './wishlist-button';
 
@@ -44,8 +45,8 @@ export function Navbar() {
         }`}
       >
         <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <div className='flex h-16 items-center gap-4 lg:h-20'>
-            <Link href='/' className='flex shrink-0 items-center'>
+          <div className='flex h-16 items-center gap-3 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-4 xl:gap-x-6'>
+            <Link href='/' className='relative z-20 flex shrink-0 items-center'>
               <motion.span
                 className='font-display text-2xl font-semibold tracking-tight'
                 whileHover={{ scale: 1.02 }}
@@ -54,11 +55,11 @@ export function Navbar() {
               </motion.span>
             </Link>
 
-            <div className='hidden flex-1 justify-center md:flex'>
+            <div className='hidden min-w-0 lg:block'>
               <DesktopNav navMenus={navMenus} />
             </div>
 
-            <div className='ml-auto flex items-center gap-0.5 sm:gap-1'>
+            <div className='ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
               <NavbarActionButton
                 className='lg:hidden'
                 aria-label='Search'
@@ -75,6 +76,8 @@ export function Navbar() {
 
               <WishlistButton />
 
+              <NotificationButton />
+
               <CartButton />
 
               <span
@@ -85,7 +88,7 @@ export function Navbar() {
               <UserProfile />
 
               <NavbarActionButton
-                className='md:hidden'
+                className='lg:hidden'
                 aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -107,7 +110,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className='border-border bg-background/95 border-b backdrop-blur-xl md:hidden'
+              className='border-border bg-background/95 border-b backdrop-blur-xl lg:hidden'
             >
               <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6'>
                 <MobileNav

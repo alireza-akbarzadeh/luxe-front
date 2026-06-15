@@ -16,6 +16,7 @@ import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 import { navDiscoverLinks } from './nav-supplement';
 
 export const navUtilityLinks = [
+  { label: 'Notifications', href: '/notifications' },
   { label: 'Stores', href: '/store' },
   { label: 'Wishlist', href: '/wishlist' },
   { label: 'My Account', href: '/account' }

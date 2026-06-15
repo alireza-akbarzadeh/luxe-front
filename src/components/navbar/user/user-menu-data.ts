@@ -45,9 +45,10 @@ export const profileMenuItems = [
     icon: IconLayersIntersect2
   },
   {
-    type: 'button',
+    type: 'link',
+    href: '/notifications',
     title: 'Notifications',
-    subtitle: 'Manage alerts & updates',
+    subtitle: 'Order and shipping alerts',
     icon: IconBell
   },
   {

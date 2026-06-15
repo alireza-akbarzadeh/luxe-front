@@ -10,6 +10,7 @@ export const AUTH_ROUTES = {
     '/wishlist',
     '/checkout',
     '/compare',
+    '/notifications',
     '/dashboard',
     '/order-tracking'
   ],

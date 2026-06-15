@@ -18,28 +18,30 @@ import { GlowBadge } from '~/src/components/badges/glow-badge';
 import { navSupplementLinks } from './nav-supplement';
 
 const triggerClassName = cn(
-  'bg-transparent h-auto px-0 py-0 text-sm font-medium',
+  'bg-transparent h-auto px-0 py-0 text-[13px] font-medium xl:text-sm',
   'text-muted-foreground hover:text-foreground hover:bg-transparent',
   'focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-foreground'
 );
+
 interface DesktopNavProps {
   navMenus: DtoNavItemResponse[] | undefined;
 }
 
 export function DesktopNav(props: DesktopNavProps) {
   const { navMenus } = props;
+
   return (
-    <NavigationMenu className='max-w-none flex-none justify-start'>
-      <NavigationMenuList className='gap-6 space-x-0'>
+    <NavigationMenu className='relative z-10 w-full max-w-full min-w-0 justify-center'>
+      <NavigationMenuList className='w-full min-w-0 flex-nowrap justify-center gap-3 space-x-0 xl:gap-4 2xl:gap-5'>
         {navMenus?.map((item) =>
           item.type === 'link' ? (
-            <NavigationMenuItem key={item.label}>
+            <NavigationMenuItem key={item.label} className='shrink-0'>
               <NavigationMenuLink asChild>
                 <Link
                   href={item.href as string}
                   className={cn(
                     triggerClassName,
-                    'inline-flex items-center gap-2',
+                    'inline-flex items-center gap-1.5 whitespace-nowrap',
                     item.badge && 'text-foreground'
                   )}
                 >
@@ -53,8 +55,8 @@ export function DesktopNav(props: DesktopNavProps) {
               </NavigationMenuLink>
             </NavigationMenuItem>
           ) : (
-            <NavigationMenuItem key={item.label}>
-              <NavigationMenuTrigger className={triggerClassName}>
+            <NavigationMenuItem key={item.label} className='shrink-0'>
+              <NavigationMenuTrigger className={cn(triggerClassName, 'gap-0.5 whitespace-nowrap')}>
                 {item.label}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -64,9 +66,12 @@ export function DesktopNav(props: DesktopNavProps) {
           )
         )}
         {navSupplementLinks.map((link) => (
-          <NavigationMenuItem key={link.label}>
+          <NavigationMenuItem key={link.label} className='hidden shrink-0 2xl:list-item'>
             <NavigationMenuLink asChild>
-              <Link href={link.href} className={cn(triggerClassName, 'inline-flex items-center gap-2')}>
+              <Link
+                href={link.href}
+                className={cn(triggerClassName, 'inline-flex items-center gap-2 whitespace-nowrap')}
+              >
                 {link.label}
               </Link>
             </NavigationMenuLink>
