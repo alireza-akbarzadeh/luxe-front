@@ -178,6 +178,16 @@
   color: transparent;
 }
 
+/** Standard page content width + horizontal padding (use on pages, not site layout). */
+@utility app-container {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/** Full-width navbar shell — minimal edge padding for max nav room. */
+@utility navbar-container {
+  @apply mx-auto w-full px-2 sm:px-3 lg:px-4;
+}
+
 /* Delivery map picker — custom pin + selection cursor */
 .delivery-map-marker {
   background: transparent !important;

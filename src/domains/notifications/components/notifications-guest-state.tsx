@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export function NotificationsGuestState() {
   return (
-    <main className='-mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8'>
+    <main className='app-container pt-24 pb-16'>
       <DynamicBreadcrumb
         items={[{ label: 'Notifications' }]}
         direction='column'

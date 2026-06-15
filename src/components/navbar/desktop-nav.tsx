@@ -66,7 +66,7 @@ export function DesktopNav(props: DesktopNavProps) {
           )
         )}
         {navSupplementLinks.map((link) => (
-          <NavigationMenuItem key={link.label} className='hidden shrink-0 2xl:list-item'>
+          <NavigationMenuItem key={link.label} className='hidden shrink-0 2xl:block'>
             <NavigationMenuLink asChild>
               <Link
                 href={link.href}

@@ -44,7 +44,7 @@ export function Navbar() {
             : 'bg-transparent'
         }`}
       >
-        <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <nav className='mx-auto max-w-7xl'>
           <div className='flex h-16 items-center gap-3 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-4 xl:gap-x-6'>
             <Link href='/' className='relative z-20 flex shrink-0 items-center'>
               <motion.span
@@ -112,7 +112,7 @@ export function Navbar() {
               transition={{ duration: 0.3 }}
               className='border-border bg-background/95 border-b backdrop-blur-xl lg:hidden'
             >
-              <div className='mx-auto max-w-7xl px-4 py-6 sm:px-6'>
+              <div className='navbar-container py-6'>
                 <MobileNav
                   navMenus={navMenus}
                   onNavigateAction={() => setIsMobileMenuOpen(false)}
