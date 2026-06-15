@@ -1,4 +1,6 @@
 'use client';
+
+import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
@@ -11,22 +13,50 @@ import { CompareTable } from '@/domains/compare/sections/compare-table';
 
 import useCompareController from './hooks/useCompareController';
 
+const compareBreadcrumb = (
+  <DynamicBreadcrumb
+    items={[{ label: 'Compare' }]}
+    direction='column'
+    separator={<IconChevronRight className='h-3 w-3' />}
+    className='text-muted-foreground text-xs'
+    breadcrumbClassName='flex items-center gap-1.5'
+    showBackButton={false}
+  />
+);
+
 export function CompareDomain() {
-  const { items, compareProducts, isLoading, clearAll, highlightDiffs, setHighlightDiffs, isAuthenticated } =
-    useCompareController();
+  const controller = useCompareController();
+  const {
+    items,
+    compareProducts,
+    isLoading,
+    clearAll,
+    highlightDiffs,
+    setHighlightDiffs,
+    isAuthenticated,
+    removeItem,
+    canAddMore,
+    maxCompare
+  } = controller;
 
   if (isLoading) {
-    return <CompareSkeleton />;
+    return (
+      <div className='app-container py-8 pt-24'>
+        {compareBreadcrumb}
+        <CompareSkeleton />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
     return (
       <div className='app-container py-8 pt-24'>
-        <DynamicBreadcrumb direction='column' segments={['Compare Products']} />
+        {compareBreadcrumb}
         <div className='py-20 text-center'>
           <h2 className='mb-2 text-2xl font-semibold'>Sign in to compare products</h2>
           <p className='text-muted-foreground mx-auto mb-8 max-w-md'>
-            Save up to four products side by side to compare price, ratings, and seller details.
+            Save up to four products side by side to compare price, ratings, seller details, and
+            specifications.
           </p>
           <Button asChild size='lg' className='rounded-full'>
             <Link href='/login?callbackUrl=%2Fcompare'>Sign in</Link>
@@ -38,19 +68,26 @@ export function CompareDomain() {
 
   return (
     <div className='app-container py-8 pt-24'>
-      <DynamicBreadcrumb direction='column' segments={['Compare Products']} />
+      {compareBreadcrumb}
+
       <CompareHeader
         itemCount={items.length}
-        maxCompare={4}
+        maxCompare={maxCompare}
         clearAll={clearAll}
         highlightDiffs={highlightDiffs}
         setHighlightDiffs={setHighlightDiffs}
       />
+
       {items.length === 0 ? (
         <CompareEmptyState />
       ) : (
         <>
-          <CompareTable />
+          <CompareTable
+            products={compareProducts}
+            canAddMore={canAddMore}
+            highlightDiffs={highlightDiffs}
+            removeItem={removeItem}
+          />
           {items.length >= 2 && <CompareSummary products={compareProducts} />}
         </>
       )}

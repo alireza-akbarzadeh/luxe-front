@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { cache } from 'react';
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { getProductsId } from '~/src/services/-products-{id}-get';

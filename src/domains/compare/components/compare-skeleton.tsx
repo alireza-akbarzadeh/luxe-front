@@ -1,12 +1,23 @@
-import { Skeleton } from '~/src/components/ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function CompareSkeleton() {
   return (
-    <div className='mx-auto max-w-7xl px-4 py-8 pt-24'>
-      <Skeleton className='h-8 w-48' />
-      <div className='mt-8 flex gap-4'>
-        {[...Array(3)].map((_, i) => (
-          <Skeleton key={i} className='h-80 w-full' />
+    <div className='mt-8 space-y-6'>
+      <div className='space-y-3'>
+        <Skeleton className='h-4 w-32' />
+        <Skeleton className='h-10 w-72 max-w-full' />
+        <Skeleton className='h-4 w-96 max-w-full' />
+      </div>
+
+      <div className='flex gap-2'>
+        {[...Array(4)].map((_, index) => (
+          <Skeleton key={index} className='h-2.5 w-10 rounded-full' />
+        ))}
+      </div>
+
+      <div className='grid gap-4 md:grid-cols-3'>
+        {[...Array(3)].map((_, index) => (
+          <Skeleton key={index} className='h-80 rounded-2xl' />
         ))}
       </div>
     </div>

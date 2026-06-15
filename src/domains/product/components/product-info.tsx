@@ -12,6 +12,7 @@ import {
   IconTruck
 } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -32,8 +33,8 @@ import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { useCartStore } from '~/src/store/card.store';
 
-import ProductQuantity from './product-quantity';
 import { ProductFeatureHighlights } from './product-feature-highlights';
+import ProductQuantity from './product-quantity';
 import { ProductStockNotify } from './product-stock-notify';
 import { ProductVariantAttributes } from './product-variant-attributes';
 
@@ -52,6 +53,7 @@ const iconActionClassName =
   'border-border/80 bg-background hover:bg-muted h-11 w-11 shrink-0 rounded-full border shadow-sm';
 
 export function ProductInfo({ product, is_liked }: ProductInfoProps) {
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
   const { increment, decrement, itemCount, items, isLoading } = useCartController();
   const openCart = useCartStore((state) => state.openCart);
@@ -101,7 +103,12 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
       return;
     }
     if (inCompare) {
-      toast.info('Already in your compare list');
+      router.push('/compare');
+      return;
+    }
+    if (!canAddMore) {
+      toast.info('Compare list is full — open compare to make room');
+      router.push('/compare');
       return;
     }
     void addItem(product.id);
@@ -265,16 +272,19 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                     type='button'
                     variant='outline'
                     size='icon'
-                    className={cn(iconActionClassName, inCompare && 'bg-muted')}
-                    disabled={!product.id || inCompare || !canAddMore}
+                    className={cn(
+                      iconActionClassName,
+                      inCompare && 'border-accent/40 bg-accent/10 text-accent'
+                    )}
+                    disabled={!product.id}
                     onClick={handleCompare}
-                    aria-label={inCompare ? 'In compare list' : 'Add to compare'}
+                    aria-label={inCompare ? 'Open compare list' : 'Add to compare'}
                   >
                     <IconArrowsLeftRight className='h-4 w-4' />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side='top'>
-                  {inCompare ? 'In compare list' : 'Add to compare'}
+                  {inCompare ? 'Open compare list' : 'Add to compare'}
                 </TooltipContent>
               </Tooltip>
 
@@ -319,14 +329,6 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
             </div>
           </div>
         </TooltipProvider>
-
-        {inCompare && (
-          <p className='text-right'>
-            <Link href='/compare' className='text-accent hover:text-accent/80 text-sm font-medium'>
-              Open compare list
-            </Link>
-          </p>
-        )}
 
         {isOutOfStock && product.id && product.slug && (
           <ProductStockNotify

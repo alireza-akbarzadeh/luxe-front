@@ -17,8 +17,8 @@ import { ProductQaSection } from './components/product-qa-section';
 import { ProductSpecifications } from './components/product-specification';
 import { ProductStorePanel } from './components/product-store-panel';
 import { ProductVideoPlayer } from './components/product-video-player';
-import { hasCustomProductVideo } from './lib/product-media-utils';
 import { RelatedProductsSection } from './components/related-products-section';
+import { hasCustomProductVideo } from './lib/product-media-utils';
 import { ProductReviewsSection } from './sections/product-reviews-section';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {

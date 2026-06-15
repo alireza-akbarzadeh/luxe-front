@@ -3,8 +3,8 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useDebounce } from '@/hooks/useDebounce';
 import { getProductPath } from '@/domains/product/lib/product-routes';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useGetCategories } from '@/services/-categories-get';
 import { useGetSearchSuggestions } from '@/services/-search-suggestions-get';
 import type { DtoSuggestionItem } from '@/services/-search-suggestions-get.schemas';

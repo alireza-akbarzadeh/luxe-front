@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '~/src/services/-products-get';
 
@@ -16,7 +17,6 @@ import {
   resolveProducts,
   sectionContainerClass
 } from '../lib/home-utils';
-import { getProductPath } from '@/domains/product/lib/product-routes';
 
 const containerVariants = {
   hidden: {},

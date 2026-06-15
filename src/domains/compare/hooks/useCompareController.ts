@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/components/providers/auth-provider';
-import { getProductsId } from '@/services/-products-{id}-get';
+import { MAX_COMPARE } from '@/domains/compare/lib/compare-constants';
 import { getGetCompareQueryKey, useGetCompare } from '@/services/-compare-get';
 import { postCompare } from '@/services/-compare-post';
 import type { DtoCompareProductResponse } from '@/services/-compare-post.schemas';
 import { usePutCompare } from '@/services/-compare-put';
+import { getProductsId } from '@/services/-products-{id}-get';
 
 function toCompareProduct(
   product: NonNullable<Awaited<ReturnType<typeof getProductsId>>['data']>['product']
@@ -66,6 +67,7 @@ export default function useCompareController() {
     try {
       await putCompare.mutateAsync({ data: { product_ids: newIds } });
       await queryClient.invalidateQueries({ queryKey: getGetCompareQueryKey() });
+      await queryClient.invalidateQueries({ queryKey: ['compare-products'] });
     } catch {
       toast.error('Failed to update compare list');
       throw new Error('compare sync failed');
@@ -77,8 +79,8 @@ export default function useCompareController() {
       toast.message('Sign in to compare products');
       return;
     }
-    if (productIds.length >= 4) {
-      toast.warning('You can only compare up to 4 products');
+    if (productIds.length >= MAX_COMPARE) {
+      toast.warning(`You can only compare up to ${MAX_COMPARE} products`);
       return;
     }
     if (productIds.includes(productId)) {
@@ -112,10 +114,11 @@ export default function useCompareController() {
   };
 
   const isInCompare = (id: number) => productIds.includes(id);
-  const canAddMore = productIds.length < 4;
+  const canAddMore = productIds.length < MAX_COMPARE;
 
   return {
     canAddMore,
+    maxCompare: MAX_COMPARE,
     isInCompare,
     items: productIds,
     clearAll,
