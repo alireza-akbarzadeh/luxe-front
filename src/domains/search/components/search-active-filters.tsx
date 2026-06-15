@@ -6,7 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
+import { formatPrice } from '@/domains/home/lib/home-utils';
+
 import { useSearchParams } from '../hooks/useSearchParams';
+import {
+  isSearchPriceFilterActive,
+  SEARCH_DEFAULT_PRICE_MAX,
+  SEARCH_DEFAULT_PRICE_MIN
+} from '../search.utils';
 
 interface SearchActiveFiltersProps {
   stores?: DtoStoreResponse[];
@@ -46,13 +53,15 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
         </Badge>
       ))}
 
-      {(searchParams.priceRange[0] > 0 || searchParams.priceRange[1] < 1000) && (
+      {isSearchPriceFilterActive(searchParams.priceRange) && (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
-          onClick={() => searchParams.setPriceRange([0, 1000])}
+          onClick={() =>
+            searchParams.setPriceRange([SEARCH_DEFAULT_PRICE_MIN, SEARCH_DEFAULT_PRICE_MAX])
+          }
         >
-          ${searchParams.priceRange[0]} – ${searchParams.priceRange[1]}
+          {formatPrice(searchParams.priceRange[0])} – {formatPrice(searchParams.priceRange[1])}
           <IconX className='ml-1 h-3 w-3' />
         </Badge>
       )}

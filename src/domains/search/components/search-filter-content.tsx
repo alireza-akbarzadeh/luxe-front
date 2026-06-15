@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import { Slider } from '@/components/ui/slider';
 import { Button } from '~/src/components/ui/button';
 import type {
   DtoCategoryResponse,
@@ -14,17 +13,21 @@ import type {
   DtoStoreResponse} from '~/src/services/-search-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
+import { SearchPriceRangeFilter } from './search-price-range-filter';
 
 interface SearchFilterContentProps {
   products: DtoProductResponse[];
   stores: DtoStoreResponse[];
-  categories?: DtoCategoryResponse[]; // optional, from search API
+  categories?: DtoCategoryResponse[];
+  /** Sheet layout hides duplicate clear actions — handled by the drawer footer. */
+  variant?: 'sidebar' | 'sheet';
 }
 
 export function SearchFilterContent({
   products,
   stores,
-  categories: searchCategories
+  categories: searchCategories,
+  variant = 'sidebar'
 }: SearchFilterContentProps) {
   const searchParams = useSearchParams();
 
@@ -56,7 +59,7 @@ export function SearchFilterContent({
           <IconTag className='h-4 w-4' />
           Categories
         </h3>
-        <div className='max-h-48 space-y-2 overflow-y-auto'>
+        <div className={variant === 'sheet' ? 'max-h-none space-y-2' : 'max-h-48 space-y-2 overflow-y-auto'}>
           {availableCategories.map((cat) => (
             <label key={cat} className='group flex cursor-pointer items-center gap-2'>
               <Checkbox
@@ -108,22 +111,7 @@ export function SearchFilterContent({
 
       <Separator />
 
-      {/* Price Range */}
-      <div>
-        <h3 className='mb-3 font-semibold'>Price Range</h3>
-        <Slider
-          value={searchParams.priceRange}
-          min={0}
-          max={1000}
-          step={10}
-          onValueChange={(v) => searchParams.setPriceRange(v as [number, number])}
-          className='mb-2'
-        />
-        <div className='text-muted-foreground flex items-center justify-between text-sm'>
-          <span>${searchParams.priceRange[0]}</span>
-          <span>${searchParams.priceRange[1]}</span>
-        </div>
-      </div>
+      <SearchPriceRangeFilter />
 
       <Separator />
 
@@ -182,8 +170,7 @@ export function SearchFilterContent({
         </div>
       </div>
 
-      {/* Clear Filters */}
-      {searchParams.hasActiveFilters && (
+      {variant === 'sidebar' && searchParams.hasActiveFilters && (
         <>
           <Separator />
           <Button variant='outline' className='w-full' onClick={searchParams.clearFilters}>

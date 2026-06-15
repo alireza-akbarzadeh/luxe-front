@@ -1,12 +1,12 @@
 'use client';
-import { IconHeart, IconSearch, IconShoppingCart, IconStar } from '@tabler/icons-react';
+
+import { IconSearch } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/domains/shop/components/product-card';
+import { ProductListRow } from '@/domains/shop/components/product-list-row';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
@@ -42,66 +42,7 @@ export function ProductGridList(props: ProductGridListProps) {
                   priority={index === 0}
                 />
               ) : (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link
-                    href={`/product/${product.id}`}
-                    className='bg-card group flex gap-4 rounded-xl border p-4 transition-shadow hover:shadow-lg'
-                  >
-                    <div className='bg-secondary relative h-32 w-32 shrink-0 overflow-hidden rounded-lg'>
-                      <Image
-                        src={product?.images?.[0] ?? ''}
-                        alt={product.name ?? ''}
-                        fill
-                        className='object-cover transition-transform duration-500 group-hover:scale-105'
-                      />
-                      {product.is_new && (
-                        <Badge className='absolute top-2 left-2' variant='secondary'>
-                          New
-                        </Badge>
-                      )}
-                    </div>
-                    <div className='min-w-0 flex-1'>
-                      <span className='text-muted-foreground text-xs tracking-wider uppercase'>
-                        {product.category?.name}
-                      </span>
-                      <h3 className='group-hover:text-primary mt-1 font-semibold transition-colors'>
-                        {product.name}
-                      </h3>
-                      <p className='text-muted-foreground mt-1 line-clamp-2 text-sm'>
-                        {product.description}
-                      </p>
-                      <div className='mt-2 flex items-center gap-4'>
-                        <div className='flex items-center gap-1'>
-                          <IconStar className='fill-accent text-accent h-4 w-4' />
-                          <span className='text-sm'>
-                            {product.rating} ({product.reviews_count})
-                          </span>
-                        </div>
-                        <div className='flex items-center gap-2'>
-                          <span className='font-semibold'>${product.price}</span>
-                          {product.compare_at_price && (
-                            <span className='text-muted-foreground text-sm line-through'>
-                              ${product.compare_at_price}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className='flex flex-col justify-center gap-2'>
-                      <Button size='icon' variant='outline'>
-                        <IconHeart className='h-4 w-4' />
-                      </Button>
-                      <Button size='icon'>
-                        <IconShoppingCart className='h-4 w-4' />
-                      </Button>
-                    </div>
-                  </Link>
-                </motion.div>
+                <ProductListRow key={product.id} product={product} index={index} />
               )
             )}
           </div>

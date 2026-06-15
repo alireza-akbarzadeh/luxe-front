@@ -10,6 +10,11 @@ import {
 } from 'nuqs';
 import { useMemo } from 'react';
 
+import {
+  SEARCH_DEFAULT_PRICE_MAX,
+  SEARCH_DEFAULT_PRICE_MIN
+} from '../search.utils';
+
 export type SortBy = 'relevance' | 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'popular';
 type ViewMode = 'grid' | 'list';
 
@@ -24,8 +29,8 @@ export function useSearchParams() {
       categories: parseAsArrayOf(parseAsString).withDefault([]),
       stores: parseAsArrayOf(parseAsString).withDefault([]),
       sortBy: parseAsStringLiteral(sortValues).withDefault('relevance'),
-      priceMin: parseAsInteger.withDefault(0),
-      priceMax: parseAsInteger.withDefault(1000),
+      priceMin: parseAsInteger.withDefault(SEARCH_DEFAULT_PRICE_MIN),
+      priceMax: parseAsInteger.withDefault(SEARCH_DEFAULT_PRICE_MAX),
       minRating: parseAsInteger.withDefault(0),
       inStock: parseAsBoolean.withDefault(false),
       onSale: parseAsBoolean.withDefault(false),
@@ -87,8 +92,8 @@ export function useSearchParams() {
     setParams({
       categories: [],
       stores: [],
-      priceMin: 0,
-      priceMax: 1000,
+      priceMin: SEARCH_DEFAULT_PRICE_MIN,
+      priceMax: SEARCH_DEFAULT_PRICE_MAX,
       minRating: 0,
       inStock: false,
       onSale: false,
@@ -104,8 +109,8 @@ export function useSearchParams() {
       q: '',
       categories: [],
       stores: [],
-      priceMin: 0,
-      priceMax: 1000,
+      priceMin: SEARCH_DEFAULT_PRICE_MIN,
+      priceMax: SEARCH_DEFAULT_PRICE_MAX,
       minRating: 0,
       inStock: false,
       onSale: false,
@@ -120,8 +125,8 @@ export function useSearchParams() {
     return (
       categories.length > 0 ||
       stores.length > 0 ||
-      priceMin > 0 ||
-      priceMax < 1000 ||
+      priceMin > SEARCH_DEFAULT_PRICE_MIN ||
+      priceMax < SEARCH_DEFAULT_PRICE_MAX ||
       minRating > 0 ||
       inStock ||
       onSale ||
@@ -134,7 +139,7 @@ export function useSearchParams() {
     let count = 0;
     if (categories.length > 0) count += categories.length;
     if (stores.length > 0) count += stores.length;
-    if (priceMin > 0 || priceMax < 1000) count++;
+    if (priceMin > SEARCH_DEFAULT_PRICE_MIN || priceMax < SEARCH_DEFAULT_PRICE_MAX) count++;
     if (minRating > 0) count++;
     if (inStock) count++;
     if (onSale) count++;

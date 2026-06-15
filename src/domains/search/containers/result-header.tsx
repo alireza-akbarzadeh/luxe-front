@@ -1,8 +1,7 @@
 'use client';
 
-import { IconFilter2, IconGridDots, IconList } from '@tabler/icons-react';
+import { IconGridDots, IconList } from '@tabler/icons-react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -11,12 +10,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { type SortBy } from '@/domains/search/hooks/useSearchParams';
 import type { DtoCategoryResponse, DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 
-import { SearchFilterContent } from '../components/search-filter-content';
+import { SearchMobileFilterSheet } from '../components/search-mobile-filter-sheet';
 import { useSearchParams } from '../hooks/useSearchParams';
 
 const sortOptions = [
@@ -45,73 +43,99 @@ export function ResultHeader(props: ResultHeaderProps) {
       : `${productCount} product${productCount === 1 ? '' : 's'} found`;
 
   return (
-    <div className='mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
+    <div className='mb-6 space-y-4'>
       <div>
-        <h2 className='text-lg font-semibold'>
+        <h2 className='font-display text-lg font-semibold md:text-xl'>
           {searchParams.query ? <>Results for &quot;{searchParams.query}&quot;</> : 'All Products'}
         </h2>
-        <p className='text-muted-foreground text-sm'>{resultLabel}</p>
+        <p className='text-muted-foreground mt-1 text-sm'>{resultLabel}</p>
       </div>
 
-      <div className='flex items-center gap-2'>
-        {/* Mobile Filter Button */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant='outline' size='sm' className='lg:hidden'>
-              <IconFilter2 className='mr-2 h-4 w-4' />
-              Filters
-              {searchParams.activeFilterCount > 0 && (
-                <Badge variant='secondary' className='ml-2'>
-                  {searchParams.activeFilterCount}
-                </Badge>
-              )}
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+        <div className='flex min-w-0 items-center gap-2 lg:hidden'>
+          <SearchMobileFilterSheet
+            total={total}
+            products={products}
+            stores={stores}
+            categories={categories}
+          />
+          <Select
+            value={searchParams.sortBy}
+            onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
+          >
+            <SelectTrigger className='h-10 min-w-0 flex-1 rounded-full'>
+              <SelectValue placeholder='Sort by' />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className='hidden items-center gap-2 lg:flex'>
+          <Select
+            value={searchParams.sortBy}
+            onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
+          >
+            <SelectTrigger className='w-44'>
+              <SelectValue placeholder='Sort by' />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <div className='flex items-center rounded-lg border p-1'>
+            <Button
+              variant={searchParams.view === 'grid' ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8'
+              onClick={() => searchParams.setView('grid')}
+              aria-label='Grid view'
+            >
+              <IconGridDots className='h-4 w-4' />
             </Button>
-          </SheetTrigger>
-          <SheetContent side='left' className='w-80'>
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
-            <div className='mt-6'>
-              <SearchFilterContent categories={categories} stores={stores} products={products} />
-            </div>
-          </SheetContent>
-        </Sheet>
+            <Button
+              variant={searchParams.view === 'list' ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8'
+              onClick={() => searchParams.setView('list')}
+              aria-label='List view'
+            >
+              <IconList className='h-4 w-4' />
+            </Button>
+          </div>
+        </div>
 
-        {/* Sort */}
-        <Select
-          value={searchParams.sortBy}
-          onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
-        >
-          <SelectTrigger className='w-44'>
-            <SelectValue placeholder='Sort by' />
-          </SelectTrigger>
-          <SelectContent>
-            {sortOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {/* View Mode */}
-        <div className='hidden items-center rounded-lg border p-1 sm:flex'>
-          <Button
-            variant={searchParams.view === 'grid' ? 'secondary' : 'ghost'}
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => searchParams.setView('grid')}
-          >
-            <IconGridDots className='h-4 w-4' />
-          </Button>
-          <Button
-            variant={searchParams.view === 'list' ? 'secondary' : 'ghost'}
-            size='icon'
-            className='h-8 w-8'
-            onClick={() => searchParams.setView('list')}
-          >
-            <IconList className='h-4 w-4' />
-          </Button>
+        <div className='flex items-center gap-2 sm:hidden'>
+          <div className='border-border flex flex-1 items-center justify-center rounded-full border p-1'>
+            <Button
+              variant={searchParams.view === 'grid' ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8 rounded-full'
+              onClick={() => searchParams.setView('grid')}
+              aria-label='Grid view'
+            >
+              <IconGridDots className='h-4 w-4' />
+            </Button>
+            <Button
+              variant={searchParams.view === 'list' ? 'secondary' : 'ghost'}
+              size='icon'
+              className='h-8 w-8 rounded-full'
+              onClick={() => searchParams.setView('list')}
+              aria-label='List view'
+            >
+              <IconList className='h-4 w-4' />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
