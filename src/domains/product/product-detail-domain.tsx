@@ -12,13 +12,13 @@ import ProductDescription from './components/product-description';
 import { ProductDetailSkeleton } from './components/product-detail-skeleton';
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
-import { ProductPriceChart } from './components/product-price-chart';
+import { ProductInsightsSection } from './components/product-insights-section';
 import { ProductQaSection } from './components/product-qa-section';
 import { ProductSpecifications } from './components/product-specification';
 import { ProductStorePanel } from './components/product-store-panel';
 import { ProductVideoPlayer } from './components/product-video-player';
 import { hasCustomProductVideo } from './lib/product-media-utils';
-import RelatedProduct from './related-product';
+import { RelatedProductsSection } from './components/related-products-section';
 import { ProductReviewsSection } from './sections/product-reviews-section';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
@@ -83,9 +83,7 @@ export default function ProductDetailDomain({ productId }: { productId: string }
         </div>
       </div>
 
-      <div className='mt-12 lg:mt-16'>
-        <ProductPriceChart productId={productSlug} />
-      </div>
+      <ProductInsightsSection productId={productSlug} product={product} />
 
       <ProductAlternativesSection productId={productSlug} productName={product.name} />
 
@@ -155,7 +153,11 @@ export default function ProductDetailDomain({ productId }: { productId: string }
         </Tabs>
       </section>
 
-      <RelatedProduct />
+      <RelatedProductsSection
+        productId={numericProductId}
+        categoryId={product.category?.id}
+        categoryName={product.category?.name}
+      />
     </div>
   );
 }
