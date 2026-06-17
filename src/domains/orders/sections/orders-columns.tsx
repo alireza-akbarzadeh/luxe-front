@@ -144,7 +144,7 @@ export const orderColumns: ColumnDef<Order>[] = [
     header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Items</span>,
     cell: ({ row }) => (
       <span className='bg-muted inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold'>
-        {row.original.items?.length ?? 0}
+        {row.original.items_count ?? row.original.items?.length ?? 0}
       </span>
     ),
     enableSorting: false

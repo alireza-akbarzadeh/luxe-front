@@ -1,5 +1,5 @@
 import { OrderStatus } from '@/lib/constants/enum-statuses';
-import type { ModelsOrder, ModelsShipment } from '~/src/services/-orders-{id}-get.schemas';
+import type { ModelsOrder, ModelsShipment } from '~/src/services/-orders-my-get.schemas';
 
 export type OrderProgressStepStatus = 'completed' | 'active' | 'upcoming' | 'cancelled';
 

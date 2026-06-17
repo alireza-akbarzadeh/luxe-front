@@ -1,52 +1,91 @@
 'use client';
+
+import { IconAlertTriangle } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 
+import { Button } from '@/components/ui/button';
 import { OrderRevenueChart } from '@/domains/orders/components/order-revenue-chart';
 import { OrderStatusDonut } from '@/domains/orders/components/order-status-donut';
 import { OrderVolumeChart } from '@/domains/orders/components/order-volume-chart';
 import { TopProductsTable } from '@/domains/orders/components/top-products-table';
-import { MOCK_ORDERS } from '@/domains/orders/mock_order';
-import type { OrderStatus } from '@/domains/orders/orders-types';
+import { mapApiOrderDetailToDomain } from '@/domains/orders/order.utils';
+import type { Order, OrderStatus } from '@/domains/orders/orders-types';
 import { OrderCustomerCard } from '@/domains/orders/sections/customer-order-detail';
 import { OrderDetailHeader } from '@/domains/orders/sections/order-details-header';
 import { OrderLineItems } from '@/domains/orders/sections/order-line-items';
 import { OrderPaymentSummary } from '@/domains/orders/sections/order-payment-summary';
 import { OrderShippingCard } from '@/domains/orders/sections/order-shipping-card';
 import { OrderTimeline } from '@/domains/orders/sections/order-timeline';
+import { useGetOrdersId } from '@/services/-orders-{id}-get';
 
 interface OrderDetailDomainProps {
   orderId: string;
 }
 
 export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
-  const initialOrder = MOCK_ORDERS.find((o) => o.id === orderId);
+  const numericId = Number(orderId);
+  const { data, isLoading, isError, error, refetch } = useGetOrdersId(numericId, {
+    query: { enabled: Number.isFinite(numericId) && numericId > 0 }
+  });
 
-  if (!initialOrder) {
-    throw notFound();
+  if (isLoading) {
+    return (
+      <div className='bg-background flex min-h-screen items-center justify-center'>
+        <p className='text-muted-foreground text-sm font-medium'>Loading order…</p>
+      </div>
+    );
   }
 
-  const [currentOrder, setCurrentOrder] = React.useState({ ...initialOrder });
+  if (isError) {
+    const message =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? String((error as { message?: string }).message)
+        : 'Failed to load order';
+
+    return (
+      <div className='bg-background flex min-h-screen items-center justify-center p-8'>
+        <div className='max-w-md rounded-2xl border-2 border-dashed p-12 text-center'>
+          <IconAlertTriangle className='text-destructive mx-auto mb-4 h-12 w-12' />
+          <h3 className='text-lg font-bold tracking-tight uppercase italic'>Order unavailable</h3>
+          <p className='text-muted-foreground text-sm font-medium'>{message}</p>
+          <Button className='mt-4' variant='outline' onClick={() => void refetch()}>
+            Try again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data?.data) {
+    notFound();
+  }
+
+  return (
+    <OrderDetailContent
+      key={data.data.id}
+      initialOrder={mapApiOrderDetailToDomain(data.data)}
+    />
+  );
+}
+
+function OrderDetailContent({ initialOrder }: { initialOrder: Order }) {
+  const [currentOrder, setCurrentOrder] = React.useState(initialOrder);
 
   const handleStatusChange = async (newStatus: OrderStatus) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
       setCurrentOrder((prev) => {
         const updated = { ...prev, status: newStatus };
-
-        if (updated.timeline) {
-          updated.timeline = [
-            {
-              event: newStatus,
-              timestamp: new Date().toISOString(),
-              description: `Order status manually changed to ${newStatus}`,
-              actor: 'Admin'
-            },
-            ...updated.timeline
-          ];
-        }
+        updated.timeline = [
+          {
+            event: newStatus,
+            timestamp: new Date().toISOString(),
+            description: `Order status manually changed to ${newStatus}`,
+            actor: 'Admin'
+          },
+          ...updated.timeline
+        ];
         return updated;
       });
 
@@ -58,16 +97,13 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
 
   return (
     <div className='bg-background min-h-screen'>
-      {/* STICKY HEADER */}
       <div className='bg-card/80 border-border/40 sticky top-0 z-20 border-b backdrop-blur-sm'>
         <div className='mx-auto max-w-350 px-6 py-4'>
           <OrderDetailHeader order={currentOrder} onStatusChange={handleStatusChange} />
         </div>
       </div>
 
-      {/* MAIN BODY */}
       <div className='mx-auto max-w-350 px-6 py-8'>
-        {/* ANALYTICS SECTION */}
         <div className='mb-8'>
           <div className='mb-4'>
             <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
@@ -78,7 +114,6 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
             </p>
           </div>
           <div className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4'>
-            {/* Revenue & Orders spans 2 */}
             <div className='md:col-span-2'>
               <OrderRevenueChart />
             </div>
@@ -96,14 +131,14 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
           </div>
         </div>
 
-        {/* ORDER DETAIL GRID */}
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
-          {/* LEFT COLUMN — main content */}
           <div className='space-y-6 lg:col-span-2'>
-            {/* Order Summary KPIs */}
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
               {[
-                { label: 'Items', value: currentOrder.items?.length ?? 0 },
+                {
+                  label: 'Items',
+                  value: currentOrder.items_count ?? currentOrder.items?.length ?? 0
+                },
                 {
                   label: 'Total',
                   value: new Intl.NumberFormat('en-US', {
@@ -128,18 +163,15 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
               ))}
             </div>
 
-            {/* Line Items Container */}
             {currentOrder.items && currentOrder.items.length > 0 && (
               <OrderLineItems items={currentOrder.items} />
             )}
 
-            {/* Live Operational Timeline Section */}
             {currentOrder.timeline && currentOrder.timeline.length > 0 && (
               <OrderTimeline timeline={currentOrder.timeline} />
             )}
           </div>
 
-          {/* RIGHT COLUMN — sidebar logistics links */}
           <div className='space-y-5'>
             <OrderPaymentSummary order={currentOrder} />
             <OrderCustomerCard order={currentOrder} />

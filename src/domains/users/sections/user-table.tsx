@@ -5,12 +5,10 @@ import {
   IconArrowsHorizontal,
   IconChevronDown,
   IconFilter,
-  IconTrash,
   IconUserCheck,
   IconUserMinus
 } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-import { type ComponentType,useCallback, useMemo } from 'react';
+import { type ComponentType, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { AppDialog } from '@/components/app-dialog';
@@ -24,44 +22,46 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { UserDetailSheet } from '@/domains/users/components/user-detail-sheet';
 import { cn } from '@/lib/utils';
-import { useGetUsers } from '@/services/-users-get';
+import { useGetAdminUsers } from '@/services/-admin-users-get';
 import type {
-  GetUsers200,
-  GetUsers200DataUsersItem,
-  GetUsersRole
-} from '@/services/-users-get.schemas';
+  DtoAdminUserResponse,
+  GetAdminUsers200,
+  GetAdminUsersParams
+} from '@/services/-admin-users-get.schemas';
 
 import { userColumns } from '../components/userColumns';
 
 export function UserManagementTable() {
-  const { push } = useRouter();
+  const [selectedUser, setSelectedUser] = useState<DtoAdminUserResponse | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const getQueryParams = useCallback((state: TableState, filter: string) => {
     const isActiveFilter = state.columnFilters.find((f) => f.id === 'status')?.value as
       | boolean
       | undefined;
     const roleFilter = state.columnFilters.find((f) => f.id === 'role')?.value as
-      | GetUsersRole
+      | string
       | undefined;
 
-    return {
+    const params: GetAdminUsersParams = {
       limit: state.pagination.pageSize,
       offset: state.pagination.pageIndex * state.pagination.pageSize,
-      email: filter || undefined,
-      first_name: filter || undefined,
-      last_name: filter || undefined,
+      search: filter.trim() || undefined,
       is_active: isActiveFilter,
       role: roleFilter
     };
+
+    return params;
   }, []);
 
   const getRows = useCallback(
-    (data: GetUsers200 | undefined) => data?.data?.users ?? [],
+    (data: GetAdminUsers200 | undefined) => data?.data?.users ?? [],
     []
   );
 
-  const getTotal = useCallback((data: GetUsers200 | undefined) => data?.data?.total ?? 0, []);
+  const getTotal = useCallback((data: GetAdminUsers200 | undefined) => data?.data?.total ?? 0, []);
 
   const serverTable = useServerTable({
     columns: userColumns,
@@ -69,15 +69,8 @@ export function UserManagementTable() {
     getQueryParams,
     getRows,
     getTotal,
-    useQuery: useGetUsers
+    useQuery: (params) => useGetAdminUsers(params)
   });
-
-  const selectedUsers = useMemo(() => {
-    const selectedIds = Object.keys(serverTable.tableState.rowSelection).filter(
-      (id) => serverTable.tableState.rowSelection[id]
-    );
-    return serverTable.rows.filter((user) => selectedIds.includes(String(user.id)));
-  }, [serverTable.tableState.rowSelection, serverTable.rows]);
 
   const applySegment = (segment: 'all' | 'active' | 'inactive' | 'admins') => {
     switch (segment) {
@@ -93,16 +86,20 @@ export function UserManagementTable() {
       default:
         serverTable.tableState.setColumnFilters([]);
     }
-    toast.success(`Switched to ${segment} segment`);
+    toast.success(`Showing ${segment} users`);
   };
 
-  const userStatusOptions = [
-    { label: 'Active', value: true, icon: IconUserCheck, color: 'text-emerald-500' },
-    { label: 'Inactive', value: false, icon: IconUserMinus, color: 'text-slate-400' }
-  ];
+  const userStatusOptions = useMemo(
+    () => [
+      { label: 'Active', value: true, icon: IconUserCheck, color: 'text-emerald-500' },
+      { label: 'Inactive', value: false, icon: IconUserMinus, color: 'text-slate-400' }
+    ],
+    []
+  );
 
-  const handleDelete = () => {
-    toast.error(`Suspending ${selectedUsers[0]?.id} users`);
+  const openUserDetail = (user: DtoAdminUserResponse) => {
+    setSelectedUser(user);
+    setDetailOpen(true);
   };
 
   if (serverTable.isError && serverTable.error) {
@@ -123,25 +120,25 @@ export function UserManagementTable() {
   }
 
   return (
-    <UserTableContent
-      serverTable={serverTable}
-      push={push}
-      applySegment={applySegment}
-      userStatusOptions={userStatusOptions}
-      handleDelete={handleDelete}
-    />
+    <>
+      <UserTableContent
+        serverTable={serverTable}
+        applySegment={applySegment}
+        userStatusOptions={userStatusOptions}
+        onRowOpen={openUserDetail}
+      />
+      <UserDetailSheet user={selectedUser} open={detailOpen} onOpenChange={setDetailOpen} />
+    </>
   );
 }
 
 function UserTableContent({
   serverTable,
-  push,
   applySegment,
   userStatusOptions,
-  handleDelete
+  onRowOpen
 }: {
-  serverTable: ReturnType<typeof useServerTable<GetUsers200DataUsersItem, GetUsers200, object>>;
-  push: (path: string) => void;
+  serverTable: ReturnType<typeof useServerTable<DtoAdminUserResponse, GetAdminUsers200, GetAdminUsersParams>>;
   applySegment: (segment: 'all' | 'active' | 'inactive' | 'admins') => void;
   userStatusOptions: Array<{
     label: string;
@@ -149,9 +146,9 @@ function UserTableContent({
     icon: ComponentType<{ className?: string }>;
     color: string;
   }>;
-  handleDelete: () => void;
+  onRowOpen: (user: DtoAdminUserResponse) => void;
 }) {
-  const { tableState, isLoading, isFetching, refetch } = serverTable;
+  const { tableState, isLoading, isFetching, refetch, total } = serverTable;
 
   return (
     <Table.Root {...serverTable.rootProps}>
@@ -160,18 +157,12 @@ function UserTableContent({
         showRefresh
         onRefresh={refetch}
         isLoading={isFetching}
-        showCreate
-        onCreate={() => push('/dashboard/users/create')}
         showClear
         onClearFilter={() => tableState.resetFilters()}
         showColumnVisibility
         showSorting
         showExport
-        showBulkActions
       >
-        <Button variant='outline' className='border-none' onClick={handleDelete}>
-          <IconTrash className='size-5' />
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -274,12 +265,12 @@ function UserTableContent({
           })}
         </div>
         <div className='text-primary bg-primary/10 border-primary/20 rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-          {serverTable.rows.length} Results
+          {total.toLocaleString()} Results
         </div>
       </div>
 
-      <Table.Grid<GetUsers200DataUsersItem>
-        onRowDoubleClick={(row) => push(`/dashboard/users/edit/${row.original.id}`)}
+      <Table.Grid<DtoAdminUserResponse>
+        onRowDoubleClick={(row) => onRowOpen(row.original)}
         isLoading={isLoading}
       />
 

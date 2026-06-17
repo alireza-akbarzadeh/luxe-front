@@ -34,7 +34,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Returns paginated users with optional filters by email, role, and active status.
+ * Returns paginated users with optional filters by search term, email, role, and active status.
  * @summary List users (admin)
  */
 export const getAdminUsers = (

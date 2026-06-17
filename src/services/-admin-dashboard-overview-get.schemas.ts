@@ -39,6 +39,8 @@ export interface DtoAdminDashboardStatusCount {
 }
 
 export interface DtoAdminStatsResponse {
+  active_users?: number;
+  admin_users?: number;
   low_stock_products?: number;
   pending_orders?: number;
   total_active_products?: number;

@@ -1,14 +1,32 @@
+'use client';
+
 import { IconChartBar, IconPlus, IconRotateClockwise2 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
-import { MOCK_ORDERS } from '@/domains/orders/mock_order';
 import { OrdersKPICards } from '@/domains/orders/sections/0rders-kpi-cards';
 import OrdersTable from '@/domains/orders/sections/orders-table';
+import {
+  getGetAdminDashboardOverviewQueryKey,
+  useGetAdminDashboardOverview
+} from '@/services/-admin-dashboard-overview-get';
+import { getGetOrdersQueryKey } from '@/services/-orders-get';
 
 export function OrdersDomain() {
+  const queryClient = useQueryClient();
+  const { data: overviewResponse, isLoading: isOverviewLoading } = useGetAdminDashboardOverview({
+    period: '30d'
+  });
+
+  const handleRefresh = () => {
+    void queryClient.invalidateQueries({ queryKey: getGetOrdersQueryKey() });
+    void queryClient.invalidateQueries({
+      queryKey: getGetAdminDashboardOverviewQueryKey({ period: '30d' })
+    });
+  };
+
   return (
     <div className='bg-background min-h-screen'>
-      {/* PAGE HEADER */}
       <div className='bg-card/80 sticky top-0 z-20 border-b backdrop-blur-sm'>
         <div className='mx-auto max-w-400 px-6 py-5'>
           <div className='flex items-center justify-between'>
@@ -30,10 +48,11 @@ export function OrdersDomain() {
                 variant='outline'
                 size='sm'
                 className='h-9 gap-2 rounded-xl text-[10px] font-bold uppercase'
+                onClick={handleRefresh}
               >
                 <IconRotateClockwise2 className='h-3.5 w-3.5' /> Refresh
               </Button>
-              <Button size='sm' className='h-9 gap-2 rounded-xl text-[10px] font-bold uppercase'>
+              <Button size='sm' className='h-9 gap-2 rounded-xl text-[10px] font-bold uppercase' disabled>
                 <IconPlus className='h-3.5 w-3.5' /> New Order
               </Button>
             </div>
@@ -41,12 +60,8 @@ export function OrdersDomain() {
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
       <div className='mx-auto max-w-400 space-y-8 px-6 py-8'>
-        {/* KPI CARDS */}
-        <OrdersKPICards orders={MOCK_ORDERS} />
-
-        {/* ORDERS TABLE */}
+        <OrdersKPICards overview={overviewResponse?.data} isLoading={isOverviewLoading} />
         <div>
           <div className='mb-4 flex items-center justify-between'>
             <div>
@@ -56,7 +71,7 @@ export function OrdersDomain() {
               </p>
             </div>
           </div>
-          <OrdersTable data={MOCK_ORDERS} />
+          <OrdersTable />
         </div>
       </div>
     </div>

@@ -24,7 +24,7 @@ export function RevenueSparkling({ data }: { data: RevenueSparklingProps[] }) {
   };
 
   return (
-    <ChartContainer config={chartConfig} className='h-[180px] w-full'>
+    <ChartContainer config={chartConfig} className='aspect-auto h-[180px] w-full min-h-0'>
       <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id='revGrad' x1='0' y1='0' x2='0' y2='1'>

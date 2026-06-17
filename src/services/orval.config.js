@@ -4520,6 +4520,12 @@ module.exports = [
             },
             "dto.AdminStatsResponse": {
               "properties": {
+                "active_users": {
+                  "type": "integer"
+                },
+                "admin_users": {
+                  "type": "integer"
+                },
                 "low_stock_products": {
                   "type": "integer"
                 },
@@ -8457,6 +8463,12 @@ module.exports = [
             },
             "dto.AdminStatsResponse": {
               "properties": {
+                "active_users": {
+                  "type": "integer"
+                },
+                "admin_users": {
+                  "type": "integer"
+                },
                 "low_stock_products": {
                   "type": "integer"
                 },
@@ -8525,7 +8537,7 @@ module.exports = [
         "paths": {
           "/admin/users": {
             "get": {
-              "description": "Returns paginated users with optional filters by email, role, and active status.",
+              "description": "Returns paginated users with optional filters by search term, email, role, and active status.",
               "parameters": [
                 {
                   "description": "Items per page (default 20)",
@@ -8541,6 +8553,14 @@ module.exports = [
                   "name": "offset",
                   "schema": {
                     "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search name or email (partial)",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
                   }
                 },
                 {
@@ -20287,6 +20307,14 @@ module.exports = [
                   "schema": {
                     "type": "integer"
                   }
+                },
+                {
+                  "description": "Search order number or customer name/email",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
                 }
               ],
               "responses": {
@@ -20301,24 +20329,7 @@ module.exports = [
                           {
                             "properties": {
                               "data": {
-                                "properties": {
-                                  "limit": {
-                                    "type": "integer"
-                                  },
-                                  "offset": {
-                                    "type": "integer"
-                                  },
-                                  "orders": {
-                                    "items": {
-                                      "$ref": "#/components/schemas/models.Order"
-                                    },
-                                    "type": "array"
-                                  },
-                                  "total": {
-                                    "type": "integer"
-                                  }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/dto.AdminOrderListData"
                               }
                             },
                             "type": "object"
@@ -20391,736 +20402,57 @@ module.exports = [
               },
               "type": "object"
             },
-            "models.Order": {
+            "dto.AdminOrderListData": {
               "properties": {
-                "billing_address_id": {
-                  "description": "Address IDs (separate addresses table could be added later)",
+                "limit": {
                   "type": "integer"
                 },
+                "offset": {
+                  "type": "integer"
+                },
+                "orders": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminOrderListItem"
+                  },
+                  "type": "array"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminOrderListItem": {
+              "properties": {
                 "created_at": {
                   "type": "string"
                 },
                 "currency": {
                   "type": "string"
                 },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                "customer_email": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
                 },
                 "id": {
                   "type": "integer"
                 },
-                "items": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.OrderItem"
-                  },
-                  "type": "array"
-                },
-                "notes": {
-                  "type": "string"
+                "items_count": {
+                  "type": "integer"
                 },
                 "order_number": {
                   "type": "string"
                 },
-                "payment": {
-                  "$ref": "#/components/schemas/models.Payment"
-                },
-                "payment_id": {
-                  "type": "integer"
-                },
-                "shipment": {
-                  "$ref": "#/components/schemas/models.Shipment"
-                },
-                "shipment_id": {
-                  "type": "integer"
-                },
-                "shipping_address_id": {
-                  "type": "integer"
+                "payment_status": {
+                  "type": "string"
                 },
                 "status": {
                   "type": "string"
                 },
                 "total_amount": {
                   "type": "number"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "gorm.DeletedAt": {
-              "properties": {
-                "time": {
-                  "type": "string"
-                },
-                "valid": {
-                  "description": "Valid is true if Time is not NULL",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "models.OrderItem": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "order_id": {
-                  "type": "integer"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "product": {
-                  "$ref": "#/components/schemas/models.Product"
-                },
-                "product_id": {
-                  "type": "integer"
-                },
-                "quantity": {
-                  "type": "integer"
-                },
-                "total": {
-                  "description": "read-only",
-                  "type": "number"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "models.Product": {
-              "properties": {
-                "allow_backorder": {
-                  "type": "boolean"
-                },
-                "attributes": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.ProductAttribute"
-                  },
-                  "type": "array"
-                },
-                "barcode": {
-                  "type": "string"
-                },
-                "brand": {
-                  "$ref": "#/components/schemas/models.Brand"
-                },
-                "brand_id": {
-                  "type": "integer"
-                },
-                "category": {
-                  "$ref": "#/components/schemas/models.Category"
-                },
-                "category_id": {
-                  "type": "integer"
-                },
-                "channels": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "colors": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "compare_at_price": {
-                  "type": "number"
-                },
-                "cost": {
-                  "type": "number"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "integer"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "images": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "is_digital": {
-                  "type": "boolean"
-                },
-                "is_new": {
-                  "type": "boolean"
-                },
-                "low_stock_threshold": {
-                  "type": "integer"
-                },
-                "meta_description": {
-                  "type": "string"
-                },
-                "meta_title": {
-                  "type": "string"
-                },
-                "name": {
-                  "maxLength": 255,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "published_at": {
-                  "type": "string"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "reviews_count": {
-                  "type": "integer"
-                },
-                "sizes": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "sku": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "stock": {
-                  "minimum": 0,
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "tags": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "track_inventory": {
-                  "description": "Inventory extras",
-                  "type": "boolean"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "integer"
-                },
-                "visibility": {
-                  "description": "Publishing extras",
-                  "type": "string"
-                },
-                "warehouse_location": {
-                  "type": "string"
-                },
-                "weight": {
-                  "type": "number"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "name",
-                "price",
-                "sku",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "models.ProductAttribute": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "product_id": {
-                  "type": "integer"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "values": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "minItems": 1,
-                  "type": "array"
-                }
-              },
-              "required": [
-                "name",
-                "values"
-              ],
-              "type": "object"
-            },
-            "models.Brand": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "models.Category": {
-              "properties": {
-                "children": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "level": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "parent": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.Category"
-                    }
-                  ],
-                  "description": "Associations"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "models.Store": {
-              "properties": {
-                "bannerURL": {
-                  "type": "string"
-                },
-                "categories": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "deletedAt": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "followerCount": {
-                  "type": "integer"
-                },
-                "followers": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.User"
-                  },
-                  "type": "array"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "isVerified": {
-                  "type": "boolean"
-                },
-                "joinedAt": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logoURL": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "returnPolicy": {
-                  "type": "string"
-                },
-                "reviewCount": {
-                  "type": "integer"
-                },
-                "reviews": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.StoreReview"
-                  },
-                  "type": "array"
-                },
-                "settings": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "shippingInfo": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.User"
-                    }
-                  ],
-                  "description": "Relationships"
-                },
-                "userID": {
-                  "description": "owner (admin user)",
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.User": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "email": {
-                  "description": "Account identity",
-                  "type": "string"
-                },
-                "email_verified_at": {
-                  "type": "string"
-                },
-                "first_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "id": {
-                  "description": "Primary",
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "last_login_at": {
-                  "description": "Audit",
-                  "type": "string"
-                },
-                "last_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "phone": {
-                  "type": "string"
-                },
-                "role": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "email",
-                "first_name",
-                "last_name"
-              ],
-              "type": "object"
-            },
-            "models.StoreReview": {
-              "properties": {
-                "comment": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "rating": {
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "$ref": "#/components/schemas/models.User"
-                },
-                "userID": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.Payment": {
-              "properties": {
-                "amount": {
-                  "type": "number"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "currency": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "gateway_response": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "method": {
-                  "type": "string"
-                },
-                "order_id": {
-                  "type": "integer"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "stripe_session_id": {
-                  "type": "string"
-                },
-                "transaction_id": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.Shipment": {
-              "properties": {
-                "address_line1": {
-                  "description": "Shipping address",
-                  "type": "string"
-                },
-                "address_line2": {
-                  "type": "string"
-                },
-                "carrier": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "country": {
-                  "type": "string"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "delivered_at": {
-                  "type": "string"
-                },
-                "estimated_delivery": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "order_id": {
-                  "type": "integer"
-                },
-                "postal_code": {
-                  "type": "string"
-                },
-                "provider": {
-                  "$ref": "#/components/schemas/models.ShippingProviders"
-                },
-                "provider_id": {
-                  "type": "integer"
-                },
-                "shipped_at": {
-                  "type": "string"
-                },
-                "shipping_price": {
-                  "type": "number"
-                },
-                "state": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "tracking_number": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.ShippingProviders": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "updated_at": {
-                  "type": "string"
                 }
               },
               "type": "object"
@@ -22084,7 +21416,7 @@ module.exports = [
                           {
                             "properties": {
                               "data": {
-                                "$ref": "#/components/schemas/models.Order"
+                                "$ref": "#/components/schemas/dto.AdminOrderDetailResponse"
                               }
                             },
                             "type": "object"
@@ -22157,11 +21489,10 @@ module.exports = [
               },
               "type": "object"
             },
-            "models.Order": {
+            "dto.AdminOrderDetailResponse": {
               "properties": {
-                "billing_address_id": {
-                  "description": "Address IDs (separate addresses table could be added later)",
-                  "type": "integer"
+                "carrier": {
+                  "type": "string"
                 },
                 "created_at": {
                   "type": "string"
@@ -22169,15 +21500,21 @@ module.exports = [
                 "currency": {
                   "type": "string"
                 },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                "customer_email": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "estimated_delivery": {
+                  "type": "string"
                 },
                 "id": {
                   "type": "integer"
                 },
                 "items": {
                   "items": {
-                    "$ref": "#/components/schemas/models.OrderItem"
+                    "$ref": "#/components/schemas/dto.AdminOrderItemView"
                   },
                   "type": "array"
                 },
@@ -22187,20 +21524,11 @@ module.exports = [
                 "order_number": {
                   "type": "string"
                 },
-                "payment": {
-                  "$ref": "#/components/schemas/models.Payment"
+                "payment_method": {
+                  "type": "string"
                 },
-                "payment_id": {
-                  "type": "integer"
-                },
-                "shipment": {
-                  "$ref": "#/components/schemas/models.Shipment"
-                },
-                "shipment_id": {
-                  "type": "integer"
-                },
-                "shipping_address_id": {
-                  "type": "integer"
+                "payment_status": {
+                  "type": "string"
                 },
                 "status": {
                   "type": "string"
@@ -22208,49 +21536,28 @@ module.exports = [
                 "total_amount": {
                   "type": "number"
                 },
+                "tracking_number": {
+                  "type": "string"
+                },
                 "updated_at": {
                   "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
                 }
               },
               "type": "object"
             },
-            "gorm.DeletedAt": {
+            "dto.AdminOrderItemView": {
               "properties": {
-                "time": {
+                "category": {
                   "type": "string"
-                },
-                "valid": {
-                  "description": "Valid is true if Time is not NULL",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "models.OrderItem": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
                 },
                 "id": {
                   "type": "integer"
                 },
-                "order_id": {
-                  "type": "integer"
+                "image": {
+                  "type": "string"
                 },
-                "price": {
-                  "type": "number"
-                },
-                "product": {
-                  "$ref": "#/components/schemas/models.Product"
+                "name": {
+                  "type": "string"
                 },
                 "product_id": {
                   "type": "integer"
@@ -22258,635 +21565,14 @@ module.exports = [
                 "quantity": {
                   "type": "integer"
                 },
-                "total": {
-                  "description": "read-only",
-                  "type": "number"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "models.Product": {
-              "properties": {
-                "allow_backorder": {
-                  "type": "boolean"
-                },
-                "attributes": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.ProductAttribute"
-                  },
-                  "type": "array"
-                },
-                "barcode": {
-                  "type": "string"
-                },
-                "brand": {
-                  "$ref": "#/components/schemas/models.Brand"
-                },
-                "brand_id": {
-                  "type": "integer"
-                },
-                "category": {
-                  "$ref": "#/components/schemas/models.Category"
-                },
-                "category_id": {
-                  "type": "integer"
-                },
-                "channels": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "colors": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "compare_at_price": {
-                  "type": "number"
-                },
-                "cost": {
-                  "type": "number"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "integer"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "images": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "is_digital": {
-                  "type": "boolean"
-                },
-                "is_new": {
-                  "type": "boolean"
-                },
-                "low_stock_threshold": {
-                  "type": "integer"
-                },
-                "meta_description": {
-                  "type": "string"
-                },
-                "meta_title": {
-                  "type": "string"
-                },
-                "name": {
-                  "maxLength": 255,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "published_at": {
-                  "type": "string"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "reviews_count": {
-                  "type": "integer"
-                },
-                "sizes": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
                 "sku": {
                   "type": "string"
                 },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "stock": {
-                  "minimum": 0,
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "tags": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "track_inventory": {
-                  "description": "Inventory extras",
-                  "type": "boolean"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "integer"
-                },
-                "visibility": {
-                  "description": "Publishing extras",
-                  "type": "string"
-                },
-                "warehouse_location": {
-                  "type": "string"
-                },
-                "weight": {
+                "total_price": {
                   "type": "number"
                 },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "name",
-                "price",
-                "sku",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "models.ProductAttribute": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "product_id": {
-                  "type": "integer"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "values": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "minItems": 1,
-                  "type": "array"
-                }
-              },
-              "required": [
-                "name",
-                "values"
-              ],
-              "type": "object"
-            },
-            "models.Brand": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "models.Category": {
-              "properties": {
-                "children": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "level": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "parent": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.Category"
-                    }
-                  ],
-                  "description": "Associations"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "models.Store": {
-              "properties": {
-                "bannerURL": {
-                  "type": "string"
-                },
-                "categories": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "deletedAt": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "followerCount": {
-                  "type": "integer"
-                },
-                "followers": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.User"
-                  },
-                  "type": "array"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "isVerified": {
-                  "type": "boolean"
-                },
-                "joinedAt": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logoURL": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "rating": {
+                "unit_price": {
                   "type": "number"
-                },
-                "returnPolicy": {
-                  "type": "string"
-                },
-                "reviewCount": {
-                  "type": "integer"
-                },
-                "reviews": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.StoreReview"
-                  },
-                  "type": "array"
-                },
-                "settings": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "shippingInfo": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.User"
-                    }
-                  ],
-                  "description": "Relationships"
-                },
-                "userID": {
-                  "description": "owner (admin user)",
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.User": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "email": {
-                  "description": "Account identity",
-                  "type": "string"
-                },
-                "email_verified_at": {
-                  "type": "string"
-                },
-                "first_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "id": {
-                  "description": "Primary",
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "last_login_at": {
-                  "description": "Audit",
-                  "type": "string"
-                },
-                "last_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "phone": {
-                  "type": "string"
-                },
-                "role": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "email",
-                "first_name",
-                "last_name"
-              ],
-              "type": "object"
-            },
-            "models.StoreReview": {
-              "properties": {
-                "comment": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "rating": {
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "$ref": "#/components/schemas/models.User"
-                },
-                "userID": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.Payment": {
-              "properties": {
-                "amount": {
-                  "type": "number"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "currency": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "gateway_response": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "method": {
-                  "type": "string"
-                },
-                "order_id": {
-                  "type": "integer"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "stripe_session_id": {
-                  "type": "string"
-                },
-                "transaction_id": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.Shipment": {
-              "properties": {
-                "address_line1": {
-                  "description": "Shipping address",
-                  "type": "string"
-                },
-                "address_line2": {
-                  "type": "string"
-                },
-                "carrier": {
-                  "type": "string"
-                },
-                "city": {
-                  "type": "string"
-                },
-                "country": {
-                  "type": "string"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "delivered_at": {
-                  "type": "string"
-                },
-                "estimated_delivery": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "order_id": {
-                  "type": "integer"
-                },
-                "postal_code": {
-                  "type": "string"
-                },
-                "provider": {
-                  "$ref": "#/components/schemas/models.ShippingProviders"
-                },
-                "provider_id": {
-                  "type": "integer"
-                },
-                "shipped_at": {
-                  "type": "string"
-                },
-                "shipping_price": {
-                  "type": "number"
-                },
-                "state": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "tracking_number": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.ShippingProviders": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "updated_at": {
-                  "type": "string"
                 }
               },
               "type": "object"

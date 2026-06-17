@@ -93,6 +93,7 @@ interface Order {
   notes: string;
   tags: string[];
   items: OrderItem[];
+  items_count?: number;
   shipping_address: Address;
   billing_address: Address;
   timeline: TimelineEvent[];

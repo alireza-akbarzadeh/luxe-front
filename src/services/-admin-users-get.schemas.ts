@@ -34,6 +34,10 @@ limit?: number;
  */
 offset?: number;
 /**
+ * Search name or email (partial)
+ */
+search?: string;
+/**
  * Email search (partial)
  */
 email?: string;

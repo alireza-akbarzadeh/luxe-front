@@ -49,9 +49,20 @@ function mapStatusCounts(rows?: { status?: string; count?: number }[]): StatusCo
 function mapSnapshotEvents(
   events?: DtoAdminSalesFeedSnapshotResponse['recent_events']
 ): SaleEvent[] {
+  const allowed = new Set<SaleEventType>([
+    'new_order',
+    'status_change',
+    'cancellation',
+    'shipment',
+    'payment',
+    'refund'
+  ]);
+
   return (events ?? []).map((event) => ({
     id: event.id ?? String(event.timestamp ?? Date.now()),
-    type: (event.type as SaleEventType) ?? 'status_change',
+    type: allowed.has(event.type as SaleEventType)
+      ? (event.type as SaleEventType)
+      : 'status_change',
     title: event.title ?? 'Activity',
     subtitle: event.subtitle ?? '',
     amount: event.amount,
@@ -126,6 +137,10 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
     if (get().paused) return;
 
     set((state) => {
+      if (state.events.some((existing) => existing.id === evt.id)) {
+        return state;
+      }
+
       const events = [evt, ...state.events].slice(0, MAX_EVENTS);
       let totalOrders = state.totalOrders;
       let totalRevenue = state.totalRevenue;
@@ -166,6 +181,9 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
     });
   },
 
-  setActiveUsers: (n) => set({ activeUsers: Math.max(0, n) }),
+  setActiveUsers: (n) =>
+    set((state) =>
+      state.activeUsers === n ? state : { activeUsers: Math.max(0, n) }
+    ),
   setEventsPerMin: (n) => set({ eventsPerMin: Math.max(0, n) })
 }));

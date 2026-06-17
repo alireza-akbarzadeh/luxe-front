@@ -13,8 +13,8 @@ import {
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { useSalesFeedSocket } from '@/domains/sales-feed/hooks/useSalesFeedSocket';
 import { formatStatusLabel, STATUS_COLORS } from '@/domains/sales-feed/constants';
+import { useSalesFeedSocket } from '@/domains/sales-feed/hooks/useSalesFeedSocket';
 import { useSalesFeedStore } from '@/domains/sales-feed/sales-store';
 import { LiveEventFeed } from '@/domains/sales-feed/sections/live-event-feed';
 import { LiveStatCard } from '@/domains/sales-feed/sections/live-stats-card';
@@ -35,7 +35,7 @@ function buildStatusData(counts: Record<string, number>) {
 }
 
 export function LiveSaleFeedDomain() {
-  useSalesFeedSocket();
+  const { isLoading, isError, error } = useSalesFeedSocket();
 
   const events = useSalesFeedStore((s) => s.events);
   const revenueData = useSalesFeedStore((s) => s.revenueData);
@@ -55,6 +55,33 @@ export function LiveSaleFeedDomain() {
   const latestRevenue = revenueData[revenueData.length - 1];
 
   const isLive = connected && !paused;
+
+  if (isLoading) {
+    return (
+      <div className='bg-background flex min-h-[60vh] items-center justify-center'>
+        <p className='text-muted-foreground text-sm font-medium'>Loading live feed…</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    const message =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? String((error as { message?: string }).message)
+        : 'Failed to load live sales feed';
+
+    return (
+      <div className='bg-background flex min-h-[60vh] items-center justify-center p-8'>
+        <div className='max-w-md rounded-2xl border-2 border-dashed p-12 text-center'>
+          <h3 className='text-lg font-bold tracking-tight'>Live feed unavailable</h3>
+          <p className='text-muted-foreground mt-2 text-sm'>{message}</p>
+          <p className='text-muted-foreground mt-4 text-xs'>
+            Ensure you are signed in as an admin and the API is running on port 8080.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='bg-background min-h-full'>

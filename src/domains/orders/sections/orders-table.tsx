@@ -1,13 +1,14 @@
 'use client';
 import {
   IconAdjustmentsHorizontal,
+  IconAlertTriangle,
   IconClock,
   IconRefresh,
   IconUserCheck,
   IconUserMinus,
   IconX
 } from '@tabler/icons-react';
-import type { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table';
+import type { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
@@ -25,14 +26,12 @@ import {
 } from '@/components/ui/sheet';
 import { useOrdersQueryState } from '@/domains/orders/hooks/useOrderFilterQuery';
 import { useOrdersFilterStore } from '@/domains/orders/hooks/useOrderFilterStore';
+import { mapApiOrdersToDomain, mapUiStatusToApi } from '@/domains/orders/order.utils';
 import type { Order, OrderStatus } from '@/domains/orders/orders-types';
 import { OrdersAdvancedFilter } from '@/domains/orders/sections/orders-advanced-filter';
 import { orderColumns } from '@/domains/orders/sections/orders-columns';
 import { exportToCSV } from '@/lib/export-file';
-
-interface OrdersTableProps {
-  data: Order[];
-}
+import { useGetOrders } from '@/services/-orders-get';
 
 const STATUS_TABS: readonly (OrderStatus | 'All')[] = [
   'All',
@@ -45,7 +44,7 @@ const STATUS_TABS: readonly (OrderStatus | 'All')[] = [
   'Refunded'
 ];
 
-export default function OrdersTable({ data }: OrdersTableProps) {
+export default function OrdersTable() {
   const {
     search,
     setSearch,
@@ -60,15 +59,37 @@ export default function OrdersTable({ data }: OrdersTableProps) {
     pageSize,
     setPageSize,
     filters: advancedFilters,
+    minTotal,
+    maxTotal,
     resetAllFilters
   } = useOrdersQueryState();
 
   const { advancedOpen, setAdvancedOpen } = useOrdersFilterStore();
+  const deferredSearch = React.useDeferredValue(search);
 
-  // Derive sorting state directly
+  const queryParams = React.useMemo(
+    () => ({
+      limit: pageSize,
+      offset: page * pageSize,
+      search: deferredSearch.trim() || undefined,
+      status: mapUiStatusToApi(statusTab as OrderStatus | 'All'),
+      min_amount: minTotal ?? undefined,
+      max_amount: maxTotal ?? undefined
+    }),
+    [pageSize, page, deferredSearch, statusTab, minTotal, maxTotal]
+  );
+
+  const { data, isLoading, isFetching, isError, error, refetch } = useGetOrders(queryParams);
+
+  const orders = React.useMemo(
+    () => mapApiOrdersToDomain(data?.data?.orders),
+    [data?.data?.orders]
+  );
+  const total = data?.data?.total ?? 0;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
   const sorting: SortingState = sortKey ? [{ id: sortKey, desc: sortDir === 'desc' }] : [];
 
-  // Derive columnFilters directly from URL state
   const derivedColumnFilters = React.useMemo(() => {
     const filters: ColumnFiltersState = [];
 
@@ -142,33 +163,27 @@ export default function OrdersTable({ data }: OrdersTableProps) {
     }
   };
 
-  const filterFns = {
-    multiSelect: (row: Row<Order>, columnId: string, filterValue: string[] | null) => {
-      if (!filterValue || (Array.isArray(filterValue) && filterValue.length === 0)) return true;
-      const rowValue = String(row.getValue(columnId)).toLowerCase();
-      if (Array.isArray(filterValue)) {
-        return filterValue.some((val) => String(val).toLowerCase() === rowValue);
-      }
-      return String(filterValue).toLowerCase() === rowValue;
-    }
-  };
+  if (isError) {
+    const message =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? String((error as { message?: string }).message)
+        : 'Failed to load orders';
 
-  const globalFilterFn = (row: Row<Order>, _columnId: string, filterValue: string | null) => {
-    const searchStr = String(filterValue ?? '').toLowerCase();
-    if (!searchStr) return true;
-    const orderNumber = row.getValue('order_number') as string;
-    const customerName = row.getValue('customer_name') as string;
-    const customerEmail = row.original.customer_email;
     return (
-      orderNumber?.toLowerCase().includes(searchStr) ||
-      customerName?.toLowerCase().includes(searchStr) ||
-      customerEmail?.toLowerCase().includes(searchStr)
+      <div className='rounded-2xl border-2 border-dashed p-16 text-center'>
+        <IconAlertTriangle className='text-destructive mx-auto mb-4 h-12 w-12' />
+        <h3 className='text-lg font-bold tracking-tight uppercase italic'>Orders unavailable</h3>
+        <p className='text-muted-foreground text-sm font-medium'>{message}</p>
+        <Button className='mt-4' variant='outline' onClick={() => void refetch()}>
+          Try again
+        </Button>
+      </div>
     );
-  };
+  }
 
   return (
     <Table.Root
-      data={data}
+      data={orders}
       columns={orderColumns}
       pagination={{ pageIndex: page, pageSize }}
       onPaginationChange={handlePaginationChange}
@@ -181,11 +196,9 @@ export default function OrdersTable({ data }: OrdersTableProps) {
       manualPagination
       manualFiltering
       manualSorting
+      pageCount={pageCount}
+      rowCount={total}
       enableRowSelection
-      meta={{
-        filterFns,
-        globalFilterFn
-      }}
     >
       <OrdersTableContent
         resetAllFilters={resetAllFilters}
@@ -194,19 +207,24 @@ export default function OrdersTable({ data }: OrdersTableProps) {
         advancedFilters={advancedFilters}
         setAdvancedOpen={setAdvancedOpen}
         advancedOpen={advancedOpen}
+        total={total}
+        isLoading={isLoading}
+        isFetching={isFetching}
       />
     </Table.Root>
   );
 }
 
-// Nested component to access table context
 function OrdersTableContent({
   resetAllFilters,
   setAdvancedOpen,
   advancedOpen,
   search,
   derivedColumnFilters,
-  advancedFilters
+  advancedFilters,
+  total,
+  isLoading,
+  isFetching
 }: {
   resetAllFilters: () => Promise<void>;
   setAdvancedOpen: (open: boolean) => void;
@@ -217,13 +235,16 @@ function OrdersTableContent({
     id: string;
     value: string[] | ((old: string[]) => string[] | null) | null;
   }>;
+  total: number;
+  isLoading: boolean;
+  isFetching: boolean;
 }) {
   const { table } = useTableContext<Order>();
   const router = useRouter();
 
   const handleExport = () => {
     const rows = table.getSelectedRowModel().rows;
-    const exportData = (rows.length ? rows : table.getFilteredRowModel().rows).map((row) => ({
+    const exportData = (rows.length ? rows : table.getRowModel().rows).map((row) => ({
       order_number: row.original.order_number,
       customer: row.original.customer_name,
       email: row.original.customer_email,
@@ -254,7 +275,6 @@ function OrdersTableContent({
 
   return (
     <div className='space-y-0'>
-      {/* Command bar */}
       <div className='bg-muted/5 border-border/40 flex flex-col items-center gap-3 border-b px-6 py-5 md:flex-row'>
         <div className='w-full flex-1 md:w-auto'>
           <Table.Search placeholder='Search by order #, customer name or email…' />
@@ -295,12 +315,11 @@ function OrdersTableContent({
           />
 
           <div className='bg-primary/10 border-primary/20 text-primary rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-            {table.getFilteredRowModel().rows.length} Results
+            {isFetching ? 'Loading…' : `${total.toLocaleString()} Results`}
           </div>
         </div>
       </div>
 
-      {/* Sub-bar with status filters & bulk actions */}
       <div className='bg-background/50 border-border/40 flex items-center justify-between border-b px-6 py-4'>
         <Table.StatusFilters
           columnId='status'
@@ -326,9 +345,9 @@ function OrdersTableContent({
         </div>
       </div>
 
-      {/* Table body */}
       <div className='p-2'>
         <Table.Grid<Order>
+          isLoading={isLoading}
           onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
           getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
           extendMenuActions={(row) => {
@@ -348,12 +367,10 @@ function OrdersTableContent({
         />
       </div>
 
-      {/* Pagination */}
       <div className='border-border/40 border-t px-6 py-4'>
         <Table.Pagination />
       </div>
 
-      {/* Advanced filter sheet */}
       <Sheet open={advancedOpen} onOpenChange={setAdvancedOpen}>
         <SheetContent side='right' className='flex w-full max-w-md flex-col p-0'>
           <SheetHeader className='border-b px-6 py-5'>
