@@ -4276,6 +4276,347 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-dashboard-overview-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/dashboard/overview": {
+            "get": {
+              "description": "Returns period KPIs, revenue series, order status breakdown, recent orders, top products, and low-stock alerts.",
+              "parameters": [
+                {
+                  "description": "Period: 7d, 30d, or 90d (default 30d)",
+                  "in": "query",
+                  "name": "period",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminDashboardOverviewResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Admin dashboard overview",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardOverviewResponse": {
+              "properties": {
+                "generated_at": {
+                  "type": "string"
+                },
+                "kpis": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPIs"
+                },
+                "low_stock_products": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardLowStockProduct"
+                  },
+                  "type": "array"
+                },
+                "orders_by_status": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardStatusCount"
+                  },
+                  "type": "array"
+                },
+                "period": {
+                  "type": "string"
+                },
+                "platform": {
+                  "$ref": "#/components/schemas/dto.AdminStatsResponse"
+                },
+                "recent_orders": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardRecentOrder"
+                  },
+                  "type": "array"
+                },
+                "revenue_series": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardSeriesPoint"
+                  },
+                  "type": "array"
+                },
+                "top_products": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardTopProduct"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardKPIs": {
+              "properties": {
+                "avg_order_value": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "new_customers": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "orders": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "revenue": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardKPI": {
+              "properties": {
+                "change_percent": {
+                  "type": "number"
+                },
+                "previous_value": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardLowStockProduct": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "threshold": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardStatusCount": {
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminStatsResponse": {
+              "properties": {
+                "low_stock_products": {
+                  "type": "integer"
+                },
+                "pending_orders": {
+                  "type": "integer"
+                },
+                "total_active_products": {
+                  "type": "integer"
+                },
+                "total_orders": {
+                  "type": "integer"
+                },
+                "total_revenue": {
+                  "type": "number"
+                },
+                "total_users": {
+                  "type": "integer"
+                },
+                "total_wallet_balance": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardRecentOrder": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "customer_email": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "total_amount": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardSeriesPoint": {
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "orders": {
+                  "type": "integer"
+                },
+                "revenue": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardTopProduct": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "revenue": {
+                  "type": "number"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "units_sold": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-categories-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -7336,6 +7677,216 @@ module.exports = [
                   "type": "integer"
                 },
                 "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-sales-feed-snapshot-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/sales-feed/snapshot": {
+            "get": {
+              "description": "Returns today's order totals, status breakdown, revenue series, and recent feed events.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminSalesFeedSnapshotResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Live sales feed snapshot",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminSalesFeedSnapshotResponse": {
+              "properties": {
+                "generated_at": {
+                  "type": "string"
+                },
+                "recent_events": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminSalesFeedEvent"
+                  },
+                  "type": "array"
+                },
+                "revenue_series": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardSeriesPoint"
+                  },
+                  "type": "array"
+                },
+                "status_counts": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminDashboardStatusCount"
+                  },
+                  "type": "array"
+                },
+                "total_orders_today": {
+                  "type": "integer"
+                },
+                "total_revenue_today": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminSalesFeedEvent": {
+              "properties": {
+                "amount": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "subtitle": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardSeriesPoint": {
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "orders": {
+                  "type": "integer"
+                },
+                "revenue": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardStatusCount": {
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "status": {
                   "type": "string"
                 }
               },

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
-import { STATUS_COLORS } from './mock-data';
+import type { DtoAdminSalesFeedSnapshotResponse } from '@/services/-admin-sales-feed-snapshot-get.schemas';
+
+import { normalizeStatusKey, SALES_FEED_STATUS_KEYS, type SalesFeedStatusKey } from './constants';
 
 export type SaleEventType =
   | 'new_order'
@@ -25,20 +27,47 @@ export type RevenueSnapshot = {
   orders: number;
 };
 
-export type StatusCounts = Record<keyof typeof STATUS_COLORS, number>;
+export type StatusCounts = Record<SalesFeedStatusKey, number>;
 
-const INITIAL_STATUS_COUNTS: StatusCounts = {
-  Pending: 0,
-  Processing: 0,
-  Fulfilled: 0,
-  Shipped: 0,
-  Delivered: 0,
-  Cancelled: 0,
-  Refunded: 0
-};
+const INITIAL_STATUS_COUNTS = SALES_FEED_STATUS_KEYS.reduce((acc, key) => {
+  acc[key] = 0;
+  return acc;
+}, {} as StatusCounts);
 
 const MAX_REVENUE_POINTS = 30;
 const MAX_EVENTS = 60;
+
+function mapStatusCounts(rows?: { status?: string; count?: number }[]): StatusCounts {
+  const counts = { ...INITIAL_STATUS_COUNTS };
+  for (const row of rows ?? []) {
+    const key = row.status ? normalizeStatusKey(row.status) : null;
+    if (key) counts[key] = row.count ?? 0;
+  }
+  return counts;
+}
+
+function mapSnapshotEvents(
+  events?: DtoAdminSalesFeedSnapshotResponse['recent_events']
+): SaleEvent[] {
+  return (events ?? []).map((event) => ({
+    id: event.id ?? String(event.timestamp ?? Date.now()),
+    type: (event.type as SaleEventType) ?? 'status_change',
+    title: event.title ?? 'Activity',
+    subtitle: event.subtitle ?? '',
+    amount: event.amount,
+    timestamp: event.timestamp ?? Date.now()
+  }));
+}
+
+function mapRevenueSeries(
+  series?: DtoAdminSalesFeedSnapshotResponse['revenue_series']
+): RevenueSnapshot[] {
+  return (series ?? []).map((point) => ({
+    time: point.date ?? '',
+    revenue: point.revenue ?? 0,
+    orders: point.orders ?? 0
+  }));
+}
 
 interface SalesFeedState {
   events: SaleEvent[];
@@ -50,12 +79,14 @@ interface SalesFeedState {
   eventsPerMin: number;
   paused: boolean;
   connected: boolean;
+  snapshotLoaded: boolean;
   lastRevDelta: number;
   lastOrderDelta: number;
 
   setPaused: (paused: boolean) => void;
   setConnected: (connected: boolean) => void;
   clearEvents: () => void;
+  hydrateFromSnapshot: (snapshot: DtoAdminSalesFeedSnapshotResponse) => void;
   ingestEvent: (evt: SaleEvent) => void;
   ingestRevenueSnapshot: (snap: RevenueSnapshot) => void;
   setActiveUsers: (n: number) => void;
@@ -72,6 +103,7 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
   eventsPerMin: 0,
   paused: false,
   connected: false,
+  snapshotLoaded: false,
   lastRevDelta: 0,
   lastOrderDelta: 0,
 
@@ -79,38 +111,44 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
   setConnected: (connected) => set({ connected }),
   clearEvents: () => set({ events: [] }),
 
+  hydrateFromSnapshot: (snapshot) => {
+    set({
+      snapshotLoaded: true,
+      totalOrders: snapshot.total_orders_today ?? 0,
+      totalRevenue: snapshot.total_revenue_today ?? 0,
+      statusCounts: mapStatusCounts(snapshot.status_counts),
+      events: mapSnapshotEvents(snapshot.recent_events),
+      revenueData: mapRevenueSeries(snapshot.revenue_series)
+    });
+  },
+
   ingestEvent: (evt) => {
     if (get().paused) return;
 
     set((state) => {
       const events = [evt, ...state.events].slice(0, MAX_EVENTS);
-      const statusCounts = { ...state.statusCounts };
       let totalOrders = state.totalOrders;
       let totalRevenue = state.totalRevenue;
       let lastOrderDelta = state.lastOrderDelta;
+      const statusCounts = { ...state.statusCounts };
 
-      switch (evt.type) {
-        case 'new_order':
-        case 'payment':
-          totalOrders += 1;
-          lastOrderDelta = 2.1;
-          totalRevenue += evt.amount ?? 0;
-          statusCounts.Pending += 1;
-          break;
-        case 'status_change':
-          statusCounts.Processing += 1;
-          statusCounts.Pending = Math.max(0, statusCounts.Pending - 1);
-          break;
-        case 'cancellation':
-          statusCounts.Cancelled += 1;
-          break;
-        case 'refund':
-          statusCounts.Refunded += 1;
-          break;
-        case 'shipment':
-          statusCounts.Shipped += 1;
-          statusCounts.Fulfilled = Math.max(0, statusCounts.Fulfilled - 1);
-          break;
+      if (evt.type === 'new_order' || evt.type === 'payment') {
+        totalOrders += 1;
+        totalRevenue += evt.amount ?? 0;
+        lastOrderDelta = 2.1;
+        statusCounts.paid += 1;
+      }
+
+      if (evt.type === 'cancellation') {
+        statusCounts.cancelled += 1;
+      }
+
+      if (evt.type === 'refund') {
+        statusCounts.refunded += 1;
+      }
+
+      if (evt.type === 'shipment') {
+        statusCounts.shipped += 1;
       }
 
       return { events, statusCounts, totalOrders, totalRevenue, lastOrderDelta };
@@ -128,6 +166,6 @@ export const useSalesFeedStore = create<SalesFeedState>((set, get) => ({
     });
   },
 
-  setActiveUsers: (n) => set({ activeUsers: Math.max(5, Math.min(120, n)) }),
-  setEventsPerMin: (n) => set({ eventsPerMin: n })
+  setActiveUsers: (n) => set({ activeUsers: Math.max(0, n) }),
+  setEventsPerMin: (n) => set({ eventsPerMin: Math.max(0, n) })
 }));

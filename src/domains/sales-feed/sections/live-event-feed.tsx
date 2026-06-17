@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { EVENT_TYPE_META } from '../mock-data';
+import { EVENT_TYPE_META } from '../constants';
 import type { SaleEvent } from '../sales-store';
 
 export function LiveEventFeed({

@@ -42,7 +42,7 @@ const EVENT_TEMPLATES = {
   }),
   status_change: (name: string, order: string) => ({
     title: `Order ${order} updated`,
-    subtitle: `${name}'s order moved to Processing`
+    subtitle: `${name}'s order moved to processing`
   }),
   payment: (name: string, order: string, amount: number) => ({
     title: `Payment received`,
@@ -64,6 +64,7 @@ const EVENT_TEMPLATES = {
 
 let idCounter = 1000;
 
+/** Local-only simulator used when NEXT_PUBLIC_SALES_FEED_MOCK=true. */
 export function generateEvent(): SaleEvent {
   const types: SaleEventType[] = [
     'new_order',
@@ -98,22 +99,3 @@ export function generateRevenueSnapshot() {
     orders: Math.floor(Math.random() * 30 + 5)
   };
 }
-
-export const STATUS_COLORS = {
-  Pending: '#f59e0b',
-  Processing: '#3b82f6',
-  Fulfilled: '#8b5cf6',
-  Shipped: '#06b6d4',
-  Delivered: '#22c55e',
-  Cancelled: '#ef4444',
-  Refunded: '#ec4899'
-};
-
-export const EVENT_TYPE_META = {
-  new_order: { label: 'New Order', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  status_change: { label: 'Status', color: 'text-blue-600', bg: 'bg-blue-50' },
-  payment: { label: 'Payment', color: 'text-violet-600', bg: 'bg-violet-50' },
-  cancellation: { label: 'Cancelled', color: 'text-red-600', bg: 'bg-red-50' },
-  refund: { label: 'Refund', color: 'text-pink-600', bg: 'bg-pink-50' },
-  shipment: { label: 'Shipped', color: 'text-cyan-600', bg: 'bg-cyan-50' }
-};

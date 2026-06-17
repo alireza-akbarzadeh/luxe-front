@@ -25,15 +25,27 @@ export interface DtoAdminDashboardKPIs {
   revenue?: DtoAdminDashboardKPI;
 }
 
-export interface DtoAdminDashboardSeriesPoint {
-  date?: string;
-  orders?: number;
-  revenue?: number;
+export interface DtoAdminDashboardLowStockProduct {
+  id?: number;
+  name?: string;
+  sku?: string;
+  stock?: number;
+  threshold?: number;
 }
 
 export interface DtoAdminDashboardStatusCount {
   count?: number;
   status?: string;
+}
+
+export interface DtoAdminStatsResponse {
+  low_stock_products?: number;
+  pending_orders?: number;
+  total_active_products?: number;
+  total_orders?: number;
+  total_revenue?: number;
+  total_users?: number;
+  total_wallet_balance?: number;
 }
 
 export interface DtoAdminDashboardRecentOrder {
@@ -47,6 +59,12 @@ export interface DtoAdminDashboardRecentOrder {
   total_amount?: number;
 }
 
+export interface DtoAdminDashboardSeriesPoint {
+  date?: string;
+  orders?: number;
+  revenue?: number;
+}
+
 export interface DtoAdminDashboardTopProduct {
   id?: number;
   name?: string;
@@ -54,24 +72,6 @@ export interface DtoAdminDashboardTopProduct {
   sku?: string;
   stock?: number;
   units_sold?: number;
-}
-
-export interface DtoAdminDashboardLowStockProduct {
-  id?: number;
-  name?: string;
-  sku?: string;
-  stock?: number;
-  threshold?: number;
-}
-
-export interface DtoAdminStatsResponse {
-  low_stock_products?: number;
-  pending_orders?: number;
-  total_active_products?: number;
-  total_orders?: number;
-  total_revenue?: number;
-  total_users?: number;
-  total_wallet_balance?: number;
 }
 
 export interface DtoAdminDashboardOverviewResponse {
@@ -86,19 +86,14 @@ export interface DtoAdminDashboardOverviewResponse {
   top_products?: DtoAdminDashboardTopProduct[];
 }
 
-export type GetAdminDashboardOverviewPeriod =
-  (typeof GetAdminDashboardOverviewPeriod)[keyof typeof GetAdminDashboardOverviewPeriod];
-
-export const GetAdminDashboardOverviewPeriod = {
-  '7d': '7d',
-  '30d': '30d',
-  '90d': '90d'
-} as const;
-
 export type GetAdminDashboardOverviewParams = {
-  period?: GetAdminDashboardOverviewPeriod;
+/**
+ * Period: 7d, 30d, or 90d (default 30d)
+ */
+period?: string;
 };
 
 export type GetAdminDashboardOverview200 = UtilsResponse & {
   data?: DtoAdminDashboardOverviewResponse;
 };
+

@@ -14,7 +14,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { useSalesFeedSocket } from '@/domains/sales-feed/hooks/useSalesFeedSocket';
-import { STATUS_COLORS } from '@/domains/sales-feed/mock-data';
+import { formatStatusLabel, STATUS_COLORS } from '@/domains/sales-feed/constants';
 import { useSalesFeedStore } from '@/domains/sales-feed/sales-store';
 import { LiveEventFeed } from '@/domains/sales-feed/sections/live-event-feed';
 import { LiveStatCard } from '@/domains/sales-feed/sections/live-stats-card';
@@ -25,11 +25,13 @@ import { cn } from '@/lib/utils';
 const MAX_REVENUE_POINTS = 30;
 
 function buildStatusData(counts: Record<string, number>) {
-  return Object.keys(counts).map((name) => ({
-    name,
-    value: counts[name] ?? 0,
-    color: STATUS_COLORS[name as keyof typeof STATUS_COLORS]
-  }));
+  return Object.entries(counts)
+    .filter(([, value]) => value > 0)
+    .map(([name, value]) => ({
+      name: formatStatusLabel(name),
+      value,
+      color: STATUS_COLORS[name as keyof typeof STATUS_COLORS] ?? '#94a3b8'
+    }));
 }
 
 export function LiveSaleFeedDomain() {
@@ -147,7 +149,7 @@ export function LiveSaleFeedDomain() {
             pulse={isLive}
           />
           <LiveStatCard
-            label='Active Users'
+            label='Live viewers'
             value={activeUsers}
             icon={IconUsers}
             iconColor='text-violet-600'
