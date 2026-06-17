@@ -1,0 +1,49 @@
+---
+description: Luxe Front — Next.js conventions, Orval API layer, and AI task rules
+alwaysApply: true
+---
+
+# Luxe Front — AI Rules
+
+Also read: `AGENTS.md`, `documentation/architecture.md`, full `.cursorrules`.
+
+## Stack
+Next.js 16 · React 19 · TS strict · Tailwind v4 · shadcn · TanStack Query/Form/Table · Zustand · Orval · pnpm
+
+## Before any API-related work
+
+1. Check `src/services/` for an existing Orval hook — **never** add raw `axios`/`fetch` in components.
+2. If endpoint/types missing: backend `make swagger` → **restart API** → `pnpm api:gen`.
+3. **Never edit** `src/services/*` or `orval.config.js` by hand.
+
+## Orval import pattern
+
+```ts
+import { useGetX, getGetXQueryKey } from '@/services/-<path>-<method>';
+import type { GetX200 } from '@/services/-<path>-<method>.schemas';
+```
+
+Invalidate with generated `get*QueryKey()` — not string literals.
+
+## Layering
+
+```
+page.tsx → domains/<name>/*.domain.tsx → Orval hooks → API
+```
+
+- **Domains** live in `src/domains/` (not `features/`).
+- **Forms** → `useAppForm` (`src/components/forms/useAppForm.ts`).
+- **Tables** → `Table` from `src/components/table/data-table.tsx`.
+- **Server data** → TanStack Query only; **UI state** → Zustand.
+
+## Hard rules
+
+- Server Components by default; `"use client"` only when needed.
+- No `any`; minimal justified `as` casts.
+- Table filter/pagination → URL (`nuqs`), not Zustand.
+- Don't edit `src/components/ui/*` unless asked.
+
+## Before done
+
+- `pnpm check` (typecheck + lint:fix) on changed code.
+- If backend API changed: confirm `pnpm api:gen` was run with API up.

@@ -25,6 +25,11 @@ export interface DtoStateView {
 
 export interface DtoTransitionView {
   event?: string;
+  from_state?: DtoStateView;
+  guard_key?: string;
+  hook_key?: string;
+  id?: number;
+  is_active?: boolean;
   name?: string;
   required_role?: string;
   to_state?: DtoStateView;

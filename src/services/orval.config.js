@@ -8864,7 +8864,22 @@ module.exports = [
                   "content": {
                     "application/json": {
                       "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/models.Workflow"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
                       }
                     }
                   },
@@ -8898,6 +8913,153 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.Workflow": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "key": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "states": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.WorkflowState"
+                  },
+                  "type": "array"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.WorkflowTransition"
+                  },
+                  "type": "array"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "gorm.DeletedAt": {
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "valid": {
+                  "description": "Valid is true if Time is not NULL",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowTransition": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "from_state_id": {
+                  "type": "integer"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "to_state_id": {
+                  "type": "integer"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -22336,6 +22498,21 @@ module.exports = [
                 "event": {
                   "type": "string"
                 },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
                 "name": {
                   "type": "string"
                 },
@@ -26816,6 +26993,21 @@ module.exports = [
               "properties": {
                 "event": {
                   "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
                 },
                 "name": {
                   "type": "string"
@@ -32693,6 +32885,21 @@ module.exports = [
                 "event": {
                   "type": "string"
                 },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
                 "name": {
                   "type": "string"
                 },
@@ -38411,6 +38618,21 @@ module.exports = [
                 "event": {
                   "type": "string"
                 },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
                 "name": {
                   "type": "string"
                 },
@@ -38589,6 +38811,21 @@ module.exports = [
               "properties": {
                 "event": {
                   "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "guard_key": {
+                  "type": "string"
+                },
+                "hook_key": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
                 },
                 "name": {
                   "type": "string"

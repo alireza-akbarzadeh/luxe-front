@@ -21,7 +21,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  UtilsResponse
+  GetAdminWorkflows200
 } from './-admin-workflows-get.schemas';
 
 import { customInstance } from '../lib/api/api-client';
@@ -40,7 +40,7 @@ export const getAdminWorkflows = (
 ) => {
 
 
-      return customInstance<UtilsResponse>(
+      return customInstance<GetAdminWorkflows200>(
       {url: `/admin/workflows`, method: 'GET', signal
     },
       options);

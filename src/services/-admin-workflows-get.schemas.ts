@@ -12,3 +12,60 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
+export interface GormDeletedAt {
+  time?: string;
+  /** Valid is true if Time is not NULL */
+  valid?: boolean;
+}
+
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  created_at?: string;
+  description?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+  updated_at?: string;
+  workflow_id?: number;
+}
+
+export interface ModelsWorkflowTransition {
+  created_at?: string;
+  event?: string;
+  from_state?: ModelsWorkflowState;
+  from_state_id?: number;
+  guard_key?: string;
+  hook_key?: string;
+  id?: number;
+  is_active?: boolean;
+  name?: string;
+  required_role?: string;
+  sort_order?: number;
+  to_state?: ModelsWorkflowState;
+  to_state_id?: number;
+  updated_at?: string;
+  workflow_id?: number;
+}
+
+export interface ModelsWorkflow {
+  created_at?: string;
+  deleted_at?: GormDeletedAt;
+  description?: string;
+  entity_type?: string;
+  id?: number;
+  is_active?: boolean;
+  key?: string;
+  name?: string;
+  states?: ModelsWorkflowState[];
+  transitions?: ModelsWorkflowTransition[];
+  updated_at?: string;
+}
+
+export type GetAdminWorkflows200 = UtilsResponse & {
+  data?: ModelsWorkflow[];
+};
+
