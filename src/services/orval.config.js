@@ -2423,11 +2423,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -2465,6 +2460,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -2685,6 +2683,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -3249,11 +3250,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -3291,6 +3287,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -3511,6 +3510,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -3946,11 +3948,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -3988,6 +3985,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -4208,6 +4208,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -4249,6 +4252,575 @@ module.exports = [
               },
               "type": "object"
             },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-categories-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/import/categories": {
+            "post": {
+              "description": "Upload an .xlsx file. Row 1 must be the header (name,slug,description,parent_id,is_active). Returns per-row result.",
+              "requestBody": {
+                "content": {
+                  "multipart/form-data": {
+                    "schema": {
+                      "properties": {
+                        "file": {
+                          "description": "Excel file (.xlsx)",
+                          "format": "binary",
+                          "type": "string",
+                          "x-formData-name": "file"
+                        }
+                      },
+                      "required": [
+                        "file"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ImportSummary"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Import categories from Excel (admin)",
+              "tags": [
+                "Admin",
+                "Import"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ImportSummary": {
+              "properties": {
+                "created": {
+                  "description": "successfully inserted",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "validation or DB errors",
+                  "type": "integer"
+                },
+                "rows": {
+                  "description": "per-row detail",
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ImportRowResult"
+                  },
+                  "type": "array"
+                },
+                "skipped": {
+                  "description": "intentionally skipped (e.g. empty row)",
+                  "type": "integer"
+                },
+                "total_rows": {
+                  "description": "data rows parsed (header excluded)",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ImportRowResult": {
+              "properties": {
+                "error": {
+                  "description": "human-readable reason (when status=failed/skipped)",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "ID of the created record (when status=created)",
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "display value from the row for easy identification",
+                  "type": "string"
+                },
+                "row": {
+                  "description": "1-based Excel row number (row 1 = header)",
+                  "type": "integer"
+                },
+                "status": {
+                  "description": "\"created\" | \"skipped\" | \"failed\"",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-products-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/import/products": {
+            "post": {
+              "description": "Upload an .xlsx file. Row 1 must be the header (name,sku,price,stock,description,status,category_id,brand_id,store_id,compare_at_price,barcode,low_stock_threshold,weight). Returns per-row result.",
+              "parameters": [
+                {
+                  "description": "Default store ID for products without one in the file",
+                  "in": "query",
+                  "name": "store_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "multipart/form-data": {
+                    "schema": {
+                      "properties": {
+                        "file": {
+                          "description": "Excel file (.xlsx)",
+                          "format": "binary",
+                          "type": "string",
+                          "x-formData-name": "file"
+                        }
+                      },
+                      "required": [
+                        "file"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ImportSummary"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Import products from Excel (admin)",
+              "tags": [
+                "Admin",
+                "Import"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ImportSummary": {
+              "properties": {
+                "created": {
+                  "description": "successfully inserted",
+                  "type": "integer"
+                },
+                "failed": {
+                  "description": "validation or DB errors",
+                  "type": "integer"
+                },
+                "rows": {
+                  "description": "per-row detail",
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ImportRowResult"
+                  },
+                  "type": "array"
+                },
+                "skipped": {
+                  "description": "intentionally skipped (e.g. empty row)",
+                  "type": "integer"
+                },
+                "total_rows": {
+                  "description": "data rows parsed (header excluded)",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ImportRowResult": {
+              "properties": {
+                "error": {
+                  "description": "human-readable reason (when status=failed/skipped)",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "ID of the created record (when status=created)",
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "display value from the row for easy identification",
+                  "type": "string"
+                },
+                "row": {
+                  "description": "1-based Excel row number (row 1 = header)",
+                  "type": "integer"
+                },
+                "status": {
+                  "description": "\"created\" | \"skipped\" | \"failed\"",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-template-{entity}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/import/template/{entity}": {
+            "get": {
+              "description": "Returns a pre-formatted .xlsx template for the given entity (products | categories).",
+              "parameters": [
+                {
+                  "description": "Entity type: products | categories",
+                  "in": "path",
+                  "name": "entity",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                      "schema": {
+                        "format": "binary",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Download import template (admin)",
+              "tags": [
+                "Admin",
+                "Import"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
             "utils.Response": {
               "properties": {
                 "code": {
@@ -6139,6 +6711,643 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-orders-bulk-status-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/orders/bulk-status": {
+            "post": {
+              "description": "Applies the given status to all specified order IDs. Max 500 IDs per call.",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.BulkUpdateOrderStatusRequest"
+                    }
+                  }
+                },
+                "description": "Order IDs and target status",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "properties": {
+                                  "updated": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Bulk update order status (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.BulkUpdateOrderStatusRequest": {
+              "properties": {
+                "order_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "maxItems": 500,
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "status": {
+                  "enum": [
+                    "paid",
+                    "shipped",
+                    "delivered",
+                    "cancelled"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "order_ids",
+                "status"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-orders-export-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/orders/export": {
+            "get": {
+              "description": "Returns a CSV file of orders filtered by status and date range (max 10 000 rows).",
+              "parameters": [
+                {
+                  "description": "Filter by status",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Start date (YYYY-MM-DD)",
+                  "in": "query",
+                  "name": "from_date",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "End date (YYYY-MM-DD)",
+                  "in": "query",
+                  "name": "to_date",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "text/csv": {
+                      "schema": {
+                        "format": "binary",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "text/csv": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "text/csv": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "text/csv": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Export orders CSV (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/returns": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Filter by status",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by user ID",
+                  "in": "query",
+                  "name": "user_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List returns (admin)",
+              "tags": [
+                "Returns"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-{id}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/returns/{id}/transition": {
+            "post": {
+              "parameters": [
+                {
+                  "description": "Return ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformReturnTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Transition event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.TransitionResultView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Transition return state (admin)",
+              "tags": [
+                "Returns"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformReturnTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -6359,6 +7568,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -6569,6 +7781,728 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stats-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/stats": {
+            "get": {
+              "description": "Returns counts of users, orders, products, revenue, wallet balances, and low-stock alerts.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminStatsResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Platform stats (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminStatsResponse": {
+              "properties": {
+                "low_stock_products": {
+                  "type": "integer"
+                },
+                "pending_orders": {
+                  "type": "integer"
+                },
+                "total_active_products": {
+                  "type": "integer"
+                },
+                "total_orders": {
+                  "type": "integer"
+                },
+                "total_revenue": {
+                  "type": "number"
+                },
+                "total_users": {
+                  "type": "integer"
+                },
+                "total_wallet_balance": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/users": {
+            "get": {
+              "description": "Returns paginated users with optional filters by email, role, and active status.",
+              "parameters": [
+                {
+                  "description": "Items per page (default 20)",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Email search (partial)",
+                  "in": "query",
+                  "name": "email",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by role (admin|user)",
+                  "in": "query",
+                  "name": "role",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by active status",
+                  "in": "query",
+                  "name": "is_active",
+                  "schema": {
+                    "type": "boolean"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "properties": {
+                                  "limit": {
+                                    "type": "integer"
+                                  },
+                                  "offset": {
+                                    "type": "integer"
+                                  },
+                                  "total": {
+                                    "type": "integer"
+                                  },
+                                  "users": {
+                                    "items": {
+                                      "$ref": "#/components/schemas/dto.AdminUserResponse"
+                                    },
+                                    "type": "array"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List users (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminUserResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "email_verified_at": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "last_login_at": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-{id}-active-patch.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/users/{id}/active": {
+            "patch": {
+              "description": "Enables or disables a user account.",
+              "parameters": [
+                {
+                  "description": "User ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.ToggleUserActiveRequest"
+                    }
+                  }
+                },
+                "description": "Active flag",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Toggle user active status (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.ToggleUserActiveRequest": {
+              "properties": {
+                "is_active": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-{id}-role-patch.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/users/{id}/role": {
+            "patch": {
+              "description": "Sets the role of a user to 'admin' or 'user'.",
+              "parameters": [
+                {
+                  "description": "User ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateUserRoleRequest"
+                    }
+                  }
+                },
+                "description": "New role",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update user role (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateUserRoleRequest": {
+              "properties": {
+                "role": {
+                  "enum": [
+                    "admin",
+                    "user"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "role"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-wallet-adjust-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -6728,6 +8662,1417 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-webhooks-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/webhooks": {
+            "get": {
+              "description": "Returns paginated Stripe webhook events with optional filters by source, type, and status.",
+              "parameters": [
+                {
+                  "description": "Items per page (default 20)",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Filter by source (e.g. stripe)",
+                  "in": "query",
+                  "name": "source",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by event type",
+                  "in": "query",
+                  "name": "event_type",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by status (received|processed|failed)",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List webhook events (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows": {
+            "get": {
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List workflows (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows": {
+            "post": {
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateWorkflowRequest"
+                    }
+                  }
+                },
+                "description": "Workflow",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create workflow (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateWorkflowRequest": {
+              "properties": {
+                "description": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "entity_type": {
+                  "maxLength": 64,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "key": {
+                  "maxLength": 64,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "entity_type",
+                "key",
+                "name"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete workflow (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-patch.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}": {
+            "patch": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateWorkflowRequest"
+                    }
+                  }
+                },
+                "description": "Fields",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update workflow (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateWorkflowRequest": {
+              "properties": {
+                "description": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/states": {
+            "post": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateWorkflowStateRequest"
+                    }
+                  }
+                },
+                "description": "State",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create workflow state (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateWorkflowStateRequest": {
+              "properties": {
+                "code": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "description": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "name"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-{stateId}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/states/{stateId}": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "State ID",
+                  "in": "path",
+                  "name": "stateId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete workflow state (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-{stateId}-patch.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/states/{stateId}": {
+            "patch": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "State ID",
+                  "in": "path",
+                  "name": "stateId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateWorkflowStateRequest"
+                    }
+                  }
+                },
+                "description": "Fields",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update workflow state (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateWorkflowStateRequest": {
+              "properties": {
+                "color": {
+                  "type": "string"
+                },
+                "description": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/transitions": {
+            "post": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateWorkflowTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Transition",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create workflow transition (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateWorkflowTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "from_state_code": {
+                  "description": "empty = wildcard \"any state\"",
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "guard_key": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "hook_key": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "required_role": {
+                  "maxLength": 32,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "to_state_code": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event",
+                "name",
+                "to_state_code"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-{transitionId}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/transitions/{transitionId}": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Transition ID",
+                  "in": "path",
+                  "name": "transitionId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete workflow transition (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-{transitionId}-patch.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/workflows/{id}/transitions/{transitionId}": {
+            "patch": {
+              "parameters": [
+                {
+                  "description": "Workflow ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Transition ID",
+                  "in": "path",
+                  "name": "transitionId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateWorkflowTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Fields",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update workflow transition (admin)",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateWorkflowTransitionRequest": {
+              "properties": {
+                "guard_key": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "hook_key": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "required_role": {
+                  "maxLength": 32,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-change-password-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -6837,11 +10182,11 @@ module.exports = [
             "dto.ChangePasswordRequest": {
               "properties": {
                 "current_password": {
-                  "minLength": 6,
+                  "minLength": 8,
                   "type": "string"
                 },
                 "new_password": {
-                  "minLength": 6,
+                  "minLength": 8,
                   "type": "string"
                 }
               },
@@ -7682,7 +11027,7 @@ module.exports = [
             "dto.ResetPasswordRequest": {
               "properties": {
                 "new_password": {
-                  "minLength": 6,
+                  "minLength": 8,
                   "type": "string"
                 },
                 "token": {
@@ -9913,11 +13258,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -9955,6 +13295,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -10175,6 +13518,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -10592,11 +13938,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -10634,6 +13975,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -10854,6 +14198,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -11230,11 +14577,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -11272,6 +14614,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -11492,6 +14837,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -11723,6 +15071,11 @@ module.exports = [
                   "type": "boolean"
                 },
                 "payment_method": {
+                  "enum": [
+                    "mock",
+                    "stripe",
+                    "wallet"
+                  ],
                   "type": "string"
                 },
                 "phone": {
@@ -11746,13 +15099,9 @@ module.exports = [
               },
               "required": [
                 "address_line1",
-                "card_number",
                 "city",
                 "country",
-                "cvv",
                 "email",
-                "expiry_month",
-                "expiry_year",
                 "first_name",
                 "last_name",
                 "phone",
@@ -11833,6 +15182,9 @@ module.exports = [
                   "type": "string"
                 },
                 "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
                   "type": "integer"
                 }
               },
@@ -11996,11 +15348,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -12038,6 +15385,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -12322,6 +15672,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -12393,6 +15746,9 @@ module.exports = [
                   "type": "integer"
                 },
                 "status": {
+                  "type": "string"
+                },
+                "stripe_session_id": {
                   "type": "string"
                 },
                 "transaction_id": {
@@ -12471,6 +15827,9 @@ module.exports = [
                   "type": "string"
                 },
                 "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
                   "type": "integer"
                 }
               },
@@ -13158,9 +16517,6 @@ module.exports = [
                   "type": "array"
                 }
               },
-              "required": [
-                "product_ids"
-              ],
               "type": "object"
             },
             "utils.Response": {
@@ -14975,7 +18331,7 @@ module.exports = [
         "paths": {
           "/health": {
             "get": {
-              "description": "Returns the health status of the API and database",
+              "description": "Readiness-style check (database + Redis when configured). Same as /health/ready.",
               "responses": {
                 "200": {
                   "content": {
@@ -15001,6 +18357,149 @@ module.exports = [
                 }
               },
               "summary": "Health check",
+              "tags": [
+                "health"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {}
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-health-live-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/health/live": {
+            "get": {
+              "description": "Returns 200 if the process is alive (no dependency checks).",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Liveness probe",
+              "tags": [
+                "health"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {}
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-health-ready-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/health/ready": {
+            "get": {
+              "description": "Returns 200 when database (and Redis if configured) are reachable.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "503": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "additionalProperties": true,
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "Service Unavailable"
+                }
+              },
+              "summary": "Readiness probe",
               "tags": [
                 "health"
               ]
@@ -16235,6 +19734,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -16397,11 +19899,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -16439,6 +19936,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -16723,6 +20223,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -16794,6 +20297,9 @@ module.exports = [
                   "type": "integer"
                 },
                 "status": {
+                  "type": "string"
+                },
+                "stripe_session_id": {
                   "type": "string"
                 },
                 "transaction_id": {
@@ -16872,6 +20378,9 @@ module.exports = [
                   "type": "string"
                 },
                 "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
                   "type": "integer"
                 }
               },
@@ -17116,6 +20625,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -17278,11 +20790,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -17320,6 +20827,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -17604,6 +21114,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -17675,6 +21188,9 @@ module.exports = [
                   "type": "integer"
                 },
                 "status": {
+                  "type": "string"
+                },
+                "stripe_session_id": {
                   "type": "string"
                 },
                 "transaction_id": {
@@ -17753,6 +21269,9 @@ module.exports = [
                   "type": "string"
                 },
                 "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
                   "type": "integer"
                 }
               },
@@ -17981,6 +21500,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -18143,11 +21665,6 @@ module.exports = [
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "active",
-                    "inactive",
-                    "archived"
-                  ],
                   "type": "string"
                 },
                 "stock": {
@@ -18185,6 +21702,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -18469,6 +21989,9 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -18540,6 +22063,9 @@ module.exports = [
                   "type": "integer"
                 },
                 "status": {
+                  "type": "string"
+                },
+                "stripe_session_id": {
                   "type": "string"
                 },
                 "transaction_id": {
@@ -18619,6 +22145,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -18645,6 +22174,315 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-available-transitions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/orders/{id}/available-transitions": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Order ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AvailableTransitionsView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List order workflow transitions (admin)",
+              "tags": [
+                "Orders"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AvailableTransitionsView": {
+              "properties": {
+                "current_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.TransitionView"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionView": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-cancel-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/orders/{id}/cancel": {
+            "post": {
+              "description": "Cancels a pending or paid order, restores stock, and refunds wallet payments.",
+              "parameters": [
+                {
+                  "description": "Order ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Cancel order",
+              "tags": [
+                "Orders"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -18806,6 +22644,206 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/orders/{id}/transition": {
+            "post": {
+              "description": "Fires events such as start_processing, ship, deliver, refund, or cancel with guards and hooks.",
+              "parameters": [
+                {
+                  "description": "Order ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformOrderTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Workflow event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.OrderTransitionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Transition order workflow state (admin)",
+              "tags": [
+                "Orders"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformOrderTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.OrderTransitionResponse": {
+              "properties": {
+                "order": {
+                  "description": "models.Order in responses"
+                },
+                "transition": {
+                  "$ref": "#/components/schemas/dto.TransitionResultView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -22627,6 +26665,177 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-available-transitions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/available-transitions": {
+            "get": {
+              "description": "Returns available workflow events from the product's current state (approve, publish, discontinue, etc.).",
+              "parameters": [
+                {
+                  "description": "Product ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AvailableTransitionsView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List product workflow transitions (admin)",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AvailableTransitionsView": {
+              "properties": {
+                "current_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.TransitionView"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionView": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-like-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -24456,6 +28665,454 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/products/{id}/transition": {
+            "post": {
+              "description": "Fires a workflow event such as approve, publish, discontinue, or archive. Updates product status via the engine mirror.",
+              "parameters": [
+                {
+                  "description": "Product ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformProductTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Workflow event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ProductTransitionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Transition product workflow state (admin)",
+              "tags": [
+                "Products"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformProductTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductTransitionResponse": {
+              "properties": {
+                "product": {
+                  "$ref": "#/components/schemas/dto.ProductResponse"
+                },
+                "transition": {
+                  "$ref": "#/components/schemas/dto.TransitionResultView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductResponse": {
+              "properties": {
+                "allow_backorder": {
+                  "type": "boolean"
+                },
+                "attributes": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ProductAttributeResponse"
+                  },
+                  "type": "array"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "brand": {
+                  "$ref": "#/components/schemas/dto.BrandResponse"
+                },
+                "brand_id": {
+                  "type": "integer"
+                },
+                "category": {
+                  "$ref": "#/components/schemas/dto.CategoryResponse"
+                },
+                "category_id": {
+                  "type": "integer"
+                },
+                "channels": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "colors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "compare_at_price": {
+                  "type": "number"
+                },
+                "cost": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "images": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "is_digital": {
+                  "type": "boolean"
+                },
+                "is_new": {
+                  "type": "boolean"
+                },
+                "low_stock_threshold": {
+                  "type": "integer"
+                },
+                "meta_description": {
+                  "type": "string"
+                },
+                "meta_title": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "published_at": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "reviews_count": {
+                  "type": "integer"
+                },
+                "sizes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "store": {
+                  "$ref": "#/components/schemas/dto.ProductStoreSummary"
+                },
+                "store_id": {
+                  "type": "integer"
+                },
+                "tags": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "track_inventory": {
+                  "type": "boolean"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "visibility": {
+                  "description": "Publishing extras",
+                  "type": "string"
+                },
+                "warehouse_location": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductAttributeResponse": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "values": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.BrandResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ProductStoreSummary": {
+              "properties": {
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-profile-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -24776,6 +29433,483 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/returns": {
+            "post": {
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateReturnRequest"
+                    }
+                  }
+                },
+                "description": "Return details",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ReturnResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create return request",
+              "tags": [
+                "Returns"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateReturnRequest": {
+              "properties": {
+                "order_id": {
+                  "type": "integer"
+                },
+                "reason": {
+                  "maxLength": 512,
+                  "minLength": 3,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "order_id",
+                "reason"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ReturnResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "order_id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "refund_amount": {
+                  "type": "number"
+                },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-my-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/returns/my": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List my returns",
+              "tags": [
+                "Returns"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-{id}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/returns/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Return ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ReturnResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get return by ID",
+              "tags": [
+                "Returns"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ReturnResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "order_id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "refund_amount": {
+                  "type": "number"
+                },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -27105,6 +32239,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -27353,6 +32490,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -27390,6 +32530,376 @@ module.exports = [
                   "type": "number"
                 },
                 "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-{id}-available-transitions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/shipments/{id}/available-transitions": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Shipment ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AvailableTransitionsView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List shipment workflow transitions (admin)",
+              "tags": [
+                "Shipments"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AvailableTransitionsView": {
+              "properties": {
+                "current_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.TransitionView"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionView": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-{id}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/shipments/{id}/transition": {
+            "post": {
+              "description": "Fires events such as ready, pick_up, depart, out_for_delivery, deliver, or return_to_sender.",
+              "parameters": [
+                {
+                  "description": "Shipment ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformShipmentTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Workflow event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.ShipmentTransitionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Transition shipment workflow state (admin)",
+              "tags": [
+                "Shipments"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformShipmentTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.ShipmentTransitionResponse": {
+              "properties": {
+                "shipment": {
+                  "description": "models.Shipment in responses"
+                },
+                "transition": {
+                  "$ref": "#/components/schemas/dto.TransitionResultView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -30721,6 +36231,295 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-uploads-config-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/uploads/config": {
+            "get": {
+              "description": "Returns direct-upload settings for the storefront (R2 presigned PUT).",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.UploadConfigResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Upload configuration",
+              "tags": [
+                "Uploads"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.UploadConfigResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "max_size_mb": {
+                  "type": "integer"
+                },
+                "presign_ttl_seconds": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-uploads-presign-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/uploads/presign": {
+            "post": {
+              "description": "Returns a short-lived PUT URL; client uploads file bytes to upload_url with Content-Type header.",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PresignUploadRequest"
+                    }
+                  }
+                },
+                "description": "Upload metadata",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.PresignUploadResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Presign upload",
+              "tags": [
+                "Uploads"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PresignUploadRequest": {
+              "properties": {
+                "content_type": {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "filename": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "purpose": {
+                  "enum": [
+                    "product",
+                    "avatar",
+                    "store",
+                    "brand",
+                    "media"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content_type",
+                "filename",
+                "purpose"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.PresignUploadResponse": {
+              "properties": {
+                "expires_at": {
+                  "type": "string"
+                },
+                "key": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "public_url": {
+                  "type": "string"
+                },
+                "upload_url": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-user-menu-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -31770,6 +37569,9 @@ module.exports = [
                 "status": {
                   "type": "string"
                 },
+                "stripe_session_id": {
+                  "type": "string"
+                },
                 "type": {
                   "type": "string"
                 }
@@ -31820,7 +37622,7 @@ module.exports = [
         "paths": {
           "/wallet/deposit": {
             "post": {
-              "description": "Create a pending deposit transaction. In production, this would integrate with a payment gateway.",
+              "description": "Creates a pending deposit and returns a Stripe Checkout URL when Stripe is enabled.",
               "requestBody": {
                 "content": {
                   "application/json": {
@@ -31845,12 +37647,7 @@ module.exports = [
                           {
                             "properties": {
                               "data": {
-                                "properties": {
-                                  "transaction_id": {
-                                    "type": "integer"
-                                  }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/dto.DepositResponse"
                               }
                             },
                             "type": "object"
@@ -31912,7 +37709,10 @@ module.exports = [
                   "type": "number"
                 },
                 "payment_method": {
-                  "description": "for future gateway integration",
+                  "enum": [
+                    "stripe",
+                    "mock"
+                  ],
                   "type": "string"
                 }
               },
@@ -31934,6 +37734,23 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.DepositResponse": {
+              "properties": {
+                "checkout_url": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stripe_session_id": {
+                  "type": "string"
+                },
+                "transaction_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -32234,6 +38051,9 @@ module.exports = [
                 "status": {
                   "type": "string"
                 },
+                "stripe_session_id": {
+                  "type": "string"
+                },
                 "type": {
                   "type": "string"
                 }
@@ -32397,6 +38217,743 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/workflows/{key}": {
+            "get": {
+              "description": "Returns a workflow with its states (including color codes) and transitions.",
+              "parameters": [
+                {
+                  "description": "Workflow key (order, product, shipment, return, user)",
+                  "in": "path",
+                  "name": "key",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.WorkflowDefinitionView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get workflow definition",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.WorkflowDefinitionView": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "key": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "states": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.StateView"
+                  },
+                  "type": "array"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.TransitionView"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionView": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-available-transitions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/workflows/{key}/{entityId}/available-transitions": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Workflow key",
+                  "in": "path",
+                  "name": "key",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Entity ID",
+                  "in": "path",
+                  "name": "entityId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AvailableTransitionsView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List available transitions",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AvailableTransitionsView": {
+              "properties": {
+                "current_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "transitions": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.TransitionView"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionView": {
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required_role": {
+                  "type": "string"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-history-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/workflows/{key}/{entityId}/history": {
+            "get": {
+              "description": "Returns who changed the entity's state, from/to (with colors), when, and any note.",
+              "parameters": [
+                {
+                  "description": "Workflow key / entity type (order, product, shipment, return, user)",
+                  "in": "path",
+                  "name": "key",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Entity ID",
+                  "in": "path",
+                  "name": "entityId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get workflow history",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/workflows/{key}/{entityId}/transition": {
+            "post": {
+              "description": "Moves an entity to a new state by firing an event. Records who changed what, when.",
+              "parameters": [
+                {
+                  "description": "Workflow key",
+                  "in": "path",
+                  "name": "key",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Entity ID",
+                  "in": "path",
+                  "name": "entityId",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Transition event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.TransitionResultView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Perform a workflow transition",
+              "tags": [
+                "Workflows"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "metadata": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"

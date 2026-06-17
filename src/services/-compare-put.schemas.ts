@@ -7,7 +7,7 @@
  */
 export interface DtoSyncCompareRequest {
   /** @maxItems 4 */
-  product_ids: number[];
+  product_ids?: number[];
 }
 
 export interface UtilsResponse {

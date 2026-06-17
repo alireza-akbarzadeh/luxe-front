@@ -33,7 +33,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Returns the health status of the API and database
+ * Readiness-style check (database + Redis when configured). Same as /health/ready.
  * @summary Health check
  */
 export const getHealth = (

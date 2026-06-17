@@ -5,27 +5,36 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
+export type DtoCheckoutRequestPaymentMethod = typeof DtoCheckoutRequestPaymentMethod[keyof typeof DtoCheckoutRequestPaymentMethod];
+
+
+export const DtoCheckoutRequestPaymentMethod = {
+  mock: 'mock',
+  stripe: 'stripe',
+  wallet: 'wallet',
+} as const;
+
 export interface DtoCheckoutRequest {
   address_line1: string;
   address_line2?: string;
   card_last4?: string;
-  card_number: string;
+  card_number?: string;
   city: string;
   country: string;
   coupon_code?: string;
-  cvv: string;
+  cvv?: string;
   email: string;
   /**
      * @minimum 1
      * @maximum 12
      */
-  expiry_month: number;
+  expiry_month?: number;
   /** @minimum 2025 */
-  expiry_year: number;
+  expiry_year?: number;
   first_name: string;
   last_name: string;
   newsletter?: boolean;
-  payment_method?: string;
+  payment_method?: DtoCheckoutRequestPaymentMethod;
   phone: string;
   save_info?: boolean;
   shipping_method?: string;
@@ -95,15 +104,6 @@ export interface ModelsCategory {
   updated_at?: string;
 }
 
-export type ModelsProductStatus = typeof ModelsProductStatus[keyof typeof ModelsProductStatus];
-
-
-export const ModelsProductStatus = {
-  active: 'active',
-  inactive: 'inactive',
-  archived: 'archived',
-} as const;
-
 export interface ModelsUser {
   created_at?: string;
   deleted_at?: GormDeletedAt;
@@ -128,6 +128,7 @@ export interface ModelsUser {
   phone?: string;
   role?: string;
   updated_at?: string;
+  workflow_state_id?: number;
 }
 
 export interface ModelsStoreReview {
@@ -207,7 +208,7 @@ export interface ModelsProduct {
   sizes?: string[];
   sku: string;
   slug: string;
-  status?: ModelsProductStatus;
+  status?: string;
   /** @minimum 0 */
   stock?: number;
   store?: ModelsStore;
@@ -221,6 +222,7 @@ export interface ModelsProduct {
   visibility?: string;
   warehouse_location?: string;
   weight?: number;
+  workflow_state_id?: number;
 }
 
 export interface ModelsOrderItem {
@@ -247,6 +249,7 @@ export interface ModelsPayment {
   method?: string;
   order_id?: number;
   status?: string;
+  stripe_session_id?: string;
   transaction_id?: string;
   updated_at?: string;
   user_id?: number;
@@ -285,6 +288,7 @@ export interface ModelsShipment {
   tracking_number?: string;
   updated_at?: string;
   user_id?: number;
+  workflow_state_id?: number;
 }
 
 export interface ModelsOrder {
@@ -306,6 +310,7 @@ export interface ModelsOrder {
   total_amount?: number;
   updated_at?: string;
   user_id?: number;
+  workflow_state_id?: number;
 }
 
 export type PostCheckout201 = UtilsResponse & {

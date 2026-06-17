@@ -49,15 +49,6 @@ export interface ModelsBrand {
   updated_at?: string;
 }
 
-export type ModelsProductStatus = typeof ModelsProductStatus[keyof typeof ModelsProductStatus];
-
-
-export const ModelsProductStatus = {
-  active: 'active',
-  inactive: 'inactive',
-  archived: 'archived',
-} as const;
-
 export interface ModelsUser {
   created_at?: string;
   deleted_at?: GormDeletedAt;
@@ -82,6 +73,7 @@ export interface ModelsUser {
   phone?: string;
   role?: string;
   updated_at?: string;
+  workflow_state_id?: number;
 }
 
 export interface ModelsStoreReview {
@@ -161,7 +153,7 @@ export interface ModelsProduct {
   sizes?: string[];
   sku: string;
   slug: string;
-  status?: ModelsProductStatus;
+  status?: string;
   /** @minimum 0 */
   stock?: number;
   store?: ModelsStore;
@@ -175,6 +167,7 @@ export interface ModelsProduct {
   visibility?: string;
   warehouse_location?: string;
   weight?: number;
+  workflow_state_id?: number;
 }
 
 export interface ModelsCategory {

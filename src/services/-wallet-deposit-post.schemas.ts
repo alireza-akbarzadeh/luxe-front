@@ -5,10 +5,17 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
+export type DtoDepositRequestPaymentMethod = typeof DtoDepositRequestPaymentMethod[keyof typeof DtoDepositRequestPaymentMethod];
+
+
+export const DtoDepositRequestPaymentMethod = {
+  stripe: 'stripe',
+  mock: 'mock',
+} as const;
+
 export interface DtoDepositRequest {
   amount: number;
-  /** for future gateway integration */
-  payment_method?: string;
+  payment_method?: DtoDepositRequestPaymentMethod;
 }
 
 export interface UtilsResponse {
@@ -18,11 +25,14 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type PostWalletDeposit200Data = {
+export interface DtoDepositResponse {
+  checkout_url?: string;
+  status?: string;
+  stripe_session_id?: string;
   transaction_id?: number;
-};
+}
 
 export type PostWalletDeposit200 = UtilsResponse & {
-  data?: PostWalletDeposit200Data;
+  data?: DtoDepositResponse;
 };
 

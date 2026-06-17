@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 export interface DtoResetPasswordRequest {
-  /** @minLength 6 */
+  /** @minLength 8 */
   new_password: string;
   token: string;
 }

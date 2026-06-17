@@ -51,6 +51,7 @@ export interface ModelsShipment {
   tracking_number?: string;
   updated_at?: string;
   user_id?: number;
+  workflow_state_id?: number;
 }
 
 export type GetShipmentsId200 = UtilsResponse & {

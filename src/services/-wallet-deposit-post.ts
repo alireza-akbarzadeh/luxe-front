@@ -29,7 +29,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Create a pending deposit transaction. In production, this would integrate with a payment gateway.
+ * Creates a pending deposit and returns a Stripe Checkout URL when Stripe is enabled.
  * @summary Deposit funds
  */
 export const postWalletDeposit = (

@@ -21,6 +21,7 @@ export interface DtoTransactionResponse {
   reference_id?: number;
   reference_type?: string;
   status?: string;
+  stripe_session_id?: string;
   type?: string;
 }
 
