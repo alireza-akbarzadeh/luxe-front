@@ -88,12 +88,19 @@ export function AppDialog(props: AppDialogProps) {
     return (
       <Sheet open={open} onOpenChange={onOpenChange}>
         {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
-        <SheetContent side={side} className={sizeClasses.sheet}>
-          <SheetHeader>
-            {title && <SheetTitle>{title}</SheetTitle>}
-            {description && <SheetDescription>{description}</SheetDescription>}
-          </SheetHeader>
-          <div className={cn('mt-4', contentClassName)}>{children}</div>
+        <SheetContent
+          side={side}
+          className={cn('flex h-full w-full flex-col gap-0 p-0', sizeClasses.sheet)}
+        >
+          {(title || description) && (
+            <SheetHeader className='shrink-0 space-y-1 border-b px-6 py-5 pr-14 text-left'>
+              {title && <SheetTitle className='text-lg font-semibold'>{title}</SheetTitle>}
+              {description && <SheetDescription>{description}</SheetDescription>}
+            </SheetHeader>
+          )}
+          <div className={cn('flex min-h-0 flex-1 flex-col overflow-hidden', contentClassName)}>
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     );

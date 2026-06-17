@@ -25,6 +25,9 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
   useDashboardShortcuts();
   const { data: { data: sidebar_menu = [] } = {} } = useGetUserMenuStructure({});
   const isLiveFeed = pathname === '/dashboard/live';
+  const isWorkflowCanvas =
+    pathname.startsWith('/dashboard/workflows/') && pathname !== '/dashboard/workflows';
+  const isFullWidth = isLiveFeed || isWorkflowCanvas;
 
   return (
     <RealtimeProvider>
@@ -47,7 +50,7 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
               <div
                 className={cn(
                   'bg-card min-h-full',
-                  isLiveFeed ? 'max-w-none p-0' : 'container mx-auto max-w-400 p-2'
+                  isFullWidth ? 'max-w-none p-4' : 'container mx-auto max-w-400 p-2'
                 )}
               >
                 {children}

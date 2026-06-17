@@ -2,7 +2,13 @@
 
 import '@xyflow/react/dist/style.css';
 
-import { IconLayoutGrid, IconPlus, IconRefresh } from '@tabler/icons-react';
+import {
+  IconLayoutGrid,
+  IconPlus,
+  IconRefresh,
+  IconRoute,
+  IconTopologyStar3
+} from '@tabler/icons-react';
 import {
   Background,
   BackgroundVariant,
@@ -15,20 +21,20 @@ import {
   type OnNodesChange,
   Panel,
   ReactFlow,
-  ReactFlowProvider} from '@xyflow/react';
+  ReactFlowProvider
+} from '@xyflow/react';
 import { useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { WorkflowAnyNode, WorkflowStateNode } from '@/domains/workflows/components/workflow-state-node';
+import { Separator } from '@/components/ui/separator';
 import {
-  definitionToGraph,
-  writeSavedLayout
-} from '@/domains/workflows/lib/workflow-graph';
+  WorkflowAnyNode,
+  WorkflowStateNode
+} from '@/domains/workflows/components/workflow-state-node';
+import { WorkflowTransitionEdge } from '@/domains/workflows/components/workflow-transition-edge';
+import { definitionToGraph, writeSavedLayout } from '@/domains/workflows/lib/workflow-graph';
 import { useWorkflowEditorStore } from '@/domains/workflows/stores/workflow-editor-store';
-import type {
-  WorkflowStateNodeData,
-  WorkflowTransitionEdgeData
-} from '@/domains/workflows/types';
+import type { WorkflowNodeData, WorkflowTransitionEdgeData } from '@/domains/workflows/types';
 import type { DtoWorkflowDefinitionView } from '@/services/-workflows-{key}-get.schemas';
 
 const nodeTypes = {
@@ -36,14 +42,18 @@ const nodeTypes = {
   workflowAny: WorkflowAnyNode
 };
 
+const edgeTypes = {
+  workflowTransition: WorkflowTransitionEdge
+};
+
 interface WorkflowCanvasProps {
   workflowKey: string;
   definition: DtoWorkflowDefinitionView;
-  nodes: Node<WorkflowStateNodeData>[];
+  nodes: Node<WorkflowNodeData>[];
   edges: Edge<WorkflowTransitionEdgeData>[];
-  onNodesChange: OnNodesChange<Node<WorkflowStateNodeData>>;
+  onNodesChange: OnNodesChange<Node<WorkflowNodeData>>;
   onEdgesChange: OnEdgesChange<Edge<WorkflowTransitionEdgeData>>;
-  setNodes: React.Dispatch<React.SetStateAction<Node<WorkflowStateNodeData>[]>>;
+  setNodes: React.Dispatch<React.SetStateAction<Node<WorkflowNodeData>[]>>;
   onRefresh: () => void;
   isRefreshing?: boolean;
 }
@@ -61,6 +71,9 @@ function WorkflowCanvasInner({
 }: WorkflowCanvasProps) {
   const { openCreateState, openEditState, openCreateTransition, openEditTransition } =
     useWorkflowEditorStore();
+
+  const stateCount = definition.states?.length ?? 0;
+  const transitionCount = definition.transitions?.length ?? 0;
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -100,8 +113,9 @@ function WorkflowCanvasInner({
   const defaultViewport = useMemo(() => ({ x: 0, y: 0, zoom: 0.85 }), []);
 
   return (
-    <div className='h-[calc(100vh-12rem)] min-h-[520px] w-full overflow-hidden rounded-xl border bg-slate-950/5 dark:bg-slate-950/40'>
+    <div className='relative h-[calc(100vh-9rem)] min-h-[420px] w-full overflow-hidden rounded-lg border p-4 [&_.react-flow__edge-labels]:z-[1000] [&_.react-flow__nodes]:z-[1]'>
       <ReactFlow
+        className='h-full w-full'
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -110,43 +124,99 @@ function WorkflowCanvasInner({
         onNodeDoubleClick={onNodeDoubleClick}
         onEdgeClick={onEdgeClick}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
+        fitViewOptions={{ padding: 0.04, minZoom: 0.45, maxZoom: 1.15 }}
         defaultViewport={defaultViewport}
+        elevateEdgesOnSelect
         proOptions={{ hideAttribution: true }}
-        connectionLineStyle={{ stroke: '#6366f1', strokeWidth: 2 }}
+        connectionLineStyle={{ stroke: '#6366f1', strokeWidth: 2, strokeDasharray: '6 4' }}
+        defaultEdgeOptions={{ type: 'workflowTransition' }}
         snapToGrid
         snapGrid={[16, 16]}
+        minZoom={0.35}
+        maxZoom={1.5}
       >
-        <Background variant={BackgroundVariant.Dots} gap={16} size={1} color='#94a3b8' />
-        <Controls showInteractive={false} className='!bg-card !shadow-md' />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color='#cbd5e1' />
+        <Controls
+          showInteractive={false}
+          className='!bg-card/95 [&>button]:!border-border/50 !overflow-hidden !rounded-xl !border !shadow-lg backdrop-blur-sm'
+        />
         <MiniMap
           nodeStrokeWidth={3}
           zoomable
           pannable
-          className='!bg-card/90 !shadow-md'
+          className='!bg-card/90 !overflow-hidden !rounded-xl !border !shadow-lg'
+          maskColor='rgb(15 23 42 / 0.08)'
         />
-        <Panel position='top-left' className='flex flex-wrap gap-2'>
-          <Button size='sm' onClick={() => openCreateState()}>
-            <IconPlus size={16} />
-            Add state
-          </Button>
-          <Button size='sm' variant='outline' onClick={autoLayout}>
-            <IconLayoutGrid size={16} />
-            Auto layout
-          </Button>
-          <Button size='sm' variant='outline' onClick={saveLayout}>
-            Save layout
-          </Button>
-          <Button size='sm' variant='ghost' onClick={onRefresh} disabled={isRefreshing}>
-            <IconRefresh size={16} className={isRefreshing ? 'animate-spin' : ''} />
-            Refresh
-          </Button>
+
+        <Panel position='top-left' className='!m-0'>
+          <div className='bg-card/95 flex flex-wrap items-center gap-1 rounded-lg border p-1 shadow-md backdrop-blur-sm'>
+            <Button size='sm' className='h-8 gap-1.5 rounded-lg' onClick={() => openCreateState()}>
+              <IconPlus size={15} />
+              Add state
+            </Button>
+            <Separator orientation='vertical' className='mx-0.5 h-6' />
+            <Button
+              size='sm'
+              variant='ghost'
+              className='h-8 gap-1.5 rounded-lg'
+              onClick={autoLayout}
+            >
+              <IconLayoutGrid size={15} />
+              Auto layout
+            </Button>
+            <Button
+              size='sm'
+              variant='ghost'
+              className='h-8 gap-1.5 rounded-lg'
+              onClick={saveLayout}
+            >
+              Save layout
+            </Button>
+            <Button
+              size='sm'
+              variant='ghost'
+              className='h-8 gap-1.5 rounded-lg'
+              onClick={onRefresh}
+              disabled={isRefreshing}
+            >
+              <IconRefresh size={15} className={isRefreshing ? 'animate-spin' : ''} />
+              Refresh
+            </Button>
+          </div>
         </Panel>
-        <Panel position='bottom-center'>
-          <p className='text-muted-foreground rounded-full bg-card/90 px-4 py-1.5 text-xs shadow-sm backdrop-blur'>
-            Drag from a handle to connect states · Double-click a state to edit · Click an edge to
-            edit transition
-          </p>
+
+        <Panel position='top-right' className='!m-0'>
+          <div className='bg-card/95 flex gap-2 rounded-lg border px-2.5 py-1.5 shadow-md backdrop-blur-sm'>
+            <div className='flex items-center gap-2'>
+              <IconTopologyStar3 size={14} className='text-muted-foreground' />
+              <span className='text-muted-foreground text-xs'>States</span>
+              <span className='text-sm font-semibold tabular-nums'>{stateCount}</span>
+            </div>
+            <Separator orientation='vertical' className='h-5' />
+            <div className='flex items-center gap-2'>
+              <IconRoute size={14} className='text-muted-foreground' />
+              <span className='text-muted-foreground text-xs'>Transitions</span>
+              <span className='text-sm font-semibold tabular-nums'>{transitionCount}</span>
+            </div>
+          </div>
+        </Panel>
+
+        <Panel position='bottom-center' className='!mb-0'>
+          <div className='bg-card/90 text-muted-foreground flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border px-3 py-1.5 text-[11px] shadow-sm backdrop-blur-sm'>
+            <span>
+              <strong className='text-foreground font-medium'>Connect</strong> drag from handle
+            </span>
+            <span className='hidden sm:inline'>·</span>
+            <span>
+              <strong className='text-foreground font-medium'>Edit state</strong> double-click node
+            </span>
+            <span className='hidden sm:inline'>·</span>
+            <span>
+              <strong className='text-foreground font-medium'>Edit transition</strong> click edge
+            </span>
+          </div>
         </Panel>
       </ReactFlow>
     </div>

@@ -17,7 +17,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import {
+  ColorSwatchPicker,
+  KeySuggestionPills,
+  PanelFooter,
+  PanelSection,
+  StatePreviewCard,
+  TransitionFlowBanner
+} from '@/domains/workflows/components/workflow-editor-ui';
 import { stateCodeByNodeId } from '@/domains/workflows/lib/workflow-graph';
 import {
   KNOWN_GUARD_KEYS,
@@ -35,6 +45,9 @@ import { usePatchAdminWorkflowsIdTransitionsTransitionId } from '@/services/-adm
 import { usePostAdminWorkflowsIdTransitions } from '@/services/-admin-workflows-{id}-transitions-post';
 import { getGetWorkflowsKeyQueryKey } from '@/services/-workflows-{key}-get';
 import type { DtoWorkflowDefinitionView } from '@/services/-workflows-{key}-get.schemas';
+
+const SHEET_SUBMIT_CLASS =
+  'h-9 w-auto shrink-0 px-5 text-sm font-semibold tracking-normal normal-case';
 
 interface WorkflowEditorPanelsProps {
   workflowId: number;
@@ -58,8 +71,7 @@ export function WorkflowEditorPanels({
   const { panel, closePanel } = useWorkflowEditorStore();
 
   const isStateOpen = panel.type === 'create-state' || panel.type === 'edit-state';
-  const isTransitionOpen =
-    panel.type === 'create-transition' || panel.type === 'edit-transition';
+  const isTransitionOpen = panel.type === 'create-transition' || panel.type === 'edit-transition';
 
   return (
     <>
@@ -105,7 +117,8 @@ function WorkflowStatePanel({
 
   const { mutateAsync: createState, isPending: creating } = usePostAdminWorkflowsIdStates();
   const { mutateAsync: updateState, isPending: updating } = usePatchAdminWorkflowsIdStatesStateId();
-  const { mutateAsync: deleteState, isPending: deleting } = useDeleteAdminWorkflowsIdStatesStateId();
+  const { mutateAsync: deleteState, isPending: deleting } =
+    useDeleteAdminWorkflowsIdStatesStateId();
 
   const defaultValues = useMemo(
     () => ({
@@ -202,7 +215,7 @@ function WorkflowStatePanel({
       open={open}
       onOpenChange={(next) => !next && onClose()}
       title={isEdit ? 'Edit state' : 'New state'}
-      description={`Workflow: ${workflowKey}`}
+      description={`${workflowKey} workflow`}
     >
       <form.AppForm>
         <form.Root
@@ -210,44 +223,107 @@ function WorkflowStatePanel({
             e.preventDefault();
             void form.handleSubmit();
           }}
-          className='space-y-4'
+          className='flex h-full min-h-0 flex-col'
         >
-          {!isEdit ? (
-            <form.AppField name='code'>
-              {(field) => (
-                <field.TextField label='Code' placeholder='under_review' detail='Stable identifier used in transitions' />
+          <div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
+          <form.Subscribe
+            selector={(s) => ({
+              name: s.values.name,
+              code: s.values.code,
+              color: s.values.color,
+              text_color: s.values.text_color,
+              is_initial: s.values.is_initial,
+              is_final: s.values.is_final
+            })}
+          >
+            {(preview) => (
+              <StatePreviewCard
+                name={preview.name}
+                code={isEdit ? (editingState?.code ?? preview.code) : preview.code}
+                color={preview.color}
+                textColor={preview.text_color}
+                isInitial={preview.is_initial}
+                isFinal={preview.is_final}
+              />
+            )}
+          </form.Subscribe>
+
+          <Separator />
+
+          <PanelSection
+            title='Identity'
+            description='Code is permanent after creation and used in transition rules.'
+          >
+            {!isEdit ? (
+              <form.AppField name='code'>
+                {(field) => (
+                  <field.TextField
+                    label='Code'
+                    placeholder='under_review'
+                    detail='Stable snake_case identifier'
+                  />
+                )}
+              </form.AppField>
+            ) : (
+              <div className='bg-muted/50 flex items-center justify-between rounded-xl border px-3 py-2.5'>
+                <span className='font-mono text-sm'>{editingState?.code}</span>
+                <Badge variant='outline' className='text-[10px]'>
+                  locked
+                </Badge>
+              </div>
+            )}
+            <form.AppField name='name'>
+              {(field) => <field.TextField label='Display name' placeholder='Under review' />}
+            </form.AppField>
+          </PanelSection>
+
+          <Separator />
+
+          <PanelSection title='Appearance' description='Colors shown on the canvas node.'>
+            <form.Subscribe selector={(s) => s.values.color}>
+              {(color) => (
+                <ColorSwatchPicker
+                  value={color}
+                  onChange={(next) => form.setFieldValue('color', next)}
+                />
               )}
+            </form.Subscribe>
+            <div className='grid grid-cols-2 gap-3'>
+              <form.AppField name='color'>
+                {(field) => (
+                  <field.TextField label='Background' placeholder='#6366f1' className='font-mono' />
+                )}
+              </form.AppField>
+              <form.AppField name='text_color'>
+                {(field) => (
+                  <field.TextField label='Text' placeholder='#ffffff' className='font-mono' />
+                )}
+              </form.AppField>
+            </div>
+          </PanelSection>
+
+          <Separator />
+
+          <PanelSection title='Behavior'>
+            <form.AppField name='sort_order'>
+              {(field) => <field.NumberField label='Sort order' min={0} max={999} />}
             </form.AppField>
-          ) : (
-            <div className='bg-muted rounded-lg px-3 py-2 font-mono text-sm'>{editingState?.code}</div>
-          )}
-          <form.AppField name='name'>
-            {(field) => <field.TextField label='Display name' placeholder='Under review' />}
-          </form.AppField>
-          <div className='grid grid-cols-2 gap-3'>
-            <form.AppField name='color'>
-              {(field) => <field.TextField label='Background color' placeholder='#6366f1' />}
-            </form.AppField>
-            <form.AppField name='text_color'>
-              {(field) => <field.TextField label='Text color' placeholder='#ffffff' />}
-            </form.AppField>
+            <div className='bg-muted/30 flex flex-col gap-3 rounded-xl border p-3'>
+              <form.AppField name='is_initial'>
+                {(field) => <field.Switch label='Initial state' />}
+              </form.AppField>
+              <form.AppField name='is_final'>
+                {(field) => <field.Switch label='Final state' />}
+              </form.AppField>
+            </div>
+          </PanelSection>
           </div>
-          <form.AppField name='sort_order'>
-            {(field) => <field.NumberField label='Sort order' min={0} max={999} />}
-          </form.AppField>
-          <div className='flex gap-6'>
-            <form.AppField name='is_initial'>
-              {(field) => <field.Switch label='Initial state' />}
-            </form.AppField>
-            <form.AppField name='is_final'>
-              {(field) => <field.Switch label='Final state' />}
-            </form.AppField>
-          </div>
-          <div className='flex items-center justify-between gap-2 pt-4'>
+
+          <PanelFooter>
             {isEdit && editingState?.id ? (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button type='button' variant='destructive' disabled={deleting}>
+                  <Button type='button' variant='destructive' size='sm' disabled={deleting}>
                     Delete
                   </Button>
                 </AlertDialogTrigger>
@@ -260,26 +336,31 @@ function WorkflowStatePanel({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => void handleDelete()}>Delete</AlertDialogAction>
+                    <AlertDialogAction onClick={() => void handleDelete()}>
+                      Delete
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
             ) : (
-              <span />
+              <div />
             )}
-            <div className='flex gap-2'>
-              <Button type='button' variant='outline' onClick={onClose}>
+            <div className='ml-auto flex shrink-0 items-center gap-2'>
+              <Button type='button' variant='outline' size='sm' onClick={onClose}>
                 Cancel
               </Button>
               <form.Subscribe selector={(s) => s.isSubmitting}>
                 {(submitting) => (
-                  <form.Submit disabled={submitting || creating || updating}>
+                  <form.Submit
+                    className={SHEET_SUBMIT_CLASS}
+                    disabled={submitting || creating || updating}
+                  >
                     {submitting || creating || updating ? 'Saving…' : 'Save state'}
                   </form.Submit>
                 )}
               </form.Subscribe>
             </div>
-          </div>
+          </PanelFooter>
         </form.Root>
       </form.AppForm>
     </AppDialog>
@@ -306,6 +387,10 @@ function WorkflowTransitionPanel({
   const isCreate = panel.type === 'create-transition';
   const edgeData = isEdit ? panel.edgeData : undefined;
 
+  const editingTransition = edgeData?.transitionId
+    ? definition.transitions?.find((t) => t.id === edgeData.transitionId)
+    : undefined;
+
   const fromToLabel = useMemo(() => {
     if (!isCreate) return undefined;
     const fromCode = stateCodeByNodeId(definition, panel.fromNodeId);
@@ -315,7 +400,35 @@ function WorkflowTransitionPanel({
     return `${from} → ${to}`;
   }, [definition, isCreate, panel]);
 
-  const { mutateAsync: createTransition, isPending: creating } = usePostAdminWorkflowsIdTransitions();
+  const flowBanner = useMemo(() => {
+    if (isCreate && panel.type === 'create-transition') {
+      const fromCode = stateCodeByNodeId(definition, panel.fromNodeId);
+      const toCode = stateCodeByNodeId(definition, panel.toNodeId);
+      const fromState =
+        panel.fromNodeId === '__any__'
+          ? undefined
+          : definition.states?.find((s) => s.code === fromCode);
+      const toState = definition.states?.find((s) => s.code === toCode);
+      return {
+        fromLabel: fromCode ?? 'any state',
+        toLabel: toCode ?? panel.toNodeId,
+        fromColor: fromState?.color,
+        toColor: toState?.color
+      };
+    }
+    if (editingTransition) {
+      return {
+        fromLabel: editingTransition.from_state?.code ?? 'any state',
+        toLabel: editingTransition.to_state?.code ?? 'unknown',
+        fromColor: editingTransition.from_state?.color,
+        toColor: editingTransition.to_state?.color
+      };
+    }
+    return undefined;
+  }, [definition, editingTransition, isCreate, panel]);
+
+  const { mutateAsync: createTransition, isPending: creating } =
+    usePostAdminWorkflowsIdTransitions();
   const { mutateAsync: updateTransition, isPending: updating } =
     usePatchAdminWorkflowsIdTransitionsTransitionId();
   const { mutateAsync: deleteTransition, isPending: deleting } =
@@ -426,7 +539,7 @@ function WorkflowTransitionPanel({
       open={open}
       onOpenChange={(next) => !next && onClose()}
       title={isEdit ? 'Edit transition' : 'Connect states'}
-      description={fromToLabel ?? `Workflow: ${workflowKey}`}
+      description={fromToLabel ?? `${workflowKey} workflow`}
     >
       <form.AppForm>
         <form.Root
@@ -434,55 +547,141 @@ function WorkflowTransitionPanel({
             e.preventDefault();
             void form.handleSubmit();
           }}
-          className='space-y-4'
+          className='flex h-full min-h-0 flex-col'
         >
-          {isEdit ? (
-            <div className='bg-muted rounded-lg px-3 py-2 font-mono text-sm'>{edgeData?.event}</div>
-          ) : (
-            <form.AppField name='event'>
+          <div className='flex-1 space-y-6 overflow-y-auto px-6 py-5'>
+          {flowBanner ? (
+            <TransitionFlowBanner
+              fromLabel={flowBanner.fromLabel}
+              toLabel={flowBanner.toLabel}
+              fromColor={flowBanner.fromColor}
+              toColor={flowBanner.toColor}
+            />
+          ) : null}
+
+          <PanelSection
+            title='Transition identity'
+            description='Event key is sent by the API when firing this transition.'
+          >
+            {isEdit ? (
+              <div className='bg-muted/50 flex items-center justify-between rounded-xl border px-3 py-2.5'>
+                <span className='font-mono text-sm'>{edgeData?.event}</span>
+                <Badge variant='outline' className='text-[10px]'>
+                  event
+                </Badge>
+              </div>
+            ) : (
+              <form.AppField name='event'>
+                {(field) => (
+                  <field.TextField
+                    label='Event key'
+                    placeholder='approve'
+                    detail='Lowercase snake_case, e.g. verify_email'
+                  />
+                )}
+              </form.AppField>
+            )}
+            <form.AppField name='name'>
               {(field) => (
-                <field.TextField label='Event key' placeholder='approve' detail='API event fired on transition' />
+                <field.TextField
+                  label='Button label'
+                  placeholder='Approve'
+                  detail='Shown on admin action buttons'
+                />
               )}
             </form.AppField>
-          )}
-          <form.AppField name='name'>
-            {(field) => <field.TextField label='Button label' placeholder='Approve' />}
-          </form.AppField>
-          <form.AppField name='required_role'>
-            {(field) => (
-              <field.Select
-                label='Required role'
-                placeholder='Any authenticated user'
-                options={[
-                  { label: 'Any', value: 'any' },
-                  { label: 'Admin', value: 'admin' }
-                ]}
-              />
-            )}
-          </form.AppField>
-          <form.AppField name='guard_key'>
-            {(field) => (
-              <field.TextField
-                label='Guard key (optional)'
-                placeholder='order_cancellable'
-                detail={`Known: ${KNOWN_GUARD_KEYS.join(', ')}`}
-              />
-            )}
-          </form.AppField>
-          <form.AppField name='hook_key'>
-            {(field) => (
-              <field.TextField
-                label='Hook key (optional)'
-                placeholder='order_paid'
-                detail={`Known: ${KNOWN_HOOK_KEYS.join(', ')}`}
-              />
-            )}
-          </form.AppField>
-          <div className='flex items-center justify-between gap-2 pt-4'>
+          </PanelSection>
+
+          <Separator />
+
+          <PanelSection title='Access control'>
+            <form.AppField name='required_role'>
+              {(field) => (
+                <field.Select
+                  label='Required role'
+                  placeholder='Any authenticated user'
+                  options={[
+                    { label: 'Any authenticated user', value: 'any' },
+                    { label: 'Admin only', value: 'admin' }
+                  ]}
+                />
+              )}
+            </form.AppField>
+          </PanelSection>
+
+          <Separator />
+
+          <PanelSection
+            title='Guards & hooks'
+            description='Optional server-side checks and post-transition side effects.'
+          >
+            <form.Subscribe selector={(s) => s.values.guard_key}>
+              {(guardKey) => (
+                <>
+                  <form.AppField name='guard_key'>
+                    {(field) => (
+                      <field.TextField
+                        label='Guard key'
+                        placeholder='order_cancellable'
+                        detail='Must pass before transition is allowed'
+                      />
+                    )}
+                  </form.AppField>
+                  <KeySuggestionPills
+                    keys={KNOWN_GUARD_KEYS}
+                    activeKey={guardKey}
+                    onSelect={(key) => form.setFieldValue('guard_key', key)}
+                  />
+                </>
+              )}
+            </form.Subscribe>
+
+            <form.Subscribe selector={(s) => s.values.hook_key}>
+              {(hookKey) => (
+                <>
+                  <form.AppField name='hook_key'>
+                    {(field) => (
+                      <field.TextField
+                        label='Hook key'
+                        placeholder='order_paid'
+                        detail='Runs after transition succeeds'
+                      />
+                    )}
+                  </form.AppField>
+                  <KeySuggestionPills
+                    keys={KNOWN_HOOK_KEYS}
+                    activeKey={hookKey}
+                    onSelect={(key) => form.setFieldValue('hook_key', key)}
+                  />
+                </>
+              )}
+            </form.Subscribe>
+          </PanelSection>
+
+          {isEdit && edgeData ? (
+            <div className='bg-muted/30 rounded-xl border p-3 text-xs'>
+              <p className='text-muted-foreground font-medium tracking-wide uppercase'>
+                Edge metadata
+              </p>
+              <dl className='mt-2 grid grid-cols-2 gap-2'>
+                <div>
+                  <dt className='text-muted-foreground'>Transition ID</dt>
+                  <dd className='font-mono font-medium'>{edgeData.transitionId}</dd>
+                </div>
+                <div>
+                  <dt className='text-muted-foreground'>Wildcard</dt>
+                  <dd className='font-medium'>{edgeData.isWildcard ? 'Yes' : 'No'}</dd>
+                </div>
+              </dl>
+            </div>
+          ) : null}
+          </div>
+
+          <PanelFooter>
             {isEdit && edgeData?.transitionId ? (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button type='button' variant='destructive' disabled={deleting}>
+                  <Button type='button' variant='destructive' size='sm' disabled={deleting}>
                     Delete
                   </Button>
                 </AlertDialogTrigger>
@@ -496,26 +695,31 @@ function WorkflowTransitionPanel({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => void handleDelete()}>Delete</AlertDialogAction>
+                    <AlertDialogAction onClick={() => void handleDelete()}>
+                      Delete
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
             ) : (
-              <span />
+              <div />
             )}
-            <div className='flex gap-2'>
-              <Button type='button' variant='outline' onClick={onClose}>
+            <div className='ml-auto flex shrink-0 items-center gap-2'>
+              <Button type='button' variant='outline' size='sm' onClick={onClose}>
                 Cancel
               </Button>
               <form.Subscribe selector={(s) => s.isSubmitting}>
                 {(submitting) => (
-                  <form.Submit disabled={submitting || creating || updating}>
+                  <form.Submit
+                    className={SHEET_SUBMIT_CLASS}
+                    disabled={submitting || creating || updating}
+                  >
                     {submitting || creating || updating ? 'Saving…' : 'Save transition'}
                   </form.Submit>
                 )}
               </form.Subscribe>
             </div>
-          </div>
+          </PanelFooter>
         </form.Root>
       </form.AppForm>
     </AppDialog>

@@ -19,12 +19,12 @@ export const appDialogSizeClasses: Record<
   lg: {
     dialog: 'sm:max-w-2xl',
     drawer: 'max-h-[85dvh]',
-    sheet: 'sm:max-w-2xl'
+    sheet: 'w-full sm:max-w-xl'
   },
   xl: {
     dialog: 'sm:max-w-4xl',
     drawer: 'max-h-[92dvh]',
-    sheet: 'sm:max-w-4xl'
+    sheet: 'w-full sm:max-w-2xl'
   },
   full: {
     dialog: 'sm:max-w-[min(96vw,72rem)]',
