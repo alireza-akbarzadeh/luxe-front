@@ -2,25 +2,6 @@
 import { create } from 'zustand';
 
 // Types for our State
-export type NotificationType = 'system' | 'alert' | 'message';
-
-export interface NotificationItem {
-  id: string;
-  title: string;
-  description: string;
-  time: string;
-  read: boolean;
-  type: NotificationType;
-}
-
-export interface MessageItem {
-  id: string;
-  user: string;
-  preview: string;
-  time: string;
-  unread: boolean;
-}
-
 export type TimePeriod = '24h' | '7d' | '30d';
 
 export type SubscriptionTier = 'Free' | 'Standard' | 'Premium' | 'All';
@@ -35,8 +16,6 @@ export interface FilterState {
 }
 
 export interface DashboardState {
-  notifications: NotificationItem[];
-  messages: MessageItem[];
   searchOpen: boolean;
   isSidebarCollapsed: boolean;
   notificationOpen: boolean;
@@ -57,27 +36,11 @@ interface DashboardActions {
   setSearchOpen: (open: boolean) => void;
   setMobileSidebarOpen: (open: boolean) => void;
   setSidebarCollapsed: (open: boolean) => void;
-  setNotifications: (notifications: NotificationItem[]) => void;
-  prependNotification: (notification: NotificationItem) => void;
-  markAsRead: (id: string) => void;
-  markAllRead: () => void;
-  addNotification: (notif: Omit<NotificationItem, 'id' | 'read' | 'time'>) => void;
   setNotificationOpen: (open: boolean) => void;
-  markMessageRead: (id: string) => void;
 }
 
 export const useDashboardStore = create<DashboardState & DashboardActions>()((set) => ({
   // initial state
-  notifications: [],
-  messages: [
-    {
-      id: '1',
-      user: 'John Doe',
-      preview: "Hey, I can't access the library...",
-      time: '1h ago',
-      unread: true
-    }
-  ],
   searchOpen: false,
   isSidebarCollapsed: false,
   notificationOpen: false,
@@ -128,43 +91,5 @@ export const useDashboardStore = create<DashboardState & DashboardActions>()((se
 
   setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
 
-  setNotifications: (notifications) => set({ notifications }),
-
-  prependNotification: (notification) =>
-    set((state) => ({
-      notifications: [
-        notification,
-        ...state.notifications.filter((item) => item.id !== notification.id)
-      ].slice(0, 30)
-    })),
-
-  markAsRead: (id) =>
-    set((state) => ({
-      notifications: state.notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
-    })),
-
-  markAllRead: () =>
-    set((state) => ({
-      notifications: state.notifications.map((n) => ({ ...n, read: true }))
-    })),
-
-  addNotification: (notif) =>
-    set((state) => ({
-      notifications: [
-        {
-          ...notif,
-          id: Math.random().toString(),
-          read: false,
-          time: 'Just now'
-        },
-        ...state.notifications
-      ]
-    })),
-
-  setNotificationOpen: (open) => set({ notificationOpen: open }),
-
-  markMessageRead: (id) =>
-    set((state) => ({
-      messages: state.messages.map((m) => (m.id === id ? { ...m, unread: false } : m))
-    }))
+  setNotificationOpen: (open) => set({ notificationOpen: open })
 }));

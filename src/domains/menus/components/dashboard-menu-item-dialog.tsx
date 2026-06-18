@@ -13,6 +13,7 @@ import { MENU_ICON_OPTIONS } from '@/domains/menus/lib/icon-options';
 import { buildGroupItemTree, flattenMenuItems } from '@/domains/menus/lib/menu-tree';
 import {
   menuItemDefaults,
+  MENU_ITEM_NO_PARENT,
   menuItemSchema
 } from '@/domains/menus/schemas/dashboard-menu.schema';
 import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
@@ -50,7 +51,7 @@ export function DashboardMenuItemDialog() {
   const parentOptions = useMemo(() => {
     const rows = flattenMenuItems(groupTree, 0, editingItemId ?? undefined);
     return [
-      { label: 'Top level (no parent)', value: '' },
+      { label: 'Top level (no parent)', value: MENU_ITEM_NO_PARENT },
       ...rows.map((row) => ({
         label: `${'— '.repeat(row.depth)}${row.label}`,
         value: String(row.id)
@@ -63,7 +64,10 @@ export function DashboardMenuItemDialog() {
 
   const form = useAppForm({
     defaultValues: menuItemDefaults,
-    validators: { onSubmit: zodFormValidator(menuItemSchema) },
+    validators: {
+      onChange: zodFormValidator(menuItemSchema),
+      onSubmit: zodFormValidator(menuItemSchema)
+    },
     onSubmit: async ({ value, formApi }) => {
       if (!selectedGroupId) {
         toast.error('Select a menu group first');
@@ -72,7 +76,10 @@ export function DashboardMenuItemDialog() {
 
       const payload = {
         group_id: selectedGroupId,
-        parent_id: value.parent_id ? Number(value.parent_id) : undefined,
+        parent_id:
+          value.parent_id && value.parent_id !== MENU_ITEM_NO_PARENT
+            ? Number(value.parent_id)
+            : undefined,
         label: value.label,
         href: value.href?.trim() || undefined,
         icon: value.icon,
@@ -106,7 +113,9 @@ export function DashboardMenuItemDialog() {
     if (editingItem) {
       form.reset({
         group_id: editingItem.group_id ?? selectedGroupId,
-        parent_id: editingItem.parent_id ? String(editingItem.parent_id) : '',
+        parent_id: editingItem.parent_id
+          ? String(editingItem.parent_id)
+          : MENU_ITEM_NO_PARENT,
         label: editingItem.label ?? '',
         href: editingItem.href ?? '',
         icon: editingItem.icon ?? 'LayoutDashboard',
@@ -119,7 +128,7 @@ export function DashboardMenuItemDialog() {
     form.reset({
       ...menuItemDefaults,
       group_id: selectedGroupId,
-      parent_id: createItemParentId ? String(createItemParentId) : ''
+      parent_id: createItemParentId ? String(createItemParentId) : MENU_ITEM_NO_PARENT
     });
   }, [itemDialogOpen, selectedGroupId, editingItem, createItemParentId, form]);
 
@@ -133,7 +142,12 @@ export function DashboardMenuItemDialog() {
       size='lg'
     >
       <form.AppForm>
-        <form.Root className='space-y-4 px-1'>
+        <form.Root
+          className='space-y-4 px-1'
+          onSubmit={() => {
+            void form.handleSubmit();
+          }}
+        >
           <form.AppField name='label'>
             {(field) => <field.TextField label='Label' placeholder='Orders' />}
           </form.AppField>
@@ -178,13 +192,9 @@ export function DashboardMenuItemDialog() {
             <Button type='button' variant='outline' onClick={closeItemDialog}>
               Cancel
             </Button>
-            <form.Subscribe selector={(state) => state.isSubmitting}>
-              {(isSubmitting) => (
-                <form.Submit disabled={isSubmitting || isCreating || isUpdating}>
-                  {editingItemId ? 'Save changes' : 'Create item'}
-                </form.Submit>
-              )}
-            </form.Subscribe>
+            <form.Submit isPending={isCreating || isUpdating}>
+              {editingItemId ? 'Save changes' : 'Create item'}
+            </form.Submit>
           </div>
         </form.Root>
       </form.AppForm>

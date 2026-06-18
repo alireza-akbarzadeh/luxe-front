@@ -12,7 +12,11 @@ export function ToggleSidebarAction() {
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <button
-          className={cn('cursor-pointer')}
+          type='button'
+          aria-label={isSidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className={cn(
+            'text-muted-foreground hover:bg-accent/60 hover:text-foreground flex h-9 w-9 items-center justify-center rounded-xl transition-colors'
+          )}
           onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
         >
           {/* Swapped these so the icon matches what action will happen */}

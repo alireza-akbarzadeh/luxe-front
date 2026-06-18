@@ -1,37 +1,49 @@
+'use client';
+
 import {
   IconBell,
-  IconCheck,
+  IconChevronRight,
   IconExternalLink,
-  IconMessage2,
-  IconTrash
+  IconRefresh,
+  IconWifi,
+  IconWifiOff
 } from '@tabler/icons-react';
-import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  formatNotificationTime,
+  formatNotificationType,
+  getNotificationTypeStyle
+} from '@/domains/account/lib/notification-utils';
+import {
+  useAdminNotificationActions,
+  useAdminNotificationsPanel
+} from '@/domains/admin/hooks/use-admin-notifications';
+import { useDashboardStore } from '@/domains/admin/admin.store';
+import { useRealtime } from '@/lib/realtime/realtime-provider';
 import { cn } from '@/lib/utils';
 
-import type {
-  MessageItem as MessageItemType,
-  NotificationItem as NotificationItemType
-} from '../admin.store';
-import { useDashboardStore } from '../admin.store';
-import { useAdminNotificationActions } from '../hooks/use-admin-notifications';
-
 export function NotificationCenter() {
-  const notifications = useDashboardStore((state) => state.notifications);
-  const messages = useDashboardStore((state) => state.messages);
   const isOpen = useDashboardStore((state) => state.notificationOpen);
   const setNotificationOpen = useDashboardStore((state) => state.setNotificationOpen);
-  const markMessageRead = useDashboardStore((state) => state.markMessageRead);
-  const { markAsRead, markAllRead } = useAdminNotificationActions();
+  const { status: socketStatus } = useRealtime();
 
-  const unreadNotifs = notifications.filter((n) => !n.read).length;
-  const unreadMsgs = messages.filter((m) => m.unread).length;
-  const totalUnread = unreadNotifs + unreadMsgs;
+  const {
+    notifications,
+    total,
+    isLoading,
+    isError,
+    refetch,
+    unreadOnPage
+  } = useAdminNotificationsPanel();
+
+  const { markAsRead, markAllRead, isMarkingAllRead } = useAdminNotificationActions();
+
+  const unreadTotal = notifications.filter((item) => !item.is_read).length;
 
   return (
     <Popover open={isOpen} onOpenChange={setNotificationOpen}>
@@ -39,233 +51,147 @@ export function NotificationCenter() {
         <Button
           size='icon'
           variant='ghost'
-          className='from-primary to-secondary hover:bg-muted group relative h-12 w-12 rounded-full bg-linear-to-r'
+          aria-label='Notifications'
+          className='relative h-10 w-10 rounded-xl'
         >
-          <motion.div
-            animate={totalUnread > 0 ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
-            transition={{
-              repeat: totalUnread > 0 ? Infinity : 0,
-              repeatDelay: 4,
-              duration: 0.5
-            }}
-          >
-            <IconBell
-              className={cn(
-                'h-5 w-5 transition-colors',
-                totalUnread > 0 ? 'text-primary' : 'text-muted-foreground'
-              )}
-            />
-          </motion.div>
-          {totalUnread > 0 && (
-            <span className='bg-primary ring-background absolute top-1 right-2 h-2 w-2 animate-pulse rounded-full ring-2' />
-          )}
+          <IconBell className={cn('h-5 w-5', unreadTotal > 0 && 'text-primary')} />
+          {unreadTotal > 0 ? (
+            <span className='bg-primary text-primary-foreground ring-background absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold ring-2'>
+              {unreadTotal > 9 ? '9+' : unreadTotal}
+            </span>
+          ) : null}
         </Button>
       </PopoverTrigger>
 
       <PopoverContent
         align='end'
-        className='border-border/50 bg-card/95 z-50 w-80 overflow-hidden rounded-2xl p-0 shadow-2xl backdrop-blur-xl sm:w-96'
+        className='border-border/60 w-[min(100vw-2rem,24rem)] overflow-hidden rounded-2xl p-0 shadow-xl'
       >
-        <Tabs defaultValue='alerts' className='w-full'>
-          <div className='bg-muted/30 flex items-center justify-between border-b p-4'>
-            <TabsList className='bg-background/50 border-border/40 grid h-8 w-44 grid-cols-2 border'>
-              <TabsTrigger
-                value='alerts'
-                className='text-[10px] font-bold tracking-tight uppercase'
-              >
-                Alerts {unreadNotifs > 0 && `(${unreadNotifs})`}
-              </TabsTrigger>
-              <TabsTrigger
-                value='messages'
-                className='text-[10px] font-bold tracking-tight uppercase'
-              >
-                Messages {unreadMsgs > 0 && `(${unreadMsgs})`}
-              </TabsTrigger>
-            </TabsList>
+        <div className='border-border/60 bg-muted/20 flex items-start justify-between gap-3 border-b px-4 py-3'>
+          <div>
+            <p className='text-sm font-bold'>Notifications</p>
+            <p className='text-muted-foreground text-[11px]'>
+              {total} total · {unreadOnPage} unread shown
+            </p>
+            <div className='text-muted-foreground mt-1 inline-flex items-center gap-1 text-[10px]'>
+              {socketStatus === 'connected' ? (
+                <>
+                  <IconWifi className='size-3 text-emerald-600 dark:text-emerald-400' />
+                  Live
+                </>
+              ) : (
+                <>
+                  <IconWifiOff className='size-3' />
+                  {socketStatus === 'connecting' ? 'Connecting…' : 'Offline'}
+                </>
+              )}
+            </div>
+          </div>
+          <div className='flex items-center gap-1'>
+            <Button
+              variant='ghost'
+              size='icon'
+              className='h-8 w-8 rounded-lg'
+              aria-label='Refresh notifications'
+              onClick={() => void refetch()}
+            >
+              <IconRefresh className='h-4 w-4' />
+            </Button>
             <Button
               variant='ghost'
               size='sm'
-              onClick={markAllRead}
-              className='hover:text-primary h-8 px-2 text-[10px] font-bold tracking-tighter uppercase opacity-70 transition-all hover:opacity-100 active:scale-90'
+              className='h-8 text-[10px] font-bold uppercase'
+              disabled={isMarkingAllRead || unreadOnPage === 0}
+              onClick={() => void markAllRead()}
             >
-              Clear All
+              Mark all read
             </Button>
           </div>
+        </div>
 
-          <TabsContent value='alerts' className='m-0 focus-visible:outline-none'>
-            <ScrollArea className='h-100'>
-              <div className='flex flex-col'>
-                <AnimatePresence mode='popLayout'>
-                  {notifications.length > 0 ? (
-                    notifications.map((n, i) => (
-                      <NotificationItem key={n.id} n={n} i={i} markAsRead={markAsRead} />
-                    ))
-                  ) : (
-                    <EmptyStateContainer key='empty-alerts'>
-                      <EmptyState
-                        icon={<IconBell className='h-8 w-8' />}
-                        text='No new notifications'
-                      />
-                    </EmptyStateContainer>
-                  )}
-                </AnimatePresence>
+        <ScrollArea className='max-h-80'>
+          {isLoading ? (
+            <div className='space-y-2 p-3'>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Skeleton key={index} className='h-16 w-full rounded-xl' />
+              ))}
+            </div>
+          ) : null}
+
+          {isError ? (
+            <div className='px-4 py-10 text-center'>
+              <p className='text-destructive text-sm font-medium'>Failed to load notifications</p>
+              <Button variant='outline' size='sm' className='mt-3 rounded-lg' onClick={() => void refetch()}>
+                Retry
+              </Button>
+            </div>
+          ) : null}
+
+          {!isLoading && !isError && notifications.length === 0 ? (
+            <div className='flex flex-col items-center px-4 py-14 text-center'>
+              <div className='bg-muted/40 mb-3 rounded-full p-3'>
+                <IconBell className='text-muted-foreground h-6 w-6' />
               </div>
-            </ScrollArea>
-          </TabsContent>
+              <p className='text-sm font-medium'>You&apos;re all caught up</p>
+              <p className='text-muted-foreground mt-1 text-xs'>New alerts appear here in real time.</p>
+            </div>
+          ) : null}
 
-          <TabsContent value='messages' className='m-0 focus-visible:outline-none'>
-            <ScrollArea className='h-100'>
-              <div className='flex flex-col'>
-                <AnimatePresence mode='popLayout'>
-                  {messages.length > 0 ? (
-                    messages.map((m, i) => (
-                      <MessageItem key={m.id} m={m} i={i} markMessageRead={markMessageRead} />
-                    ))
-                  ) : (
-                    <EmptyStateContainer key='empty-msgs'>
-                      <EmptyState
-                        icon={<IconMessage2 className='h-8 w-8' />}
-                        text='No new messages'
-                      />
-                    </EmptyStateContainer>
+          {!isLoading && !isError
+            ? notifications.map((notification) => (
+                <button
+                  key={notification.id}
+                  type='button'
+                  onClick={() => {
+                    if (!notification.is_read) void markAsRead(notification.id);
+                  }}
+                  className={cn(
+                    'border-border/40 hover:bg-muted/40 flex w-full flex-col gap-2 border-b px-4 py-3 text-left transition-colors',
+                    !notification.is_read && 'bg-primary/5'
                   )}
-                </AnimatePresence>
-              </div>
-            </ScrollArea>
-          </TabsContent>
+                >
+                  <div className='flex items-start justify-between gap-2'>
+                    <p className='text-sm leading-snug font-semibold'>{notification.title}</p>
+                    {!notification.is_read ? (
+                      <span className='bg-primary mt-1 size-2 shrink-0 rounded-full' />
+                    ) : null}
+                  </div>
+                  <p className='text-muted-foreground line-clamp-2 text-xs leading-relaxed'>
+                    {notification.message}
+                  </p>
+                  <div className='flex items-center justify-between gap-2'>
+                    <span
+                      className={cn(
+                        'inline-flex rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase',
+                        getNotificationTypeStyle(notification.type)
+                      )}
+                    >
+                      {formatNotificationType(notification.type)}
+                    </span>
+                    <span className='text-muted-foreground text-[10px]'>
+                      {formatNotificationTime(notification.created_at)}
+                    </span>
+                  </div>
+                </button>
+              ))
+            : null}
+        </ScrollArea>
 
-          <div className='bg-muted/20 border-t p-2'>
-            <Button
-              asChild
-              variant='outline'
-              className='hover:bg-primary h-9 w-full gap-2 rounded-xl text-[10px] font-bold tracking-widest uppercase shadow-sm transition-all hover:text-white'
-            >
-              <Link href='/dashboard/live'>
-                Live sales feed
-                <IconExternalLink className='h-3 w-3' />
-              </Link>
-            </Button>
-          </div>
-        </Tabs>
+        <div className='border-border/60 bg-muted/10 grid grid-cols-2 gap-2 border-t p-2'>
+          <Button asChild variant='outline' size='sm' className='h-9 rounded-xl text-[10px] font-bold uppercase'>
+            <Link href='/dashboard/notifications'>
+              View all
+              <IconChevronRight className='ml-1 h-3.5 w-3.5' />
+            </Link>
+          </Button>
+          <Button asChild variant='outline' size='sm' className='h-9 rounded-xl text-[10px] font-bold uppercase'>
+            <Link href='/dashboard/live'>
+              Live feed
+              <IconExternalLink className='ml-1 h-3.5 w-3.5' />
+            </Link>
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
-  );
-}
-
-// --- Sub-Components with Zustand actions passed as props ---
-
-function NotificationItem({
-  n,
-  i,
-  markAsRead
-}: {
-  n: NotificationItemType;
-  i: number;
-  markAsRead: (id: string) => void;
-}) {
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{
-        opacity: 0,
-        x: -50,
-        filter: 'blur(4px)',
-        transition: { duration: 0.2, delay: i * 0.03 }
-      }}
-      onClick={() => markAsRead(n.id)}
-      className={cn(
-        'border-border/40 hover:bg-muted/50 group relative cursor-pointer border-b p-4 transition-colors',
-        !n.read && 'bg-primary/5'
-      )}
-    >
-      <div className='mb-1 flex items-start justify-between'>
-        <h5 className='pr-4 text-sm font-semibold'>{n.title}</h5>
-        <span className='text-muted-foreground text-[10px] font-medium'>{n.time}</span>
-      </div>
-      <p className='text-muted-foreground line-clamp-2 text-xs leading-relaxed'>{n.description}</p>
-      <div className='mt-3 flex translate-y-1 gap-2 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100'>
-        <Button variant='secondary' size='sm' className='h-6 rounded-md px-2 text-[10px] font-bold'>
-          <IconCheck className='mr-1 h-3 w-3' /> Resolve
-        </Button>
-        <Button
-          variant='ghost'
-          size='icon'
-          className='text-destructive hover:bg-destructive/10 h-6 w-6 rounded-md'
-        >
-          <IconTrash className='h-3 w-3' />
-        </Button>
-      </div>
-    </motion.div>
-  );
-}
-
-function MessageItem({
-  m,
-  i,
-  markMessageRead
-}: {
-  m: MessageItemType;
-  i: number;
-  markMessageRead: (id: string) => void;
-}) {
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{
-        opacity: 0,
-        x: 50,
-        filter: 'blur(4px)',
-        transition: { delay: i * 0.03 }
-      }}
-      onClick={() => markMessageRead(m.id)}
-      className='border-border/40 hover:bg-muted/50 group flex cursor-pointer items-center gap-3 border-b p-4 transition-colors'
-    >
-      <div className='bg-primary/10 border-primary/20 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border'>
-        <span className='text-xs font-bold uppercase'>{m.user[0]}</span>
-      </div>
-      <div className='min-w-0 flex-1'>
-        <div className='mb-0.5 flex items-center justify-between'>
-          <p className='truncate text-sm font-semibold'>{m.user}</p>
-          <span className='text-muted-foreground text-[10px]'>{m.time}</span>
-        </div>
-        <p
-          className={cn(
-            'truncate text-xs',
-            m.unread ? 'text-foreground font-medium' : 'text-muted-foreground'
-          )}
-        >
-          {m.preview}
-        </p>
-      </div>
-      {m.unread && (
-        <div className='bg-primary h-1.5 w-1.5 rounded-full shadow-[0_0_8px_rgba(var(--primary),0.6)]' />
-      )}
-    </motion.div>
-  );
-}
-
-function EmptyStateContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', damping: 20, stiffness: 100, delay: 0.2 }}
-      className='py-20'
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function EmptyState({ icon, text }: { icon: React.ReactNode; text: string }) {
-  return (
-    <div className='flex flex-col items-center justify-center px-4 text-center opacity-40'>
-      <div className='bg-muted/20 mb-3 rounded-full p-4'>{icon}</div>
-      <p className='text-[10px] font-bold tracking-widest uppercase'>{text}</p>
-    </div>
   );
 }

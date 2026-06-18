@@ -1,78 +1,39 @@
 'use client';
 
-import { formatDistanceToNow } from 'date-fns';
-import { useCallback, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { toast } from 'sonner';
 
-import { AXIOS_INSTANCE } from '@/lib/api/api-client';
+import { ACCOUNT_NOTIFICATIONS_QUERY_KEY } from '@/domains/account/hooks/use-account-notifications';
 import { useRealtimeSubscribe } from '@/lib/realtime/realtime-provider';
 
-import type { NotificationItem } from '../admin.store';
-import { useDashboardStore } from '../admin.store';
-
-interface ApiNotification {
-  id: number;
-  type: string;
-  title: string;
-  message: string;
-  is_read: boolean;
-  created_at: string;
+interface NotificationPayload {
+  title?: string;
+  message?: string;
 }
 
-function mapNotification(item: ApiNotification): NotificationItem {
-  return {
-    id: String(item.id),
-    title: item.title,
-    description: item.message,
-    time: formatDistanceToNow(new Date(item.created_at), { addSuffix: true }),
-    read: item.is_read,
-    type: item.type.includes('order') || item.type.includes('payment') ? 'alert' : 'system'
-  };
-}
-
-/** Loads notification history and applies live WebSocket updates to the admin store. */
+/** Live WebSocket → TanStack Query cache + toast for admin dashboard. */
 export function AdminNotificationsSync() {
-  const setNotifications = useDashboardStore((state) => state.setNotifications);
+  const queryClient = useQueryClient();
 
-  const loadNotifications = useCallback(async () => {
-    try {
-      const response = await AXIOS_INSTANCE.get<{
-        success?: boolean;
-        data?: { notifications?: ApiNotification[] };
-      }>('/ws/notifications?limit=20');
+  const handleMessage = useCallback(
+    (raw: unknown) => {
+      if (!raw || typeof raw !== 'object') return;
 
-      const items = response.data.data?.notifications ?? [];
-      setNotifications(items.map(mapNotification));
-    } catch {
-      setNotifications([]);
-    }
-  }, [setNotifications]);
+      const message = raw as { type?: string; data?: NotificationPayload };
+      if (message.type !== 'notification') return;
 
-  useEffect(() => {
-    void loadNotifications();
-  }, [loadNotifications]);
+      const title = message.data?.title ?? 'New notification';
+      const description = message.data?.message;
 
-  useRealtimeSubscribe((raw) => {
-    if (!raw || typeof raw !== 'object') return;
+      toast.info(title, description ? { description } : undefined);
 
-    const message = raw as {
-      type?: string;
-      data?: Record<string, unknown>;
-    };
+      void queryClient.invalidateQueries({ queryKey: ACCOUNT_NOTIFICATIONS_QUERY_KEY });
+    },
+    [queryClient]
+  );
 
-    if (message.type !== 'notification' || !message.data) return;
-
-    const payload = message.data;
-    const createdAt = String(payload['created_at'] ?? new Date().toISOString());
-
-    useDashboardStore.getState().prependNotification({
-      id: String(payload['id'] ?? Date.now()),
-      title: String(payload['title'] ?? 'Notification'),
-      description: String(payload['message'] ?? ''),
-      time: formatDistanceToNow(new Date(createdAt), { addSuffix: true }),
-      read: false,
-      type: 'alert'
-    });
-  });
+  useRealtimeSubscribe(handleMessage);
 
   return null;
 }

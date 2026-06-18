@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
+
 interface MenuManagerState {
   selectedGroupId: number | null;
   groupDialogOpen: boolean;
@@ -49,10 +51,11 @@ export const useMenuManagerStore = create<MenuManagerStore>()((set) => ({
 interface SiteMenuManagerState {
   dialogOpen: boolean;
   editingNavId: number | null;
+  editingNavItem: DtoNavItemResponse | null;
 }
 
 interface SiteMenuManagerActions {
-  openDialog: (navId?: number | null) => void;
+  openDialog: (item?: DtoNavItemResponse | null) => void;
   closeDialog: () => void;
   reset: () => void;
 }
@@ -62,7 +65,13 @@ type SiteMenuManagerStore = SiteMenuManagerState & SiteMenuManagerActions;
 export const useSiteMenuManagerStore = create<SiteMenuManagerStore>()((set) => ({
   dialogOpen: false,
   editingNavId: null,
-  openDialog: (navId = null) => set({ dialogOpen: true, editingNavId: navId }),
-  closeDialog: () => set({ dialogOpen: false, editingNavId: null }),
-  reset: () => set({ dialogOpen: false, editingNavId: null })
+  editingNavItem: null,
+  openDialog: (item = null) =>
+    set({
+      dialogOpen: true,
+      editingNavId: item?.id ?? null,
+      editingNavItem: item ?? null
+    }),
+  closeDialog: () => set({ dialogOpen: false, editingNavId: null, editingNavItem: null }),
+  reset: () => set({ dialogOpen: false, editingNavId: null, editingNavItem: null })
 }));

@@ -207,7 +207,6 @@ function UserTableContent({
         </DropdownMenu>
 
         <AppDialog
-          component='drawer'
           title='Advanced Parameters'
           description='Filter by role and active status.'
           trigger={

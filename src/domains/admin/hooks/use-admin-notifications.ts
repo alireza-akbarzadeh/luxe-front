@@ -1,36 +1,57 @@
 'use client';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 
-import { AXIOS_INSTANCE } from '@/lib/api/api-client';
+import {
+  markAccountNotificationRead,
+  markAllAccountNotificationsRead
+} from '@/domains/account/api/account-notifications-api';
+import {
+  ACCOUNT_NOTIFICATIONS_QUERY_KEY,
+  useAccountNotifications
+} from '@/domains/account/hooks/use-account-notifications';
 
-import { useDashboardStore } from '../admin.store';
+const PANEL_LIMIT = 20;
 
-/** Optimistic mark-read actions for the notification bell. */
+/** Recent notifications for the admin header bell. */
+export function useAdminNotificationsPanel() {
+  return useAccountNotifications(PANEL_LIMIT, 0);
+}
+
+/** Mark-read mutations with query invalidation for admin notification UI. */
 export function useAdminNotificationActions() {
-  const markAsReadLocal = useDashboardStore((state) => state.markAsRead);
-  const markAllReadLocal = useDashboardStore((state) => state.markAllRead);
+  const queryClient = useQueryClient();
+
+  const markOneMutation = useMutation({
+    mutationFn: (id: number) => markAccountNotificationRead(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ACCOUNT_NOTIFICATIONS_QUERY_KEY });
+    }
+  });
+
+  const markAllMutation = useMutation({
+    mutationFn: markAllAccountNotificationsRead,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ACCOUNT_NOTIFICATIONS_QUERY_KEY });
+    }
+  });
 
   const markAsRead = useCallback(
-    async (id: string) => {
-      markAsReadLocal(id);
-      try {
-        await AXIOS_INSTANCE.put(`/ws/notifications/${id}/read`);
-      } catch {
-        // Keep optimistic UI; history reloads on next dashboard visit.
-      }
+    async (id: number) => {
+      await markOneMutation.mutateAsync(id);
     },
-    [markAsReadLocal]
+    [markOneMutation]
   );
 
   const markAllRead = useCallback(async () => {
-    markAllReadLocal();
-    try {
-      await AXIOS_INSTANCE.put('/ws/notifications/read-all');
-    } catch {
-      // noop
-    }
-  }, [markAllReadLocal]);
+    await markAllMutation.mutateAsync();
+  }, [markAllMutation]);
 
-  return { markAsRead, markAllRead };
+  return {
+    markAsRead,
+    markAllRead,
+    isMarkingRead: markOneMutation.isPending,
+    isMarkingAllRead: markAllMutation.isPending
+  };
 }

@@ -34,7 +34,8 @@ interface AppDialogProps {
   description?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  component?: 'sheet' | 'drawer';
+  /** Desktop only — mobile always renders as a drawer. Omit for centered dialog. */
+  component?: 'sheet';
   className?: string;
   contentClassName?: string;
   size?: AppDialogSize;
@@ -98,7 +99,9 @@ export function AppDialog(props: AppDialogProps) {
               {description && <SheetDescription>{description}</SheetDescription>}
             </SheetHeader>
           )}
-          <div className={cn('flex min-h-0 flex-1 flex-col overflow-hidden', contentClassName)}>
+          <div
+            className={cn('flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-6', contentClassName)}
+          >
             {children}
           </div>
         </SheetContent>

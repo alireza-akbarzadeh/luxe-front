@@ -10,59 +10,20 @@ import { AppDialog } from '@/components/app-dialog';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
 import {
   siteMenuDefaults,
   type SiteMenuFormValues,
   siteMenuSchema
 } from '@/domains/menus/schemas/site-menu.schema';
-import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
+import { toSiteMenuFormValues } from '@/domains/menus/lib/nav-menu-payload';
 import { useSiteMenuManagerStore } from '@/domains/menus/stores/menu-manager-store';
 import { useGetNavMenusId } from '@/services/-nav-menus-{id}-get';
 import { usePutNavMenusId } from '@/services/-nav-menus-{id}-put';
 import { getGetNavMenusQueryKey } from '@/services/-nav-menus-get';
 import { usePostNavMenus } from '@/services/-nav-menus-post';
 import { DtoUpsertNavMenuRequestType } from '@/services/-nav-menus-post.schemas';
-
-function toFormValues(item: {
-  label?: string;
-  type?: string;
-  href?: string;
-  badge?: string;
-  order?: number;
-  viewAll?: { label?: string; href?: string };
-  columns?: Array<{ title?: string; links?: Array<{ title?: string; href?: string }> }>;
-  featured?: Array<{
-    title?: string;
-    description?: string;
-    href?: string;
-    image?: string;
-    badge?: string;
-  }>;
-}): SiteMenuFormValues {
-  return {
-    label: item.label ?? '',
-    type: item.type === 'mega' ? 'mega' : 'link',
-    href: item.href ?? '',
-    badge: item.badge ?? '',
-    order: item.order ?? 0,
-    viewAllLabel: item.viewAll?.label ?? '',
-    viewAllHref: item.viewAll?.href ?? '',
-    columns: (item.columns ?? []).map((column) => ({
-      title: column.title ?? '',
-      links: (column.links ?? []).map((link) => ({
-        title: link.title ?? '',
-        href: link.href ?? ''
-      }))
-    })),
-    featured: (item.featured ?? []).map((card) => ({
-      title: card.title ?? '',
-      description: card.description ?? '',
-      href: card.href ?? '',
-      image: card.image ?? '',
-      badge: card.badge ?? ''
-    }))
-  };
-}
 
 function toApiPayload(value: SiteMenuFormValues) {
   return {
@@ -83,11 +44,11 @@ function toApiPayload(value: SiteMenuFormValues) {
   };
 }
 
-export function SiteMenuFormDialog() {
+export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
   const queryClient = useQueryClient();
-  const { dialogOpen, editingNavId, closeDialog } = useSiteMenuManagerStore();
+  const { dialogOpen, editingNavId, editingNavItem, closeDialog } = useSiteMenuManagerStore();
 
-  const { data: navResponse } = useGetNavMenusId(editingNavId ?? 0, {
+  const { data: navResponse, isLoading: isLoadingNav } = useGetNavMenusId(editingNavId ?? 0, {
     query: { enabled: dialogOpen && editingNavId != null }
   });
 
@@ -96,7 +57,10 @@ export function SiteMenuFormDialog() {
 
   const form = useAppForm({
     defaultValues: siteMenuDefaults,
-    validators: { onSubmit: zodFormValidator(siteMenuSchema) },
+    validators: {
+      onChange: zodFormValidator(siteMenuSchema),
+      onSubmit: zodFormValidator(siteMenuSchema)
+    },
     onSubmit: async ({ value, formApi }) => {
       const payload = toApiPayload(value);
       try {
@@ -122,14 +86,28 @@ export function SiteMenuFormDialog() {
 
   useEffect(() => {
     if (!dialogOpen) return;
-    if (editingNavId && navResponse?.data) {
-      form.reset(toFormValues(navResponse.data));
+
+    if (!editingNavId) {
+      form.reset({
+        ...siteMenuDefaults,
+        order: itemCount + 1
+      });
       return;
     }
-    if (!editingNavId) {
-      form.reset(siteMenuDefaults);
-    }
-  }, [dialogOpen, editingNavId, navResponse?.data, form]);
+
+    const source = navResponse?.data
+      ? { ...editingNavItem, ...navResponse.data, id: editingNavId }
+      : editingNavItem;
+
+    if (!source) return;
+
+    const order =
+      editingNavItem?.order && editingNavItem.order > 0 ? editingNavItem.order : (source.order ?? 0);
+
+    form.reset(toSiteMenuFormValues(source, order));
+  }, [dialogOpen, editingNavId, editingNavItem, navResponse?.data, itemCount, form]);
+
+  const isHydratingEdit = Boolean(editingNavId && !editingNavItem && isLoadingNav);
 
   const addColumn = () => {
     form.setFieldValue('columns', [...columns, { title: 'New column', links: [] }]);
@@ -161,148 +139,177 @@ export function SiteMenuFormDialog() {
 
   return (
     <AppDialog
-      component='sheet'
       open={dialogOpen}
       onOpenChange={(open) => !open && closeDialog()}
       title={editingNavId ? 'Edit navigation item' : 'New navigation item'}
-      description='Configure storefront header links or mega-menu dropdowns.'
+      description='Top-level storefront nav item. Mega menus hold columns and links inside the dropdown — not separate parent/child rows.'
       size='xl'
     >
-      <form.AppForm>
-        <form.Root className='space-y-5 px-1 pb-6'>
-          <div className='grid gap-4 sm:grid-cols-2'>
-            <form.AppField name='label'>
-              {(field) => <field.TextField label='Label' placeholder='Shop' />}
-            </form.AppField>
-            <form.AppField name='type'>
-              {(field) => (
-                <field.Select
-                  label='Type'
-                  options={[
-                    { label: 'Simple link', value: 'link' },
-                    { label: 'Mega menu', value: 'mega' }
-                  ]}
-                />
-              )}
-            </form.AppField>
-          </div>
+      {isHydratingEdit ? (
+        <div className='space-y-4 px-1 pb-6'>
+          <Skeleton className='h-10 w-full rounded-xl' />
+          <Skeleton className='h-10 w-full rounded-xl' />
+          <Skeleton className='h-32 w-full rounded-xl' />
+        </div>
+      ) : (
+        <form.AppForm>
+          <form.Root
+            className='space-y-5 px-1 pb-6'
+            onSubmit={() => {
+              void form.handleSubmit();
+            }}
+          >
+            <div className='grid gap-4 sm:grid-cols-2'>
+              <form.AppField name='label'>
+                {(field) => <field.TextField label='Label' placeholder='Shop' />}
+              </form.AppField>
+              <form.AppField name='type'>
+                {(field) => (
+                  <field.Select
+                    label='Type'
+                    options={[
+                      { label: 'Simple link', value: 'link' },
+                      { label: 'Mega menu', value: 'mega' }
+                    ]}
+                  />
+                )}
+              </form.AppField>
+            </div>
 
-          {menuType === 'link' ? (
-            <form.AppField name='href'>
-              {(field) => <field.TextField label='Href' placeholder='/shop' />}
-            </form.AppField>
-          ) : null}
+            {menuType === 'link' ? (
+              <form.AppField name='href'>
+                {(field) => <field.TextField label='Href' placeholder='/shop' />}
+              </form.AppField>
+            ) : null}
 
-          <div className='grid gap-4 sm:grid-cols-2'>
-            <form.AppField name='badge'>
-              {(field) => <field.TextField label='Badge (optional)' placeholder='New' />}
-            </form.AppField>
-            <form.AppField name='order'>
-              {(field) => <field.NumberField label='Display order' min={0} />}
-            </form.AppField>
-          </div>
+            <div className='grid gap-4 sm:grid-cols-2'>
+              <form.AppField name='badge'>
+                {(field) => <field.TextField label='Badge (optional)' placeholder='New' />}
+              </form.AppField>
+              <form.AppField name='order'>
+                {(field) => <field.NumberField label='Display order' min={0} />}
+              </form.AppField>
+            </div>
 
-          {menuType === 'mega' ? (
-            <>
-              <Separator />
-              <div className='grid gap-4 sm:grid-cols-2'>
-                <form.AppField name='viewAllLabel'>
-                  {(field) => <field.TextField label='View all label' placeholder='View all' />}
-                </form.AppField>
-                <form.AppField name='viewAllHref'>
-                  {(field) => <field.TextField label='View all href' placeholder='/shop' />}
-                </form.AppField>
-              </div>
-
-              <div className='space-y-3'>
-                <div className='flex items-center justify-between'>
-                  <p className='text-sm font-bold'>Columns</p>
-                  <Button type='button' size='sm' variant='outline' className='h-8 gap-1' onClick={addColumn}>
-                    <IconPlus className='h-3.5 w-3.5' /> Add column
-                  </Button>
+            {menuType === 'mega' ? (
+              <>
+                <Separator />
+                <div className='grid gap-4 sm:grid-cols-2'>
+                  <form.AppField name='viewAllLabel'>
+                    {(field) => <field.TextField label='View all label' placeholder='View all' />}
+                  </form.AppField>
+                  <form.AppField name='viewAllHref'>
+                    {(field) => <field.TextField label='View all href' placeholder='/shop' />}
+                  </form.AppField>
                 </div>
-                {columns.map((column, columnIndex) => (
-                  <div key={`column-${columnIndex}`} className='border-border/60 rounded-xl border p-3'>
-                    <div className='mb-2 flex items-center justify-between gap-2'>
-                      <form.AppField name={`columns[${columnIndex}].title`}>
-                        {(field) => <field.TextField label={`Column ${columnIndex + 1} title`} />}
+
+                <div className='space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <p className='text-sm font-bold'>Columns</p>
+                    <Button
+                      type='button'
+                      size='sm'
+                      variant='outline'
+                      className='h-8 gap-1'
+                      onClick={addColumn}
+                    >
+                      <IconPlus className='h-3.5 w-3.5' /> Add column
+                    </Button>
+                  </div>
+                  {columns.map((column, columnIndex) => (
+                    <div
+                      key={`column-${columnIndex}`}
+                      className='border-border/60 rounded-xl border p-3'
+                    >
+                      <div className='mb-2 flex items-center justify-between gap-2'>
+                        <form.AppField name={`columns[${columnIndex}].title`}>
+                          {(field) => <field.TextField label={`Column ${columnIndex + 1} title`} />}
+                        </form.AppField>
+                        <Button
+                          type='button'
+                          variant='ghost'
+                          size='icon'
+                          className='text-destructive mt-6 h-8 w-8'
+                          onClick={() => removeColumn(columnIndex)}
+                        >
+                          <IconTrash className='h-4 w-4' />
+                        </Button>
+                      </div>
+                      <div className='space-y-2 pl-1'>
+                        {(column.links ?? []).map((_, linkIndex) => (
+                          <div
+                            key={`link-${columnIndex}-${linkIndex}`}
+                            className='grid gap-2 sm:grid-cols-2'
+                          >
+                            <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].title`}>
+                              {(field) => <field.TextField label='Link title' />}
+                            </form.AppField>
+                            <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].href`}>
+                              {(field) => <field.TextField label='Link href' />}
+                            </form.AppField>
+                          </div>
+                        ))}
+                        <Button
+                          type='button'
+                          size='sm'
+                          variant='outline'
+                          className='h-8 text-xs'
+                          onClick={() => addLink(columnIndex)}
+                        >
+                          Add link
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className='space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <p className='text-sm font-bold'>Featured cards</p>
+                    <Button
+                      type='button'
+                      size='sm'
+                      variant='outline'
+                      className='h-8 gap-1'
+                      onClick={addFeatured}
+                    >
+                      <IconPlus className='h-3.5 w-3.5' /> Add featured
+                    </Button>
+                  </div>
+                  {featured.map((_, featuredIndex) => (
+                    <div
+                      key={`featured-${featuredIndex}`}
+                      className='border-border/60 grid gap-3 rounded-xl border p-3 sm:grid-cols-2'
+                    >
+                      <form.AppField name={`featured[${featuredIndex}].title`}>
+                        {(field) => <field.TextField label='Title' />}
                       </form.AppField>
-                      <Button
-                        type='button'
-                        variant='ghost'
-                        size='icon'
-                        className='text-destructive mt-6 h-8 w-8'
-                        onClick={() => removeColumn(columnIndex)}
-                      >
-                        <IconTrash className='h-4 w-4' />
-                      </Button>
+                      <form.AppField name={`featured[${featuredIndex}].href`}>
+                        {(field) => <field.TextField label='Href' />}
+                      </form.AppField>
+                      <form.AppField name={`featured[${featuredIndex}].description`}>
+                        {(field) => <field.TextField label='Description' />}
+                      </form.AppField>
+                      <form.AppField name={`featured[${featuredIndex}].image`}>
+                        {(field) => <field.TextField label='Image URL' />}
+                      </form.AppField>
                     </div>
-                    <div className='space-y-2 pl-1'>
-                      {(column.links ?? []).map((_, linkIndex) => (
-                        <div key={`link-${columnIndex}-${linkIndex}`} className='grid gap-2 sm:grid-cols-2'>
-                          <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].title`}>
-                            {(field) => <field.TextField label='Link title' />}
-                          </form.AppField>
-                          <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].href`}>
-                            {(field) => <field.TextField label='Link href' />}
-                          </form.AppField>
-                        </div>
-                      ))}
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='outline'
-                        className='h-8 text-xs'
-                        onClick={() => addLink(columnIndex)}
-                      >
-                        Add link
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className='space-y-3'>
-                <div className='flex items-center justify-between'>
-                  <p className='text-sm font-bold'>Featured cards</p>
-                  <Button type='button' size='sm' variant='outline' className='h-8 gap-1' onClick={addFeatured}>
-                    <IconPlus className='h-3.5 w-3.5' /> Add featured
-                  </Button>
+                  ))}
                 </div>
-                {featured.map((_, featuredIndex) => (
-                  <div key={`featured-${featuredIndex}`} className='border-border/60 grid gap-3 rounded-xl border p-3 sm:grid-cols-2'>
-                    <form.AppField name={`featured[${featuredIndex}].title`}>
-                      {(field) => <field.TextField label='Title' />}
-                    </form.AppField>
-                    <form.AppField name={`featured[${featuredIndex}].href`}>
-                      {(field) => <field.TextField label='Href' />}
-                    </form.AppField>
-                    <form.AppField name={`featured[${featuredIndex}].description`}>
-                      {(field) => <field.TextField label='Description' />}
-                    </form.AppField>
-                    <form.AppField name={`featured[${featuredIndex}].image`}>
-                      {(field) => <field.TextField label='Image URL' />}
-                    </form.AppField>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : null}
+              </>
+            ) : null}
 
-          <div className='flex justify-end gap-2 pt-2'>
-            <Button type='button' variant='outline' onClick={closeDialog}>
-              Cancel
-            </Button>
-            <form.Subscribe selector={(state) => state.isSubmitting}>
-              {(isSubmitting) => (
-                <form.Submit disabled={isSubmitting || isCreating || isUpdating}>
-                  {editingNavId ? 'Save changes' : 'Create item'}
-                </form.Submit>
-              )}
-            </form.Subscribe>
-          </div>
-        </form.Root>
-      </form.AppForm>
+            <div className='flex justify-end gap-2 pt-2'>
+              <Button type='button' variant='outline' onClick={closeDialog}>
+                Cancel
+              </Button>
+              <form.Submit isPending={isCreating || isUpdating}>
+                {editingNavId ? 'Save changes' : 'Create item'}
+              </form.Submit>
+            </div>
+          </form.Root>
+        </form.AppForm>
+      )}
     </AppDialog>
   );
 }

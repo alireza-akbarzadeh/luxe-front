@@ -37,42 +37,43 @@ export function AdminSidebar(props: AdminSidebarProps) {
       animate={{ width: effectiveCollapsed ? 76 : 280 }}
       transition={springTransition}
       className={cn(
-        'bg-card relative z-30 flex h-full shrink-0 flex-col border-r',
-        'overflow-hidden select-none',
+        'bg-card/95 relative z-30 flex h-full shrink-0 flex-col border-r border-border/60',
+        'overflow-hidden select-none backdrop-blur-sm',
         className
       )}
     >
-      {/* 1. Workspace Switcher - Pinned at Top */}
-      <div className='flex shrink-0 items-center p-2'>
+      <div
+        className={cn(
+          'flex shrink-0 items-center gap-1 p-2',
+          effectiveCollapsed ? 'flex-col' : 'justify-between'
+        )}
+      >
         <WorkspaceSwitcher isCollapsed={effectiveCollapsed} />
-        {!isSidebarCollapsed && <ToggleSidebarAction />}
+        <ToggleSidebarAction />
       </div>
 
       <Separator
-        className={cn('mb-4 opacity-50', effectiveCollapsed ? 'mx-auto w-10' : 'mx-4 w-auto')}
+        className={cn('opacity-40', effectiveCollapsed ? 'mx-auto mb-3 w-10' : 'mx-4 mb-4 w-auto')}
       />
 
-      {/* 4. Main Navigation Area */}
       <ScrollArea className='w-full flex-1' type='auto'>
-        {/* FIX: Removed transition-all duration-300 completely to prevent thread conflicts */}
         <div
-          className={cn('flex flex-col gap-8 pb-10', effectiveCollapsed ? 'items-center' : 'px-3')}
+          className={cn('flex flex-col gap-6 pb-8', effectiveCollapsed ? 'items-center px-1' : 'px-2')}
         >
-          {isSidebarCollapsed && <ToggleSidebarAction />}
           {groups.map((group) => (
             <div key={group.id} className='w-full space-y-1'>
               <AnimatePresence initial={false}>
-                {!effectiveCollapsed && (
+                {!effectiveCollapsed ? (
                   <motion.h4
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className='text-muted-foreground/40 mb-2 px-3 text-[10px] font-bold tracking-[0.2em] whitespace-nowrap uppercase'
+                    initial={{ opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -4 }}
+                    transition={{ duration: 0.15 }}
+                    className='text-muted-foreground/50 mb-2 px-3 text-[10px] font-bold tracking-[0.18em] whitespace-nowrap uppercase'
                   >
                     {group.name}
                   </motion.h4>
-                )}
+                ) : null}
               </AnimatePresence>
               <div className='space-y-0.5'>
                 {group?.items?.map((item) => (
@@ -89,8 +90,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
         </div>
       </ScrollArea>
 
-      {/* 5. Bottom Pinned Section */}
-      <div className='bg-card mt-auto flex shrink-0 flex-col gap-1 border-t p-2'>
+      <div className='bg-muted/20 mt-auto flex shrink-0 flex-col gap-1 border-t border-border/60 p-2'>
         <UserProfile variant='sidebar' isCollapsed={effectiveCollapsed} />
       </div>
     </motion.aside>

@@ -31,7 +31,10 @@ export function DashboardMenuGroupDialog() {
 
   const form = useAppForm({
     defaultValues: menuGroupDefaults,
-    validators: { onSubmit: zodFormValidator(menuGroupSchema) },
+    validators: {
+      onChange: zodFormValidator(menuGroupSchema),
+      onSubmit: zodFormValidator(menuGroupSchema)
+    },
     onSubmit: async ({ value, formApi }) => {
       try {
         if (editingGroupId) {
@@ -75,7 +78,12 @@ export function DashboardMenuGroupDialog() {
       size='md'
     >
       <form.AppForm>
-        <form.Root className='space-y-4 px-1'>
+        <form.Root
+          className='space-y-4 px-1'
+          onSubmit={() => {
+            void form.handleSubmit();
+          }}
+        >
           <form.AppField name='name'>
             {(field) => <field.TextField label='Group name' placeholder='e.g. Commerce' />}
           </form.AppField>
@@ -86,13 +94,9 @@ export function DashboardMenuGroupDialog() {
             <Button type='button' variant='outline' onClick={closeGroupDialog}>
               Cancel
             </Button>
-            <form.Subscribe selector={(state) => state.isSubmitting}>
-              {(isSubmitting) => (
-                <form.Submit disabled={isSubmitting || isCreating || isUpdating}>
-                  {editingGroupId ? 'Save changes' : 'Create group'}
-                </form.Submit>
-              )}
-            </form.Subscribe>
+            <form.Submit isPending={isCreating || isUpdating}>
+              {editingGroupId ? 'Save changes' : 'Create group'}
+            </form.Submit>
           </div>
         </form.Root>
       </form.AppForm>

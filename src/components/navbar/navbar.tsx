@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
+import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { useSearchStore } from '@/domains/search/search.store';
 import { useGetNavMenus } from '@/services/-nav-menus-get';
 
@@ -23,6 +24,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
   const { data: { data: navMenus } = {} } = useGetNavMenus();
+  const sortedNavMenus = navMenus ? sortNavMenuItems(navMenus) : undefined;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +58,7 @@ export function Navbar() {
             </Link>
 
             <div className='hidden min-w-0 lg:block'>
-              <DesktopNav navMenus={navMenus} />
+              <DesktopNav navMenus={sortedNavMenus} />
             </div>
 
             <div className='ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
@@ -114,7 +116,7 @@ export function Navbar() {
             >
               <div className='navbar-container py-6'>
                 <MobileNav
-                  navMenus={navMenus}
+                  navMenus={sortedNavMenus}
                   onNavigateAction={() => setIsMobileMenuOpen(false)}
                 />
               </div>
