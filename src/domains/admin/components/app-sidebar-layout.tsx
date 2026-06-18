@@ -44,13 +44,13 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
             </SheetContent>
           </Sheet>
 
-          <div className='relative flex min-w-0 flex-1 flex-col overflow-hidden'>
+          <div className='relative flex flex-1 flex-col overflow-hidden'>
             <AppHeader sidebar_menu={sidebar_menu} pathname={pathname} />
             <main className='flex-1 overflow-y-auto scroll-smooth p-px'>
               <div
                 className={cn(
                   'bg-card min-h-full',
-                  isFullWidth ? 'max-w-none p-4' : 'container mx-auto max-w-400 p-2'
+                  isFullWidth ? 'max-w-none p-4' : 'w-full px-2 py-2'
                 )}
               >
                 {children}

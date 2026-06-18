@@ -1,62 +1,143 @@
 'use client';
 
+import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { toast } from 'sonner';
 
-import type { TableState } from '~/src/components/table/data-table';
-import { Table, useServerTable } from '~/src/components/table/data-table';
-import { brandColumns } from '~/src/domains/brands/sections/brand-columns';
-import { useGetBrands } from '~/src/services/-brands-get';
-import type { DtoBrandResponse, GetBrands200 } from '~/src/services/-brands-get.schemas';
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
+import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import {
+  getBrandsFromListResponse,
+  getBrandsTotalFromListResponse
+} from '@/domains/brands/lib/brand-list';
+import { brandColumns } from '@/domains/brands/sections/brand-columns';
+import { deleteBrandsId } from '@/services/-brands-{id}-delete';
+import { getGetBrandsQueryKey, useGetBrands } from '@/services/-brands-get';
+import type { DtoBrandResponse, GetBrands200 } from '@/services/-brands-get.schemas';
 
 export function BrandsDomains() {
   const { push } = useRouter();
+  const queryClient = useQueryClient();
 
   const getQueryParams = useCallback(
     (state: TableState, filter: string) => ({
       limit: state.pagination.pageSize,
-      page: state.pagination.pageIndex * state.pagination.pageSize,
+      page: state.pagination.pageIndex + 1,
       search: filter || undefined
     }),
     []
   );
 
-  const getRows = useCallback((data: GetBrands200 | undefined) => data?.data ?? [], []);
+  const getRows = useCallback(
+    (data: GetBrands200 | undefined) => getBrandsFromListResponse(data),
+    []
+  );
 
-  // API does not return total count — estimate from current page size
-  const getTotal = useCallback((data: GetBrands200 | undefined) => data?.data?.length ?? 0, []);
+  const getTotal = useCallback(
+    (data: GetBrands200 | undefined) => getBrandsTotalFromListResponse(data),
+    []
+  );
 
   const serverTable = useServerTable({
     columns: brandColumns,
-    initialPageSize: 20,
+    initialPageSize: 15,
     getQueryParams,
     getRows,
     getTotal,
     useQuery: useGetBrands
   });
 
+  const handleDeleteBrand = useCallback(
+    async (brand: DtoBrandResponse) => {
+      if (!brand.id) return;
+
+      const confirmed = window.confirm(`Delete brand "${brand.name ?? 'this brand'}"?`);
+      if (!confirmed) return;
+
+      try {
+        await deleteBrandsId(brand.id);
+        void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
+        toast.success('Brand deleted');
+      } catch (error) {
+        toast.error('Failed to delete brand', {
+          description: error instanceof Error ? error.message : 'Something went wrong'
+        });
+      }
+    },
+    [queryClient]
+  );
+
+  const handleBulkDelete = useCallback(async () => {
+    const ids = Object.entries(serverTable.tableState.rowSelection)
+      .filter(([, selected]) => selected)
+      .map(([id]) => Number(id))
+      .filter((id) => Number.isFinite(id));
+
+    if (ids.length === 0) {
+      toast.error('Select at least one brand');
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete ${ids.length} selected brand(s)?`);
+    if (!confirmed) return;
+
+    try {
+      await Promise.all(ids.map((id) => deleteBrandsId(id)));
+      void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
+      serverTable.tableState.resetRowSelection();
+      toast.success('Selected brands deleted');
+    } catch (error) {
+      toast.error('Failed to delete selected brands', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
+    }
+  }, [queryClient, serverTable.tableState]);
+
   return (
     <Table.Root {...serverTable.rootProps}>
       <Table.Toolbar
-        searchPlaceholder='Search by name'
+        searchPlaceholder='Search by name or slug'
         showRefresh
         onRefresh={serverTable.refetch}
         isLoading={serverTable.isFetching}
         showCreate
-        onCreate={() => push('/dashboard/products/create')}
+        onCreate={() => push('/dashboard/brands/create')}
         showClear
         showColumnVisibility
         showBulkActions
+        onDelete={handleBulkDelete}
       />
       <Table.Grid<DtoBrandResponse>
-        isLoading={serverTable.isLoading}
+        isLoading={serverTable.isLoading && serverTable.rows.length === 0}
         onRowDoubleClick={(row) => push(`/dashboard/brands/edit/${row.original.id}`)}
+        extendMenuActions={(row) => (
+          <>
+            <DropdownMenuItem
+              className='gap-2 text-[11px] font-semibold'
+              onClick={() => push(`/dashboard/brands/edit/${row.original.id}`)}
+            >
+              <IconPencil className='size-3.5' />
+              Edit brand
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className='text-destructive gap-2 text-[11px] font-semibold'
+              onClick={() => void handleDeleteBrand(row.original)}
+            >
+              <IconTrash className='size-3.5' />
+              Delete brand
+            </DropdownMenuItem>
+          </>
+        )}
       />
       <Table.Pagination
         showPageSize
         showTotalRows
         showJumpToPage
-        pageSizeOptions={[10, 20, 50, 100, 200]}
+        pageSizeOptions={[10, 15, 20, 50, 100]}
       />
     </Table.Root>
   );

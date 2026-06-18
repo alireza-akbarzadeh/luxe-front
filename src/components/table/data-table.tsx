@@ -26,7 +26,7 @@ export type { TableState } from './use-table-state';
  *   columns: productColumns,
  *   getQueryParams: (state, filter) => ({ limit: state.pagination.pageSize, ... }),
  *   getRows: (data) => data?.data?.products ?? [],
- *   getTotal: (data) => data?.data?.total ?? 0,
+ *   getTotal: (data) => data?.data?.total,
  *   useQuery: useGetProducts,
  * });
  *

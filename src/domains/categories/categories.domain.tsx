@@ -3,32 +3,41 @@
 import { IconFileSpreadsheet } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useCallback, useDeferredValue, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
-import { Table, useTableState } from '@/components/table/data-table';
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
-import { buildCategoryTree } from '@/domains/categories/categories.util';
 import { CategoryImportDialog } from '@/domains/categories/components/category-import-dialog';
 import { categoryColumns } from '@/domains/categories/sections/category-columns';
 import { useDeleteAdminCategoriesBulk } from '@/services/-admin-categories-bulk-delete';
-import { getGetCategoriesQueryKey,useGetCategories } from '@/services/-categories-get';
-import type { ModelsCategory } from '@/services/-categories-get.schemas';
+import { getGetCategoriesQueryKey, useGetCategories } from '@/services/-categories-get';
+import type { DtoCategoryListResponse, ModelsCategory } from '@/services/-categories-get.schemas';
 
 export function CategoriesDomains() {
   const { push } = useRouter();
   const queryClient = useQueryClient();
-  const tableState = useTableState();
-  const deferredFilter = useDeferredValue(tableState.globalFilter);
   const [importOpen, setImportOpen] = useState(false);
 
-  const { data, isLoading, isFetching, refetch } = useGetCategories({
-    search: deferredFilter || undefined,
-    limit: 100
-  });
+  const getQueryParams = useCallback(
+    (state: TableState, filter: string) => ({
+      limit: state.pagination.pageSize,
+      offset: state.pagination.pageIndex * state.pagination.pageSize,
+      search: filter || undefined
+    }),
+    []
+  );
 
-  const flatCategories = data?.data?.categories ?? [];
-  const treeData = buildCategoryTree(flatCategories);
+  const getRows = useCallback(
+    (data: DtoCategoryListResponse | undefined) => data?.data?.categories ?? [],
+    []
+  );
+
+  const getTotal = useCallback(
+    (data: DtoCategoryListResponse | undefined) => data?.data?.total,
+    []
+  );
 
   const deleteBulkMutation = useDeleteAdminCategoriesBulk({
     mutation: {
@@ -39,8 +48,17 @@ export function CategoriesDomains() {
     }
   });
 
+  const serverTable = useServerTable({
+    columns: categoryColumns,
+    initialPageSize: 20,
+    getQueryParams,
+    getRows,
+    getTotal,
+    useQuery: useGetCategories
+  });
+
   const handleBulkDelete = useCallback(() => {
-    const ids = Object.entries(tableState.rowSelection)
+    const ids = Object.entries(serverTable.tableState.rowSelection)
       .filter(([, selected]) => selected)
       .map(([id]) => Number(id))
       .filter((id) => Number.isFinite(id));
@@ -54,25 +72,20 @@ export function CategoriesDomains() {
       { data: { ids } as { ids: number[] } },
       {
         onSuccess: () => {
-          tableState.resetRowSelection();
+          serverTable.tableState.resetRowSelection();
         }
       }
     );
-  }, [deleteBulkMutation, tableState]);
+  }, [deleteBulkMutation, serverTable.tableState]);
 
   return (
     <>
-      <Table.Root
-        data={treeData}
-        columns={categoryColumns}
-        tableState={tableState}
-        getSubRows={(row: ModelsCategory) => row.children}
-      >
+      <Table.Root {...serverTable.rootProps}>
         <Table.Toolbar
           searchPlaceholder='Search by name or slug'
           showRefresh
-          onRefresh={refetch}
-          isLoading={isFetching}
+          onRefresh={serverTable.refetch}
+          isLoading={serverTable.isFetching}
           showCreate
           onCreate={() => push('/dashboard/categories/create')}
           showClear
@@ -87,7 +100,7 @@ export function CategoriesDomains() {
         </Table.Toolbar>
         <Table.Grid<ModelsCategory>
           onRowDoubleClick={(row) => push(`/dashboard/categories/edit/${row.original.id}`)}
-          isLoading={isLoading}
+          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
         />
         <Table.Pagination
           showPageSize

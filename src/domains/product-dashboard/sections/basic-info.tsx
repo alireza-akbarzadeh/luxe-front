@@ -6,6 +6,7 @@ import { withForm } from '@/components/forms/useAppForm';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
+import { getBrandsFromListResponse } from '@/domains/brands/lib/brand-list';
 import { useGetBrands } from '~/src/services/-brands-get';
 import { useGetCategories } from '~/src/services/-categories-get';
 
@@ -25,7 +26,7 @@ export const BasicInfoStep = withForm({
       form.setFieldValue('slug', slug);
     };
 
-    const { data: brands } = useGetBrands();
+    const { data: brands } = useGetBrands({ limit: 100, page: 1 });
     const { data: categories } = useGetCategories();
 
     return (
@@ -76,10 +77,10 @@ export const BasicInfoStep = withForm({
                   placeholder='Select brand'
                   required
                   options={
-                    brands?.data?.map((brand) => ({
+                    getBrandsFromListResponse(brands).map((brand) => ({
                       value: brand.id?.toString() ?? '',
                       label: brand.name ?? ''
-                    })) || []
+                    }))
                   }
                 />
               )}

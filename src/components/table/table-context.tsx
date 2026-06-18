@@ -153,6 +153,7 @@ export function TableRoot<TData>({
         manualPagination,
         manualFiltering,
         manualSorting,
+        autoResetPageIndex: manualPagination ? false : undefined,
         state: {
           pagination,
           globalFilter,

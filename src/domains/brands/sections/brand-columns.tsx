@@ -60,6 +60,7 @@ export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
     cell: ({ row }) => {
       const status = row.original.status || 'inactive';
       const config: Record<string, { color: string; label: string }> = {
+        draft: { color: 'bg-amber-400', label: 'Draft' },
         active: { color: 'bg-emerald-500', label: 'Active' },
         inactive: { color: 'bg-slate-400', label: 'Inactive' },
         archived: { color: 'bg-destructive', label: 'Archived' }

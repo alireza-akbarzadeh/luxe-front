@@ -32,16 +32,16 @@ export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-20 flex h-16 shrink-0 items-center gap-3 border-b border-border/60 px-3 transition-all duration-300 md:gap-4 md:px-5',
+        'border-border/60 sticky top-0 z-20 flex h-[70px] shrink-0 items-center gap-3 border-b px-3 transition-all duration-300 md:gap-4 md:px-5',
         isScrolled
-          ? 'bg-card/85 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-card/70'
+          ? 'bg-card/85 supports-[backdrop-filter]:bg-card/70 shadow-sm backdrop-blur-xl'
           : 'bg-card/95'
       )}
     >
       <Button
         variant='ghost'
         size='icon'
-        className='h-10 w-10 rounded-xl hover:bg-accent/60 md:hidden'
+        className='hover:bg-accent/60 h-10 w-10 rounded-xl md:hidden'
         aria-label='Open navigation menu'
         onClick={() => setMobileSidebarOpen(true)}
       >

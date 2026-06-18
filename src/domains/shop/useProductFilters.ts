@@ -100,7 +100,8 @@ export function useProductFilters() {
   const setReviewsRange = (min: number, max: number) =>
     setParams({ minReviews: min, maxReviews: max, page: 1 });
   const setIsDigital = (value: boolean) => setParams({ isDigital: value, page: 1 });
-  const setPage = (value: number) => setParams({ page: value });
+  const setPage = (value: number) =>
+    setParams({ page: value }, { scroll: true, history: 'push' });
 
   const clearFilters = () => {
     setParams({

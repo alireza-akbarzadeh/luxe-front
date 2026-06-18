@@ -21,8 +21,8 @@ interface UseServerTableOptions<TData, TQueryData, TQueryParams> {
   getQueryParams: (state: TableState, deferredFilter: string) => TQueryParams;
   /** Extract row array from query response */
   getRows: (data: TQueryData | undefined) => TData[];
-  /** Extract total count from query response (for server pagination) */
-  getTotal?: (data: TQueryData | undefined) => number;
+  /** Extract total count from query response (for server pagination). Omit or return undefined to fall back to current row count. */
+  getTotal?: (data: TQueryData | undefined) => number | undefined;
   /** TanStack Query hook — called with computed params */
   useQuery: (params: TQueryParams) => QueryResult<TQueryData>;
   manualPagination?: boolean;
@@ -45,7 +45,7 @@ interface UseServerTableOptions<TData, TQueryData, TQueryParams> {
  *     name: filter || undefined,
  *   }),
  *   getRows: (data) => data?.data?.products ?? [],
- *   getTotal: (data) => data?.data?.total ?? 0,
+ *   getTotal: (data) => data?.data?.total,
  *   useQuery: useGetProducts,
  * });
  *
@@ -73,16 +73,23 @@ export function useServerTable<TData, TQueryData, TQueryParams>({
   const tableState = useTableState({ initialPageSize });
   const deferredFilter = useDeferredValue(tableState.globalFilter);
 
+  const { pageIndex, pageSize: rawPageSize } = tableState.pagination;
+  const pageSize = Math.max(1, rawPageSize);
+
   const queryParams = useMemo(
     () => getQueryParams(tableState, deferredFilter),
-    [tableState, deferredFilter, getQueryParams]
+    [tableState, deferredFilter, getQueryParams, pageIndex, pageSize]
   );
 
   const { data, isLoading, isFetching, refetch, error, isError } = useQuery(queryParams);
 
   const rows = useMemo(() => getRows(data), [data, getRows]);
-  const total = getTotal?.(data) ?? rows.length;
-  const pageCount = Math.max(1, Math.ceil(total / tableState.pagination.pageSize));
+  const reportedTotal = getTotal?.(data);
+  const total =
+    typeof reportedTotal === 'number' && Number.isFinite(reportedTotal)
+      ? reportedTotal
+      : rows.length;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
   const rootProps = useMemo(
     () =>

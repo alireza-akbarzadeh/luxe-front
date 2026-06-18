@@ -34,15 +34,28 @@ export function TablePagination<TData>({
   showPageSize = true,
   showTotalRows = true,
   showJumpToPage = false,
-  pageSizeOptions = [10, 25, 50, 100, 250, 500]
+  pageSizeOptions = [10, 20, 25, 50, 100, 250, 500]
 }: TablePaginationProps) {
   const { table, state } = useTableContext<TData>();
   const [jumpPage, setJumpPage] = React.useState('');
 
   const pageIndex = state.pagination.pageIndex;
-  const pageSize = state.pagination.pageSize;
+  const pageSize = Math.max(1, state.pagination.pageSize);
   const pageCount = table.getPageCount();
   const rowCount = table.getRowCount();
+  const visibleRowCount = table.getRowModel().rows.length;
+
+  const resolvedPageSizeOptions = React.useMemo(() => {
+    if (pageSizeOptions.includes(pageSize)) return pageSizeOptions;
+    return [...pageSizeOptions, pageSize].sort((a, b) => a - b);
+  }, [pageSize, pageSizeOptions]);
+
+  const effectiveRowCount = rowCount > 0 ? rowCount : visibleRowCount;
+  const rangeStart = effectiveRowCount === 0 ? 0 : pageIndex * pageSize + 1;
+  const rangeEnd =
+    effectiveRowCount === 0
+      ? 0
+      : Math.min(pageIndex * pageSize + visibleRowCount, effectiveRowCount);
 
   // Smart page numbers with ellipsis
   const getPageNumbers = () => {
@@ -95,13 +108,16 @@ export function TablePagination<TData>({
             <span className='text-muted-foreground text-xs whitespace-nowrap'>Rows per page:</span>
             <Select
               value={String(pageSize)}
-              onValueChange={(value) => table.setPageSize(Number(value))}
+              onValueChange={(value) => {
+                const nextSize = Number(value);
+                if (nextSize > 0) table.setPageSize(nextSize);
+              }}
             >
-              <SelectTrigger className='border-border/40 bg-card/40 h-8 w-17.5 text-xs'>
+              <SelectTrigger className='border-border/40 bg-card/40 h-8 min-w-16 text-xs'>
                 <SelectValue placeholder={String(pageSize)} />
               </SelectTrigger>
               <SelectContent side='top'>
-                {pageSizeOptions.map((size) => (
+                {resolvedPageSizeOptions.map((size) => (
                   <SelectItem key={size} value={String(size)} className='text-xs'>
                     {size}
                   </SelectItem>
@@ -114,14 +130,9 @@ export function TablePagination<TData>({
         {showTotalRows && (
           <div className='text-muted-foreground hidden text-xs md:block'>
             Showing{' '}
-            <span className='text-foreground font-medium'>
-              {rowCount === 0 ? 0 : pageIndex * pageSize + 1}
-            </span>{' '}
-            to{' '}
-            <span className='text-foreground font-medium'>
-              {Math.min((pageIndex + 1) * pageSize, rowCount)}
-            </span>{' '}
-            of <span className='text-foreground font-medium'>{rowCount}</span> rows
+            <span className='text-foreground font-medium'>{rangeStart}</span> to{' '}
+            <span className='text-foreground font-medium'>{rangeEnd}</span> of{' '}
+            <span className='text-foreground font-medium'>{effectiveRowCount}</span> rows
           </div>
         )}
       </div>

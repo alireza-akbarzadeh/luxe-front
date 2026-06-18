@@ -31,7 +31,7 @@ export function ProductsDomains() {
 
   const getRows = useCallback((data: GetProducts200 | undefined) => data?.data?.products ?? [], []);
 
-  const getTotal = useCallback((data: GetProducts200 | undefined) => data?.data?.total ?? 0, []);
+  const getTotal = useCallback((data: GetProducts200 | undefined) => data?.data?.total, []);
 
   const deleteBulkMutation = useDeleteProductsBulk({
     mutation: {
@@ -44,7 +44,7 @@ export function ProductsDomains() {
 
   const serverTable = useServerTable({
     columns: productColumns,
-    initialPageSize: 20,
+    initialPageSize: 15,
     getQueryParams,
     getRows,
     getTotal,
@@ -93,9 +93,13 @@ export function ProductsDomains() {
         </Table.Toolbar>
         <Table.Grid<DtoProductWithLike>
           onRowDoubleClick={(row) => push(`/dashboard/products/edit/${row.original.id}`)}
-          isLoading={serverTable.isLoading}
+          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
         />
-        <Table.Pagination />
+        <Table.Pagination
+          showPageSize
+          showTotalRows
+          pageSizeOptions={[10, 15, 20, 50, 100, 250]}
+        />
       </Table.Root>
 
       <ProductImportDialog open={importOpen} onOpenChange={setImportOpen} />

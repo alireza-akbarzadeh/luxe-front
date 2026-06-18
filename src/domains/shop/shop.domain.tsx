@@ -2,9 +2,10 @@
 
 import { IconRefresh } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { useGetProducts } from '~/src/services/-products-get';
 
@@ -37,6 +38,12 @@ export function ShopDomain() {
   const apiProducts = data?.data?.products ?? [];
   const rangeStart = total === 0 ? 0 : (page - 1) * SHOP_PAGE_SIZE + 1;
   const rangeEnd = Math.min(page * SHOP_PAGE_SIZE, total);
+  const isInitialLoading = isLoading && !data;
+  const isPageLoading = isFetching && !isInitialLoading;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [page]);
 
   return (
     <div className='app-container mt-10 pb-16'>
@@ -57,7 +64,7 @@ export function ShopDomain() {
         total={total}
         rangeStart={rangeStart}
         rangeEnd={rangeEnd}
-        isFetching={isFetching && !isLoading}
+        isFetching={isPageLoading}
       />
       <ActiveFilter />
 
@@ -82,7 +89,7 @@ export function ShopDomain() {
                 Retry
               </Button>
             </div>
-          ) : isLoading ? (
+          ) : isInitialLoading ? (
             <ShopProductsSkeleton />
           ) : (
             <>
@@ -91,7 +98,9 @@ export function ShopDomain() {
                   Showing sale items from the current page of results.
                 </p>
               )}
-              <ProductGrid products={products} />
+              <div className={cn('relative', isPageLoading && 'pointer-events-none opacity-60')}>
+                <ProductGrid products={products} />
+              </div>
               <ShopPagination page={page} totalPages={totalPages} />
             </>
           )}

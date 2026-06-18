@@ -42,7 +42,21 @@ search?: string;
 status?: string;
 };
 
+export interface DtoBrandListData {
+  brands?: DtoBrandResponse[];
+  limit?: number;
+  page?: number;
+  total?: number;
+}
+
+export interface DtoBrandListResponse {
+  code?: number;
+  data?: DtoBrandListData;
+  message?: string;
+  success?: boolean;
+}
+
 export type GetBrands200 = UtilsResponse & {
-  data?: DtoBrandResponse[];
+  data?: DtoBrandListData | DtoBrandResponse[];
 };
 

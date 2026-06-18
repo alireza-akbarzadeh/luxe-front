@@ -86,7 +86,8 @@ export function useSearchParams() {
   const setIsNew = (value: boolean) => setParams({ isNew: value, page: 1 });
   const setIsDigital = (value: boolean) => setParams({ isDigital: value, page: 1 });
   const setView = (value: ViewMode) => setParams({ view: value });
-  const setPage = (value: number) => setParams({ page: value });
+  const setPage = (value: number) =>
+    setParams({ page: value }, { scroll: true, history: 'push' });
   const setPerPage = (value: number) => setParams({ perPage: value, page: 1 });
 
   const applyFilters = (draft: SearchFilterDraft) => {
