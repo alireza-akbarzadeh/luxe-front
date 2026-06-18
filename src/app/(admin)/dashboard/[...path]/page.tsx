@@ -5,7 +5,7 @@ import { AdminErrorState } from '@/components/cart/admin-error-state';
 export default function CatchAllPath() {
   return (
     <AdminErrorState
-      code='405'
+      code='404'
       badge='Resource not found'
       tone='warn'
       title="We couldn't find that admin page"
