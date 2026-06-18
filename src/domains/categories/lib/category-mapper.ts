@@ -26,8 +26,7 @@ export function mapFormToUpdateCategoryRequest(values: CategoryFormValues): DtoU
     name: values.name.trim(),
     slug: values.slug.trim() || undefined,
     description: values.description?.trim() || undefined,
-    parent_id: parseParentId(values.parent_id),
-    is_active: values.is_active
+    parent_id: parseParentId(values.parent_id)
   };
 }
 

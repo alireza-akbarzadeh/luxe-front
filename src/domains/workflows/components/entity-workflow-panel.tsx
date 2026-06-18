@@ -29,7 +29,10 @@ const ENTITY_LABELS: Record<WorkflowEntityKey, string> = {
   order: 'Order',
   shipment: 'Shipment',
   return: 'Return',
-  user: 'User'
+  user: 'User',
+  category: 'Category',
+  brand: 'Brand',
+  collection: 'Collection'
 };
 
 interface EntityWorkflowPanelProps {

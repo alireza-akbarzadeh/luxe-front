@@ -2,16 +2,35 @@
 
 import { IconArrowRight, IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useMemo } from 'react';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useGetCollections } from '@/services/-collections-get';
+import type { GetCollections200 } from '@/services/-collections-get.schemas';
 
 import { CollectionCard } from './components/collection-card';
 import { CollectionHeroGrid } from './components/collection-hero-grid';
 import { CollectionPreviewRow } from './components/collection-preview-row';
+import { mapApiCollectionToCurated } from './lib/collection-api-mapper';
 import { CURATED_COLLECTIONS } from './lib/collections.config';
 
 export function CollectionsDomain() {
+  const { data: listResponse, isLoading } = useGetCollections(
+    { status: 'active', limit: 100, page: 1 },
+    { query: { staleTime: 60_000 } }
+  );
+
+  const listData = listResponse as GetCollections200 | undefined;
+
+  const collections = useMemo(() => {
+    const fromApi = (listData?.data?.collections ?? []).map(mapApiCollectionToCurated);
+    return fromApi.length > 0 ? fromApi : CURATED_COLLECTIONS;
+  }, [listData]);
+
+  const showSkeleton = isLoading && !(listData?.data?.collections?.length);
+
   return (
     <main className='pb-24'>
       <div className='app-container pt-24'>
@@ -37,18 +56,25 @@ export function CollectionsDomain() {
           </p>
         </div>
 
-        <CollectionHeroGrid collections={CURATED_COLLECTIONS} />
+        <CollectionHeroGrid collections={collections} />
       </div>
 
       <div className='app-container mt-20 space-y-16 lg:mt-24 lg:space-y-20'>
-        {CURATED_COLLECTIONS.map((collection, index) => (
-          <section key={collection.id} className='scroll-mt-28'>
-            <div className='border-border/50 bg-muted/15 rounded-[2rem] border p-4 sm:rounded-[2.25rem] sm:p-5 lg:p-6'>
-              <CollectionCard collection={collection} index={index} />
-              <CollectionPreviewRow collection={collection} className='px-1 sm:px-2' />
-            </div>
-          </section>
-        ))}
+        {showSkeleton ? (
+          <div className='space-y-6'>
+            <Skeleton className='h-64 w-full rounded-[2rem]' />
+            <Skeleton className='h-64 w-full rounded-[2rem]' />
+          </div>
+        ) : (
+          collections.map((collection, index) => (
+            <section key={collection.id} className='scroll-mt-28'>
+              <div className='border-border/50 bg-muted/15 rounded-[2rem] border p-4 sm:rounded-[2.25rem] sm:p-5 lg:p-6'>
+                <CollectionCard collection={collection} index={index} />
+                <CollectionPreviewRow collection={collection} className='px-1 sm:px-2' />
+              </div>
+            </section>
+          ))
+        )}
       </div>
 
       <div className='app-container mt-20 lg:mt-24'>

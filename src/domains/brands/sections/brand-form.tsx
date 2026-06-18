@@ -26,6 +26,7 @@ import {
   mapFormToUpdateBrandRequest
 } from '@/domains/brands/lib/brand-mapper';
 import { uploadBrandLogo } from '@/domains/brands/lib/upload-brand-logo';
+import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
 import {
   getGetBrandsIdQueryKey,
@@ -153,7 +154,21 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
   }
 
   return (
-    <Card className='border-border/40 bg-card/40 backdrop-blur-2xl'>
+    <>
+      {isEdit && brand?.id ? (
+        <EntityWorkflowPanel
+          workflowKey='brand'
+          entityId={brand.id}
+          className='mb-6'
+          onTransitionSuccess={() => {
+            void queryClient.invalidateQueries({
+              queryKey: getGetBrandsIdQueryKey(brand.id)
+            });
+            void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
+          }}
+        />
+      ) : null}
+      <Card className='border-border/40 bg-card/40 backdrop-blur-2xl'>
       <CardHeader>
         <CardTitle>{isEdit ? 'Edit brand' : 'Create brand'}</CardTitle>
         <CardDescription>
@@ -293,17 +308,24 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
 
                 <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                   <GridItem>
-                    <form.AppField
-                      name='status'
-                      children={(field) => (
-                        <field.Select
-                          label='Status'
-                          options={[...BRAND_STATUS_OPTIONS]}
-                          description='Active brands appear in storefront filters and product forms'
-                          required
-                        />
-                      )}
-                    />
+                    {isEdit ? (
+                      <p className='text-muted-foreground text-sm'>
+                        Status is controlled by the workflow panel above (Draft / Active / Inactive /
+                        Archived).
+                      </p>
+                    ) : (
+                      <form.AppField
+                        name='status'
+                        children={(field) => (
+                          <field.Select
+                            label='Status'
+                            options={[...BRAND_STATUS_OPTIONS]}
+                            description='Active brands appear in storefront filters and product forms'
+                            required
+                          />
+                        )}
+                      />
+                    )}
                   </GridItem>
                 </Grid>
               </Flex>
@@ -341,5 +363,6 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
         </form.AppForm>
       </CardContent>
     </Card>
+    </>
   );
 }

@@ -1,3 +1,5 @@
+import { CollectionForm } from '@/domains/collections-admin/sections/collection-form';
+
 export default function CreateCollectionPage() {
-  return <div>CreateCollectionPage</div>;
+  return <CollectionForm />;
 }

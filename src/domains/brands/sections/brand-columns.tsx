@@ -56,7 +56,9 @@ export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
   },
 
   createWorkflowStateColumn<DtoBrandResponse>({
-    getState: (row) => mapBrandStatusToStateView(row.status),
+    workflowKey: 'brand',
+    getEntityId: (row) => row.id,
+    getState: (row) => row.workflow_state ?? mapBrandStatusToStateView(row.status),
     header: 'Workflow'
   }),
 

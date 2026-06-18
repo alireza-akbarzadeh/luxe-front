@@ -79,7 +79,9 @@ export const categoryColumns: ColumnDef<ModelsCategory>[] = [
   },
 
   createWorkflowStateColumn<ModelsCategory>({
-    getState: (row) => mapCategoryActiveToStateView(row.is_active),
+    workflowKey: 'category',
+    getEntityId: (row) => row.id,
+    getState: (row) => row.workflow_state ?? mapCategoryActiveToStateView(row.is_active),
     header: 'Workflow'
   }),
 

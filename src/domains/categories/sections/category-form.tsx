@@ -18,6 +18,7 @@ import {
   mapFormToCreateCategoryRequest,
   mapFormToUpdateCategoryRequest
 } from '@/domains/categories/lib/category-mapper';
+import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
 import {
   getGetAdminCategoriesIdQueryKey,
@@ -26,7 +27,7 @@ import {
 import { usePutAdminCategoriesId } from '@/services/-admin-categories-{id}-put';
 import { getGetCategoriesQueryKey, useGetCategories } from '@/services/-categories-get';
 import type { ModelsCategory } from '@/services/-categories-get.schemas';
-import { usePostCategories } from '@/services/-categories-post';
+import { usePostAdminCategories } from '~/src/services/-admin-categories-post';
 
 import { categoryDefaultValues, categoryFormSchema } from '../category.schema';
 
@@ -41,16 +42,14 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
 
   const { data: categoriesData } = useGetCategories({ limit: 100 });
 
-  const {
-    data: { data: { category } = {} } = {},
-    isLoading: isLoadingCategory
-  } = useGetAdminCategoriesId(Number(categoryId), {
-    query: {
-      enabled: isEdit && Boolean(categoryId)
-    }
-  });
+  const { data: { data: { category } = {} } = {}, isLoading: isLoadingCategory } =
+    useGetAdminCategoriesId(Number(categoryId), {
+      query: {
+        enabled: isEdit && Boolean(categoryId)
+      }
+    });
 
-  const { mutateAsync: createCategory, isPending: isCreating } = usePostCategories({
+  const { mutateAsync: createCategory, isPending: isCreating } = usePostAdminCategories({
     mutation: {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: getGetCategoriesQueryKey() });
@@ -145,6 +144,20 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
   }
 
   return (
+  <>
+    {isEdit && category?.id ? (
+      <EntityWorkflowPanel
+        workflowKey='category'
+        entityId={category.id}
+        className='mb-6'
+        onTransitionSuccess={() => {
+          void queryClient.invalidateQueries({
+            queryKey: getGetAdminCategoriesIdQueryKey(category.id)
+          });
+          void queryClient.invalidateQueries({ queryKey: getGetCategoriesQueryKey() });
+        }}
+      />
+    ) : null}
     <form.AppForm>
       <form.Root
         className='md:p4 p-2'
@@ -224,15 +237,21 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
               </GridItem>
 
               <GridItem>
-                <form.AppField
-                  name='is_active'
-                  children={(field) => (
-                    <field.Switch
-                      label='Active'
-                      description='Inactive categories are hidden from storefront navigation'
-                    />
-                  )}
-                />
+                {isEdit ? (
+                  <p className='text-muted-foreground text-sm'>
+                    Visibility is controlled by the workflow panel above (Active / Inactive / Archived).
+                  </p>
+                ) : (
+                  <form.AppField
+                    name='is_active'
+                    children={(field) => (
+                      <field.Switch
+                        label='Active'
+                        description='Inactive categories are hidden from storefront navigation'
+                      />
+                    )}
+                  />
+                )}
               </GridItem>
             </Grid>
           </Flex>
@@ -261,5 +280,6 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
         </Flex>
       </form.Root>
     </form.AppForm>
+  </>
   );
 }

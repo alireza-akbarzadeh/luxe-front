@@ -158,6 +158,19 @@ export interface ModelsProduct {
   workflow_state_id?: number;
 }
 
+import type { DtoStateView } from '@/services/-workflows-{key}-{entityId}-available-transitions-get.schemas';
+
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+}
+
 export interface ModelsCategory {
   children?: ModelsCategory[];
   created_at?: string;
@@ -178,6 +191,8 @@ export interface ModelsCategory {
   products?: ModelsProduct[];
   slug: string;
   updated_at?: string;
+  workflow_state?: ModelsWorkflowState;
+  workflow_state_id?: number;
 }
 
 export interface DtoCategoryListData {

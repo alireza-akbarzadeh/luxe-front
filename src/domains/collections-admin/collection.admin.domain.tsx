@@ -10,15 +10,15 @@ import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import {
-  getBrandsFromListResponse,
-  getBrandsTotalFromListResponse
-} from '@/domains/brands/lib/brand-list';
-import { brandColumns } from '@/domains/brands/sections/brand-columns';
-import { deleteBrandsId } from '@/services/-brands-{id}-delete';
-import { getGetBrandsQueryKey, useGetBrands } from '@/services/-brands-get';
-import type { DtoBrandResponse, GetBrands200 } from '@/services/-brands-get.schemas';
+  getCollectionsFromListResponse,
+  getCollectionsTotalFromListResponse
+} from '@/domains/collections-admin/lib/collection-list';
+import { collectionColumns } from '@/domains/collections-admin/sections/collection-columns';
+import { deleteCollectionsId } from '@/services/-collections-{id}-delete';
+import { getGetCollectionsQueryKey, useGetCollections } from '@/services/-collections-get';
+import type { DtoCollectionResponse, GetCollections200 } from '@/services/-collections-get.schemas';
 
-export function BrandsDomains() {
+export function CollectionsAdminDomain() {
   const { push } = useRouter();
   const queryClient = useQueryClient();
 
@@ -32,37 +32,37 @@ export function BrandsDomains() {
   );
 
   const getRows = useCallback(
-    (data: GetBrands200 | undefined) => getBrandsFromListResponse(data),
+    (data: GetCollections200 | undefined) => getCollectionsFromListResponse(data),
     []
   );
 
   const getTotal = useCallback(
-    (data: GetBrands200 | undefined) => getBrandsTotalFromListResponse(data),
+    (data: GetCollections200 | undefined) => getCollectionsTotalFromListResponse(data),
     []
   );
 
   const serverTable = useServerTable({
-    columns: brandColumns,
+    columns: collectionColumns,
     initialPageSize: 15,
     getQueryParams,
     getRows,
     getTotal,
-    useQuery: useGetBrands
+    useQuery: useGetCollections
   });
 
-  const handleDeleteBrand = useCallback(
-    async (brand: DtoBrandResponse) => {
-      if (!brand.id) return;
+  const handleDelete = useCallback(
+    async (collection: DtoCollectionResponse) => {
+      if (!collection.id) return;
 
-      const confirmed = window.confirm(`Delete brand "${brand.name ?? 'this brand'}"?`);
+      const confirmed = window.confirm(`Delete collection "${collection.title ?? 'this collection'}"?`);
       if (!confirmed) return;
 
       try {
-        await deleteBrandsId(brand.id);
-        void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
-        toast.success('Brand deleted');
+        await deleteCollectionsId(collection.id);
+        void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
+        toast.success('Collection deleted');
       } catch (error) {
-        toast.error('Failed to delete brand', {
+        toast.error('Failed to delete collection', {
           description: error instanceof Error ? error.message : 'Something went wrong'
         });
       }
@@ -77,20 +77,20 @@ export function BrandsDomains() {
       .filter((id) => Number.isFinite(id));
 
     if (ids.length === 0) {
-      toast.error('Select at least one brand');
+      toast.error('Select at least one collection');
       return;
     }
 
-    const confirmed = window.confirm(`Delete ${ids.length} selected brand(s)?`);
+    const confirmed = window.confirm(`Delete ${ids.length} selected collection(s)?`);
     if (!confirmed) return;
 
     try {
-      await Promise.all(ids.map((id) => deleteBrandsId(id)));
-      void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
+      await Promise.all(ids.map((id) => deleteCollectionsId(id)));
+      void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
       serverTable.tableState.resetRowSelection();
-      toast.success('Selected brands deleted');
+      toast.success('Selected collections deleted');
     } catch (error) {
-      toast.error('Failed to delete selected brands', {
+      toast.error('Failed to delete selected collections', {
         description: error instanceof Error ? error.message : 'Something went wrong'
       });
     }
@@ -99,39 +99,39 @@ export function BrandsDomains() {
   return (
     <Table.Root {...serverTable.rootProps}>
       <Table.Toolbar
-        searchPlaceholder='Search by name or slug'
+        searchPlaceholder='Search by title, slug, or eyebrow'
         showRefresh
         onRefresh={serverTable.refetch}
         isLoading={serverTable.isFetching}
         showCreate
-        onCreate={() => push('/dashboard/brands/create')}
+        onCreate={() => push('/dashboard/collections/create')}
         showClear
         showColumnVisibility
         showBulkActions
         onDelete={handleBulkDelete}
       />
-      <Table.Grid<DtoBrandResponse>
+      <Table.Grid<DtoCollectionResponse>
         isLoading={serverTable.isLoading && serverTable.rows.length === 0}
         onRowDoubleClick={(row) => {
           const id = row.original.id;
-          if (id) push(`/dashboard/brands/edit/${id}`);
+          if (id) push(`/dashboard/collections/edit/${id}`);
         }}
         extendMenuActions={(row) => (
           <>
             <DropdownMenuItem
               className='gap-2 text-[11px] font-semibold'
-              onClick={() => push(`/dashboard/brands/edit/${row.original.id}`)}
+              onClick={() => push(`/dashboard/collections/edit/${row.original.id}`)}
             >
               <IconPencil className='size-3.5' />
-              Edit brand
+              Edit collection
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className='text-destructive gap-2 text-[11px] font-semibold'
-              onClick={() => void handleDeleteBrand(row.original)}
+              onClick={() => void handleDelete(row.original)}
             >
               <IconTrash className='size-3.5' />
-              Delete brand
+              Delete collection
             </DropdownMenuItem>
           </>
         )}

@@ -25,8 +25,7 @@ export function mapFormToUpdateBrandRequest(values: BrandFormValues): DtoUpdateB
     name: values.name.trim(),
     slug: values.slug.trim(),
     description: optionalText(values.description),
-    logo_url: optionalText(values.logo_url),
-    status: values.status
+    logo_url: optionalText(values.logo_url)
   };
 }
 
