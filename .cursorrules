@@ -148,6 +148,9 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 
 - Before considering a task done, code must pass: `pnpm typecheck` and `pnpm lint:fix`
 - Follow conventional commits (enforced by commitlint) — `feat:`, `fix:`, `chore:`, `refactor:`, etc.
+- Commit subject (first line) must be **≤ 120 characters** — keep it short; put detail in the body if needed.
+  - Good: `refactor: reorganize inventory API barrel exports`
+  - Bad: long single-line subjects that describe every file touched
 - New shared logic (hooks, utils, stores) requires a brief JSDoc comment explaining purpose and usage
 - Avoid introducing new dependencies — check if existing stack (Tailwind, Radix, TanStack, Zustand) already solves the problem first
 

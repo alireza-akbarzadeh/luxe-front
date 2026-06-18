@@ -90,7 +90,7 @@ src/
 ## Conventions
 
 - **Naming**: kebab-case files (`user-profile-card.tsx`), PascalCase components, camelCase hooks/functions
-- **Commits**: Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`, `test:`, `docs:`) — enforced by commitlint
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`, `test:`, `docs:`) — enforced by commitlint; **subject line max 120 chars**
 - **Zustand stores**: typed interface split into `State` + `Actions`, created with `create<T>()(...)`, expose `reset()`, consume via selectors
 - **Zod schemas**: live in `src/schemas/` or `src/domains/<domain>/schemas/` — **form validation only**; API types come from Orval `*.schemas.ts`
 - **Error/loading states**: every async route segment gets `error.tsx` and `loading.tsx`

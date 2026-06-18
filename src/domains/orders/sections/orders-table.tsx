@@ -1,391 +1,225 @@
 'use client';
-import {
-  IconAdjustmentsHorizontal,
-  IconAlertTriangle,
-  IconClock,
-  IconRefresh,
-  IconUserCheck,
-  IconUserMinus,
-  IconX
-} from '@tabler/icons-react';
-import type { ColumnFiltersState, SortingState } from '@tanstack/react-table';
+
+import { IconDownload, IconFilter } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
-import { Table } from '@/components/table/data-table';
-import { useTableContext } from '@/components/table/table-context';
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
-import { ContextMenuItem, ContextMenuShortcut } from '@/components/ui/context-menu';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useOrdersQueryState } from '@/domains/orders/hooks/use-orders-query';
+import { downloadOrdersCsv } from '@/domains/orders/lib/order-export';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet';
-import { useOrdersQueryState } from '@/domains/orders/hooks/useOrderFilterQuery';
-import { useOrdersFilterStore } from '@/domains/orders/hooks/useOrderFilterStore';
-import { mapApiOrdersToDomain, mapUiStatusToApi } from '@/domains/orders/order.utils';
-import type { Order, OrderStatus } from '@/domains/orders/orders-types';
-import { OrdersAdvancedFilter } from '@/domains/orders/sections/orders-advanced-filter';
-import { orderColumns } from '@/domains/orders/sections/orders-columns';
-import { exportToCSV } from '@/lib/export-file';
-import { useGetOrders } from '@/services/-orders-get';
+  getOrdersFromListResponse,
+  getOrdersTotalFromListResponse
+} from '@/domains/orders/lib/order-list';
+import type { OrderStatusFilter } from '@/domains/orders/orders.schema';
+import { ORDER_STATUS_TABS } from '@/domains/orders/orders.schema';
+import { orderColumns, orderRowMenuActions } from '@/domains/orders/sections/orders-columns';
+import { OrdersFilterSheet } from '@/domains/orders/sections/orders-filter-sheet';
+import { usePostAdminOrdersBulkStatus } from '@/services/-admin-orders-bulk-status-post';
+import type { DtoBulkUpdateOrderStatusRequestStatus } from '@/services/-admin-orders-bulk-status-post.schemas';
+import { getGetOrdersQueryKey, useGetOrders } from '@/services/-orders-get';
+import type { DtoAdminOrderListItem, GetOrders200 } from '@/services/-orders-get.schemas';
 
-const STATUS_TABS: readonly (OrderStatus | 'All')[] = [
-  'All',
-  'Pending',
-  'Processing',
-  'Fulfilled',
-  'Shipped',
-  'Delivered',
-  'Cancelled',
-  'Refunded'
-];
+export function OrdersTable() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const [filterOpen, setFilterOpen] = useState(false);
 
-export default function OrdersTable() {
   const {
-    search,
-    setSearch,
-    statusTab,
-    setStatusTab,
-    sortKey,
-    setSortKey,
-    sortDir,
-    setSortDir,
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
-    filters: advancedFilters,
-    minTotal,
-    maxTotal,
-    resetAllFilters
+    status,
+    setStatus,
+    fromDate,
+    toDate,
+    minAmount,
+    maxAmount,
+    hasActiveFilters,
+    resetFilters
   } = useOrdersQueryState();
 
-  const { advancedOpen, setAdvancedOpen } = useOrdersFilterStore();
-  const deferredSearch = React.useDeferredValue(search);
+  const { mutateAsync: bulkUpdateStatus } = usePostAdminOrdersBulkStatus();
 
-  const queryParams = React.useMemo(
-    () => ({
-      limit: pageSize,
-      offset: page * pageSize,
-      search: deferredSearch.trim() || undefined,
-      status: mapUiStatusToApi(statusTab as OrderStatus | 'All'),
-      min_amount: minTotal ?? undefined,
-      max_amount: maxTotal ?? undefined
+  const getQueryParams = useCallback(
+    (state: TableState, filter: string) => ({
+      limit: state.pagination.pageSize,
+      offset: state.pagination.pageIndex * state.pagination.pageSize,
+      search: filter.trim() || undefined,
+      status: status === 'all' ? undefined : status,
+      from_date: fromDate || undefined,
+      to_date: toDate || undefined,
+      min_amount: minAmount ?? undefined,
+      max_amount: maxAmount ?? undefined
     }),
-    [pageSize, page, deferredSearch, statusTab, minTotal, maxTotal]
+    [status, fromDate, toDate, minAmount, maxAmount]
   );
 
-  const { data, isLoading, isFetching, isError, error, refetch } = useGetOrders(queryParams);
-
-  const orders = React.useMemo(
-    () => mapApiOrdersToDomain(data?.data?.orders),
-    [data?.data?.orders]
+  const getRows = useCallback(
+    (data: GetOrders200 | undefined) => getOrdersFromListResponse(data),
+    []
   );
-  const total = data?.data?.total ?? 0;
-  const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
-  const sorting: SortingState = sortKey ? [{ id: sortKey, desc: sortDir === 'desc' }] : [];
+  const getTotal = useCallback(
+    (data: GetOrders200 | undefined) => getOrdersTotalFromListResponse(data),
+    []
+  );
 
-  const derivedColumnFilters = React.useMemo(() => {
-    const filters: ColumnFiltersState = [];
+  const serverTable = useServerTable({
+    columns: orderColumns,
+    initialPageSize: 20,
+    getQueryParams,
+    getRows,
+    getTotal,
+    useQuery: useGetOrders
+  });
 
-    if (statusTab !== 'All') {
-      filters.push({ id: 'status', value: [statusTab] });
-    }
+  const getSelectedOrderIds = useCallback(() => {
+    return Object.entries(serverTable.tableState.rowSelection)
+      .filter(([, selected]) => selected)
+      .map(([id]) => Number(id))
+      .filter((id) => Number.isFinite(id) && id > 0);
+  }, [serverTable.tableState.rowSelection]);
 
-    advancedFilters.forEach((filter) => {
-      if (['status', 'payment_status', 'channel', 'priority'].includes(filter.id)) {
-        if (filter.id === 'status' && statusTab !== 'All') return;
-        filters.push({ id: filter.id, value: filter.value });
+  const handleBulkStatus = useCallback(
+    async (nextStatus: DtoBulkUpdateOrderStatusRequestStatus, label: string) => {
+      const orderIds = getSelectedOrderIds();
+      if (orderIds.length === 0) {
+        toast.error('Select at least one order');
+        return;
       }
-    });
 
-    return filters;
-  }, [statusTab, advancedFilters]);
+      const confirmed = window.confirm(`${label} for ${orderIds.length} order(s)?`);
+      if (!confirmed) return;
 
-  const handleSortingChange = async (
-    updater: SortingState | ((old: SortingState) => SortingState)
-  ) => {
-    const newSorting = typeof updater === 'function' ? updater(sorting) : updater;
-    const sort = newSorting[0];
-
-    if (sort) {
-      const validSortKeys = ['order_number', 'total', 'ordered_at'] as const;
-      if ((validSortKeys as readonly string[]).includes(sort.id)) {
-        await setSortKey(sort.id as (typeof validSortKeys)[number]);
-        await setSortDir(sort.desc ? 'desc' : 'asc');
+      try {
+        const result = await bulkUpdateStatus({
+          data: { order_ids: orderIds, status: nextStatus }
+        });
+        const updated = result.data?.updated ?? orderIds.length;
+        void queryClient.invalidateQueries({ queryKey: getGetOrdersQueryKey() });
+        serverTable.tableState.resetRowSelection();
+        toast.success(`Updated ${updated} order(s)`);
+      } catch (error) {
+        toast.error('Bulk update failed', {
+          description: error instanceof Error ? error.message : 'Something went wrong'
+        });
       }
-    } else {
-      await setSortKey(null);
-      await setSortDir('asc');
+    },
+    [bulkUpdateStatus, getSelectedOrderIds, queryClient, serverTable.tableState]
+  );
+
+  const handleExport = useCallback(async () => {
+    try {
+      await downloadOrdersCsv({
+        status: status === 'all' ? undefined : status,
+        from_date: fromDate || undefined,
+        to_date: toDate || undefined
+      });
+      toast.success('Export started');
+    } catch (error) {
+      toast.error('Export failed', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
     }
-    await setPage(0);
-  };
+  }, [status, fromDate, toDate]);
 
-  const handleColumnFiltersChange = async (
-    updater: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)
-  ) => {
-    const newFilters = typeof updater === 'function' ? updater(derivedColumnFilters) : updater;
+  const openOrder = useCallback(
+    (id: number) => {
+      router.push(`/dashboard/orders/${id}`);
+    },
+    [router]
+  );
 
-    const statusFilter = newFilters.find((f) => f.id === 'status');
-    const filterValue = statusFilter ? (statusFilter.value as string[])[0] : undefined;
-    const newStatus = filterValue ? (filterValue as OrderStatus) : 'All';
-
-    if (newStatus !== statusTab) {
-      await setStatusTab(newStatus);
-      await setPage(0);
-    }
-  };
-
-  const handlePaginationChange = async (
-    updater:
-      | {
-          pageIndex: number;
-          pageSize: number;
-        }
-      | ((old: { pageIndex: number; pageSize: number }) => { pageIndex: number; pageSize: number })
-  ) => {
-    const newPagination =
-      typeof updater === 'function' ? updater({ pageIndex: page, pageSize }) : updater;
-    await setPage(newPagination.pageIndex);
-    await setPageSize(newPagination.pageSize);
-  };
-
-  const handleGlobalFilterChange = async (updaterOrValue: string | ((old: string) => string)) => {
-    const newSearch = typeof updaterOrValue === 'function' ? updaterOrValue(search) : updaterOrValue;
-    if (newSearch !== search) {
-      await setSearch(newSearch ?? '');
-      await setPage(0);
-    }
-  };
-
-  if (isError) {
-    const message =
-      typeof error === 'object' && error !== null && 'message' in error
-        ? String((error as { message?: string }).message)
-        : 'Failed to load orders';
-
+  if (serverTable.isError) {
     return (
-      <div className='rounded-2xl border-2 border-dashed p-16 text-center'>
-        <IconAlertTriangle className='text-destructive mx-auto mb-4 h-12 w-12' />
-        <h3 className='text-lg font-bold tracking-tight uppercase italic'>Orders unavailable</h3>
-        <p className='text-muted-foreground text-sm font-medium'>{message}</p>
-        <Button className='mt-4' variant='outline' onClick={() => void refetch()}>
-          Try again
+      <div className='rounded-xl border border-dashed p-12 text-center'>
+        <p className='text-lg font-semibold'>Orders unavailable</p>
+        <p className='text-muted-foreground mt-1 text-sm'>Check your connection and try again.</p>
+        <Button className='mt-4' variant='outline' onClick={() => serverTable.refetch()}>
+          Retry
         </Button>
       </div>
     );
   }
 
   return (
-    <Table.Root
-      data={orders}
-      columns={orderColumns}
-      pagination={{ pageIndex: page, pageSize }}
-      onPaginationChange={handlePaginationChange}
-      globalFilter={search}
-      onGlobalFilterChange={handleGlobalFilterChange}
-      sorting={sorting}
-      onSortingChange={handleSortingChange}
-      columnFilters={derivedColumnFilters}
-      onColumnFiltersChange={handleColumnFiltersChange}
-      manualPagination
-      manualFiltering
-      manualSorting
-      pageCount={pageCount}
-      rowCount={total}
-      enableRowSelection
-    >
-      <OrdersTableContent
-        resetAllFilters={resetAllFilters}
-        search={search}
-        derivedColumnFilters={derivedColumnFilters}
-        advancedFilters={advancedFilters}
-        setAdvancedOpen={setAdvancedOpen}
-        advancedOpen={advancedOpen}
-        total={total}
-        isLoading={isLoading}
-        isFetching={isFetching}
-      />
-    </Table.Root>
-  );
-}
+    <>
+      <Table.Root {...serverTable.rootProps}>
+        <Tabs
+          value={status}
+          onValueChange={(value) => void setStatus(value as OrderStatusFilter)}
+          className='px-1'
+        >
+          <TabsList className='mb-3 h-auto flex-wrap'>
+            {ORDER_STATUS_TABS.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
-function OrdersTableContent({
-  resetAllFilters,
-  setAdvancedOpen,
-  advancedOpen,
-  search,
-  derivedColumnFilters,
-  advancedFilters,
-  total,
-  isLoading,
-  isFetching
-}: {
-  resetAllFilters: () => Promise<void>;
-  setAdvancedOpen: (open: boolean) => void;
-  advancedOpen: boolean;
-  search: string;
-  derivedColumnFilters: ColumnFiltersState;
-  advancedFilters: Array<{
-    id: string;
-    value: string[] | ((old: string[]) => string[] | null) | null;
-  }>;
-  total: number;
-  isLoading: boolean;
-  isFetching: boolean;
-}) {
-  const { table } = useTableContext<Order>();
-  const router = useRouter();
-
-  const handleExport = () => {
-    const rows = table.getSelectedRowModel().rows;
-    const exportData = (rows.length ? rows : table.getRowModel().rows).map((row) => ({
-      order_number: row.original.order_number,
-      customer: row.original.customer_name,
-      email: row.original.customer_email,
-      status: row.original.status,
-      payment: row.original.payment_status,
-      total: row.original.total,
-      channel: row.original.channel,
-      date: row.original.ordered_at
-    }));
-    if (!exportData.length) {
-      toast.error('No orders to export');
-      return;
-    }
-    exportToCSV(exportData, {
-      filename: 'orders-export.csv',
-      successMessage: `Exported ${exportData.length} orders`
-    });
-  };
-
-  const handleReset = async () => {
-    await resetAllFilters();
-    table.resetColumnFilters();
-    table.resetGlobalFilter();
-    table.resetSorting();
-  };
-
-  const hasFilters = derivedColumnFilters.length > 0 || !!search;
-
-  return (
-    <div className='space-y-0'>
-      <div className='bg-muted/5 border-border/40 flex flex-col items-center gap-3 border-b px-6 py-5 md:flex-row'>
-        <div className='w-full flex-1 md:w-auto'>
-          <Table.Search placeholder='Search by order #, customer name or email…' />
-        </div>
-
-        <div className='flex w-full items-center gap-2 md:w-auto'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => setAdvancedOpen(true)}
-            className='h-9 gap-2 rounded-xl border-dashed text-[10px] font-bold tracking-wide uppercase'
-          >
-            <IconAdjustmentsHorizontal className='h-3.5 w-3.5' />
-            Advanced
-            {advancedFilters.length > 0 && (
-              <span className='bg-primary text-primary-foreground flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-black'>
-                {advancedFilters.length}
+        <Table.Toolbar
+          searchPlaceholder='Search order #, customer name, or email'
+          showRefresh
+          onRefresh={serverTable.refetch}
+          isLoading={serverTable.isFetching}
+          showClear
+          showColumnVisibility
+          showSorting={false}
+          showBulkActions
+          onDelete={() => void handleBulkStatus('cancelled', 'Cancel')}
+        >
+          <Button type='button' variant='outline' size='sm' onClick={() => setFilterOpen(true)}>
+            <IconFilter className='size-4' />
+            Filters
+            {hasActiveFilters ? (
+              <span className='bg-primary text-primary-foreground ml-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold'>
+                ON
               </span>
-            )}
+            ) : null}
           </Button>
 
-          {hasFilters && (
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={handleReset}
-              className='text-destructive hover:bg-destructive/5 h-9 gap-1.5 rounded-xl px-3 text-[10px] font-black uppercase'
-            >
-              <IconX className='h-3 w-3' /> Reset
-            </Button>
-          )}
+          <Button
+            type='button'
+            variant='outline'
+            size='sm'
+            onClick={() => void handleBulkStatus('shipped', 'Mark as shipped')}
+          >
+            Mark shipped
+          </Button>
 
-          <div className='bg-border mx-2 hidden h-4 w-px md:block' />
+          <Button type='button' variant='outline' size='sm' onClick={() => void handleExport()}>
+            <IconDownload className='size-4' />
+            Export CSV
+          </Button>
+        </Table.Toolbar>
 
-          <Table.FilterTabs
-            columnId='status'
-            options={STATUS_TABS.map((tab) => (tab === 'All' ? 'All' : tab))}
-          />
-
-          <div className='bg-primary/10 border-primary/20 text-primary rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-            {isFetching ? 'Loading…' : `${total.toLocaleString()} Results`}
-          </div>
-        </div>
-      </div>
-
-      <div className='bg-background/50 border-border/40 flex items-center justify-between border-b px-6 py-4'>
-        <Table.StatusFilters
-          columnId='status'
-          title='Order Status'
-          options={[
-            { label: 'Pending', icon: IconClock, color: 'text-amber-500' },
-            { label: 'Processing', icon: IconClock, color: 'text-amber-500' },
-            { label: 'Fulfilled', icon: IconUserCheck, color: 'text-emerald-500' },
-            { label: 'Shipped', icon: IconUserCheck, color: 'text-emerald-500' },
-            { label: 'Delivered', icon: IconUserCheck, color: 'text-emerald-500' },
-            { label: 'Cancelled', icon: IconUserMinus, color: 'text-destructive' },
-            { label: 'Refunded', icon: IconRefresh, color: 'text-muted-foreground' }
-          ]}
+        <Table.Grid<DtoAdminOrderListItem>
+          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+          onRowDoubleClick={(row) => row.original.id && openOrder(row.original.id)}
+          getDetailsUrl={(row) =>
+            row.original.id ? `/dashboard/orders/${row.original.id}` : '/dashboard/orders'
+          }
+          extendMenuActions={(row) => orderRowMenuActions(row.original, openOrder)}
         />
 
-        <div className='flex items-center gap-3'>
-          <Table.BulkActions
-            onDelete={(rows) => toast.error(`Cancelling ${rows.length} orders`)}
-            onDownload={handleExport}
-            deleteTitle='Cancel Orders'
-            deleteDescription='This action cannot be undone. Orders will be cancelled immediately.'
-          />
-        </div>
-      </div>
-
-      <div className='p-2'>
-        <Table.Grid<Order>
-          isLoading={isLoading}
-          onRowDoubleClick={(row) => router.push(`/dashboard/orders/${row.original.id}`)}
-          getDetailsUrl={(row) => `/dashboard/orders/${row.original.id}`}
-          extendMenuActions={(row) => {
-            const order = row.original;
-            return (
-              <>
-                <ContextMenuItem disabled={order.status === 'Fulfilled'}>
-                  Mark as Shipped
-                  <ContextMenuShortcut>⌘⇧S</ContextMenuShortcut>
-                </ContextMenuItem>
-                <ContextMenuItem className='text-red-600 focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950/30'>
-                  Cancel Order
-                </ContextMenuItem>
-              </>
-            );
-          }}
+        <Table.Pagination
+          showPageSize
+          showTotalRows
+          showJumpToPage
+          pageSizeOptions={[10, 20, 50, 100]}
         />
-      </div>
+      </Table.Root>
 
-      <div className='border-border/40 border-t px-6 py-4'>
-        <Table.Pagination />
-      </div>
-
-      <Sheet open={advancedOpen} onOpenChange={setAdvancedOpen}>
-        <SheetContent side='right' className='flex w-full max-w-md flex-col p-0'>
-          <SheetHeader className='border-b px-6 py-5'>
-            <SheetTitle className='text-sm font-black tracking-widest uppercase'>
-              Advanced Filters
-            </SheetTitle>
-            <SheetDescription className='text-muted-foreground text-xs'>
-              Narrow orders by status, payment, channel and more.
-            </SheetDescription>
-          </SheetHeader>
-          <div className='flex-1 overflow-hidden'>
-            <OrdersAdvancedFilter onClose={() => setAdvancedOpen(false)} />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+      <OrdersFilterSheet
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        onReset={() => void resetFilters()}
+      />
+    </>
   );
 }

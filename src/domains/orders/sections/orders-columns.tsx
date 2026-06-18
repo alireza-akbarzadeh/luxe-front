@@ -1,192 +1,119 @@
-import {
-  IconAdjustmentsHorizontal,
-  IconBan,
-  IconChevronDown,
-  IconCopy,
-  IconEye,
-  IconRefresh
-} from '@tabler/icons-react';
+import { IconCopy, IconEye } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import Image from 'next/image';
+import { format, parseISO } from 'date-fns';
 
-import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
 import {
-  OrderStatusBadge,
-  PaymentBadge,
-  PriorityBadge
-} from '@/domains/orders/components/order-statuses-badge';
-import type { Order } from '@/domains/orders/orders-types';
+  ApiOrderStatusBadge,
+  ApiPaymentStatusBadge
+} from '@/domains/orders/components/order-api-badges';
 import { formatCurrency } from '@/lib/format';
 import { copyToClipboard } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
+import type { DtoAdminOrderListItem } from '~/src/services/-orders-get.schemas';
 
-export const orderColumns: ColumnDef<Order>[] = [
-  createSelectColumn<Order>(),
+function formatOrderDate(value?: string) {
+  if (!value) return '—';
+  const date = parseISO(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return format(date, 'MMM d, yyyy · h:mm a');
+}
+
+export const orderColumns: ColumnDef<DtoAdminOrderListItem>[] = [
+  createSelectColumn<DtoAdminOrderListItem>(),
+
   {
     accessorKey: 'order_number',
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        className='-ml-3 h-8 text-[10px] font-bold tracking-widest uppercase'
-      >
-        Order
-        <IconChevronDown className='ml-1 h-3 w-3' />
-      </Button>
-    ),
+    header: 'Order',
     cell: ({ row }) => (
-      <span className='flex min-w-30 font-mono text-xs font-bold'>{row.original.order_number}</span>
+      <div className='min-w-28'>
+        <p className='font-mono text-xs font-semibold'>{row.original.order_number ?? '—'}</p>
+        <p className='text-muted-foreground text-[10px]'>#{row.original.id ?? '—'}</p>
+      </div>
     )
   },
+
   {
-    accessorKey: 'customer_name',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Customer</span>,
-    cell: ({ row }) => {
-      const order = row.original;
-      return (
-        <div className='flex min-w-45 items-center gap-3'>
-          <Image
-            width={32}
-            height={32}
-            src={order.customer_avatar}
-            alt={order.customer_name}
-            className='ring-border h-8 w-8 shrink-0 rounded-full object-cover ring-2'
-            onError={(e) => {
-              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(order.customer_name)}&background=random`;
-            }}
-          />
-          <div>
-            <p className='text-xs leading-tight font-semibold'>{order.customer_name}</p>
-            <p className='text-muted-foreground text-[10px]'>{order.customer_email}</p>
-          </div>
-        </div>
-      );
-    },
-    enableSorting: false
+    id: 'customer',
+    header: 'Customer',
+    cell: ({ row }) => (
+      <div className='min-w-44'>
+        <p className='text-sm font-medium'>{row.original.customer_name ?? 'Unknown'}</p>
+        <p className='text-muted-foreground truncate text-xs'>{row.original.customer_email ?? '—'}</p>
+      </div>
+    )
   },
+
   {
     accessorKey: 'status',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Status</span>,
-    cell: ({ row }) => <OrderStatusBadge status={row.original.status} />
+    header: 'Status',
+    cell: ({ row }) => <ApiOrderStatusBadge status={row.original.status} />
   },
+
   {
     accessorKey: 'payment_status',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Payment</span>,
-    cell: ({ row }) => <PaymentBadge status={row.original.payment_status} />
+    header: 'Payment',
+    cell: ({ row }) => <ApiPaymentStatusBadge status={row.original.payment_status} />
   },
+
   {
-    accessorKey: 'total',
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        className='-ml-3 h-8 text-[10px] font-bold tracking-widest uppercase'
-      >
-        Total
-        <IconChevronDown className='ml-1 h-3 w-3' />
-      </Button>
-    ),
+    accessorKey: 'total_amount',
+    header: 'Total',
     cell: ({ row }) => (
-      <span className='text-sm font-bold tabular-nums'>
-        {formatCurrency(row.original.total, row.original.currency)}
+      <span className='text-sm font-semibold tabular-nums'>
+        {formatCurrency(row.original.total_amount ?? 0, row.original.currency ?? 'USD')}
       </span>
     )
   },
+
   {
-    accessorKey: 'channel',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Channel</span>,
+    accessorKey: 'items_count',
+    header: 'Items',
     cell: ({ row }) => (
-      <span className='bg-secondary text-secondary-foreground inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-semibold'>
-        {row.original.channel}
+      <span className='bg-muted inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular-nums'>
+        {row.original.items_count ?? 0}
       </span>
     )
   },
+
   {
-    accessorKey: 'priority',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Priority</span>,
-    cell: ({ row }) => <PriorityBadge priority={row.original.priority} />
-  },
-  {
-    accessorKey: 'ordered_at',
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        className='-ml-3 h-8 text-[10px] font-bold tracking-widest uppercase'
-      >
-        Date
-        <IconChevronDown className='ml-1 h-3 w-3' />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const date = row.original.ordered_at;
-      return date ? (
-        <span className='text-muted-foreground text-xs tabular-nums'>
-          {format(new Date(date), 'MMM d, yyyy')}
-          <br />
-          <span className='text-[10px]'>{format(new Date(date), 'h:mm a')}</span>
-        </span>
-      ) : (
-        <span className='text-muted-foreground'>—</span>
-      );
-    }
-  },
-  {
-    id: 'items_count',
-    header: () => <span className='text-[10px] font-bold tracking-widest uppercase'>Items</span>,
+    accessorKey: 'created_at',
+    header: 'Placed',
     cell: ({ row }) => (
-      <span className='bg-muted inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold'>
-        {row.original.items_count ?? row.original.items?.length ?? 0}
+      <span className='text-muted-foreground text-xs tabular-nums'>
+        {formatOrderDate(row.original.created_at)}
       </span>
-    ),
-    enableSorting: false
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      const order = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-            <Button variant='ghost' size='icon' className='h-7 w-7 rounded-lg'>
-              <IconAdjustmentsHorizontal className='h-3.5 w-3.5' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='w-44 rounded-xl shadow-xl'>
-            <DropdownMenuItem
-              className='gap-2 text-[11px] font-semibold'
-              onClick={() => (window.location.href = `/dashboard/orders/${order.id}`)}
-            >
-              <IconEye className='h-3.5 w-3.5' /> View Details
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className='gap-2 text-[11px] font-semibold'
-              onClick={async () => {
-                await copyToClipboard(order.order_number, 'order number');
-              }}
-            >
-              <IconCopy className='h-3.5 w-3.5' /> Copy Order #
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className='gap-2 text-[11px] font-semibold text-amber-600'>
-              <IconRefresh className='h-3.5 w-3.5' /> Reprocess
-            </DropdownMenuItem>
-            <DropdownMenuItem className='text-destructive gap-2 text-[11px] font-semibold'>
-              <IconBan className='h-3.5 w-3.5' /> Cancel Order
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-    enableSorting: false,
-    enableHiding: false
+    )
   }
 ];
+
+export function orderRowMenuActions(
+  order: DtoAdminOrderListItem,
+  onView: (id: number) => void
+) {
+  const id = order.id;
+  if (!id) return null;
+
+  return (
+    <>
+      <DropdownMenuItem className='gap-2 text-[11px] font-semibold' onClick={() => onView(id)}>
+        <IconEye className='size-3.5' />
+        View order
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        className='gap-2 text-[11px] font-semibold'
+        onClick={() => void copyToClipboard(order.order_number ?? String(id), 'order number')}
+      >
+        <IconCopy className='size-3.5' />
+        Copy order #
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem className='gap-2 text-[11px] font-semibold' onClick={() => onView(id)}>
+        Open fulfillment
+      </DropdownMenuItem>
+    </>
+  );
+}

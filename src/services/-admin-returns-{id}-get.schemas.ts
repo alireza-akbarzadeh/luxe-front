@@ -23,26 +23,21 @@ export interface DtoStateView {
   text_color?: string;
 }
 
-export interface DtoCollectionResponse {
+export interface DtoReturnResponse {
   created_at?: string;
-  cta_label?: string;
-  description?: string;
-  eyebrow?: string;
-  href?: string;
   id?: number;
-  image_url?: string;
-  preview_category_id?: number;
-  preview_is_new?: boolean;
-  preview_sort?: string;
-  slug?: string;
-  sort_order?: number;
+  order_id?: number;
+  order_number?: string;
+  reason?: string;
+  refund_amount?: number;
+  state?: DtoStateView;
   status?: string;
-  title?: string;
   updated_at?: string;
-  workflow_state?: DtoStateView;
+  user_id?: number;
+  workflow_state_id?: number;
 }
 
-export type GetCollectionsId200 = UtilsResponse & {
-  data?: DtoCollectionResponse;
+export type GetAdminReturnsId200 = UtilsResponse & {
+  data?: DtoReturnResponse;
 };
 
