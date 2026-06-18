@@ -1,0 +1,71 @@
+import { useQuery } from '@tanstack/react-query';
+import type {
+  DataTag,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
+import type { GetAdminInvoicesParams } from './-admin-invoices-get.schemas';
+import type { GetAdminInvoices200 } from './-admin-invoices.schemas';
+
+import { customInstance } from '../lib/api/api-client';
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+export const getAdminInvoices = (
+  params?: GetAdminInvoicesParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<GetAdminInvoices200>(
+    { url: `/admin/invoices`, method: 'GET', params, signal },
+    options
+  );
+};
+
+export const getGetAdminInvoicesQueryKey = (params?: GetAdminInvoicesParams) => {
+  return [`/admin/invoices`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetAdminInvoicesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminInvoices>>,
+  TError = unknown
+>(
+  params?: GetAdminInvoicesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminInvoices>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAdminInvoicesQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminInvoices>>> = ({ signal }) =>
+    getAdminInvoices(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminInvoices>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export function useGetAdminInvoices<
+  TData = Awaited<ReturnType<typeof getAdminInvoices>>,
+  TError = unknown
+>(
+  params?: GetAdminInvoicesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminInvoices>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetAdminInvoicesQueryOptions(params, options);
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+  return { ...query, queryKey: queryOptions.queryKey };
+}
