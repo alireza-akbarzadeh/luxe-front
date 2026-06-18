@@ -1,6 +1,6 @@
 'use client';
 
-import { IconAlertTriangle, IconArrowLeft } from '@tabler/icons-react';
+import { IconAlertTriangle, IconArrowLeft, IconDownload, IconMail } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { downloadInvoicePdf } from '@/domains/invoices-admin/lib/invoice-export';
 import { InvoiceStatusBadge } from '@/domains/invoices-admin/components/invoice-status-badge';
 import { INVOICE_STATUS_OPTIONS } from '@/domains/invoices-admin/invoices.schema';
 import { ApiPaymentStatusBadge } from '@/domains/orders/components/order-api-badges';
@@ -25,6 +26,7 @@ import {
   getGetAdminInvoicesIdQueryKey,
   getGetAdminInvoicesQueryKey,
   useGetAdminInvoicesId,
+  usePostAdminInvoicesIdSend,
   usePutAdminInvoicesIdStatus
 } from '@/services/-admin-invoices';
 import type {
@@ -111,7 +113,9 @@ function InvoiceDetailView({
 }) {
   const invoiceId = invoice.id!;
   const [selectedStatus, setSelectedStatus] = useState(invoice.status ?? 'issued');
+  const [isDownloading, setIsDownloading] = useState(false);
   const { mutateAsync: updateStatus, isPending } = usePutAdminInvoicesIdStatus();
+  const { mutateAsync: sendInvoice, isPending: isSending } = usePostAdminInvoicesIdSend();
 
   useEffect(() => {
     setSelectedStatus(invoice.status ?? 'issued');
@@ -129,6 +133,29 @@ function InvoiceDetailView({
       onStatusChange();
     } catch {
       toast.error('Failed to update invoice status');
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsDownloading(true);
+    try {
+      const filename = invoice.invoice_number
+        ? `${invoice.invoice_number.replaceAll('/', '-')}.pdf`
+        : undefined;
+      await downloadInvoicePdf(invoiceId, filename);
+    } catch {
+      toast.error('Failed to download invoice PDF');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    try {
+      await sendInvoice({ id: invoiceId });
+      toast.success('Invoice email queued for delivery');
+    } catch {
+      toast.error('Failed to send invoice email');
     }
   };
 
@@ -172,6 +199,28 @@ function InvoiceDetailView({
                   {' · '}Issued {formatDate(invoice.issued_at ?? invoice.created_at)}
                 </p>
               </div>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                className='gap-2'
+                disabled={isDownloading}
+                onClick={() => void handleDownloadPdf()}
+              >
+                <IconDownload className='h-4 w-4' />
+                {isDownloading ? 'Downloading…' : 'Download PDF'}
+              </Button>
+              <Button
+                variant='outline'
+                size='sm'
+                className='gap-2'
+                disabled={isSending || !invoice.billing_email}
+                onClick={() => void handleSendEmail()}
+              >
+                <IconMail className='h-4 w-4' />
+                {isSending ? 'Sending…' : 'Email customer'}
+              </Button>
             </div>
           </div>
         </div>
