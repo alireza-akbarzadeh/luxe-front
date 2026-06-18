@@ -1,4 +1,4 @@
-import { DiscountForm } from '~/src/domains/discounts/sections/discount-form';
+import { DiscountForm } from '@/domains/discounts/sections/discount-form';
 
 interface EditDiscountPageProps {
   params: Promise<{ discountId: string }>;

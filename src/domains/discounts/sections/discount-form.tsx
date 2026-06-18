@@ -14,12 +14,13 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
+import { mapCouponToFormValues } from '@/domains/discounts/lib/coupon-mapper';
 import { getGetCouponsIdQueryKey, useGetCouponsId } from '@/services/-coupons-{id}-get';
 import { usePutCouponsId } from '@/services/-coupons-{id}-put';
 import { getGetAdminCouponsQueryKey } from '@/services/-admin-coupons-get';
 import { usePostCoupons } from '@/services/-coupons-post';
 
-import { couponDefaultValues, couponFormSchema, type CouponFormValues } from '../discount.schema';
+import { couponDefaultValues, couponFormSchema } from '../discount.schema';
 
 interface DiscountFormProps {
   discountId?: string;
@@ -31,12 +32,11 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
   const queryClient = useQueryClient();
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
 
-  const { data: { data: { coupon } = {} } = {}, isLoading: isLoadingCoupon } = useGetCouponsId(
-    Number(discountId),
-    {
-      query: { enabled: isEdit && Boolean(discountId) }
-    }
-  );
+  const { data: couponResponse, isLoading: isLoadingCoupon } = useGetCouponsId(Number(discountId), {
+    query: { enabled: isEdit && Boolean(discountId) }
+  });
+
+  const coupon = couponResponse?.data?.coupon;
 
   const { mutateAsync: createCoupon, isPending: isCreating } = usePostCoupons({
     mutation: {
@@ -114,19 +114,8 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
   });
 
   useEffect(() => {
-    if (isEdit && coupon) {
-      const values: CouponFormValues = {
-        code: coupon.code ?? '',
-        discount_type: (coupon.discount_type as CouponFormValues['discount_type']) ?? 'percentage',
-        discount_value: coupon.discount_value ?? 0,
-        description: coupon.description ?? '',
-        start_date: coupon.start_date ?? '',
-        end_date: coupon.end_date ?? '',
-        minimum_order_amount: coupon.minimum_order_amount ?? 0,
-        max_discount_amount: coupon.max_discount_amount ?? undefined,
-        usage_limit: coupon.usage_limit ?? undefined,
-        is_active: coupon.is_active ?? false
-      };
+    if (isEdit && coupon?.id) {
+      const values = mapCouponToFormValues(coupon);
       form.reset(values);
       setDiscountType(values.discount_type);
     }
@@ -141,6 +130,24 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
         <CardContent className='space-y-4'>
           <div className='bg-muted h-10 w-full animate-pulse rounded' />
           <div className='bg-muted h-10 w-full animate-pulse rounded' />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isEdit && !coupon?.id) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Coupon not found</CardTitle>
+          <CardDescription>
+            This coupon could not be loaded. It may have been deleted or you may not have access.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button type='button' variant='outline' onClick={() => push('/dashboard/discounts')}>
+            Back to discounts
+          </Button>
         </CardContent>
       </Card>
     );
@@ -173,14 +180,15 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
         </CardHeader>
 
         <CardContent>
-          <form.Root
-            className='md:p4 p-2'
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              void form.handleSubmit();
-            }}
-          >
+          <form.AppForm>
+            <form.Root
+              className='md:p4 p-2'
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                void form.handleSubmit();
+              }}
+            >
             <Flex direction='column' spacing={6}>
               <Flex direction='column' spacing={4}>
                 <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
@@ -373,7 +381,8 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
                 />
               </Flex>
             </Flex>
-          </form.Root>
+            </form.Root>
+          </form.AppForm>
         </CardContent>
       </Card>
     </>
