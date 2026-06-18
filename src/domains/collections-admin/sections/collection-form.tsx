@@ -153,16 +153,18 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
     );
   }
 
+  const editCollectionId = isEdit ? collection?.id : undefined;
+
   return (
     <>
-      {isEdit && collection?.id ? (
+      {editCollectionId ? (
         <EntityWorkflowPanel
           workflowKey='collection'
-          entityId={collection.id}
+          entityId={editCollectionId}
           className='mb-6'
           onTransitionSuccess={() => {
             void queryClient.invalidateQueries({
-              queryKey: getGetCollectionsIdQueryKey(collection.id)
+              queryKey: getGetCollectionsIdQueryKey(editCollectionId)
             });
             void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
           }}
