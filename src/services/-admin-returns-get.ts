@@ -21,9 +21,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  GetAdminReturnsParams,
-  UtilsResponse
+  GetAdminReturnsParams
 } from './-admin-returns-get.schemas';
+import type { GetAdminReturns200 } from './-admin-returns.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
@@ -41,7 +41,7 @@ export const getAdminReturns = (
 ) => {
 
 
-      return customInstance<UtilsResponse>(
+      return customInstance<GetAdminReturns200>(
       {url: `/admin/returns`, method: 'GET',
         params, signal
     },

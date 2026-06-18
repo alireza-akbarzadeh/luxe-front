@@ -32,7 +32,7 @@ export function ShippingProvidersDomains() {
         showBulkActions
       />
       <Table.Grid<ModelsShippingProviders>
-        onRowDoubleClick={(row) => push(`/dashboard/shipments/edit/${row.original.id}`)}
+        onRowDoubleClick={(row) => push(`/dashboard/shipping-providers/${row.original.id}`)}
         isLoading={isLoading}
       />
       <Table.Pagination
