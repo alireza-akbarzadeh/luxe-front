@@ -5,18 +5,21 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface DtoUpdateUserRoleRequest {
-  /**
-     * @minLength 1
-     * @maxLength 80
-     */
-  role: string;
-}
-
 export interface UtilsResponse {
   code?: number;
   error?: string;
   message?: string;
   success?: boolean;
 }
+
+export interface DtoAuditLogSummaryResponse {
+  last_24_hours?: number;
+  today?: number;
+  total?: number;
+  unique_actors?: number;
+}
+
+export type GetAdminAuditLogsSummary200 = UtilsResponse & {
+  data?: DtoAuditLogSummaryResponse;
+};
 

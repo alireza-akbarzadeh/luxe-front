@@ -39,7 +39,7 @@ export const postCategories = (
 
 
       return customInstance<DtoCategorySingleResponse>(
-      {url: `/categories`, method: 'POST',
+      {url: `/admin/categories`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: dtoCreateCategoryRequest, signal
     },

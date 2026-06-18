@@ -10,6 +10,7 @@ import {
   IconRocket,
   IconTag
 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
@@ -31,19 +32,27 @@ import {
   StepperTrigger
 } from '@/components/ui/stepper';
 import { LeaveGuard } from '@/domains/product-dashboard/components/product-leave-guard';
-import { buildFormData } from '@/domains/product-dashboard/product.utils';
-import { BasicInfoStep } from '@/domains/product-dashboard/sections/basic-info';
-import { InventoryStep } from '@/domains/product-dashboard/sections/inventory';
-import { MediaStep } from '@/domains/product-dashboard/sections/media';
-import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
-import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
+import {
+  mapFormToCreateRequest,
+  mapFormToUpdateRequest
+} from '@/domains/product-dashboard/lib/product-mapper';
+import { uploadProductImages } from '@/domains/product-dashboard/lib/upload-product-images';
 import {
   productDefaultValues,
   type ProductFormValues,
   productSchema,
   stepFields,
   type StepId
-} from '~/src/domains/product-dashboard/product-schema';
+} from '@/domains/product-dashboard/product-schema';
+import { BasicInfoStep } from '@/domains/product-dashboard/sections/basic-info';
+import { InventoryStep } from '@/domains/product-dashboard/sections/inventory';
+import { MediaStep } from '@/domains/product-dashboard/sections/media';
+import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
+import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
+import { getGetProductsIdQueryKey } from '@/services/-products-{id}-get';
+import { usePutProductsId } from '@/services/-products-{id}-put';
+import { getGetProductsQueryKey } from '@/services/-products-get';
+import { usePostProducts } from '@/services/-products-post';
 
 const STEPS = [
   {
@@ -79,45 +88,76 @@ const STEPS = [
 ] as StepDefinition[];
 
 interface ProductFormProps {
+  productId?: number;
   initialValues?: Partial<ProductFormValues>;
   isEditMode?: boolean;
 }
 
-export function ProductForm({ initialValues, isEditMode = false }: ProductFormProps) {
+export function ProductForm({ productId, initialValues, isEditMode = false }: ProductFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [currentStepId, setCurrentStepId] = useState<StepId>('basic-info');
   const [completedSteps, setCompletedSteps] = useState<Set<StepId>>(new Set());
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentIdx = STEPS.findIndex((s) => s.id === currentStepId);
   const isLastStep = currentIdx === STEPS.length - 1;
 
+  const createMutation = usePostProducts({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetProductsQueryKey() });
+      }
+    }
+  });
+
+  const updateMutation = usePutProductsId({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetProductsQueryKey() });
+        if (productId) {
+          void queryClient.invalidateQueries({
+            queryKey: getGetProductsIdQueryKey(String(productId))
+          });
+        }
+      }
+    }
+  });
+
+  const isSubmitting = createMutation.isPending || updateMutation.isPending;
+
   const form = useAppForm({
     defaultValues: { ...productDefaultValues, ...initialValues } as ProductFormValues,
-    // @ts-expect-error issuw with multi step form
+    // @ts-expect-error multi-step form validator typing
     validators: { onChange: productSchema, onSubmit: productSchema },
     onSubmit: async ({ value }) => {
       const valid = await validateStep(form, currentStepId);
       if (!valid) return;
 
-      setIsSubmitting(true);
       try {
-        const formData = buildFormData(value);
+        const imageUrls = await uploadProductImages(value.images);
 
-        await new Promise((r) => setTimeout(r, 1200));
-        console.log('FormData entries:', [...formData.entries()]);
-
-        toast.success('Product created', {
-          description: `"${value.name}" has been saved successfully.`
-        });
+        if (isEditMode && productId) {
+          await updateMutation.mutateAsync({
+            id: productId,
+            data: mapFormToUpdateRequest(value, imageUrls)
+          });
+          toast.success('Product updated', {
+            description: `"${value.name}" has been saved successfully.`
+          });
+        } else {
+          await createMutation.mutateAsync({
+            data: mapFormToCreateRequest(value, imageUrls)
+          });
+          toast.success('Product created', {
+            description: `"${value.name}" has been saved successfully.`
+          });
+        }
 
         router.push('/dashboard/products');
-      } catch {
-        toast.error('Something went wrong', {
-          description: 'Failed to create the product. Please try again.'
-        });
-      } finally {
-        setIsSubmitting(false);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Failed to save the product. Please try again.';
+        toast.error('Something went wrong', { description: message });
       }
     }
   });
@@ -171,15 +211,12 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
         setCurrentStepId(stepId);
         return;
       }
-      // In create mode only allow clicking already-completed steps
       if (completedSteps.has(stepId)) {
         await goToStep(stepId, true);
       }
     },
     [isEditMode, completedSteps, goToStep]
   );
-
-  // ─────────────────────────────────────────────────────────────────────────
 
   return (
     <>
@@ -194,7 +231,6 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
           className='space-y-6'
         >
           <Flex direction='column' spacing={6}>
-            {/* ── Stepper nav ───────────────────────────────────────── */}
             <Stepper
               steps={STEPS}
               value={currentStepId}
@@ -229,7 +265,6 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
                 })}
               </StepperNav>
 
-              {/* ── Step panels ─────────────────────────────────────── */}
               <StepperPanel className='mt-8'>
                 <div className='bg-card rounded-xl border p-6 shadow-sm'>
                   <Flex direction='column' spacing={1} className='mb-6'>
@@ -258,7 +293,6 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
               </StepperPanel>
             </Stepper>
 
-            {/* ── Footer navigation ─────────────────────────────────── */}
             <Flex direction='row' align='center' justify='between' className='pt-2'>
               <Button
                 type='button'
@@ -278,11 +312,11 @@ export function ProductForm({ initialValues, isEditMode = false }: ProductFormPr
                 {isLastStep ? (
                   <Button type='submit' disabled={isSubmitting} className='min-w-32'>
                     {isSubmitting ? (
-                      'Publishing…'
+                      'Saving…'
                     ) : (
                       <>
                         <IconRocket className='size-4' />
-                        Publish product
+                        {isEditMode ? 'Save product' : 'Publish product'}
                       </>
                     )}
                   </Button>

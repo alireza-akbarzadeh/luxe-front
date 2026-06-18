@@ -28,7 +28,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Sets the role of a user to 'admin' or 'user'.
+ * Sets the role slug of a user. The slug must exist in the roles table.
  * @summary Update user role (admin)
  */
 export const patchAdminUsersIdRole = (

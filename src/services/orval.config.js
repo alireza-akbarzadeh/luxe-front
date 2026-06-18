@@ -1901,6 +1901,275 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-audit-logs-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/audit-logs": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Page size",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search path, resource, email",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "HTTP action",
+                  "in": "query",
+                  "name": "action",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Resource path filter",
+                  "in": "query",
+                  "name": "resource",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Actor user id",
+                  "in": "query",
+                  "name": "user_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "From date (YYYY-MM-DD or RFC3339)",
+                  "in": "query",
+                  "name": "date_from",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "To date (YYYY-MM-DD or RFC3339)",
+                  "in": "query",
+                  "name": "date_to",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List audit logs",
+              "tags": [
+                "Admin Audit"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-audit-logs-summary-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/audit-logs/summary": {
+            "get": {
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AuditLogSummaryResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Audit log summary",
+              "tags": [
+                "Admin Audit"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AuditLogSummaryResponse": {
+              "properties": {
+                "last_24_hours": {
+                  "type": "integer"
+                },
+                "today": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                },
+                "unique_actors": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-bulk-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -8680,9 +8949,6 @@ module.exports = [
                   "type": "array"
                 }
               },
-              "required": [
-                "permission_ids"
-              ],
               "type": "object"
             },
             "utils.Response": {
@@ -9993,7 +10259,7 @@ module.exports = [
         "paths": {
           "/admin/users/{id}/role": {
             "patch": {
-              "description": "Sets the role of a user to 'admin' or 'user'.",
+              "description": "Sets the role slug of a user. The slug must exist in the roles table.",
               "parameters": [
                 {
                   "description": "User ID",
@@ -10096,10 +10362,8 @@ module.exports = [
             "dto.UpdateUserRoleRequest": {
               "properties": {
                 "role": {
-                  "enum": [
-                    "admin",
-                    "user"
-                  ],
+                  "maxLength": 80,
+                  "minLength": 1,
                   "type": "string"
                 }
               },

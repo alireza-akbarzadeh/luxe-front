@@ -29,7 +29,7 @@ export const variantsPricingSchema = z.object({
 // ─── Inventory ────────────────────────────────────────────────────────────────
 
 export const inventorySchema = z.object({
-  sku: z.string().optional(),
+  sku: z.string().min(3, 'SKU must be at least 3 characters').max(50),
   barcode: z.string().optional(),
   trackInventory: z.boolean().default(true),
   quantity: z.number().int().min(0).default(0),
@@ -57,12 +57,12 @@ export const mediaSchema = z.object({
 
 export const publishingSchema = z.object({
   status: z.enum(['draft', 'active', 'archived']),
-  visibility: z.enum(['public', 'private', 'password']),
+  visibility: z.enum(['public', 'private']),
   tags: z.array(z.string()),
   seoTitle: z.string().max(70).optional(),
   seoDescription: z.string().max(160).optional(),
   channels: z.array(z.enum(['online_store', 'pos', 'wholesale'])),
-  publishedAt: z.date().nullable().optional()
+  publishedAt: z.string().optional()
 });
 
 // ─── Full product schema ──────────────────────────────────────────────────────
@@ -105,7 +105,7 @@ export const productDefaultValues: ProductFormValues = {
   seoTitle: '',
   seoDescription: '',
   channels: ['online_store'],
-  publishedAt: null
+  publishedAt: ''
 };
 
 // ─── Step field maps (for per-step validation) ────────────────────────────────

@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 export interface DtoSetRolePermissionsRequest {
-  permission_ids: number[];
+  permission_ids?: number[];
 }
 
 export interface UtilsResponse {

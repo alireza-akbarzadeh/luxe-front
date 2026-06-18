@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display } from 'next/font/google';
+import Script from 'next/script';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
@@ -60,13 +61,15 @@ export default function RootLayout({ children }: TRootLayout) {
       suppressHydrationWarning
       data-scroll-behavior='smooth'
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        <Script
+          id='luxe-theme-init'
+          strategy='beforeInteractive'
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         <RootProvider>{children}</RootProvider>
       </body>
       <SpeedInsights />

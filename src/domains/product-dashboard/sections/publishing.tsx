@@ -92,6 +92,58 @@ export const PublishingStep = withForm({
 
         <Separator />
 
+        {/* ── Visibility ────────────────────────────────────────────── */}
+        <Flex direction='column' spacing={4}>
+          <h3 className='text-foreground text-sm font-medium'>Visibility</h3>
+          <form.AppField name='visibility'>
+            {(field) => (
+              <Grid cols={2} gap={3}>
+                {[
+                  {
+                    value: 'public' as const,
+                    label: 'Public',
+                    description: 'Visible in catalog and search'
+                  },
+                  {
+                    value: 'private' as const,
+                    label: 'Private',
+                    description: 'Hidden from storefront listings'
+                  }
+                ].map((opt) => (
+                  <GridItem key={opt.value}>
+                    <button
+                      type='button'
+                      onClick={() => field.handleChange(opt.value)}
+                      className={cn(
+                        'w-full rounded-lg border p-3 text-left transition-all',
+                        field.state.value === opt.value
+                          ? 'border-primary/50 bg-primary/5 ring-primary ring-2 ring-offset-1'
+                          : 'border-border hover:border-primary/40'
+                      )}
+                    >
+                      <Flex direction='column' spacing={1}>
+                        <span className='text-sm font-medium'>{opt.label}</span>
+                        <span className='text-muted-foreground text-xs'>{opt.description}</span>
+                      </Flex>
+                    </button>
+                  </GridItem>
+                ))}
+              </Grid>
+            )}
+          </form.AppField>
+
+          <form.AppField name='publishedAt'>
+            {(field) => (
+              <field.DatePicker
+                label='Publish date'
+                detail='Optional schedule — leave empty to publish immediately when active'
+              />
+            )}
+          </form.AppField>
+        </Flex>
+
+        <Separator />
+
         {/* ── Visibility & channels ─────────────────────────────────── */}
         <Flex direction='column' spacing={4}>
           <h3 className='text-foreground text-sm font-medium'>Sales channels</h3>

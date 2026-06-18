@@ -31,6 +31,7 @@ export const InventoryStep = withForm({
                     label='SKU (Stock Keeping Unit)'
                     placeholder='e.g. SHOE-001-BLK'
                     detail='Internal identifier for your product'
+                    required
                   />
                 )}
               />
