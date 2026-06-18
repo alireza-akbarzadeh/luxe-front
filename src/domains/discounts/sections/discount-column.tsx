@@ -1,29 +1,31 @@
+'use client';
+
 import type { ColumnDef } from '@tanstack/react-table';
 
+import { createSelectColumn } from '@/components/table/data-table';
+import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
-import { createSelectColumn } from '~/src/components/table/data-table';
-import { formatPrice } from '~/src/domains/home/lib/home-utils';
-import type { ModelsCoupon } from '~/src/services/-coupons-get.schemas';
+import type { ModelsCoupon } from '@/services/-admin-coupons-get.schemas';
+
+import { formatPrice } from '../lib/discount-utils';
 
 export const couponColumns: ColumnDef<ModelsCoupon>[] = [
   createSelectColumn<ModelsCoupon>(),
 
-  // Coupon code (primary)
   {
     accessorKey: 'code',
     header: 'Code',
     cell: ({ row }) => (
       <div className='flex flex-col'>
         <span className='font-mono font-medium'>{row.original.code || '—'}</span>
-        {row.original.description && (
+        {row.original.description ? (
           <span className='text-muted-foreground text-xs'>{row.original.description}</span>
-        )}
+        ) : null}
       </div>
     )
   },
 
-  // Discount (type + value)
   {
     id: 'discount',
     header: 'Discount',
@@ -37,7 +39,6 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
     }
   },
 
-  // Minimum order amount
   {
     accessorKey: 'minimum_order_amount',
     header: 'Min. order',
@@ -47,17 +48,6 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
     }
   },
 
-  // Max discount amount (only for percentage)
-  {
-    accessorKey: 'max_discount_amount',
-    header: 'Max discount',
-    cell: ({ row }) => {
-      const amount = row.original.max_discount_amount;
-      return amount ? formatPrice(amount) : '—';
-    }
-  },
-
-  // Validity period (start – end)
   {
     id: 'validity',
     header: 'Valid period',
@@ -75,14 +65,13 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
     }
   },
 
-  // Usage (used / limit)
   {
     id: 'usage',
     header: 'Usage',
     cell: ({ row }) => {
       const used = row.original.used_count ?? 0;
       const limit = row.original.usage_limit;
-      if (limit === undefined || limit === null) {
+      if (limit === undefined || limit === null || limit === 0) {
         return <span>{used} / ∞</span>;
       }
       const percentage = (used / limit) * 100;
@@ -105,39 +94,18 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
     }
   },
 
-  // Status (active / inactive)
-  {
-    accessorKey: 'is_active',
-    header: 'Status',
-    cell: ({ row }) => {
-      const isActive = row.original.is_active;
-      return (
-        <div className='flex items-center gap-2'>
-          <div
-            className={cn('h-2 w-2 rounded-full', isActive ? 'bg-emerald-500' : 'bg-slate-400')}
-          />
-          <span className='text-xs font-medium uppercase'>{isActive ? 'Active' : 'Inactive'}</span>
-        </div>
-      );
-    }
-  },
+  createWorkflowStateColumn<ModelsCoupon>({
+    workflowKey: 'coupon',
+    getEntityId: (row) => row.id,
+    getState: (row) => row.workflow_state,
+    header: 'Status'
+  }),
 
-  // Created at
   {
     accessorKey: 'created_at',
     header: 'Created',
     cell: ({ row }) => {
       const date = row.original.created_at;
-      return <div className='text-xs'>{date ? formatDate(date, DATE_FORMATS.SHORT) : '—'}</div>;
-    }
-  },
-
-  // Updated at
-  {
-    accessorKey: 'updated_at',
-    header: 'Updated',
-    cell: ({ row }) => {
-      const date = row.original.updated_at;
       return <div className='text-xs'>{date ? formatDate(date, DATE_FORMATS.SHORT) : '—'}</div>;
     }
   }

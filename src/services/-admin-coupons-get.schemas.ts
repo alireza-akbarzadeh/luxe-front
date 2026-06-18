@@ -58,13 +58,16 @@ export interface ModelsCoupon {
   workflow_state_id?: number;
 }
 
-export interface DtoCouponData {
-  coupon?: ModelsCoupon;
+export interface DtoCouponListData {
+  coupons?: ModelsCoupon[];
+  limit?: number;
+  offset?: number;
+  total?: number;
 }
 
-export interface DtoCouponSingleResponse {
+export interface DtoCouponListResponse {
   code?: number;
-  data?: DtoCouponData;
+  data?: DtoCouponListData;
   message?: string;
   success?: boolean;
 }
@@ -75,4 +78,30 @@ export interface UtilsResponse {
   message?: string;
   success?: boolean;
 }
+
+export type GetAdminCouponsParams = {
+/**
+ * Items per page
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * Offset
+ * @minimum 0
+ */
+offset?: number;
+/**
+ * Filter by coupon code (partial match)
+ */
+code?: string;
+/**
+ * Filter by lifecycle status (active|inactive|expired|exhausted|all)
+ */
+status?: string;
+/**
+ * Filter by discount type (percentage/fixed)
+ */
+discount_type?: string;
+};
 

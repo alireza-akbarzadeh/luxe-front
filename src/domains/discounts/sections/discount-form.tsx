@@ -1,21 +1,25 @@
 'use client';
 
 import { IconLoader2 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
-import { useGetCouponsId } from '~/src/services/-coupons-{id}-get';
-import { usePutCouponsId } from '~/src/services/-coupons-{id}-put';
-import { usePostCoupons } from '~/src/services/-coupons-post';
+import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
+import { getGetCouponsIdQueryKey, useGetCouponsId } from '@/services/-coupons-{id}-get';
+import { usePutCouponsId } from '@/services/-coupons-{id}-put';
+import { getGetAdminCouponsQueryKey } from '@/services/-admin-coupons-get';
+import { usePostCoupons } from '@/services/-coupons-post';
 
-import { couponDefaultValues, couponFormSchema } from '../discount.schema';
+import { couponDefaultValues, couponFormSchema, type CouponFormValues } from '../discount.schema';
 
 interface DiscountFormProps {
   discountId?: string;
@@ -24,65 +28,65 @@ interface DiscountFormProps {
 
 export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) {
   const { push } = useRouter();
+  const queryClient = useQueryClient();
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
 
-  const { data: { data: { coupon } = {} } = {} } = useGetCouponsId(Number(discountId), {
-    query: { enabled: isEdit }
+  const { data: { data: { coupon } = {} } = {}, isLoading: isLoadingCoupon } = useGetCouponsId(
+    Number(discountId),
+    {
+      query: { enabled: isEdit && Boolean(discountId) }
+    }
+  );
+
+  const { mutateAsync: createCoupon, isPending: isCreating } = usePostCoupons({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetAdminCouponsQueryKey() });
+      }
+    }
   });
 
-  const { mutateAsync: createCoupon, isPending: isCreating } = usePostCoupons();
-  const { mutateAsync: updateCoupon, isPending: isUpdating } = usePutCouponsId();
+  const { mutateAsync: updateCoupon, isPending: isUpdating } = usePutCouponsId({
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetAdminCouponsQueryKey() });
+        if (coupon?.id) {
+          void queryClient.invalidateQueries({
+            queryKey: getGetCouponsIdQueryKey(coupon.id)
+          });
+        }
+      }
+    }
+  });
 
   const isPending = isCreating || isUpdating;
+  const editCouponId = coupon?.id;
 
   const form = useAppForm({
-    defaultValues:
-      isEdit && coupon
-        ? {
-            code: coupon.code ?? '',
-            discount_type: coupon.discount_type ?? 'percentage',
-            discount_value: coupon.discount_value ?? 0,
-            description: coupon.description ?? '',
-            start_date: coupon.start_date ?? '',
-            end_date: coupon.end_date ?? '',
-            minimum_order_amount: coupon.minimum_order_amount ?? 0,
-            max_discount_amount: coupon.max_discount_amount ?? undefined,
-            usage_limit: coupon.usage_limit ?? undefined,
-            is_active: coupon.is_active ?? true
-          }
-        : couponDefaultValues,
+    defaultValues: couponDefaultValues,
     validators: {
-      // Convert Zod schema to a function that returns errors
-      onChange: (value) => {
-        const result = couponFormSchema.safeParse(value);
-        if (!result.success) {
-          return result.error;
-        }
-        return undefined;
-      }
+      onChange: couponFormSchema,
+      onSubmit: couponFormSchema
     },
     listeners: {
       onChange: ({ formApi }) => {
-        // Auto-uppercase code
         const code = formApi.getFieldValue('code');
         if (code && formApi.getFieldMeta('code')?.isDirty) {
           formApi.setFieldValue('code', code.toUpperCase());
         }
-        // Update local discountType for conditional rendering
         const currentDiscountType = formApi.getFieldValue('discount_type');
         setDiscountType(currentDiscountType);
       }
     },
     onSubmit: async ({ value }) => {
       try {
-        // Build payload matching DtoCreateCouponRequest
         const payload = {
           code: value.code.toUpperCase(),
           discount_type: value.discount_type,
           discount_value: Number(value.discount_value),
           description: value.description || undefined,
-          start_date: value.start_date || '', // DTO requires string; empty means no start?
-          end_date: value.end_date || '', // same
+          start_date: value.start_date || '',
+          end_date: value.end_date || '',
           minimum_order_amount: value.minimum_order_amount
             ? Number(value.minimum_order_amount)
             : undefined,
@@ -109,200 +113,269 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
     }
   });
 
+  useEffect(() => {
+    if (isEdit && coupon) {
+      const values: CouponFormValues = {
+        code: coupon.code ?? '',
+        discount_type: (coupon.discount_type as CouponFormValues['discount_type']) ?? 'percentage',
+        discount_value: coupon.discount_value ?? 0,
+        description: coupon.description ?? '',
+        start_date: coupon.start_date ?? '',
+        end_date: coupon.end_date ?? '',
+        minimum_order_amount: coupon.minimum_order_amount ?? 0,
+        max_discount_amount: coupon.max_discount_amount ?? undefined,
+        usage_limit: coupon.usage_limit ?? undefined,
+        is_active: coupon.is_active ?? false
+      };
+      form.reset(values);
+      setDiscountType(values.discount_type);
+    }
+  }, [isEdit, coupon, form]);
+
+  if (isEdit && isLoadingCoupon) {
+    return (
+      <Card>
+        <CardHeader>
+          <div className='bg-muted h-8 w-48 animate-pulse rounded' />
+        </CardHeader>
+        <CardContent className='space-y-4'>
+          <div className='bg-muted h-10 w-full animate-pulse rounded' />
+          <div className='bg-muted h-10 w-full animate-pulse rounded' />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <form.Root
-      className='md:p4 p-2'
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
-      <Flex direction='column' spacing={6}>
-        <Flex direction='column' spacing={4}>
-          <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
+    <>
+      {isEdit && editCouponId ? (
+        <EntityWorkflowPanel
+          workflowKey='coupon'
+          entityId={editCouponId}
+          className='mb-6'
+          onTransitionSuccess={() => {
+            void queryClient.invalidateQueries({
+              queryKey: getGetCouponsIdQueryKey(editCouponId)
+            });
+            void queryClient.invalidateQueries({ queryKey: getGetAdminCouponsQueryKey() });
+          }}
+        />
+      ) : null}
 
-          <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-            <GridItem>
-              <form.AppField
-                name='code'
-                children={(field) => (
-                  <field.TextField
-                    label='Coupon code'
-                    placeholder='e.g. SUMMER20'
-                    required
-                    detail='Customers will enter this code at checkout'
-                  />
-                )}
-              />
-            </GridItem>
+      <Card className='border-border/40 bg-card/40 backdrop-blur-2xl'>
+        <CardHeader>
+          <CardTitle>{isEdit ? 'Edit coupon' : 'Create coupon'}</CardTitle>
+          <CardDescription>
+            {isEdit
+              ? 'Update coupon details. Lifecycle status is controlled by the workflow panel above.'
+              : 'Create a new discount coupon. Leave inactive to start in draft, or enable to publish immediately.'}
+          </CardDescription>
+        </CardHeader>
 
-            <GridItem>
-              <form.AppField
-                name='discount_type'
-                children={(field) => (
-                  <field.Select
-                    description='Choose whether the discount is a percentage  or a fixed amount.'
-                    label='Discount type'
-                    options={[
-                      { label: 'Percentage (%)', value: 'percentage' },
-                      { label: 'Fixed amount ($)', value: 'fixed' }
-                    ]}
-                    required
-                  />
-                )}
-              />
-            </GridItem>
-          </Grid>
+        <CardContent>
+          <form.Root
+            className='md:p4 p-2'
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              void form.handleSubmit();
+            }}
+          >
+            <Flex direction='column' spacing={6}>
+              <Flex direction='column' spacing={4}>
+                <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
 
-          <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-            <GridItem>
-              <form.AppField
-                name='discount_value'
-                children={(field) => (
-                  <field.NumberField
-                    label={
-                      discountType === 'percentage' ? 'Discount percentage' : 'Discount amount'
-                    }
-                    placeholder={discountType === 'percentage' ? 'e.g. 20' : 'e.g. 10.00'}
-                    required
-                    detail={
-                      discountType === 'percentage'
-                        ? 'Percentage off (0-100)'
-                        : 'Fixed amount off in your store currency'
-                    }
-                  />
-                )}
-              />
-            </GridItem>
-
-            <GridItem>
-              <form.AppField
-                name='description'
-                children={(field) => (
-                  <field.TextField
-                    label='Description (optional)'
-                    placeholder='e.g. Summer sale discount'
-                    detail='Internal note or customer-facing description'
-                  />
-                )}
-              />
-            </GridItem>
-          </Grid>
-        </Flex>
-
-        <Separator />
-
-        <Flex direction='column' spacing={4}>
-          <h3 className='text-foreground text-sm font-medium'>Validity & Limits</h3>
-
-          <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-            <GridItem>
-              <form.AppField
-                name='start_date'
-                children={(field) => (
-                  <field.DatePicker
-                    label='Start date'
-                    detail='Leave empty to activate immediately'
-                  />
-                )}
-              />
-            </GridItem>
-
-            <GridItem>
-              <form.AppField
-                name='end_date'
-                children={(field) => (
-                  <field.DatePicker label='End date' detail='Leave empty for no expiration' />
-                )}
-              />
-            </GridItem>
-          </Grid>
-
-          <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-            <GridItem>
-              <form.AppField
-                name='minimum_order_amount'
-                children={(field) => (
-                  <field.NumberField
-                    label='Minimum order amount'
-                    placeholder='0.00'
-                    detail='Minimum cart subtotal to apply coupon (0 = no minimum)'
-                  />
-                )}
-              />
-            </GridItem>
-
-            <GridItem>
-              <form.AppField
-                name='usage_limit'
-                children={(field) => (
-                  <field.NumberField
-                    label='Usage limit'
-                    placeholder='Unlimited'
-                    detail='Maximum number of times this coupon can be used'
-                  />
-                )}
-              />
-            </GridItem>
-          </Grid>
-
-          {discountType === 'percentage' && (
-            <Grid cols={1} gap={4}>
-              <GridItem>
-                <form.AppField
-                  name='max_discount_amount'
-                  children={(field) => (
-                    <field.NumberField
-                      label='Maximum discount amount'
-                      placeholder='No maximum'
-                      detail='Upper limit for percentage discounts (e.g., max $20 off)'
+                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                  <GridItem>
+                    <form.AppField
+                      name='code'
+                      children={(field) => (
+                        <field.TextField
+                          label='Coupon code'
+                          placeholder='e.g. SUMMER20'
+                          required
+                          detail='Customers will enter this code at checkout'
+                        />
+                      )}
                     />
+                  </GridItem>
+
+                  <GridItem>
+                    <form.AppField
+                      name='discount_type'
+                      children={(field) => (
+                        <field.Select
+                          description='Choose whether the discount is a percentage or a fixed amount.'
+                          label='Discount type'
+                          options={[
+                            { label: 'Percentage (%)', value: 'percentage' },
+                            { label: 'Fixed amount ($)', value: 'fixed' }
+                          ]}
+                          required
+                        />
+                      )}
+                    />
+                  </GridItem>
+                </Grid>
+
+                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                  <GridItem>
+                    <form.AppField
+                      name='discount_value'
+                      children={(field) => (
+                        <field.NumberField
+                          label={
+                            discountType === 'percentage' ? 'Discount percentage' : 'Discount amount'
+                          }
+                          placeholder={discountType === 'percentage' ? 'e.g. 20' : 'e.g. 10.00'}
+                          required
+                          detail={
+                            discountType === 'percentage'
+                              ? 'Percentage off (0-100)'
+                              : 'Fixed amount off in your store currency'
+                          }
+                        />
+                      )}
+                    />
+                  </GridItem>
+
+                  <GridItem>
+                    <form.AppField
+                      name='description'
+                      children={(field) => (
+                        <field.TextField
+                          label='Description (optional)'
+                          placeholder='e.g. Summer sale discount'
+                          detail='Internal note or customer-facing description'
+                        />
+                      )}
+                    />
+                  </GridItem>
+                </Grid>
+              </Flex>
+
+              <Separator />
+
+              <Flex direction='column' spacing={4}>
+                <h3 className='text-foreground text-sm font-medium'>Validity & limits</h3>
+
+                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                  <GridItem>
+                    <form.AppField
+                      name='start_date'
+                      children={(field) => (
+                        <field.DatePicker
+                          label='Start date'
+                          detail='Leave empty to activate immediately'
+                        />
+                      )}
+                    />
+                  </GridItem>
+
+                  <GridItem>
+                    <form.AppField
+                      name='end_date'
+                      children={(field) => (
+                        <field.DatePicker label='End date' detail='Leave empty for no expiration' />
+                      )}
+                    />
+                  </GridItem>
+                </Grid>
+
+                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                  <GridItem>
+                    <form.AppField
+                      name='minimum_order_amount'
+                      children={(field) => (
+                        <field.NumberField
+                          label='Minimum order amount'
+                          placeholder='0.00'
+                          detail='Minimum cart subtotal to apply coupon (0 = no minimum)'
+                        />
+                      )}
+                    />
+                  </GridItem>
+
+                  <GridItem>
+                    <form.AppField
+                      name='usage_limit'
+                      children={(field) => (
+                        <field.NumberField
+                          label='Usage limit'
+                          placeholder='Unlimited'
+                          detail='Maximum number of times this coupon can be used'
+                        />
+                      )}
+                    />
+                  </GridItem>
+                </Grid>
+
+                {discountType === 'percentage' ? (
+                  <Grid cols={1} gap={4}>
+                    <GridItem>
+                      <form.AppField
+                        name='max_discount_amount'
+                        children={(field) => (
+                          <field.NumberField
+                            label='Maximum discount amount'
+                            placeholder='No maximum'
+                            detail='Upper limit for percentage discounts (e.g., max $20 off)'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                  </Grid>
+                ) : null}
+              </Flex>
+
+              <Separator />
+
+              <Flex direction='column' spacing={4}>
+                <h3 className='text-foreground text-sm font-medium'>Status</h3>
+
+                {isEdit ? (
+                  <p className='text-muted-foreground text-sm'>
+                    Lifecycle status is controlled by the workflow panel above (Draft / Active / Paused
+                    / Expired / Exhausted / Archived).
+                  </p>
+                ) : (
+                  <form.AppField
+                    name='is_active'
+                    children={(field) => (
+                      <field.Switch
+                        label='Activate on create'
+                        description='When enabled, the coupon is published immediately after creation'
+                      />
+                    )}
+                  />
+                )}
+              </Flex>
+
+              <Separator />
+
+              <Flex direction='row' justify='end' spacing={3}>
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
+                  children={([canSubmit, isSubmitting, isDirty]) => (
+                    <Button type='submit' disabled={!canSubmit || isPending || (!isDirty && isEdit)}>
+                      {isPending || isSubmitting ? (
+                        <>
+                          <IconLoader2 className='size-4 animate-spin' />
+                          {isEdit ? 'Saving…' : 'Creating…'}
+                        </>
+                      ) : isEdit ? (
+                        'Save changes'
+                      ) : (
+                        'Create coupon'
+                      )}
+                    </Button>
                   )}
                 />
-              </GridItem>
-            </Grid>
-          )}
-        </Flex>
-
-        <Separator />
-
-        <Flex direction='column' spacing={4}>
-          <h3 className='text-foreground text-sm font-medium'>Status</h3>
-
-          <form.AppField
-            name='is_active'
-            children={(field) => (
-              <field.Switch
-                label='Active'
-                description='Active coupons can be used by customers at checkout'
-              />
-            )}
-          />
-        </Flex>
-
-        <Separator />
-
-        <Flex direction='row' justify='end' spacing={3}>
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
-            children={([canSubmit, isSubmitting, isDirty]) => (
-              <Button type='submit' disabled={!canSubmit || isPending || !isDirty}>
-                {isPending || isSubmitting ? (
-                  <>
-                    <IconLoader2 className='size-4 animate-spin' />
-                    {isEdit ? 'Saving…' : 'Creating…'}
-                  </>
-                ) : isEdit ? (
-                  'Save changes'
-                ) : (
-                  'Create coupon'
-                )}
-              </Button>
-            )}
-          />
-        </Flex>
-      </Flex>
-    </form.Root>
+              </Flex>
+            </Flex>
+          </form.Root>
+        </CardContent>
+      </Card>
+    </>
   );
 }

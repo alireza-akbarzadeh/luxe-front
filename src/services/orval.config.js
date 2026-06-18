@@ -5449,6 +5449,336 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-coupons-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/coupons": {
+            "get": {
+              "description": "Returns a paginated list of all coupons for admin management with optional status filters",
+              "parameters": [
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 20,
+                    "maximum": 100,
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "default": 0,
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Filter by coupon code (partial match)",
+                  "in": "query",
+                  "name": "code",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by lifecycle status (active|inactive|expired|exhausted|all)",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by discount type (percentage/fixed)",
+                  "in": "query",
+                  "name": "discount_type",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/dto.CouponListResponse"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List coupons (admin)",
+              "tags": [
+                "Coupons"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CouponListResponse": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/dto.CouponListData"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CouponListData": {
+              "properties": {
+                "coupons": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.Coupon"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "offset": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.Coupon": {
+              "properties": {
+                "code": {
+                  "maxLength": 50,
+                  "minLength": 3,
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "discount_type": {
+                  "enum": [
+                    "percentage",
+                    "fixed"
+                  ],
+                  "type": "string"
+                },
+                "discount_value": {
+                  "type": "number"
+                },
+                "end_date": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "max_discount_amount": {
+                  "type": "number"
+                },
+                "minimum_order_amount": {
+                  "type": "number"
+                },
+                "start_date": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "usage_limit": {
+                  "type": "integer"
+                },
+                "used_count": {
+                  "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "code"
+              ],
+              "type": "object"
+            },
+            "gorm.DeletedAt": {
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "valid": {
+                  "description": "Valid is true if Time is not NULL",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-dashboard-overview-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -7681,6 +8011,758 @@ module.exports = [
                 },
                 "reference_type": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/invoices": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Filter by status",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by user ID",
+                  "in": "query",
+                  "name": "user_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Filter by order ID",
+                  "in": "query",
+                  "name": "order_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search invoice #, order #, or customer",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Start date (RFC3339)",
+                  "in": "query",
+                  "name": "from_date",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "End date (RFC3339)",
+                  "in": "query",
+                  "name": "to_date",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminInvoiceListData"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List invoices (admin)",
+              "tags": [
+                "Invoices"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminInvoiceListData": {
+              "properties": {
+                "invoices": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminInvoiceListItem"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "offset": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminInvoiceListItem": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "customer_email": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "invoice_number": {
+                  "type": "string"
+                },
+                "issued_at": {
+                  "type": "string"
+                },
+                "order_id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "paid_at": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "total_amount": {
+                  "type": "number"
+                },
+                "user_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/invoices/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Invoice ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.InvoiceDetailResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get invoice by ID (admin)",
+              "tags": [
+                "Invoices"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InvoiceDetailResponse": {
+              "properties": {
+                "billing_email": {
+                  "type": "string"
+                },
+                "billing_name": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "due_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "invoice_number": {
+                  "type": "string"
+                },
+                "issued_at": {
+                  "type": "string"
+                },
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminOrderItemView"
+                  },
+                  "type": "array"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "order_id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "paid_at": {
+                  "type": "string"
+                },
+                "payment_method": {
+                  "type": "string"
+                },
+                "payment_status": {
+                  "type": "string"
+                },
+                "shipping_amount": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "subtotal": {
+                  "type": "number"
+                },
+                "tax_amount": {
+                  "type": "number"
+                },
+                "total_amount": {
+                  "type": "number"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminOrderItemView": {
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "quantity": {
+                  "type": "integer"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "total_price": {
+                  "type": "number"
+                },
+                "unit_price": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-pdf-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/invoices/{id}/pdf": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Invoice ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/pdf": {
+                      "schema": {
+                        "format": "binary",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Download invoice PDF (admin)",
+              "tags": [
+                "Invoices"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {}
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-send-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/invoices/{id}/send": {
+            "post": {
+              "parameters": [
+                {
+                  "description": "Invoice ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Email invoice to customer (admin)",
+              "tags": [
+                "Invoices"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-status-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/invoices/{id}/status": {
+            "put": {
+              "parameters": [
+                {
+                  "description": "Invoice ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateInvoiceStatusRequest"
+                    }
+                  }
+                },
+                "description": "Status update",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update invoice status (admin)",
+              "tags": [
+                "Invoices"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateInvoiceStatusRequest": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "draft",
+                    "issued",
+                    "paid",
+                    "void",
+                    "refunded"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -11637,6 +12719,248 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/shipments": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Filter by legacy status",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by carrier",
+                  "in": "query",
+                  "name": "carrier",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by order ID",
+                  "in": "query",
+                  "name": "order_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search tracking, order #, or carrier",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminShipmentListData"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List shipments (admin)",
+              "tags": [
+                "Shipments"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminShipmentListData": {
+              "properties": {
+                "limit": {
+                  "type": "integer"
+                },
+                "offset": {
+                  "type": "integer"
+                },
+                "shipments": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminShipmentListItem"
+                  },
+                  "type": "array"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminShipmentListItem": {
+              "properties": {
+                "carrier": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "estimated_delivery": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "order_id": {
+                  "type": "integer"
+                },
+                "order_number": {
+                  "type": "string"
+                },
+                "shipped_at": {
+                  "type": "string"
+                },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "tracking_number": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -11858,6 +13182,9 @@ module.exports = [
                 "user_id": {
                   "type": "integer"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -11898,6 +13225,47 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -19930,6 +21298,9 @@ module.exports = [
                 "user_id": {
                   "type": "integer"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -22017,6 +23388,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -22032,6 +23409,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -22209,6 +23627,9 @@ module.exports = [
                 "end_date": {
                   "type": "string"
                 },
+                "is_active": {
+                  "type": "boolean"
+                },
                 "max_discount_amount": {
                   "type": "number"
                 },
@@ -22225,9 +23646,7 @@ module.exports = [
               "required": [
                 "code",
                 "discount_type",
-                "discount_value",
-                "end_date",
-                "start_date"
+                "discount_value"
               ],
               "type": "object"
             },
@@ -22308,6 +23727,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -22323,6 +23748,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -22529,6 +23995,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -22544,6 +24016,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -22759,6 +24272,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -22774,6 +24293,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -23167,6 +24727,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -23182,6 +24748,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -23469,6 +25076,12 @@ module.exports = [
                 },
                 "used_count": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -23484,6 +25097,47 @@ module.exports = [
                 "valid": {
                   "description": "Valid is true if Time is not NULL",
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -26004,6 +27658,9 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
                 },
                 "workflow_state_id": {
                   "type": "integer"
@@ -36679,6 +38336,9 @@ module.exports = [
                 "user_id": {
                   "type": "integer"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -36719,6 +38379,47 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -36930,6 +38631,9 @@ module.exports = [
                 "user_id": {
                   "type": "integer"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -36970,6 +38674,47 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"

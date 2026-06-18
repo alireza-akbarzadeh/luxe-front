@@ -55,7 +55,7 @@ export const KNOWN_HOOK_KEYS = [
   'return_refunded'
 ] as const;
 
-export const ENTITY_TYPE_SUGGESTIONS = ['product', 'order', 'shipment', 'return', 'user'] as const;
+export const ENTITY_TYPE_SUGGESTIONS = ['product', 'order', 'shipment', 'return', 'user', 'coupon'] as const;
 
 /** TanStack Form adapter for Zod schemas (matches discount-form pattern). */
 export { zodFormValidator, zodFormValidators } from '@/domains/menus/schemas/form-validator';

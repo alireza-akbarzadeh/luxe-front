@@ -28,6 +28,21 @@ export interface ModelsShippingProviders {
   updated_at?: string;
 }
 
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  created_at?: string;
+  description?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+  updated_at?: string;
+  workflow_id?: number;
+}
+
 export interface ModelsShipment {
   /** Shipping address */
   address_line1?: string;
@@ -51,6 +66,7 @@ export interface ModelsShipment {
   tracking_number?: string;
   updated_at?: string;
   user_id?: number;
+  workflow_state?: ModelsWorkflowState;
   workflow_state_id?: number;
 }
 

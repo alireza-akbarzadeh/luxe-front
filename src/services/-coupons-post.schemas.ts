@@ -22,10 +22,11 @@ export interface DtoCreateCouponRequest {
   description?: string;
   discount_type: DtoCreateCouponRequestDiscountType;
   discount_value: number;
-  end_date: string;
+  end_date?: string;
+  is_active?: boolean;
   max_discount_amount?: number;
   minimum_order_amount?: number;
-  start_date: string;
+  start_date?: string;
   usage_limit?: number;
 }
 
@@ -42,6 +43,21 @@ export const ModelsCouponDiscountType = {
   percentage: 'percentage',
   fixed: 'fixed',
 } as const;
+
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  created_at?: string;
+  description?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+  updated_at?: string;
+  workflow_id?: number;
+}
 
 export interface ModelsCoupon {
   /**
@@ -63,6 +79,8 @@ export interface ModelsCoupon {
   updated_at?: string;
   usage_limit?: number;
   used_count?: number;
+  workflow_state?: ModelsWorkflowState;
+  workflow_state_id?: number;
 }
 
 export interface DtoCouponData {

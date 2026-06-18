@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
-import type { TableState } from '~/src/components/table/data-table';
-import { Table, useServerTable } from '~/src/components/table/data-table';
-import { couponColumns } from '~/src/domains/discounts/sections/discount-column';
-import { useGetCoupons } from '~/src/services/-coupons-get';
-import type { DtoCouponListResponse, ModelsCoupon } from '~/src/services/-coupons-get.schemas';
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
+import { couponColumns } from '@/domains/discounts/sections/discount-column';
+import type { DtoCouponListResponse, ModelsCoupon } from '@/services/-admin-coupons-get.schemas';
+import { useGetAdminCoupons } from '@/services/-admin-coupons-get';
 
 export function DiscountDomain() {
   const { push } = useRouter();
@@ -16,7 +16,8 @@ export function DiscountDomain() {
     (state: TableState, filter: string) => ({
       limit: state.pagination.pageSize,
       offset: state.pagination.pageIndex * state.pagination.pageSize,
-      code: filter || undefined
+      code: filter || undefined,
+      status: 'all' as const
     }),
     []
   );
@@ -37,7 +38,7 @@ export function DiscountDomain() {
     getQueryParams,
     getRows,
     getTotal,
-    useQuery: useGetCoupons
+    useQuery: useGetAdminCoupons
   });
 
   return (

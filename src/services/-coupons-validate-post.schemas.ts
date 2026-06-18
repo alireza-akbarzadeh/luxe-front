@@ -24,6 +24,21 @@ export const ModelsCouponDiscountType = {
   fixed: 'fixed',
 } as const;
 
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  created_at?: string;
+  description?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+  updated_at?: string;
+  workflow_id?: number;
+}
+
 export interface ModelsCoupon {
   /**
      * @minLength 3
@@ -44,6 +59,8 @@ export interface ModelsCoupon {
   updated_at?: string;
   usage_limit?: number;
   used_count?: number;
+  workflow_state?: ModelsWorkflowState;
+  workflow_state_id?: number;
 }
 
 export interface DtoCouponValidateData {

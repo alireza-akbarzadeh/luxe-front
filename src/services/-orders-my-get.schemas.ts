@@ -270,6 +270,7 @@ export interface ModelsShipment {
   tracking_number?: string;
   updated_at?: string;
   user_id?: number;
+  workflow_state?: ModelsWorkflowState;
   workflow_state_id?: number;
 }
 
