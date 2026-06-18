@@ -59,7 +59,9 @@ export interface DtoNavItemResponse {
   columns?: DtoColumn[];
   featured?: DtoFeaturedItem[];
   href?: string;
+  id?: number;
   label?: string;
+  order?: number;
   type?: string;
   viewAll?: DtoViewAll;
 }

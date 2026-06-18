@@ -11,13 +11,13 @@ import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
+import { toSiteMenuFormValues } from '@/domains/menus/lib/nav-menu-payload';
+import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import {
   siteMenuDefaults,
   type SiteMenuFormValues,
   siteMenuSchema
 } from '@/domains/menus/schemas/site-menu.schema';
-import { toSiteMenuFormValues } from '@/domains/menus/lib/nav-menu-payload';
 import { useSiteMenuManagerStore } from '@/domains/menus/stores/menu-manager-store';
 import { useGetNavMenusId } from '@/services/-nav-menus-{id}-get';
 import { usePutNavMenusId } from '@/services/-nav-menus-{id}-put';
@@ -29,9 +29,7 @@ function toApiPayload(value: SiteMenuFormValues) {
   return {
     label: value.label,
     type:
-      value.type === 'mega'
-        ? DtoUpsertNavMenuRequestType.mega
-        : DtoUpsertNavMenuRequestType.link,
+      value.type === 'mega' ? DtoUpsertNavMenuRequestType.mega : DtoUpsertNavMenuRequestType.link,
     href: value.type === 'link' ? value.href?.trim() || undefined : undefined,
     badge: value.badge?.trim() || undefined,
     order: value.order,
@@ -57,10 +55,7 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
 
   const form = useAppForm({
     defaultValues: siteMenuDefaults,
-    validators: {
-      onChange: zodFormValidator(siteMenuSchema),
-      onSubmit: zodFormValidator(siteMenuSchema)
-    },
+    validators: zodFormValidators(siteMenuSchema),
     onSubmit: async ({ value, formApi }) => {
       const payload = toApiPayload(value);
       try {
@@ -102,10 +97,12 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
     if (!source) return;
 
     const order =
-      editingNavItem?.order && editingNavItem.order > 0 ? editingNavItem.order : (source.order ?? 0);
+      editingNavItem?.order && editingNavItem.order > 0
+        ? editingNavItem.order
+        : (source.order ?? 0);
 
     form.reset(toSiteMenuFormValues(source, order));
-  }, [dialogOpen, editingNavId, editingNavItem, navResponse?.data, itemCount, form]);
+  }, [dialogOpen, editingNavId, editingNavItem, navResponse?.data, itemCount]);
 
   const isHydratingEdit = Boolean(editingNavId && !editingNavItem && isLoadingNav);
 
@@ -241,10 +238,14 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
                             key={`link-${columnIndex}-${linkIndex}`}
                             className='grid gap-2 sm:grid-cols-2'
                           >
-                            <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].title`}>
+                            <form.AppField
+                              name={`columns[${columnIndex}].links[${linkIndex}].title`}
+                            >
                               {(field) => <field.TextField label='Link title' />}
                             </form.AppField>
-                            <form.AppField name={`columns[${columnIndex}].links[${linkIndex}].href`}>
+                            <form.AppField
+                              name={`columns[${columnIndex}].links[${linkIndex}].href`}
+                            >
                               {(field) => <field.TextField label='Link href' />}
                             </form.AppField>
                           </div>
@@ -300,10 +301,16 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
             ) : null}
 
             <div className='flex justify-end gap-2 pt-2'>
-              <Button type='button' variant='outline' onClick={closeDialog}>
+              <Button
+                className='flex-1'
+                size='lg'
+                type='button'
+                variant='outline'
+                onClick={closeDialog}
+              >
                 Cancel
               </Button>
-              <form.Submit isPending={isCreating || isUpdating}>
+              <form.Submit className='flex-1' isPending={isCreating || isUpdating}>
                 {editingNavId ? 'Save changes' : 'Create item'}
               </form.Submit>
             </div>

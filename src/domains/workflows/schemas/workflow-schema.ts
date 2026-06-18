@@ -58,10 +58,4 @@ export const KNOWN_HOOK_KEYS = [
 export const ENTITY_TYPE_SUGGESTIONS = ['product', 'order', 'shipment', 'return', 'user'] as const;
 
 /** TanStack Form adapter for Zod schemas (matches discount-form pattern). */
-export function zodFormValidator<T>(schema: z.ZodType<T>) {
-  return (value: unknown) => {
-    const result = schema.safeParse(value);
-    if (!result.success) return result.error;
-    return undefined;
-  };
-}
+export { zodFormValidator, zodFormValidators } from '@/domains/menus/schemas/form-validator';

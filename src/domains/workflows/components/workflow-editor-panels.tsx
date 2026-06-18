@@ -34,7 +34,7 @@ import {
   KNOWN_HOOK_KEYS,
   workflowStateSchema,
   workflowTransitionSchema,
-  zodFormValidator
+  zodFormValidators
 } from '@/domains/workflows/schemas/workflow-schema';
 import { useWorkflowEditorStore } from '@/domains/workflows/stores/workflow-editor-store';
 import { useDeleteAdminWorkflowsIdStatesStateId } from '@/services/-admin-workflows-{id}-states-{stateId}-delete';
@@ -136,10 +136,7 @@ function WorkflowStatePanel({
 
   const form = useAppForm({
     defaultValues,
-    validators: {
-      onChange: zodFormValidator(workflowStateSchema),
-      onSubmit: zodFormValidator(workflowStateSchema)
-    },
+      validators: zodFormValidators(workflowStateSchema),
     onSubmit: async ({ value }) => {
       try {
         if (isEdit && editingState?.id) {
@@ -448,10 +445,7 @@ function WorkflowTransitionPanel({
 
   const form = useAppForm({
     defaultValues,
-    validators: {
-      onChange: zodFormValidator(workflowTransitionSchema),
-      onSubmit: zodFormValidator(workflowTransitionSchema)
-    },
+      validators: zodFormValidators(workflowTransitionSchema),
     onSubmit: async ({ value }) => {
       try {
         if (isEdit && edgeData?.transitionId) {

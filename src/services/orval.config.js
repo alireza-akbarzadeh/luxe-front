@@ -7386,6 +7386,125 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-permissions-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/permissions": {
+            "get": {
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/dto.PermissionResponse"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List permissions",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.PermissionResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "key": {
+                  "type": "string"
+                },
+                "module": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -7684,6 +7803,945 @@ module.exports = [
                 },
                 "text_color": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles": {
+            "get": {
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/dto.RoleResponse"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List roles",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.RoleResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_system": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "permission_count": {
+                  "type": "integer"
+                },
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "permission_keys": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_count": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles": {
+            "post": {
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateRoleRequest"
+                    }
+                  }
+                },
+                "description": "Role data",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.RoleResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create role",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateRoleRequest": {
+              "properties": {
+                "description": {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "slug": {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "slug"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.RoleResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_system": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "permission_count": {
+                  "type": "integer"
+                },
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "permission_keys": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_count": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles/{id}": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Role ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete role",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Role ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.RoleResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get role with permissions",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.RoleResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_system": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "permission_count": {
+                  "type": "integer"
+                },
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "permission_keys": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_count": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles/{id}": {
+            "put": {
+              "parameters": [
+                {
+                  "description": "Role ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateRoleRequest"
+                    }
+                  }
+                },
+                "description": "Role data",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.RoleResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update role",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateRoleRequest": {
+              "properties": {
+                "description": {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 80,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.RoleResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_system": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "permission_count": {
+                  "type": "integer"
+                },
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "permission_keys": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_count": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-permissions-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/roles/{id}/permissions": {
+            "put": {
+              "parameters": [
+                {
+                  "description": "Role ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.SetRolePermissionsRequest"
+                    }
+                  }
+                },
+                "description": "Permission ids",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.RoleResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Replace permissions assigned to a role",
+              "tags": [
+                "Admin Roles"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.SetRolePermissionsRequest": {
+              "properties": {
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "permission_ids"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.RoleResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_system": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "permission_count": {
+                  "type": "integer"
+                },
+                "permission_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "permission_keys": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "user_count": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -19357,8 +20415,14 @@ module.exports = [
                 "href": {
                   "type": "string"
                 },
+                "id": {
+                  "type": "integer"
+                },
                 "label": {
                   "type": "string"
+                },
+                "order": {
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
@@ -19650,14 +20714,144 @@ module.exports = [
                 "href": {
                   "type": "string"
                 },
+                "id": {
+                  "type": "integer"
+                },
                 "label": {
                   "type": "string"
+                },
+                "order": {
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
                 },
                 "viewAll": {
                   "$ref": "#/components/schemas/dto.ViewAll"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-reorder-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/nav-menus/reorder": {
+            "put": {
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.ReorderNavMenusRequest"
+                    }
+                  }
+                },
+                "description": "Ordered nav item ids",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Reorder navigation menus",
+              "tags": [
+                "Navigation"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.ReorderNavMenusRequest": {
+              "properties": {
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.ReorderNavMenuItem"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "type": "object"
+            },
+            "dto.ReorderNavMenuItem": {
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "order": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -19880,8 +21074,14 @@ module.exports = [
                 "href": {
                   "type": "string"
                 },
+                "id": {
+                  "type": "integer"
+                },
                 "label": {
                   "type": "string"
+                },
+                "order": {
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
@@ -20184,8 +21384,14 @@ module.exports = [
                 "href": {
                   "type": "string"
                 },
+                "id": {
+                  "type": "integer"
+                },
                 "label": {
                   "type": "string"
+                },
+                "order": {
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"

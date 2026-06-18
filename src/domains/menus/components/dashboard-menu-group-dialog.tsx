@@ -8,7 +8,7 @@ import { AppDialog } from '@/components/app-dialog';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { menuGroupDefaults, menuGroupSchema } from '@/domains/menus/schemas/dashboard-menu.schema';
-import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
+import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import { useMenuManagerStore } from '@/domains/menus/stores/menu-manager-store';
 import { usePutAdminMenuGroupsId } from '@/services/-admin-menu-groups-{id}-put';
 import {
@@ -31,10 +31,7 @@ export function DashboardMenuGroupDialog() {
 
   const form = useAppForm({
     defaultValues: menuGroupDefaults,
-    validators: {
-      onChange: zodFormValidator(menuGroupSchema),
-      onSubmit: zodFormValidator(menuGroupSchema)
-    },
+    validators: zodFormValidators(menuGroupSchema),
     onSubmit: async ({ value, formApi }) => {
       try {
         if (editingGroupId) {
@@ -66,7 +63,7 @@ export function DashboardMenuGroupDialog() {
     } else {
       form.reset(menuGroupDefaults);
     }
-  }, [groupDialogOpen, editingGroup, form]);
+  }, [groupDialogOpen, editingGroupId, editingGroup?.id]);
 
   return (
     <AppDialog

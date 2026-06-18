@@ -29,7 +29,7 @@ export function SubscribeButton({
             disabled={isDisabled}
             aria-busy={isLoading}
             className={cn(
-              'h-12 w-full rounded-xl text-[10px] font-black tracking-widest uppercase',
+              'w-full h-12 flex-1 rounded-xl text-[10px] font-black tracking-widest uppercase',
               isLoading &&
                 'border-border/70 bg-muted text-muted-foreground hover:bg-muted shadow-none hover:shadow-none active:scale-100 disabled:opacity-100',
               !isLoading && isDisabled && 'cursor-not-allowed opacity-50',

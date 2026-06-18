@@ -9,12 +9,11 @@ export const menuGroupSchema = z.object({
 });
 
 export const menuItemSchema = z.object({
-  group_id: z.coerce.number().int().positive(),
   parent_id: z.string().optional(),
   label: z.string().min(1, 'Label is required').max(120),
-  href: z.string().max(500).optional(),
+  href: z.string().max(500).default(''),
   icon: z.string().min(1, 'Icon is required'),
-  permission: z.string().max(120).optional(),
+  permission: z.string().max(120).default(''),
   display_order: z.coerce.number().int().min(0).default(0)
 });
 
@@ -27,7 +26,6 @@ export const menuGroupDefaults: MenuGroupFormValues = {
 };
 
 export const menuItemDefaults: MenuItemFormValues = {
-  group_id: 0,
   parent_id: MENU_ITEM_NO_PARENT,
   label: '',
   href: '',

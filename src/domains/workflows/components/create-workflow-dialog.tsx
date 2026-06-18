@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import {
   createWorkflowSchema,
   ENTITY_TYPE_SUGGESTIONS,
-  zodFormValidator
+  zodFormValidators
 } from '@/domains/workflows/schemas/workflow-schema';
 import { useCreateWorkflowDialogStore } from '@/domains/workflows/stores/workflow-editor-store';
 import { getGetAdminWorkflowsQueryKey } from '@/services/-admin-workflows-get';
@@ -32,10 +32,7 @@ export function CreateWorkflowDialog({ onCreated }: CreateWorkflowDialogProps) {
       entity_type: 'product',
       description: ''
     },
-    validators: {
-      onChange: zodFormValidator(createWorkflowSchema),
-      onSubmit: zodFormValidator(createWorkflowSchema)
-    },
+    validators: zodFormValidators(createWorkflowSchema),
     onSubmit: async ({ value, formApi }) => {
       try {
         const result = await createWorkflow({
@@ -65,7 +62,7 @@ export function CreateWorkflowDialog({ onCreated }: CreateWorkflowDialogProps) {
 
   useEffect(() => {
     if (!open) form.reset();
-  }, [open, form]);
+  }, [open]);
 
   return (
     <AppDialog

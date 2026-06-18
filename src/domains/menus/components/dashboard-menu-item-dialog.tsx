@@ -16,7 +16,7 @@ import {
   MENU_ITEM_NO_PARENT,
   menuItemSchema
 } from '@/domains/menus/schemas/dashboard-menu.schema';
-import { zodFormValidator } from '@/domains/menus/schemas/form-validator';
+import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import { useMenuManagerStore } from '@/domains/menus/stores/menu-manager-store';
 import { usePutAdminMenuItemsId } from '@/services/-admin-menu-items-{id}-put';
 import {
@@ -64,10 +64,7 @@ export function DashboardMenuItemDialog() {
 
   const form = useAppForm({
     defaultValues: menuItemDefaults,
-    validators: {
-      onChange: zodFormValidator(menuItemSchema),
-      onSubmit: zodFormValidator(menuItemSchema)
-    },
+    validators: zodFormValidators(menuItemSchema),
     onSubmit: async ({ value, formApi }) => {
       if (!selectedGroupId) {
         toast.error('Select a menu group first');
@@ -112,7 +109,6 @@ export function DashboardMenuItemDialog() {
 
     if (editingItem) {
       form.reset({
-        group_id: editingItem.group_id ?? selectedGroupId,
         parent_id: editingItem.parent_id
           ? String(editingItem.parent_id)
           : MENU_ITEM_NO_PARENT,
@@ -127,10 +123,9 @@ export function DashboardMenuItemDialog() {
 
     form.reset({
       ...menuItemDefaults,
-      group_id: selectedGroupId,
       parent_id: createItemParentId ? String(createItemParentId) : MENU_ITEM_NO_PARENT
     });
-  }, [itemDialogOpen, selectedGroupId, editingItem, createItemParentId, form]);
+  }, [itemDialogOpen, selectedGroupId, editingItemId, createItemParentId]);
 
   return (
     <AppDialog
