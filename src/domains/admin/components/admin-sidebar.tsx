@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
+import { AdminSidebarSkeleton } from './admin-sidebar-skeleton';
 import { SidebarNavItem } from './sidebar-nav-item';
 import { UserProfile } from './user-profile';
 import { WorkspaceSwitcher } from './workspace-switcher';
@@ -16,10 +17,11 @@ interface AdminSidebarProps {
   groups: DtoMenuGroupResponse[];
   pathname: string;
   className?: string;
+  isLoading?: boolean;
 }
 
 export function AdminSidebar(props: AdminSidebarProps) {
-  const { groups, pathname, className } = props;
+  const { groups, pathname, className, isLoading = false } = props;
   const { isMobile } = useMediaDevices();
   const isSidebarCollapsed = useDashboardStore((store) => store.isSidebarCollapsed);
   const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
@@ -60,33 +62,37 @@ export function AdminSidebar(props: AdminSidebarProps) {
         <div
           className={cn('flex flex-col gap-6 pb-8', effectiveCollapsed ? 'items-center px-1' : 'px-2')}
         >
-          {groups.map((group) => (
-            <div key={group.id} className='w-full space-y-1'>
-              <AnimatePresence initial={false}>
-                {!effectiveCollapsed ? (
-                  <motion.h4
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -4 }}
-                    transition={{ duration: 0.15 }}
-                    className='text-muted-foreground/50 mb-2 px-3 text-[10px] font-bold tracking-[0.18em] whitespace-nowrap uppercase'
-                  >
-                    {group.name}
-                  </motion.h4>
-                ) : null}
-              </AnimatePresence>
-              <div className='space-y-0.5'>
-                {group?.items?.map((item) => (
-                  <SidebarNavItem
-                    key={item.label}
-                    item={item}
-                    isCollapsed={effectiveCollapsed}
-                    pathname={pathname}
-                  />
-                ))}
+          {isLoading && groups.length === 0 ? (
+            <AdminSidebarSkeleton isCollapsed={effectiveCollapsed} />
+          ) : (
+            groups.map((group) => (
+              <div key={group.id} className='w-full space-y-1'>
+                <AnimatePresence initial={false}>
+                  {!effectiveCollapsed ? (
+                    <motion.h4
+                      initial={{ opacity: 0, x: -4 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -4 }}
+                      transition={{ duration: 0.15 }}
+                      className='text-muted-foreground/50 mb-2 px-3 text-[10px] font-bold tracking-[0.18em] whitespace-nowrap uppercase'
+                    >
+                      {group.name}
+                    </motion.h4>
+                  ) : null}
+                </AnimatePresence>
+                <div className='space-y-0.5'>
+                  {group?.items?.map((item) => (
+                    <SidebarNavItem
+                      key={item.label}
+                      item={item}
+                      isCollapsed={effectiveCollapsed}
+                      pathname={pathname}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </ScrollArea>
 

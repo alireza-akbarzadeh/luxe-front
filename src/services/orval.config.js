@@ -2170,6 +2170,686 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/categories": {
+            "post": {
+              "description": "Creates a new product category. Only accessible by users with the \"admin\" role.",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateCategoryRequest"
+                    }
+                  }
+                },
+                "description": "Category creation data",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/dto.CategorySingleResponse"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create a new category",
+              "tags": [
+                "Categories"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateCategoryRequest": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "maxLength": 100,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            },
+            "dto.CategorySingleResponse": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/dto.CategoryData"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryData": {
+              "properties": {
+                "category": {
+                  "$ref": "#/components/schemas/models.Category"
+                }
+              },
+              "type": "object"
+            },
+            "models.Category": {
+              "properties": {
+                "children": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.Category"
+                  },
+                  "type": "array"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "maxLength": 100,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "parent": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/models.Category"
+                    }
+                  ],
+                  "description": "Associations"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "products": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.Product"
+                  },
+                  "type": "array"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "slug"
+              ],
+              "type": "object"
+            },
+            "gorm.DeletedAt": {
+              "properties": {
+                "time": {
+                  "type": "string"
+                },
+                "valid": {
+                  "description": "Valid is true if Time is not NULL",
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.Product": {
+              "properties": {
+                "allow_backorder": {
+                  "type": "boolean"
+                },
+                "attributes": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.ProductAttribute"
+                  },
+                  "type": "array"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "brand": {
+                  "$ref": "#/components/schemas/models.Brand"
+                },
+                "brand_id": {
+                  "type": "integer"
+                },
+                "category": {
+                  "$ref": "#/components/schemas/models.Category"
+                },
+                "category_id": {
+                  "type": "integer"
+                },
+                "channels": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "colors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "compare_at_price": {
+                  "type": "number"
+                },
+                "cost": {
+                  "type": "number"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "created_by": {
+                  "type": "integer"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "images": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "is_digital": {
+                  "type": "boolean"
+                },
+                "is_new": {
+                  "type": "boolean"
+                },
+                "low_stock_threshold": {
+                  "type": "integer"
+                },
+                "meta_description": {
+                  "type": "string"
+                },
+                "meta_title": {
+                  "type": "string"
+                },
+                "name": {
+                  "maxLength": 255,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "published_at": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "reviews_count": {
+                  "type": "integer"
+                },
+                "sizes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stock": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "store": {
+                  "$ref": "#/components/schemas/models.Store"
+                },
+                "storeID": {
+                  "type": "integer"
+                },
+                "tags": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "track_inventory": {
+                  "description": "Inventory extras",
+                  "type": "boolean"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "updated_by": {
+                  "type": "integer"
+                },
+                "visibility": {
+                  "description": "Publishing extras",
+                  "type": "string"
+                },
+                "warehouse_location": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "name",
+                "price",
+                "sku",
+                "slug"
+              ],
+              "type": "object"
+            },
+            "models.ProductAttribute": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "name": {
+                  "maxLength": 100,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "values": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "name",
+                "values"
+              ],
+              "type": "object"
+            },
+            "models.Brand": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "models.Store": {
+              "properties": {
+                "bannerURL": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.Category"
+                  },
+                  "type": "array"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "deletedAt": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "followerCount": {
+                  "type": "integer"
+                },
+                "followers": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.User"
+                  },
+                  "type": "array"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "isVerified": {
+                  "type": "boolean"
+                },
+                "joinedAt": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logoURL": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "products": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.Product"
+                  },
+                  "type": "array"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "returnPolicy": {
+                  "type": "string"
+                },
+                "reviewCount": {
+                  "type": "integer"
+                },
+                "reviews": {
+                  "items": {
+                    "$ref": "#/components/schemas/models.StoreReview"
+                  },
+                  "type": "array"
+                },
+                "settings": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "shippingInfo": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "user": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/models.User"
+                    }
+                  ],
+                  "description": "Relationships"
+                },
+                "userID": {
+                  "description": "owner (admin user)",
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.User": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "deleted_at": {
+                  "$ref": "#/components/schemas/gorm.DeletedAt"
+                },
+                "email": {
+                  "description": "Account identity",
+                  "type": "string"
+                },
+                "email_verified_at": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "maxLength": 100,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "id": {
+                  "description": "Primary",
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "last_login_at": {
+                  "description": "Audit",
+                  "type": "string"
+                },
+                "last_name": {
+                  "maxLength": 100,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "email",
+                "first_name",
+                "last_name"
+              ],
+              "type": "object"
+            },
+            "models.StoreReview": {
+              "properties": {
+                "comment": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "rating": {
+                  "type": "integer"
+                },
+                "store": {
+                  "$ref": "#/components/schemas/models.Store"
+                },
+                "storeID": {
+                  "type": "integer"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "user": {
+                  "$ref": "#/components/schemas/models.User"
+                },
+                "userID": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-bulk-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -13392,22 +14072,7 @@ module.exports = [
                   "content": {
                     "application/json": {
                       "schema": {
-                        "allOf": [
-                          {
-                            "$ref": "#/components/schemas/utils.Response"
-                          },
-                          {
-                            "properties": {
-                              "data": {
-                                "items": {
-                                  "$ref": "#/components/schemas/dto.BrandResponse"
-                                },
-                                "type": "array"
-                              }
-                            },
-                            "type": "object"
-                          }
-                        ]
+                        "$ref": "#/components/schemas/dto.BrandListResponse"
                       }
                     }
                   },
@@ -13433,19 +14098,39 @@ module.exports = [
         },
         "components": {
           "schemas": {
-            "utils.Response": {
+            "dto.BrandListResponse": {
               "properties": {
                 "code": {
                   "type": "integer"
                 },
-                "error": {
-                  "type": "string"
+                "data": {
+                  "$ref": "#/components/schemas/dto.BrandListData"
                 },
                 "message": {
                   "type": "string"
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.BrandListData": {
+              "properties": {
+                "brands": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.BrandResponse"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -13475,6 +14160,23 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
                 }
               },
               "type": "object"
@@ -15123,686 +15825,6 @@ module.exports = [
                 },
                 "total": {
                   "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.Category": {
-              "properties": {
-                "children": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "level": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "parent": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.Category"
-                    }
-                  ],
-                  "description": "Associations"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "gorm.DeletedAt": {
-              "properties": {
-                "time": {
-                  "type": "string"
-                },
-                "valid": {
-                  "description": "Valid is true if Time is not NULL",
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "models.Product": {
-              "properties": {
-                "allow_backorder": {
-                  "type": "boolean"
-                },
-                "attributes": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.ProductAttribute"
-                  },
-                  "type": "array"
-                },
-                "barcode": {
-                  "type": "string"
-                },
-                "brand": {
-                  "$ref": "#/components/schemas/models.Brand"
-                },
-                "brand_id": {
-                  "type": "integer"
-                },
-                "category": {
-                  "$ref": "#/components/schemas/models.Category"
-                },
-                "category_id": {
-                  "type": "integer"
-                },
-                "channels": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "colors": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "compare_at_price": {
-                  "type": "number"
-                },
-                "cost": {
-                  "type": "number"
-                },
-                "created_at": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "integer"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "images": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "is_digital": {
-                  "type": "boolean"
-                },
-                "is_new": {
-                  "type": "boolean"
-                },
-                "low_stock_threshold": {
-                  "type": "integer"
-                },
-                "meta_description": {
-                  "type": "string"
-                },
-                "meta_title": {
-                  "type": "string"
-                },
-                "name": {
-                  "maxLength": 255,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "price": {
-                  "type": "number"
-                },
-                "published_at": {
-                  "type": "string"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "reviews_count": {
-                  "type": "integer"
-                },
-                "sizes": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "sku": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "stock": {
-                  "minimum": 0,
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "tags": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "type": "array"
-                },
-                "track_inventory": {
-                  "description": "Inventory extras",
-                  "type": "boolean"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "integer"
-                },
-                "visibility": {
-                  "description": "Publishing extras",
-                  "type": "string"
-                },
-                "warehouse_location": {
-                  "type": "string"
-                },
-                "weight": {
-                  "type": "number"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "name",
-                "price",
-                "sku",
-                "slug"
-              ],
-              "type": "object"
-            },
-            "models.ProductAttribute": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "product_id": {
-                  "type": "integer"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "values": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "minItems": 1,
-                  "type": "array"
-                }
-              },
-              "required": [
-                "name",
-                "values"
-              ],
-              "type": "object"
-            },
-            "models.Brand": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "models.Store": {
-              "properties": {
-                "bannerURL": {
-                  "type": "string"
-                },
-                "categories": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Category"
-                  },
-                  "type": "array"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "deletedAt": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "followerCount": {
-                  "type": "integer"
-                },
-                "followers": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.User"
-                  },
-                  "type": "array"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "isVerified": {
-                  "type": "boolean"
-                },
-                "joinedAt": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logoURL": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "products": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.Product"
-                  },
-                  "type": "array"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "returnPolicy": {
-                  "type": "string"
-                },
-                "reviewCount": {
-                  "type": "integer"
-                },
-                "reviews": {
-                  "items": {
-                    "$ref": "#/components/schemas/models.StoreReview"
-                  },
-                  "type": "array"
-                },
-                "settings": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "shippingInfo": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/models.User"
-                    }
-                  ],
-                  "description": "Relationships"
-                },
-                "userID": {
-                  "description": "owner (admin user)",
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "models.User": {
-              "properties": {
-                "created_at": {
-                  "type": "string"
-                },
-                "deleted_at": {
-                  "$ref": "#/components/schemas/gorm.DeletedAt"
-                },
-                "email": {
-                  "description": "Account identity",
-                  "type": "string"
-                },
-                "email_verified_at": {
-                  "type": "string"
-                },
-                "first_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "id": {
-                  "description": "Primary",
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "last_login_at": {
-                  "description": "Audit",
-                  "type": "string"
-                },
-                "last_name": {
-                  "maxLength": 100,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                "phone": {
-                  "type": "string"
-                },
-                "role": {
-                  "type": "string"
-                },
-                "updated_at": {
-                  "type": "string"
-                },
-                "workflow_state_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "email",
-                "first_name",
-                "last_name"
-              ],
-              "type": "object"
-            },
-            "models.StoreReview": {
-              "properties": {
-                "comment": {
-                  "type": "string"
-                },
-                "createdAt": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "rating": {
-                  "type": "integer"
-                },
-                "store": {
-                  "$ref": "#/components/schemas/models.Store"
-                },
-                "storeID": {
-                  "type": "integer"
-                },
-                "updatedAt": {
-                  "type": "string"
-                },
-                "user": {
-                  "$ref": "#/components/schemas/models.User"
-                },
-                "userID": {
-                  "type": "integer"
-                }
-              },
-              "type": "object"
-            },
-            "utils.Response": {
-              "properties": {
-                "code": {
-                  "type": "integer"
-                },
-                "error": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "output": {
-      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-categories-post.ts",
-      "client": "react-query",
-      "httpClient": "axios",
-      "mode": "split",
-      "prettier": true,
-      "override": {
-        "mutator": {
-          "path": "../lib/api/api-client.ts",
-          "name": "customInstance"
-        }
-      }
-    },
-    "input": {
-      "target": {
-        "openapi": "3.0.3",
-        "info": {
-          "contact": {
-            "email": "support@luxe.com",
-            "name": "API Support"
-          },
-          "description": "Production-grade e-commerce backend",
-          "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-          },
-          "termsOfService": "http://swagger.io/terms/",
-          "title": "Shopping Platform API",
-          "version": "1.0"
-        },
-        "servers": [
-          {
-            "url": "https://localhost:8080/api/v1"
-          }
-        ],
-        "paths": {
-          "/categories": {
-            "post": {
-              "description": "Creates a new product category. Only accessible by users with the \"admin\" role.",
-              "requestBody": {
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/dto.CreateCategoryRequest"
-                    }
-                  }
-                },
-                "description": "Category creation data",
-                "required": true,
-                "x-originalParamName": "request"
-              },
-              "responses": {
-                "201": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/dto.CategorySingleResponse"
-                      }
-                    }
-                  },
-                  "description": "Created"
-                },
-                "400": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Bad Request"
-                },
-                "401": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Unauthorized"
-                },
-                "403": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Forbidden"
-                },
-                "500": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Internal Server Error"
-                }
-              },
-              "security": [
-                {
-                  "BearerAuth": []
-                }
-              ],
-              "summary": "Create a new category",
-              "tags": [
-                "Categories"
-              ]
-            }
-          }
-        },
-        "components": {
-          "schemas": {
-            "dto.CreateCategoryRequest": {
-              "properties": {
-                "description": {
-                  "type": "string"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "maxLength": 100,
-                  "minLength": 2,
-                  "type": "string"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "name"
-              ],
-              "type": "object"
-            },
-            "dto.CategorySingleResponse": {
-              "properties": {
-                "code": {
-                  "type": "integer"
-                },
-                "data": {
-                  "$ref": "#/components/schemas/dto.CategoryData"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "dto.CategoryData": {
-              "properties": {
-                "category": {
-                  "$ref": "#/components/schemas/models.Category"
                 }
               },
               "type": "object"

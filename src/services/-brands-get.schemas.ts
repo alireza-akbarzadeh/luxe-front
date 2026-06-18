@@ -5,13 +5,6 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface UtilsResponse {
-  code?: number;
-  error?: string;
-  message?: string;
-  success?: boolean;
-}
-
 export interface DtoBrandResponse {
   created_at?: string;
   description?: string;
@@ -21,6 +14,27 @@ export interface DtoBrandResponse {
   slug?: string;
   status?: string;
   updated_at?: string;
+}
+
+export interface DtoBrandListData {
+  brands?: DtoBrandResponse[];
+  limit?: number;
+  page?: number;
+  total?: number;
+}
+
+export interface DtoBrandListResponse {
+  code?: number;
+  data?: DtoBrandListData;
+  message?: string;
+  success?: boolean;
+}
+
+export interface UtilsResponse {
+  code?: number;
+  error?: string;
+  message?: string;
+  success?: boolean;
 }
 
 export type GetBrandsParams = {
@@ -40,23 +54,5 @@ search?: string;
  * Filter by status
  */
 status?: string;
-};
-
-export interface DtoBrandListData {
-  brands?: DtoBrandResponse[];
-  limit?: number;
-  page?: number;
-  total?: number;
-}
-
-export interface DtoBrandListResponse {
-  code?: number;
-  data?: DtoBrandListData;
-  message?: string;
-  success?: boolean;
-}
-
-export type GetBrands200 = UtilsResponse & {
-  data?: DtoBrandListData | DtoBrandResponse[];
 };
 

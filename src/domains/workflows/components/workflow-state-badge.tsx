@@ -1,7 +1,6 @@
-import type { DtoStateView } from '@/services/-workflows-{key}-{entityId}-available-transitions-get.schemas';
-
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { DtoStateView } from '@/services/-workflows-{key}-{entityId}-available-transitions-get.schemas';
 
 import { getWorkflowStateStyle } from '../lib/workflow-runtime';
 

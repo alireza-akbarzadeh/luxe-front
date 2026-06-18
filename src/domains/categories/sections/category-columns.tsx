@@ -2,8 +2,9 @@ import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
+import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
+import { mapCategoryActiveToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
 import { DATE_FORMATS, formatDate } from '~/src/lib/date';
 import type { ModelsCategory } from '~/src/services/-categories-get.schemas'; // adjust import path
 
@@ -77,21 +78,10 @@ export const categoryColumns: ColumnDef<ModelsCategory>[] = [
     )
   },
 
-  {
-    accessorKey: 'is_active',
-    header: 'Status',
-    cell: ({ row }) => {
-      const isActive = row.original.is_active;
-      return (
-        <div className='flex items-center gap-2'>
-          <div
-            className={cn('h-2 w-2 rounded-full', isActive ? 'bg-emerald-500' : 'bg-slate-400')}
-          />
-          <span className='text-xs font-medium uppercase'>{isActive ? 'Active' : 'Inactive'}</span>
-        </div>
-      );
-    }
-  },
+  createWorkflowStateColumn<ModelsCategory>({
+    getState: (row) => mapCategoryActiveToStateView(row.is_active),
+    header: 'Workflow'
+  }),
 
   {
     accessorKey: 'path',

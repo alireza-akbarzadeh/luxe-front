@@ -3,12 +3,12 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'rec
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig
+  ChartTooltipContent
 } from '@/components/ui/chart';
 import type {
   DtoAdminDashboardSeriesPoint,
@@ -46,7 +46,7 @@ export function DashboardCharts({
 
   const statusData = useMemo(
     () =>
-      ordersByStatus.map((item) => {
+      ordersByStatus?.map((item) => {
         const status = item.status ?? 'unknown';
         return {
           status: formatStatusLabel(status),
@@ -153,10 +153,7 @@ export function DashboardCharts({
                 {statusData.map((item) => (
                   <div key={item.status} className='flex items-center justify-between text-sm'>
                     <div className='flex items-center gap-2'>
-                      <span
-                        className='h-2.5 w-2.5 rounded-sm'
-                        style={{ background: item.fill }}
-                      />
+                      <span className='h-2.5 w-2.5 rounded-sm' style={{ background: item.fill }} />
                       <span className='text-muted-foreground'>{item.status}</span>
                     </div>
                     <span className='font-medium tabular-nums'>{item.count}</span>

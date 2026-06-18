@@ -80,7 +80,10 @@ export function CategoriesDomains() {
 
   return (
     <>
-      <Table.Root {...serverTable.rootProps}>
+      <Table.Root
+        {...serverTable.rootProps}
+        getSubRows={(row) => row.children}
+      >
         <Table.Toolbar
           searchPlaceholder='Search by name or slug'
           showRefresh
@@ -99,7 +102,10 @@ export function CategoriesDomains() {
           </Button>
         </Table.Toolbar>
         <Table.Grid<ModelsCategory>
-          onRowDoubleClick={(row) => push(`/dashboard/categories/edit/${row.original.id}`)}
+          onRowDoubleClick={(row) => {
+            const id = row.original.id;
+            if (id) push(`/dashboard/categories/edit/${id}`);
+          }}
           isLoading={serverTable.isLoading && serverTable.rows.length === 0}
         />
         <Table.Pagination

@@ -49,6 +49,7 @@ import { InventoryStep } from '@/domains/product-dashboard/sections/inventory';
 import { MediaStep } from '@/domains/product-dashboard/sections/media';
 import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
 import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
+import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { getGetProductsIdQueryKey } from '@/services/-products-{id}-get';
 import { usePutProductsId } from '@/services/-products-{id}-put';
 import { getGetProductsQueryKey } from '@/services/-products-get';
@@ -221,6 +222,19 @@ export function ProductForm({ productId, initialValues, isEditMode = false }: Pr
   return (
     <>
       <LeaveGuard isDirty={form.state.isDirty && !isSubmitting} />
+      {isEditMode && productId ? (
+        <EntityWorkflowPanel
+          workflowKey='product'
+          entityId={productId}
+          className='mb-6'
+          onTransitionSuccess={() => {
+            void queryClient.invalidateQueries({
+              queryKey: getGetProductsIdQueryKey(String(productId))
+            });
+            void queryClient.invalidateQueries({ queryKey: getGetProductsQueryKey() });
+          }}
+        />
+      ) : null}
       <form.AppForm>
         <form.Root
           onSubmit={async (e) => {

@@ -21,7 +21,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  GetBrands200,
+  DtoBrandListResponse,
   GetBrandsParams,
   UtilsResponse
 } from './-brands-get.schemas';
@@ -43,7 +43,7 @@ export const getBrands = (
 ) => {
 
 
-      return customInstance<GetBrands200>(
+      return customInstance<DtoBrandListResponse>(
       {url: `/brands`, method: 'GET',
         params, signal
     },

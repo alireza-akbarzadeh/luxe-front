@@ -23,7 +23,12 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
   const { mobileSidebarOpen, setMobileSidebarOpen } = useDashboardStore();
   const pathname = usePathname();
   useDashboardShortcuts();
-  const { data: { data: sidebar_menu = [] } = {} } = useGetUserMenuStructure({});
+  const {
+    data: { data: sidebar_menu = [] } = {},
+    isLoading: isMenuLoading,
+    isFetching: isMenuFetching
+  } = useGetUserMenuStructure({});
+  const showSidebarSkeleton = (isMenuLoading || isMenuFetching) && sidebar_menu.length === 0;
   const isLiveFeed = pathname === '/dashboard/live';
   const isWorkflowCanvas =
     pathname.startsWith('/dashboard/workflows/') && pathname !== '/dashboard/workflows';
@@ -35,12 +40,21 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
       <TooltipProvider delayDuration={0}>
         <div className='bg-background flex h-screen w-full overflow-hidden'>
           {/* Desktop Sidebar */}
-          <AdminSidebar pathname={pathname} groups={sidebar_menu} className='hidden md:flex' />
+          <AdminSidebar
+            pathname={pathname}
+            groups={sidebar_menu}
+            isLoading={showSidebarSkeleton}
+            className='hidden md:flex'
+          />
 
           {/* Mobile Sidebar - controlled by store */}
           <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
             <SheetContent side='left' className='w-72 border-none p-0'>
-              <AdminSidebar pathname={pathname} groups={sidebar_menu} />
+              <AdminSidebar
+                pathname={pathname}
+                groups={sidebar_menu}
+                isLoading={showSidebarSkeleton}
+              />
             </SheetContent>
           </Sheet>
 

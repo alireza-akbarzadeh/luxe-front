@@ -1,8 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 
-import { cn } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
+import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
+import { mapBrandStatusToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
 import { DATE_FORMATS, formatDate } from '~/src/lib/date';
 import type { DtoBrandResponse } from '~/src/services/-brands-get.schemas';
 
@@ -54,26 +55,10 @@ export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
     }
   },
 
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.original.status || 'inactive';
-      const config: Record<string, { color: string; label: string }> = {
-        draft: { color: 'bg-amber-400', label: 'Draft' },
-        active: { color: 'bg-emerald-500', label: 'Active' },
-        inactive: { color: 'bg-slate-400', label: 'Inactive' },
-        archived: { color: 'bg-destructive', label: 'Archived' }
-      };
-      const { color, label } = config[status] ?? { color: 'bg-muted', label: status };
-      return (
-        <div className='flex items-center gap-2'>
-          <div className={cn('h-2 w-2 rounded-full', color)} />
-          <span className='text-xs font-medium uppercase'>{label}</span>
-        </div>
-      );
-    }
-  },
+  createWorkflowStateColumn<DtoBrandResponse>({
+    getState: (row) => mapBrandStatusToStateView(row.status),
+    header: 'Workflow'
+  }),
 
   {
     accessorKey: 'created_at',

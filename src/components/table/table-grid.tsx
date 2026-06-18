@@ -92,12 +92,15 @@ export function TableGrid<TData>(props: TableGridProps<TData>) {
                   className={cn(
                     'hover:bg-primary/5 data-[state=selected]:bg-primary/5 cursor-pointer transition-colors'
                   )}
-                  onDoubleClick={() => onRowDoubleClick?.(row)}
                   onClick={(event) => {
                     const target = event.target as HTMLElement;
                     if (
                       target.closest('button, input, a, [role="checkbox"], [data-slot="checkbox"]')
                     ) {
+                      return;
+                    }
+                    if (event.detail === 2) {
+                      onRowDoubleClick?.(row);
                       return;
                     }
                     onClick?.(row);

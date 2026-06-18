@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
 import { formatPrice } from '~/src/domains/home/lib/home-utils';
 import { StoreRatingStars } from '~/src/domains/store/components/store-rating-start';
+import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
 import type { DtoProductWithLike } from '~/src/services/-products-get.schemas';
 
 export const productColumns: ColumnDef<DtoProductWithLike>[] = [
@@ -127,27 +128,13 @@ export const productColumns: ColumnDef<DtoProductWithLike>[] = [
       </div>
     )
   },
-  // Status with color dot
-  {
-    accessorKey: 'status',
-    id: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.original.status || 'draft';
-      const config: Record<string, { color: string; label: string }> = {
-        active: { color: 'bg-emerald-500', label: 'Active' },
-        draft: { color: 'bg-slate-400', label: 'Draft' },
-        archived: { color: 'bg-destructive', label: 'Archived' }
-      };
-      const { color, label } = config[status] ?? { color: 'bg-muted', label: status };
-      return (
-        <div className='flex items-center gap-2'>
-          <div className={cn('h-2 w-2 rounded-full', color)} />
-          <span className='text-xs font-medium uppercase'>{label}</span>
-        </div>
-      );
-    }
-  },
+  // Workflow state (from product workflow engine)
+  createWorkflowStateColumn<DtoProductWithLike>({
+    workflowKey: 'product',
+    getEntityId: (row) => row.id,
+    getState: (row) => row.workflow_state,
+    header: 'Workflow'
+  }),
   // Created date
   {
     accessorKey: 'created_at',
