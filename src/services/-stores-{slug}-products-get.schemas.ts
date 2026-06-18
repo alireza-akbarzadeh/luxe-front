@@ -17,6 +17,17 @@ export interface DtoProductAttributeResponse {
   values?: string[];
 }
 
+export interface DtoStateView {
+  code?: string;
+  color?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+}
+
 export interface DtoBrandResponse {
   created_at?: string;
   description?: string;
@@ -26,6 +37,7 @@ export interface DtoBrandResponse {
   slug?: string;
   status?: string;
   updated_at?: string;
+  workflow_state?: DtoStateView;
 }
 
 export interface DtoCategoryResponse {
@@ -93,6 +105,7 @@ export interface DtoProductResponse {
   visibility?: string;
   warehouse_location?: string;
   weight?: number;
+  workflow_state?: DtoStateView;
 }
 
 export type GetStoresSlugProductsParams = {

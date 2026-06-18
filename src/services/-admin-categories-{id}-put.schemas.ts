@@ -38,6 +38,21 @@ export interface ModelsProductAttribute {
   values: string[];
 }
 
+export interface ModelsWorkflowState {
+  code?: string;
+  color?: string;
+  created_at?: string;
+  description?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+  updated_at?: string;
+  workflow_id?: number;
+}
+
 export interface ModelsBrand {
   created_at?: string;
   description?: string;
@@ -47,6 +62,8 @@ export interface ModelsBrand {
   slug?: string;
   status?: string;
   updated_at?: string;
+  workflow_state?: ModelsWorkflowState;
+  workflow_state_id?: number;
 }
 
 export interface ModelsUser {
@@ -167,6 +184,7 @@ export interface ModelsProduct {
   visibility?: string;
   warehouse_location?: string;
   weight?: number;
+  workflow_state?: ModelsWorkflowState;
   workflow_state_id?: number;
 }
 
@@ -190,6 +208,8 @@ export interface ModelsCategory {
   products?: ModelsProduct[];
   slug: string;
   updated_at?: string;
+  workflow_state?: ModelsWorkflowState;
+  workflow_state_id?: number;
 }
 
 export interface DtoCategoryData {

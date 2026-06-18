@@ -2392,6 +2392,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -2560,6 +2566,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -2633,6 +2642,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -3242,6 +3298,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -3410,6 +3472,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -3483,6 +3548,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -4069,6 +4181,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -4237,6 +4355,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -4310,6 +4431,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -4767,6 +4935,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -4935,6 +5109,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -5008,6 +5185,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -6130,6 +6354,1333 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory": {
+            "get": {
+              "description": "Paginated product inventory rows with stock status, waitlist counts, and 30-day velocity",
+              "parameters": [
+                {
+                  "description": "Page number",
+                  "in": "query",
+                  "name": "page",
+                  "schema": {
+                    "default": 1,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Page size",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 20,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search by name or SKU",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter",
+                  "in": "query",
+                  "name": "stock_status",
+                  "schema": {
+                    "enum": [
+                      "all",
+                      "low",
+                      "out",
+                      "healthy",
+                      "not_tracked"
+                    ],
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Sort",
+                  "in": "query",
+                  "name": "sort",
+                  "schema": {
+                    "enum": [
+                      "stock_asc",
+                      "stock_desc",
+                      "name_asc",
+                      "waitlist_desc",
+                      "velocity_desc"
+                    ],
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.InventoryListData"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List inventory items",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryListData": {
+              "properties": {
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.InventoryItemResponse"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryItemResponse": {
+              "properties": {
+                "allow_backorder": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "low_stock_threshold": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "stock_status": {
+                  "type": "string"
+                },
+                "track_inventory": {
+                  "type": "boolean"
+                },
+                "units_sold_30d": {
+                  "type": "integer"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "waitlist_count": {
+                  "type": "integer"
+                },
+                "warehouse_location": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-adjust-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory/adjust": {
+            "post": {
+              "description": "Apply a signed stock delta with reason (receive, correction, damage, etc.)",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.AdjustInventoryRequest"
+                    }
+                  }
+                },
+                "description": "Adjustment payload",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.InventoryItemResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Adjust product stock",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.AdjustInventoryRequest": {
+              "properties": {
+                "delta": {
+                  "type": "integer"
+                },
+                "note": {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "reason": {
+                  "enum": [
+                    "receive",
+                    "correction",
+                    "damage",
+                    "shrinkage",
+                    "cycle_count",
+                    "other"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "delta",
+                "product_id",
+                "reason"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryItemResponse": {
+              "properties": {
+                "allow_backorder": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "low_stock_threshold": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "stock_status": {
+                  "type": "string"
+                },
+                "track_inventory": {
+                  "type": "boolean"
+                },
+                "units_sold_30d": {
+                  "type": "integer"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "waitlist_count": {
+                  "type": "integer"
+                },
+                "warehouse_location": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-adjustments-recent-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory/adjustments/recent": {
+            "get": {
+              "description": "Latest stock movements across all products",
+              "parameters": [
+                {
+                  "description": "Max rows",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 10,
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/dto.InventoryAdjustmentResponse"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Recent inventory adjustments",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryAdjustmentResponse": {
+              "properties": {
+                "actor_name": {
+                  "type": "string"
+                },
+                "adjustment_type": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "product_name": {
+                  "type": "string"
+                },
+                "product_sku": {
+                  "type": "string"
+                },
+                "quantity_after": {
+                  "type": "integer"
+                },
+                "quantity_before": {
+                  "type": "integer"
+                },
+                "quantity_delta": {
+                  "type": "integer"
+                },
+                "reference_id": {
+                  "type": "integer"
+                },
+                "reference_type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-bulk-adjust-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory/bulk-adjust": {
+            "post": {
+              "description": "Apply signed stock deltas for multiple SKUs in one request (receive shipments, corrections, etc.)",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.BulkAdjustInventoryRequest"
+                    }
+                  }
+                },
+                "description": "Bulk adjustment payload",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.BulkAdjustInventoryResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Bulk adjust stock by SKU",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.BulkAdjustInventoryRequest": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "receive",
+                    "correction",
+                    "damage",
+                    "shrinkage",
+                    "cycle_count",
+                    "other"
+                  ],
+                  "type": "string"
+                },
+                "rows": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.BulkInventoryAdjustRow"
+                  },
+                  "maxItems": 500,
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "reason",
+                "rows"
+              ],
+              "type": "object"
+            },
+            "dto.BulkInventoryAdjustRow": {
+              "properties": {
+                "delta": {
+                  "type": "integer"
+                },
+                "note": {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                "sku": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "delta",
+                "sku"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.BulkAdjustInventoryResponse": {
+              "properties": {
+                "applied": {
+                  "type": "integer"
+                },
+                "failed": {
+                  "type": "integer"
+                },
+                "rows": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.BulkInventoryAdjustRowResult"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "dto.BulkInventoryAdjustRowResult": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-overview-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory/overview": {
+            "get": {
+              "description": "Returns low-stock, out-of-stock, and waitlist totals for the admin inventory dashboard",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.InventoryOverviewResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Inventory overview KPIs",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryOverviewResponse": {
+              "properties": {
+                "low_stock_count": {
+                  "type": "integer"
+                },
+                "not_tracked_count": {
+                  "type": "integer"
+                },
+                "out_of_stock_count": {
+                  "type": "integer"
+                },
+                "total_units_on_hand": {
+                  "type": "integer"
+                },
+                "tracked_sku_count": {
+                  "type": "integer"
+                },
+                "waitlist_total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-products-{id}-history-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/inventory/products/{id}/history": {
+            "get": {
+              "description": "Paginated adjustment ledger for a single product",
+              "parameters": [
+                {
+                  "description": "Product ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Page number",
+                  "in": "query",
+                  "name": "page",
+                  "schema": {
+                    "default": 1,
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Page size",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "default": 20,
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.InventoryHistoryData"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Product inventory history",
+              "tags": [
+                "inventory"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryHistoryData": {
+              "properties": {
+                "adjustments": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.InventoryAdjustmentResponse"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.InventoryAdjustmentResponse": {
+              "properties": {
+                "actor_name": {
+                  "type": "string"
+                },
+                "adjustment_type": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "integer"
+                },
+                "product_name": {
+                  "type": "string"
+                },
+                "product_sku": {
+                  "type": "string"
+                },
+                "quantity_after": {
+                  "type": "integer"
+                },
+                "quantity_before": {
+                  "type": "integer"
+                },
+                "quantity_delta": {
+                  "type": "integer"
+                },
+                "reference_id": {
+                  "type": "integer"
+                },
+                "reference_type": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -14160,6 +15711,38 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -14356,6 +15939,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -14646,6 +16261,38 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -14842,6 +16489,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -15885,6 +17564,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -16053,6 +17738,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -16126,6 +17814,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -16524,6 +18259,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -16692,6 +18433,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -16765,6 +18509,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -17463,6 +19254,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -17536,6 +19330,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -17596,6 +19437,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -17933,6 +19780,1088 @@ module.exports = [
                   "type": "number"
                 },
                 "updated_at": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/collections": {
+            "get": {
+              "description": "Returns a paginated list of collections with optional search and status filtering.",
+              "parameters": [
+                {
+                  "description": "Page number",
+                  "in": "query",
+                  "name": "page",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Search by title, slug, or eyebrow",
+                  "in": "query",
+                  "name": "search",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by status",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/dto.CollectionListResponse"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "summary": "List collections",
+              "tags": [
+                "collections"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CollectionListResponse": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/dto.CollectionListData"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CollectionListData": {
+              "properties": {
+                "collections": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CollectionResponse"
+                  },
+                  "type": "array"
+                },
+                "limit": {
+                  "type": "integer"
+                },
+                "page": {
+                  "type": "integer"
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CollectionResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "cta_label": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/collections": {
+            "post": {
+              "description": "Creates a curated collection for the storefront collections page.",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateCollectionRequest"
+                    }
+                  }
+                },
+                "description": "Collection payload",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.CollectionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "summary": "Create a new collection",
+              "tags": [
+                "collections"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateCollectionRequest": {
+              "properties": {
+                "cta_label": {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "description": {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "href": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "image_url": {
+                  "maxLength": 2048,
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "slug": {
+                  "maxLength": 128,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "enum": [
+                    "draft",
+                    "active",
+                    "inactive",
+                    "archived"
+                  ],
+                  "type": "string"
+                },
+                "title": {
+                  "maxLength": 255,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "slug",
+                "title"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CollectionResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "cta_label": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/collections/{id}": {
+            "delete": {
+              "parameters": [
+                {
+                  "description": "Collection ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "Delete a collection",
+              "tags": [
+                "collections"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/collections/{id}": {
+            "get": {
+              "parameters": [
+                {
+                  "description": "Collection ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.CollectionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "Get a collection by ID",
+              "tags": [
+                "collections"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CollectionResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "cta_label": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/collections/{id}": {
+            "put": {
+              "parameters": [
+                {
+                  "description": "Collection ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateCollectionRequest"
+                    }
+                  }
+                },
+                "description": "Update payload",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.CollectionResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "summary": "Update a collection",
+              "tags": [
+                "collections"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateCollectionRequest": {
+              "properties": {
+                "cta_label": {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "description": {
+                  "maxLength": 2000,
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                "href": {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                "image_url": {
+                  "maxLength": 2048,
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "slug": {
+                  "maxLength": 128,
+                  "minLength": 2,
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "enum": [
+                    "draft",
+                    "active",
+                    "inactive",
+                    "archived"
+                  ],
+                  "type": "string"
+                },
+                "title": {
+                  "maxLength": 255,
+                  "minLength": 2,
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CollectionResponse": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "cta_label": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "eyebrow": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "preview_category_id": {
+                  "type": "integer"
+                },
+                "preview_is_new": {
+                  "type": "boolean"
+                },
+                "preview_sort": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -18367,6 +21296,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -18409,6 +21341,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -22365,6 +25329,9 @@ module.exports = [
                 "weight": {
                   "type": "number"
                 },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
                 "workflow_state_id": {
                   "type": "integer"
                 }
@@ -22438,6 +25405,53 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "models.WorkflowState": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "workflow_id": {
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -22498,6 +25512,12 @@ module.exports = [
                 },
                 "updated_at": {
                   "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/models.WorkflowState"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
                 }
               },
               "required": [
@@ -24306,6 +27326,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -24348,6 +27371,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -24855,6 +27910,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -24897,6 +27955,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -25555,6 +28645,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -25597,6 +28690,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -25958,6 +29083,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -26000,6 +29128,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -26492,6 +29652,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -26534,6 +29697,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -27057,6 +30252,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -27099,6 +30297,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -27450,6 +30680,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -27492,6 +30725,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -29081,6 +32346,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -29123,6 +32391,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -29864,6 +33164,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -29906,6 +33209,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -29994,35 +33329,6 @@ module.exports = [
                 },
                 "to_state": {
                   "$ref": "#/components/schemas/dto.StateView"
-                }
-              },
-              "type": "object"
-            },
-            "dto.StateView": {
-              "properties": {
-                "code": {
-                  "type": "string"
-                },
-                "color": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_final": {
-                  "type": "boolean"
-                },
-                "is_initial": {
-                  "type": "boolean"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "sort_order": {
-                  "type": "integer"
-                },
-                "text_color": {
-                  "type": "string"
                 }
               },
               "type": "object"
@@ -31973,6 +35279,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -32015,6 +35324,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
@@ -36462,6 +39803,9 @@ module.exports = [
                 },
                 "weight": {
                   "type": "number"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
                 }
               },
               "type": "object"
@@ -36504,6 +39848,38 @@ module.exports = [
                   "type": "string"
                 },
                 "updated_at": {
+                  "type": "string"
+                },
+                "workflow_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
                   "type": "string"
                 }
               },
