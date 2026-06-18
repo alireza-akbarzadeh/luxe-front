@@ -1,12 +1,12 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { Badge } from '@/components/ui/badge';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 import type { DtoAdminUserResponse } from '@/services/-admin-users-get.schemas';
 import { createSelectColumn } from '~/src/components/table/data-table';
 
 import { UserActions } from './user-actions';
+import { UserRoleBadge } from './user-role-badge';
 
 export const userColumns: ColumnDef<DtoAdminUserResponse>[] = [
   createSelectColumn<DtoAdminUserResponse>(),
@@ -27,12 +27,7 @@ export const userColumns: ColumnDef<DtoAdminUserResponse>[] = [
     accessorKey: 'role',
     header: 'Role',
     filterFn: 'multiSelect',
-    cell: ({ row }) => {
-      const role = row.original.role || 'user';
-      return (
-        <Badge variant={role === 'admin' ? 'destructive' : 'secondary'}>{role}</Badge>
-      );
-    }
+    cell: ({ row }) => <UserRoleBadge slug={row.original.role} />
   },
   {
     id: 'status',

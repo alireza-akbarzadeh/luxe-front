@@ -13,7 +13,7 @@ export default async function DashboardLayout({ children }: TRootLayout) {
     redirect('/login');
   }
 
-  if (user?.role !== 'admin' && user?.role !== 'moderator') {
+  if (user?.role === 'user') {
     return forbidden();
   }
   return <AppSidebarLayout>{children}</AppSidebarLayout>;

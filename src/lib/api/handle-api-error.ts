@@ -42,7 +42,7 @@ export const handleApiError = (
       break;
 
     case HttpStatusCode.Forbidden:
-      toast.error('You dont have permission to perform this action.');
+      toast.error(message || 'You do not have permission to perform this action.');
       break;
 
     case HttpStatusCode.NotFound:

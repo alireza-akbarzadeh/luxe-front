@@ -1,11 +1,12 @@
+import type { FormValidateFn } from '@tanstack/react-form';
 import { z } from 'zod';
 
 /**
  * TanStack Form adapter for Zod schemas.
- * Must return `string | undefined` — returning a ZodError leaves canSubmit stuck false.
+ * Validators receive `{ value, formApi }` — not the raw form value.
  */
-export function zodFormValidator<T>(schema: z.ZodType<T>) {
-  return (value: unknown) => {
+export function zodFormValidator<T>(schema: z.ZodType<T>): FormValidateFn<T> {
+  return ({ value }) => {
     const result = schema.safeParse(value);
     if (!result.success) {
       const first = result.error.issues[0];
@@ -15,12 +16,12 @@ export function zodFormValidator<T>(schema: z.ZodType<T>) {
   };
 }
 
-/** Standard validators object for dialog forms (mount + change + submit). */
+/** Standard validators for dialog forms (change + blur + submit). */
 export function zodFormValidators<T>(schema: z.ZodType<T>) {
   const validate = zodFormValidator(schema);
   return {
-    onMount: validate,
     onChange: validate,
+    onBlur: validate,
     onSubmit: validate
   };
 }

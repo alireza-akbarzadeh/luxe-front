@@ -67,7 +67,8 @@ export function UsersDomain() {
           <div className='mb-4'>
             <h2 className='text-base font-black tracking-tight'>All Users</h2>
             <p className='text-muted-foreground mt-0.5 text-[11px]'>
-              Double-click a row to view account details. Use row actions to change role or status.
+              Double-click a row for details. Use row actions → Change role to assign any role from
+              Roles & Permissions.
             </p>
           </div>
           <div className='border-border/40 bg-card/30 rounded-[2.5rem] border shadow-2xl shadow-black/5 backdrop-blur-xl'>

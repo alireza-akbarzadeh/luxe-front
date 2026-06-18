@@ -5,16 +5,9 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export type DtoUpdateUserRoleRequestRole = typeof DtoUpdateUserRoleRequestRole[keyof typeof DtoUpdateUserRoleRequestRole];
-
-
-export const DtoUpdateUserRoleRequestRole = {
-  admin: 'admin',
-  user: 'user',
-} as const;
-
 export interface DtoUpdateUserRoleRequest {
-  role: DtoUpdateUserRoleRequestRole;
+  /** Role slug — must exist in the roles table (e.g. admin, user, content-manager). */
+  role: string;
 }
 
 export interface UtilsResponse {

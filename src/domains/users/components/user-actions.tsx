@@ -3,7 +3,6 @@
 import {
   IconDotsVertical,
   IconShield,
-  IconShieldOff,
   IconUserCheck,
   IconUserMinus
 } from '@tabler/icons-react';
@@ -29,10 +28,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { UserRoleDialog } from '@/domains/users/components/user-role-dialog';
 import { getGetAdminStatsQueryKey } from '@/services/-admin-stats-get';
 import { usePatchAdminUsersIdActive } from '@/services/-admin-users-{id}-active-patch';
-import { usePatchAdminUsersIdRole } from '@/services/-admin-users-{id}-role-patch';
-import { DtoUpdateUserRoleRequestRole } from '@/services/-admin-users-{id}-role-patch.schemas';
 import { getGetAdminUsersQueryKey } from '@/services/-admin-users-get';
 import type { DtoAdminUserResponse } from '@/services/-admin-users-get.schemas';
 
@@ -40,33 +38,19 @@ interface UserActionsProps {
   user: DtoAdminUserResponse;
 }
 
-type PendingAction = 'promote' | 'demote' | 'activate' | 'deactivate' | null;
+type PendingAction = 'activate' | 'deactivate' | null;
 
 export function UserActions({ user }: UserActionsProps) {
   const queryClient = useQueryClient();
   const [pendingAction, setPendingAction] = useState<PendingAction>(null);
+  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const userId = user.id;
-  const isAdmin = user.role === 'admin';
   const isActive = user.is_active ?? false;
 
   const invalidateUsers = () => {
     void queryClient.invalidateQueries({ queryKey: getGetAdminUsersQueryKey() });
     void queryClient.invalidateQueries({ queryKey: getGetAdminStatsQueryKey() });
   };
-
-  const roleMutation = usePatchAdminUsersIdRole({
-    mutation: {
-      onSuccess: () => {
-        invalidateUsers();
-        toast.success('User role updated');
-        setPendingAction(null);
-      },
-      onError: () => {
-        toast.error('Failed to update user role');
-        setPendingAction(null);
-      }
-    }
-  });
 
   const activeMutation = usePatchAdminUsersIdActive({
     mutation: {
@@ -82,24 +66,12 @@ export function UserActions({ user }: UserActionsProps) {
     }
   });
 
-  const isPending = roleMutation.isPending || activeMutation.isPending;
+  const isPending = activeMutation.isPending;
 
   const handleConfirm = () => {
     if (!userId || !pendingAction) return;
 
     switch (pendingAction) {
-      case 'promote':
-        roleMutation.mutate({
-          id: userId,
-          data: { role: DtoUpdateUserRoleRequestRole.admin }
-        });
-        break;
-      case 'demote':
-        roleMutation.mutate({
-          id: userId,
-          data: { role: DtoUpdateUserRoleRequestRole.user }
-        });
-        break;
       case 'activate':
         activeMutation.mutate({ id: userId, data: { is_active: true } });
         break;
@@ -110,14 +82,6 @@ export function UserActions({ user }: UserActionsProps) {
   };
 
   const dialogCopy = {
-    promote: {
-      title: 'Grant admin access?',
-      description: `${user.email ?? 'This user'} will be able to access all admin dashboard features.`
-    },
-    demote: {
-      title: 'Remove admin access?',
-      description: `${user.email ?? 'This user'} will lose admin dashboard access and revert to a standard user.`
-    },
     activate: {
       title: 'Activate this account?',
       description: `${user.email ?? 'This user'} will be able to sign in again.`
@@ -154,23 +118,13 @@ export function UserActions({ user }: UserActionsProps) {
             </span>
           </div>
           <DropdownMenuSeparator className='my-2' />
-          {isAdmin ? (
-            <DropdownMenuItem
-              className='gap-2 rounded-xl py-2 text-xs font-medium'
-              onClick={() => setPendingAction('demote')}
-            >
-              <IconShieldOff className='h-4 w-4' />
-              Remove admin role
-            </DropdownMenuItem>
-          ) : (
-            <DropdownMenuItem
-              className='gap-2 rounded-xl py-2 text-xs font-medium'
-              onClick={() => setPendingAction('promote')}
-            >
-              <IconShield className='h-4 w-4' />
-              Make administrator
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem
+            className='gap-2 rounded-xl py-2 text-xs font-medium'
+            onClick={() => setRoleDialogOpen(true)}
+          >
+            <IconShield className='h-4 w-4' />
+            Change role
+          </DropdownMenuItem>
           {isActive ? (
             <DropdownMenuItem
               className='text-destructive focus:text-destructive gap-2 rounded-xl py-2 text-xs font-medium'
@@ -190,6 +144,13 @@ export function UserActions({ user }: UserActionsProps) {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <UserRoleDialog
+        user={user}
+        open={roleDialogOpen}
+        onOpenChange={setRoleDialogOpen}
+        onSuccess={invalidateUsers}
+      />
 
       <AlertDialog open={pendingAction !== null} onOpenChange={(open) => !open && setPendingAction(null)}>
         <AlertDialogContent>

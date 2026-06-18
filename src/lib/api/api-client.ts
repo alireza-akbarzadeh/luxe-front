@@ -91,29 +91,8 @@ AXIOS_INSTANCE.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Handle non-401 errors
+    // Handle non-401 errors — toasts are shown by customInstance/handleApiError (no redirect).
     if (error.response?.status !== HttpStatusCode.Unauthorized) {
-      const showErrorToast = () => {
-        let errorMessage = 'An unexpected error occurred';
-        if (error.response?.data) {
-          const data = error.response.data as any;
-          errorMessage = data.message || data.error || JSON.stringify(data);
-        } else if (error.request) {
-          errorMessage = 'No response from server. Please check your network.';
-        }
-        toast.error(errorMessage);
-      };
-
-      if (error.response?.status === HttpStatusCode.Forbidden) {
-        toast.error('You do not have permission to perform this action.');
-      } else if (error.response?.status === HttpStatusCode.BadRequest) {
-        showErrorToast();
-      } else if (Number(error?.response?.status) >= HttpStatusCode.InternalServerError) {
-        toast.error('Server error. Please try again later.');
-      } else {
-        showErrorToast();
-      }
-
       return Promise.reject(error);
     }
 

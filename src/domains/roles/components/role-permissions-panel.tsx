@@ -102,6 +102,16 @@ export function RolePermissionsPanel() {
       </div>
 
       <ScrollArea className='flex-1 p-4'>
+        {permissions.length === 0 ? (
+          <div className='border-border/60 flex min-h-48 flex-col items-center justify-center rounded-2xl border border-dashed p-8 text-center'>
+            <p className='text-sm font-semibold'>No permissions defined yet</p>
+            <p className='text-muted-foreground mt-2 max-w-md text-xs leading-relaxed'>
+              Permissions are seeded in the database (e.g. <code className='text-xs'>users.read</code>,{' '}
+              <code className='text-xs'>products.write</code>). Run{' '}
+              <code className='text-xs'>make seed-dev</code> in the backend, then click Refresh.
+            </p>
+          </div>
+        ) : (
         <div className='space-y-5'>
           {grouped.map(([module, modulePermissions]) => {
             const moduleIds = modulePermissions.map((item) => item.id);
@@ -158,6 +168,7 @@ export function RolePermissionsPanel() {
             );
           })}
         </div>
+        )}
       </ScrollArea>
     </div>
   );
