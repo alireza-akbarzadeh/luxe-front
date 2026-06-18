@@ -1,30 +1,40 @@
 'use client';
 
-import { IconAdjustments, IconHistory, IconPencil } from '@tabler/icons-react';
+import { IconAdjustments, IconHistory, IconPackageImport, IconPencil } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
+import { Button } from '@/components/ui/button';
 import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Flex } from '@/components/ui/flex';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { InventorySort } from '@/domains/inventory-admin/hooks/use-inventory-query';
 import { useInventoryQueryState } from '@/domains/inventory-admin/hooks/use-inventory-query';
-import { INVENTORY_STOCK_TABS } from '@/domains/inventory-admin/inventory.schema';
+import {
+  INVENTORY_SORT_OPTIONS,
+  INVENTORY_STOCK_TABS
+} from '@/domains/inventory-admin/inventory.schema';
 import {
   getInventoryItemsFromListResponse,
   getInventoryTotalFromListResponse
 } from '@/domains/inventory-admin/lib/inventory-list';
 import { InventoryActivityFeed } from '@/domains/inventory-admin/sections/inventory-activity-feed';
 import { InventoryAdjustDialog } from '@/domains/inventory-admin/sections/inventory-adjust-dialog';
+import { InventoryBulkReceiveDialog } from '@/domains/inventory-admin/sections/inventory-bulk-receive-dialog';
 import { inventoryColumns } from '@/domains/inventory-admin/sections/inventory-columns';
 import { InventoryHistorySheet } from '@/domains/inventory-admin/sections/inventory-history-sheet';
 import { InventoryOverview } from '@/domains/inventory-admin/sections/inventory-overview';
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
-import {
-  useGetAdminInventory,
-  useGetAdminInventoryOverview
-} from '@/services/-admin-inventory';
+import { useGetAdminInventory, useGetAdminInventoryOverview } from '@/services/-admin-inventory';
 import type { InventoryStockStatus } from '@/services/-admin-inventory.schemas';
 import type {
   DtoInventoryItemResponse,
@@ -33,9 +43,10 @@ import type {
 
 export function InventoryAdminDomain() {
   const { push } = useRouter();
-  const { stockStatus, setStockStatus, sort } = useInventoryQueryState();
+  const { stockStatus, setStockStatus, sort, setSort } = useInventoryQueryState();
   const openAdjust = useInventoryStore((state) => state.openAdjust);
   const openHistory = useInventoryStore((state) => state.openHistory);
+  const openBulkReceive = useInventoryStore((state) => state.openBulkReceive);
 
   const { data: overviewData, isLoading: isOverviewLoading } = useGetAdminInventoryOverview();
   const overview = overviewData?.data;
@@ -71,7 +82,7 @@ export function InventoryAdminDomain() {
   });
 
   return (
-    <Flex direction='column' spacing={6}>
+    <Flex direction='column' className='flex-wrap gap-6'>
       <div>
         <h1 className='text-2xl font-semibold tracking-tight'>Inventory</h1>
         <p className='text-muted-foreground mt-1 text-sm'>
@@ -86,7 +97,7 @@ export function InventoryAdminDomain() {
         onStatusSelect={(status) => void setStockStatus(status as InventoryStockStatus)}
       />
 
-      <div className='grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]'>
+      <div className='flex flex-col gap-4'>
         <Table.Root {...serverTable.rootProps}>
           <Tabs
             value={stockStatus}
@@ -109,14 +120,30 @@ export function InventoryAdminDomain() {
             isLoading={serverTable.isFetching}
             showClear
             showColumnVisibility
-          />
+            showSorting={false}
+          >
+            <Select value={sort} onValueChange={(value) => void setSort(value as InventorySort)}>
+              <SelectTrigger className='h-8 w-44 text-xs'>
+                <SelectValue placeholder='Sort by' />
+              </SelectTrigger>
+              <SelectContent>
+                {INVENTORY_SORT_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value} className='text-xs'>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button type='button' variant='outline' size='sm' onClick={openBulkReceive}>
+              <IconPackageImport className='size-4' />
+              Bulk receive
+            </Button>
+          </Table.Toolbar>
 
           <Table.Grid<DtoInventoryItemResponse>
             isLoading={serverTable.isLoading && serverTable.rows.length === 0}
-            onRowDoubleClick={(row) => {
-              const id = row.original.id;
-              if (id) push(`/dashboard/products/edit/${id}`);
-            }}
+            onRowDoubleClick={(row) => openAdjust(row.original)}
             extendMenuActions={(row) => (
               <>
                 <DropdownMenuItem
@@ -136,7 +163,9 @@ export function InventoryAdminDomain() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className='gap-2 text-[11px] font-semibold'
-                  onClick={() => row.original.id && push(`/dashboard/products/edit/${row.original.id}`)}
+                  onClick={() =>
+                    row.original.id && push(`/dashboard/products/edit/${row.original.id}`)
+                  }
                 >
                   <IconPencil className='size-3.5' />
                   Edit product
@@ -157,6 +186,7 @@ export function InventoryAdminDomain() {
       </div>
 
       <InventoryAdjustDialog />
+      <InventoryBulkReceiveDialog />
       <InventoryHistorySheet />
     </Flex>
   );

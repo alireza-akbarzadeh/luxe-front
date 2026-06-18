@@ -53,17 +53,6 @@ export interface DtoProductStoreSummary {
   slug?: string;
 }
 
-export interface DtoStateView {
-  code?: string;
-  color?: string;
-  id?: number;
-  is_final?: boolean;
-  is_initial?: boolean;
-  name?: string;
-  sort_order?: number;
-  text_color?: string;
-}
-
 export interface DtoProductWithLike {
   allow_backorder?: boolean;
   attributes?: DtoProductAttributeResponse[];
@@ -105,7 +94,6 @@ export interface DtoProductWithLike {
   visibility?: string;
   warehouse_location?: string;
   weight?: number;
-  workflow_state?: DtoStateView;
 }
 
 export type GetProductsParams = {
