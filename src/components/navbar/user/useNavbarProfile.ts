@@ -1,4 +1,3 @@
-import { useTheme } from 'next-themes';
 import { useState } from 'react';
 
 import { logoutAction } from '@/actions/auth.actions';
@@ -10,7 +9,6 @@ export function useNavbarProfile() {
   const { user, isAuthenticated } = useUser();
   const { clearSession } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
-  const { theme, setTheme } = useTheme();
 
   const isLoggedIn = isAuthenticated && !!user;
 
@@ -28,10 +26,8 @@ export function useNavbarProfile() {
   };
 
   return {
-    theme,
     openMenu,
     setOpenMenu,
-    setTheme,
     isLoggedIn,
     userName,
     userEmail,

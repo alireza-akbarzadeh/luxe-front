@@ -1,0 +1,34 @@
+import { z } from 'zod';
+
+export const menuGroupSchema = z.object({
+  name: z.string().min(1, 'Group name is required').max(80),
+  display_order: z.coerce.number().int().min(0).default(0)
+});
+
+export const menuItemSchema = z.object({
+  group_id: z.coerce.number().int().positive(),
+  parent_id: z.string().optional(),
+  label: z.string().min(1, 'Label is required').max(120),
+  href: z.string().max(500).optional(),
+  icon: z.string().min(1, 'Icon is required'),
+  permission: z.string().max(120).optional(),
+  display_order: z.coerce.number().int().min(0).default(0)
+});
+
+export type MenuGroupFormValues = z.infer<typeof menuGroupSchema>;
+export type MenuItemFormValues = z.infer<typeof menuItemSchema>;
+
+export const menuGroupDefaults: MenuGroupFormValues = {
+  name: '',
+  display_order: 0
+};
+
+export const menuItemDefaults: MenuItemFormValues = {
+  group_id: 0,
+  parent_id: '',
+  label: '',
+  href: '',
+  icon: 'LayoutDashboard',
+  permission: '',
+  display_order: 0
+};

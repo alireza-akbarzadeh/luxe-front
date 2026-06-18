@@ -1,12 +1,13 @@
 'use client';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
+
+import { useTheme } from '@/components/providers/client/theme';
 
 export function ThemeMenuItem() {
-  const { setTheme, theme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
-  const nextTheme = theme === 'light' ? 'dark' : 'light';
+  const nextTheme = resolvedTheme === 'light' ? 'dark' : 'light';
 
   return (
     <button
@@ -16,13 +17,13 @@ export function ThemeMenuItem() {
       <div className='bg-muted group-hover:bg-primary/10 flex h-9 w-9 items-center justify-center rounded-xl transition-colors'>
         <AnimatePresence mode='wait'>
           <motion.div
-            key={theme}
+            key={resolvedTheme}
             initial={{ opacity: 0, rotate: -90, scale: 0.7 }}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
             exit={{ opacity: 0, rotate: 90, scale: 0.7 }}
             transition={{ duration: 0.2 }}
           >
-            {theme === 'dark' ? (
+            {resolvedTheme === 'dark' ? (
               <IconSun size={16} className='text-foreground' />
             ) : (
               <IconMoon size={16} className='text-foreground' />

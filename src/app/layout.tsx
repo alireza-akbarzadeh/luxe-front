@@ -7,6 +7,7 @@ import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
+import { themeInitScript } from '@/lib/theme';
 
 const nunitoSans = Nunito_Sans({ variable: '--font-sans' });
 
@@ -59,6 +60,9 @@ export default function RootLayout({ children }: TRootLayout) {
       suppressHydrationWarning
       data-scroll-behavior='smooth'
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning

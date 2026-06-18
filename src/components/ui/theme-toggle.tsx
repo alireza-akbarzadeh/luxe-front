@@ -1,8 +1,8 @@
 'use client';
 
 import { IconDeviceLaptop, IconMoonStars, IconSun } from '@tabler/icons-react';
-import { useTheme } from 'next-themes';
 
+import { useTheme } from '@/components/providers/client/theme';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

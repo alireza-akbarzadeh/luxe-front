@@ -6,16 +6,16 @@ import {
   IconLoader2,
   IconTriangleSquareCircle
 } from '@tabler/icons-react';
-import { useTheme } from 'next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
+import { useTheme } from '@/components/providers/client/theme';
+
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme } = useTheme();
-  const themeValue = theme === 'dark' || theme === 'light' || theme === 'system' ? theme : 'dark';
+  const { resolvedTheme } = useTheme();
 
   return (
     <Sonner
-      theme={themeValue}
+      theme={resolvedTheme}
       className='toaster group'
       icons={{
         success: <IconCheckbox className='size-4' />,

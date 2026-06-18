@@ -10,7 +10,7 @@ import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.s
 import { useDashboardStore } from '../admin.store';
 import { SidebarNavItem } from './sidebar-nav-item';
 import { UserProfile } from './user-profile';
-import { WorkspaceSwitcher } from './worksapce-switcher';
+import { WorkspaceSwitcher } from './workspace-switcher';
 
 interface AdminSidebarProps {
   groups: DtoMenuGroupResponse[];

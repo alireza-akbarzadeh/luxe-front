@@ -13,7 +13,7 @@ type TRootProvider = Readonly<PropsWithChildren>;
 
 export default function RootProvider({ children }: TRootProvider) {
   return (
-    <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+    <ThemeProvider defaultTheme='system'>
       <DirectionProvider dir='ltr'>
         <NuqsAdapter>
           <Toaster />
