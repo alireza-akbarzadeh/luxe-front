@@ -1,7 +1,7 @@
 import type { CategoryFormValues } from '@/domains/categories/category.schema';
 import type { ModelsCategory } from '@/services/-admin-categories-{id}-get.schemas';
 import type { DtoUpdateCategoryRequest } from '@/services/-admin-categories-{id}-put.schemas';
-import type { DtoCreateCategoryRequest } from '@/services/-categories-post.schemas';
+import type { DtoCreateCategoryRequest } from '@/services/-admin-categories-post.schemas';
 
 function parseParentId(value: string | null | undefined): number | undefined {
   if (!value?.trim()) return undefined;
@@ -10,7 +10,9 @@ function parseParentId(value: string | null | undefined): number | undefined {
 }
 
 /** Maps admin form values to the JSON create payload expected by the API. */
-export function mapFormToCreateCategoryRequest(values: CategoryFormValues): DtoCreateCategoryRequest {
+export function mapFormToCreateCategoryRequest(
+  values: CategoryFormValues
+): DtoCreateCategoryRequest {
   return {
     name: values.name.trim(),
     slug: values.slug.trim() || undefined,
@@ -21,7 +23,9 @@ export function mapFormToCreateCategoryRequest(values: CategoryFormValues): DtoC
 }
 
 /** Maps admin form values to the JSON update payload expected by the API. */
-export function mapFormToUpdateCategoryRequest(values: CategoryFormValues): DtoUpdateCategoryRequest {
+export function mapFormToUpdateCategoryRequest(
+  values: CategoryFormValues
+): DtoUpdateCategoryRequest {
   return {
     name: values.name.trim(),
     slug: values.slug.trim() || undefined,

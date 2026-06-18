@@ -1,1 +1,5 @@
-export type { DtoCollectionResponse, GetCollectionsId200 } from './-collections-get.schemas';
+export type {
+  DtoCollectionResponse,
+  GetCollectionsId200,
+  UtilsResponse
+} from './-collections-get.schemas';

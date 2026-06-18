@@ -4,7 +4,6 @@ import { IconCopy } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 import { toast } from 'sonner';
 
-import { AuditActionBadge } from '@/domains/audit/components/audit-action-badge';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -13,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
+import { AuditActionBadge } from '@/domains/audit/components/audit-action-badge';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import type { DtoAuditLogResponse } from '@/services/-admin-audit-logs-get.schemas';
 
@@ -46,7 +46,13 @@ function CopyableValue({ value }: { value: string }) {
   return (
     <span className='inline-flex items-center justify-end gap-2'>
       <span className='font-mono text-xs'>{value}</span>
-      <Button type='button' variant='ghost' size='icon' className='h-7 w-7' onClick={() => void copy()}>
+      <Button
+        type='button'
+        variant='ghost'
+        size='icon'
+        className='h-7 w-7'
+        onClick={() => void copy()}
+      >
         <IconCopy className='h-3.5 w-3.5' />
       </Button>
     </span>
@@ -91,9 +97,7 @@ export function AuditDetailSheet({ log, open, onOpenChange }: AuditDetailSheetPr
             />
             <DetailRow
               label='Timestamp'
-              value={
-                log.created_at ? formatDate(log.created_at, DATE_FORMATS.WITH_TIME) : '—'
-              }
+              value={log.created_at ? formatDate(log.created_at, DATE_FORMATS.WITH_TIME) : '—'}
             />
           </div>
         ) : null}

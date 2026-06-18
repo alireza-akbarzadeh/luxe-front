@@ -8,10 +8,10 @@ import {
   COMPARE_SECTION_HEADER_HEIGHT
 } from '@/domains/compare/lib/compare-constants';
 import {
+  type CompareRowDefinition,
   formatCompareValue,
   groupCompareRows,
-  isBestCell,
-  type CompareRowDefinition
+  isBestCell
 } from '@/domains/compare/lib/compare-utils';
 import { cn } from '@/lib/utils';
 import type { DtoCompareProductResponse } from '@/services/-compare-post.schemas';

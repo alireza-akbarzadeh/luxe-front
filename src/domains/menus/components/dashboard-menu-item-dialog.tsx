@@ -12,8 +12,8 @@ import { ICON_MAP } from '@/domains/admin/data';
 import { MENU_ICON_OPTIONS } from '@/domains/menus/lib/icon-options';
 import { buildGroupItemTree, flattenMenuItems } from '@/domains/menus/lib/menu-tree';
 import {
-  menuItemDefaults,
   MENU_ITEM_NO_PARENT,
+  menuItemDefaults,
   menuItemSchema
 } from '@/domains/menus/schemas/dashboard-menu.schema';
 import { zodFormValidators } from '@/domains/menus/schemas/form-validator';

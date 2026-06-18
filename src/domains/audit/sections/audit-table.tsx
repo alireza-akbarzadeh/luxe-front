@@ -3,6 +3,7 @@
 import { IconAlertTriangle, IconChevronDown, IconFilter } from '@tabler/icons-react';
 import { useCallback, useMemo, useState } from 'react';
 
+import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,10 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { AUDIT_ACTION_OPTIONS, AuditActionBadge } from '@/domains/audit/components/audit-action-badge';
+import {
+  AUDIT_ACTION_OPTIONS,
+  AuditActionBadge
+} from '@/domains/audit/components/audit-action-badge';
 import { auditColumns } from '@/domains/audit/components/audit-columns';
 import { AuditDetailSheet } from '@/domains/audit/components/audit-detail-sheet';
-import type { TableState } from '@/components/table/data-table';
 import { useGetAdminAuditLogs } from '@/services/-admin-audit-logs-get';
 import type {
   DtoAuditLogResponse,
@@ -41,9 +44,15 @@ export function AuditLogTable() {
     return params;
   }, []);
 
-  const getRows = useCallback((data: GetAdminAuditLogs200 | undefined) => data?.data?.logs ?? [], []);
+  const getRows = useCallback(
+    (data: GetAdminAuditLogs200 | undefined) => data?.data?.logs ?? [],
+    []
+  );
 
-  const getTotal = useCallback((data: GetAdminAuditLogs200 | undefined) => data?.data?.total ?? 0, []);
+  const getTotal = useCallback(
+    (data: GetAdminAuditLogs200 | undefined) => data?.data?.total ?? 0,
+    []
+  );
 
   const serverTable = useServerTable({
     columns: auditColumns,
@@ -121,7 +130,10 @@ export function AuditLogTable() {
                 <IconChevronDown className='h-3 w-3 opacity-50' />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='border-border/40 w-48 rounded-xl p-1 shadow-2xl'>
+            <DropdownMenuContent
+              align='end'
+              className='border-border/40 w-48 rounded-xl p-1 shadow-2xl'
+            >
               <DropdownMenuItem
                 onClick={() => applyActionFilter(null)}
                 className='py-2 text-[10px] font-bold uppercase'

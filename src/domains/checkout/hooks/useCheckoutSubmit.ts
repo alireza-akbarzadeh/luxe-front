@@ -10,11 +10,25 @@ import type { ApiErrorResponse } from '@/lib/api/type';
 import { ShippingProviders } from '@/lib/constants/enum-statuses';
 import { usePostCheckout } from '@/services/-checkout-post';
 import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
+import type { DtoCheckoutRequestPaymentMethod } from '@/services/-checkout-post.schemas';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
 import type { CheckoutFormValues } from '../checkout.schema';
 import { paymentMethodRequiresCard, resolveCheckoutOrderId } from '../lib/checkout-utils';
 import { useCheckoutStore } from '../store/checkout.store';
+
+/** Maps storefront payment UI values to API payment_method enum. */
+function mapCheckoutPaymentMethod(
+  method: CheckoutFormValues['paymentMethod']
+): DtoCheckoutRequestPaymentMethod {
+  if (method === 'credit_card' || method === 'debit_card' || method === 'paypal') {
+    return 'stripe';
+  }
+  if (method === 'gift_card' || method === 'store_credit') {
+    return 'wallet';
+  }
+  return 'mock';
+}
 
 export function useCheckoutSubmit() {
   const router = useRouter();
@@ -52,7 +66,7 @@ export function useCheckoutSubmit() {
           country: values.country,
           phone: values.phone || '',
           shipping_provider_id: Number(values.shippingProviderId),
-          payment_method: values.paymentMethod,
+          payment_method: mapCheckoutPaymentMethod(values.paymentMethod),
           save_info: values.saveInfo,
           newsletter: values.newsletter,
           coupon_code: values.couponCode || undefined,

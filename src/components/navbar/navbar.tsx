@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
+import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
 import { useSearchStore } from '@/domains/search/search.store';
 import { useGetNavMenus } from '@/services/-nav-menus-get';
 

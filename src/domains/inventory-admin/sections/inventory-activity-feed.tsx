@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useGetAdminInventoryAdjustmentsRecent } from '@/services/-admin-inventory';
+import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory.schemas';
 
 export function InventoryActivityFeed() {
   const { data, isLoading } = useGetAdminInventoryAdjustmentsRecent({ limit: 8 });
@@ -28,7 +29,7 @@ export function InventoryActivityFeed() {
           <p className='text-muted-foreground py-6 text-center text-sm'>No stock movements yet.</p>
         ) : (
           <div className='space-y-3'>
-            {rows.map((row) => {
+            {rows.map((row: DtoInventoryAdjustmentResponse) => {
               const createdAt = row.created_at ? parseISO(row.created_at) : null;
               const delta = row.quantity_delta ?? 0;
               return (
@@ -37,7 +38,8 @@ export function InventoryActivityFeed() {
                     <div className='min-w-0'>
                       <p className='truncate font-medium'>{row.product_name ?? 'Product'}</p>
                       <p className='text-muted-foreground text-xs'>
-                        {row.product_sku ?? '—'} · {(row.adjustment_type ?? 'adjustment').replaceAll('_', ' ')}
+                        {row.product_sku ?? '—'} ·{' '}
+                        {(row.adjustment_type ?? 'adjustment').replaceAll('_', ' ')}
                       </p>
                     </div>
                     <div className='text-right'>

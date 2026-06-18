@@ -9,6 +9,7 @@ import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import { SupportPageHero } from '@/domains/support/components/support-page-hero';
 
 import {
@@ -29,9 +30,11 @@ export function GiftCardsDomain() {
       message: '',
       deliveryDate: ''
     },
-    validators: { onSubmit: giftCardPurchaseSchema },
+    validators: zodFormValidators(giftCardPurchaseSchema),
     onSubmit: async ({ value }) => {
-      const subject = encodeURIComponent(`Gift card purchase request — ${formatPrice(value.amount)}`);
+      const subject = encodeURIComponent(
+        `Gift card purchase request — ${formatPrice(value.amount)}`
+      );
       const body = encodeURIComponent(
         [
           `Amount: ${formatPrice(value.amount)}`,
@@ -147,9 +150,7 @@ export function GiftCardsDomain() {
                 <div className='grid gap-5 sm:grid-cols-2'>
                   <purchaseForm.AppField
                     name='deliveryDate'
-                    children={(field) => (
-                      <field.TextField label='Send on (optional)' type='date' />
-                    )}
+                    children={(field) => <field.TextField label='Send on (optional)' type='date' />}
                   />
                   <purchaseForm.AppField
                     name='message'
@@ -162,7 +163,12 @@ export function GiftCardsDomain() {
                 <purchaseForm.Subscribe
                   selector={(state) => [state.isSubmitting]}
                   children={([isSubmitting]) => (
-                    <Button type='submit' size='lg' className='w-full rounded-full sm:w-auto' disabled={isSubmitting}>
+                    <Button
+                      type='submit'
+                      size='lg'
+                      className='w-full rounded-full sm:w-auto'
+                      disabled={isSubmitting}
+                    >
                       Request {formatPrice(selectedAmount)} gift card
                     </Button>
                   )}

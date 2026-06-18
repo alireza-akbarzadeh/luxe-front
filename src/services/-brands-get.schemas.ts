@@ -49,22 +49,23 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type GetBrandsParams = {
-/**
- * Page number
- */
-page?: number;
-/**
- * Items per page
- */
-limit?: number;
-/**
- * Search by name or slug
- */
-search?: string;
-/**
- * Filter by status
- */
-status?: string;
-};
+export type GetBrands200 = DtoBrandListResponse;
 
+export type GetBrandsParams = {
+  /**
+   * Page number
+   */
+  page?: number;
+  /**
+   * Items per page
+   */
+  limit?: number;
+  /**
+   * Search by name or slug
+   */
+  search?: string;
+  /**
+   * Filter by status
+   */
+  status?: string;
+};

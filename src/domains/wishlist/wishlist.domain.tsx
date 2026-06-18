@@ -2,8 +2,8 @@
 
 import { IconChevronRight } from '@tabler/icons-react';
 
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/components/providers/auth-provider';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,

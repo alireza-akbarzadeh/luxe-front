@@ -7,8 +7,8 @@ export const giftCardPurchaseSchema = z.object({
   recipientEmail: z.string().email('Enter a valid recipient email'),
   recipientName: z.string().min(1, 'Recipient name is required'),
   senderName: z.string().min(1, 'Your name is required'),
-  message: z.string().max(240).optional(),
-  deliveryDate: z.string().optional()
+  message: z.string().max(240).default(''),
+  deliveryDate: z.string().default('')
 });
 
 export type GiftCardPurchaseValues = z.infer<typeof giftCardPurchaseSchema>;

@@ -1,6 +1,6 @@
 import type { SiteMenuFormValues } from '@/domains/menus/schemas/site-menu.schema';
-import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 import type { DtoUpsertNavMenuRequest } from '@/services/-nav-menus-{id}-put.schemas';
+import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 import { DtoUpsertNavMenuRequestType } from '@/services/-nav-menus-post.schemas';
 
 /** Map an API nav item to site-menu form values (edit dialog). */

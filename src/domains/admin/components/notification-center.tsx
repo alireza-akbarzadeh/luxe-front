@@ -19,11 +19,11 @@ import {
   formatNotificationType,
   getNotificationTypeStyle
 } from '@/domains/account/lib/notification-utils';
+import { useDashboardStore } from '@/domains/admin/admin.store';
 import {
   useAdminNotificationActions,
   useAdminNotificationsPanel
 } from '@/domains/admin/hooks/use-admin-notifications';
-import { useDashboardStore } from '@/domains/admin/admin.store';
 import { useRealtime } from '@/lib/realtime/realtime-provider';
 import { cn } from '@/lib/utils';
 
@@ -32,14 +32,8 @@ export function NotificationCenter() {
   const setNotificationOpen = useDashboardStore((state) => state.setNotificationOpen);
   const { status: socketStatus } = useRealtime();
 
-  const {
-    notifications,
-    total,
-    isLoading,
-    isError,
-    refetch,
-    unreadOnPage
-  } = useAdminNotificationsPanel();
+  const { notifications, total, isLoading, isError, refetch, unreadOnPage } =
+    useAdminNotificationsPanel();
 
   const { markAsRead, markAllRead, isMarkingAllRead } = useAdminNotificationActions();
 
@@ -121,7 +115,12 @@ export function NotificationCenter() {
           {isError ? (
             <div className='px-4 py-10 text-center'>
               <p className='text-destructive text-sm font-medium'>Failed to load notifications</p>
-              <Button variant='outline' size='sm' className='mt-3 rounded-lg' onClick={() => void refetch()}>
+              <Button
+                variant='outline'
+                size='sm'
+                className='mt-3 rounded-lg'
+                onClick={() => void refetch()}
+              >
                 Retry
               </Button>
             </div>
@@ -133,7 +132,9 @@ export function NotificationCenter() {
                 <IconBell className='text-muted-foreground h-6 w-6' />
               </div>
               <p className='text-sm font-medium'>You&apos;re all caught up</p>
-              <p className='text-muted-foreground mt-1 text-xs'>New alerts appear here in real time.</p>
+              <p className='text-muted-foreground mt-1 text-xs'>
+                New alerts appear here in real time.
+              </p>
             </div>
           ) : null}
 
@@ -178,13 +179,23 @@ export function NotificationCenter() {
         </ScrollArea>
 
         <div className='border-border/60 bg-muted/10 grid grid-cols-2 gap-2 border-t p-2'>
-          <Button asChild variant='outline' size='sm' className='h-9 rounded-xl text-[10px] font-bold uppercase'>
+          <Button
+            asChild
+            variant='outline'
+            size='sm'
+            className='h-9 rounded-xl text-[10px] font-bold uppercase'
+          >
             <Link href='/dashboard/notifications'>
               View all
               <IconChevronRight className='ml-1 h-3.5 w-3.5' />
             </Link>
           </Button>
-          <Button asChild variant='outline' size='sm' className='h-9 rounded-xl text-[10px] font-bold uppercase'>
+          <Button
+            asChild
+            variant='outline'
+            size='sm'
+            className='h-9 rounded-xl text-[10px] font-bold uppercase'
+          >
             <Link href='/dashboard/live'>
               Live feed
               <IconExternalLink className='ml-1 h-3.5 w-3.5' />

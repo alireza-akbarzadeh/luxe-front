@@ -2,8 +2,8 @@
 
 import type { ReactNode } from 'react';
 
-import { AccountNotificationsSync } from '@/domains/account/components/account-notifications-sync';
 import { useAuth } from '@/components/providers/auth-provider';
+import { AccountNotificationsSync } from '@/domains/account/components/account-notifications-sync';
 
 import { RealtimeProvider } from './realtime-provider';
 

@@ -12,38 +12,59 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type GetAdminAuditLogsParams = {
-/**
- * Page size
- */
-limit?: number;
-/**
- * Offset
- */
-offset?: number;
-/**
- * Search path, resource, email
- */
-search?: string;
-/**
- * HTTP action
- */
-action?: string;
-/**
- * Resource path filter
- */
-resource?: string;
-/**
- * Actor user id
- */
-user_id?: number;
-/**
- * From date (YYYY-MM-DD or RFC3339)
- */
-date_from?: string;
-/**
- * To date (YYYY-MM-DD or RFC3339)
- */
-date_to?: string;
+export interface DtoAuditLogResponse {
+  id?: number;
+  user_id?: number;
+  user_email?: string;
+  action?: string;
+  resource?: string;
+  resource_id?: string;
+  path?: string;
+  ip_address?: string;
+  request_id?: string;
+  created_at?: string;
+}
+
+export interface DtoAuditLogListData {
+  logs?: DtoAuditLogResponse[];
+  total?: number;
+}
+
+export type GetAdminAuditLogs200 = UtilsResponse & {
+  data?: DtoAuditLogListData;
 };
 
+export type GetAdminAuditLogsParams = {
+  /**
+   * Page size
+   */
+  limit?: number;
+  /**
+   * Offset
+   */
+  offset?: number;
+  /**
+   * Search path, resource, email
+   */
+  search?: string;
+  /**
+   * HTTP action
+   */
+  action?: string;
+  /**
+   * Resource path filter
+   */
+  resource?: string;
+  /**
+   * Actor user id
+   */
+  user_id?: number;
+  /**
+   * From date (YYYY-MM-DD or RFC3339)
+   */
+  date_from?: string;
+  /**
+   * To date (YYYY-MM-DD or RFC3339)
+   */
+  date_to?: string;
+};

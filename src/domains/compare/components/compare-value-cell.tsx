@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import { IconStar, IconTrophy } from '@tabler/icons-react';
+import type { ReactNode } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { COMPARE_ROW_HEIGHT } from '@/domains/compare/lib/compare-constants';
@@ -12,7 +11,11 @@ interface CompareValueCellProps {
   isRating?: boolean;
 }
 
-export function CompareValueCell({ displayValue, isBest = false, isRating = false }: CompareValueCellProps) {
+export function CompareValueCell({
+  displayValue,
+  isBest = false,
+  isRating = false
+}: CompareValueCellProps) {
   return (
     <div
       className={cn(
@@ -34,7 +37,7 @@ export function CompareValueCell({ displayValue, isBest = false, isRating = fals
         {isBest && (
           <Badge
             variant='secondary'
-            className='bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 shrink-0'
+            className='shrink-0 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
           >
             <IconTrophy className='mr-1 h-3 w-3' />
             Best

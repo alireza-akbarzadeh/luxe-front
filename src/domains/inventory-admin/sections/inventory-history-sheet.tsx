@@ -17,6 +17,7 @@ import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-st
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 import { useGetAdminInventoryProductsIdHistory } from '@/services/-admin-inventory';
+import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory.schemas';
 
 function formatAdjustmentType(type?: string) {
   return (type ?? 'adjustment').replaceAll('_', ' ');
@@ -52,7 +53,9 @@ export function InventoryHistorySheet() {
           <Skeleton className='h-10 w-full' />
         </div>
       ) : adjustments.length === 0 ? (
-        <p className='text-muted-foreground py-8 text-center text-sm'>No adjustments recorded yet.</p>
+        <p className='text-muted-foreground py-8 text-center text-sm'>
+          No adjustments recorded yet.
+        </p>
       ) : (
         <Table>
           <TableHeader>
@@ -65,13 +68,15 @@ export function InventoryHistorySheet() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {adjustments.map((row) => {
+            {adjustments.map((row: DtoInventoryAdjustmentResponse) => {
               const createdAt = row.created_at ? parseISO(row.created_at) : null;
               const delta = row.quantity_delta ?? 0;
               return (
                 <TableRow key={row.id}>
                   <TableCell className='text-xs whitespace-nowrap'>
-                    <div>{row.created_at ? formatDate(row.created_at, DATE_FORMATS.SHORT) : '—'}</div>
+                    <div>
+                      {row.created_at ? formatDate(row.created_at, DATE_FORMATS.SHORT) : '—'}
+                    </div>
                     <div className='text-muted-foreground'>
                       {createdAt && !Number.isNaN(createdAt.getTime())
                         ? formatDistanceToNow(createdAt, { addSuffix: true })
@@ -95,8 +100,12 @@ export function InventoryHistorySheet() {
                   >
                     {delta > 0 ? `+${delta}` : delta}
                   </TableCell>
-                  <TableCell className='text-right tabular-nums'>{row.quantity_after ?? '—'}</TableCell>
-                  <TableCell className='max-w-[200px] truncate text-xs'>{row.note || '—'}</TableCell>
+                  <TableCell className='text-right tabular-nums'>
+                    {row.quantity_after ?? '—'}
+                  </TableCell>
+                  <TableCell className='max-w-[200px] truncate text-xs'>
+                    {row.note || '—'}
+                  </TableCell>
                 </TableRow>
               );
             })}

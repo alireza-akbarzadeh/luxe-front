@@ -28,10 +28,7 @@ import {
 import { uploadBrandLogo } from '@/domains/brands/lib/upload-brand-logo';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
-import {
-  getGetBrandsIdQueryKey,
-  useGetBrandsId
-} from '@/services/-brands-{id}-get';
+import { getGetBrandsIdQueryKey, useGetBrandsId } from '@/services/-brands-{id}-get';
 import { usePutBrandsId } from '@/services/-brands-{id}-put';
 import { getGetBrandsQueryKey } from '@/services/-brands-get';
 import { usePostBrands } from '@/services/-brands-post';
@@ -47,14 +44,14 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
 
-  const {
-    data: { data: brand } = {},
-    isLoading: isLoadingBrand
-  } = useGetBrandsId(Number(brandId), {
-    query: {
-      enabled: isEdit && Boolean(brandId)
+  const { data: { data: brand } = {}, isLoading: isLoadingBrand } = useGetBrandsId(
+    Number(brandId),
+    {
+      query: {
+        enabled: isEdit && Boolean(brandId)
+      }
     }
-  });
+  );
 
   const { mutateAsync: createBrand, isPending: isCreating } = usePostBrands({
     mutation: {
@@ -153,216 +150,218 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
     );
   }
 
+  const editBrandId = brand?.id;
+
   return (
     <>
-      {isEdit && brand?.id ? (
+      {isEdit && editBrandId ? (
         <EntityWorkflowPanel
           workflowKey='brand'
-          entityId={brand.id}
+          entityId={editBrandId}
           className='mb-6'
           onTransitionSuccess={() => {
             void queryClient.invalidateQueries({
-              queryKey: getGetBrandsIdQueryKey(brand.id)
+              queryKey: getGetBrandsIdQueryKey(editBrandId)
             });
             void queryClient.invalidateQueries({ queryKey: getGetBrandsQueryKey() });
           }}
         />
       ) : null}
       <Card className='border-border/40 bg-card/40 backdrop-blur-2xl'>
-      <CardHeader>
-        <CardTitle>{isEdit ? 'Edit brand' : 'Create brand'}</CardTitle>
-        <CardDescription>
-          {isEdit
-            ? 'Update brand details shown across the storefront and product catalog.'
-            : 'Add a new brand for products, filters, and storefront merchandising.'}
-        </CardDescription>
-      </CardHeader>
+        <CardHeader>
+          <CardTitle>{isEdit ? 'Edit brand' : 'Create brand'}</CardTitle>
+          <CardDescription>
+            {isEdit
+              ? 'Update brand details shown across the storefront and product catalog.'
+              : 'Add a new brand for products, filters, and storefront merchandising.'}
+          </CardDescription>
+        </CardHeader>
 
-      <CardContent>
-        <form.AppForm>
-          <form.Root
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              void form.handleSubmit();
-            }}
-          >
-            <Flex direction='column' spacing={6}>
-              <Flex direction='column' spacing={4}>
-                <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
+        <CardContent>
+          <form.AppForm>
+            <form.Root
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                void form.handleSubmit();
+              }}
+            >
+              <Flex direction='column' spacing={6}>
+                <Flex direction='column' spacing={4}>
+                  <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
 
-                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-                  <GridItem>
-                    <form.AppField
-                      name='name'
-                      children={(field) => (
-                        <field.TextField
-                          label='Brand name'
-                          placeholder='e.g. Nike'
-                          required
-                          detail='Displayed on product pages and brand filters'
-                        />
-                      )}
-                    />
-                  </GridItem>
-
-                  <GridItem>
-                    <form.AppField
-                      name='slug'
-                      children={(field) => (
-                        <field.TextField
-                          label='Slug'
-                          placeholder='e.g. nike'
-                          required
-                          detail='Used in URLs — lowercase, hyphen-separated'
-                        />
-                      )}
-                    />
-                  </GridItem>
-                </Grid>
-
-                <form.AppField
-                  name='description'
-                  children={(field) => (
-                    <field.TextArea
-                      label='Description'
-                      placeholder='Briefly describe this brand…'
-                      rows={4}
-                      description='Optional — shown on brand landing pages'
-                    />
-                  )}
-                />
-              </Flex>
-
-              <Separator />
-
-              <Flex direction='column' spacing={4}>
-                <h3 className='text-foreground text-sm font-medium'>Logo</h3>
-
-                <form.Subscribe
-                  selector={(state) => state.values.logo_url}
-                  children={(logoUrl) => (
-                    <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
-                      <div className='border-border/40 bg-muted/30 relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border'>
-                        {logoUrl ? (
-                          <Image
-                            src={logoUrl}
-                            alt='Brand logo preview'
-                            fill
-                            className='object-contain p-2'
-                            sizes='96px'
-                          />
-                        ) : (
-                          <IconPhoto className='text-muted-foreground size-8' />
-                        )}
-                      </div>
-
-                      <Flex direction='column' spacing={3} className='min-w-60 flex-1'>
-                        <input
-                          ref={fileInputRef}
-                          type='file'
-                          accept='image/jpeg,image/png,image/webp,image/gif'
-                          className='hidden'
-                          onChange={(event) => {
-                            const file = event.target.files?.[0];
-                            if (file) void handleLogoUpload(file);
-                            event.target.value = '';
-                          }}
-                        />
-                        <Button
-                          type='button'
-                          variant='outline'
-                          size='sm'
-                          className='w-fit'
-                          disabled={isUploadingLogo}
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          {isUploadingLogo ? (
-                            <IconLoader2 className='size-4 animate-spin' />
-                          ) : (
-                            <IconUpload className='size-4' />
-                          )}
-                          Upload logo
-                        </Button>
-
-                        <form.AppField
-                          name='logo_url'
-                          children={(field) => (
-                            <field.TextField
-                              label='Logo URL'
-                              placeholder='https://…'
-                              detail='Upload an image or paste a public URL'
-                            />
-                          )}
-                        />
-                      </Flex>
-                    </Flex>
-                  )}
-                />
-              </Flex>
-
-              <Separator />
-
-              <Flex direction='column' spacing={4}>
-                <h3 className='text-foreground text-sm font-medium'>Visibility</h3>
-
-                <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-                  <GridItem>
-                    {isEdit ? (
-                      <p className='text-muted-foreground text-sm'>
-                        Status is controlled by the workflow panel above (Draft / Active / Inactive /
-                        Archived).
-                      </p>
-                    ) : (
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
                       <form.AppField
-                        name='status'
+                        name='name'
                         children={(field) => (
-                          <field.Select
-                            label='Status'
-                            options={[...BRAND_STATUS_OPTIONS]}
-                            description='Active brands appear in storefront filters and product forms'
+                          <field.TextField
+                            label='Brand name'
+                            placeholder='e.g. Nike'
                             required
+                            detail='Displayed on product pages and brand filters'
                           />
                         )}
                       />
+                    </GridItem>
+
+                    <GridItem>
+                      <form.AppField
+                        name='slug'
+                        children={(field) => (
+                          <field.TextField
+                            label='Slug'
+                            placeholder='e.g. nike'
+                            required
+                            detail='Used in URLs — lowercase, hyphen-separated'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                  </Grid>
+
+                  <form.AppField
+                    name='description'
+                    children={(field) => (
+                      <field.TextArea
+                        label='Description'
+                        placeholder='Briefly describe this brand…'
+                        rows={4}
+                        description='Optional — shown on brand landing pages'
+                      />
                     )}
-                  </GridItem>
-                </Grid>
-              </Flex>
+                  />
+                </Flex>
 
-              <Separator />
+                <Separator />
 
-              <Flex direction='row' justify='between' spacing={3} className='flex-wrap'>
-                <Button type='button' variant='ghost' onClick={() => push('/dashboard/brands')}>
-                  Cancel
-                </Button>
+                <Flex direction='column' spacing={4}>
+                  <h3 className='text-foreground text-sm font-medium'>Logo</h3>
 
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
-                  children={([canSubmit, isSubmitting, isDirty]) => (
-                    <Button
-                      type='submit'
-                      disabled={!canSubmit || isPending || (!isDirty && isEdit)}
-                    >
-                      {isPending || isSubmitting ? (
-                        <>
-                          <IconLoader2 className='size-4 animate-spin' />
-                          {isEdit ? 'Saving…' : 'Creating…'}
-                        </>
-                      ) : isEdit ? (
-                        'Save changes'
+                  <form.Subscribe
+                    selector={(state) => state.values.logo_url}
+                    children={(logoUrl) => (
+                      <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
+                        <div className='border-border/40 bg-muted/30 relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border'>
+                          {logoUrl ? (
+                            <Image
+                              src={logoUrl}
+                              alt='Brand logo preview'
+                              fill
+                              className='object-contain p-2'
+                              sizes='96px'
+                            />
+                          ) : (
+                            <IconPhoto className='text-muted-foreground size-8' />
+                          )}
+                        </div>
+
+                        <Flex direction='column' spacing={3} className='min-w-60 flex-1'>
+                          <input
+                            ref={fileInputRef}
+                            type='file'
+                            accept='image/jpeg,image/png,image/webp,image/gif'
+                            className='hidden'
+                            onChange={(event) => {
+                              const file = event.target.files?.[0];
+                              if (file) void handleLogoUpload(file);
+                              event.target.value = '';
+                            }}
+                          />
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            className='w-fit'
+                            disabled={isUploadingLogo}
+                            onClick={() => fileInputRef.current?.click()}
+                          >
+                            {isUploadingLogo ? (
+                              <IconLoader2 className='size-4 animate-spin' />
+                            ) : (
+                              <IconUpload className='size-4' />
+                            )}
+                            Upload logo
+                          </Button>
+
+                          <form.AppField
+                            name='logo_url'
+                            children={(field) => (
+                              <field.TextField
+                                label='Logo URL'
+                                placeholder='https://…'
+                                detail='Upload an image or paste a public URL'
+                              />
+                            )}
+                          />
+                        </Flex>
+                      </Flex>
+                    )}
+                  />
+                </Flex>
+
+                <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <h3 className='text-foreground text-sm font-medium'>Visibility</h3>
+
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
+                      {isEdit ? (
+                        <p className='text-muted-foreground text-sm'>
+                          Status is controlled by the workflow panel above (Draft / Active /
+                          Inactive / Archived).
+                        </p>
                       ) : (
-                        'Create brand'
+                        <form.AppField
+                          name='status'
+                          children={(field) => (
+                            <field.Select
+                              label='Status'
+                              options={[...BRAND_STATUS_OPTIONS]}
+                              description='Active brands appear in storefront filters and product forms'
+                              required
+                            />
+                          )}
+                        />
                       )}
-                    </Button>
-                  )}
-                />
+                    </GridItem>
+                  </Grid>
+                </Flex>
+
+                <Separator />
+
+                <Flex direction='row' justify='between' spacing={3} className='flex-wrap'>
+                  <Button type='button' variant='ghost' onClick={() => push('/dashboard/brands')}>
+                    Cancel
+                  </Button>
+
+                  <form.Subscribe
+                    selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
+                    children={([canSubmit, isSubmitting, isDirty]) => (
+                      <Button
+                        type='submit'
+                        disabled={!canSubmit || isPending || (!isDirty && isEdit)}
+                      >
+                        {isPending || isSubmitting ? (
+                          <>
+                            <IconLoader2 className='size-4 animate-spin' />
+                            {isEdit ? 'Saving…' : 'Creating…'}
+                          </>
+                        ) : isEdit ? (
+                          'Save changes'
+                        ) : (
+                          'Create brand'
+                        )}
+                      </Button>
+                    )}
+                  />
+                </Flex>
               </Flex>
-            </Flex>
-          </form.Root>
-        </form.AppForm>
-      </CardContent>
-    </Card>
+            </form.Root>
+          </form.AppForm>
+        </CardContent>
+      </Card>
     </>
   );
 }

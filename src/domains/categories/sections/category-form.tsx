@@ -143,143 +143,146 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
     );
   }
 
+  const editCategoryId = category?.id;
+
   return (
-  <>
-    {isEdit && category?.id ? (
-      <EntityWorkflowPanel
-        workflowKey='category'
-        entityId={category.id}
-        className='mb-6'
-        onTransitionSuccess={() => {
-          void queryClient.invalidateQueries({
-            queryKey: getGetAdminCategoriesIdQueryKey(category.id)
-          });
-          void queryClient.invalidateQueries({ queryKey: getGetCategoriesQueryKey() });
-        }}
-      />
-    ) : null}
-    <form.AppForm>
-      <form.Root
-        className='md:p4 p-2'
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          void form.handleSubmit();
-        }}
-      >
-        <Flex direction='column' spacing={6}>
-          <Flex direction='column' spacing={4}>
-            <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-              <GridItem>
-                <form.AppField
-                  name='name'
-                  children={(field) => (
-                    <field.TextField
-                      label='Category name'
-                      placeholder='e.g. Electronics'
-                      required
-                      detail='Displayed to customers in navigation and filters'
-                    />
-                  )}
-                />
-              </GridItem>
-
-              <GridItem>
-                <form.AppField
-                  name='slug'
-                  children={(field) => (
-                    <field.TextField
-                      label='Slug'
-                      placeholder='e.g. electronics'
-                      required
-                      detail='Used in URLs — lowercase, hyphen-separated'
-                    />
-                  )}
-                />
-              </GridItem>
-            </Grid>
-
-            <form.AppField
-              name='description'
-              children={(field) => (
-                <field.TextArea
-                  label='Description'
-                  placeholder='Briefly describe this category…'
-                  rows={4}
-                  description='Optional — shown on category landing pages'
-                />
-              )}
-            />
-          </Flex>
-
-          <Separator />
-
-          <Flex direction='column' spacing={4}>
-            <h3 className='text-foreground text-sm font-medium'>Organization</h3>
-
-            <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-              <GridItem>
-                <form.AppField
-                  name='parent_id'
-                  children={(field) => (
-                    <>
-                      <p className='text-muted-foreground pb-1.5 text-[10px] font-medium'>
-                        Leave empty to make this a top-level category
-                      </p>
-                      <field.Select
-                        options={parentOptions}
-                        placeholder='None (top-level category)'
-                        label='Parent category'
-                      />
-                    </>
-                  )}
-                />
-              </GridItem>
-
-              <GridItem>
-                {isEdit ? (
-                  <p className='text-muted-foreground text-sm'>
-                    Visibility is controlled by the workflow panel above (Active / Inactive / Archived).
-                  </p>
-                ) : (
+    <>
+      {isEdit && editCategoryId ? (
+        <EntityWorkflowPanel
+          workflowKey='category'
+          entityId={editCategoryId}
+          className='mb-6'
+          onTransitionSuccess={() => {
+            void queryClient.invalidateQueries({
+              queryKey: getGetAdminCategoriesIdQueryKey(editCategoryId)
+            });
+            void queryClient.invalidateQueries({ queryKey: getGetCategoriesQueryKey() });
+          }}
+        />
+      ) : null}
+      <form.AppForm>
+        <form.Root
+          className='md:p4 p-2'
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            void form.handleSubmit();
+          }}
+        >
+          <Flex direction='column' spacing={6}>
+            <Flex direction='column' spacing={4}>
+              <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                <GridItem>
                   <form.AppField
-                    name='is_active'
+                    name='name'
                     children={(field) => (
-                      <field.Switch
-                        label='Active'
-                        description='Inactive categories are hidden from storefront navigation'
+                      <field.TextField
+                        label='Category name'
+                        placeholder='e.g. Electronics'
+                        required
+                        detail='Displayed to customers in navigation and filters'
                       />
                     )}
                   />
+                </GridItem>
+
+                <GridItem>
+                  <form.AppField
+                    name='slug'
+                    children={(field) => (
+                      <field.TextField
+                        label='Slug'
+                        placeholder='e.g. electronics'
+                        required
+                        detail='Used in URLs — lowercase, hyphen-separated'
+                      />
+                    )}
+                  />
+                </GridItem>
+              </Grid>
+
+              <form.AppField
+                name='description'
+                children={(field) => (
+                  <field.TextArea
+                    label='Description'
+                    placeholder='Briefly describe this category…'
+                    rows={4}
+                    description='Optional — shown on category landing pages'
+                  />
                 )}
-              </GridItem>
-            </Grid>
-          </Flex>
+              />
+            </Flex>
 
-          <Separator />
+            <Separator />
 
-          <Flex direction='row' justify='end' spacing={3}>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
-              children={([canSubmit, isSubmitting, isDirty]) => (
-                <Button type='submit' disabled={!canSubmit || isPending || (!isDirty && isEdit)}>
-                  {isPending || isSubmitting ? (
-                    <>
-                      <IconLoader2 className='size-4 animate-spin' />
-                      {isEdit ? 'Saving…' : 'Creating…'}
-                    </>
-                  ) : isEdit ? (
-                    'Save changes'
+            <Flex direction='column' spacing={4}>
+              <h3 className='text-foreground text-sm font-medium'>Organization</h3>
+
+              <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                <GridItem>
+                  <form.AppField
+                    name='parent_id'
+                    children={(field) => (
+                      <>
+                        <p className='text-muted-foreground pb-1.5 text-[10px] font-medium'>
+                          Leave empty to make this a top-level category
+                        </p>
+                        <field.Select
+                          options={parentOptions}
+                          placeholder='None (top-level category)'
+                          label='Parent category'
+                        />
+                      </>
+                    )}
+                  />
+                </GridItem>
+
+                <GridItem>
+                  {isEdit ? (
+                    <p className='text-muted-foreground text-sm'>
+                      Visibility is controlled by the workflow panel above (Active / Inactive /
+                      Archived).
+                    </p>
                   ) : (
-                    'Create category'
+                    <form.AppField
+                      name='is_active'
+                      children={(field) => (
+                        <field.Switch
+                          label='Active'
+                          description='Inactive categories are hidden from storefront navigation'
+                        />
+                      )}
+                    />
                   )}
-                </Button>
-              )}
-            />
+                </GridItem>
+              </Grid>
+            </Flex>
+
+            <Separator />
+
+            <Flex direction='row' justify='end' spacing={3}>
+              <form.Subscribe
+                selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
+                children={([canSubmit, isSubmitting, isDirty]) => (
+                  <Button type='submit' disabled={!canSubmit || isPending || (!isDirty && isEdit)}>
+                    {isPending || isSubmitting ? (
+                      <>
+                        <IconLoader2 className='size-4 animate-spin' />
+                        {isEdit ? 'Saving…' : 'Creating…'}
+                      </>
+                    ) : isEdit ? (
+                      'Save changes'
+                    ) : (
+                      'Create category'
+                    )}
+                  </Button>
+                )}
+              />
+            </Flex>
           </Flex>
-        </Flex>
-      </form.Root>
-    </form.AppForm>
-  </>
+        </form.Root>
+      </form.AppForm>
+    </>
   );
 }
