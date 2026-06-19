@@ -24,9 +24,9 @@ export function FeaturesSection() {
     <section id='features' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Why LUXE'
-          title='The LUXE difference'
-          description='We obsess over every touchpoint — from sourcing to delivery — so you can shop with total confidence.'
+          eyebrow='Shopping experience'
+          title='Why shoppers choose LUXE'
+          description='Every touchpoint — from discovery to delivery — is designed to feel premium, transparent, and effortless.'
         />
 
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5'>

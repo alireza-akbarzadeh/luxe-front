@@ -12,8 +12,8 @@ export function BrandsMarquee() {
       aria-label='Partner brands'
     >
       <div className={sectionContainerClass}>
-        <p className='text-muted-foreground mb-6 text-center text-xs font-medium tracking-[0.25em] uppercase'>
-          Sample partner names · verified brands load from the marketplace
+        <p className='text-muted-foreground mb-8 text-center text-xs font-medium tracking-[0.22em] uppercase'>
+          Trusted by leading independent brands
         </p>
         <div className='relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]'>
           <div className='animate-marquee flex w-max gap-12 sm:gap-16'>

@@ -8,6 +8,92 @@ export const HOME_STATS = [
   { label: 'Countries shipped', value: '45' }
 ] as const;
 
+export const HOME_PLATFORM_STATS = [
+  { value: 50000, suffix: '+', label: 'Happy shoppers' },
+  { value: 2400, suffix: '+', label: 'Curated products' },
+  { value: 120, suffix: '+', label: 'Verified brands' },
+  { value: 4.9, suffix: '★', label: 'Average rating', decimals: 1 },
+  { value: 45, suffix: '', label: 'Countries shipped' },
+  { value: 99.9, suffix: '%', label: 'Order success rate', decimals: 1 }
+] as const;
+
+export const HOME_HOW_IT_WORKS = [
+  {
+    step: '01',
+    title: 'Discover',
+    description: 'Browse curated collections, independent stores, and editor picks in one marketplace.'
+  },
+  {
+    step: '02',
+    title: 'Choose with confidence',
+    description: 'Read verified reviews, compare products, and shop from trusted sellers.'
+  },
+  {
+    step: '03',
+    title: 'Checkout securely',
+    description: 'Fast, encrypted checkout with flexible payment options and transparent shipping.'
+  },
+  {
+    step: '04',
+    title: 'Enjoy & return easy',
+    description: 'Track every order and enjoy hassle-free returns when something is not quite right.'
+  }
+] as const;
+
+export const HOME_MARKETPLACE_BENEFITS = [
+  {
+    title: 'Curated multi-brand marketplace',
+    description: 'One destination for premium fashion, home, and lifestyle — vetted for quality.'
+  },
+  {
+    title: 'Independent stores you can trust',
+    description: 'Shop directly from verified sellers with transparent policies and ratings.'
+  },
+  {
+    title: 'Editorial discovery',
+    description: 'Collections and seasonal edits help you find pieces worth keeping.'
+  },
+  {
+    title: 'Secure, seamless checkout',
+    description: 'Protected payments, order tracking, and support when you need it.'
+  }
+] as const;
+
+export const HOME_FAQ = [
+  {
+    question: 'What makes LUXE different from other marketplaces?',
+    answer:
+      'We combine editorial curation with a multi-vendor marketplace — every brand and product is reviewed for quality, presentation, and customer experience before going live.'
+  },
+  {
+    question: 'How does shipping work?',
+    answer:
+      'Shipping options depend on the seller and your location. Many orders qualify for complimentary delivery over $100, with tracking provided as soon as your order ships.'
+  },
+  {
+    question: 'What is your return policy?',
+    answer:
+      'Most items can be returned within 30 days in original condition. Return details appear on each product and store page before you purchase.'
+  },
+  {
+    question: 'Are payments secure?',
+    answer:
+      'Yes. Checkout uses industry-standard encryption and trusted payment providers. We never store full card details on our servers.'
+  },
+  {
+    question: 'Can I sell on LUXE?',
+    answer:
+      'Absolutely. Independent brands and merchants can apply to open a storefront on our marketplace with dedicated seller tools and analytics.'
+  }
+] as const;
+
+export const HERO_TRUST_AVATARS = [
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop'
+] as const;
+
 export const TRUST_ITEMS = [
   { title: 'Free shipping', description: 'On orders over $100', icon: 'truck' },
   { title: 'Easy returns', description: '30-day hassle-free', icon: 'return' },

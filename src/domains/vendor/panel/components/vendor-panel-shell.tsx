@@ -1,13 +1,11 @@
 'use client';
 
-import { IconMenu } from '@tabler/icons-react';
-import Link from 'next/link';
-import { useState } from 'react';
-
-import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
-import ThemeToggle from '@/components/ui/theme-toggle';
-import { VendorSidebar } from '@/domains/vendor/panel/components/vendor-sidebar';
+import { VendorCommandPalette } from '@/domains/vendor/panel/components/layout/vendor-command-palette';
+import { VendorSidebar } from '@/domains/vendor/panel/components/layout/vendor-sidebar';
+import { VendorTopNav } from '@/domains/vendor/panel/components/layout/vendor-top-nav';
+import { useVendorShortcuts } from '@/domains/vendor/panel/hooks/use-vendor-shortcuts';
+import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import type { UserPayload } from '@/lib/auth/auth-server';
 
 interface VendorPanelShellProps {
@@ -16,49 +14,35 @@ interface VendorPanelShellProps {
 }
 
 export function VendorPanelShell({ children, user }: VendorPanelShellProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  useVendorShortcuts();
+
+  const mobileSidebarOpen = useVendorPanelStore((s) => s.mobileSidebarOpen);
+  const setMobileSidebarOpen = useVendorPanelStore((s) => s.setMobileSidebarOpen);
+  const activeStoreName = useVendorPanelStore((s) => s.activeStoreName);
 
   return (
     <div className='bg-background flex h-screen w-full overflow-hidden'>
       <VendorSidebar className='hidden md:flex' />
 
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side='left' className='w-72 border-none p-0'>
-          <VendorSidebar onNavigate={() => setMobileOpen(false)} />
+      <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
+        <SheetContent side='left' className='w-[272px] border-none p-0'>
+          <VendorSidebar onNavigate={() => setMobileSidebarOpen(false)} />
         </SheetContent>
       </Sheet>
 
       <div className='flex min-w-0 flex-1 flex-col overflow-hidden'>
-        <header className='border-border/60 bg-card/95 flex h-16 shrink-0 items-center justify-between gap-3 border-b px-4 md:px-6'>
-          <div className='flex items-center gap-2'>
-            <Button
-              type='button'
-              variant='ghost'
-              size='icon'
-              className='md:hidden'
-              aria-label='Open vendor navigation'
-              onClick={() => setMobileOpen(true)}
-            >
-              <IconMenu className='size-5' />
-            </Button>
-            <div>
-              <p className='text-muted-foreground text-xs'>Signed in as</p>
-              <p className='text-sm font-medium'>
-                {user.first_name} {user.last_name}
-              </p>
-            </div>
-          </div>
+        <VendorTopNav user={user} onOpenMobileNav={() => setMobileSidebarOpen(true)} />
 
-          <div className='flex items-center gap-2'>
-            <ThemeToggle />
-            <Button variant='outline' size='sm' asChild>
-              <Link href='/vendor'>Vendor home</Link>
-            </Button>
-          </div>
-        </header>
+        <div className='border-border/40 bg-muted/20 hidden border-b px-4 py-2 md:block lg:px-6'>
+          <p className='text-muted-foreground text-xs'>
+            Managing <span className='text-foreground font-medium'>{activeStoreName}</span>
+          </p>
+        </div>
 
-        <main className='flex-1 overflow-y-auto p-4 md:p-6'>{children}</main>
+        <main className='flex-1 overflow-y-auto p-4 md:p-6 lg:p-8'>{children}</main>
       </div>
+
+      <VendorCommandPalette />
     </div>
   );
 }

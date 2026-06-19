@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowRight, IconSparkles } from '@tabler/icons-react';
+import { IconArrowRight, IconSparkles, IconStar } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { getProductPath } from '@/domains/product/lib/product-routes';
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '~/src/services/-products-get';
 
-import { HERO_FALLBACK_IMAGE, HOME_STATS } from '../lib/home-mock-data';
+import { HERO_FALLBACK_IMAGE, HERO_TRUST_AVATARS, HOME_STATS } from '../lib/home-mock-data';
 import {
   formatPrice,
   fullBleedClass,
@@ -64,7 +64,7 @@ export function HeroSection() {
       />
 
       <div
-        className={`${sectionContainerClass} relative pt-6 pb-16 sm:pt-10 sm:pb-20 lg:pt-14 lg:pb-28`}
+        className={`${sectionContainerClass} relative flex min-h-[calc(100svh-5rem)] flex-col justify-center pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24`}
       >
         <div className='grid items-center gap-10 lg:grid-cols-12 lg:gap-14'>
           <motion.div
@@ -96,13 +96,39 @@ export function HeroSection() {
               variants={itemVariants}
               className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg lg:mx-0'
             >
-              Discover designer-grade fashion, home, and lifestyle pieces — handpicked for quality,
-              sustainability, and timeless style.
+              Discover designer-grade fashion, home, and lifestyle from verified independent stores —
+              curated for quality, sustainability, and timeless style.
             </motion.p>
 
             <motion.div
               variants={itemVariants}
-              className='mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'
+              className='mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start'
+            >
+              <div className='flex -space-x-2'>
+                {HERO_TRUST_AVATARS.map((src, i) => (
+                  <div
+                    key={src}
+                    className='border-background relative size-9 overflow-hidden rounded-full border-2 sm:size-10'
+                    style={{ zIndex: HERO_TRUST_AVATARS.length - i }}
+                  >
+                    <Image src={src} alt='' fill className='object-cover' sizes='40px' />
+                  </div>
+                ))}
+              </div>
+              <div className='text-center sm:text-left'>
+                <div className='flex items-center justify-center gap-1 sm:justify-start'>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <IconStar key={i} className='fill-gold text-gold size-3.5 sm:size-4' aria-hidden />
+                  ))}
+                  <span className='ml-1 text-sm font-semibold'>4.9</span>
+                </div>
+                <p className='text-muted-foreground text-xs sm:text-sm'>Trusted by 50,000+ shoppers</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              className='mt-8 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row lg:justify-start'
             >
               <Link
                 href='/shop'
@@ -120,7 +146,7 @@ export function HeroSection() {
                 className='border-gold/40 hover:border-gold hover:text-gold-strong dark:hover:text-gold bg-card/50 h-12 rounded-full px-8 text-base backdrop-blur-sm transition-colors sm:h-14'
                 asChild
               >
-                <Link href='/shop?sortBy=rating'>Learn more</Link>
+                <Link href='/shop?sortBy=newest'>Explore collections</Link>
               </Button>
             </motion.div>
 
@@ -139,9 +165,9 @@ export function HeroSection() {
             </motion.dl>
             <motion.p
               variants={itemVariants}
-              className='text-muted-foreground mt-3 text-[11px] tracking-wide uppercase'
+              className='text-muted-foreground/80 mt-3 text-[11px] tracking-wide'
             >
-              Illustrative marketplace highlights
+              Marketplace highlights · updated seasonally
             </motion.p>
           </motion.div>
 

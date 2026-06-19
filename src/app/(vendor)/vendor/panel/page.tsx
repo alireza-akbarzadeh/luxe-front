@@ -1,5 +1,5 @@
-import { VendorOverviewDomain } from '@/domains/vendor/panel/vendor-overview.domain';
+import { VendorDashboardDomain } from '@/domains/vendor/panel/vendor-dashboard.domain';
 
 export default function VendorPanelPage() {
-  return <VendorOverviewDomain />;
+  return <VendorDashboardDomain />;
 }
