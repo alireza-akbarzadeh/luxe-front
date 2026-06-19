@@ -1,7 +1,6 @@
 'use client';
 
 import { IconDownload, IconFilter } from '@tabler/icons-react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
@@ -20,14 +19,11 @@ import type { OrderStatusFilter } from '@/domains/orders/orders.schema';
 import { ORDER_STATUS_TABS } from '@/domains/orders/orders.schema';
 import { orderColumns, orderRowMenuActions } from '@/domains/orders/sections/orders-columns';
 import { OrdersFilterSheet } from '@/domains/orders/sections/orders-filter-sheet';
-import { usePostAdminOrdersBulkStatus } from '@/services/-admin-orders-bulk-status-post';
-import type { DtoBulkUpdateOrderStatusRequestStatus } from '@/services/-admin-orders-bulk-status-post.schemas';
-import { getGetOrdersQueryKey, useGetOrders } from '@/services/-orders-get';
+import { useGetOrders } from '@/services/-orders-get';
 import type { DtoAdminOrderListItem, GetOrders200 } from '@/services/-orders-get.schemas';
 
 export function OrdersTable() {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const [filterOpen, setFilterOpen] = useState(false);
 
   const {
@@ -40,8 +36,6 @@ export function OrdersTable() {
     hasActiveFilters,
     resetFilters
   } = useOrdersQueryState();
-
-  const { mutateAsync: bulkUpdateStatus } = usePostAdminOrdersBulkStatus();
 
   const getQueryParams = useCallback(
     (state: TableState, filter: string) => ({
@@ -75,41 +69,6 @@ export function OrdersTable() {
     getTotal,
     useQuery: useGetOrders
   });
-
-  const getSelectedOrderIds = useCallback(() => {
-    return Object.entries(serverTable.tableState.rowSelection)
-      .filter(([, selected]) => selected)
-      .map(([id]) => Number(id))
-      .filter((id) => Number.isFinite(id) && id > 0);
-  }, [serverTable.tableState.rowSelection]);
-
-  const handleBulkStatus = useCallback(
-    async (nextStatus: DtoBulkUpdateOrderStatusRequestStatus, label: string) => {
-      const orderIds = getSelectedOrderIds();
-      if (orderIds.length === 0) {
-        toast.error('Select at least one order');
-        return;
-      }
-
-      const confirmed = window.confirm(`${label} for ${orderIds.length} order(s)?`);
-      if (!confirmed) return;
-
-      try {
-        const result = await bulkUpdateStatus({
-          data: { order_ids: orderIds, status: nextStatus }
-        });
-        const updated = result.data?.updated ?? orderIds.length;
-        void queryClient.invalidateQueries({ queryKey: getGetOrdersQueryKey() });
-        serverTable.tableState.resetRowSelection();
-        toast.success(`Updated ${updated} order(s)`);
-      } catch (error) {
-        toast.error('Bulk update failed', {
-          description: error instanceof Error ? error.message : 'Something went wrong'
-        });
-      }
-    },
-    [bulkUpdateStatus, getSelectedOrderIds, queryClient, serverTable.tableState]
-  );
 
   const handleExport = useCallback(async () => {
     try {
@@ -170,8 +129,6 @@ export function OrdersTable() {
           showClear
           showColumnVisibility
           showSorting={false}
-          showBulkActions
-          onDelete={() => void handleBulkStatus('cancelled', 'Cancel')}
         >
           <Button type='button' variant='outline' size='sm' onClick={() => setFilterOpen(true)}>
             <IconFilter className='size-4' />
@@ -181,15 +138,6 @@ export function OrdersTable() {
                 ON
               </span>
             ) : null}
-          </Button>
-
-          <Button
-            type='button'
-            variant='outline'
-            size='sm'
-            onClick={() => void handleBulkStatus('shipped', 'Mark as shipped')}
-          >
-            Mark shipped
           </Button>
 
           <Button type='button' variant='outline' size='sm' onClick={() => void handleExport()}>

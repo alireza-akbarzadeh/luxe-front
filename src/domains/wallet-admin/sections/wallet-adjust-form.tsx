@@ -2,10 +2,20 @@
 
 import { IconLoader2 } from '@tabler/icons-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
@@ -14,7 +24,8 @@ import { WalletUserPicker } from '@/domains/wallet-admin/components/wallet-user-
 import { formatPrice } from '@/domains/discounts/lib/discount-utils';
 import {
   walletAdjustDefaultValues,
-  walletAdjustFormSchema
+  walletAdjustFormSchema,
+  type WalletAdjustFormValues
 } from '@/domains/wallet-admin/wallet-adjust.schema';
 import { usePostAdminWalletAdjust } from '@/services/-admin-wallet-adjust-post';
 
@@ -22,6 +33,9 @@ export function WalletAdjustForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedUserId = searchParams.get('userId');
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingValues, setPendingValues] = useState<WalletAdjustFormValues | null>(null);
 
   const { mutateAsync: adjustWallet, isPending } = usePostAdminWalletAdjust();
 
@@ -37,29 +51,36 @@ export function WalletAdjustForm() {
         return;
       }
 
-      const confirmed = window.confirm(
-        `Apply ${value.amount > 0 ? 'credit' : 'debit'} of ${formatPrice(Math.abs(value.amount))} to user #${userId}?`
-      );
-      if (!confirmed) return;
-
-      try {
-        await adjustWallet({
-          data: {
-            user_id: userId,
-            amount: value.amount,
-            description: value.description.trim()
-          }
-        });
-
-        toast.success('Wallet adjusted successfully');
-        form.reset(walletAdjustDefaultValues);
-      } catch (error) {
-        toast.error('Failed to adjust wallet', {
-          description: error instanceof Error ? error.message : 'Something went wrong'
-        });
-      }
+      setPendingValues(value);
+      setConfirmOpen(true);
     }
   });
+
+  const handleConfirmAdjust = async () => {
+    if (!pendingValues) return;
+
+    const userId = Number(pendingValues.user_id);
+    if (!Number.isFinite(userId) || userId <= 0) return;
+
+    try {
+      await adjustWallet({
+        data: {
+          user_id: userId,
+          amount: pendingValues.amount,
+          description: pendingValues.description.trim()
+        }
+      });
+
+      toast.success('Wallet adjusted successfully');
+      form.reset(walletAdjustDefaultValues);
+      setConfirmOpen(false);
+      setPendingValues(null);
+    } catch (error) {
+      toast.error('Failed to adjust wallet', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
+    }
+  };
 
   useEffect(() => {
     if (preselectedUserId) {
@@ -67,8 +88,13 @@ export function WalletAdjustForm() {
     }
   }, [preselectedUserId, form]);
 
+  const pendingUserId = pendingValues ? Number(pendingValues.user_id) : null;
+  const pendingAmount = pendingValues?.amount ?? 0;
+  const isCredit = pendingAmount > 0;
+
   return (
-    <Card className='border-border/40 bg-card/40 max-w-2xl backdrop-blur-2xl'>
+    <>
+      <Card className='border-border/40 bg-card/40 max-w-2xl backdrop-blur-2xl'>
       <CardHeader>
         <CardTitle>Adjust wallet balance</CardTitle>
         <CardDescription>
@@ -168,5 +194,63 @@ export function WalletAdjustForm() {
         </form.AppForm>
       </CardContent>
     </Card>
+
+      <AlertDialog
+        open={confirmOpen}
+        onOpenChange={(open) => {
+          if (!open && !isPending) {
+            setConfirmOpen(false);
+            setPendingValues(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {isCredit ? 'Apply wallet credit?' : 'Apply wallet debit?'}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingUserId ? (
+                <>
+                  This will {isCredit ? 'add' : 'deduct'}{' '}
+                  <span className='text-foreground font-medium'>
+                    {formatPrice(Math.abs(pendingAmount))}
+                  </span>{' '}
+                  {isCredit ? 'to' : 'from'} user #{pendingUserId}. The reason below will be stored on
+                  the transaction.
+                </>
+              ) : null}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {pendingValues?.description ? (
+            <p className='text-muted-foreground border-border/40 rounded-lg border px-3 py-2 text-sm'>
+              {pendingValues.description.trim()}
+            </p>
+          ) : null}
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isPending}
+              variant={isCredit ? 'default' : 'destructive'}
+              onClick={(event) => {
+                event.preventDefault();
+                void handleConfirmAdjust();
+              }}
+            >
+              {isPending ? (
+                <>
+                  <IconLoader2 className='size-4 animate-spin' />
+                  Applying…
+                </>
+              ) : (
+                'Confirm adjustment'
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

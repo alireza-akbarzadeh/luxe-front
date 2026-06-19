@@ -28,8 +28,8 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Updates the status of a shipment and sends real-time notifications.
- * @summary Update shipment status (admin)
+ * Deprecated — use workflow transitions on shipment detail instead. Updates the status of a shipment and sends real-time notifications.
+ * @summary Update shipment status (admin) [deprecated]
  */
 export const putAdminShipmentsIdStatus = (
     id: number,
@@ -80,7 +80,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type PutAdminShipmentsIdStatusMutationError = UtilsResponse
 
     /**
- * @summary Update shipment status (admin)
+ * @summary Update shipment status (admin) [deprecated]
  */
 export const usePutAdminShipmentsIdStatus = <TError = UtilsResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminShipmentsIdStatus>>, TError,{id: number;data: PutAdminShipmentsIdStatusBody}, TContext>, request?: SecondParameter<typeof customInstance>}

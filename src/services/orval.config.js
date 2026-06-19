@@ -10677,7 +10677,7 @@ module.exports = [
         "paths": {
           "/admin/orders/bulk-status": {
             "post": {
-              "description": "Applies the given status to all specified order IDs. Max 500 IDs per call.",
+              "description": "Deprecated — use workflow transitions on order detail instead. Applies the given status to all specified order IDs. Max 500 IDs per call.",
               "requestBody": {
                 "content": {
                   "application/json": {
@@ -10764,7 +10764,7 @@ module.exports = [
                   "BearerAuth": []
                 }
               ],
-              "summary": "Bulk update order status (admin)",
+              "summary": "Bulk update order status (admin) [deprecated]",
               "tags": [
                 "Admin"
               ]
@@ -13525,7 +13525,7 @@ module.exports = [
         "paths": {
           "/admin/shipments/{id}/status": {
             "put": {
-              "description": "Updates the status of a shipment and sends real-time notifications.",
+              "description": "Deprecated — use workflow transitions on shipment detail instead. Updates the status of a shipment and sends real-time notifications.",
               "parameters": [
                 {
                   "description": "Shipment ID",
@@ -13616,7 +13616,7 @@ module.exports = [
                   "BearerAuth": []
                 }
               ],
-              "summary": "Update shipment status (admin)",
+              "summary": "Update shipment status (admin) [deprecated]",
               "tags": [
                 "Shipments"
               ]
@@ -13939,6 +13939,952 @@ module.exports = [
                 },
                 "total_wallet_balance": {
                   "type": "number"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/stores": {
+            "post": {
+              "description": "Create a new store (admin only)",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.CreateStoreRequest"
+                    }
+                  }
+                },
+                "description": "Store details",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StoreResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Create store",
+              "tags": [
+                "Stores"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.CreateStoreRequest": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "category_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StoreResponse": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CategoryResponse"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_followed": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "joined_at": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/stores/{id}": {
+            "delete": {
+              "description": "Soft delete a store (admin only)",
+              "parameters": [
+                {
+                  "description": "Store ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete store",
+              "tags": [
+                "Stores"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/stores/{id}": {
+            "get": {
+              "description": "Fetch store details by primary key for admin edit screens",
+              "parameters": [
+                {
+                  "description": "Store ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StoreResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Get store by ID (admin)",
+              "tags": [
+                "Stores"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StoreResponse": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CategoryResponse"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_followed": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "joined_at": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-put.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/stores/{id}": {
+            "put": {
+              "description": "Update store details (admin only)",
+              "parameters": [
+                {
+                  "description": "Store ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.UpdateStoreRequest"
+                    }
+                  }
+                },
+                "description": "Updated store data",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StoreResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Update store",
+              "tags": [
+                "Stores"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.UpdateStoreRequest": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "category_ids": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StoreResponse": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CategoryResponse"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_followed": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "joined_at": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -40417,726 +41363,6 @@ module.exports = [
         },
         "components": {
           "schemas": {
-            "utils.Response": {
-              "properties": {
-                "code": {
-                  "type": "integer"
-                },
-                "error": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "dto.StoreResponse": {
-              "properties": {
-                "banner_url": {
-                  "type": "string"
-                },
-                "categories": {
-                  "items": {
-                    "$ref": "#/components/schemas/dto.CategoryResponse"
-                  },
-                  "type": "array"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "follower_count": {
-                  "type": "integer"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_followed": {
-                  "type": "boolean"
-                },
-                "is_verified": {
-                  "type": "boolean"
-                },
-                "joined_at": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "return_policy": {
-                  "type": "string"
-                },
-                "review_count": {
-                  "type": "integer"
-                },
-                "shipping_info": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "dto.CategoryResponse": {
-              "properties": {
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "level": {
-                  "type": "integer"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "output": {
-      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-post.ts",
-      "client": "react-query",
-      "httpClient": "axios",
-      "mode": "split",
-      "prettier": true,
-      "override": {
-        "mutator": {
-          "path": "../lib/api/api-client.ts",
-          "name": "customInstance"
-        }
-      }
-    },
-    "input": {
-      "target": {
-        "openapi": "3.0.3",
-        "info": {
-          "contact": {
-            "email": "support@luxe.com",
-            "name": "API Support"
-          },
-          "description": "Production-grade e-commerce backend",
-          "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-          },
-          "termsOfService": "http://swagger.io/terms/",
-          "title": "Shopping Platform API",
-          "version": "1.0"
-        },
-        "servers": [
-          {
-            "url": "https://localhost:8080/api/v1"
-          }
-        ],
-        "paths": {
-          "/stores": {
-            "post": {
-              "description": "Create a new store (admin only)",
-              "requestBody": {
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/dto.CreateStoreRequest"
-                    }
-                  }
-                },
-                "description": "Store details",
-                "required": true,
-                "x-originalParamName": "request"
-              },
-              "responses": {
-                "201": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "allOf": [
-                          {
-                            "$ref": "#/components/schemas/utils.Response"
-                          },
-                          {
-                            "properties": {
-                              "data": {
-                                "$ref": "#/components/schemas/dto.StoreResponse"
-                              }
-                            },
-                            "type": "object"
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  "description": "Created"
-                },
-                "400": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Bad Request"
-                },
-                "401": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Unauthorized"
-                },
-                "403": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Forbidden"
-                },
-                "500": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Internal Server Error"
-                }
-              },
-              "security": [
-                {
-                  "BearerAuth": []
-                }
-              ],
-              "summary": "Create store",
-              "tags": [
-                "Stores"
-              ]
-            }
-          }
-        },
-        "components": {
-          "schemas": {
-            "dto.CreateStoreRequest": {
-              "properties": {
-                "banner_url": {
-                  "type": "string"
-                },
-                "category_ids": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "return_policy": {
-                  "type": "string"
-                },
-                "shipping_info": {
-                  "type": "string"
-                },
-                "user_id": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "name"
-              ],
-              "type": "object"
-            },
-            "utils.Response": {
-              "properties": {
-                "code": {
-                  "type": "integer"
-                },
-                "error": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            },
-            "dto.StoreResponse": {
-              "properties": {
-                "banner_url": {
-                  "type": "string"
-                },
-                "categories": {
-                  "items": {
-                    "$ref": "#/components/schemas/dto.CategoryResponse"
-                  },
-                  "type": "array"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "follower_count": {
-                  "type": "integer"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_followed": {
-                  "type": "boolean"
-                },
-                "is_verified": {
-                  "type": "boolean"
-                },
-                "joined_at": {
-                  "type": "string"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "rating": {
-                  "type": "number"
-                },
-                "return_policy": {
-                  "type": "string"
-                },
-                "review_count": {
-                  "type": "integer"
-                },
-                "shipping_info": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
-            "dto.CategoryResponse": {
-              "properties": {
-                "description": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "integer"
-                },
-                "is_active": {
-                  "type": "boolean"
-                },
-                "level": {
-                  "type": "integer"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "parent_id": {
-                  "type": "integer"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "slug": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "output": {
-      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{id}-delete.ts",
-      "client": "react-query",
-      "httpClient": "axios",
-      "mode": "split",
-      "prettier": true,
-      "override": {
-        "mutator": {
-          "path": "../lib/api/api-client.ts",
-          "name": "customInstance"
-        }
-      }
-    },
-    "input": {
-      "target": {
-        "openapi": "3.0.3",
-        "info": {
-          "contact": {
-            "email": "support@luxe.com",
-            "name": "API Support"
-          },
-          "description": "Production-grade e-commerce backend",
-          "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-          },
-          "termsOfService": "http://swagger.io/terms/",
-          "title": "Shopping Platform API",
-          "version": "1.0"
-        },
-        "servers": [
-          {
-            "url": "https://localhost:8080/api/v1"
-          }
-        ],
-        "paths": {
-          "/stores/{id}": {
-            "delete": {
-              "description": "Soft delete a store (admin only)",
-              "parameters": [
-                {
-                  "description": "Store ID",
-                  "in": "path",
-                  "name": "id",
-                  "required": true,
-                  "schema": {
-                    "type": "integer"
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "OK"
-                },
-                "400": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Bad Request"
-                },
-                "401": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Unauthorized"
-                },
-                "403": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Forbidden"
-                },
-                "404": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Not Found"
-                },
-                "500": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Internal Server Error"
-                }
-              },
-              "security": [
-                {
-                  "BearerAuth": []
-                }
-              ],
-              "summary": "Delete store",
-              "tags": [
-                "Stores"
-              ]
-            }
-          }
-        },
-        "components": {
-          "schemas": {
-            "utils.Response": {
-              "properties": {
-                "code": {
-                  "type": "integer"
-                },
-                "error": {
-                  "type": "string"
-                },
-                "message": {
-                  "type": "string"
-                },
-                "success": {
-                  "type": "boolean"
-                }
-              },
-              "type": "object"
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "output": {
-      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{id}-put.ts",
-      "client": "react-query",
-      "httpClient": "axios",
-      "mode": "split",
-      "prettier": true,
-      "override": {
-        "mutator": {
-          "path": "../lib/api/api-client.ts",
-          "name": "customInstance"
-        }
-      }
-    },
-    "input": {
-      "target": {
-        "openapi": "3.0.3",
-        "info": {
-          "contact": {
-            "email": "support@luxe.com",
-            "name": "API Support"
-          },
-          "description": "Production-grade e-commerce backend",
-          "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-          },
-          "termsOfService": "http://swagger.io/terms/",
-          "title": "Shopping Platform API",
-          "version": "1.0"
-        },
-        "servers": [
-          {
-            "url": "https://localhost:8080/api/v1"
-          }
-        ],
-        "paths": {
-          "/stores/{id}": {
-            "put": {
-              "description": "Update store details (admin only)",
-              "parameters": [
-                {
-                  "description": "Store ID",
-                  "in": "path",
-                  "name": "id",
-                  "required": true,
-                  "schema": {
-                    "type": "integer"
-                  }
-                }
-              ],
-              "requestBody": {
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/dto.UpdateStoreRequest"
-                    }
-                  }
-                },
-                "description": "Updated store data",
-                "required": true,
-                "x-originalParamName": "request"
-              },
-              "responses": {
-                "200": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "allOf": [
-                          {
-                            "$ref": "#/components/schemas/utils.Response"
-                          },
-                          {
-                            "properties": {
-                              "data": {
-                                "$ref": "#/components/schemas/dto.StoreResponse"
-                              }
-                            },
-                            "type": "object"
-                          }
-                        ]
-                      }
-                    }
-                  },
-                  "description": "OK"
-                },
-                "400": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Bad Request"
-                },
-                "401": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Unauthorized"
-                },
-                "403": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Forbidden"
-                },
-                "404": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Not Found"
-                },
-                "500": {
-                  "content": {
-                    "application/json": {
-                      "schema": {
-                        "$ref": "#/components/schemas/utils.Response"
-                      }
-                    }
-                  },
-                  "description": "Internal Server Error"
-                }
-              },
-              "security": [
-                {
-                  "BearerAuth": []
-                }
-              ],
-              "summary": "Update store",
-              "tags": [
-                "Stores"
-              ]
-            }
-          }
-        },
-        "components": {
-          "schemas": {
-            "dto.UpdateStoreRequest": {
-              "properties": {
-                "banner_url": {
-                  "type": "string"
-                },
-                "category_ids": {
-                  "items": {
-                    "type": "integer"
-                  },
-                  "type": "array"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "is_verified": {
-                  "type": "boolean"
-                },
-                "location": {
-                  "type": "string"
-                },
-                "logo_url": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "return_policy": {
-                  "type": "string"
-                },
-                "shipping_info": {
-                  "type": "string"
-                },
-                "status": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            },
             "utils.Response": {
               "properties": {
                 "code": {

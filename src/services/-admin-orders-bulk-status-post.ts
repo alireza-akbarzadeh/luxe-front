@@ -29,8 +29,8 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Applies the given status to all specified order IDs. Max 500 IDs per call.
- * @summary Bulk update order status (admin)
+ * Deprecated — use workflow transitions on order detail instead. Applies the given status to all specified order IDs. Max 500 IDs per call.
+ * @summary Bulk update order status (admin) [deprecated]
  */
 export const postAdminOrdersBulkStatus = (
     dtoBulkUpdateOrderStatusRequest: DtoBulkUpdateOrderStatusRequest,
@@ -80,7 +80,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type PostAdminOrdersBulkStatusMutationError = UtilsResponse
 
     /**
- * @summary Bulk update order status (admin)
+ * @summary Bulk update order status (admin) [deprecated]
  */
 export const usePostAdminOrdersBulkStatus = <TError = UtilsResponse,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminOrdersBulkStatus>>, TError,{data: DtoBulkUpdateOrderStatusRequest}, TContext>, request?: SecondParameter<typeof customInstance>}

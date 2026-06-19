@@ -17,7 +17,7 @@ import type {
 
 import type {
   UtilsResponse
-} from './-stores-{id}-delete.schemas';
+} from './-admin-stores-{id}-delete.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
@@ -30,7 +30,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * Soft delete a store (admin only)
  * @summary Delete store
  */
-export const deleteStoresId = (
+export const deleteAdminStoresId = (
     id: number,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
@@ -44,11 +44,11 @@ export const deleteStoresId = (
 
 
 
-export const getDeleteStoresIdMutationOptions = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStoresId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteStoresId>>, TError,{id: number}, TContext> => {
+export const getDeleteAdminStoresIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminStoresId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteAdminStoresId>>, TError,{id: number}, TContext> => {
 
-const mutationKey = ['deleteStoresId'];
+const mutationKey = ['deleteAdminStoresId'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -58,10 +58,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteStoresId>>, {id: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdminStoresId>>, {id: number}> = (props) => {
           const {id} = props ?? {};
 
-          return  deleteStoresId(id,requestOptions)
+          return  deleteAdminStoresId(id,requestOptions)
         }
 
 
@@ -71,21 +71,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type DeleteStoresIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteStoresId>>>
+    export type DeleteAdminStoresIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdminStoresId>>>
 
-    export type DeleteStoresIdMutationError = UtilsResponse
+    export type DeleteAdminStoresIdMutationError = UtilsResponse
 
     /**
  * @summary Delete store
  */
-export const useDeleteStoresId = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteStoresId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const useDeleteAdminStoresId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminStoresId>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deleteStoresId>>,
+        Awaited<ReturnType<typeof deleteAdminStoresId>>,
         TError,
         {id: number},
         TContext
       > => {
-      return useMutation(getDeleteStoresIdMutationOptions(options), queryClient);
+      return useMutation(getDeleteAdminStoresIdMutationOptions(options), queryClient);
     }
 

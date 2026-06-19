@@ -17,9 +17,9 @@ import type {
 
 import type {
   DtoUpdateStoreRequest,
-  PutStoresId200,
+  PutAdminStoresId200,
   UtilsResponse
-} from './-stores-{id}-put.schemas';
+} from './-admin-stores-{id}-put.schemas';
 
 import { customInstance } from '../lib/api/api-client';
 
@@ -32,14 +32,14 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * Update store details (admin only)
  * @summary Update store
  */
-export const putStoresId = (
+export const putAdminStoresId = (
     id: number,
     dtoUpdateStoreRequest: DtoUpdateStoreRequest,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
 
-      return customInstance<PutStoresId200>(
+      return customInstance<PutAdminStoresId200>(
       {url: `/admin/stores/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: dtoUpdateStoreRequest, signal
@@ -49,11 +49,11 @@ export const putStoresId = (
 
 
 
-export const getPutStoresIdMutationOptions = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof putStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext> => {
+export const getPutAdminStoresIdMutationOptions = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putAdminStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext> => {
 
-const mutationKey = ['putStoresId'];
+const mutationKey = ['putAdminStoresId'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -63,10 +63,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putStoresId>>, {id: number;data: DtoUpdateStoreRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putAdminStoresId>>, {id: number;data: DtoUpdateStoreRequest}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  putStoresId(id,data,requestOptions)
+          return  putAdminStoresId(id,data,requestOptions)
         }
 
 
@@ -76,21 +76,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type PutStoresIdMutationResult = NonNullable<Awaited<ReturnType<typeof putStoresId>>>
-    export type PutStoresIdMutationBody = DtoUpdateStoreRequest
-    export type PutStoresIdMutationError = UtilsResponse
+    export type PutAdminStoresIdMutationResult = NonNullable<Awaited<ReturnType<typeof putAdminStoresId>>>
+    export type PutAdminStoresIdMutationBody = DtoUpdateStoreRequest
+    export type PutAdminStoresIdMutationError = UtilsResponse
 
     /**
  * @summary Update store
  */
-export const usePutStoresId = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+export const usePutAdminStoresId = <TError = UtilsResponse,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putAdminStoresId>>, TError,{id: number;data: DtoUpdateStoreRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof putStoresId>>,
+        Awaited<ReturnType<typeof putAdminStoresId>>,
         TError,
         {id: number;data: DtoUpdateStoreRequest},
         TContext
       > => {
-      return useMutation(getPutStoresIdMutationOptions(options), queryClient);
+      return useMutation(getPutAdminStoresIdMutationOptions(options), queryClient);
     }
 

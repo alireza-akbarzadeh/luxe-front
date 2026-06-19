@@ -54,7 +54,7 @@ export interface DtoStoreResponse {
   slug?: string;
 }
 
-export type PostStores201 = UtilsResponse & {
+export type PostAdminStores201 = UtilsResponse & {
   data?: DtoStoreResponse;
 };
 
