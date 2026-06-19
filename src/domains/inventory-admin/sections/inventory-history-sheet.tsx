@@ -16,8 +16,8 @@ import {
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
-import { useGetAdminInventoryProductsIdHistory } from '@/services/-admin-inventory';
-import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory.schemas';
+import { useGetAdminInventoryProductsIdHistory } from '@/services/-admin-inventory-products-{id}-history-get';
+import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory-products-{id}-history-get.schemas';
 
 function formatAdjustmentType(type?: string) {
   return (type ?? 'adjustment').replaceAll('_', ' ');

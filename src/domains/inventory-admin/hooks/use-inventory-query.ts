@@ -1,6 +1,8 @@
 import { parseAsStringEnum, useQueryState } from 'nuqs';
 
-import type { InventoryStockStatus } from '@/services/-admin-inventory.schemas';
+import type { GetAdminInventoryStockStatus } from '@/services/-admin-inventory-get.schemas';
+
+export type InventoryStockStatus = GetAdminInventoryStockStatus;
 
 const STOCK_STATUSES = ['all', 'low', 'out', 'healthy', 'not_tracked'] as const;
 const SORT_OPTIONS = ['stock_asc', 'stock_desc', 'name_asc', 'waitlist_desc', 'velocity_desc'] as const;

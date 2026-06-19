@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
 import { formatCurrency } from '@/lib/format';
-import type { DtoReturnResponse } from '@/services/-admin-returns.schemas';
+import type { DtoReturnResponse } from '@/domains/returns-admin/lib/return-list';
 
 function formatReturnDate(value?: string) {
   if (!value) return '—';

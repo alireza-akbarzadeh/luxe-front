@@ -1,4 +1,4 @@
-import type { GetAdminInventory200 } from '@/services/-admin-inventory.schemas';
+import type { GetAdminInventory200 } from '@/services/-admin-inventory-get.schemas';
 
 export function getInventoryItemsFromListResponse(data: GetAdminInventory200 | undefined) {
   return data?.data?.items ?? [];

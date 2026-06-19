@@ -10,13 +10,14 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useReturnsQueryState } from '@/domains/returns-admin/hooks/use-returns-query';
 import {
   getReturnsFromListResponse,
-  getReturnsTotalFromListResponse
+  getReturnsTotalFromListResponse,
+  type DtoReturnResponse,
+  type GetAdminReturns200
 } from '@/domains/returns-admin/lib/return-list';
 import type { ReturnStatusFilter } from '@/domains/returns-admin/returns.schema';
 import { RETURN_STATUS_TABS } from '@/domains/returns-admin/returns.schema';
 import { returnColumns, returnRowMenuActions } from '@/domains/returns-admin/sections/returns-columns';
-import { useGetAdminReturns } from '@/services/-admin-returns';
-import type { DtoReturnResponse, GetAdminReturns200 } from '@/services/-admin-returns.schemas';
+import { useGetAdminReturns } from '@/services/-admin-returns-get';
 
 export function ReturnsTable() {
   const router = useRouter();

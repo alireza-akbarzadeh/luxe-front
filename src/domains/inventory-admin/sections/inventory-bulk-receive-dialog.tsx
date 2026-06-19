@@ -17,13 +17,11 @@ import {
   parseBulkReceiveLines
 } from '@/domains/inventory-admin/inventory.schema';
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
-import {
-  getGetAdminInventoryAdjustmentsRecentQueryKey,
-  getGetAdminInventoryOverviewQueryKey,
-  getGetAdminInventoryQueryKey,
-  usePostAdminInventoryBulkAdjust
-} from '@/services/-admin-inventory';
-import type { DtoBulkInventoryAdjustRowResult } from '@/services/-admin-inventory.schemas';
+import { getGetAdminInventoryAdjustmentsRecentQueryKey } from '@/services/-admin-inventory-adjustments-recent-get';
+import { getGetAdminInventoryOverviewQueryKey } from '@/services/-admin-inventory-overview-get';
+import { getGetAdminInventoryQueryKey } from '@/services/-admin-inventory-get';
+import { usePostAdminInventoryBulkAdjust } from '@/services/-admin-inventory-bulk-adjust-post';
+import type { DtoBulkInventoryAdjustRowResult } from '@/services/-admin-inventory-bulk-adjust-post.schemas';
 
 export function InventoryBulkReceiveDialog() {
   const queryClient = useQueryClient();

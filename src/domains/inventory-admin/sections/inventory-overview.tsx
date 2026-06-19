@@ -11,7 +11,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import type { DtoInventoryOverviewResponse } from '@/services/-admin-inventory.schemas';
+import type { DtoInventoryOverviewResponse } from '@/services/-admin-inventory-overview-get.schemas';
 
 interface InventoryOverviewProps {
   overview?: DtoInventoryOverviewResponse;

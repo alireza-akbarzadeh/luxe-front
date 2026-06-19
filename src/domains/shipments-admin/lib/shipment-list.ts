@@ -1,7 +1,7 @@
 import type {
   DtoAdminShipmentListItem,
   GetAdminShipments200
-} from '@/services/-admin-shipments.schemas';
+} from '@/services/-admin-shipments-get.schemas';
 
 export function getShipmentsFromListResponse(
   data: GetAdminShipments200 | undefined

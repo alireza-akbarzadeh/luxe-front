@@ -3,8 +3,8 @@
 import { useQueries } from '@tanstack/react-query';
 
 import { SHIPMENT_IN_TRANSIT_STATUSES } from '@/domains/shipments-admin/shipments.schema';
-import { getAdminShipments } from '@/services/-admin-shipments';
-import type { GetAdminShipments200 } from '@/services/-admin-shipments.schemas';
+import { getAdminShipments } from '@/services/-admin-shipments-get';
+import type { GetAdminShipments200 } from '@/services/-admin-shipments-get.schemas';
 
 function readTotal(data: GetAdminShipments200 | undefined) {
   return data?.data?.total ?? 0;

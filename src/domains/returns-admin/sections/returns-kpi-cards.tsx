@@ -3,8 +3,9 @@
 import { useQueries } from '@tanstack/react-query';
 
 import { RETURN_ACTION_STATUSES } from '@/domains/returns-admin/returns.schema';
-import { getAdminReturns } from '@/services/-admin-returns';
-import type { GetAdminReturns200 } from '@/services/-admin-returns.schemas';
+import { getAdminReturns } from '@/services/-admin-returns-get';
+
+import type { GetAdminReturns200 } from '../lib/return-list';
 
 function readTotal(data: GetAdminReturns200 | undefined) {
   return data?.data?.total ?? 0;

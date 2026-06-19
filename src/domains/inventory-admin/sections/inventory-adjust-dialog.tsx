@@ -14,13 +14,11 @@ import {
   inventoryAdjustSchema
 } from '@/domains/inventory-admin/inventory.schema';
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
-import {
-  getGetAdminInventoryAdjustmentsRecentQueryKey,
-  getGetAdminInventoryOverviewQueryKey,
-  getGetAdminInventoryProductsIdHistoryQueryKey,
-  getGetAdminInventoryQueryKey,
-  usePostAdminInventoryAdjust
-} from '@/services/-admin-inventory';
+import { getGetAdminInventoryAdjustmentsRecentQueryKey } from '@/services/-admin-inventory-adjustments-recent-get';
+import { getGetAdminInventoryOverviewQueryKey } from '@/services/-admin-inventory-overview-get';
+import { getGetAdminInventoryProductsIdHistoryQueryKey } from '@/services/-admin-inventory-products-{id}-history-get';
+import { getGetAdminInventoryQueryKey } from '@/services/-admin-inventory-get';
+import { usePostAdminInventoryAdjust } from '@/services/-admin-inventory-adjust-post';
 
 export function InventoryAdjustDialog() {
   const queryClient = useQueryClient();

@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
-import type { DtoAdminShipmentListItem } from '@/services/-admin-shipments.schemas';
+import type { DtoAdminShipmentListItem } from '@/services/-admin-shipments-get.schemas';
 
 function formatShipmentDate(value?: string) {
   if (!value) return '—';

@@ -18,8 +18,8 @@ import {
   shipmentColumns,
   shipmentRowMenuActions
 } from '@/domains/shipments-admin/sections/shipments-columns';
-import { useGetAdminShipments } from '@/services/-admin-shipments';
-import type { DtoAdminShipmentListItem, GetAdminShipments200 } from '@/services/-admin-shipments.schemas';
+import { useGetAdminShipments } from '@/services/-admin-shipments-get';
+import type { DtoAdminShipmentListItem, GetAdminShipments200 } from '@/services/-admin-shipments-get.schemas';
 
 export function ShipmentsTable() {
   const router = useRouter();

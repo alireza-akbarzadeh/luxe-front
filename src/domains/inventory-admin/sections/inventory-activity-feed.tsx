@@ -5,8 +5,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { useGetAdminInventoryAdjustmentsRecent } from '@/services/-admin-inventory';
-import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory.schemas';
+import { useGetAdminInventoryAdjustmentsRecent } from '@/services/-admin-inventory-adjustments-recent-get';
+import type { DtoInventoryAdjustmentResponse } from '@/services/-admin-inventory-adjustments-recent-get.schemas';
 
 export function InventoryActivityFeed() {
   const { data, isLoading } = useGetAdminInventoryAdjustmentsRecent({ limit: 8 });

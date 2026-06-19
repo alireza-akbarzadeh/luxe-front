@@ -34,12 +34,15 @@ import { inventoryColumns } from '@/domains/inventory-admin/sections/inventory-c
 import { InventoryHistorySheet } from '@/domains/inventory-admin/sections/inventory-history-sheet';
 import { InventoryOverview } from '@/domains/inventory-admin/sections/inventory-overview';
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
-import { useGetAdminInventory, useGetAdminInventoryOverview } from '@/services/-admin-inventory';
-import type { InventoryStockStatus } from '@/services/-admin-inventory.schemas';
+import { useGetAdminInventory } from '@/services/-admin-inventory-get';
+import { useGetAdminInventoryOverview } from '@/services/-admin-inventory-overview-get';
 import type {
   DtoInventoryItemResponse,
-  GetAdminInventory200
-} from '@/services/-admin-inventory.schemas';
+  GetAdminInventory200,
+  GetAdminInventoryStockStatus
+} from '@/services/-admin-inventory-get.schemas';
+
+export type InventoryStockStatus = GetAdminInventoryStockStatus;
 
 export function InventoryAdminDomain() {
   const { push } = useRouter();

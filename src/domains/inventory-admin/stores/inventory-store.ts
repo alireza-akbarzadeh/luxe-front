@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import type { DtoInventoryItemResponse } from '@/services/-admin-inventory.schemas';
+import type { DtoInventoryItemResponse } from '@/services/-admin-inventory-get.schemas';
 
 interface InventoryStoreState {
   adjustTarget: DtoInventoryItemResponse | null;

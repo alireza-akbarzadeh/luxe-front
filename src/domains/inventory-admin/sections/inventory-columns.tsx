@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
 import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
 import { mapBrandStatusToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
-import type { DtoInventoryItemResponse } from '~/src/services/-admin-inventory.schemas';
+import type { DtoInventoryItemResponse } from '@/services/-admin-inventory-get.schemas';
 
 function stockStatusLabel(status?: string) {
   switch (status) {

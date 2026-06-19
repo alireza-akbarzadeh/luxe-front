@@ -12,7 +12,7 @@ import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workf
 import { WorkflowHistoryTimeline } from '@/domains/workflows/components/workflow-history-timeline';
 import { parseWorkflowHistoryResponse } from '@/domains/workflows/lib/workflow-runtime';
 import { formatCurrency } from '@/lib/format';
-import { getGetAdminShipmentsQueryKey } from '@/services/-admin-shipments';
+import { getGetAdminShipmentsQueryKey } from '@/services/-admin-shipments-get';
 import { getGetShipmentsIdQueryKey, useGetShipmentsId } from '@/services/-shipments-{id}-get';
 import type { ModelsShipment } from '@/services/-shipments-{id}-get.schemas';
 import { useGetWorkflowsKeyEntityIdHistory } from '@/services/-workflows-{key}-{entityId}-history-get';
