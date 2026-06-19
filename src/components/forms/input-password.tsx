@@ -14,12 +14,14 @@ import { useFieldContext } from './useFormContext';
 export function InputPassword({
   label = 'Password',
   showForgotLink = false,
+  forgotPasswordHref = '/forgot-password',
   placeholder,
   className,
   ...props
 }: {
   label?: string;
   showForgotLink?: boolean;
+  forgotPasswordHref?: string;
   placeholder?: string;
 } & ComponentProps<typeof Input>) {
   const field = useFieldContext<string>();
@@ -32,7 +34,7 @@ export function InputPassword({
         {showForgotLink ? (
           <div className='flex justify-end'>
             <Link
-              href='/forgot-password'
+              href={forgotPasswordHref}
               className='text-accent text-sm font-medium transition-colors hover:underline'
             >
               Forgot password?

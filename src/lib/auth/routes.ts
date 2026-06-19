@@ -12,9 +12,10 @@ export const AUTH_ROUTES = {
     '/compare',
     '/notifications',
     '/dashboard',
-    '/order-tracking'
+    '/order-tracking',
+    '/vendor/panel'
   ],
-  guestOnly: ['/login', '/register', '/forgot-password'],
+  guestOnly: ['/login', '/register', '/forgot-password', '/vendor/login'],
   publicAuth: ['/reset-password', '/verify-email'],
   admin: ['/dashboard']
 } as const;
@@ -38,4 +39,12 @@ export function isAuthPath(pathname: string): boolean {
 
 export function isAdminPath(pathname: string): boolean {
   return AUTH_ROUTES.admin.some((route) => pathname.startsWith(route));
+}
+
+export function isVendorPanelPath(pathname: string): boolean {
+  return pathname.startsWith('/vendor/panel');
+}
+
+export function isVendorLoginPath(pathname: string): boolean {
+  return pathname.startsWith('/vendor/login');
 }

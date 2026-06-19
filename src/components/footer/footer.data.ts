@@ -52,8 +52,9 @@ const footerSections = [
       { name: 'Discover Stores', href: '/store' },
       { name: 'Top Rated', href: '/store?sort=top_rated' },
       { name: 'Verified Vendors', href: '/store?verified=true' },
-      { name: 'Partner With Us', href: '/contact' },
-      { name: 'Vendor Login', href: '/login?callbackUrl=%2Fdashboard' }
+      { name: 'Sell on Luxe', href: '/vendor' },
+      { name: 'Vendor sign in', href: '/vendor/login' },
+      { name: 'Vendor panel', href: '/vendor/panel' }
     ]
   },
   {

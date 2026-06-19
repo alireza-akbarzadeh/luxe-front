@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { applyAuthCookiesToResponse, clearAuthCookiesOnResponse } from './lib/auth/auth-cookies';
 import { isAccessTokenExpired, requestTokenRefresh } from './lib/auth/auth-refresh';
-import { isAdminPath, isGuestOnlyAuthPath, isProtectedPath } from './lib/auth/routes';
+import { isAdminPath, isGuestOnlyAuthPath, isProtectedPath, isVendorLoginPath, isVendorPanelPath } from './lib/auth/routes';
 
 function decodeToken(token: string) {
   try {
@@ -27,6 +27,8 @@ export async function proxy(request: NextRequest) {
   const isGuestOnlyAuthRoute = isGuestOnlyAuthPath(pathname);
   const isAdminRoute = isAdminPath(pathname);
 
+  const isVendorPanelRoute = isVendorPanelPath(pathname);
+
   let refreshedTokens: Awaited<ReturnType<typeof requestTokenRefresh>> | null = null;
   if (refreshToken && (!accessToken || isAccessTokenExpired(accessToken))) {
     refreshedTokens = await requestTokenRefresh(refreshToken);
@@ -47,7 +49,8 @@ export async function proxy(request: NextRequest) {
 
   if (isProtectedRoute || isAdminRoute) {
     if (!effectiveAccessToken && !refreshToken) {
-      const url = new URL('/login', request.url);
+      const loginPath = isVendorPanelRoute ? '/vendor/login' : '/login';
+      const url = new URL(loginPath, request.url);
       url.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(url);
     }
@@ -63,7 +66,8 @@ export async function proxy(request: NextRequest) {
     }
 
     if (refreshToken && !refreshedTokens) {
-      const url = new URL('/login', request.url);
+      const loginPath = isVendorPanelRoute ? '/vendor/login' : '/login';
+      const url = new URL(loginPath, request.url);
       url.searchParams.set('callbackUrl', pathname);
       return clearAuthCookiesOnResponse(NextResponse.redirect(url));
     }
@@ -78,18 +82,21 @@ export async function proxy(request: NextRequest) {
       return withRefreshedCookies(NextResponse.next());
     }
 
-    const url = new URL('/login', request.url);
+    const loginPath = isVendorPanelRoute ? '/vendor/login' : '/login';
+    const url = new URL(loginPath, request.url);
     url.searchParams.set('callbackUrl', pathname);
     return clearAuthCookiesOnResponse(NextResponse.redirect(url));
   }
 
   if (isGuestOnlyAuthRoute) {
     if (effectiveAccessToken && !isAccessTokenExpired(effectiveAccessToken)) {
-      return withRefreshedCookies(NextResponse.redirect(new URL('/account', request.url)));
+      const destination = isVendorLoginPath(pathname) ? '/vendor/panel' : '/account';
+      return withRefreshedCookies(NextResponse.redirect(new URL(destination, request.url)));
     }
 
     if (refreshedTokens) {
-      return withRefreshedCookies(NextResponse.redirect(new URL('/account', request.url)));
+      const destination = isVendorLoginPath(pathname) ? '/vendor/panel' : '/account';
+      return withRefreshedCookies(NextResponse.redirect(new URL(destination, request.url)));
     }
 
     if (refreshToken && !refreshedTokens) {

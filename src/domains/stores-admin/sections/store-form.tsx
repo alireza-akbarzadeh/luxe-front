@@ -26,8 +26,8 @@ import {
 } from '@/services/-admin-stores-{id}-get';
 import { useGetCategories } from '@/services/-categories-get';
 import { getGetStoresQueryKey } from '@/services/-stores-get';
-import { usePutStoresId } from '@/services/-stores-{id}-put';
-import { usePostStores } from '@/services/-stores-post';
+import { usePutAdminStoresId } from '@/services/-admin-stores-{id}-put';
+import { usePostAdminStores } from '@/services/-admin-stores-post';
 
 interface StoreFormProps {
   storeId?: string;
@@ -56,7 +56,7 @@ export function StoreForm({ isEdit = false, storeId }: StoreFormProps) {
       }));
   }, [categoriesData]);
 
-  const { mutateAsync: createStore, isPending: isCreating } = usePostStores({
+  const { mutateAsync: createStore, isPending: isCreating } = usePostAdminStores({
     mutation: {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: getGetStoresQueryKey() });
@@ -64,7 +64,7 @@ export function StoreForm({ isEdit = false, storeId }: StoreFormProps) {
     }
   });
 
-  const { mutateAsync: updateStore, isPending: isUpdating } = usePutStoresId({
+  const { mutateAsync: updateStore, isPending: isUpdating } = usePutAdminStoresId({
     mutation: {
       onSuccess: () => {
         void queryClient.invalidateQueries({ queryKey: getGetStoresQueryKey() });

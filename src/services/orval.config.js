@@ -30049,6 +30049,112 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-payments-stripe-config-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/payments/stripe-config": {
+            "get": {
+              "description": "Returns whether Stripe is enabled and the publishable key for client-side checkout.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StripeConfigResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Get Stripe client configuration",
+              "tags": [
+                "Payment"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StripeConfigResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "publishable_key": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-get.ts",
       "client": "react-query",
       "httpClient": "axios",

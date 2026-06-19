@@ -4,6 +4,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { BASE_URL } from '@/lib/api/api-client';
+import { getCallbackeUrl } from '@/lib/utils';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
 import { clearAuthCookies, setAuthCookies } from '~/src/lib/auth/auth-helpers';
 import { refreshSessionFromCookies } from '~/src/lib/auth/auth-refresh';
@@ -65,13 +66,36 @@ async function getCallbackUrlFromReferer(): Promise<string | null> {
   }
 }
 
+async function resolvePostAuthRedirect(
+  formData?: FormData,
+  defaultRedirect = '/account'
+): Promise<string> {
+  const fromForm = formData?.get('callbackUrl');
+  if (typeof fromForm === 'string' && fromForm.startsWith('/')) {
+    return getCallbackeUrl(fromForm);
+  }
+
+  const fromReferer = await getCallbackUrlFromReferer();
+  if (fromReferer) {
+    return getCallbackeUrl(fromReferer);
+  }
+
+  return defaultRedirect;
+}
+
 async function handleAuthResponse<
   T extends {
     success?: boolean;
     message?: string;
     data?: { access_token?: string; refresh_token?: string };
   }
->(response: Response, json: T, rememberMe = false): Promise<{ error: string } | void> {
+>(
+  response: Response,
+  json: T,
+  rememberMe = false,
+  formData?: FormData,
+  defaultRedirect = '/account'
+): Promise<{ error: string } | void> {
   if (!response.ok || !json.success) {
     return { error: json.message || 'Authentication failed' };
   }
@@ -84,7 +108,7 @@ async function handleAuthResponse<
 
   await setAuthCookies(access_token, refresh_token, rememberMe);
 
-  const callbackUrl = (await getCallbackUrlFromReferer()) || '/account';
+  const callbackUrl = await resolvePostAuthRedirect(formData, defaultRedirect);
   redirect(callbackUrl);
 }
 
@@ -105,7 +129,7 @@ export async function loginAction(formData: FormData) {
     });
 
     const json = (await res.json()) as DtoRegisterResponse;
-    const error = await handleAuthResponse(res, json, rememberMe);
+    const error = await handleAuthResponse(res, json, rememberMe, formData);
     if (error) return error;
   } catch (error) {
     if (isNextRedirectError(error)) {

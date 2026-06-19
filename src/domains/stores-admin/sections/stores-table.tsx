@@ -15,7 +15,7 @@ import {
   getStoresTotalFromListResponse
 } from '@/domains/stores-admin/lib/store-list';
 import { storeColumns } from '@/domains/stores-admin/sections/store-columns';
-import { deleteStoresId } from '@/services/-stores-{id}-delete';
+import { deleteAdminStoresId } from '@/services/-admin-stores-{id}-delete';
 import { getGetStoresQueryKey, useGetStores } from '@/services/-stores-get';
 import type { DtoStoreResponse, GetStores200 } from '@/services/-stores-get.schemas';
 
@@ -71,7 +71,7 @@ export function StoresTable() {
       if (!confirmed) return;
 
       try {
-        await deleteStoresId(store.id);
+        await deleteAdminStoresId(store.id);
         invalidateList();
         toast.success('Store deleted');
       } catch (error) {
@@ -98,7 +98,7 @@ export function StoresTable() {
     if (!confirmed) return;
 
     try {
-      await Promise.all(ids.map((id) => deleteStoresId(id)));
+      await Promise.all(ids.map((id) => deleteAdminStoresId(id)));
       invalidateList();
       serverTable.tableState.resetRowSelection();
       toast.success('Selected stores deleted');
