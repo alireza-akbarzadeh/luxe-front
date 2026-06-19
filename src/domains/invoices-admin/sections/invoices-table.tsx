@@ -18,8 +18,8 @@ import {
   invoiceColumns,
   invoiceRowMenuActions
 } from '@/domains/invoices-admin/sections/invoices-columns';
-import { useGetAdminInvoices } from '@/services/-admin-invoices';
-import type { DtoAdminInvoiceListItem, GetAdminInvoices200 } from '@/services/-admin-invoices.schemas';
+import { useGetAdminInvoices } from '@/services/-admin-invoices-get';
+import type { DtoAdminInvoiceListItem, GetAdminInvoices200 } from '@/services/-admin-invoices-get.schemas';
 
 export function InvoicesTable() {
   const router = useRouter();

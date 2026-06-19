@@ -3,8 +3,8 @@
 import { useQueries } from '@tanstack/react-query';
 
 import { INVOICE_OUTSTANDING_STATUSES } from '@/domains/invoices-admin/invoices.schema';
-import { getAdminInvoices } from '@/services/-admin-invoices';
-import type { GetAdminInvoices200 } from '@/services/-admin-invoices.schemas';
+import { getAdminInvoices } from '@/services/-admin-invoices-get';
+import type { GetAdminInvoices200 } from '@/services/-admin-invoices-get.schemas';
 
 function readTotal(data: GetAdminInvoices200 | undefined) {
   return data?.data?.total ?? 0;

@@ -1,7 +1,7 @@
 import type {
   DtoAdminInvoiceListItem,
   GetAdminInvoices200
-} from '@/services/-admin-invoices.schemas';
+} from '@/services/-admin-invoices-get.schemas';
 
 export function getInvoicesFromListResponse(
   data: GetAdminInvoices200 | undefined

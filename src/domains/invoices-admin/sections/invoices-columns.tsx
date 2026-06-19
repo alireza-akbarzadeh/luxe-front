@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { InvoiceStatusBadge } from '@/domains/invoices-admin/components/invoice-status-badge';
 import { formatCurrency } from '@/lib/format';
-import type { DtoAdminInvoiceListItem } from '@/services/-admin-invoices.schemas';
+import type { DtoAdminInvoiceListItem } from '@/services/-admin-invoices-get.schemas';
 
 function formatInvoiceDate(value?: string) {
   if (!value) return '—';

@@ -22,17 +22,15 @@ import { INVOICE_STATUS_OPTIONS } from '@/domains/invoices-admin/invoices.schema
 import { ApiPaymentStatusBadge } from '@/domains/orders/components/order-api-badges';
 import { OrderLineItems } from '@/domains/orders/sections/order-line-items';
 import { formatCurrency } from '@/lib/format';
+import { getGetAdminInvoicesQueryKey } from '@/services/-admin-invoices-get';
 import {
   getGetAdminInvoicesIdQueryKey,
-  getGetAdminInvoicesQueryKey,
-  useGetAdminInvoicesId,
-  usePostAdminInvoicesIdSend,
-  usePutAdminInvoicesIdStatus
-} from '@/services/-admin-invoices';
-import type {
-  DtoInvoiceDetailResponse,
-  DtoUpdateInvoiceStatusRequest
-} from '@/services/-admin-invoices.schemas';
+  useGetAdminInvoicesId
+} from '@/services/-admin-invoices-{id}-get';
+import { usePostAdminInvoicesIdSend } from '@/services/-admin-invoices-{id}-send-post';
+import { usePutAdminInvoicesIdStatus } from '@/services/-admin-invoices-{id}-status-put';
+import type { DtoInvoiceDetailResponse } from '@/services/-admin-invoices-{id}-get.schemas';
+import type { DtoUpdateInvoiceStatusRequest } from '@/services/-admin-invoices-{id}-status-put.schemas';
 import type { DtoAdminOrderItemView } from '@/services/-orders-{id}-get.schemas';
 
 import { InvoiceDetailSkeleton } from '../sections/invoice-detail-skeleton';
