@@ -8,7 +8,7 @@ import {
   IconUserCheck,
   IconUserMinus
 } from '@tabler/icons-react';
-import { type ComponentType, useCallback, useMemo, useState } from 'react';
+import { type ComponentType, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { AppDialog } from '@/components/app-dialog';
@@ -33,7 +33,14 @@ import type {
 
 import { userColumns } from '../components/userColumns';
 
-export function UserManagementTable() {
+type UserSegment = 'all' | 'active' | 'inactive' | 'admins';
+
+interface UserManagementTableProps {
+  /** Pre-filter the table on first render (e.g. staff page → admins only). */
+  defaultSegment?: UserSegment;
+}
+
+export function UserManagementTable({ defaultSegment }: UserManagementTableProps = {}) {
   const [selectedUser, setSelectedUser] = useState<DtoAdminUserResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -72,7 +79,7 @@ export function UserManagementTable() {
     useQuery: (params) => useGetAdminUsers(params)
   });
 
-  const applySegment = (segment: 'all' | 'active' | 'inactive' | 'admins') => {
+  const applySegment = (segment: UserSegment) => {
     switch (segment) {
       case 'active':
         serverTable.tableState.setColumnFilters([{ id: 'status', value: true }]);
@@ -88,6 +95,24 @@ export function UserManagementTable() {
     }
     toast.success(`Showing ${segment} users`);
   };
+
+  useEffect(() => {
+    if (!defaultSegment || defaultSegment === 'all') return;
+
+    switch (defaultSegment) {
+      case 'active':
+        serverTable.tableState.setColumnFilters([{ id: 'status', value: true }]);
+        break;
+      case 'inactive':
+        serverTable.tableState.setColumnFilters([{ id: 'status', value: false }]);
+        break;
+      case 'admins':
+        serverTable.tableState.setColumnFilters([{ id: 'role', value: 'admin' }]);
+        break;
+      default:
+        serverTable.tableState.setColumnFilters([]);
+    }
+  }, [defaultSegment, serverTable.tableState]);
 
   const userStatusOptions = useMemo(
     () => [
@@ -139,7 +164,7 @@ function UserTableContent({
   onRowOpen
 }: {
   serverTable: ReturnType<typeof useServerTable<DtoAdminUserResponse, GetAdminUsers200, GetAdminUsersParams>>;
-  applySegment: (segment: 'all' | 'active' | 'inactive' | 'admins') => void;
+  applySegment: (segment: UserSegment) => void;
   userStatusOptions: Array<{
     label: string;
     value: boolean;

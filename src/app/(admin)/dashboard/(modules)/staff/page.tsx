@@ -1,3 +1,5 @@
+import { StaffAdminDomain } from '@/domains/staff-admin/staff-admin.domain';
+
 export default function StaffPage() {
-  return <div>staffPage</div>;
+  return <StaffAdminDomain />;
 }
