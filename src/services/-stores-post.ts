@@ -39,7 +39,7 @@ export const postStores = (
 
 
       return customInstance<PostStores201>(
-      {url: `/stores`, method: 'POST',
+      {url: `/admin/stores`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: dtoCreateStoreRequest, signal
     },

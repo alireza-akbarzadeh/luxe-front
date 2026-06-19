@@ -3,8 +3,8 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
-import { createSelectColumn } from '~/src/components/table/data-table';
-import type { ModelsShippingProviders } from '~/src/services/-checkout-post.schemas';
+import { createSelectColumn } from '@/components/table/data-table';
+import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
 
 export const shippingProviderColumns: ColumnDef<ModelsShippingProviders>[] = [
   createSelectColumn<ModelsShippingProviders>(),

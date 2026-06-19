@@ -40,7 +40,7 @@ export const putStoresId = (
 
 
       return customInstance<PutStoresId200>(
-      {url: `/stores/${id}`, method: 'PUT',
+      {url: `/admin/stores/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: dtoUpdateStoreRequest, signal
     },

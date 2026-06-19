@@ -11087,6 +11087,217 @@ module.exports = [
   },
   {
     "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-reports-revenue-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/reports/revenue": {
+            "get": {
+              "description": "Returns period summary KPIs and a day-by-day revenue, orders, and AOV breakdown.",
+              "parameters": [
+                {
+                  "description": "Period: 7d, 30d, or 90d (default 30d)",
+                  "in": "query",
+                  "name": "period",
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AdminRevenueReportResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "403": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Forbidden"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Daily revenue report (admin)",
+              "tags": [
+                "Admin"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminRevenueReportResponse": {
+              "properties": {
+                "daily": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AdminRevenueDailyRow"
+                  },
+                  "type": "array"
+                },
+                "generated_at": {
+                  "type": "string"
+                },
+                "period": {
+                  "type": "string"
+                },
+                "summary": {
+                  "$ref": "#/components/schemas/dto.AdminRevenueReportSummary"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminRevenueDailyRow": {
+              "properties": {
+                "avg_order_value": {
+                  "type": "number"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "orders": {
+                  "type": "integer"
+                },
+                "paid_orders": {
+                  "type": "integer"
+                },
+                "revenue": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminRevenueReportSummary": {
+              "properties": {
+                "avg_daily_revenue": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "avg_order_value": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "orders": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                },
+                "revenue": {
+                  "$ref": "#/components/schemas/dto.AdminDashboardKPI"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AdminDashboardKPI": {
+              "properties": {
+                "change_percent": {
+                  "type": "number"
+                },
+                "previous_value": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -13427,6 +13638,145 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipping-providers-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/shipping-providers": {
+            "get": {
+              "description": "Returns every shipping provider including inactive ones for admin management",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/models.ShippingProviders"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List all shipping providers (admin)",
+              "tags": [
+                "Shipping Providers"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "models.ShippingProviders": {
+              "properties": {
+                "created_at": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "updated_at": {
+                  "type": "string"
                 }
               },
               "type": "object"

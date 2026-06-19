@@ -37,7 +37,7 @@ export const deleteStoresId = (
 
 
       return customInstance<UtilsResponse>(
-      {url: `/stores/${id}`, method: 'DELETE', signal
+      {url: `/admin/stores/${id}`, method: 'DELETE', signal
     },
       options);
     }
