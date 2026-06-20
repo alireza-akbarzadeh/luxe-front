@@ -126,5 +126,218 @@
     "should_trigger": false,
     "split": "validation",
     "note": "backend add-api-endpoint"
+  },
+  {
+    "skill": "zustand",
+    "query": "add a zustand store for the gift cards admin page with delete dialog open state and selected id",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "zustand",
+    "query": "should we persist the roles table page size in zustand or url params",
+    "should_trigger": true,
+    "split": "train",
+    "note": "boundary question — nuqs not zustand"
+  },
+  {
+    "skill": "zustand",
+    "query": "cache the brands list in zustand so the table doesn't refetch",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "server data belongs in TanStack Query"
+  },
+  {
+    "skill": "zustand",
+    "query": "fix useAppForm default values for the coupon edit page",
+    "should_trigger": false,
+    "split": "train",
+    "note": "admin-forms"
+  },
+  {
+    "skill": "tanstack-table",
+    "query": "add columns and a server table for the gift cards admin list with bulk delete",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "tanstack-table",
+    "query": "fix pagination on the categories DataTable — total count from API is wrong",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "tanstack-table",
+    "query": "use useReactTable with getSortedRowModel in the brands domain file",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "must use Table + useServerTable wrapper"
+  },
+  {
+    "skill": "tanstack-table",
+    "query": "scaffold a new /dashboard/reports route and domain folder",
+    "should_trigger": false,
+    "split": "train",
+    "note": "new-admin-domain first"
+  },
+  {
+    "skill": "tanstack-query",
+    "query": "after deleting a brand the list still shows it until I hard refresh — fix query cache",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "tanstack-query",
+    "query": "prefetch products on the home page server component with HydrationBoundary",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "tanstack-query",
+    "query": "run pnpm api:gen — useGetAdminSuppliers is missing",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "api-gen"
+  },
+  {
+    "skill": "tanstack-query",
+    "query": "add columns to the suppliers admin table with bulk delete",
+    "should_trigger": false,
+    "split": "train",
+    "note": "tanstack-table"
+  },
+  {
+    "skill": "luxe-react-performance",
+    "query": "revenue dashboard chart re-renders on every filter change — tune TanStack Query and chart memoization",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "luxe-react-performance",
+    "query": "reduce bundle size on the admin dashboard — dynamic import heavy chart components",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "luxe-react-performance",
+    "query": "run pnpm api:gen after backend swagger update",
+    "should_trigger": false,
+    "split": "train",
+    "note": "api-gen"
+  },
+  {
+    "skill": "shadcn",
+    "query": "add the shadcn Sheet component to the project and use it for the mobile nav drawer",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "shadcn",
+    "query": "fix DialogTitle accessibility on the delete confirmation dialog — use our shadcn Dialog",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "shadcn",
+    "query": "refactor this section from div flex to Flex and Grid layout components",
+    "should_trigger": false,
+    "split": "train",
+    "note": "layout-typography"
+  },
+  {
+    "skill": "framer-motion",
+    "query": "add a staggered fade-in for storefront hero cards using motion/react",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "framer-motion",
+    "query": "animate the mobile menu slide-in with Framer Motion — use transform not width",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "framer-motion",
+    "query": "slow admin table — profile React Compiler and Query staleTime",
+    "should_trigger": false,
+    "split": "train",
+    "note": "luxe-react-performance"
+  },
+  {
+    "skill": "frontend-design",
+    "query": "redesign the storefront home hero so it doesn't look like a generic SaaS template",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "frontend-design",
+    "query": "pick a distinctive typography pairing and palette for the luxury fashion landing page",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "frontend-design",
+    "query": "wire useAppForm validation on the coupon edit page",
+    "should_trigger": false,
+    "split": "train",
+    "note": "admin-forms"
+  },
+  {
+    "skill": "design-taste-frontend",
+    "query": "this landing page looks like AI slop — audit and redesign with a clear design direction",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "design-taste-frontend",
+    "query": "portfolio site for a creative director — anti-template, editorial layout",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "design-taste-frontend",
+    "query": "add bulk delete to the brands admin table",
+    "should_trigger": false,
+    "split": "train",
+    "note": "tanstack-table — not landing/portfolio"
+  },
+  {
+    "skill": "vercel-composition-patterns",
+    "query": "this settings panel has isEditing isThread isDMThread booleans — refactor to compound components",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "vercel-composition-patterns",
+    "query": "split our monolithic Card component into Card.Header Card.Body compound API like Table",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "vercel-composition-patterns",
+    "query": "add zustand store for delete dialog open state",
+    "should_trigger": false,
+    "split": "train",
+    "note": "zustand"
+  },
+  {
+    "skill": "find-skills",
+    "query": "find a Cursor skill for Playwright e2e testing in our stack",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "find-skills",
+    "query": "is there a local skill for Orval regeneration?",
+    "should_trigger": true,
+    "split": "validation",
+    "note": "should route to /api-gen in luxe-skills-map"
+  },
+  {
+    "skill": "find-skills",
+    "query": "regenerate src/services after swagger changed",
+    "should_trigger": false,
+    "split": "train",
+    "note": "api-gen directly"
   }
 ]

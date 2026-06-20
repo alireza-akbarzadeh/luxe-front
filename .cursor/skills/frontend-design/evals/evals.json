@@ -1,0 +1,27 @@
+{
+  "skill_name": "frontend-design",
+  "evals": [
+    {
+      "id": 1,
+      "name": "storefront-hero-direction",
+      "prompt": "Redesign the luxe fashion storefront home hero — avoid generic SaaS gradient + big number template. State design direction before code.",
+      "expected_output": "Design read with subject/audience, distinctive type and palette choices, hero tied to fashion/luxury brief.",
+      "assertions": [
+        "States a concrete design direction before implementation",
+        "Avoids default purple gradient SaaS hero cliché without justification",
+        "Typography pairing is intentional not Inter/Roboto-only default",
+        "Scope is storefront/marketing not admin dashboard"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "reject-admin-scope",
+      "prompt": "Apply frontend-design skill to redesign the /dashboard/brands admin table page.",
+      "expected_output": "Redirects to admin patterns — layout-typography, tanstack-table, shadcn — not landing-page aesthetics.",
+      "assertions": [
+        "Does not treat admin CRUD table as landing page redesign",
+        "Points to appropriate Luxe admin skills or components"
+      ]
+    }
+  ]
+}

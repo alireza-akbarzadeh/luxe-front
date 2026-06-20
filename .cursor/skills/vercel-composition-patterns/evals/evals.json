@@ -1,0 +1,27 @@
+{
+  "skill_name": "vercel-composition-patterns",
+  "evals": [
+    {
+      "id": 1,
+      "name": "boolean-props-to-compound",
+      "prompt": "Refactor a Composer-like component with isThread, isEditing, isDMThread boolean props into compound subcomponents with shared context.",
+      "expected_output": "Explicit variant components or compound API; no exponential boolean conditionals.",
+      "assertions": [
+        "Removes boolean prop proliferation pattern",
+        "Uses compound components or explicit variants",
+        "Uses React 19 use() not useContext when showing context access",
+        "Does not use forwardRef wrapper for ref passthrough"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "luxe-table-reference",
+      "prompt": "We already have Table.Root Table.Grid Table.Pagination — explain how this matches compound component pattern for new domain UI.",
+      "expected_output": "Maps vercel composition rules to existing @/components/table/data-table compound API.",
+      "assertions": [
+        "References existing Table compound component as Luxe precedent",
+        "Recommends extending Table not raw useReactTable in domains"
+      ]
+    }
+  ]
+}

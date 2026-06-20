@@ -1,0 +1,29 @@
+[
+  {
+    "id": "mutation-invalidate",
+    "prompt": "After saving the supplier edit form, the suppliers list still shows stale data — fix cache invalidation.",
+    "assertions": [
+      "Uses getGet*QueryKey from Orval generated services",
+      "queryClient.invalidateQueries after mutation success",
+      "No raw fetch or hand-written query key strings",
+      "Does not move list data to Zustand"
+    ]
+  },
+  {
+    "id": "reject-raw-useQuery",
+    "prompt": "Add a useQuery that fetches /admin/reports with axios in the dashboard component.",
+    "assertions": [
+      "Rejects raw axios/fetch useQuery",
+      "Points to Orval useGet* hook or api-gen if missing"
+    ]
+  },
+  {
+    "id": "ssr-prefetch",
+    "prompt": "Prefetch featured products on the home page server component so the client hook does not flash loading.",
+    "assertions": [
+      "getQueryClient in Server Component",
+      "prefetchQuery with getGetProductsQueryOptions",
+      "HydrationBoundary with dehydrate"
+    ]
+  }
+]

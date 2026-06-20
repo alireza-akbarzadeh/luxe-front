@@ -1,0 +1,31 @@
+[
+  {
+    "id": "admin-list-table",
+    "prompt": "Add a server-driven admin table for suppliers with search, pagination, bulk delete, and columns for name and status.",
+    "assertions": [
+      "Uses Table and useServerTable from @/components/table/data-table",
+      "Columns in sections/*-columns.tsx as ColumnDef<Dto*>[]",
+      "createSelectColumn for bulk selection",
+      "Orval useGet* hook passed to useServerTable",
+      "No useReactTable in domain files",
+      "Spreads serverTable.rootProps on Table.Root"
+    ]
+  },
+  {
+    "id": "reject-raw-useReactTable",
+    "prompt": "The brands page needs sorting — add useReactTable directly in brand.domain.tsx with getSortedRowModel.",
+    "assertions": [
+      "Rejects raw useReactTable in domain",
+      "Points to Table compound component or manualSorting via useServerTable"
+    ]
+  },
+  {
+    "id": "nuqs-status-filter",
+    "prompt": "Shipments table needs status tabs that survive page refresh — wire status filter to the API.",
+    "assertions": [
+      "nuqs useQueryState hook for status",
+      "status included in getQueryParams useCallback deps",
+      "Tabs UI above Table.Toolbar"
+    ]
+  }
+]

@@ -10,6 +10,8 @@
 
 Layout: use `Flex`, `Grid`, `GridItem`, `Typography` from `@/components/ui/` — not raw div/h* with flex/grid/text Tailwind. Skill: `/layout-typography`.
 
+Performance: TanStack Query + Orval, Zustand UI-only, ChartContainer/Recharts, React Compiler — skill: `/luxe-react-performance`.
+
 
 - **Framework**: Next.js 16 (App Router, React Compiler enabled)
 - **Runtime**: React 19, TypeScript (strict mode)

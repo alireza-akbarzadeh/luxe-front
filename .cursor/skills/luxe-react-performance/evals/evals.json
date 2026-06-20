@@ -1,0 +1,28 @@
+{
+  "skill_name": "luxe-react-performance",
+  "evals": [
+    {
+      "id": 1,
+      "name": "dashboard-query-caching",
+      "prompt": "The revenue report refetches on every tab switch. Tune TanStack Query for luxe-front without bypassing Orval.",
+      "expected_output": "Uses staleTime on useGetAdminReportsRevenue, references query-client defaults, does not add axios or Zustand for report data.",
+      "assertions": [
+        "Response uses Orval-generated hook not raw fetch",
+        "Response mentions staleTime or query options",
+        "Response does not store report data in Zustand",
+        "Response does not recommend SWR"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "chart-bundle",
+      "prompt": "Admin dashboard with Recharts feels heavy on first load. Optimize bundle for luxe-front.",
+      "expected_output": "Suggests next/dynamic for chart sections, direct recharts imports, ChartContainer pattern; respects React Compiler.",
+      "assertions": [
+        "Response mentions next/dynamic or conditional load",
+        "Response references ChartContainer or revenue-daily-chart pattern",
+        "Response does not add useCallback/useMemo everywhere as default fix"
+      ]
+    }
+  ]
+}

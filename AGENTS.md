@@ -24,16 +24,29 @@ Two layers — do not duplicate skill workflows in these docs; use skills for st
 |-------|------|------|
 | **Always-on rules** | `.cursorrules`, `.cursor/rules/luxe-front.mdc` | Hard conventions every session |
 | **Agent skills** | `.cursor/skills/<name>/SKILL.md` | Task workflows loaded when relevant |
+| **Vendor rule packs** | `.cursor/skills/_vendor/` | Third-party upstream copies (e.g. Vercel React rules) |
 | **Skill evals** | `.cursor/skills/<name>/evals/`, `eval-queries.json` | Test description triggering and output quality |
+
+`npx skills add` writes to `.agents/skills/` (gitignored). Adapt into `.cursor/skills/` before committing — do not maintain two parallel trees.
 
 ### Project skills (luxe-front)
 
 | Skill | Use when |
 |-------|----------|
+| `/find-skills` | Find/install agent skills — checks local skills first, then skills.sh |
+| `/luxe-react-performance` | React/Next perf — TanStack Query, Recharts, bundle, re-renders |
 | `/api-gen` | Orval regen, missing hooks/types in `src/services/` |
 | `/layout-typography` | Layout/text — use `Flex`, `Grid`, `Typography`, `Box` not raw div + Tailwind flex/grid/text |
 | `/new-admin-domain` | New `/dashboard/*` page, domain scaffold, server table |
 | `/admin-forms` | `useAppForm`, Zod, submit handlers, form mappers |
+| `/zustand` | Client UI stores — dialogs, selections, wizard; not server lists or table URL state |
+| `/tanstack-table` | Data tables — columns, useServerTable, bulk actions; not raw useReactTable in domains |
+| `/tanstack-query` | Server data — Orval hooks, cache invalidation, prefetch, mutations; not raw fetch |
+| `/shadcn` | shadcn/ui CLI — add components, Field/Dialog patterns; don't hand-edit `src/components/ui/*` |
+| `/framer-motion` | Marketing motion — `motion/react`, transform/opacity; not admin perf tuning |
+| `/frontend-design` | Storefront/marketing visual direction — distinctive hero, type, palette |
+| `/design-taste-frontend` | Landing/portfolio anti-slop redesign — not admin dashboards |
+| `/vercel-composition-patterns` | Compound components, boolean prop refactors — aligns with `Table.*` |
 
 Details: `.cursor/skills/README.md`. Backend skills live in the **`luxe`** repo under `.cursor/skills/` (`new-api-entity`, `add-api-endpoint`).
 

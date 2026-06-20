@@ -1,0 +1,31 @@
+[
+  {
+    "id": "inventory-dialog-store",
+    "prompt": "Add Zustand UI state for the suppliers admin page: bulk import dialog open flag and selected supplier id for delete confirmation. No API calls in the store.",
+    "assertions": [
+      "Store under src/domains/suppliers/stores/ or similar",
+      "FeatureStoreState and FeatureStoreActions interfaces",
+      "reset() action",
+      "create<T>()((set) => ...) curried syntax",
+      "No axios, fetch, or useGet in store file",
+      "No internal_ prefix or class ActionImpl"
+    ]
+  },
+  {
+    "id": "reject-server-list",
+    "prompt": "Cache the products list in Zustand so the table renders faster without refetching.",
+    "assertions": [
+      "Rejects storing server list in Zustand",
+      "Points to TanStack Query staleTime or useServerTable instead"
+    ]
+  },
+  {
+    "id": "workflow-panel-union",
+    "prompt": "Workflow settings need three panel modes: closed, edit metadata, edit permissions. Use Zustand.",
+    "assertions": [
+      "Discriminated union panel type",
+      "open*/close* actions",
+      "reset() clears to closed"
+    ]
+  }
+]

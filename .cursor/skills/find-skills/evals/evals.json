@@ -1,0 +1,27 @@
+{
+  "skill_name": "find-skills",
+  "evals": [
+    {
+      "id": 1,
+      "name": "local-first-routing",
+      "prompt": "I need help regenerating Orval clients after backend swagger changed. Find the right skill.",
+      "expected_output": "Routes to local /api-gen with luxe-skills-map — not generic REST client skill.",
+      "assertions": [
+        "Checks luxe-skills-map or lists local /api-gen first",
+        "Includes make swagger restart API pnpm api:gen workflow",
+        "Does not recommend hand-editing src/services/"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "external-search-fallback",
+      "prompt": "Find a community skill for TanStack Query best practices not covered locally.",
+      "expected_output": "Mentions local /tanstack-query first, then npx skills find if gap remains.",
+      "assertions": [
+        "Prefers .cursor/skills/tanstack-query over raw upstream install",
+        "Mentions npx skills find as secondary step",
+        "Warns to adapt into .cursor/skills/ for team use"
+      ]
+    }
+  ]
+}

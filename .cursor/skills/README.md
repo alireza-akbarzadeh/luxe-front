@@ -1,6 +1,15 @@
 # Luxe Front — Agent Skills
 
-Project skills live under `.cursor/skills/`. Each skill has:
+**Single skills root:** `.cursor/skills/` (committed). Do not maintain a parallel `.agents/skills/` tree — CLI installs land in `.agents/` (gitignored); copy or adapt into here.
+
+| Subfolder | Purpose |
+|-----------|---------|
+| `<skill-name>/` | Team-authored Luxe skills (`SKILL.md`, references, evals) |
+| `_vendor/` | Third-party rule packs (e.g. Vercel React best practices) — read-only upstream copies |
+
+> **Note:** `.cursor/shadcn/` is a duplicate CLI install — canonical shadcn skill is `.cursor/skills/shadcn/`. Safe to delete `.cursor/shadcn/` after confirming paths.
+
+Each skill has:
 
 | Path | Purpose |
 |------|---------|
@@ -14,10 +23,20 @@ Project skills live under `.cursor/skills/`. Each skill has:
 
 | Skill | When |
 |-------|------|
-| `layout-typography` | Flex/Grid/Typography instead of raw div + Tailwind layout/text |
+| `find-skills` | Discover/install skills — **local skills first**, then skills.sh |
 | `api-gen` | Orval regen after backend OpenAPI changes |
-| `new-admin-domain` | New `/dashboard/*` feature scaffold |
+| `tanstack-query` | Server data — Orval hooks, invalidation, prefetch; not raw fetch |
+| `tanstack-table` | Admin lists — `Table`, `useServerTable`, `*-columns.tsx` |
+| `zustand` | Client UI stores — dialogs, selections; not server data |
 | `admin-forms` | useAppForm + Zod + Orval mutations |
+| `new-admin-domain` | New `/dashboard/*` feature scaffold |
+| `layout-typography` | Flex/Grid/Typography instead of raw div + Tailwind layout/text |
+| `luxe-react-performance` | React/Next perf — Query, Recharts, bundle, re-renders |
+| `shadcn` | Add/fix/compose shadcn/ui components via CLI |
+| `framer-motion` | Storefront/marketing motion — `motion/react`, transform/opacity |
+| `frontend-design` | Distinctive visual direction for new/redesigned marketing UI |
+| `design-taste-frontend` | Anti-slop landing/portfolio redesigns (not admin dashboards) |
+| `vercel-composition-patterns` | Compound components, boolean prop refactors (see `Table`) |
 
 ---
 
@@ -90,6 +109,35 @@ See [agentskills.io — evaluating skill output quality](https://agentskills.io/
 | Skill | Should not steal from |
 |-------|----------------------|
 | `api-gen` | `new-admin-domain`, backend swagger authoring |
+| `tanstack-query` | `api-gen`, `tanstack-table`, `zustand` |
+| `tanstack-table` | `tanstack-query`, `useAppForm`, raw div layout |
+| `zustand` | TanStack Query cache, nuqs table state, `useAppForm` |
+| `admin-forms` | `layout-typography`, backend DTOs |
 | `layout-typography` | `admin-forms`, DataTable |
 | `new-admin-domain` | storefront routes, `api-gen` alone |
-| `admin-forms` | `layout-typography`, backend DTOs |
+| `luxe-react-performance` | replacing Orval, useAppForm, DataTable, layout skills |
+| `shadcn` | `layout-typography` (layout primitives), hand-edit `src/components/ui/*` |
+| `framer-motion` | admin perf (`luxe-react-performance`), admin CRUD UI |
+| `frontend-design` | admin dashboards, forms, tables |
+| `design-taste-frontend` | dashboards, data tables, multi-step product UI |
+| `vercel-composition-patterns` | Zustand stores, Orval/API layer |
+| `find-skills` | executing workflows — routes to other skills |
+
+## Eval coverage checklist
+
+| Skill | `eval-queries.json` | `evals/evals.json` |
+|-------|--------------------|--------------------|
+| api-gen | yes | yes |
+| admin-forms | yes | yes |
+| layout-typography | yes | yes |
+| new-admin-domain | yes | yes |
+| luxe-react-performance | yes | yes |
+| tanstack-query | yes | yes |
+| tanstack-table | yes | yes |
+| zustand | yes | yes |
+| shadcn | yes | yes |
+| framer-motion | yes | yes |
+| frontend-design | yes | yes |
+| design-taste-frontend | yes | yes |
+| vercel-composition-patterns | yes | yes |
+| find-skills | yes | yes |

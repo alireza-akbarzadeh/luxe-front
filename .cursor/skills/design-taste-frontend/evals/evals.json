@@ -1,0 +1,27 @@
+{
+  "skill_name": "design-taste-frontend",
+  "evals": [
+    {
+      "id": 1,
+      "name": "anti-slop-landing",
+      "prompt": "Our new landing page looks templated and AI-generated. Audit first, then redesign with a one-line Design Read.",
+      "expected_output": "Brief inference, Design Read line, contextual rules only — not dashboard/table patterns.",
+      "assertions": [
+        "Outputs a Design Read before generating UI",
+        "Audit-first on redesign not blind rewrite",
+        "Does not apply numbered 01/02/03 markers unless content is sequential",
+        "Stays in landing/portfolio scope not admin tables"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "reject-dashboard",
+      "prompt": "Use design-taste-frontend on the inventory admin dashboard with DataTable and charts.",
+      "expected_output": "Skill explicitly excludes dashboards — use shadcn, layout-typography, tanstack-table instead.",
+      "assertions": [
+        "Acknowledges skill is not for dashboards or data tables",
+        "Routes to Luxe admin stack skills"
+      ]
+    }
+  ]
+}

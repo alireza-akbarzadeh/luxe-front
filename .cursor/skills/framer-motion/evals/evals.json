@@ -1,0 +1,27 @@
+{
+  "skill_name": "framer-motion",
+  "evals": [
+    {
+      "id": 1,
+      "name": "hero-stagger",
+      "prompt": "Add staggered fade-in for storefront hero product cards using motion/react. Keep animations on transform and opacity only.",
+      "expected_output": "Uses motion/react imports, motion.div with variants/stagger, no width/height animation.",
+      "assertions": [
+        "Imports from motion/react not framer-motion",
+        "Animates x/y/scale/opacity rather than width height margin",
+        "Uses reduced-motion or respects prefers-reduced-motion when mentioned",
+        "Does not wrap admin DataTable or form fields unnecessarily"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "reject-layout-animation",
+      "prompt": "Animate sidebar open by transitioning width from 0 to 280px with Framer Motion.",
+      "expected_output": "Rejects width animation; suggests x transform or CSS instead.",
+      "assertions": [
+        "Does not recommend animating width for performance",
+        "Suggests transform translateX or existing shadcn Sheet pattern"
+      ]
+    }
+  ]
+}

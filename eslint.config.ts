@@ -32,6 +32,9 @@ export default [
       'src/services/**',
       'orval.config.ts',
 
+      // Cursor agent skills & rules (markdown/docs — not app source)
+      '.cursor/**',
+
       // lock files
       'pnpm-lock.yaml'
     ]
