@@ -1,3 +1,5 @@
-export NODE_OPTIONS="--experimental-strip-types"
+# --experimental-strip-types requires Node 22+; skip on older Node (e.g. local nvm default)
+node -e "process.exit(Number(process.versions.node.split('.')[0]) >= 22 ? 0 : 1)" 2>/dev/null \
+  && export NODE_OPTIONS="--experimental-strip-types"
 
 npx lint-staged

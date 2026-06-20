@@ -1,89 +1,56 @@
 ---
 name: new-admin-domain
-description: Adds a new admin dashboard feature under src/domains/ with route, table, and forms. Use when creating admin pages, CRUD screens, dashboard modules, or wiring a new /dashboard/* route.
+description: >
+  Use when adding a new luxe-front admin screen under /dashboard — CRUD modules,
+  server-paginated list pages, src/domains/ scaffolding, route pages in
+  app/(admin)/dashboard/, or admin sidebar entries. Apply when the user says
+  management page, back-office list, admin settings, or "add a dashboard for X"
+  without naming domains. Do not use for storefront/shop pages, Orval-only regen,
+  or small layout edits inside an existing domain file.
 ---
 
-# Luxe Front — New admin domain
+# New admin domain
 
-## Before coding
-
-1. Search `src/domains/` and `src/services/` for existing patterns
-2. If API is new/changed → use `/api-gen` skill first
-3. Read a similar domain (e.g. `categories`, `discounts`, `workflows`)
+**Default reference:** `src/domains/categories/categories.domain.tsx` (list) + `src/domains/brands/sections/brand-form.tsx` (form).
 
 ## Checklist
 
 ```text
-- [ ] Orval hooks exist in src/services/
-- [ ] src/domains/<name>/ — components, containers, sections, schemas, stores
-- [ ] src/app/(admin)/dashboard/<route>/page.tsx — thin wrapper
-- [ ] loading.tsx + error.tsx on the route segment
-- [ ] Admin nav entry (backend menu seed if needed)
-- [ ] pnpm check passes
+- [ ] Orval hooks exist (run /api-gen if not)
+- [ ] src/domains/<name>/ — domain, sections/, schemas/, stores/
+- [ ] src/app/(admin)/dashboard/<route>/page.tsx + loading.tsx + error.tsx
+- [ ] Backend menu entry if page should appear in sidebar (/user-menu-structure)
+- [ ] pnpm check
 ```
 
-## File layout
+## Scaffold
 
 ```
 src/domains/<name>/
-  <name>.domain.tsx          # main client component
+  <name>.domain.tsx
   sections/<name>-columns.tsx
-  sections/<name>-form.tsx   # if CRUD form
-  schemas/<name>-schema.ts   # Zod for forms only
-  stores/<name>-store.ts     # UI state only (modals, selection)
-  components/                # optional pieces
-src/app/(admin)/dashboard/<name>/page.tsx
+  sections/<name>-form.tsx      # if CRUD
+  schemas/<name>-schema.ts      # Zod forms only
+  stores/<name>-store.ts        # dialog/selection UI only
+src/app/(admin)/dashboard/<name>/page.tsx   # thin export
 ```
 
-## Route pattern
+Route page delegates only — no data fetching in `page.tsx`.
 
-```tsx
-import { FeatureDomain } from '@/domains/<name>/<name>.domain';
+## Gotchas
 
-export default function FeaturePage() {
-  return <FeatureDomain />;
-}
+- **Folder is `domains/`**, not `features/`.
+- **Admin nav is backend-driven** — a new route won't appear in the sidebar until the menu config/seed includes it.
+- **Table state lives in the URL** (nuqs via DataTable) — not Zustand.
+- **Server data lives in TanStack Query** — not Zustand. Zustand = modals, selected row, draft UI.
+- **Missing Orval hook** → fix backend Swagger, not a manual axios wrapper.
+- **Layout/text** → follow `/layout-typography` when building JSX.
+
+## Validate
+
+```bash
+pnpm check
 ```
 
-## Server-driven table
-
-Use `useServerTable` + Orval `useQuery` + URL state via the DataTable helper.
-
-Reference: `src/domains/categories/categories.domain.tsx`
-
-```tsx
-const serverTable = useServerTable({
-  columns: featureColumns,
-  initialPageSize: 20,
-  getQueryParams: (state, filter) => ({
-    limit: state.pagination.pageSize,
-    offset: state.pagination.pageIndex * state.pagination.pageSize,
-    search: filter || undefined,
-  }),
-  getRows: (data) => data?.data?.items ?? [],
-  getTotal: (data) => data?.data?.total,
-  useQuery: useGetFeature,
-});
-```
-
-Render with `Table.Root`, `Table.Toolbar`, `Table.Grid`, `Table.Pagination` from `@/components/table/data-table`.
-
-## Forms
-
-- Always `useAppForm` from `@/components/forms/useAppForm`
-- Zod v4 in `schemas/`; submit via Orval mutations
-- Toast errors with `sonner`; invalidate with `get*QueryKey()` on success
-
-## State rules
-
-| Data | Where |
-|------|-------|
-| API responses | TanStack Query (Orval hooks) |
-| Pagination, filters, sort | URL via DataTable / nuqs |
-| Dialog open, selected row | Zustand in `stores/` |
-
-## Do not
-
-- Put fetched data in Zustand
-- Call `useReactTable` or raw `useForm` directly
-- Create manual API wrappers when a hook is missing — fix Swagger instead
+For table wiring details, read [references/server-table.md](references/server-table.md).
+For forms, invoke `/admin-forms`.

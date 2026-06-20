@@ -1,6 +1,11 @@
 ---
 name: admin-forms
-description: Builds admin forms with useAppForm, Zod, and Orval mutations. Use when adding or editing form fields, validation, or submit handlers in src/domains/ or src/components/forms/.
+description: >
+  Use when implementing or changing luxe-front forms — useAppForm, Zod schemas,
+  field validation, submit handlers, create/edit flows, mappers to API payloads,
+  or json-field config editors. Apply when the user mentions saving, editing records,
+  required fields, or validation errors, even without saying useAppForm. Do not use
+  for list/table pages, layout-only JSX changes, backend DTOs, or Orval regeneration.
 paths:
   - "src/domains/**/schemas/**/*.ts"
   - "src/domains/**/*form*.tsx"
@@ -8,49 +13,51 @@ paths:
   - "src/components/forms/**/*.tsx"
 ---
 
-# Luxe Front — Admin forms
+# Admin forms
 
-## Stack
-
-- Hook: `src/components/forms/useAppForm.ts` (never raw `@tanstack/react-form`)
-- Validation: Zod v4 + `@tanstack/zod-adapter`
-- Submit: Orval `useMutation` hooks
-- Feedback: `sonner` toast; inline field errors from form state
+**Default reference:** `src/domains/discounts/sections/discount-form.tsx` (validation + mapper + mutation).
 
 ## Pattern
 
 ```tsx
 const form = useAppForm({
   defaultValues: schema.parse({}),
-  validators: { onSubmit: schema },
+  validators: { onChange: schema, onSubmit: schema },
   onSubmit: async ({ value }) => {
-    await mutation.mutateAsync({ data: value });
+    await mutation.mutateAsync({ data: mapFormToRequest(value) });
     toast.success('Saved');
-    await queryClient.invalidateQueries({ queryKey: getGetItemsQueryKey() });
+    void queryClient.invalidateQueries({ queryKey: getGetItemsQueryKey() });
   },
 });
+
+return (
+  <form.AppForm>
+    <form.Root onSubmit={(e) => { e.preventDefault(); void form.handleSubmit(); }}>
+      <form.AppField name="name" children={(field) => (
+        <field.TextField label="Name" required />
+      )} />
+    </form.Root>
+  </form.AppForm>
+);
 ```
 
-Use shared field components from `src/components/forms/` (Input, Select, etc.) — not raw `<input>`.
+Use `field.TextField`, `field.NumberField`, `field.TextArea`, etc. — not raw `<input>`.
 
-## Schema location
+## Gotchas
 
-- Form validation only → `src/domains/<domain>/schemas/` or `src/schemas/`
-- API request/response types → Orval `*.schemas.ts` (generated)
+- **Never `useForm` from `@tanstack/react-form` directly** — always `useAppForm`.
+- **Zod schemas are form-only.** Map to Orval request types via `lib/*-mapper.ts` (see `brand-mapper.ts`, `coupon-mapper`).
+- **Edit mode:** fetch with Orval `useGet*Id`, reset form in `useEffect` when entity loads (see `brand-form.tsx`).
+- **JSON config fields:** use `src/components/editor/json-field.tsx`.
+- **Layout around fields:** `/layout-typography` — Flex/Grid, not div flex/grid.
+- **Errors:** toast via `sonner` for submit failures; field errors from form validators.
 
-## Validation tips
+## Validate
 
-- Prefer `safeParse` in `validators.onChange` for live feedback (see `discount-form.tsx`)
-- Map API validation errors to field errors when the backend returns structured errors
-- Show `isPending` / `isSubmitting` on the submit button
+```bash
+pnpm check
+```
 
-## JSON / rich fields
-
-For structured JSON config fields, use `src/components/editor/json-field.tsx` when appropriate.
-
-## Checklist
-
-- [ ] Schema infers type with `z.infer<typeof schema>`
-- [ ] Mutation invalidates relevant `get*QueryKey()`
-- [ ] Loading and error states handled
-- [ ] `pnpm check` passes
+- [ ] `z.infer<typeof schema>` for form values
+- [ ] Mutation invalidates `get*QueryKey()`
+- [ ] Submit button reflects `isPending`

@@ -1,0 +1,130 @@
+[
+  {
+    "skill": "api-gen",
+    "query": "I added a GET /admin/suppliers endpoint on the backend but useGetAdminSuppliers doesn't exist in the frontend yet",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "api-gen",
+    "query": "pnpm api:gen wiped my services folder and now the build fails",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "api-gen",
+    "query": "DtoProductWithLike type looks stale after I changed the Go DTO — regen the client",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "api-gen",
+    "query": "wire up the new coupons bulk delete endpoint on the admin page",
+    "should_trigger": false,
+    "split": "train",
+    "note": "near-miss: UI wiring — new-admin-domain + maybe api-gen only if hook missing; primary intent is UI"
+  },
+  {
+    "skill": "api-gen",
+    "query": "add Swagger comments to the brand controller GetByID handler",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "backend swagger work, not frontend regen"
+  },
+  {
+    "skill": "layout-typography",
+    "query": "this form section uses div className flex flex-col gap-6 — refactor to our layout components",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "layout-typography",
+    "query": "add a two column grid for the brand name and slug fields on the edit page",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "layout-typography",
+    "query": "replace the h3 with text-sm font-medium section headers in discount-form",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "layout-typography",
+    "query": "add zod validation so discount_value can't exceed 100 for percentage coupons",
+    "should_trigger": false,
+    "split": "train",
+    "note": "near-miss: form validation — admin-forms"
+  },
+  {
+    "skill": "layout-typography",
+    "query": "fix the categories table pagination — it's not syncing to the URL",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "DataTable/nuqs, not layout primitives"
+  },
+  {
+    "skill": "new-admin-domain",
+    "query": "scaffold a new /dashboard/gift-cards admin page with a server table like categories",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "new-admin-domain",
+    "query": "we need a back-office screen to manage shipping providers with search and bulk delete",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "new-admin-domain",
+    "query": "add a management page for staff roles under the dashboard",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "new-admin-domain",
+    "query": "make the storefront shop page show products in a 3 column grid",
+    "should_trigger": false,
+    "split": "train",
+    "note": "storefront not admin"
+  },
+  {
+    "skill": "new-admin-domain",
+    "query": "run pnpm api:gen — backend added new routes yesterday",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "api-gen only"
+  },
+  {
+    "skill": "admin-forms",
+    "query": "add a wallet adjust form with amount and reason fields using our form hook",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "admin-forms",
+    "query": "the brand edit page submit fails silently — fix validation and map to the PUT payload",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "admin-forms",
+    "query": "create/edit coupon flow needs onChange validation like discount-form",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "admin-forms",
+    "query": "put the brand name and slug fields side by side in two columns",
+    "should_trigger": false,
+    "split": "train",
+    "note": "near-miss: layout — layout-typography"
+  },
+  {
+    "skill": "admin-forms",
+    "query": "add GET /admin/reports endpoint with swagger on the Go side",
+    "should_trigger": false,
+    "split": "validation",
+    "note": "backend add-api-endpoint"
+  }
+]
