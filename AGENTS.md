@@ -37,6 +37,8 @@ Two layers — do not duplicate skill workflows in these docs; use skills for st
 
 Details: `.cursor/skills/README.md`. Backend skills live in the **`luxe`** repo under `.cursor/skills/` (`new-api-entity`, `add-api-endpoint`).
 
+**After backend Swagger changes:** luxe → `make swagger` → **restart API** → luxe-front → `pnpm api:gen` → `pnpm check`. Required for new/renamed DTOs, routes, and response shapes — not optional.
+
 **Layout rule (always):** prefer `@/components/ui/flex`, `grid`, `typography` over `<div className="flex|grid …">` and styled `<h*>`/`<p>`. Full checklist: `/layout-typography`.
 
 ## Architecture (one line)
@@ -55,22 +57,27 @@ Route (App Router) → Domain component → Orval hook (TanStack Query) → cust
 
 All HTTP calls use **generated** clients under `src/services/`. Never call `axios`/`fetch` in components.
 
-### When backend API changes
+### When backend Swagger / API contract changes
 
-Run in order (backend must be **running** before step 3):
+Run in order (backend must be **running** before step 3). Required for **any** OpenAPI change — new routes, new/renamed DTOs, renamed fields, path/method changes, response shape updates:
 
 ```bash
-# 1. Backend — update Swagger from Go DTOs + controller comments
-cd luxe-backend
+# 1. Backend (luxe) — regenerate Swagger from Go DTOs + controller comments
 make swagger
 
-# 2. Restart the API (OpenAPI is cached at process start)
+# 2. Restart the API (OpenAPI is cached at process start — restart is mandatory)
 make run
 
-# 3. Frontend — regenerate hooks + types
-cd luxe-front
+# 3. Frontend (luxe-front) — regenerate hooks + Dto* types
 pnpm api:gen
+
+# 4. Fix imports/mappers; verify
+pnpm check
 ```
+
+**Do not** hand-edit `src/services/` when DTO names or fields changed — run the sequence above. Update form mappers in `domains/*/lib/*-mapper.ts` if API field names changed.
+
+Skill: `/api-gen` · Detail: `.cursor/skills/api-gen/references/swagger-contract-sync.md`
 
 **Warning:** `pnpm api:gen` **deletes** `src/services/` first. If the backend is down, generation fails and services are wiped. Ensure `http://localhost:8080/openapi` responds before running.
 

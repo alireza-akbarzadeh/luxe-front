@@ -29,17 +29,20 @@ Skills cover Orval regen, admin domain scaffold, forms, and layout primitives �
 
 **All HTTP calls** use generated hooks in `src/services/`. Never call `axios` or `fetch` in components.
 
-### Regenerate after backend API changes
+### Regenerate after backend Swagger / contract changes
+
+Required when OpenAPI changes: new routes, new/renamed DTOs, renamed JSON fields, path/method changes, `@Success` / response wrapper updates.
 
 ```bash
-# luxe-backend
-make swagger && make run    # restart required — /openapi is cached at startup
+# luxe
+make swagger && make run    # restart mandatory — /openapi cached at startup
 
-# luxe-front (API must be running at localhost:8080 or OPENAPI_BASE_URL)
+# luxe-front (API must be running)
 pnpm api:gen
+pnpm check                  # fix imports + mappers after renames
 ```
 
-`pnpm api:gen` **wipes** `src/services/` then refetches OpenAPI. If the backend is down, generation fails and services are empty.
+`pnpm api:gen` **wipes** `src/services/` then refetches OpenAPI. If the backend is down, generation fails and services are empty. **Never** hand-patch `src/services/` for contract changes — use `/api-gen`.
 
 ### Generated files (never hand-edit)
 

@@ -43,7 +43,7 @@ Layout: use `Flex`, `Grid`, `GridItem`, `Typography` from `@/components/ui/` —
 
 1. **Never edit** files under `src/services/` — they are generated.
 2. Before adding API calls, **grep `src/services/`** for an existing hook.
-3. When backend changes: `make swagger` → **restart luxe-backend** → `pnpm api:gen`.
+3. When backend Swagger changes (new/renamed DTO, route, fields): `make swagger` → **restart API** → `pnpm api:gen` → `pnpm check`.
 4. Import hooks from `@/services/-<path>-<method>` and types from `*.schemas.ts`.
 5. Use `get*QueryKey()` from generated files for query invalidation.
 

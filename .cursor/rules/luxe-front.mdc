@@ -24,7 +24,7 @@ Index: `.cursor/skills/README.md`. Backend: `luxe/.cursor/skills/`.
 ## Before any API-related work
 
 1. Check `src/services/` for an existing Orval hook — **never** add raw `axios`/`fetch` in components.
-2. If endpoint/types missing: use `/api-gen` — backend `make swagger` → **restart API** → `pnpm api:gen`.
+2. If endpoint/types missing or stale after backend Swagger change: `/api-gen` — `make swagger` → **restart API** → `pnpm api:gen` → `pnpm check`.
 3. **Never edit** `src/services/*` or `orval.config.js` by hand.
 
 ## Orval import pattern

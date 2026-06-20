@@ -3,8 +3,8 @@ name: api-gen
 description: >
   Use when luxe-front needs fresh Orval hooks or types in src/services/ — after
   backend Swagger or route changes, when useGet*/usePost* hooks or Dto* types are
-  missing, @/services/ imports fail, or the user mentions api:gen, OpenAPI, Orval,
-  or regenerating the API client. Apply when Dto types or hooks are stale even if the
+  missing, @/services/ imports fail, Dto or hook renames after backend changes, or the user
+  mentions api:gen, OpenAPI, Orval, or regenerating the API client. Apply when Dto types or hooks are stale even if the
   user does not mention Orval. Do not use for writing Go handlers, UI layout, or
   admin page wiring when hooks already exist.
 ---
@@ -12,6 +12,18 @@ description: >
 # API client regeneration
 
 Run this exact sequence. Do not hand-edit `src/services/`.
+
+## When backend Swagger changes
+
+If **luxe** changed DTOs, routes, response shapes, or Swagger comments → full sync required:
+
+```text
+luxe: make swagger → restart API → luxe-front: pnpm api:gen → pnpm check
+```
+
+Applies to: new endpoints, new/renamed `Dto*`, renamed fields, renamed paths/methods, `@Success` / wrapper fixes. Details: [references/swagger-contract-sync.md](references/swagger-contract-sync.md).
+
+**Never** patch `src/services/` manually for contract changes — regen after restart.
 
 ## Checklist
 
@@ -49,7 +61,9 @@ Invalidate with `get*QueryKey()` factories only.
 ## Gotchas
 
 - **`pnpm api:gen` wipes `src/services/` first** (`code-generator.js`). If the backend is down, generation fails and services may be empty — fix backend, then re-run.
-- **Restart required after `make swagger`.** Editing `docs/` without restart serves stale OpenAPI.
+- **Restart required after `make swagger`.** Editing `docs/` without restart serves stale OpenAPI — frontend `api:gen` will pull old spec.
+- **Renamed DTO/field/route** → regen then fix imports and `lib/*-mapper.ts`; Zod form schemas in `domains/*/schemas/` are separate from Orval types.
+- **Backend agent finished Swagger?** Confirm API was **restarted** before running `pnpm api:gen`.
 - **Missing hook after regen** → Swagger comments missing/wrong on controller, not a frontend fix. Fix `@Router` / `@Success` → `make swagger` → restart → regen.
 - **Form Zod schemas ≠ API types.** Form validation stays in `domains/*/schemas/`; request/response types come from `*.schemas.ts`.
 - **`pnpm build` runs `prebuild` → `api:gen`.** CI needs a reachable OpenAPI or committed generated files.
