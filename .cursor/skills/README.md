@@ -7,8 +7,6 @@
 | `<skill-name>/` | Team-authored Luxe skills (`SKILL.md`, references, evals) |
 | `_vendor/` | Third-party rule packs (e.g. Vercel React best practices) — read-only upstream copies |
 
-> **Note:** `.cursor/shadcn/` is a duplicate CLI install — canonical shadcn skill is `.cursor/skills/shadcn/`. Safe to delete `.cursor/shadcn/` after confirming paths.
-
 Each skill has:
 
 | Path | Purpose |

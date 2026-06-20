@@ -11,7 +11,7 @@ Install only when **no local Luxe skill** fits. Verify SKILL.md before use.
 | `tanstack-query` | `tanstack-skills/tanstack-skills` | **Adapted** → `/tanstack-query` (Orval hooks + get*QueryKey, not raw fetch) |
 | `vercel-react-best-practices` | `vercel-labs/agent-skills` | **Adapted** → `/luxe-react-performance` (vendor rules in `_vendor/vercel-react-best-practices/`) |
 | `vercel-composition-patterns` | `vercel-labs/agent-skills` | Installed → `/vercel-composition-patterns` (align with existing `Table` compound API) |
-| `shadcn` | shadcn CLI skill | Installed → `/shadcn` (canonical: `.cursor/skills/shadcn/`; remove duplicate `.cursor/shadcn/`) |
+| `shadcn` | shadcn CLI skill | `/shadcn` at `.cursor/skills/shadcn/` |
 | `framer-motion` | community | Installed → `/framer-motion` (storefront motion; use `motion/react`) |
 | `frontend-design` | Anthropic/community | Installed → `/frontend-design` (marketing UI direction) |
 | `design-taste-frontend` | community | Installed → `/design-taste-frontend` (landing/portfolio only) |
