@@ -1,6 +1,16 @@
 # Project Stack & Conventions
 
-> **AI agents:** Read `AGENTS.md` and `documentation/architecture.md` before any task. Short summary: `.cursor/rules/luxe-front.mdc`.
+> **AI agents:** Read `AGENTS.md` and `documentation/architecture.md` before any task. Short summary: `.cursor/rules/luxe-front.mdc`. Task workflows: `.cursor/skills/` (e.g. `/api-gen`, `/layout-typography`).
+
+## Cursor AI context
+
+| Layer | Path |
+|-------|------|
+| Always-on rules | `.cursorrules`, `.cursor/rules/luxe-front.mdc` |
+| Workflow skills | `.cursor/skills/<name>/SKILL.md` — invoke `/skill-name` or auto-load |
+| Skill maintenance | `.cursor/skills/README.md`, `eval-queries.json`, `<skill>/evals/` |
+
+Skills cover Orval regen, admin domain scaffold, forms, and layout primitives — not duplicated here.
 
 ## Core Stack
 - Next.js 16 (App Router, React Compiler enabled)
@@ -139,6 +149,7 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 
 - Tailwind v4 utility-first; use `cn()` (clsx + tailwind-merge) for conditional classes
 - Use `class-variance-authority` (cva) for component variants (buttons, badges, etc.)
+- **Layout & text:** use `Flex`, `Grid`, `GridItem`, `FlexItem`, `Typography`, `Box` from `@/components/ui/` — not `<div className="flex|grid …">` or `<h*>`/`<p>` with manual `text-*`/`font-*` classes (see `/layout-typography` skill)
 - Never write raw CSS/SCSS unless for truly global styles (`globals.css`) — prefer Tailwind utilities and shadcn theme tokens
 - Respect `prettier-plugin-tailwindcss` class ordering — don't fight the formatter
 
@@ -157,7 +168,9 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 ---
 
 ## Anti-Patterns to Avoid
-- ❌ Hand-editing `src/services/` or `orval.config.js` (run `pnpm api:gen` instead)
+- ❌ Raw div/span layout shells with `className="flex|grid|inline-flex"` (use `Flex`/`Grid` from `@/components/ui/`)
+- ❌ Section headings/body with ad-hoc `text-*`/`font-*` on raw tags (use `Typography`/`Text`)
+- ❌ Hand-editing `src/services/` or `orval.config.js` (run `pnpm api:gen` instead; see `/api-gen`)
 - ❌ Running `pnpm api:gen` while backend is down (wipes services folder)
 - ❌ `useState` for server data (use TanStack Query)
 - ❌ Raw `fetch`/`axios` in components (use Orval-generated services)

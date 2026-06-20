@@ -1,0 +1,28 @@
+{
+  "skill_name": "new-admin-domain",
+  "evals": [
+    {
+      "id": 1,
+      "name": "scaffold-gift-cards-admin",
+      "prompt": "Scaffold a new /dashboard/gift-cards admin page with a server-paginated table like categories — domain folder, columns, route page, loading and error.tsx.",
+      "expected_output": "src/domains/gift-cards/ with domain file and columns, thin page.tsx under app/(admin)/dashboard/gift-cards/, useServerTable + Table.*, no data in Zustand.",
+      "assertions": [
+        "Output creates src/domains/<name>/ structure not src/features/",
+        "Output uses useServerTable and Table from @/components/table/data-table",
+        "Output creates thin page.tsx that delegates to a domain component",
+        "Output mentions loading.tsx and error.tsx for the route segment",
+        "Output does not put server list data in Zustand"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "admin-nav-gotcha",
+      "prompt": "I added the gift cards dashboard route but it does not show in the admin sidebar.",
+      "expected_output": "Agent explains backend-driven nav via /user-menu-structure or menu seed — not a frontend-only fix.",
+      "assertions": [
+        "Response mentions admin nav is backend-driven",
+        "Response references menu config or user-menu-structure rather than only editing frontend sidebar code"
+      ]
+    }
+  ]
+}

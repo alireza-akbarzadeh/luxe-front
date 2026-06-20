@@ -1,23 +1,91 @@
-# Skill description eval queries
+# Luxe Front — Agent Skills
 
-Test whether skill descriptions trigger correctly in Cursor Agent.
+Project skills live under `.cursor/skills/`. Each skill has:
 
-## Files
+| Path | Purpose |
+|------|---------|
+| `SKILL.md` | Core instructions (loaded when skill triggers) |
+| `references/` | Detail loaded on demand |
+| `evals/evals.json` | **Output quality** test cases |
+| `eval-queries.json` (root) | **Description triggering** test prompts |
+| `scripts/` | Optional verifiers bundled with a skill |
 
-- `eval-queries.json` — labeled prompts with `should_trigger`, `split` (train/validation), and optional `note` for near-misses
+## Skills
 
-## Manual sanity check
+| Skill | When |
+|-------|------|
+| `layout-typography` | Flex/Grid/Typography instead of raw div + Tailwind layout/text |
+| `api-gen` | Orval regen after backend OpenAPI changes |
+| `new-admin-domain` | New `/dashboard/*` feature scaffold |
+| `admin-forms` | useAppForm + Zod + Orval mutations |
 
-In Agent chat, try 2–3 **should_trigger** and 2–3 **should_not_trigger** prompts from the JSON. In **Cursor Settings → Rules**, confirm the expected skill appears under active context, or type `/skill-name` to force-load and compare behavior.
+---
 
-## Optimization loop (from agentskills.io)
+## 1. Description triggering (`eval-queries.json`)
 
-1. Run train-set queries; note false positives/negatives
-2. Revise only the `description` field in `SKILL.md` — generalize, don't copy query keywords
-3. Re-run validation set to check generalization
-4. Keep descriptions under **1024 characters**
+Tests whether the **description** loads the right skill.
 
-## Boundaries to protect
+1. Pick train queries from `eval-queries.json`
+2. Run in Cursor Agent; note false positives/negatives
+3. Revise **description only** in `SKILL.md` (generalize, ≤1024 chars)
+4. Validate on held-out `split: "validation"` queries
+
+See [agentskills.io — optimizing descriptions](https://agentskills.io/skill-creation/optimizing-descriptions).
+
+---
+
+## 2. Output quality (`<skill>/evals/evals.json`)
+
+Tests whether the skill produces **good outputs** on realistic tasks.
+
+### Workspace layout
+
+```
+layout-typography/
+├── SKILL.md
+├── evals/
+│   ├── evals.json
+│   └── files/              # Input fixtures
+└── scripts/
+    └── verify-layout.mjs
+
+layout-typography-workspace/
+└── iteration-1/
+    ├── refactor-form-section-shell/
+    │   ├── with_skill/outputs/
+    │   │   ├── refactored.tsx
+    │   │   ├── grading.json
+    │   │   └── timing.json
+    │   └── without_skill/outputs/
+    └── benchmark.json
+```
+
+### Run one eval (manual)
+
+1. Snapshot skill or use `/skill-name` in Agent
+2. Run the eval **prompt** from `evals/evals.json` (attach `files` if listed)
+3. Save agent output to `…/with_skill/outputs/`
+4. Repeat **without** the skill → `without_skill/outputs/`
+5. Grade assertions → `grading.json`
+6. For layout TSX outputs, run:
+
+```bash
+node .cursor/skills/layout-typography/scripts/verify-layout.mjs \
+  layout-typography-workspace/iteration-1/refactor-form-section-shell/with_skill/outputs/refactored.tsx
+```
+
+### Iteration loop
+
+1. Grade assertions + human review (`feedback.json`)
+2. Update `SKILL.md` gotchas (not one-off prompt patches)
+3. Rerun all evals in `iteration-2/`
+4. Stop when pass rate plateaus or feedback is empty
+
+See [agentskills.io — evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills).
+
+---
+
+## Skill boundaries
 
 | Skill | Should not steal from |
 |-------|----------------------|
@@ -25,10 +93,3 @@ In Agent chat, try 2–3 **should_trigger** and 2–3 **should_not_trigger** pro
 | `layout-typography` | `admin-forms`, DataTable |
 | `new-admin-domain` | storefront routes, `api-gen` alone |
 | `admin-forms` | `layout-typography`, backend DTOs |
-| `new-api-entity` | `add-api-endpoint` |
-| `add-api-endpoint` | `new-api-entity`, frontend Orval |
-
-## Split usage
-
-- **train (~60%)** — use failures to edit descriptions
-- **validation (~40%)** — hold out until an iteration is done; score pass rate before merging description changes

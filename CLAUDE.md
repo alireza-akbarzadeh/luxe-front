@@ -1,8 +1,15 @@
 # Project Context for Claude Code
 
-> **Authoritative docs:** `AGENTS.md` · `documentation/architecture.md` · `.cursorrules` · `.cursor/rules/luxe-front.mdc`
+> **Authoritative docs:** `AGENTS.md` · `documentation/architecture.md` · `.cursorrules` · `.cursor/rules/luxe-front.mdc` · `.cursor/skills/`
 
-## Stack Overview
+## Cursor context
+
+- **Always-on:** `.cursorrules` + `.cursor/rules/luxe-front.mdc` — hard rules every session.
+- **On-demand skills:** `.cursor/skills/<name>/SKILL.md` — workflows; type `/api-gen`, `/layout-typography`, `/new-admin-domain`, `/admin-forms` or let Agent auto-load.
+- **Evals:** `.cursor/skills/*/evals/` and `eval-queries.json` — skill quality tests (see `.cursor/skills/README.md`).
+
+Layout: use `Flex`, `Grid`, `GridItem`, `Typography` from `@/components/ui/` — not raw div/h* with flex/grid/text Tailwind. Skill: `/layout-typography`.
+
 
 - **Framework**: Next.js 16 (App Router, React Compiler enabled)
 - **Runtime**: React 19, TypeScript (strict mode)
@@ -73,7 +80,7 @@ src/
 6. **Table state (pagination, sorting, filters)** goes in URL search params via `nuqs`, not Zustand, not local state.
 7. **No `any` types.** No unjustified `as` casts. Use `type-fest` for advanced type utilities.
 8. **No manual `useMemo`/`useCallback`** unless there's a measured perf problem — React Compiler handles this.
-9. **Styling**: Tailwind utilities + `cn()` (clsx + tailwind-merge) + `cva` for variants. No raw CSS/SCSS except `globals.css` for true globals. Don't fight `prettier-plugin-tailwindcss` class ordering.
+9. **Styling**: Tailwind + `cn()` + `cva`; layout via `Flex`/`Grid`/`Typography`, not div flex/grid shells.
 10. **Imports**: Let `eslint-plugin-simple-import-sort` order imports — don't manually reorder.
 
 ---

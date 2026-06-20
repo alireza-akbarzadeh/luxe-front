@@ -5,15 +5,26 @@ alwaysApply: true
 
 # Luxe Front — AI Rules
 
-Also read: `AGENTS.md`, `documentation/architecture.md`, full `.cursorrules`.
+Also read: `AGENTS.md`, `documentation/architecture.md`, full `.cursorrules`. Workflows: `.cursor/skills/` (`/api-gen`, `/layout-typography`, `/new-admin-domain`, `/admin-forms`).
 
 ## Stack
 Next.js 16 · React 19 · TS strict · Tailwind v4 · shadcn · TanStack Query/Form/Table · Zustand · Orval · pnpm
 
+## Cursor skills (on-demand)
+
+| Skill | When |
+|-------|------|
+| `/api-gen` | Regenerate `src/services/` after backend OpenAPI changes |
+| `/layout-typography` | `Flex`/`Grid`/`Typography` instead of div + Tailwind layout/text |
+| `/new-admin-domain` | New `/dashboard/*` feature scaffold |
+| `/admin-forms` | `useAppForm`, Zod, mutations, mappers |
+
+Index: `.cursor/skills/README.md`. Backend: `luxe/.cursor/skills/`.
+
 ## Before any API-related work
 
 1. Check `src/services/` for an existing Orval hook — **never** add raw `axios`/`fetch` in components.
-2. If endpoint/types missing: backend `make swagger` → **restart API** → `pnpm api:gen`.
+2. If endpoint/types missing: use `/api-gen` — backend `make swagger` → **restart API** → `pnpm api:gen`.
 3. **Never edit** `src/services/*` or `orval.config.js` by hand.
 
 ## Orval import pattern
@@ -32,8 +43,9 @@ page.tsx → domains/<name>/*.domain.tsx → Orval hooks → API
 ```
 
 - **Domains** live in `src/domains/` (not `features/`).
-- **Forms** → `useAppForm` (`src/components/forms/useAppForm.ts`).
+- **Forms** → `useAppForm` (`src/components/forms/useAppForm.ts`) — skill `/admin-forms`.
 - **Tables** → `Table` from `src/components/table/data-table.tsx`.
+- **Layout/text** → `Flex`, `Grid`, `Typography` from `@/components/ui/` — skill `/layout-typography`.
 - **Server data** → TanStack Query only; **UI state** → Zustand.
 
 ## Hard rules

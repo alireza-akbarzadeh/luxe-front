@@ -1,0 +1,29 @@
+{
+  "skill_name": "api-gen",
+  "evals": [
+    {
+      "id": 1,
+      "name": "missing-orval-hook",
+      "prompt": "Backend added GET /admin/suppliers but useGetAdminSuppliers is missing from src/services/. Regenerate the client.",
+      "expected_output": "Agent runs make swagger, restarts the API, verifies /openapi, runs pnpm api:gen, greps for the new hook, and does not hand-edit src/services/.",
+      "assertions": [
+        "Response includes make swagger on the luxe backend",
+        "Response states the API must be restarted after swagger (OpenAPI cached at startup)",
+        "Response includes pnpm api:gen from luxe-front",
+        "Response warns not to hand-edit src/services/ or orval.config.js",
+        "Response mentions verifying GET /openapi before generation"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "empty-services-after-failed-gen",
+      "prompt": "pnpm api:gen failed while backend was down and src/services/ is mostly empty. Fix it.",
+      "expected_output": "Agent diagnoses backend-down wipe, starts/restarts API, re-runs pnpm api:gen — does not patch generated files manually.",
+      "assertions": [
+        "Response explains api:gen wipes src/services/ first",
+        "Response does not recommend hand-creating hooks in src/services/",
+        "Response includes restarting or starting the backend before re-running api:gen"
+      ]
+    }
+  ]
+}

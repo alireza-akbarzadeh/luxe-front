@@ -65,6 +65,12 @@ Canonical references: `src/domains/brands/sections/brand-form.tsx`, `src/domains
 pnpm check
 ```
 
+For eval fixtures, run:
+
+```bash
+node .cursor/skills/layout-typography/scripts/verify-layout.mjs path/to/output.tsx
+```
+
 Self-check on changed files:
 
 - [ ] No new `className="flex|grid|inline-flex|inline-grid"` on `<div>`

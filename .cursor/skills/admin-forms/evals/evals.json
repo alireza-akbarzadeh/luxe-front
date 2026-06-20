@@ -1,0 +1,29 @@
+{
+  "skill_name": "admin-forms",
+  "evals": [
+    {
+      "id": 1,
+      "name": "wallet-adjust-fields",
+      "prompt": "Add amount and reason fields to the wallet adjust dialog using useAppForm and a Zod schema. Submit via the existing Orval mutation and invalidate the wallet query on success.",
+      "expected_output": "Form uses useAppForm, field.TextField or NumberField, Zod schema in domain schemas/, mapForm helper if needed, sonner toast, get*QueryKey invalidation.",
+      "assertions": [
+        "Output uses useAppForm from @/components/forms/useAppForm",
+        "Output does not import useForm from @tanstack/react-form",
+        "Output uses form.AppField with field.TextField or field.NumberField",
+        "Output invalidates queries with a generated get*QueryKey factory",
+        "Zod schema lives in domains schema file not in src/services/"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "edit-mode-reset",
+      "prompt": "Brand edit form should load existing brand data from useGetBrandsId and reset the form when data arrives — match brand-form.tsx pattern.",
+      "expected_output": "useGetBrandsId with enabled flag, useEffect calling form.reset with mapped values, mapper in lib/brand-mapper.ts.",
+      "assertions": [
+        "Output uses useEffect to reset form when entity loads",
+        "Output uses a mapper function rather than passing API DTO directly as form values",
+        "Output uses Orval useGet* hook with enabled tied to edit mode"
+      ]
+    }
+  ]
+}

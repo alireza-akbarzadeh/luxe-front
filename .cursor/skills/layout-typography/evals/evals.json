@@ -1,0 +1,44 @@
+{
+  "skill_name": "layout-typography",
+  "evals": [
+    {
+      "id": 1,
+      "name": "refactor-form-section-shell",
+      "prompt": "Refactor evals/files/bad-form-section.tsx to use our Flex, Grid, GridItem, and Typography components instead of raw div/h3 with Tailwind layout and text classes. Keep the same structure: section title, two fields in a row, helper text below.",
+      "expected_output": "The refactored TSX imports Flex, Grid, GridItem, and Typography from @/components/ui/, uses them for layout and the section heading, and removes div flex/grid and h3 text-* patterns from the shell.",
+      "files": ["evals/files/bad-form-section.tsx"],
+      "assertions": [
+        "Output imports Flex from @/components/ui/flex",
+        "Output imports Grid from @/components/ui/grid",
+        "Output imports Typography or Text from @/components/ui/typography",
+        "Output does not contain div with className containing flex flex-col or flex row layout classes",
+        "Output does not contain h3 with text-sm or font-medium Tailwind text classes for the section title",
+        "Section heading uses Typography.H3 or Text with a variant prop instead of raw h3 styling"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "two-column-field-grid",
+      "prompt": "In a new snippet file, add a two-column responsive grid for Name and Slug fields using Grid template=\"form\" and GridItem — no div className grid.",
+      "expected_output": "A TSX snippet with Grid template=\"form\" gap prop, two GridItem children, and no raw grid div.",
+      "assertions": [
+        "Output uses <Grid with template=\"form\" or cols plus gap prop",
+        "Output wraps fields in GridItem",
+        "Output does not use <div className=\"grid",
+        "Gap/spacing uses gap={n} prop not className=\"gap-4\" on the grid container"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "toolbar-row-flex",
+      "prompt": "Create a page toolbar with title on the left and a Button on the right using Flex direction=\"row\" justify=\"between\" align=\"center\" — not a div with flex justify-between.",
+      "expected_output": "Flex row toolbar with Typography for title and shadcn Button; no div flex wrapper.",
+      "assertions": [
+        "Output uses Flex with direction=\"row\" and justify=\"between\"",
+        "Output uses Typography for the title text",
+        "Output does not use div className with justify-between for the toolbar shell",
+        "Button import remains from @/components/ui/button (shadcn exception allowed)"
+      ]
+    }
+  ]
+}

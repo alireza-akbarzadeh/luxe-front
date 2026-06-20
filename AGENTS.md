@@ -9,11 +9,35 @@ Next.js 16 admin + storefront: **React 19**, **TypeScript**, **Tailwind v4**, **
 ## Authoritative rules (read before any task)
 
 1. **`.cursorrules`** — full stack conventions (forms, tables, state, styling).
-2. **`.cursor/rules/luxe-front.mdc`** — short always-on summary.
+2. **`.cursor/rules/luxe-front.mdc`** — short always-on summary (Cursor Rules).
 3. **`documentation/architecture.md`** — app structure, Orval pipeline, domain layout.
-4. **`CLAUDE.md`** — duplicate quick reference for Claude Code.
+4. **`.cursor/skills/`** — on-demand workflow skills (see below); invoke with `/skill-name` or let Agent auto-load.
+5. **`CLAUDE.md`** — duplicate quick reference for Claude Code.
 
 Do not hand-edit generated API files. Do not assume `src/features/` — this repo uses **`src/domains/`**.
+
+## Cursor AI context (`.cursor/`)
+
+Two layers — do not duplicate skill workflows in these docs; use skills for step-by-step tasks.
+
+| Layer | Path | Role |
+|-------|------|------|
+| **Always-on rules** | `.cursorrules`, `.cursor/rules/luxe-front.mdc` | Hard conventions every session |
+| **Agent skills** | `.cursor/skills/<name>/SKILL.md` | Task workflows loaded when relevant |
+| **Skill evals** | `.cursor/skills/<name>/evals/`, `eval-queries.json` | Test description triggering and output quality |
+
+### Project skills (luxe-front)
+
+| Skill | Use when |
+|-------|----------|
+| `/api-gen` | Orval regen, missing hooks/types in `src/services/` |
+| `/layout-typography` | Layout/text — use `Flex`, `Grid`, `Typography`, `Box` not raw div + Tailwind flex/grid/text |
+| `/new-admin-domain` | New `/dashboard/*` page, domain scaffold, server table |
+| `/admin-forms` | `useAppForm`, Zod, submit handlers, form mappers |
+
+Details: `.cursor/skills/README.md`. Backend skills live in the **`luxe`** repo under `.cursor/skills/` (`new-api-entity`, `add-api-endpoint`).
+
+**Layout rule (always):** prefer `@/components/ui/flex`, `grid`, `typography` over `<div className="flex|grid …">` and styled `<h*>`/`<p>`. Full checklist: `/layout-typography`.
 
 ## Architecture (one line)
 
@@ -96,11 +120,12 @@ import { usePostAdminWorkflowsIdStates } from '@/services/-admin-workflows-{id}-
 ## New domain feature checklist
 
 1. Search `src/domains/` and `src/services/` for existing patterns.
-2. If API is new/changed: backend Swagger → restart API → `pnpm api:gen`.
-3. Add route under `src/app/` (thin `page.tsx` delegating to domain).
+2. If API is new/changed: use `/api-gen` or backend Swagger → restart API → `pnpm api:gen`.
+3. Add route under `src/app/` (thin `page.tsx` delegating to domain) — see `/new-admin-domain`.
 4. Implement under `src/domains/<name>/` (`components/`, `containers/`, `sections/`, `schemas/`, `stores/`).
-5. Use Orval hooks for data; Zod + `useAppForm` for forms; `Table` for lists.
-6. `pnpm check`.
+5. Use Orval hooks for data; Zod + `useAppForm` for forms (`/admin-forms`); `Table` for lists.
+6. Use `Flex`/`Grid`/`Typography` for layout (`/layout-typography`).
+7. `pnpm check`.
 
 ## Key entry points
 
@@ -112,6 +137,8 @@ import { usePostAdminWorkflowsIdStates } from '@/services/-admin-workflows-{id}-
 | `src/components/table/data-table.tsx` | All data tables |
 | `src/lib/api/api-client.ts` | Axios `customInstance` (Orval mutator) |
 | `code-generator.js` | OpenAPI fetch + Orval config generation |
+| `.cursor/skills/` | Agent Skills — workflows (`/api-gen`, `/layout-typography`, etc.) |
+| `.cursor/skills/README.md` | Skill index, evals, triggering tests |
 
 ## Env reference
 
