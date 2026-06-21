@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -18,7 +19,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
+
 export function ForgotPasswordDomain() {
+  const t = useTranslations('auth');
+  const tForgot = useTranslations('auth.forgotPassword');
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -29,7 +34,7 @@ export function ForgotPasswordDomain() {
     setError(null);
 
     if (!email) {
-      setError('Please enter your email address');
+      setError(tForgot('emailRequired'));
       return;
     }
 
@@ -39,8 +44,8 @@ export function ForgotPasswordDomain() {
         setIsSubmitted(true);
         return;
       }
-      setError(result.error ?? 'Unable to send reset email');
-      toast.error(result.error ?? 'Unable to send reset email');
+      setError(result.error ?? tForgot('sendError'));
+      toast.error(result.error ?? tForgot('sendError'));
     });
   };
 
@@ -48,15 +53,16 @@ export function ForgotPasswordDomain() {
     startTransition(async () => {
       const result = await forgotPasswordAction(email);
       if (result.success) {
-        toast.success('Reset link sent again');
+        toast.success(tForgot('resentToast'));
         return;
       }
-      toast.error(result.error ?? 'Unable to resend reset email');
+      toast.error(result.error ?? tForgot('resendError'));
     });
   };
 
   return (
-    <div className='bg-background flex min-h-screen items-center justify-center p-6'>
+    <div className='bg-background relative flex min-h-screen items-center justify-center p-6'>
+      <AuthLanguageSwitcher />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -67,8 +73,8 @@ export function ForgotPasswordDomain() {
           href='/login'
           className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
         >
-          <IconArrowLeft className='h-4 w-4' />
-          Back to sign in
+          <IconArrowLeft className='cn-rtl-flip h-4 w-4' />
+          {tForgot('backToSignIn')}
         </Link>
 
         <AnimatePresence mode='wait'>
@@ -87,24 +93,23 @@ export function ForgotPasswordDomain() {
               </div>
 
               <div className='mb-8'>
-                <h1 className='mb-2 text-3xl font-bold'>Forgot password?</h1>
-                <p className='text-muted-foreground'>
-                  Enter your email and we&apos;ll send you a reset link.
-                </p>
+                <h1 className='mb-2 text-3xl font-bold'>{tForgot('title')}</h1>
+                <p className='text-muted-foreground'>{tForgot('subtitle')}</p>
               </div>
 
               <form onSubmit={handleSubmit} className='space-y-6'>
                 <div className='space-y-2'>
-                  <Label htmlFor='email'>Email address</Label>
-                  <div className='relative'>
-                    <IconMail className='text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2' />
+                  <Label htmlFor='email'>{t('fields.email')}</Label>
+                  <div className='relative' dir='ltr'>
+                    <IconMail className='text-muted-foreground absolute top-1/2 start-3 h-5 w-5 -translate-y-1/2' />
                     <Input
                       id='email'
                       type='email'
+                      dir='ltr'
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
-                      placeholder='name@example.com'
-                      className='h-12 pl-10'
+                      placeholder={t('fields.emailPlaceholder')}
+                      className='h-12 ps-10'
                     />
                   </div>
                   {error ? <p className='text-sm text-red-500'>{error}</p> : null}
@@ -113,13 +118,13 @@ export function ForgotPasswordDomain() {
                 <Button type='submit' className='h-12 w-full' disabled={isPending}>
                   {isPending ? (
                     <>
-                      <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />
-                      Sending...
+                      <IconLoader2 className='me-2 h-4 w-4 animate-spin' />
+                      {tForgot('sending')}
                     </>
                   ) : (
                     <>
-                      Send reset link
-                      <IconArrowRight className='ml-2 h-4 w-4' />
+                      {tForgot('submit')}
+                      <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4' />
                     </>
                   )}
                 </Button>
@@ -137,13 +142,14 @@ export function ForgotPasswordDomain() {
               <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30'>
                 <IconCheckbox className='h-8 w-8 text-emerald-600' />
               </div>
-              <h1 className='mb-2 text-2xl font-bold'>Check your email</h1>
+              <h1 className='mb-2 text-2xl font-bold'>{tForgot('successTitle')}</h1>
               <p className='text-muted-foreground mb-8'>
-                If an account exists for <strong>{email}</strong>, you&apos;ll receive a password
-                reset link shortly.
+                {tForgot.rich('successBody', {
+                  email: () => <strong>{email}</strong>
+                })}
               </p>
               <Button variant='outline' onClick={handleResend} disabled={isPending}>
-                Resend email
+                {tForgot('resend')}
               </Button>
             </motion.div>
           )}

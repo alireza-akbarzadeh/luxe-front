@@ -33,7 +33,7 @@ export function NumberField({
     <FieldContainer label={label} detail={detail}>
       <div className='relative w-full'>
         {StartIcon && (
-          <StartIcon className='text-muted-foreground pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2' />
+          <StartIcon className='text-muted-foreground pointer-events-none absolute top-1/2 start-4 size-4 -translate-y-1/2' />
         )}
 
         <NumberInput
@@ -41,11 +41,11 @@ export function NumberField({
           value={field.state.value}
           onValueChange={field.handleChange}
           onBlur={field.handleBlur}
-          className={cn(StartIcon && 'pl-12', EndIcon && 'pr-12', className)}
+          className={cn(StartIcon && 'ps-12', EndIcon && 'pe-12', className)}
         />
 
         {EndIcon && (
-          <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2' />
+          <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 end-4 size-4 -translate-y-1/2' />
         )}
       </div>
     </FieldContainer>

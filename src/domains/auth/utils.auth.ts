@@ -1,6 +1,10 @@
+export type PasswordStrengthKey = 'weak' | 'fair' | 'good' | 'strong' | 'veryStrong';
+
+export type PasswordRequirementKey = 'minLength' | 'mixedCase' | 'number' | 'special';
+
 interface PasswordStrength {
   score: number;
-  label: string;
+  labelKey: PasswordStrengthKey;
   color: string;
 }
 
@@ -12,16 +16,19 @@ export function getPasswordStrength(password: string): PasswordStrength {
   if (/\d/.test(password)) score++;
   if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
 
-  if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-red-500' };
-  if (score <= 2) return { score: 2, label: 'Fair', color: 'bg-orange-500' };
-  if (score <= 3) return { score: 3, label: 'Good', color: 'bg-yellow-500' };
-  if (score <= 4) return { score: 4, label: 'Strong', color: 'bg-green-500' };
-  return { score: 5, label: 'Very Strong', color: 'bg-emerald-500' };
+  if (score <= 1) return { score: 1, labelKey: 'weak', color: 'bg-red-500' };
+  if (score <= 2) return { score: 2, labelKey: 'fair', color: 'bg-orange-500' };
+  if (score <= 3) return { score: 3, labelKey: 'good', color: 'bg-yellow-500' };
+  if (score <= 4) return { score: 4, labelKey: 'strong', color: 'bg-green-500' };
+  return { score: 5, labelKey: 'veryStrong', color: 'bg-emerald-500' };
 }
 
-export const passwordRequirements = [
-  { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
-  { label: 'Upper and lowercase letters', test: (p: string) => /[a-z]/.test(p) && /[A-Z]/.test(p) },
-  { label: 'At least one number', test: (p: string) => /\d/.test(p) },
-  { label: 'At least one special character', test: (p: string) => /[!@#$%^&*(),.?":{}|<>]/.test(p) }
+export const passwordRequirementKeys: Array<{
+  key: PasswordRequirementKey;
+  test: (password: string) => boolean;
+}> = [
+  { key: 'minLength', test: (p) => p.length >= 8 },
+  { key: 'mixedCase', test: (p) => /[a-z]/.test(p) && /[A-Z]/.test(p) },
+  { key: 'number', test: (p) => /\d/.test(p) },
+  { key: 'special', test: (p) => /[!@#$%^&*(),.?":{}|<>]/.test(p) }
 ];

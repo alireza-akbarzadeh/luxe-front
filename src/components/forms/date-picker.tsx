@@ -20,7 +20,7 @@ export function DatePicker({ label, detail, icon: Icon, ...props }: TextFieldPro
     <FieldContainer label={label} detail={detail}>
       <div className='relative w-full'>
         {Icon && (
-          <Icon className='pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-gray-400' />
+          <Icon className='pointer-events-none absolute top-1/2 start-4 size-4 -translate-y-1/2 text-gray-400' />
         )}
         <ShadcnDatePicker
           calendar={{

@@ -5,6 +5,7 @@
 import { IconChevronDown } from '@tabler/icons-react';
 import type { Virtualizer } from '@tanstack/react-virtual';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useTranslations } from 'next-intl';
 import type { ComponentProps, PropsWithChildren } from 'react';
 import { useState } from 'react';
 import * as PhoneInputPrimitive from 'react-phone-number-input';
@@ -75,6 +76,7 @@ export function InputPhone({
           }}
           onBlur={field.handleBlur}
           className='flex h-full min-h-0 w-full'
+          dir='ltr'
           flagComponent={FlagComponent}
           inputComponent={InputComponent}
           countrySelectComponent={CountrySelect}
@@ -87,8 +89,9 @@ export function InputPhone({
 function InputComponent({ className, ...props }: ComponentProps<typeof Input>) {
   return (
     <Input
+      dir='ltr'
       className={cn(
-        'h-full min-h-0 w-full rounded-none border-0 bg-transparent px-3 shadow-none',
+        'h-full min-h-0 w-full rounded-none border-0 bg-transparent px-3 text-start shadow-none',
         'focus-visible:border-0 focus-visible:ring-0',
         className
       )}
@@ -167,7 +170,7 @@ function CountrySelect({ disabled, value, options, onChange }: CountrySelectProp
           type='button'
           variant='ghost'
           className={cn(
-            'text-foreground border-input flex h-full min-h-0 shrink-0 gap-2 self-stretch rounded-none border-0 border-r px-3 shadow-none',
+            'text-foreground border-input flex h-full min-h-0 shrink-0 gap-2 self-stretch rounded-none border-0 border-e px-3 shadow-none',
             'hover:bg-muted/50 dark:hover:bg-muted/30',
             'focus-visible:ring-0 focus-visible:ring-offset-0',
             disabled && 'opacity-50'
@@ -213,11 +216,12 @@ function MobileView({ children }: PropsWithChildren) {
 
 function CountrySelectCommand() {
   const context = useContext();
+  const t = useTranslations('auth');
 
   return (
     <Command shouldFilter={false}>
       <CommandInput
-        placeholder='Search country...'
+        placeholder={t('searchCountry')}
         value={context.search}
         onValueChange={context.setSearch}
       />
@@ -236,7 +240,7 @@ function CountrySelectCommand() {
                   inset: 0
                 }}
               >
-                No country found.
+                {t('noCountryFound')}
               </CommandEmpty>
               <CommandGroup>
                 {context.virtualizer.getVirtualItems().map((virtualItem) => {

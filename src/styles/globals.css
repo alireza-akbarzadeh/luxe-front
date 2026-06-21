@@ -269,6 +269,13 @@
   }
 }
 
+/**
+ * Form fields: use logical Tailwind classes so adornments follow locale direction.
+ * - Icon position: `start-4` / `end-4` (not left/right)
+ * - Input padding: `ps-*` / `pe-*` (not pl/pr)
+ * - Email/phone values: `dir="ltr"` on the input
+ */
+
 [dir='rtl'] .font-display {
   letter-spacing: 0;
 }

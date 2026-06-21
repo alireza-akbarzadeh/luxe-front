@@ -1,8 +1,26 @@
+'use client';
+
 import { motion } from 'framer-motion';
+import { useLocale, useTranslations } from 'next-intl';
+
+import { getDirection, type Locale } from '@/i18n/config';
 
 export function LoginSidebar() {
+  const locale = useLocale() as Locale;
+  const pageDir = getDirection(locale);
+  const t = useTranslations('auth.sidebar.login');
+
+  const stats = [
+    { label: t('stats.secureCheckout'), value: t('stats.secureCheckoutValue') },
+    { label: t('stats.freeReturns'), value: t('stats.freeReturnsValue') },
+    { label: t('stats.support'), value: t('stats.supportValue') }
+  ];
+
   return (
-    <div className='bg-accent/5 relative hidden flex-1 items-center justify-center overflow-hidden p-12 lg:flex'>
+    <div
+      dir={pageDir}
+      className='bg-accent/5 relative hidden flex-1 items-center justify-center overflow-hidden p-12 lg:flex'
+    >
       <div className='from-accent/10 to-accent/5 absolute inset-0 bg-linear-to-br via-transparent' />
       <div className='bg-accent/10 absolute top-1/4 left-1/4 h-64 w-64 rounded-full blur-3xl' />
       <div className='bg-accent/20 absolute right-1/4 bottom-1/4 h-48 w-48 rounded-full blur-3xl' />
@@ -15,17 +33,10 @@ export function LoginSidebar() {
         <div className='mb-8'>
           <span className='text-6xl font-bold tracking-tight'>LUXE</span>
         </div>
-        <h2 className='mb-4 text-2xl font-semibold'>Premium Shopping Experience</h2>
-        <p className='text-muted-foreground leading-relaxed'>
-          Discover exclusive collections and enjoy personalized recommendations tailored just for
-          you. Sign in to access your wishlist, track orders, and more.
-        </p>
+        <h2 className='mb-4 text-2xl font-semibold'>{t('title')}</h2>
+        <p className='text-muted-foreground leading-relaxed'>{t('description')}</p>
         <div className='mt-12 grid grid-cols-3 gap-6'>
-          {[
-            { label: 'Secure Checkout', value: '256-bit SSL' },
-            { label: 'Free Returns', value: '30 Days' },
-            { label: 'Support', value: '24/7' }
-          ].map((feature) => (
+          {stats.map((feature) => (
             <div key={feature.label} className='text-center'>
               <p className='text-lg font-semibold'>{feature.value}</p>
               <p className='text-muted-foreground text-xs'>{feature.label}</p>

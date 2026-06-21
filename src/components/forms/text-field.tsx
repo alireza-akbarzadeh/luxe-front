@@ -12,6 +12,8 @@ interface TextFieldProps extends ComponentProps<typeof Input> {
   detail?: string;
   startIcon?: TablerIcon;
   endIcon?: TablerIcon;
+  /** Force input text direction (e.g. `ltr` for email in RTL locales). */
+  inputDir?: 'ltr' | 'rtl' | 'auto';
   /** Optional normaliser applied to the raw input before it is stored. */
   transform?: (value: string) => string;
 }
@@ -23,6 +25,7 @@ export function TextField(props: TextFieldProps) {
     placeholder,
     startIcon: StartIcon,
     endIcon: EndIcon,
+    inputDir,
     className,
     transform,
     ...rest
@@ -32,12 +35,13 @@ export function TextField(props: TextFieldProps) {
 
   return (
     <FieldContainer label={label} detail={detail}>
-      <div className='relative w-full'>
+      <div className='relative w-full' dir={inputDir === 'ltr' ? 'ltr' : undefined}>
         {StartIcon && (
-          <StartIcon className='text-muted-foreground pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2' />
+          <StartIcon className='text-muted-foreground pointer-events-none absolute top-1/2 start-4 size-4 -translate-y-1/2' />
         )}
         <Input
           {...rest}
+          dir={inputDir}
           name={field.name}
           value={field.state.value}
           placeholder={placeholder}
@@ -45,10 +49,10 @@ export function TextField(props: TextFieldProps) {
           onChange={(e) =>
             field.handleChange(transform ? transform(e.target.value) : e.target.value)
           }
-          className={cn(StartIcon && 'pl-12', EndIcon && 'pr-12', className)}
+          className={cn(StartIcon && 'ps-12', EndIcon && 'pe-12', className)}
         />
         {EndIcon && (
-          <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2' />
+          <EndIcon className='text-muted-foreground pointer-events-none absolute top-1/2 end-4 size-4 -translate-y-1/2' />
         )}
       </div>
     </FieldContainer>

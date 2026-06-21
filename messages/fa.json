@@ -123,5 +123,177 @@
       "secure": "پرداخت امن",
       "delivery": "ارسال جهانی"
     }
+  },
+  "auth": {
+    "fields": {
+      "email": "ایمیل",
+      "emailPlaceholder": "name@example.com",
+      "password": "رمز عبور",
+      "confirmPassword": "تأیید رمز عبور",
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "phone": "تلفن",
+      "firstNamePlaceholder": "علی",
+      "lastNamePlaceholder": "احمدی",
+      "phonePlaceholder": "+98 912 345 6789"
+    },
+    "password": {
+      "strength": "قدرت رمز عبور",
+      "weak": "ضعیف",
+      "fair": "متوسط",
+      "good": "خوب",
+      "strong": "قوی",
+      "veryStrong": "بسیار قوی",
+      "createPlaceholder": "یک رمز عبور قوی بسازید",
+      "confirmPlaceholder": "رمز عبور را تأیید کنید",
+      "enterPlaceholder": "رمز عبور را وارد کنید",
+      "requirements": {
+        "minLength": "حداقل ۸ کاراکتر",
+        "mixedCase": "حروف بزرگ و کوچک",
+        "number": "حداقل یک عدد",
+        "special": "حداقل یک کاراکتر ویژه"
+      }
+    },
+    "validation": {
+      "invalidEmail": "ایمیل نامعتبر است",
+      "passwordRequired": "رمز عبور الزامی است",
+      "firstNameRequired": "نام الزامی است",
+      "lastNameRequired": "نام خانوادگی الزامی است",
+      "passwordMinLength": "رمز عبور باید حداقل ۸ کاراکتر باشد",
+      "passwordMinLengthReset": "رمز عبور باید حداقل ۶ کاراکتر باشد",
+      "passwordsMismatch": "رمزهای عبور یکسان نیستند",
+      "acceptTerms": "پذیرش قوانین الزامی است",
+      "phoneE164": "شماره باید با فرمت E.164 باشد (مثلاً +989123456789)",
+      "currentPasswordRequired": "رمز عبور فعلی الزامی است",
+      "newPasswordMinLength": "رمز جدید باید حداقل ۸ کاراکتر باشد"
+    },
+    "login": {
+      "title": "خوش آمدید",
+      "subtitle": "برای ورود به حساب، اطلاعات خود را وارد کنید",
+      "rememberMe": "مرا به مدت ۷ روز به خاطر بسپار",
+      "submit": "ورود",
+      "orContinueWith": "یا ادامه با",
+      "noAccount": "حساب ندارید؟",
+      "createAccount": "همین حالا بسازید",
+      "welcomeBackToast": "خوش آمدید!",
+      "invalidCredentials": "اطلاعات ورود نادرست است",
+      "socialComingSoon": "ورود با شبکه‌های اجتماعی به‌زودی — فعلاً با ایمیل وارد شوید"
+    },
+    "register": {
+      "title": "ایجاد حساب",
+      "subtitle": "سفر خرید لوکس خود را امروز آغاز کنید",
+      "termsPrefix": "با",
+      "termsLink": "شرایط استفاده",
+      "termsAnd": "و",
+      "privacyLink": "حریم خصوصی",
+      "marketingOptIn": "مایل به دریافت پیشنهادهای ویژه، نکات استایل و به‌روزرسانی‌ها هستم",
+      "submit": "ثبت‌نام",
+      "orSignUpWith": "یا ثبت‌نام با",
+      "hasAccount": "قبلاً حساب دارید؟",
+      "signIn": "ورود",
+      "successToast": "حساب ایجاد شد! در حال انتقال...",
+      "emailAlreadyRegistered": "این ایمیل قبلاً ثبت شده است",
+      "socialComingSoon": "ثبت‌نام با شبکه‌های اجتماعی به‌زودی — فعلاً با ایمیل ثبت‌نام کنید"
+    },
+    "forgotPassword": {
+      "backToSignIn": "بازگشت به ورود",
+      "title": "رمز عبور را فراموش کرده‌اید؟",
+      "subtitle": "ایمیل خود را وارد کنید تا لینک بازیابی برایتان ارسال شود.",
+      "submit": "ارسال لینک بازیابی",
+      "sending": "در حال ارسال...",
+      "emailRequired": "لطفاً ایمیل خود را وارد کنید",
+      "sendError": "ارسال ایمیل بازیابی ممکن نشد",
+      "successTitle": "ایمیل خود را بررسی کنید",
+      "successBody": "اگر حسابی برای {email} وجود داشته باشد، به‌زودی لینک بازیابی دریافت می‌کنید.",
+      "resend": "ارسال مجدد ایمیل",
+      "resentToast": "لینک دوباره ارسال شد",
+      "resendError": "ارسال مجدد ممکن نشد"
+    },
+    "forgotPasswordLink": "رمز عبور را فراموش کرده‌اید؟",
+    "togglePasswordVisibility": "نمایش یا پنهان کردن رمز عبور",
+    "searchCountry": "جستجوی کشور...",
+    "noCountryFound": "کشوری یافت نشد.",
+    "resetPassword": {
+      "backToSignIn": "بازگشت به ورود",
+      "invalidLinkTitle": "لینک نامعتبر",
+      "invalidLinkBody": "لینک بازیابی رمز عبور وجود ندارد یا منقضی شده است.",
+      "requestNewLink": "درخواست لینک جدید",
+      "title": "تنظیم رمز عبور جدید",
+      "subtitle": "یک رمز عبور قوی برای حساب خود انتخاب کنید.",
+      "newPassword": "رمز عبور جدید",
+      "newPasswordPlaceholder": "رمز عبور جدید را وارد کنید",
+      "confirmPlaceholder": "رمز عبور جدید را تأیید کنید",
+      "submit": "به‌روزرسانی رمز عبور",
+      "invalidToken": "لینک بازیابی نامعتبر یا منقضی شده است",
+      "successToast": "رمز عبور با موفقیت به‌روزرسانی شد",
+      "resetError": "بازیابی رمز عبور ممکن نشد",
+      "successTitle": "رمز عبور به‌روزرسانی شد",
+      "successBody": "رمز عبور شما بازنشانی شد. با رمز جدید وارد شوید.",
+      "continueToSignIn": "ادامه به ورود"
+    },
+    "changePassword": {
+      "title": "تغییر رمز عبور",
+      "subtitle": "حداقل ۸ کاراکتر استفاده کنید. به‌روزرسانی رمز عبور امنیت حساب را حفظ می‌کند.",
+      "currentPassword": "رمز عبور فعلی",
+      "currentPasswordPlaceholder": "رمز عبور فعلی را وارد کنید",
+      "newPassword": "رمز عبور جدید",
+      "newPasswordPlaceholder": "رمز عبور جدید را وارد کنید",
+      "confirmPassword": "تأیید رمز جدید",
+      "confirmPasswordPlaceholder": "رمز جدید را تأیید کنید",
+      "submit": "به‌روزرسانی رمز عبور",
+      "successToast": "رمز عبور با موفقیت به‌روزرسانی شد"
+    },
+    "vendor": {
+      "brandSuffix": "فروشنده",
+      "login": {
+        "title": "ورود فروشنده",
+        "subtitle": "به پنل فروشنده برای مدیریت کاتالوگ، سفارش‌ها و تنظیمات فروشگاه دسترسی پیدا کنید.",
+        "emailPlaceholder": "seller@yourbrand.com",
+        "submit": "ورود به پنل فروشنده",
+        "welcomeBackToast": "خوش آمدید به پنل فروشنده!",
+        "noAccount": "تازه‌وارد Luxe هستید؟",
+        "createAccount": "ایجاد حساب فروشنده",
+        "customerSignIn": "به عنوان مشتری خرید می‌کنید؟",
+        "customerSignInLink": "ورود مشتری",
+        "backToVendorHome": "← بازگشت به صفحه فروشنده"
+      },
+      "sidebar": {
+        "title": "مرکز فرمان فروشنده شما",
+        "description": "برای مدیریت محصولات، تکمیل سفارش‌ها و حفظ ظاهر فروشگاه — همه از یک فضای فروشنده وارد شوید.",
+        "stats": {
+          "catalogLabel": "کاتالوگ",
+          "catalogValue": "محصولات",
+          "operationsLabel": "عملیات",
+          "operationsValue": "سفارش‌ها",
+          "brandLabel": "برند",
+          "brandValue": "فروشگاه"
+        }
+      }
+    },
+    "sidebar": {
+      "login": {
+        "title": "تجربه خرید لوکس",
+        "description": "مجموعه‌های منتخب و پیشنهادهای شخصی‌سازی‌شده را کشف کنید. برای علاقه‌مندی‌ها، پیگیری سفارش و بیشتر وارد شوید.",
+        "stats": {
+          "secureCheckout": "پرداخت امن",
+          "secureCheckoutValue": "SSL 256-bit",
+          "freeReturns": "مرجوعی رایگان",
+          "freeReturnsValue": "۳۰ روز",
+          "support": "پشتیبانی",
+          "supportValue": "۲۴/۷"
+        }
+      },
+      "register": {
+        "title": "به جامعه ما بپیوندید",
+        "description": "با ایجاد حساب، مزایای ویژه، دسترسی زودتر به مجموعه‌های جدید و تجربه خرید شخصی‌سازی‌شده را فعال کنید.",
+        "benefits": {
+          "discounts": "تخفیف‌های ویژه اعضا",
+          "earlyAccess": "دسترسی زودتر به محصولات جدید",
+          "wishlist": "ذخیره در علاقه‌مندی‌ها",
+          "checkout": "تسویه حساب سریع‌تر",
+          "orders": "پیگیری و تاریخچه سفارش"
+        }
+      }
+    }
   }
 }

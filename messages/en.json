@@ -123,5 +123,177 @@
       "secure": "Secure checkout",
       "delivery": "Global shipping"
     }
+  },
+  "auth": {
+    "fields": {
+      "email": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "firstNamePlaceholder": "John",
+      "lastNamePlaceholder": "Doe",
+      "phonePlaceholder": "+1 234 567 8900"
+    },
+    "password": {
+      "strength": "Password strength",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "veryStrong": "Very strong",
+      "createPlaceholder": "Create a strong password",
+      "confirmPlaceholder": "Confirm your password",
+      "enterPlaceholder": "Enter your password",
+      "requirements": {
+        "minLength": "At least 8 characters",
+        "mixedCase": "Upper and lowercase letters",
+        "number": "At least one number",
+        "special": "At least one special character"
+      }
+    },
+    "validation": {
+      "invalidEmail": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordMinLengthReset": "Password must be at least 6 characters",
+      "passwordsMismatch": "Passwords do not match",
+      "acceptTerms": "You must accept the terms",
+      "phoneE164": "Phone number must be in E.164 format (e.g., +1234567890)",
+      "currentPasswordRequired": "Current password is required",
+      "newPasswordMinLength": "New password must be at least 8 characters"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Enter your credentials to access your account",
+      "rememberMe": "Remember me for 7 days",
+      "submit": "Sign in",
+      "orContinueWith": "Or continue with",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one now",
+      "welcomeBackToast": "Welcome back!",
+      "invalidCredentials": "Invalid credentials",
+      "socialComingSoon": "Social sign-in is coming soon — use email for now"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Start your premium shopping journey today",
+      "termsPrefix": "I agree to the",
+      "termsLink": "Terms of Service",
+      "termsAnd": "and",
+      "privacyLink": "Privacy Policy",
+      "marketingOptIn": "I want to receive exclusive offers, style tips, and updates",
+      "submit": "Register",
+      "orSignUpWith": "Or sign up with",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "successToast": "Account created! Redirecting...",
+      "emailAlreadyRegistered": "Email already registered",
+      "socialComingSoon": "Social sign-up is coming soon — use email for now"
+    },
+    "forgotPassword": {
+      "backToSignIn": "Back to sign in",
+      "title": "Forgot password?",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "submit": "Send reset link",
+      "sending": "Sending...",
+      "emailRequired": "Please enter your email address",
+      "sendError": "Unable to send reset email",
+      "successTitle": "Check your email",
+      "successBody": "If an account exists for {email}, you'll receive a password reset link shortly.",
+      "resend": "Resend email",
+      "resentToast": "Reset link sent again",
+      "resendError": "Unable to resend reset email"
+    },
+    "forgotPasswordLink": "Forgot password?",
+    "togglePasswordVisibility": "Toggle password visibility",
+    "searchCountry": "Search country...",
+    "noCountryFound": "No country found.",
+    "resetPassword": {
+      "backToSignIn": "Back to sign in",
+      "invalidLinkTitle": "Invalid reset link",
+      "invalidLinkBody": "This password reset link is missing or has expired.",
+      "requestNewLink": "Request a new link",
+      "title": "Set a new password",
+      "subtitle": "Choose a strong password for your account.",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPlaceholder": "Confirm your new password",
+      "submit": "Update password",
+      "invalidToken": "Reset link is invalid or expired",
+      "successToast": "Password updated successfully",
+      "resetError": "Unable to reset password",
+      "successTitle": "Password updated",
+      "successBody": "Your password has been reset. Sign in with your new password.",
+      "continueToSignIn": "Continue to sign in"
+    },
+    "changePassword": {
+      "title": "Change password",
+      "subtitle": "Use at least 8 characters. Updating your password keeps your account secure.",
+      "currentPassword": "Current password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "submit": "Update password",
+      "successToast": "Password updated successfully"
+    },
+    "vendor": {
+      "brandSuffix": "Vendor",
+      "login": {
+        "title": "Vendor sign in",
+        "subtitle": "Access your seller panel to manage catalog, orders, and storefront settings.",
+        "emailPlaceholder": "seller@yourbrand.com",
+        "submit": "Sign in to vendor panel",
+        "welcomeBackToast": "Welcome back to your vendor panel",
+        "noAccount": "New to Luxe marketplace?",
+        "createAccount": "Create a seller account",
+        "customerSignIn": "Shopping as a customer?",
+        "customerSignInLink": "Customer sign in",
+        "backToVendorHome": "← Back to vendor home"
+      },
+      "sidebar": {
+        "title": "Your seller command center",
+        "description": "Sign in to manage products, fulfill orders, and keep your storefront polished — all from one vendor workspace.",
+        "stats": {
+          "catalogLabel": "Catalog",
+          "catalogValue": "Products",
+          "operationsLabel": "Operations",
+          "operationsValue": "Orders",
+          "brandLabel": "Brand",
+          "brandValue": "Store"
+        }
+      }
+    },
+    "sidebar": {
+      "login": {
+        "title": "Premium shopping experience",
+        "description": "Discover exclusive collections and enjoy personalized recommendations tailored just for you. Sign in to access your wishlist, track orders, and more.",
+        "stats": {
+          "secureCheckout": "Secure checkout",
+          "secureCheckoutValue": "256-bit SSL",
+          "freeReturns": "Free returns",
+          "freeReturnsValue": "30 days",
+          "support": "Support",
+          "supportValue": "24/7"
+        }
+      },
+      "register": {
+        "title": "Join our community",
+        "description": "Create an account to unlock exclusive benefits, early access to new collections, and personalized shopping experiences.",
+        "benefits": {
+          "discounts": "Exclusive member-only discounts",
+          "earlyAccess": "Early access to new arrivals",
+          "wishlist": "Save items to your wishlist",
+          "checkout": "Faster checkout experience",
+          "orders": "Order tracking & history"
+        }
+      }
+    }
   }
 }

@@ -5,13 +5,11 @@ import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display, Vazirmatn } from 'next/font/google';
-import Script from 'next/script';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
 import { getDirection, type Locale } from '@/i18n/config';
-import { themeInitScript } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 const nunitoSans = Nunito_Sans({ variable: '--font-sans' });
@@ -85,16 +83,11 @@ export default async function RootLayout({ children }: TRootLayout) {
         )}
         suppressHydrationWarning
       >
-        <Script
-          id='luxe-theme-init'
-          strategy='beforeInteractive'
-          dangerouslySetInnerHTML={{ __html: themeInitScript }}
-        />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <RootProvider dir={dir}>{children}</RootProvider>
         </NextIntlClientProvider>
+        <SpeedInsights />
       </body>
-      <SpeedInsights />
     </html>
   );
 }

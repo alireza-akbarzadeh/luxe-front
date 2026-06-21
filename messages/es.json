@@ -123,5 +123,177 @@
       "secure": "Pago seguro",
       "delivery": "Envío global"
     }
+  },
+  "auth": {
+    "fields": {
+      "email": "Correo electrónico",
+      "emailPlaceholder": "nombre@ejemplo.com",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "phone": "Teléfono",
+      "firstNamePlaceholder": "Juan",
+      "lastNamePlaceholder": "Pérez",
+      "phonePlaceholder": "+34 612 345 678"
+    },
+    "password": {
+      "strength": "Fortaleza de la contraseña",
+      "weak": "Débil",
+      "fair": "Regular",
+      "good": "Buena",
+      "strong": "Fuerte",
+      "veryStrong": "Muy fuerte",
+      "createPlaceholder": "Cree una contraseña segura",
+      "confirmPlaceholder": "Confirme su contraseña",
+      "enterPlaceholder": "Introduzca su contraseña",
+      "requirements": {
+        "minLength": "Al menos 8 caracteres",
+        "mixedCase": "Mayúsculas y minúsculas",
+        "number": "Al menos un número",
+        "special": "Al menos un carácter especial"
+      }
+    },
+    "validation": {
+      "invalidEmail": "Correo electrónico no válido",
+      "passwordRequired": "La contraseña es obligatoria",
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+      "passwordMinLengthReset": "La contraseña debe tener al menos 6 caracteres",
+      "passwordsMismatch": "Las contraseñas no coinciden",
+      "acceptTerms": "Debe aceptar los términos",
+      "phoneE164": "El teléfono debe estar en formato E.164 (p. ej., +34612345678)",
+      "currentPasswordRequired": "La contraseña actual es obligatoria",
+      "newPasswordMinLength": "La nueva contraseña debe tener al menos 8 caracteres"
+    },
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "subtitle": "Introduzca sus credenciales para acceder a su cuenta",
+      "rememberMe": "Recordarme durante 7 días",
+      "submit": "Iniciar sesión",
+      "orContinueWith": "O continuar con",
+      "noAccount": "¿No tiene cuenta?",
+      "createAccount": "Cree una ahora",
+      "welcomeBackToast": "¡Bienvenido de nuevo!",
+      "invalidCredentials": "Credenciales no válidas",
+      "socialComingSoon": "El inicio de sesión social llegará pronto — use el correo por ahora"
+    },
+    "register": {
+      "title": "Cree su cuenta",
+      "subtitle": "Comience hoy su experiencia de compra premium",
+      "termsPrefix": "Acepto los",
+      "termsLink": "Términos del servicio",
+      "termsAnd": "y la",
+      "privacyLink": "Política de privacidad",
+      "marketingOptIn": "Quiero recibir ofertas exclusivas, consejos de estilo y novedades",
+      "submit": "Registrarse",
+      "orSignUpWith": "O registrarse con",
+      "hasAccount": "¿Ya tiene cuenta?",
+      "signIn": "Iniciar sesión",
+      "successToast": "¡Cuenta creada! Redirigiendo...",
+      "emailAlreadyRegistered": "El correo ya está registrado",
+      "socialComingSoon": "El registro social llegará pronto — use el correo por ahora"
+    },
+    "forgotPassword": {
+      "backToSignIn": "Volver a iniciar sesión",
+      "title": "¿Olvidó su contraseña?",
+      "subtitle": "Introduzca su correo y le enviaremos un enlace de restablecimiento.",
+      "submit": "Enviar enlace",
+      "sending": "Enviando...",
+      "emailRequired": "Introduzca su correo electrónico",
+      "sendError": "No se pudo enviar el correo de restablecimiento",
+      "successTitle": "Revise su correo",
+      "successBody": "Si existe una cuenta para {email}, recibirá un enlace de restablecimiento en breve.",
+      "resend": "Reenviar correo",
+      "resentToast": "Enlace reenviado",
+      "resendError": "No se pudo reenviar el correo"
+    },
+    "forgotPasswordLink": "¿Olvidó su contraseña?",
+    "togglePasswordVisibility": "Mostrar u ocultar contraseña",
+    "searchCountry": "Buscar país...",
+    "noCountryFound": "No se encontró ningún país.",
+    "resetPassword": {
+      "backToSignIn": "Volver a iniciar sesión",
+      "invalidLinkTitle": "Enlace no válido",
+      "invalidLinkBody": "Este enlace de restablecimiento falta o ha caducado.",
+      "requestNewLink": "Solicitar un nuevo enlace",
+      "title": "Establecer nueva contraseña",
+      "subtitle": "Elija una contraseña segura para su cuenta.",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Introduzca su nueva contraseña",
+      "confirmPlaceholder": "Confirme su nueva contraseña",
+      "submit": "Actualizar contraseña",
+      "invalidToken": "El enlace de restablecimiento no es válido o ha caducado",
+      "successToast": "Contraseña actualizada correctamente",
+      "resetError": "No se pudo restablecer la contraseña",
+      "successTitle": "Contraseña actualizada",
+      "successBody": "Su contraseña se ha restablecido. Inicie sesión con la nueva contraseña.",
+      "continueToSignIn": "Continuar e iniciar sesión"
+    },
+    "changePassword": {
+      "title": "Cambiar contraseña",
+      "subtitle": "Use al menos 8 caracteres. Actualizar su contraseña mantiene su cuenta segura.",
+      "currentPassword": "Contraseña actual",
+      "currentPasswordPlaceholder": "Introduzca la contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "newPasswordPlaceholder": "Introduzca la nueva contraseña",
+      "confirmPassword": "Confirmar nueva contraseña",
+      "confirmPasswordPlaceholder": "Confirme la nueva contraseña",
+      "submit": "Actualizar contraseña",
+      "successToast": "Contraseña actualizada correctamente"
+    },
+    "vendor": {
+      "brandSuffix": "Vendedor",
+      "login": {
+        "title": "Inicio de sesión de vendedor",
+        "subtitle": "Acceda a su panel para gestionar catálogo, pedidos y la tienda.",
+        "emailPlaceholder": "vendedor@sumarca.com",
+        "submit": "Entrar al panel de vendedor",
+        "welcomeBackToast": "¡Bienvenido de nuevo a su panel de vendedor!",
+        "noAccount": "¿Nuevo en Luxe?",
+        "createAccount": "Crear cuenta de vendedor",
+        "customerSignIn": "¿Compra como cliente?",
+        "customerSignInLink": "Inicio de sesión de cliente",
+        "backToVendorHome": "← Volver al inicio de vendedor"
+      },
+      "sidebar": {
+        "title": "Su centro de mando de vendedor",
+        "description": "Inicie sesión para gestionar productos, cumplir pedidos y mantener su tienda impecable — todo desde un solo espacio.",
+        "stats": {
+          "catalogLabel": "Catálogo",
+          "catalogValue": "Productos",
+          "operationsLabel": "Operaciones",
+          "operationsValue": "Pedidos",
+          "brandLabel": "Marca",
+          "brandValue": "Tienda"
+        }
+      }
+    },
+    "sidebar": {
+      "login": {
+        "title": "Experiencia de compra premium",
+        "description": "Descubra colecciones exclusivas y recomendaciones personalizadas. Inicie sesión para acceder a favoritos, pedidos y más.",
+        "stats": {
+          "secureCheckout": "Pago seguro",
+          "secureCheckoutValue": "SSL 256 bits",
+          "freeReturns": "Devoluciones gratis",
+          "freeReturnsValue": "30 días",
+          "support": "Soporte",
+          "supportValue": "24/7"
+        }
+      },
+      "register": {
+        "title": "Únase a nuestra comunidad",
+        "description": "Cree una cuenta para desbloquear beneficios exclusivos, acceso anticipado y experiencias personalizadas.",
+        "benefits": {
+          "discounts": "Descuentos exclusivos para miembros",
+          "earlyAccess": "Acceso anticipado a novedades",
+          "wishlist": "Guarde artículos en favoritos",
+          "checkout": "Pago más rápido",
+          "orders": "Seguimiento e historial de pedidos"
+        }
+      }
+    }
   }
 }

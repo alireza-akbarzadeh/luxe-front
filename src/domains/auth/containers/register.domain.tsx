@@ -4,22 +4,36 @@ import { IconCheck, IconMail, IconUser, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useMemo, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { getDirection, type Locale } from '@/i18n/config';
 import { registerAction } from '~/src/actions/auth.actions';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
-import { registerFormSchema } from '../auth.schema';
+import { createRegisterFormSchema } from '../auth.schema';
+import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 import { RegisterSidebar } from '../components/register-sidebar';
-import { getPasswordStrength, passwordRequirements } from '../utils.auth';
+import { getPasswordStrength, passwordRequirementKeys } from '../utils.auth';
 
 export function RegisterDomain() {
+  const locale = useLocale() as Locale;
+  const pageDir = getDirection(locale);
+  const t = useTranslations('auth');
+  const tRegister = useTranslations('auth.register');
+  const tPassword = useTranslations('auth.password');
+  const tValidation = useTranslations('auth.validation');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+
+  const registerFormSchema = useMemo(
+    () => createRegisterFormSchema(tValidation),
+    [tValidation]
+  );
 
   const form = useAppForm({
     defaultValues: {
@@ -50,14 +64,19 @@ export function RegisterDomain() {
         if (result && 'error' in result) {
           setError(result.error);
           toast.error(result.error);
-          if (result.error.includes('duplicate') || result.error.includes('already exists')) {
+          if (
+            result.error.includes('duplicate') ||
+            result.error.includes('already exists') ||
+            result.error.includes('ya está') ||
+            result.error.includes('قبلاً')
+          ) {
             formApi.setFieldMeta('email', (prev) => ({
               ...prev,
-              error: 'Email already registered'
+              error: tRegister('emailAlreadyRegistered')
             }));
           }
         } else {
-          toast.success('Account created! Redirecting...');
+          toast.success(tRegister('successToast'));
           router.push('/account');
         }
       });
@@ -68,30 +87,27 @@ export function RegisterDomain() {
   const passwordStrength = getPasswordStrength(password);
 
   return (
-    <div className='bg-background flex min-h-screen'>
-      {/* Left Side */}
-      <RegisterSidebar />
-      {/* Right Side */}
-      <div className='flex flex-1 items-center justify-center overflow-y-auto p-6 sm:p-12'>
+    <div className='bg-background flex min-h-screen' dir='ltr'>
+      <div
+        className='relative flex flex-1 items-center justify-center overflow-y-auto p-6 sm:p-12'
+        dir={pageDir}
+      >
+        <AuthLanguageSwitcher />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className='w-full max-w-md py-8'
         >
-          {/* Logo */}
           <Link href='/' className='mb-8 inline-block'>
             <span className='text-3xl font-bold tracking-tight'>LUXE</span>
           </Link>
 
-          {/* Header */}
           <div className='mb-8'>
-            <h1 className='mb-2 text-3xl font-bold'>Create your account</h1>
-
-            <p className='text-muted-foreground'>Start your premium shopping journey today</p>
+            <h1 className='mb-2 text-3xl font-bold'>{tRegister('title')}</h1>
+            <p className='text-muted-foreground'>{tRegister('subtitle')}</p>
           </div>
 
-          {/* Error */}
           {error && (
             <motion.div
               data-testid='register-error'
@@ -112,14 +128,13 @@ export function RegisterDomain() {
               }}
               className='space-y-5'
             >
-              {/* Names */}
               <div className='grid grid-cols-2 gap-4'>
                 <form.AppField name='firstName'>
                   {(field) => (
                     <field.TextField
                       data-testid='firstName-input'
-                      label='First name'
-                      placeholder='John'
+                      label={t('fields.firstName')}
+                      placeholder={t('fields.firstNamePlaceholder')}
                       startIcon={IconUser}
                       className='h-12'
                     />
@@ -130,47 +145,45 @@ export function RegisterDomain() {
                   {(field) => (
                     <field.TextField
                       data-testid='lastName-input'
-                      label='Last name'
-                      placeholder='Doe'
+                      label={t('fields.lastName')}
+                      placeholder={t('fields.lastNamePlaceholder')}
                       className='h-12'
                     />
                   )}
                 </form.AppField>
               </div>
 
-              {/* Email */}
               <form.AppField name='email'>
                 {(field) => (
                   <field.TextField
                     data-testid='email-input'
-                    label='Email address'
-                    placeholder='name@example.com'
+                    label={t('fields.email')}
+                    placeholder={t('fields.emailPlaceholder')}
                     startIcon={IconMail}
-                    className='h-12'
-                  />
-                )}
-              </form.AppField>
-              {/* Email */}
-              <form.AppField name='phone'>
-                {(field) => (
-                  <field.InputPhone
-                    data-testid='phone-input'
-                    label='phone'
-                    placeholder='09381223880'
-                    startIcon={IconMail}
+                    inputDir='ltr'
                     className='h-12'
                   />
                 )}
               </form.AppField>
 
-              {/* Password */}
+              <form.AppField name='phone'>
+                {(field) => (
+                  <field.InputPhone
+                    data-testid='phone-input'
+                    label={t('fields.phone')}
+                    placeholder={t('fields.phonePlaceholder')}
+                    className='h-12'
+                  />
+                )}
+              </form.AppField>
+
               <form.AppField name='password'>
                 {(field) => (
                   <div className='space-y-3'>
                     <field.InputPassword
                       data-testid='password-input'
-                      label='Password'
-                      placeholder='Create a strong password'
+                      label={t('fields.password')}
+                      placeholder={t('password.createPlaceholder')}
                     />
 
                     {password && (
@@ -181,7 +194,7 @@ export function RegisterDomain() {
                       >
                         <div className='space-y-1'>
                           <div className='flex justify-between text-xs'>
-                            <span className='text-muted-foreground'>Password strength</span>
+                            <span className='text-muted-foreground'>{tPassword('strength')}</span>
 
                             <span
                               className={`font-medium ${
@@ -192,7 +205,7 @@ export function RegisterDomain() {
                                     : 'text-red-500'
                               }`}
                             >
-                              {passwordStrength.label}
+                              {tPassword(passwordStrength.labelKey)}
                             </span>
                           </div>
 
@@ -209,12 +222,12 @@ export function RegisterDomain() {
                         </div>
 
                         <div className='grid grid-cols-2 gap-2'>
-                          {passwordRequirements.map((req) => {
+                          {passwordRequirementKeys.map((req) => {
                             const passed = req.test(password);
 
                             return (
                               <div
-                                key={req.label}
+                                key={req.key}
                                 className={`flex items-center gap-2 text-xs ${
                                   passed ? 'text-green-500' : 'text-muted-foreground'
                                 }`}
@@ -225,7 +238,7 @@ export function RegisterDomain() {
                                   <IconX className='size-3.5' />
                                 )}
 
-                                {req.label}
+                                {tPassword(`requirements.${req.key}`)}
                               </div>
                             );
                           })}
@@ -236,18 +249,16 @@ export function RegisterDomain() {
                 )}
               </form.AppField>
 
-              {/* Confirm Password */}
               <form.AppField name='confirmPassword'>
                 {(field) => (
                   <field.InputPassword
                     data-testid='confirmPassword-input'
-                    label='Confirm password'
-                    placeholder='Confirm your password'
+                    label={t('fields.confirmPassword')}
+                    placeholder={t('password.confirmPlaceholder')}
                   />
                 )}
               </form.AppField>
 
-              {/* Terms */}
               <div className='space-y-4'>
                 <form.AppField name='acceptTerms'>
                   {(field) => (
@@ -257,13 +268,13 @@ export function RegisterDomain() {
                         htmlFor={field.name}
                         className='cursor-pointer text-sm leading-relaxed font-normal'
                       >
-                        I agree to the{' '}
+                        {tRegister('termsPrefix')}{' '}
                         <Link href='/terms' className='text-accent hover:underline'>
-                          Terms of Service
+                          {tRegister('termsLink')}
                         </Link>{' '}
-                        and{' '}
+                        {tRegister('termsAnd')}{' '}
                         <Link href='/privacy' className='text-accent hover:underline'>
-                          Privacy Policy
+                          {tRegister('privacyLink')}
                         </Link>
                       </Label>
                     </div>
@@ -278,37 +289,40 @@ export function RegisterDomain() {
                         htmlFor={field.name}
                         className='cursor-pointer text-sm leading-relaxed font-normal'
                       >
-                        I want to receive exclusive offers, style tips, and updates
+                        {tRegister('marketingOptIn')}
                       </Label>
                     </div>
                   )}
                 </form.AppField>
               </div>
 
-              {/* Submit */}
-              <form.Submit data-testid='register-submit' label='Register' isPending={isPending} />
+              <form.Submit
+                data-testid='register-submit'
+                label={tRegister('submit')}
+                isPending={isPending}
+              />
             </form.Root>
           </form.AppForm>
 
-          {/* Divider */}
           <div className='relative my-8'>
             <div className='absolute inset-0 flex items-center'>
               <div className='border-border w-full border-t' />
             </div>
 
             <div className='relative flex justify-center text-sm'>
-              <span className='bg-background text-muted-foreground px-4'>Or sign up with</span>
+              <span className='bg-background text-muted-foreground px-4'>
+                {tRegister('orSignUpWith')}
+              </span>
             </div>
           </div>
 
-          {/* Social — coming soon */}
           <div className='grid grid-cols-2 gap-4'>
             <Button
               type='button'
               variant='outline'
               className='h-12'
               disabled
-              onClick={() => toast.message('Social sign-up is coming soon — use email for now')}
+              onClick={() => toast.message(tRegister('socialComingSoon'))}
             >
               Google
             </Button>
@@ -318,21 +332,22 @@ export function RegisterDomain() {
               variant='outline'
               className='h-12'
               disabled
-              onClick={() => toast.message('Social sign-up is coming soon — use email for now')}
+              onClick={() => toast.message(tRegister('socialComingSoon'))}
             >
               GitHub
             </Button>
           </div>
 
-          {/* Footer */}
           <p className='text-muted-foreground mt-8 text-center text-sm'>
-            Already have an account?{' '}
+            {tRegister('hasAccount')}{' '}
             <Link href='/login' className='text-accent font-medium hover:underline'>
-              Sign in
+              {tRegister('signIn')}
             </Link>
           </p>
         </motion.div>
       </div>
+
+      <RegisterSidebar />
     </div>
   );
 }

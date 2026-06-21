@@ -1,51 +1,73 @@
 import { z } from 'zod';
 
-export const loginFormSchema = z.object({
-  email: z.email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
-  rememberMe: z.boolean()
-});
+type ValidationT = (key: string) => string;
 
-export const registerFormSchema = z
-  .object({
-    firstName: z.string().min(2, 'First name is required'),
-    lastName: z.string().min(2, 'Last name is required'),
-    email: z.string().email('Invalid email address'),
-    phone: z
-      .string()
-      .refine(
-        (val) => val === '' || /^\+?[1-9]\d{1,14}$/.test(val),
-        'Phone number must be in E.164 format (e.g., +1234567890)'
-      ),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string(),
-    acceptTerms: z.boolean().refine((val) => val, {
-      message: 'You must accept terms'
-    }),
-    acceptMarketing: z.boolean()
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword']
+export function createLoginFormSchema(t: ValidationT) {
+  return z.object({
+    email: z.email(t('invalidEmail')),
+    password: z.string().min(1, t('passwordRequired')),
+    rememberMe: z.boolean()
   });
+}
 
-export const resetPasswordFormSchema = z
-  .object({
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string()
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword']
-  });
+export function createRegisterFormSchema(t: ValidationT) {
+  return z
+    .object({
+      firstName: z.string().min(2, t('firstNameRequired')),
+      lastName: z.string().min(2, t('lastNameRequired')),
+      email: z.string().email(t('invalidEmail')),
+      phone: z
+        .string()
+        .refine(
+          (val) => val === '' || /^\+?[1-9]\d{1,14}$/.test(val),
+          t('phoneE164')
+        ),
+      password: z.string().min(8, t('passwordMinLength')),
+      confirmPassword: z.string(),
+      acceptTerms: z.boolean().refine((val) => val, {
+        message: t('acceptTerms')
+      }),
+      acceptMarketing: z.boolean()
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsMismatch'),
+      path: ['confirmPassword']
+    });
+}
 
-export const changePasswordFormSchema = z
-  .object({
-    currentPassword: z.string().min(1, 'Current password is required'),
-    newPassword: z.string().min(8, 'New password must be at least 8 characters'),
-    confirmPassword: z.string()
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword']
-  });
+export function createResetPasswordFormSchema(t: ValidationT) {
+  return z
+    .object({
+      password: z.string().min(6, t('passwordMinLengthReset')),
+      confirmPassword: z.string()
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsMismatch'),
+      path: ['confirmPassword']
+    });
+}
+
+export function createChangePasswordFormSchema(t: ValidationT) {
+  return z
+    .object({
+      currentPassword: z.string().min(1, t('currentPasswordRequired')),
+      newPassword: z.string().min(8, t('newPasswordMinLength')),
+      confirmPassword: z.string()
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t('passwordsMismatch'),
+      path: ['confirmPassword']
+    });
+}
+
+/** @deprecated Use createLoginFormSchema with translations */
+export const loginFormSchema = createLoginFormSchema((key) => key);
+
+/** @deprecated Use createRegisterFormSchema with translations */
+export const registerFormSchema = createRegisterFormSchema((key) => key);
+
+/** @deprecated Use createResetPasswordFormSchema with translations */
+export const resetPasswordFormSchema = createResetPasswordFormSchema((key) => key);
+
+/** @deprecated Use createChangePasswordFormSchema with translations */
+export const changePasswordFormSchema = createChangePasswordFormSchema((key) => key);

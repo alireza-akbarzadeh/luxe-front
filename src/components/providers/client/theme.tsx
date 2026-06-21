@@ -1,5 +1,6 @@
 'use client';
 
+import { useServerInsertedHTML } from 'next/navigation';
 import {
   createContext,
   type PropsWithChildren,
@@ -7,7 +8,8 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState} from 'react';
+  useState
+} from 'react';
 
 import {
   applyResolvedTheme,
@@ -15,7 +17,9 @@ import {
   type ResolvedTheme,
   resolveTheme,
   type Theme,
-  THEME_STORAGE_KEY} from '@/lib/theme';
+  THEME_STORAGE_KEY,
+  themeInitScript
+} from '@/lib/theme';
 
 interface ThemeContextValue {
   theme: Theme;
@@ -35,6 +39,13 @@ function getClientTheme(defaultTheme: Theme): Theme {
 }
 
 export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProviderProps) {
+  useServerInsertedHTML(() => (
+    <script
+      id='luxe-theme-init'
+      dangerouslySetInnerHTML={{ __html: themeInitScript }}
+    />
+  ));
+
   const [theme, setThemeState] = useState<Theme>(() => getClientTheme(defaultTheme));
   const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
     resolveTheme(getClientTheme(defaultTheme))

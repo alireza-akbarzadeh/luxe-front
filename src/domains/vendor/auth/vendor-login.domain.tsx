@@ -3,24 +3,35 @@
 import { IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { loginAction } from '@/actions/auth.actions';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
-import { loginFormSchema } from '@/domains/auth/auth.schema';
+import { AuthLanguageSwitcher } from '@/domains/auth/components/auth-language-switcher';
+import { createLoginFormSchema } from '@/domains/auth/auth.schema';
 import { VendorLoginSidebar } from '@/domains/vendor/auth/components/vendor-login-sidebar';
+import { getDirection, type Locale } from '@/i18n/config';
 import { getCallbackUrl } from '@/lib/utils';
 
 const DEFAULT_VENDOR_CALLBACK = '/vendor/panel';
 
 export function VendorLoginDomain() {
+  const locale = useLocale() as Locale;
+  const pageDir = getDirection(locale);
   const searchParams = useSearchParams();
   const callbackUrl = getCallbackUrl(searchParams.get('callbackUrl') ?? DEFAULT_VENDOR_CALLBACK);
+  const t = useTranslations('auth');
+  const tLogin = useTranslations('auth.login');
+  const tVendor = useTranslations('auth.vendor.login');
+  const tValidation = useTranslations('auth.validation');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+
+  const loginFormSchema = useMemo(() => createLoginFormSchema(tValidation), [tValidation]);
 
   const form = useAppForm({
     defaultValues: {
@@ -44,11 +55,18 @@ export function VendorLoginDomain() {
         setError(result?.error as string);
         if (result && 'error' in result) {
           toast.error(result.error);
-          if (result.error.includes('Invalid credentials')) {
-            formApi.setFieldMeta('password', (prev) => ({ ...prev, error: 'Invalid credentials' }));
+          if (
+            result.error.includes('Invalid credentials') ||
+            result.error.includes('Credenciales') ||
+            result.error.includes('اطلاعات ورود')
+          ) {
+            formApi.setFieldMeta('password', (prev) => ({
+              ...prev,
+              error: tLogin('invalidCredentials')
+            }));
           }
         } else {
-          toast.success('Welcome back to your vendor panel');
+          toast.success(tVendor('welcomeBackToast'));
         }
       });
     }
@@ -58,8 +76,9 @@ export function VendorLoginDomain() {
   const registerHref = `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`;
 
   return (
-    <div className='bg-background flex min-h-screen'>
-      <div className='flex flex-1 items-center justify-center p-6 sm:p-12'>
+    <div className='bg-background flex min-h-screen' dir='ltr'>
+      <div className='relative flex flex-1 items-center justify-center p-6 sm:p-12' dir={pageDir}>
+        <AuthLanguageSwitcher />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -69,15 +88,13 @@ export function VendorLoginDomain() {
           <Link href='/vendor' className='mb-8 inline-block'>
             <span className='text-3xl font-bold tracking-tight'>LUXE</span>
             <span className='text-muted-foreground ml-2 text-sm font-medium tracking-widest uppercase'>
-              Vendor
+              {t('vendor.brandSuffix')}
             </span>
           </Link>
 
           <div className='mb-8'>
-            <h1 className='mb-2 text-3xl font-bold'>Vendor sign in</h1>
-            <p className='text-muted-foreground'>
-              Access your seller panel to manage catalog, orders, and storefront settings.
-            </p>
+            <h1 className='mb-2 text-3xl font-bold'>{tVendor('title')}</h1>
+            <p className='text-muted-foreground'>{tVendor('subtitle')}</p>
           </div>
 
           <form.AppForm>
@@ -100,9 +117,10 @@ export function VendorLoginDomain() {
                   <field.TextField
                     startIcon={IconMail}
                     data-testid='vendor-email-input'
-                    label='Email address'
-                    placeholder='seller@yourbrand.com'
-                    className='h-12 pl-10'
+                    label={t('fields.email')}
+                    placeholder={tVendor('emailPlaceholder')}
+                    inputDir='ltr'
+                    className='h-12'
                   />
                 )}
               </form.AppField>
@@ -111,8 +129,8 @@ export function VendorLoginDomain() {
                 {(field) => (
                   <field.InputPassword
                     data-testid='vendor-password-input'
-                    label='Password'
-                    placeholder='Enter your password'
+                    label={t('fields.password')}
+                    placeholder={t('password.enterPlaceholder')}
                     showForgotLink
                     forgotPasswordHref={forgotPasswordHref}
                   />
@@ -122,7 +140,7 @@ export function VendorLoginDomain() {
               <form.AppField name='rememberMe'>
                 {(field) => (
                   <field.Checkbox
-                    label='Remember me for 7 days'
+                    label={tLogin('rememberMe')}
                     data-testid='vendor-remember-me-checkbox'
                   />
                 )}
@@ -131,28 +149,28 @@ export function VendorLoginDomain() {
               <form.Submit
                 data-testid='vendor-login-submit'
                 isPending={isPending}
-                label='Sign in to vendor panel'
+                label={tVendor('submit')}
               />
             </form.Root>
           </form.AppForm>
 
           <p className='text-muted-foreground mt-8 text-center text-sm'>
-            New to Luxe marketplace?{' '}
+            {tVendor('noAccount')}{' '}
             <Link href={registerHref} className='text-accent font-medium hover:underline'>
-              Create a seller account
+              {tVendor('createAccount')}
             </Link>
           </p>
 
           <p className='text-muted-foreground mt-4 text-center text-sm'>
-            Shopping as a customer?{' '}
+            {tVendor('customerSignIn')}{' '}
             <Link href='/login' className='text-foreground font-medium hover:underline'>
-              Customer sign in
+              {tVendor('customerSignInLink')}
             </Link>
           </p>
 
           <div className='mt-6 flex justify-center'>
             <Button variant='ghost' size='sm' asChild>
-              <Link href='/vendor'>← Back to vendor home</Link>
+              <Link href='/vendor'>{tVendor('backToVendorHome')}</Link>
             </Button>
           </div>
         </motion.div>

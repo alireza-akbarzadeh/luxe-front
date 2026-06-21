@@ -9,23 +9,33 @@ import {
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState, useTransition } from 'react';
+import { Suspense, useMemo, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { resetPasswordAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
-import { resetPasswordFormSchema } from '../auth.schema';
+import { createResetPasswordFormSchema } from '../auth.schema';
+import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
+  const tReset = useTranslations('auth.resetPassword');
+  const tFields = useTranslations('auth.fields');
+  const tValidation = useTranslations('auth.validation');
   const [isPending, startTransition] = useTransition();
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const resetPasswordFormSchema = useMemo(
+    () => createResetPasswordFormSchema(tValidation),
+    [tValidation]
+  );
 
   const form = useAppForm({
     defaultValues: {
@@ -38,7 +48,7 @@ function ResetPasswordForm() {
     },
     onSubmit: async ({ value }) => {
       if (!token) {
-        setError('Reset link is invalid or expired');
+        setError(tReset('invalidToken'));
         return;
       }
 
@@ -46,12 +56,13 @@ function ResetPasswordForm() {
         const result = await resetPasswordAction(token, value.password);
         if (result.success) {
           setIsComplete(true);
-          toast.success('Password updated successfully');
+          toast.success(tReset('successToast'));
           return;
         }
 
-        setError(result.error ?? 'Unable to reset password');
-        toast.error(result.error ?? 'Unable to reset password');
+        const message = result.error ?? tReset('resetError');
+        setError(message);
+        toast.error(message);
       });
     }
   });
@@ -59,12 +70,10 @@ function ResetPasswordForm() {
   if (!token) {
     return (
       <div className='text-center'>
-        <h1 className='mb-2 text-2xl font-bold'>Invalid reset link</h1>
-        <p className='text-muted-foreground mb-6'>
-          This password reset link is missing or has expired.
-        </p>
+        <h1 className='mb-2 text-2xl font-bold'>{tReset('invalidLinkTitle')}</h1>
+        <p className='text-muted-foreground mb-6'>{tReset('invalidLinkBody')}</p>
         <Button asChild>
-          <Link href='/forgot-password'>Request a new link</Link>
+          <Link href='/forgot-password'>{tReset('requestNewLink')}</Link>
         </Button>
       </div>
     );
@@ -87,8 +96,8 @@ function ResetPasswordForm() {
           </div>
 
           <div className='mb-8'>
-            <h1 className='mb-2 text-3xl font-bold'>Set a new password</h1>
-            <p className='text-muted-foreground'>Choose a strong password for your account.</p>
+            <h1 className='mb-2 text-3xl font-bold'>{tReset('title')}</h1>
+            <p className='text-muted-foreground'>{tReset('subtitle')}</p>
           </div>
 
           <form.AppForm>
@@ -106,8 +115,8 @@ function ResetPasswordForm() {
                 {(field) => (
                   <field.InputPassword
                     data-testid='reset-password-input'
-                    label='New password'
-                    placeholder='Enter your new password'
+                    label={tReset('newPassword')}
+                    placeholder={tReset('newPasswordPlaceholder')}
                   />
                 )}
               </form.AppField>
@@ -116,8 +125,8 @@ function ResetPasswordForm() {
                 {(field) => (
                   <field.InputPassword
                     data-testid='reset-confirm-password-input'
-                    label='Confirm password'
-                    placeholder='Confirm your new password'
+                    label={tFields('confirmPassword')}
+                    placeholder={tReset('confirmPlaceholder')}
                   />
                 )}
               </form.AppField>
@@ -125,7 +134,7 @@ function ResetPasswordForm() {
               <form.Submit
                 data-testid='reset-password-submit'
                 isPending={isPending}
-                label='Update password'
+                label={tReset('submit')}
               />
             </form.Root>
           </form.AppForm>
@@ -142,13 +151,11 @@ function ResetPasswordForm() {
           <div className='mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/30'>
             <IconCheckbox className='h-8 w-8 text-emerald-600' />
           </div>
-          <h1 className='mb-2 text-2xl font-bold'>Password updated</h1>
-          <p className='text-muted-foreground mb-8'>
-            Your password has been reset. Sign in with your new password.
-          </p>
+          <h1 className='mb-2 text-2xl font-bold'>{tReset('successTitle')}</h1>
+          <p className='text-muted-foreground mb-8'>{tReset('successBody')}</p>
           <Button className='h-12 w-full' onClick={() => router.push('/login')}>
-            Continue to sign in
-            <IconArrowRight className='ml-2 h-4 w-4' />
+            {tReset('continueToSignIn')}
+            <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4' />
           </Button>
         </motion.div>
       )}
@@ -157,8 +164,11 @@ function ResetPasswordForm() {
 }
 
 export function ResetPasswordDomain() {
+  const tReset = useTranslations('auth.resetPassword');
+
   return (
-    <div className='bg-background flex min-h-screen items-center justify-center p-6'>
+    <div className='bg-background relative flex min-h-screen items-center justify-center p-6'>
+      <AuthLanguageSwitcher />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -169,8 +179,8 @@ export function ResetPasswordDomain() {
           href='/login'
           className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
         >
-          <IconArrowLeft className='h-4 w-4' />
-          Back to sign in
+          <IconArrowLeft className='cn-rtl-flip h-4 w-4' />
+          {tReset('backToSignIn')}
         </Link>
 
         <Suspense
