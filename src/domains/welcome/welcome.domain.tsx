@@ -9,9 +9,9 @@ import { useTransition } from 'react';
 
 import { continueAsGuestAction } from '@/actions/welcome.actions';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
-import { useDirection } from '@/components/ui/direction';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
+import { useDirection } from '@/components/ui/direction';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 
