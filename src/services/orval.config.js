@@ -2680,6 +2680,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -2687,6 +2690,9 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -2698,6 +2704,12 @@ module.exports = [
               "required": [
                 "name"
               ],
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
               "type": "object"
             },
             "dto.CategorySingleResponse": {
@@ -2742,6 +2754,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -2755,6 +2773,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -2863,6 +2887,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -2892,6 +2922,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -2903,6 +2939,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -3596,6 +3638,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -3603,6 +3648,9 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -3614,6 +3662,12 @@ module.exports = [
               "required": [
                 "name"
               ],
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
               "type": "object"
             },
             "dto.BulkCreateCategoryResponse": {
@@ -3661,6 +3715,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -3674,6 +3734,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -3782,6 +3848,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -3811,6 +3883,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -3822,6 +3900,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -4557,6 +4641,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -4570,6 +4660,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -4678,6 +4774,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -4707,6 +4809,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -4718,6 +4826,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -5265,6 +5379,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -5273,12 +5390,21 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -5324,6 +5450,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -5337,6 +5469,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -5445,6 +5583,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -5474,6 +5618,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -5485,6 +5635,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -14635,6 +14791,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -14647,6 +14806,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -14656,6 +14818,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -15010,6 +15178,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -15022,6 +15193,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -15031,6 +15205,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -15306,6 +15486,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -15318,6 +15501,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -15327,6 +15513,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -20815,6 +21007,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -20828,6 +21026,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -20936,6 +21140,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -20965,6 +21175,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -20976,6 +21192,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -21523,6 +21745,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -21536,6 +21764,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -21644,6 +21878,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -21673,6 +21913,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -21684,6 +21930,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -22478,6 +22730,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -22507,6 +22765,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -22518,6 +22782,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -22714,6 +22984,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -22727,6 +23003,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -24526,6 +24808,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "discount_percent": {
                   "type": "number"
                 },
@@ -24555,6 +24840,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -24715,6 +25003,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -24727,6 +25018,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -24736,6 +25030,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -28984,6 +29284,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -29013,6 +29319,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -29024,6 +29336,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -29220,6 +29538,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -29233,6 +29557,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -31108,6 +31438,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31137,6 +31470,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -31282,6 +31618,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31294,6 +31633,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -31303,6 +31645,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -31522,6 +31870,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -31548,12 +31899,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -31628,6 +31988,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -31695,6 +32061,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31721,6 +32090,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -31866,6 +32238,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31877,6 +32252,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -32257,6 +32635,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -32283,12 +32664,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -32363,6 +32753,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -32430,6 +32826,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32456,6 +32855,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -32601,6 +33003,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32612,6 +33017,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -32868,6 +33276,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32894,6 +33305,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -33039,6 +33453,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33051,6 +33468,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -33060,6 +33480,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -33437,6 +33863,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33463,6 +33892,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -33608,6 +34040,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33620,6 +34055,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -33629,6 +34067,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -33869,6 +34313,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -33895,12 +34342,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -33970,6 +34426,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -34037,6 +34499,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -34063,6 +34528,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -34208,6 +34676,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -34219,6 +34690,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -34453,6 +34927,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -34479,6 +34956,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -34636,6 +35116,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -34648,6 +35131,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -34657,6 +35143,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -36131,6 +36623,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -36157,6 +36652,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -36302,6 +36800,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -36314,6 +36815,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -36323,6 +36827,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -36949,6 +37459,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -36975,6 +37488,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -37120,6 +37636,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -37132,6 +37651,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -37141,6 +37663,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -39096,6 +39624,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -39108,6 +39639,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -39117,6 +39651,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -39170,6 +39710,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -39196,6 +39739,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -42286,6 +42832,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -42298,6 +42847,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -42307,6 +42859,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -42497,6 +43055,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -42509,6 +43070,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -42518,6 +43082,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -43062,6 +43632,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -43088,6 +43661,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -43233,6 +43809,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -43245,6 +43824,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -43254,6 +43836,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -45216,6 +45804,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -45228,6 +45819,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -45237,6 +45831,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }

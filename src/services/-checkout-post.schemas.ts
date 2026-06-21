@@ -104,6 +104,7 @@ export interface ModelsCategory {
   created_at?: string;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   is_active?: boolean;
   level?: number;
@@ -112,6 +113,7 @@ export interface ModelsCategory {
      * @maxLength 100
      */
   name: string;
+  nameI18n?: number[];
   /** Associations */
   parent?: ModelsCategory;
   parent_id?: number;
@@ -213,6 +215,7 @@ export interface ModelsProduct {
   created_by?: number;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   images?: string[];
   is_digital?: boolean;
@@ -225,10 +228,12 @@ export interface ModelsProduct {
      * @maxLength 255
      */
   name: string;
+  nameI18n?: number[];
   price: number;
   published_at?: string;
   rating?: number;
   reviews_count?: number;
+  searchAliases?: number[];
   sizes?: string[];
   sku: string;
   slug: string;

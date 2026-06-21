@@ -5,14 +5,18 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
+export interface I18nLocalizedMap {[key: string]: string}
+
 export interface DtoUpdateCategoryRequest {
   description?: string;
+  descriptionI18n?: I18nLocalizedMap;
   is_active?: boolean;
   /**
      * @minLength 2
      * @maxLength 100
      */
   name?: string;
+  nameI18n?: I18nLocalizedMap;
   parent_id?: number;
   slug?: string;
 }
@@ -156,6 +160,7 @@ export interface ModelsProduct {
   created_by?: number;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   images?: string[];
   is_digital?: boolean;
@@ -168,10 +173,12 @@ export interface ModelsProduct {
      * @maxLength 255
      */
   name: string;
+  nameI18n?: number[];
   price: number;
   published_at?: string;
   rating?: number;
   reviews_count?: number;
+  searchAliases?: number[];
   sizes?: string[];
   sku: string;
   slug: string;
@@ -198,6 +205,7 @@ export interface ModelsCategory {
   created_at?: string;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   is_active?: boolean;
   level?: number;
@@ -206,6 +214,7 @@ export interface ModelsCategory {
      * @maxLength 100
      */
   name: string;
+  nameI18n?: number[];
   /** Associations */
   parent?: ModelsCategory;
   parent_id?: number;
