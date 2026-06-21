@@ -7,9 +7,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 
 export function NewsletterSection() {
+  const { t } = useHomeContent();
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -39,14 +41,13 @@ export function NewsletterSection() {
               <IconMail className='h-5 w-5' />
             </div>
             <span className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
-              Stay in the loop
+              {t('newsletter.eyebrow')}
             </span>
             <h2 className='font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl'>
-              Join the LUXE insider list
+              {t('newsletter.title')}
             </h2>
             <p className='text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base'>
-              Early access to drops, styling notes, and members-only offers — no spam, unsubscribe
-              anytime.
+              {t('newsletter.description')}
             </p>
 
             <div className='mt-8'>
@@ -57,7 +58,7 @@ export function NewsletterSection() {
                   className='text-accent flex items-center justify-center gap-2 font-medium'
                 >
                   <IconCircleCheck className='h-5 w-5' />
-                  You&apos;re on the list — welcome aboard.
+                  {t('newsletter.success')}
                 </motion.div>
               ) : (
                 <form
@@ -66,26 +67,24 @@ export function NewsletterSection() {
                 >
                   <Input
                     type='email'
-                    placeholder='you@email.com'
+                    placeholder={t('newsletter.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className='bg-background/80 border-border/60 focus-visible:ring-accent h-12 rounded-full px-5 sm:h-14'
                     required
-                    aria-label='Email address'
+                    aria-label={t('newsletter.emailAriaLabel')}
                   />
                   <Button
                     type='submit'
                     size='lg'
                     className='group h-12 shrink-0 rounded-full px-6 sm:h-14 sm:px-8'
                   >
-                    Subscribe
-                    <IconArrowRight className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5' />
+                    {t('newsletter.subscribe')}
+                    <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
                   </Button>
                 </form>
               )}
-              <p className='text-muted-foreground mt-4 text-xs'>
-                By subscribing you agree to our Privacy Policy.
-              </p>
+              <p className='text-muted-foreground mt-4 text-xs'>{t('newsletter.privacyNote')}</p>
             </div>
           </div>
         </motion.div>

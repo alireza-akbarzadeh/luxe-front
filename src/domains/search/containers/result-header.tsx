@@ -1,6 +1,7 @@
 'use client';
 
 import { IconGridDots, IconList } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,13 +18,13 @@ import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 import { SearchMobileFilterSheet } from '../components/search-mobile-filter-sheet';
 import { useSearchParams } from '../hooks/useSearchParams';
 
-const sortOptions = [
-  { label: 'Most Relevant', value: 'relevance' },
-  { label: 'Newest First', value: 'newest' },
-  { label: 'Price: Low to High', value: 'price-asc' },
-  { label: 'Price: High to Low', value: 'price-desc' },
-  { label: 'Highest Rated', value: 'rating' },
-  { label: 'Most Popular', value: 'popular' }
+const SORT_OPTIONS: { value: SortBy; labelKey: string }[] = [
+  { value: 'relevance', labelKey: 'relevance' },
+  { value: 'newest', labelKey: 'newest' },
+  { value: 'price-asc', labelKey: 'priceAsc' },
+  { value: 'price-desc', labelKey: 'priceDesc' },
+  { value: 'rating', labelKey: 'rating' },
+  { value: 'popular', labelKey: 'popular' }
 ];
 
 interface ResultHeaderProps {
@@ -37,18 +38,16 @@ interface ResultHeaderProps {
 export function ResultHeader(props: ResultHeaderProps) {
   const { productCount, total, products, stores, categories } = props;
   const searchParams = useSearchParams();
-  const resultLabel =
-    total > 0
-      ? `${total} product${total === 1 ? '' : 's'} found`
-      : `${productCount} product${productCount === 1 ? '' : 's'} found`;
+  const t = useTranslations('search.results');
+  const resultCount = total > 0 ? total : productCount;
 
   return (
     <div className='mb-6 space-y-4'>
       <div>
         <h2 className='font-display text-lg font-semibold md:text-xl'>
-          {searchParams.query ? <>Results for &quot;{searchParams.query}&quot;</> : 'All Products'}
+          {searchParams.query ? t('forQuery', { query: searchParams.query }) : t('allProducts')}
         </h2>
-        <p className='text-muted-foreground mt-1 text-sm'>{resultLabel}</p>
+        <p className='text-muted-foreground mt-1 text-sm'>{t('count', { count: resultCount })}</p>
       </div>
 
       <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
@@ -63,12 +62,12 @@ export function ResultHeader(props: ResultHeaderProps) {
             onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
           >
             <SelectTrigger className='h-10 min-w-0 flex-1 rounded-full'>
-              <SelectValue placeholder='Sort by' />
+              <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {t(`sort.${option.labelKey}`)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -81,12 +80,12 @@ export function ResultHeader(props: ResultHeaderProps) {
             onValueChange={(value: SortBy) => searchParams.setSortBy(value)}
           >
             <SelectTrigger className='w-44'>
-              <SelectValue placeholder='Sort by' />
+              <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((option) => (
+              {SORT_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {t(`sort.${option.labelKey}`)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -98,7 +97,7 @@ export function ResultHeader(props: ResultHeaderProps) {
               size='icon'
               className='h-8 w-8'
               onClick={() => searchParams.setView('grid')}
-              aria-label='Grid view'
+              aria-label={t('viewGrid')}
             >
               <IconGridDots className='h-4 w-4' />
             </Button>
@@ -107,7 +106,7 @@ export function ResultHeader(props: ResultHeaderProps) {
               size='icon'
               className='h-8 w-8'
               onClick={() => searchParams.setView('list')}
-              aria-label='List view'
+              aria-label={t('viewList')}
             >
               <IconList className='h-4 w-4' />
             </Button>
@@ -121,7 +120,7 @@ export function ResultHeader(props: ResultHeaderProps) {
               size='icon'
               className='h-8 w-8 rounded-full'
               onClick={() => searchParams.setView('grid')}
-              aria-label='Grid view'
+              aria-label={t('viewGrid')}
             >
               <IconGridDots className='h-4 w-4' />
             </Button>
@@ -130,7 +129,7 @@ export function ResultHeader(props: ResultHeaderProps) {
               size='icon'
               className='h-8 w-8 rounded-full'
               onClick={() => searchParams.setView('list')}
-              aria-label='List view'
+              aria-label={t('viewList')}
             >
               <IconList className='h-4 w-4' />
             </Button>

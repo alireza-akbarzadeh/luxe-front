@@ -4,7 +4,10 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useSyncExternalStore } from 'react';
 
+import { getFooterTrustCopyParams } from '@/lib/i18n/marketing-copy-params';
 import { trustBadges } from '~/src/components/footer/footer.data';
+
+const trustBadgeParams = getFooterTrustCopyParams();
 
 const itemClassName =
   'group bg-card hover:bg-muted/50 flex items-center gap-4 p-5 transition-colors';
@@ -55,8 +58,8 @@ export function TrustStrip() {
         const content = (
           <TrustBadgeContent
             badge={badge}
-            title={t(`${badge.key}Title`)}
-            subtitle={t(`${badge.key}Subtitle`)}
+            title={t(`${badge.key}Title`, trustBadgeParams[badge.key])}
+            subtitle={t(`${badge.key}Subtitle`, trustBadgeParams[badge.key])}
           />
         );
 

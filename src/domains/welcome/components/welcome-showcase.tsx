@@ -9,6 +9,7 @@ import { Box } from '@/components/ui/box';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { Text } from '@/components/ui/typography';
+import { getHomeMarketingCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 const WELCOME_IMAGE =
   'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1600&h=2000&fit=crop';
@@ -72,7 +73,7 @@ export function WelcomeShowcase() {
               {t('showcase.headline')}
             </Text>
             <Text variant='lead' tone='inherit' className='mt-4 max-w-sm text-white/75'>
-              {t('showcase.subhead')}
+              {t('showcase.subhead', getHomeMarketingCopyParams().welcome)}
             </Text>
           </motion.div>
 

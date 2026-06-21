@@ -1,6 +1,7 @@
 'use client';
 
 import { IconX } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,13 +21,14 @@ interface SearchActiveFiltersProps {
 
 export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
   const searchParams = useSearchParams();
+  const t = useTranslations('search.filters');
 
   const getStoreName = (storeId: string) =>
-    stores.find((store) => store.id?.toString() === storeId)?.name ?? `Store ${storeId}`;
+    stores.find((store) => store.id?.toString() === storeId)?.name ?? t('storeFallback', { id: storeId });
 
   return (
     <div className='mb-6 flex flex-wrap items-center gap-2'>
-      <span className='text-muted-foreground text-sm'>Active filters:</span>
+      <span className='text-muted-foreground text-sm'>{t('activeLabel')}</span>
 
       {searchParams.categories.map((cat) => (
         <Badge
@@ -36,7 +38,7 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
           onClick={() => searchParams.toggleCategory(cat)}
         >
           {cat}
-          <IconX className='ml-1 h-3 w-3' />
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
       ))}
 
@@ -48,11 +50,11 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
           onClick={() => searchParams.toggleStore(storeId)}
         >
           {getStoreName(storeId)}
-          <IconX className='ml-1 h-3 w-3' />
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
       ))}
 
-      {isSearchPriceFilterActive(searchParams.priceRange) && (
+      {isSearchPriceFilterActive(searchParams.priceRange) ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
@@ -61,64 +63,64 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
           }
         >
           {formatPrice(searchParams.priceRange[0])} – {formatPrice(searchParams.priceRange[1])}
-          <IconX className='ml-1 h-3 w-3' />
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
-      {searchParams.minRating > 0 && (
+      {searchParams.minRating > 0 ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
           onClick={() => searchParams.setMinRating(0)}
         >
-          {searchParams.minRating}+ stars
-          <IconX className='ml-1 h-3 w-3' />
+          {t('starsPlus', { rating: searchParams.minRating })}
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
-      {searchParams.inStock && (
+      {searchParams.inStock ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
           onClick={() => searchParams.setInStock(false)}
         >
-          In Stock
-          <IconX className='ml-1 h-3 w-3' />
+          {t('badges.inStock')}
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
-      {searchParams.onSale && (
+      {searchParams.onSale ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
           onClick={() => searchParams.setOnSale(false)}
         >
-          On Sale
-          <IconX className='ml-1 h-3 w-3' />
+          {t('badges.onSale')}
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
-      {searchParams.isNew && (
+      {searchParams.isNew ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
           onClick={() => searchParams.setIsNew(false)}
         >
-          New Arrivals
-          <IconX className='ml-1 h-3 w-3' />
+          {t('badges.newArrivals')}
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
-      {searchParams.isDigital && (
+      {searchParams.isDigital ? (
         <Badge
           variant='secondary'
           className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
           onClick={() => searchParams.setIsDigital(false)}
         >
-          Digital
-          <IconX className='ml-1 h-3 w-3' />
+          {t('badges.digital')}
+          <IconX className='ms-1 h-3 w-3' />
         </Badge>
-      )}
+      ) : null}
 
       <Button
         variant='ghost'
@@ -126,7 +128,7 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
         className='text-primary'
         onClick={searchParams.clearFilters}
       >
-        Clear all
+        {t('clearAllShort')}
       </Button>
     </div>
   );

@@ -1,91 +1,41 @@
+import { CURATED_COLLECTIONS } from '@/domains/collections/lib/collections.config';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
-import type { ModelsCategory } from '~/src/services/-categories-get.schemas';
 
 export const HOME_STATS = [
-  { label: 'Happy customers', value: '50K+' },
-  { label: 'Curated products', value: '2,400+' },
-  { label: 'Designer brands', value: '120+' },
-  { label: 'Countries shipped', value: '45' }
+  { key: 'customers', value: 50_000, suffix: '+' },
+  { key: 'products', value: 2_400, suffix: '+' },
+  { key: 'brands', value: 120, suffix: '+' },
+  { key: 'countries', value: 45, suffix: '' }
 ] as const;
 
 export const HOME_PLATFORM_STATS = [
-  { value: 50000, suffix: '+', label: 'Happy shoppers' },
-  { value: 2400, suffix: '+', label: 'Curated products' },
-  { value: 120, suffix: '+', label: 'Verified brands' },
-  { value: 4.9, suffix: '★', label: 'Average rating', decimals: 1 },
-  { value: 45, suffix: '', label: 'Countries shipped' },
-  { value: 99.9, suffix: '%', label: 'Order success rate', decimals: 1 }
+  { key: 'shoppers', value: 50000, suffix: '+' },
+  { key: 'products', value: 2400, suffix: '+' },
+  { key: 'brands', value: 120, suffix: '+' },
+  { key: 'rating', value: 4.9, suffix: '★', decimals: 1 },
+  { key: 'countries', value: 45, suffix: '' },
+  { key: 'successRate', value: 99.9, suffix: '%', decimals: 1 }
 ] as const;
 
 export const HOME_HOW_IT_WORKS = [
-  {
-    step: '01',
-    title: 'Discover',
-    description: 'Browse curated collections, independent stores, and editor picks in one marketplace.'
-  },
-  {
-    step: '02',
-    title: 'Choose with confidence',
-    description: 'Read verified reviews, compare products, and shop from trusted sellers.'
-  },
-  {
-    step: '03',
-    title: 'Checkout securely',
-    description: 'Fast, encrypted checkout with flexible payment options and transparent shipping.'
-  },
-  {
-    step: '04',
-    title: 'Enjoy & return easy',
-    description: 'Track every order and enjoy hassle-free returns when something is not quite right.'
-  }
+  { step: '01', key: 'discover' },
+  { step: '02', key: 'choose' },
+  { step: '03', key: 'checkout' },
+  { step: '04', key: 'enjoy' }
 ] as const;
 
-export const HOME_MARKETPLACE_BENEFITS = [
-  {
-    title: 'Curated multi-brand marketplace',
-    description: 'One destination for premium fashion, home, and lifestyle — vetted for quality.'
-  },
-  {
-    title: 'Independent stores you can trust',
-    description: 'Shop directly from verified sellers with transparent policies and ratings.'
-  },
-  {
-    title: 'Editorial discovery',
-    description: 'Collections and seasonal edits help you find pieces worth keeping.'
-  },
-  {
-    title: 'Secure, seamless checkout',
-    description: 'Protected payments, order tracking, and support when you need it.'
-  }
+export const MARKETPLACE_BENEFIT_KEYS = ['curated', 'stores', 'editorial', 'checkout'] as const;
+
+export const MARKETPLACE_TILE_KEYS = ['stores', 'collections', 'reviews', 'checkout'] as const;
+
+export const FEATURE_ITEMS = [
+  { id: 1, key: 'shipping', icon: 'truck' },
+  { id: 2, key: 'quality', icon: 'gem' },
+  { id: 3, key: 'warranty', icon: 'shield' },
+  { id: 4, key: 'support', icon: 'headphones' }
 ] as const;
 
-export const HOME_FAQ = [
-  {
-    question: 'What makes LUXE different from other marketplaces?',
-    answer:
-      'We combine editorial curation with a multi-vendor marketplace — every brand and product is reviewed for quality, presentation, and customer experience before going live.'
-  },
-  {
-    question: 'How does shipping work?',
-    answer:
-      'Shipping options depend on the seller and your location. Many orders qualify for complimentary delivery over $100, with tracking provided as soon as your order ships.'
-  },
-  {
-    question: 'What is your return policy?',
-    answer:
-      'Most items can be returned within 30 days in original condition. Return details appear on each product and store page before you purchase.'
-  },
-  {
-    question: 'Are payments secure?',
-    answer:
-      'Yes. Checkout uses industry-standard encryption and trusted payment providers. We never store full card details on our servers.'
-  },
-  {
-    question: 'Can I sell on LUXE?',
-    answer:
-      'Absolutely. Independent brands and merchants can apply to open a storefront on our marketplace with dedicated seller tools and analytics.'
-  }
-] as const;
+export const FAQ_KEYS = ['different', 'shipping', 'returns', 'payments', 'sell'] as const;
 
 export const HERO_TRUST_AVATARS = [
   'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop',
@@ -95,10 +45,10 @@ export const HERO_TRUST_AVATARS = [
 ] as const;
 
 export const TRUST_ITEMS = [
-  { title: 'Free shipping', description: 'On orders over $100', icon: 'truck' },
-  { title: 'Easy returns', description: '30-day hassle-free', icon: 'return' },
-  { title: 'Secure checkout', description: '256-bit encryption', icon: 'lock' },
-  { title: '24/7 support', description: 'Real humans, fast help', icon: 'headphones' }
+  { key: 'freeShipping', icon: 'truck' },
+  { key: 'easyReturns', icon: 'return' },
+  { key: 'secureCheckout', icon: 'lock' },
+  { key: 'support', icon: 'headphones' }
 ] as const;
 
 export const BRAND_NAMES = [
@@ -132,104 +82,34 @@ export const FALLBACK_CATEGORY_IMAGES = [
   CATEGORY_IMAGES.watches
 ] as const;
 
-export const MOCK_CATEGORIES: ModelsCategory[] = [
-  {
-    id: 1,
-    name: 'Accessories',
-    slug: 'accessories',
-    description: 'Elevate every outfit',
-    is_active: true
-  },
-  {
-    id: 2,
-    name: 'Home & Living',
-    slug: 'home',
-    description: 'Design your sanctuary',
-    is_active: true
-  },
-  {
-    id: 3,
-    name: 'Electronics',
-    slug: 'electronics',
-    description: 'Premium tech essentials',
-    is_active: true
-  },
-  {
-    id: 4,
-    name: 'Lifestyle',
-    slug: 'lifestyle',
-    description: 'Curated for modern living',
-    is_active: true
-  }
-];
-
-import { CURATED_COLLECTIONS } from '@/domains/collections/lib/collections.config';
+export const MOCK_CATEGORY_KEYS = ['accessories', 'home', 'electronics', 'lifestyle'] as const;
 
 /** @deprecated Use CURATED_COLLECTIONS from collections domain */
 export const COLLECTION_BANNERS = CURATED_COLLECTIONS.slice(0, 2);
 
-export const features = [
+export const TESTIMONIAL_ITEMS = [
   {
     id: 1,
-    title: 'Free Shipping',
-    description: 'Complimentary delivery on orders over $100 worldwide.',
-    icon: 'truck'
-  },
-  {
-    id: 2,
-    title: 'Premium Quality',
-    description: 'Every item is vetted for materials, fit, and longevity.',
-    icon: 'gem'
-  },
-  {
-    id: 3,
-    title: '2-Year Warranty',
-    description: 'Extended protection on eligible products.',
-    icon: 'shield'
-  },
-  {
-    id: 4,
-    title: '24/7 Support',
-    description: 'Concierge-style help whenever you need it.',
-    icon: 'headphones'
-  }
-] as const;
-
-export const testimonials = [
-  {
-    id: 1,
-    name: 'Sarah Mitchell',
-    role: 'Creative Director',
+    key: '1',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
-    content:
-      'The quality from LUXE is unmatched. Every piece feels intentional — packaging, fit, and finish are all world-class.',
     rating: 5
   },
   {
     id: 2,
-    name: 'James Chen',
-    role: 'Architect',
+    key: '2',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
-    content:
-      'Finally a store that balances minimalist design with real functionality. Checkout was seamless and delivery was fast.',
     rating: 5
   },
   {
     id: 3,
-    name: 'Emma Rodriguez',
-    role: 'Interior Designer',
+    key: '3',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
-    content:
-      'I recommend LUXE to clients constantly. The curation feels editorial without being pretentious.',
     rating: 5
   },
   {
     id: 4,
-    name: 'David Okonkwo',
-    role: 'Product Lead',
+    key: '4',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
-    content:
-      'Returns were effortless when a size did not work. That level of service keeps me coming back.',
     rating: 5
   }
 ] as const;

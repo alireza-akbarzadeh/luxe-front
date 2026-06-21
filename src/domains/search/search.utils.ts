@@ -119,8 +119,24 @@ function parseStoreId(storeId: string | undefined): number | undefined {
   return Number.isNaN(parsed) ? undefined : parsed;
 }
 
+type SearchQueryInput = Pick<
+  SearchParams,
+  | 'query'
+  | 'page'
+  | 'perPage'
+  | 'categories'
+  | 'stores'
+  | 'sortBy'
+  | 'priceRange'
+  | 'minRating'
+  | 'inStock'
+  | 'onSale'
+  | 'isNew'
+  | 'isDigital'
+>;
+
 export function buildSearchQueryParams(
-  searchParams: SearchParams,
+  searchParams: SearchQueryInput,
   category?: CategoryLookup
 ): import('~/src/services/-search-get.schemas').GetSearchParams {
   const storeId = parseStoreId(searchParams.stores[0]);

@@ -4,7 +4,6 @@ import type { ModelsCategory, ModelsProduct } from '~/src/services/-categories-g
 import {
   CATEGORY_IMAGES,
   FALLBACK_CATEGORY_IMAGES,
-  MOCK_CATEGORIES,
   MOCK_FEATURED_PRODUCTS
 } from './home-mock-data';
 
@@ -25,7 +24,7 @@ export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCateg
   if (apiCategories && apiCategories.length > 0) {
     return apiCategories.filter((c) => c.is_active !== false).slice(0, 8);
   }
-  return MOCK_CATEGORIES;
+  return [];
 }
 
 export function mapProductForCard(item: DtoProductWithLike) {

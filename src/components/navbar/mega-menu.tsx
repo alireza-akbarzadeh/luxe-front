@@ -84,10 +84,10 @@ export function MegaMenuPanel({ item }: { item: DtoNavItemResponse }) {
           <NavigationMenuLink asChild>
             <Link
               href={item.viewAll.href as string}
-              className='text-accent hover:text-accent/80 inline-flex items-center gap-1 text-sm font-medium transition-colors'
+              className='text-accent hover:text-accent/80 group inline-flex items-center gap-1 text-sm font-medium transition-colors'
             >
               {item.viewAll.label}
-              <IconArrowRight className='size-4' />
+              <IconArrowRight className='cn-rtl-flip size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
             </Link>
           </NavigationMenuLink>
         </div>

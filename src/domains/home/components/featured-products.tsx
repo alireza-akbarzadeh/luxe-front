@@ -9,6 +9,7 @@ import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetProducts } from '~/src/services/-products-get';
 import type { GetProductsParams } from '~/src/services/-products-get.schemas';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { mapProductForCard, resolveProducts, sectionContainerClass } from '../lib/home-utils';
 import { ProductGridSkeleton } from './product-grid-skeleton';
 import { SectionHeader } from './section-header';
@@ -22,6 +23,7 @@ const TAB_PARAMS: Record<ProductTab, GetProductsParams> = {
 };
 
 export function FeaturedProducts() {
+  const { t } = useHomeContent();
   const [tab, setTab] = useState<ProductTab>('featured');
   const params = TAB_PARAMS[tab];
 
@@ -38,32 +40,30 @@ export function FeaturedProducts() {
     <section id='products' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Curated for you'
-          title='Featured products'
-          description='Handpicked pieces our stylists love this season — refined materials, modern silhouettes, and lasting value.'
+          eyebrow={t('featured.eyebrow')}
+          title={t('featured.title')}
+          description={t('featured.description')}
           href='/shop'
-          linkLabel='Shop all'
+          linkLabel={t('common.shopAll')}
           align='left'
         />
 
         <Tabs value={tab} onValueChange={(v) => setTab(v as ProductTab)} className='mb-8 sm:mb-10'>
           <TabsList className='bg-muted/60 h-auto w-full justify-start gap-1 overflow-x-auto rounded-full p-1 sm:w-auto'>
             <TabsTrigger value='featured' className='rounded-full px-4 py-2 text-sm'>
-              Featured
+              {t('featured.tabs.featured')}
             </TabsTrigger>
             <TabsTrigger value='new' className='rounded-full px-4 py-2 text-sm'>
-              New in
+              {t('featured.tabs.new')}
             </TabsTrigger>
             <TabsTrigger value='trending' className='rounded-full px-4 py-2 text-sm'>
-              Trending
+              {t('featured.tabs.trending')}
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         {usingMock && !isLoading && (
-          <p className='text-muted-foreground mb-6 text-sm'>
-            Showing curated picks while we connect to the catalog.
-          </p>
+          <p className='text-muted-foreground mb-6 text-sm'>{t('common.featuredMockNotice')}</p>
         )}
 
         {isLoading ? (
@@ -78,7 +78,7 @@ export function FeaturedProducts() {
 
         <div className='flex-center mt-12 sm:mt-14'>
           <Button variant='outline' size='lg' className='rounded-full px-8' asChild>
-            <Link href='/shop'>View all products</Link>
+            <Link href='/shop'>{t('common.viewAllProducts')}</Link>
           </Button>
         </div>
       </div>

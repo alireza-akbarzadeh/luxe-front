@@ -2,6 +2,7 @@
 
 import { IconShoppingCart, IconTag } from '@tabler/icons-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -39,6 +40,7 @@ export function SearchFilterContent({
   draft,
   draftActions
 }: SearchFilterContentProps) {
+  const t = useTranslations('search.filters');
   const searchParams = useSearchParams();
   const isDraftMode = draft != null && draftActions != null;
 
@@ -133,7 +135,7 @@ export function SearchFilterContent({
       <div>
         <h3 className='mb-3 flex items-center gap-2 font-semibold'>
           <IconTag className='h-4 w-4' />
-          Categories
+          {t('categories')}
         </h3>
         <div className={variant === 'sheet' ? 'max-h-none space-y-2' : 'max-h-48 space-y-2 overflow-y-auto'}>
           {availableCategories.map((cat) => (
@@ -143,7 +145,7 @@ export function SearchFilterContent({
                 onCheckedChange={() => toggleCategory(cat)}
               />
               <span className='group-hover:text-primary text-sm transition-colors'>{cat}</span>
-              <span className='text-muted-foreground ml-auto text-xs'>
+              <span className='text-muted-foreground ms-auto text-xs'>
                 {categoryCounts[cat] || 0}
               </span>
             </label>
@@ -156,7 +158,7 @@ export function SearchFilterContent({
       <div>
         <h3 className='mb-3 flex items-center gap-2 font-semibold'>
           <IconShoppingCart className='h-4 w-4' />
-          Stores
+          {t('stores')}
         </h3>
         <div className='space-y-2'>
           {stores.map((store) => (
@@ -195,7 +197,7 @@ export function SearchFilterContent({
       <Separator />
 
       <div>
-        <h3 className='mb-3 font-semibold'>Minimum Rating</h3>
+        <h3 className='mb-3 font-semibold'>{t('minRating')}</h3>
         <div className='flex gap-1'>
           {[0, 3, 4, 4.5].map((rating) => (
             <Button
@@ -205,7 +207,7 @@ export function SearchFilterContent({
               onClick={() => setMinRating(rating)}
               className='flex-1'
             >
-              {rating === 0 ? 'Any' : `${rating}+`}
+              {rating === 0 ? t('ratingAny') : `${rating}+`}
             </Button>
           ))}
         </div>
@@ -214,35 +216,35 @@ export function SearchFilterContent({
       <Separator />
 
       <div>
-        <h3 className='mb-3 font-semibold'>Quick Filters</h3>
+        <h3 className='mb-3 font-semibold'>{t('quickFilters')}</h3>
         <div className='space-y-2'>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox checked={inStock} onCheckedChange={(checked) => setInStock(!!checked)} />
-            <span className='text-sm'>In Stock</span>
+            <span className='text-sm'>{t('inStock')}</span>
           </label>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox checked={onSale} onCheckedChange={(checked) => setOnSale(!!checked)} />
-            <span className='text-sm'>On Sale</span>
+            <span className='text-sm'>{t('onSale')}</span>
           </label>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox checked={isNew} onCheckedChange={(checked) => setIsNew(!!checked)} />
-            <span className='text-sm'>New Arrivals</span>
+            <span className='text-sm'>{t('newArrivals')}</span>
           </label>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox checked={isDigital} onCheckedChange={(checked) => setIsDigital(!!checked)} />
-            <span className='text-sm'>Digital Products</span>
+            <span className='text-sm'>{t('digitalProducts')}</span>
           </label>
         </div>
       </div>
 
-      {variant === 'sidebar' && hasActiveFilters && (
+      {variant === 'sidebar' && hasActiveFilters ? (
         <>
           <Separator />
           <Button variant='outline' className='w-full' onClick={searchParams.clearFilters}>
-            Clear All Filters
+            {t('clearAll')}
           </Button>
         </>
-      )}
+      ) : null}
     </div>
   );
 }

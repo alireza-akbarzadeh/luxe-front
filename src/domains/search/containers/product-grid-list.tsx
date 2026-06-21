@@ -3,6 +3,7 @@
 import { IconSearch } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/domains/shop/components/product-card';
@@ -19,6 +20,7 @@ interface ProductGridListProps {
 export function ProductGridList(props: ProductGridListProps) {
   const { products, total } = props;
   const searchParams = useSearchParams();
+  const t = useTranslations('search');
 
   const totalPages = Math.ceil(total / searchParams.perPage);
 
@@ -53,23 +55,23 @@ export function ProductGridList(props: ProductGridListProps) {
             <div className='bg-secondary mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full'>
               <IconSearch className='text-muted-foreground h-10 w-10' />
             </div>
-            <h3 className='mb-2 text-xl font-semibold'>No products found</h3>
+            <h3 className='mb-2 text-xl font-semibold'>{t('empty.title')}</h3>
             <p className='text-muted-foreground mx-auto mb-6 max-w-md'>
               {searchParams.query
-                ? `We couldn't find any products matching "${searchParams.query}". Try adjusting your search or filters.`
-                : 'No products match your current filters. Try removing some filters.'}
+                ? t('empty.withQuery', { query: searchParams.query })
+                : t('empty.noQuery')}
             </p>
             <div className='flex flex-col justify-center gap-2 sm:flex-row'>
-              <Button onClick={searchParams.clearAll}>Clear All</Button>
+              <Button onClick={searchParams.clearAll}>{t('empty.clearAll')}</Button>
               <Button variant='outline' asChild>
-                <Link href='/shop'>Browse All Products</Link>
+                <Link href='/shop'>{t('empty.browseAll')}</Link>
               </Button>
             </div>
           </motion.div>
         )}
       </div>
 
-      {totalPages > 1 && (
+      {totalPages > 1 ? (
         <div className='mt-8 flex items-center justify-center gap-2'>
           <Button
             variant='outline'
@@ -77,7 +79,7 @@ export function ProductGridList(props: ProductGridListProps) {
             disabled={searchParams.page === 1}
             onClick={() => searchParams.setPage(searchParams.page - 1)}
           >
-            Previous
+            {t('pagination.previous')}
           </Button>
           <div className='flex items-center gap-1'>
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -111,10 +113,10 @@ export function ProductGridList(props: ProductGridListProps) {
             disabled={searchParams.page === totalPages}
             onClick={() => searchParams.setPage(searchParams.page + 1)}
           >
-            Next
+            {t('pagination.next')}
           </Button>
         </div>
-      )}
+      ) : null}
     </>
   );
 }

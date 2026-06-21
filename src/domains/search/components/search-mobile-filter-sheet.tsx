@@ -1,6 +1,7 @@
 'use client';
 
 import { IconFilter2 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,6 +37,7 @@ export function SearchMobileFilterSheet({
   stores,
   categories
 }: SearchMobileFilterSheetProps) {
+  const t = useTranslations('search.filters');
   const searchParams = useSearchParams();
   const isOpen = useSearchStore((state) => state.isFilterSheetOpen);
   const setFilterSheetOpen = useSearchStore((state) => state.setFilterSheetOpen);
@@ -61,13 +63,13 @@ export function SearchMobileFilterSheet({
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <Button variant='outline' size='sm' className='h-10 flex-1 rounded-full lg:hidden'>
-          <IconFilter2 className='mr-2 h-4 w-4 shrink-0' />
-          Filters
-          {appliedCount > 0 && (
-            <Badge variant='secondary' className='ml-2 tabular-nums'>
+          <IconFilter2 className='me-2 h-4 w-4 shrink-0' />
+          {t('title')}
+          {appliedCount > 0 ? (
+            <Badge variant='secondary' className='ms-2 tabular-nums'>
               {appliedCount}
             </Badge>
-          )}
+          ) : null}
         </Button>
       </SheetTrigger>
 
@@ -79,17 +81,17 @@ export function SearchMobileFilterSheet({
           <div className='bg-muted-foreground/25 h-1.5 w-12 rounded-full' />
         </div>
 
-        <SheetHeader className='border-border shrink-0 border-b px-6 py-4 text-left'>
+        <SheetHeader className='border-border shrink-0 border-b px-6 py-4 text-start'>
           <div className='flex items-start justify-between gap-3'>
             <div className='space-y-1'>
-              <SheetTitle className='font-display text-xl'>Filters</SheetTitle>
+              <SheetTitle className='font-display text-xl'>{t('title')}</SheetTitle>
               <SheetDescription>
                 {hasDraftFilters
-                  ? `${draftFilterCount} selected · tap Apply when ready`
-                  : 'Refine products by category, price, and more'}
+                  ? t('mobile.selectedApply', { count: draftFilterCount })
+                  : t('mobile.refineDescription')}
               </SheetDescription>
             </div>
-            {hasDraftFilters && (
+            {hasDraftFilters ? (
               <Button
                 type='button'
                 variant='ghost'
@@ -97,9 +99,9 @@ export function SearchMobileFilterSheet({
                 className='text-muted-foreground shrink-0'
                 onClick={resetDraft}
               >
-                Reset
+                {t('mobile.reset')}
               </Button>
-            )}
+            ) : null}
           </div>
         </SheetHeader>
 
@@ -115,18 +117,18 @@ export function SearchMobileFilterSheet({
         </div>
 
         <SheetFooter className='border-border bg-background/95 shrink-0 gap-2 border-t px-6 py-4 backdrop-blur-sm pb-[max(1rem,env(safe-area-inset-bottom))]'>
-          {hasDraftFilters && (
+          {hasDraftFilters ? (
             <Button
               type='button'
               variant='outline'
               className='w-full rounded-full'
               onClick={resetDraft}
             >
-              Clear selection
+              {t('mobile.clearSelection')}
             </Button>
-          )}
+          ) : null}
           <Button type='button' className='h-11 w-full rounded-full' onClick={handleApply}>
-            Apply filters
+            {t('mobile.applyFilters')}
           </Button>
         </SheetFooter>
       </SheetContent>

@@ -4,7 +4,7 @@
     "wishlist": "علاقه‌مندی‌ها",
     "cart": "سبد خرید",
     "openCart": "باز کردن سبد خرید",
-    "openCartWithCount": "باز کردن سبد خرید، {count} قلم",
+    "openCartWithCount": "باز کردن سبد خرید، {count, number} قلم",
     "signIn": "ورود",
     "continueShopping": "ادامه خرید",
     "proceedToCheckout": "ادامه به پرداخت",
@@ -83,7 +83,7 @@
     "emptyDescription": "قطعات منتخب از برندهای لوکس مستقل را کشف کنید.",
     "emptyDescriptionAlt": "قطعات منتخب ماندگار را کشف کنید — مجموعه خود را بسازید.",
     "sheetTitle": "سبد خرید",
-    "titleWithCount": "سبد خرید · {count}",
+    "titleWithCount": "سبد خرید · {count, number}",
     "subtotal": "جمع جزء",
     "estimatedTotal": "جمع تقریبی",
     "taxNote": "مالیات و هزینه ارسال در مرحله پرداخت محاسبه می‌شود."
@@ -97,8 +97,8 @@
     "appStore": "App Store",
     "getItOn": "دریافت از",
     "googlePlay": "Google Play",
-    "copyright": "© {year} Luxe Marketplace, Inc. تمامی حقوق محفوظ است.",
-    "secureCheckout": "پرداخت امن · SSL 256 بیتی",
+    "copyright": "© {year, number} Luxe Marketplace, Inc. تمامی حقوق محفوظ است.",
+    "secureCheckout": "پرداخت امن · SSL {bits, number} بیتی",
     "sections": {
       "shop": "فروشگاه",
       "stores": "فروشگاه‌ها",
@@ -136,13 +136,28 @@
     },
     "trust": {
       "freeShippingTitle": "ارسال رایگان",
-      "freeShippingSubtitle": "برای سفارش‌های بالای ۱۵۰ دلار",
-      "returnsTitle": "مرجوعی ۳۰ روزه",
+      "freeShippingSubtitle": "برای سفارش‌های بالای {amount, number, usd}",
+      "returnsTitle": "مرجوعی {days, number} روزه",
       "returnsSubtitle": "بدون دردسر",
       "authenticityTitle": "اصالت کالا",
-      "authenticitySubtitle": "برندهای ۱۰۰٪ تأییدشده",
-      "conciergeTitle": "پشتیبانی ۲۴/۷",
+      "authenticitySubtitle": "برندهای {percent, number, percentWhole} تأییدشده",
+      "conciergeTitle": "پشتیبانی {hours, number}/{days, number}",
       "conciergeSubtitle": "همیشه پاسخگوی شما"
+    },
+    "newsletter": {
+      "badge": "لوکس ادیت",
+      "title": "<highlight>{discount, number, percentWhole} تخفیف</highlight> برای اولین سفارش",
+      "description": "به بیش از {count, number} عضو بپیوندید — دسترسی زودهنگام به محصولات جدید، فروش‌های خصوصی و انتخاب‌های سردبیری، هفتگی.",
+      "emailPlaceholder": "you@domain.com",
+      "emailAriaLabel": "آدرس ایمیل",
+      "subscribe": "عضویت",
+      "subscribed": "عضو شدید",
+      "joining": "در حال عضویت",
+      "errorInvalidEmail": "لطفاً یک آدرس ایمیل معتبر وارد کنید.",
+      "successHint": "برنامه ایمیل شما باز می‌شود — برای تکمیل عضویت پیام را ارسال کنید.",
+      "idleHint": "برای عضویت برنامه ایمیل باز می‌شود. یا <link>حساب بسازید</link> برای به‌روزرسانی سفارش.",
+      "mailtoSubject": "عضویت در خبرنامه لوکس ادیت",
+      "mailtoBody": "لطفاً مرا به خبرنامه لوکس ادیت اضافه کنید:\n\n{email}"
     }
   },
   "errors": {
@@ -169,7 +184,7 @@
     "showcase": {
       "eyebrow": "انتخاب سردبیر",
       "headline": "صنعت، اصالت و قطعاتی که می‌مانند.",
-      "subhead": "از فروشندگان تأییدشده بخرید، با اطمینان مقایسه کنید و تا ۳۰ روز مرجوع کنید.",
+      "subhead": "از فروشندگان تأییدشده بخرید، با اطمینان مقایسه کنید و تا {days, number} روز مرجوع کنید.",
       "cardEyebrow": "مزیت عضویت",
       "cardBody": "علاقه‌مندی‌ها را ذخیره کنید، سفارش را پیگیری کنید و زودتر به محصولات جدید دسترسی داشته باشید."
     },
@@ -339,11 +354,11 @@
         "description": "مجموعه‌های منتخب و پیشنهادهای شخصی‌سازی‌شده را کشف کنید. برای علاقه‌مندی‌ها، پیگیری سفارش و بیشتر وارد شوید.",
         "stats": {
           "secureCheckout": "پرداخت امن",
-          "secureCheckoutValue": "SSL 256-bit",
+          "secureCheckoutValue": "SSL {bits, number} بیتی",
           "freeReturns": "مرجوعی رایگان",
-          "freeReturnsValue": "۳۰ روز",
+          "freeReturnsValue": "{days, number} روز",
           "support": "پشتیبانی",
-          "supportValue": "۲۴/۷"
+          "supportValue": "{hours, number}/{days, number}"
         }
       },
       "register": {
@@ -356,6 +371,404 @@
           "checkout": "تسویه حساب سریع‌تر",
           "orders": "پیگیری و تاریخچه سفارش"
         }
+      }
+    }
+  },
+  "home": {
+    "common": {
+      "viewAll": "مشاهده همه",
+      "viewAllProducts": "مشاهده همه محصولات",
+      "shopAll": "مشاهده فروشگاه",
+      "shopNow": "خرید کنید",
+      "catalogMockNotice": "نمایش محصولات نمونه تا بارگذاری کاتالوگ.",
+      "categoriesMockNotice": "پیش‌نمایش دسته‌ها — کاتالوگ زنده به‌زودی همگام می‌شود.",
+      "featuredMockNotice": "نمایش انتخاب‌های منتخب تا اتصال به کاتالوگ.",
+      "productAlt": "محصول",
+      "categoryAlt": "دسته‌بندی",
+      "collectionPreviewAlt": "پیش‌نمایش مجموعه",
+      "featuredCollectionAlt": "مجموعه ویژه",
+      "promoImageAlt": "مجموعه فروش فصلی",
+      "partnerBrandsAria": "برندهای همکار",
+      "starsRating": "{rating} از ۵ ستاره",
+      "fromPrice": "از {price}"
+    },
+    "hero": {
+      "seasonBadge": "بهار / تابستان {year, number}",
+      "seasonLive": "اکنون فعال",
+      "titleLine1": "لوکس منتخب برای",
+      "titleLine2": "زندگی روزمره",
+      "description": "مد، خانه و سبک زندگی در سطح طراحی از فروشگاه‌های مستقل تأییدشده — منتخب برای کیفیت، پایداری و استایل ماندگار.",
+      "ratingValue": "{rating, number, decimal1}",
+      "socialProof": "مورد اعتماد بیش از {count, number} خریدار",
+      "shopNewArrivals": "مشاهده تازه‌ها",
+      "exploreCollections": "کاوش مجموعه‌ها",
+      "statsFootnote": "برجسته‌های بازار · فصلی به‌روز می‌شود",
+      "editorsPick": "انتخاب سردبیر",
+      "signatureEditFallback": "ویرایش امضایی",
+      "newSeasonBadge": "جدید",
+      "seasonBadgeSub": "فصل",
+      "stats": {
+        "customers": "مشتریان راضی",
+        "products": "محصولات منتخب",
+        "brands": "برندهای طراح",
+        "countries": "کشورهای ارسال"
+      }
+    },
+    "brands": {
+      "title": "مورد اعتماد برندهای مستقل پیشرو"
+    },
+    "marketplace": {
+      "eyebrow": "بازارچه",
+      "title": "یک مقصد پریمیوم برای خرید مدرن",
+      "description": "لوکس برندهای مستقل، مجموعه‌های منتخب و تجربه خریدی را گرد هم می‌آورد که از کشف تا تحویل روان باشد.",
+      "liveLabel": "بازار زنده",
+      "productCount": "{count, number}+",
+      "productSubtext": "محصول از بیش از {brandCount, number} برند",
+      "ratingTitle": "میانگین امتیاز فروشگاه {rating, number, decimal1}",
+      "ratingSubtext": "از نظرات تأییدشده خریداران",
+      "tiles": {
+        "stores": "فروشگاه‌ها",
+        "collections": "مجموعه‌ها",
+        "reviews": "نظرات",
+        "checkout": "پرداخت"
+      },
+      "benefits": {
+        "curated": {
+          "title": "بازارچه چندبرندی منتخب",
+          "description": "یک مقصد برای مد، خانه و سبک زندگی پریمیوم — با کیفیت تأییدشده."
+        },
+        "stores": {
+          "title": "فروشگاه‌های مستقل قابل اعتماد",
+          "description": "مستقیم از فروشندگان تأییدشده با سیاست‌ها و امتیازهای شفاف خرید کنید."
+        },
+        "editorial": {
+          "title": "کشف سردبیری",
+          "description": "مجموعه‌ها و ویرایش‌های فصلی به یافتن قطعات ارزشمند کمک می‌کنند."
+        },
+        "checkout": {
+          "title": "پرداخت امن و روان",
+          "description": "پرداخت محافظت‌شده، پیگیری سفارش و پشتیبانی در صورت نیاز."
+        }
+      }
+    },
+    "categories": {
+      "eyebrow": "مرور بر اساس دسته",
+      "title": "خرید از مجموعه‌ها",
+      "description": "از پایه‌های کمد تا قطعات برجسته خانه — بخش‌هایی متناسب با سبک زندگی شما."
+    },
+    "featured": {
+      "eyebrow": "منتخب برای شما",
+      "title": "محصولات ویژه",
+      "description": "قطعات منتخب استایلیست‌های ما این فصل — مواد refined، سیلوئت مدرن و ارزش ماندگار.",
+      "tabs": {
+        "featured": "ویژه",
+        "new": "تازه",
+        "trending": "ترند"
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "نحوه کار",
+      "title": "از کشف تا درب منزل",
+      "description": "مسیر خریدی که در هر گام ساده، پریمیوم و قابل اعتماد باشد.",
+      "steps": {
+        "discover": {
+          "title": "کشف",
+          "description": "مجموعه‌های منتخب، فروشگاه‌های مستقل و پیشنهادهای سردبیر را در یک بازار ببینید."
+        },
+        "choose": {
+          "title": "انتخاب با اطمینان",
+          "description": "نظرات تأییدشده بخوانید، مقایسه کنید و از فروشندگان معتبر خرید کنید."
+        },
+        "checkout": {
+          "title": "پرداخت امن",
+          "description": "پرداخت سریع و رمزنگاری‌شده با گزینه‌های انعطاف‌پذیر و ارسال شفاف."
+        },
+        "enjoy": {
+          "title": "لذت و مرجوعی آسان",
+          "description": "هر سفارش را پیگیری کنید و در صورت نامناسب بودن، مرجوعی بدون دردسر داشته باشید."
+        }
+      }
+    },
+    "collections": {
+      "eyebrow": "مجموعه‌ها",
+      "title": "ویرایش‌های منتخب",
+      "viewAll": "مشاهده همه مجموعه‌ها",
+      "banners": {
+        "essentials": {
+          "eyebrow": "ویرایش بهاری",
+          "title": "ضروریات مدرن",
+          "description": "پایه‌های refined برای لوکس روزمره — پالت فصلی محدود.",
+          "cta": "خرید ویرایش"
+        },
+        "atelier": {
+          "eyebrow": "ساخته برای ماندگاری",
+          "title": "مجموعه Atelier",
+          "description": "قطعات دست‌ساز از سازندگان مستقل سراسر جهان.",
+          "cta": "کاوش مجموعه"
+        }
+      }
+    },
+    "newArrivals": {
+      "eyebrow": "تازه رسیده",
+      "title": "تازه‌ها",
+      "description": "انتخاب‌های تازه از فروشندگان تأییدشده — هفتگی به‌روز می‌شود.",
+      "linkLabel": "مشاهده تازه‌ها"
+    },
+    "features": {
+      "eyebrow": "تجربه خرید",
+      "title": "چرا لوکس را انتخاب می‌کنند",
+      "description": "هر نقطه تماس — از کشف تا تحویل — برای حس پریمیوم، شفافیت و راحتی طراحی شده است.",
+      "items": {
+        "shipping": {
+          "title": "ارسال رایگان",
+          "description": "تحویل رایگان برای سفارش‌های بالای {amount, number, usd} در سراسر جهان."
+        },
+        "quality": {
+          "title": "کیفیت پریمیوم",
+          "description": "هر قلم از نظر مواد، فیت و دوام بررسی می‌شود."
+        },
+        "warranty": {
+          "title": "گارانتی {years, number} ساله",
+          "description": "حفاظت تمدیدشده برای محصولات واجد شرایط."
+        },
+        "support": {
+          "title": "پشتیبانی {hours, number}/{days, number}",
+          "description": "کمک سطح کنسیرژ هر زمان که نیاز دارید."
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "داستان مشتریان",
+      "title": "محبوب هزاران نفر",
+      "description": "برجسته‌های سردبیری از جامعه ما. نظرات زنده در هر صفحه محصول نمایش داده می‌شود.",
+      "items": {
+        "1": {
+          "name": "Sarah Mitchell",
+          "role": "مدیر خلاق",
+          "content": "کیفیت لوکس بی‌نظیر است. هر قطعه عمدی به نظر می‌رسد — بسته‌بندی، فیت و پرداخت در سطح جهانی."
+        },
+        "2": {
+          "name": "James Chen",
+          "role": "معمار",
+          "content": "بالاخره فروشگاهی که طراحی مینیمال را با کارایی واقعی متعادل می‌کند. پرداخت روان و تحویل سریع بود."
+        },
+        "3": {
+          "name": "Emma Rodriguez",
+          "role": "طراح داخلی",
+          "content": "مدام لوکس را به مشتریان توصیه می‌کنم. انتخاب‌ها سردبیری است بدون تکلف."
+        },
+        "4": {
+          "name": "David Okonkwo",
+          "role": "رهبر محصول",
+          "content": "وقتی سایز مناسب نبود، مرجوعی بی‌دردسر بود. همین سطح خدمات مرا برمی‌گرداند."
+        }
+      }
+    },
+    "statsSection": {
+      "eyebrow": "در اعداد",
+      "title": "بازاری ساخته‌شده برای مقیاس و اعتماد",
+      "description": "شاخص‌های رشد واقعی که تعهد ما به تجارت باکیفیت را نشان می‌دهد.",
+      "items": {
+        "shoppers": "خریداران راضی",
+        "products": "محصولات منتخب",
+        "brands": "برندهای تأییدشده",
+        "rating": "میانگین امتیاز",
+        "countries": "کشورهای ارسال",
+        "successRate": "نرخ موفقیت سفارش"
+      }
+    },
+    "promo": {
+      "badge": "زمان محدود",
+      "title": "{discount, number, percentWhole} تخفیف اولین سفارش",
+      "description": "به جامعه لوکس بپیوندید و به فروش‌های خصوصی، عرضه زودهنگام و جلسات استایل اعضا دسترسی پیدا کنید. کد {code} را در پرداخت وارد کنید.",
+      "code": "WELCOME30",
+      "countdown": {
+        "hours": "ساعت",
+        "minutes": "دقیقه",
+        "seconds": "ثانیه"
+      },
+      "shopSale": "خرید از حراج",
+      "createAccount": "ایجاد حساب"
+    },
+    "faq": {
+      "eyebrow": "سوالات متداول",
+      "title": "سوالات خریداران",
+      "description": "هر آنچه قبل از اولین سفارش باید بدانید.",
+      "items": {
+        "different": {
+          "question": "لوکس چه تفاوتی با بازارهای دیگر دارد؟",
+          "answer": "ما انتخاب سردبیری را با بازار چندفروشنده ترکیب می‌کنیم — هر برند و محصول قبل از انتشار از نظر کیفیت، ارائه و تجربه مشتری بررسی می‌شود."
+        },
+        "shipping": {
+          "question": "ارسال چگونه کار می‌کند؟",
+          "answer": "گزینه‌ها به فروشنده و موقعیت شما بستگی دارد. بسیاری از سفارش‌ها بالای {amount, number, usd} ارسال رایگان دارند و پس از ارسال ردیابی دریافت می‌کنید."
+        },
+        "returns": {
+          "question": "سیاست مرجوعی چیست؟",
+          "answer": "اکثر اقلام تا {days, number} روز در شرایط اولیه قابل مرجوع هستند. جزئیات در صفحه هر محصول و فروشگاه قبل از خرید نمایش داده می‌شود."
+        },
+        "payments": {
+          "question": "آیا پرداخت امن است؟",
+          "answer": "بله. پرداخت با رمزنگاری استاندارد و ارائه‌دهندگان معتبر انجام می‌شود. جزئیات کامل کارت را ذخیره نمی‌کنیم."
+        },
+        "sell": {
+          "question": "آیا می‌توانم در لوکس بفروشم؟",
+          "answer": "قطعاً. برندها و فروشندگان مستقل می‌توانند برای باز کردن فروشگاه با ابزارها و تحلیل‌های اختصاصی درخواست دهند."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "آماده تجربه خرید پریمیوم؟",
+      "description": "امروز مجموعه‌های منتخب را ببینید — یا برند خود را در بازاری که خریداران مدرن به آن اعتماد دارند راه بیندازید.",
+      "startShopping": "شروع خرید",
+      "sellOnLuxe": "فروش در لوکس"
+    },
+    "newsletter": {
+      "eyebrow": "در جریان بمانید",
+      "title": "به لیست insider لوکس بپیوندید",
+      "description": "دسترسی زودهنگام به عرضه‌ها، نکات استایل و پیشنهادهای اعضا — بدون اسپم، لغو هر زمان.",
+      "emailPlaceholder": "you@email.com",
+      "emailAriaLabel": "آدرس ایمیل",
+      "subscribe": "عضویت",
+      "success": "در لیست هستید — خوش آمدید.",
+      "privacyNote": "با عضویت، سیاست حریم خصوصی ما را می‌پذیرید."
+    },
+    "trust": {
+      "items": {
+        "freeShipping": {
+          "title": "ارسال رایگان",
+          "description": "برای سفارش‌های بالای {amount, number, usd}"
+        },
+        "easyReturns": {
+          "title": "مرجوعی آسان",
+          "description": "{days, number} روز بدون دردسر"
+        },
+        "secureCheckout": {
+          "title": "پرداخت امن",
+          "description": "رمزنگاری {bits, number} بیتی"
+        },
+        "support": {
+          "title": "پشتیبانی {hours, number}/{days, number}",
+          "description": "پاسخگویی سریع توسط انسان واقعی"
+        }
+      }
+    },
+    "mockCategories": {
+      "accessories": {
+        "name": "اکسسوری",
+        "description": "هر استایلی را ارتقا دهید"
+      },
+      "home": {
+        "name": "خانه و زندگی",
+        "description": "پناهگاه خود را طراحی کنید"
+      },
+      "electronics": {
+        "name": "الکترونیک",
+        "description": "فناوری پریمیوم ضروری"
+      },
+      "lifestyle": {
+        "name": "سبک زندگی",
+        "description": "منتخب برای زندگی مدرن"
+      }
+    }
+  },
+  "search": {
+    "hero": {
+      "title": "محبوب بعدی خود را کشف کنید",
+      "subtitle": "در میان هزاران محصول، فروشگاه و دسته‌بندی جستجو کنید",
+      "placeholder": "جستجوی محصول، فروشگاه، دسته…",
+      "searchButton": "جستجو",
+      "keyboardHint": "برای جستجو در هر جای سایت"
+    },
+    "mobileSheet": {
+      "title": "جستجو",
+      "description": "محصول، فروشگاه و دسته پیدا کنید",
+      "close": "بستن",
+      "clearSearch": "پاک کردن جستجو",
+      "go": "برو"
+    },
+    "error": {
+      "loadFailed": "بارگذاری نتایج جستجو ناموفق بود. دوباره تلاش کنید.",
+      "retry": "تلاش مجدد"
+    },
+    "filters": {
+      "title": "فیلترها",
+      "categories": "دسته‌بندی‌ها",
+      "stores": "فروشگاه‌ها",
+      "priceRange": "محدوده قیمت",
+      "priceAdjustDraft": "تنظیم محدوده",
+      "priceAdjustSidebar": "بکشید برای تنظیم · رها کنید برای اعمال",
+      "priceAriaLabel": "فیلتر محدوده قیمت",
+      "minRating": "حداقل امتیاز",
+      "ratingAny": "همه",
+      "quickFilters": "فیلترهای سریع",
+      "inStock": "موجود",
+      "onSale": "حراج",
+      "newArrivals": "تازه‌ها",
+      "digitalProducts": "محصولات دیجیتال",
+      "clearAll": "حذف همه فیلترها",
+      "activeLabel": "فیلترهای فعال:",
+      "clearAllShort": "حذف همه",
+      "starsPlus": "{rating}+ ستاره",
+      "storeFallback": "فروشگاه {id}",
+      "mobile": {
+        "selectedApply": "{count, number} انتخاب شده · برای اعمال «اعمال» را بزنید",
+        "refineDescription": "محصولات را بر اساس دسته، قیمت و موارد دیگر محدود کنید",
+        "reset": "بازنشانی",
+        "clearSelection": "پاک کردن انتخاب",
+        "applyFilters": "اعمال فیلترها"
+      },
+      "badges": {
+        "inStock": "موجود",
+        "onSale": "حراج",
+        "newArrivals": "تازه‌ها",
+        "digital": "دیجیتال"
+      }
+    },
+    "results": {
+      "forQuery": "نتایج برای «{query}»",
+      "allProducts": "همه محصولات",
+      "count": "{count, plural, one {# محصول یافت شد} other {# محصول یافت شد}}",
+      "sortBy": "مرتب‌سازی",
+      "sort": {
+        "relevance": "مرتبط‌ترین",
+        "newest": "جدیدترین",
+        "priceAsc": "قیمت: کم به زیاد",
+        "priceDesc": "قیمت: زیاد به کم",
+        "rating": "بیشترین امتیاز",
+        "popular": "محبوب‌ترین"
+      },
+      "viewGrid": "نمای شبکه‌ای",
+      "viewList": "نمای فهرست"
+    },
+    "empty": {
+      "title": "محصولی یافت نشد",
+      "noQuery": "هیچ محصولی با فیلترهای فعلی مطابقت ندارد. چند فیلتر را حذف کنید.",
+      "withQuery": "محصولی مطابق «{query}» پیدا نشد. جستجو یا فیلترها را تنظیم کنید.",
+      "clearAll": "حذف همه",
+      "browseAll": "مشاهده همه محصولات"
+    },
+    "pagination": {
+      "previous": "قبلی",
+      "next": "بعدی"
+    },
+    "recentlyViewed": {
+      "title": "بازدیدهای اخیر",
+      "clear": "پاک کردن"
+    },
+    "suggestions": {
+      "loading": "در حال بارگذاری پیشنهادها…",
+      "title": "پیشنهادها",
+      "pressEnter": "Enter برای جستجو",
+      "noneForQuery": "پیشنهادی برای «{query}» یافت نشد",
+      "pressEnterAnyway": "Enter بزنید تا جستجو شود",
+      "recent": "جستجوهای اخیر",
+      "clear": "پاک کردن",
+      "trending": "جستجوهای پرطرفدار",
+      "types": {
+        "product": "محصول",
+        "store": "فروشگاه",
+        "category": "دسته"
       }
     }
   },

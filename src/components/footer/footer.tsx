@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
+import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
 import {
   footerSections,
   legalLinks,
@@ -44,6 +45,7 @@ export function Footer() {
   const tLinks = useTranslations('footer.links');
   const tSections = useTranslations('footer.sections');
   const tLegal = useTranslations('footer.legal');
+  const footerBarCopy = getFooterBarCopyParams();
 
   return (
     <footer className='border-border/60 bg-background relative mt-24 border-t'>
@@ -155,11 +157,11 @@ export function Footer() {
         <div className='via-border mt-12 h-px w-full bg-linear-to-r from-transparent to-transparent' />
         <div className='flex flex-col gap-6 py-8 lg:flex-row lg:items-center lg:justify-between'>
           <div className='text-muted-foreground flex flex-col gap-3 text-xs sm:flex-row sm:items-center sm:gap-5'>
-            <span>{t('copyright', { year: new Date().getFullYear() })}</span>
+            <span>{t('copyright', footerBarCopy)}</span>
             <span className='hidden sm:inline'>·</span>
             <span className='inline-flex items-center gap-1.5'>
               <IconLock className='size-3.5' />
-              {t('secureCheckout')}
+              {t('secureCheckout', footerBarCopy)}
             </span>
           </div>
           <div className='flex flex-wrap items-center gap-x-5 gap-y-2 text-xs'>

@@ -8,33 +8,36 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetCategories } from '~/src/services/-categories-get';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { getCategoryImage, resolveCategories, sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
 
 export function CategoriesSection() {
+  const { mockCategories, t } = useHomeContent();
   const { data, isLoading, isError } = useGetCategories({
     is_active: true,
     limit: 8,
     offset: 0
   });
 
-  const categories = resolveCategories(data?.data?.categories);
-  const usingMock = isError || !data?.data?.categories?.length;
+  const apiCategories = resolveCategories(data?.data?.categories);
+  const usingMock = isError || !apiCategories.length;
+  const categories = usingMock ? mockCategories : apiCategories;
 
   return (
     <section id='categories' className='bg-secondary/30 py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Browse by category'
-          title='Shop the collections'
-          description='From wardrobe staples to statement home pieces — explore departments tailored to how you live.'
+          eyebrow={t('categories.eyebrow')}
+          title={t('categories.title')}
+          description={t('categories.description')}
           href='/shop'
           align='left'
         />
 
         {usingMock && !isLoading && (
           <p className='text-muted-foreground -mt-6 mb-6 text-sm sm:mb-8'>
-            Preview categories — live catalog syncing shortly.
+            {t('common.categoriesMockNotice')}
           </p>
         )}
 
@@ -54,6 +57,8 @@ export function CategoriesSection() {
                   description={category.description}
                   categoryId={category.id}
                   image={getCategoryImage(category, index)}
+                  shopNowLabel={t('common.shopNow')}
+                  categoryAlt={t('common.categoryAlt')}
                   className='min-w-[72vw] shrink-0'
                 />
               ))}
@@ -73,6 +78,8 @@ export function CategoriesSection() {
                     description={category.description}
                     categoryId={category.id}
                     image={getCategoryImage(category, index)}
+                    shopNowLabel={t('common.shopNow')}
+                    categoryAlt={t('common.categoryAlt')}
                   />
                 </motion.div>
               ))}
@@ -89,12 +96,16 @@ function CategoryCard({
   description,
   categoryId,
   image,
+  shopNowLabel,
+  categoryAlt,
   className
 }: Readonly<{
   name?: string;
   description?: string;
   categoryId?: number;
   image: string;
+  shopNowLabel: string;
+  categoryAlt: string;
   className?: string;
 }>) {
   const href = categoryId ? `/shop?categoryId=${categoryId}` : '/shop';
@@ -106,7 +117,7 @@ function CategoryCard({
     >
       <Image
         src={image}
-        alt={name ?? 'Category'}
+        alt={name ?? categoryAlt}
         fill
         sizes='(max-width: 640px) 75vw, 25vw'
         className='object-cover transition-transform duration-700 group-hover:scale-105'
@@ -120,8 +131,8 @@ function CategoryCard({
           <p className='text-primary-foreground/75 mt-1 line-clamp-2 text-sm'>{description}</p>
         )}
         <span className='text-primary-foreground mt-4 inline-flex items-center gap-2 text-sm font-medium'>
-          Shop now
-          <IconArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-0.5' />
+          {shopNowLabel}
+          <IconArrowRight className='cn-rtl-flip h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
         </span>
       </div>
     </Link>

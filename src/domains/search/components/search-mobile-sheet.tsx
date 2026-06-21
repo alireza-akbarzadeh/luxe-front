@@ -1,6 +1,7 @@
 'use client';
 
 import { IconLoader2, IconSearch, IconX } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +32,7 @@ export function SearchMobileSheet() {
 }
 
 function SearchMobileSheetContent() {
+  const t = useTranslations('search');
   const closeSearchSheet = useSearchStore((state) => state.closeSearchSheet);
   const {
     isSearching,
@@ -58,11 +60,11 @@ function SearchMobileSheetContent() {
         <div className='bg-muted-foreground/25 h-1.5 w-12 rounded-full' />
       </div>
 
-      <SheetHeader className='border-border shrink-0 border-b px-6 py-4 text-left'>
+      <SheetHeader className='border-border shrink-0 border-b px-6 py-4 text-start'>
         <div className='flex items-start justify-between gap-3'>
           <div className='space-y-1'>
-            <SheetTitle className='font-display text-xl'>Search</SheetTitle>
-            <SheetDescription>Find products, stores, and categories</SheetDescription>
+            <SheetTitle className='font-display text-xl'>{t('mobileSheet.title')}</SheetTitle>
+            <SheetDescription>{t('mobileSheet.description')}</SheetDescription>
           </div>
           <Button
             type='button'
@@ -71,14 +73,14 @@ function SearchMobileSheetContent() {
             className='text-muted-foreground shrink-0'
             onClick={closeSearchSheet}
           >
-            Close
+            {t('mobileSheet.close')}
           </Button>
         </div>
       </SheetHeader>
 
       <div className='border-border shrink-0 border-b px-6 py-4'>
         <div className='relative'>
-          <div className='absolute top-1/2 left-3 flex -translate-y-1/2 items-center'>
+          <div className='absolute top-1/2 start-3 flex -translate-y-1/2 items-center'>
             {isSearching || suggestionsLoading ? (
               <IconLoader2 className='text-muted-foreground h-5 w-5 animate-spin' />
             ) : (
@@ -92,7 +94,7 @@ function SearchMobileSheetContent() {
             autoComplete='off'
             autoCorrect='off'
             spellCheck={false}
-            placeholder='Search products, stores, categories…'
+            placeholder={t('hero.placeholder')}
             value={inputValue}
             onChange={(e) => {
               setInputValue(e.target.value);
@@ -100,16 +102,16 @@ function SearchMobileSheetContent() {
               setFocusedSuggestion(-1);
             }}
             onKeyDown={handleKeyDown}
-            className='focus:border-primary bg-background h-12 rounded-full pr-20 pl-11'
+            className='focus:border-primary bg-background h-12 rounded-full pe-20 ps-11'
           />
-          <div className='absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1'>
+          <div className='absolute top-1/2 end-2 flex -translate-y-1/2 items-center gap-1'>
             {inputValue ? (
               <Button
                 type='button'
                 variant='ghost'
                 size='icon'
                 className='h-8 w-8 rounded-full'
-                aria-label='Clear search'
+                aria-label={t('mobileSheet.clearSearch')}
                 onClick={() => {
                   setInputValue('');
                   inputRef.current?.focus();
@@ -124,14 +126,14 @@ function SearchMobileSheetContent() {
               className='h-8 rounded-full px-3'
               onClick={() => handleSearch(inputValue)}
             >
-              Go
+              {t('mobileSheet.go')}
             </Button>
           </div>
         </div>
       </div>
 
       <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-2 pb-[max(1rem,env(safe-area-inset-bottom))]'>
-        {(inputValue || searchStore.recentSearches.length > 0 || trendingSearches.length > 0) && (
+        {inputValue || searchStore.recentSearches.length > 0 || trendingSearches.length > 0 ? (
           <SearchSuggestionsPanel
             inputValue={inputValue}
             suggestions={suggestions}
@@ -146,7 +148,7 @@ function SearchMobileSheetContent() {
             onClearRecentSearches={searchStore.clearRecentSearches}
             onFocusSuggestion={setFocusedSuggestion}
           />
-        )}
+        ) : null}
       </div>
     </SheetContent>
   );

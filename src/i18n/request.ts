@@ -14,6 +14,28 @@ export default getRequestConfig(async () => {
 
   return {
     locale,
-    messages: (await import(`../../messages/${locale}.json`)).default
+    messages: (await import(`../../messages/${locale}.json`)).default,
+    formats: {
+      number: {
+        usd: {
+          style: 'currency',
+          currency: 'USD',
+          maximumFractionDigits: 0
+        },
+        percentWhole: {
+          style: 'percent',
+          maximumFractionDigits: 0
+        },
+        decimal1: {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        },
+        decimal1Percent: {
+          style: 'percent',
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1
+        }
+      }
+    }
   };
 });

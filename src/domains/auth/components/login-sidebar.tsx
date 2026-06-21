@@ -4,16 +4,19 @@ import { motion } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { getDirection, type Locale } from '@/i18n/config';
+import { getHomeMarketingCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 export function LoginSidebar() {
   const locale = useLocale() as Locale;
   const pageDir = getDirection(locale);
   const t = useTranslations('auth.sidebar.login');
 
+  const authCopy = getHomeMarketingCopyParams().authSidebar;
+
   const stats = [
-    { label: t('stats.secureCheckout'), value: t('stats.secureCheckoutValue') },
-    { label: t('stats.freeReturns'), value: t('stats.freeReturnsValue') },
-    { label: t('stats.support'), value: t('stats.supportValue') }
+    { label: t('stats.secureCheckout'), value: t('stats.secureCheckoutValue', authCopy) },
+    { label: t('stats.freeReturns'), value: t('stats.freeReturnsValue', authCopy) },
+    { label: t('stats.support'), value: t('stats.supportValue', { hours: authCopy.hours, days: authCopy.daysSupport }) }
   ];
 
   return (

@@ -6,10 +6,13 @@ import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 import { HomeFadeIn } from './ui/home-fade-in';
 
 export function FinalCtaSection() {
+  const { t } = useHomeContent();
+
   return (
     <section className='pb-8 sm:pb-12'>
       <div className={sectionContainerClass}>
@@ -21,11 +24,10 @@ export function FinalCtaSection() {
             />
             <div className='relative mx-auto max-w-2xl'>
               <h2 className='font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
-                Ready to experience premium shopping?
+                {t('finalCta.title')}
               </h2>
               <p className='text-muted-foreground mx-auto mt-4 max-w-xl text-base leading-relaxed sm:text-lg'>
-                Explore curated collections today — or launch your brand on the marketplace trusted
-                by modern shoppers.
+                {t('finalCta.description')}
               </p>
               <div className='mt-8 flex flex-col justify-center gap-3 sm:flex-row'>
                 <Link
@@ -36,13 +38,13 @@ export function FinalCtaSection() {
                   )}
                 >
                   <IconShoppingBag className='size-4' aria-hidden />
-                  Start shopping
-                  <IconArrowRight className='size-4 transition-transform group-hover:translate-x-0.5' />
+                  {t('finalCta.startShopping')}
+                  <IconArrowRight className='cn-rtl-flip size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
                 </Link>
                 <Button variant='outline' size='lg' className='h-12 gap-2 rounded-full px-8 sm:h-14' asChild>
                   <Link href='/vendor'>
                     <IconBuildingStore className='size-4' aria-hidden />
-                    Sell on LUXE
+                    {t('finalCta.sellOnLuxe')}
                   </Link>
                 </Button>
               </div>

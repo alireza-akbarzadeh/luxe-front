@@ -4,7 +4,7 @@
     "wishlist": "Wishlist",
     "cart": "Cart",
     "openCart": "Open cart",
-    "openCartWithCount": "Open cart, {count} items",
+    "openCartWithCount": "Open cart, {count, number} items",
     "signIn": "Sign in",
     "continueShopping": "Continue shopping",
     "proceedToCheckout": "Proceed to checkout",
@@ -83,7 +83,7 @@
     "emptyDescription": "Discover curated pieces from independent luxury brands.",
     "emptyDescriptionAlt": "Discover curated pieces designed to last — start building your collection.",
     "sheetTitle": "Shopping cart",
-    "titleWithCount": "Your cart · {count}",
+    "titleWithCount": "Your cart · {count, number}",
     "subtotal": "Subtotal",
     "estimatedTotal": "Estimated total",
     "taxNote": "Taxes and shipping calculated at checkout."
@@ -97,8 +97,8 @@
     "appStore": "App Store",
     "getItOn": "Get it on",
     "googlePlay": "Google Play",
-    "copyright": "© {year} Luxe Marketplace, Inc. All rights reserved.",
-    "secureCheckout": "Secure checkout · 256-bit SSL",
+    "copyright": "© {year, number} Luxe Marketplace, Inc. All rights reserved.",
+    "secureCheckout": "Secure checkout · {bits, number}-bit SSL",
     "sections": {
       "shop": "Shop",
       "stores": "Stores",
@@ -136,13 +136,28 @@
     },
     "trust": {
       "freeShippingTitle": "Free Shipping",
-      "freeShippingSubtitle": "On orders over $150",
-      "returnsTitle": "30-Day Returns",
+      "freeShippingSubtitle": "On orders over {amount, number, usd}",
+      "returnsTitle": "{days, number}-Day Returns",
       "returnsSubtitle": "Hassle-free, on us",
       "authenticityTitle": "Authenticity",
-      "authenticitySubtitle": "100% verified brands",
-      "conciergeTitle": "24/7 Concierge",
+      "authenticitySubtitle": "{percent, number, percentWhole} verified brands",
+      "conciergeTitle": "{hours, number}/{days, number} Concierge",
       "conciergeSubtitle": "Real humans, always"
+    },
+    "newsletter": {
+      "badge": "The Luxe Edit",
+      "title": "Get <highlight>{discount, number, percentWhole} off</highlight> your first order",
+      "description": "Join {count, number}+ insiders for early access to drops, private sales, and curated edits — delivered weekly.",
+      "emailPlaceholder": "you@domain.com",
+      "emailAriaLabel": "Email address",
+      "subscribe": "Subscribe",
+      "subscribed": "Subscribed",
+      "joining": "Joining",
+      "errorInvalidEmail": "Please enter a valid email address.",
+      "successHint": "Your email app should open — send the message to complete signup.",
+      "idleHint": "Opens your email app to subscribe. Or <link>create an account</link> for order updates.",
+      "mailtoSubject": "Luxe Edit newsletter signup",
+      "mailtoBody": "Please add me to the Luxe Edit newsletter:\n\n{email}"
     }
   },
   "errors": {
@@ -169,7 +184,7 @@
     "showcase": {
       "eyebrow": "Editor's selection",
       "headline": "Craft, provenance, and pieces worth keeping.",
-      "subhead": "Shop verified sellers, compare with confidence, and return within 30 days.",
+      "subhead": "Shop verified sellers, compare with confidence, and return within {days, number} days.",
       "cardEyebrow": "Member perk",
       "cardBody": "Save favorites, track orders, and get early access to drops when you create a free account."
     },
@@ -339,11 +354,11 @@
         "description": "Discover exclusive collections and enjoy personalized recommendations tailored just for you. Sign in to access your wishlist, track orders, and more.",
         "stats": {
           "secureCheckout": "Secure checkout",
-          "secureCheckoutValue": "256-bit SSL",
+          "secureCheckoutValue": "{bits, number}-bit SSL",
           "freeReturns": "Free returns",
-          "freeReturnsValue": "30 days",
+          "freeReturnsValue": "{days, number} days",
           "support": "Support",
-          "supportValue": "24/7"
+          "supportValue": "{hours, number}/{days, number}"
         }
       },
       "register": {
@@ -356,6 +371,404 @@
           "checkout": "Faster checkout experience",
           "orders": "Order tracking & history"
         }
+      }
+    }
+  },
+  "home": {
+    "common": {
+      "viewAll": "View all",
+      "viewAllProducts": "View all products",
+      "shopAll": "Shop all",
+      "shopNow": "Shop now",
+      "catalogMockNotice": "Showing sample products while the catalog loads.",
+      "categoriesMockNotice": "Preview categories — live catalog syncing shortly.",
+      "featuredMockNotice": "Showing curated picks while we connect to the catalog.",
+      "productAlt": "Product",
+      "categoryAlt": "Category",
+      "collectionPreviewAlt": "Collection preview",
+      "featuredCollectionAlt": "Featured collection",
+      "promoImageAlt": "Curated seasonal sale collection",
+      "partnerBrandsAria": "Partner brands",
+      "starsRating": "{rating} out of 5 stars",
+      "fromPrice": "From {price}"
+    },
+    "hero": {
+      "seasonBadge": "Spring / Summer {year, number}",
+      "seasonLive": "Now live",
+      "titleLine1": "Curated luxury for",
+      "titleLine2": "everyday life",
+      "description": "Discover designer-grade fashion, home, and lifestyle from verified independent stores — curated for quality, sustainability, and timeless style.",
+      "ratingValue": "{rating, number, decimal1}",
+      "socialProof": "Trusted by {count, number}+ shoppers",
+      "shopNewArrivals": "Shop new arrivals",
+      "exploreCollections": "Explore collections",
+      "statsFootnote": "Marketplace highlights · updated seasonally",
+      "editorsPick": "Editor's pick",
+      "signatureEditFallback": "The Signature Edit",
+      "newSeasonBadge": "New",
+      "seasonBadgeSub": "Season",
+      "stats": {
+        "customers": "Happy customers",
+        "products": "Curated products",
+        "brands": "Designer brands",
+        "countries": "Countries shipped"
+      }
+    },
+    "brands": {
+      "title": "Trusted by leading independent brands"
+    },
+    "marketplace": {
+      "eyebrow": "The marketplace",
+      "title": "One premium destination for modern shopping",
+      "description": "LUXE brings together independent brands, curated collections, and a shopping experience designed to feel effortless from discovery to delivery.",
+      "liveLabel": "Live marketplace",
+      "productCount": "{count, number}+",
+      "productSubtext": "Products across {brandCount, number}+ brands",
+      "ratingTitle": "{rating, number, decimal1} average store rating",
+      "ratingSubtext": "From verified buyer reviews",
+      "tiles": {
+        "stores": "Stores",
+        "collections": "Collections",
+        "reviews": "Reviews",
+        "checkout": "Checkout"
+      },
+      "benefits": {
+        "curated": {
+          "title": "Curated multi-brand marketplace",
+          "description": "One destination for premium fashion, home, and lifestyle — vetted for quality."
+        },
+        "stores": {
+          "title": "Independent stores you can trust",
+          "description": "Shop directly from verified sellers with transparent policies and ratings."
+        },
+        "editorial": {
+          "title": "Editorial discovery",
+          "description": "Collections and seasonal edits help you find pieces worth keeping."
+        },
+        "checkout": {
+          "title": "Secure, seamless checkout",
+          "description": "Protected payments, order tracking, and support when you need it."
+        }
+      }
+    },
+    "categories": {
+      "eyebrow": "Browse by category",
+      "title": "Shop the collections",
+      "description": "From wardrobe staples to statement home pieces — explore departments tailored to how you live."
+    },
+    "featured": {
+      "eyebrow": "Curated for you",
+      "title": "Featured products",
+      "description": "Handpicked pieces our stylists love this season — refined materials, modern silhouettes, and lasting value.",
+      "tabs": {
+        "featured": "Featured",
+        "new": "New in",
+        "trending": "Trending"
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "From discovery to doorstep",
+      "description": "A shopping journey designed to feel simple, premium, and trustworthy at every step.",
+      "steps": {
+        "discover": {
+          "title": "Discover",
+          "description": "Browse curated collections, independent stores, and editor picks in one marketplace."
+        },
+        "choose": {
+          "title": "Choose with confidence",
+          "description": "Read verified reviews, compare products, and shop from trusted sellers."
+        },
+        "checkout": {
+          "title": "Checkout securely",
+          "description": "Fast, encrypted checkout with flexible payment options and transparent shipping."
+        },
+        "enjoy": {
+          "title": "Enjoy & return easy",
+          "description": "Track every order and enjoy hassle-free returns when something is not quite right."
+        }
+      }
+    },
+    "collections": {
+      "eyebrow": "Collections",
+      "title": "Curated edits",
+      "viewAll": "View all collections",
+      "banners": {
+        "essentials": {
+          "eyebrow": "Spring edit",
+          "title": "Modern Essentials",
+          "description": "Refined staples built for everyday luxury — limited seasonal palette.",
+          "cta": "Shop the edit"
+        },
+        "atelier": {
+          "eyebrow": "Crafted to last",
+          "title": "The Atelier Collection",
+          "description": "Hand-finished pieces from independent makers worldwide.",
+          "cta": "Explore collection"
+        }
+      }
+    },
+    "newArrivals": {
+      "eyebrow": "Just dropped",
+      "title": "New arrivals",
+      "description": "Fresh picks from verified sellers — updated weekly.",
+      "linkLabel": "Shop new arrivals"
+    },
+    "features": {
+      "eyebrow": "Shopping experience",
+      "title": "Why shoppers choose LUXE",
+      "description": "Every touchpoint — from discovery to delivery — is designed to feel premium, transparent, and effortless.",
+      "items": {
+        "shipping": {
+          "title": "Free Shipping",
+          "description": "Complimentary delivery on orders over {amount, number, usd} worldwide."
+        },
+        "quality": {
+          "title": "Premium Quality",
+          "description": "Every item is vetted for materials, fit, and longevity."
+        },
+        "warranty": {
+          "title": "{years, number}-Year Warranty",
+          "description": "Extended protection on eligible products."
+        },
+        "support": {
+          "title": "{hours, number}/{days, number} Support",
+          "description": "Concierge-style help whenever you need it."
+        }
+      }
+    },
+    "testimonials": {
+      "eyebrow": "Customer stories",
+      "title": "Loved by thousands",
+      "description": "Editorial highlights from our community. Live product reviews appear on each product page.",
+      "items": {
+        "1": {
+          "name": "Sarah Mitchell",
+          "role": "Creative Director",
+          "content": "The quality from LUXE is unmatched. Every piece feels intentional — packaging, fit, and finish are all world-class."
+        },
+        "2": {
+          "name": "James Chen",
+          "role": "Architect",
+          "content": "Finally a store that balances minimalist design with real functionality. Checkout was seamless and delivery was fast."
+        },
+        "3": {
+          "name": "Emma Rodriguez",
+          "role": "Interior Designer",
+          "content": "I recommend LUXE to clients constantly. The curation feels editorial without being pretentious."
+        },
+        "4": {
+          "name": "David Okonkwo",
+          "role": "Product Lead",
+          "content": "Returns were effortless when a size did not work. That level of service keeps me coming back."
+        }
+      }
+    },
+    "statsSection": {
+      "eyebrow": "By the numbers",
+      "title": "A marketplace built for scale and trust",
+      "description": "Real growth metrics that reflect our commitment to quality commerce.",
+      "items": {
+        "shoppers": "Happy shoppers",
+        "products": "Curated products",
+        "brands": "Verified brands",
+        "rating": "Average rating",
+        "countries": "Countries shipped",
+        "successRate": "Order success rate"
+      }
+    },
+    "promo": {
+      "badge": "Limited time",
+      "title": "{discount, number, percentWhole} off your first order",
+      "description": "Join the LUXE community and unlock exclusive access to private sales, early drops, and member-only styling sessions. Use code {code} at checkout.",
+      "code": "WELCOME30",
+      "countdown": {
+        "hours": "Hours",
+        "minutes": "Min",
+        "seconds": "Sec"
+      },
+      "shopSale": "Shop the sale",
+      "createAccount": "Create account"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions shoppers ask",
+      "description": "Everything you need to know before your first order.",
+      "items": {
+        "different": {
+          "question": "What makes LUXE different from other marketplaces?",
+          "answer": "We combine editorial curation with a multi-vendor marketplace — every brand and product is reviewed for quality, presentation, and customer experience before going live."
+        },
+        "shipping": {
+          "question": "How does shipping work?",
+          "answer": "Shipping options depend on the seller and your location. Many orders qualify for complimentary delivery over {amount, number, usd}, with tracking provided as soon as your order ships."
+        },
+        "returns": {
+          "question": "What is your return policy?",
+          "answer": "Most items can be returned within {days, number} days in original condition. Return details appear on each product and store page before you purchase."
+        },
+        "payments": {
+          "question": "Are payments secure?",
+          "answer": "Yes. Checkout uses industry-standard encryption and trusted payment providers. We never store full card details on our servers."
+        },
+        "sell": {
+          "question": "Can I sell on LUXE?",
+          "answer": "Absolutely. Independent brands and merchants can apply to open a storefront on our marketplace with dedicated seller tools and analytics."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Ready to experience premium shopping?",
+      "description": "Explore curated collections today — or launch your brand on the marketplace trusted by modern shoppers.",
+      "startShopping": "Start shopping",
+      "sellOnLuxe": "Sell on LUXE"
+    },
+    "newsletter": {
+      "eyebrow": "Stay in the loop",
+      "title": "Join the LUXE insider list",
+      "description": "Early access to drops, styling notes, and members-only offers — no spam, unsubscribe anytime.",
+      "emailPlaceholder": "you@email.com",
+      "emailAriaLabel": "Email address",
+      "subscribe": "Subscribe",
+      "success": "You're on the list — welcome aboard.",
+      "privacyNote": "By subscribing you agree to our Privacy Policy."
+    },
+    "trust": {
+      "items": {
+        "freeShipping": {
+          "title": "Free shipping",
+          "description": "On orders over {amount, number, usd}"
+        },
+        "easyReturns": {
+          "title": "Easy returns",
+          "description": "{days, number}-day hassle-free"
+        },
+        "secureCheckout": {
+          "title": "Secure checkout",
+          "description": "{bits, number}-bit encryption"
+        },
+        "support": {
+          "title": "{hours, number}/{days, number} support",
+          "description": "Real humans, fast help"
+        }
+      }
+    },
+    "mockCategories": {
+      "accessories": {
+        "name": "Accessories",
+        "description": "Elevate every outfit"
+      },
+      "home": {
+        "name": "Home & Living",
+        "description": "Design your sanctuary"
+      },
+      "electronics": {
+        "name": "Electronics",
+        "description": "Premium tech essentials"
+      },
+      "lifestyle": {
+        "name": "Lifestyle",
+        "description": "Curated for modern living"
+      }
+    }
+  },
+  "search": {
+    "hero": {
+      "title": "Discover Your Next Favorite",
+      "subtitle": "Search across thousands of products, stores, and categories",
+      "placeholder": "Search products, stores, categories…",
+      "searchButton": "Search",
+      "keyboardHint": "to search anywhere"
+    },
+    "mobileSheet": {
+      "title": "Search",
+      "description": "Find products, stores, and categories",
+      "close": "Close",
+      "clearSearch": "Clear search",
+      "go": "Go"
+    },
+    "error": {
+      "loadFailed": "Failed to load search results. Please try again.",
+      "retry": "Retry"
+    },
+    "filters": {
+      "title": "Filters",
+      "categories": "Categories",
+      "stores": "Stores",
+      "priceRange": "Price Range",
+      "priceAdjustDraft": "Adjust range",
+      "priceAdjustSidebar": "Drag to adjust · release to apply",
+      "priceAriaLabel": "Price range filter",
+      "minRating": "Minimum Rating",
+      "ratingAny": "Any",
+      "quickFilters": "Quick Filters",
+      "inStock": "In Stock",
+      "onSale": "On Sale",
+      "newArrivals": "New Arrivals",
+      "digitalProducts": "Digital Products",
+      "clearAll": "Clear All Filters",
+      "activeLabel": "Active filters:",
+      "clearAllShort": "Clear all",
+      "starsPlus": "{rating}+ stars",
+      "storeFallback": "Store {id}",
+      "mobile": {
+        "selectedApply": "{count, number} selected · tap Apply when ready",
+        "refineDescription": "Refine products by category, price, and more",
+        "reset": "Reset",
+        "clearSelection": "Clear selection",
+        "applyFilters": "Apply filters"
+      },
+      "badges": {
+        "inStock": "In Stock",
+        "onSale": "On Sale",
+        "newArrivals": "New Arrivals",
+        "digital": "Digital"
+      }
+    },
+    "results": {
+      "forQuery": "Results for \"{query}\"",
+      "allProducts": "All Products",
+      "count": "{count, plural, one {# product found} other {# products found}}",
+      "sortBy": "Sort by",
+      "sort": {
+        "relevance": "Most Relevant",
+        "newest": "Newest First",
+        "priceAsc": "Price: Low to High",
+        "priceDesc": "Price: High to Low",
+        "rating": "Highest Rated",
+        "popular": "Most Popular"
+      },
+      "viewGrid": "Grid view",
+      "viewList": "List view"
+    },
+    "empty": {
+      "title": "No products found",
+      "noQuery": "No products match your current filters. Try removing some filters.",
+      "withQuery": "We couldn't find any products matching \"{query}\". Try adjusting your search or filters.",
+      "clearAll": "Clear All",
+      "browseAll": "Browse All Products"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "recentlyViewed": {
+      "title": "Recently Viewed",
+      "clear": "Clear"
+    },
+    "suggestions": {
+      "loading": "Loading suggestions…",
+      "title": "Suggestions",
+      "pressEnter": "Press Enter to search",
+      "noneForQuery": "No suggestions found for \"{query}\"",
+      "pressEnterAnyway": "Press Enter to search anyway",
+      "recent": "Recent Searches",
+      "clear": "Clear",
+      "trending": "Trending Searches",
+      "types": {
+        "product": "Product",
+        "store": "Store",
+        "category": "Category"
       }
     }
   },

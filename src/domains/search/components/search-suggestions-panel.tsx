@@ -11,6 +11,7 @@ import {
   IconX
 } from '@tabler/icons-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import { Separator } from '@/components/ui/separator';
 import type { DtoSuggestionItem } from '@/services/-search-suggestions-get.schemas';
@@ -32,6 +33,13 @@ interface SearchSuggestionsPanelProps {
   onFocusSuggestion: (index: number) => void;
 }
 
+function suggestionTypeKey(type?: string): 'product' | 'store' | 'category' {
+  if (type === 'product' || type === 'store' || type === 'category') {
+    return type;
+  }
+  return 'product';
+}
+
 /** Shared suggestions body for desktop dropdown and mobile search sheet. */
 export function SearchSuggestionsPanel({
   inputValue,
@@ -47,16 +55,18 @@ export function SearchSuggestionsPanel({
   onClearRecentSearches,
   onFocusSuggestion
 }: SearchSuggestionsPanelProps) {
+  const t = useTranslations('search.suggestions');
+
   if (inputValue && suggestionsLoading) {
     return (
-      <div className='text-muted-foreground p-8 text-center text-sm'>Loading suggestions…</div>
+      <div className='text-muted-foreground p-8 text-center text-sm'>{t('loading')}</div>
     );
   }
 
   if (inputValue && suggestions.length > 0) {
     return (
       <div className='p-2'>
-        <div className='text-muted-foreground px-3 py-2 text-xs font-medium'>Suggestions</div>
+        <div className='text-muted-foreground px-3 py-2 text-xs font-medium'>{t('title')}</div>
         {suggestions.map((suggestion, index) => (
           <button
             key={`${suggestion.type}-${suggestion.id || suggestion.name}`}
@@ -67,7 +77,7 @@ export function SearchSuggestionsPanel({
             onMouseEnter={() => onFocusSuggestion(index)}
             onClick={() => onSuggestionClick(suggestion)}
           >
-            {suggestion.type === 'product' && suggestion.image && (
+            {suggestion.type === 'product' && suggestion.image ? (
               <Image
                 src={suggestion.image}
                 alt={suggestion.name ?? ''}
@@ -75,8 +85,8 @@ export function SearchSuggestionsPanel({
                 height={40}
                 className='rounded-lg object-cover'
               />
-            )}
-            {suggestion.type === 'store' && suggestion.image && (
+            ) : null}
+            {suggestion.type === 'store' && suggestion.image ? (
               <Image
                 src={suggestion.image}
                 alt={suggestion.name ?? ''}
@@ -84,30 +94,32 @@ export function SearchSuggestionsPanel({
                 height={40}
                 className='rounded-full object-cover'
               />
-            )}
-            {suggestion.type === 'category' && (
+            ) : null}
+            {suggestion.type === 'category' ? (
               <div className='bg-secondary flex h-10 w-10 items-center justify-center rounded-lg'>
                 <IconTag className='text-muted-foreground h-5 w-5' />
               </div>
-            )}
-            <div className='min-w-0 flex-1 text-left'>
+            ) : null}
+            <div className='min-w-0 flex-1 text-start'>
               <div className='truncate text-sm font-medium'>{suggestion.name}</div>
-              <div className='text-muted-foreground text-xs capitalize'>{suggestion.type}</div>
+              <div className='text-muted-foreground text-xs'>
+                {t(`types.${suggestionTypeKey(suggestion.type)}`)}
+              </div>
             </div>
-            {suggestion.type === 'product' && suggestion.price != null && (
+            {suggestion.type === 'product' && suggestion.price != null ? (
               <span className='shrink-0 text-sm font-semibold tabular-nums'>
                 ${suggestion.price}
               </span>
-            )}
-            <IconArrowRight className='text-muted-foreground h-4 w-4 shrink-0' />
+            ) : null}
+            <IconArrowRight className='text-muted-foreground cn-rtl-flip h-4 w-4 shrink-0' />
           </button>
         ))}
         <Separator className='my-2' />
         <div className='text-muted-foreground flex items-center gap-2 px-3 pb-1 text-xs'>
           <div className='rounded-xs border p-px'>
-            <IconCornerDownLeft className='h-4 w-4' />
+            <IconCornerDownLeft className='cn-rtl-flip h-4 w-4' />
           </div>
-          <span>Press Enter to search</span>
+          <span>{t('pressEnter')}</span>
         </div>
       </div>
     );
@@ -117,29 +129,27 @@ export function SearchSuggestionsPanel({
     return (
       <div className='p-8 text-center'>
         <IconSearch className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
-        <p className='text-muted-foreground text-sm'>
-          No suggestions found for &quot;{inputValue}&quot;
-        </p>
-        <p className='text-muted-foreground mt-1 text-xs'>Press Enter to search anyway</p>
+        <p className='text-muted-foreground text-sm'>{t('noneForQuery', { query: inputValue })}</p>
+        <p className='text-muted-foreground mt-1 text-xs'>{t('pressEnterAnyway')}</p>
       </div>
     );
   }
 
   return (
     <div className='space-y-4 p-2'>
-      {recentSearches.length > 0 && (
+      {recentSearches.length > 0 ? (
         <div>
           <div className='flex items-center justify-between px-3 py-2'>
             <span className='text-muted-foreground flex items-center gap-1 text-xs font-medium'>
               <IconClock className='h-3 w-3' />
-              Recent Searches
+              {t('recent')}
             </span>
             <button
               type='button'
               className='text-primary text-xs hover:underline'
               onClick={onClearRecentSearches}
             >
-              Clear
+              {t('clear')}
             </button>
           </div>
           <div className='flex flex-wrap gap-2 px-3'>
@@ -163,13 +173,13 @@ export function SearchSuggestionsPanel({
             ))}
           </div>
         </div>
-      )}
+      ) : null}
 
-      {trendingSearches.length > 0 && (
+      {trendingSearches.length > 0 ? (
         <div>
           <div className='text-muted-foreground flex items-center gap-1 px-3 py-2 text-xs font-medium'>
             <IconTrendingUp className='h-3 w-3' />
-            Trending Searches
+            {t('trending')}
           </div>
           <div className='flex flex-wrap gap-2 px-3 pb-2'>
             {trendingSearches.map((query) => (
@@ -185,7 +195,7 @@ export function SearchSuggestionsPanel({
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

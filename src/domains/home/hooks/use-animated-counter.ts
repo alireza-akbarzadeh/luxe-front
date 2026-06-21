@@ -2,15 +2,22 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import type { Locale } from '@/i18n/config';
+import { formatLocaleDecimal, formatLocaleNumber } from '@/lib/i18n/format-number';
+
 interface UseAnimatedCounterOptions {
   end: number;
   duration?: number;
   decimals?: number;
   enabled?: boolean;
+  locale: Locale;
 }
 
-function formatCounterValue(value: number, decimals: number) {
-  return decimals > 0 ? value.toFixed(decimals) : Math.round(value).toLocaleString();
+function formatCounterValue(value: number, decimals: number, locale: Locale) {
+  if (decimals > 0) {
+    return formatLocaleDecimal(value, locale, decimals);
+  }
+  return formatLocaleNumber(Math.round(value), locale);
 }
 
 /** Animates a number when enabled (typically on scroll into view). */
@@ -18,7 +25,8 @@ export function useAnimatedCounter({
   end,
   duration = 1800,
   decimals = 0,
-  enabled = true
+  enabled = true,
+  locale
 }: UseAnimatedCounterOptions) {
   const [animatedValue, setAnimatedValue] = useState(0);
   const frameRef = useRef<number | null>(null);
@@ -62,5 +70,5 @@ export function useAnimatedCounter({
   }, [duration, enabled, end]);
 
   const value = enabled ? animatedValue : end;
-  return formatCounterValue(value, decimals);
+  return formatCounterValue(value, decimals, locale);
 }

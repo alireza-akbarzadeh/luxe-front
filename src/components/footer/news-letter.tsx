@@ -1,11 +1,16 @@
 'use client';
+
 import { IconArrowRight, IconCheck, IconMail } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import { getFooterNewsletterCopyParams } from '@/lib/i18n/marketing-copy-params';
 import { cn } from '@/lib/utils';
 
 export function Newsletter() {
+  const t = useTranslations('footer.newsletter');
+  const copy = getFooterNewsletterCopyParams();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
@@ -17,37 +22,39 @@ export function Newsletter() {
     }
     setStatus('loading');
 
-    const subject = encodeURIComponent('Luxe Edit newsletter signup');
-    const body = encodeURIComponent(`Please add me to the Luxe Edit newsletter:\n\n${email}`);
+    const subject = encodeURIComponent(t('mailtoSubject'));
+    const body = encodeURIComponent(t('mailtoBody', { email }));
     window.location.href = `mailto:concierge@luxe.com?subject=${subject}&body=${body}`;
 
     setStatus('success');
     setEmail('');
     setTimeout(() => setStatus('idle'), 3500);
   }
+
   return (
     <div className='border-border/60 from-card via-card to-muted/40 relative overflow-hidden rounded-3xl border bg-linear-to-br p-8 md:p-12'>
-      {/* Decorative orbs */}
       <div
         aria-hidden
-        className='bg-accent/20 absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl'
+        className='bg-accent/20 absolute -top-24 -end-24 h-72 w-72 rounded-full blur-3xl'
       />
       <div
         aria-hidden
-        className='bg-accent/10 absolute -bottom-24 -left-24 h-72 w-72 rounded-full blur-3xl'
+        className='bg-accent/10 absolute -bottom-24 -start-24 h-72 w-72 rounded-full blur-3xl'
       />
       <div className='relative grid gap-8 md:grid-cols-2 md:items-center'>
-        <div>
+        <div className='text-start'>
           <div className='border-border/60 bg-background/60 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium tracking-wide uppercase backdrop-blur'>
             <span className='bg-accent h-1.5 w-1.5 animate-pulse rounded-full' />
-            The Luxe Edit
+            {t('badge')}
           </div>
           <h3 className='mt-4 text-3xl font-semibold tracking-tight md:text-4xl'>
-            Get <span className='text-accent'>10% off</span> your first order
+            {t.rich('title', {
+              ...copy,
+              highlight: (chunks) => <span className='text-accent'>{chunks}</span>
+            })}
           </h3>
           <p className='text-muted-foreground mt-3 max-w-md text-sm md:text-base'>
-            Join 250,000+ insiders for early access to drops, private sales, and curated edits —
-            delivered weekly.
+            {t('description', copy)}
           </p>
         </div>
         <form onSubmit={handleSubmit} className='space-y-3'>
@@ -59,7 +66,7 @@ export function Newsletter() {
                 : 'border-border/60 focus-within:border-accent/60 focus-within:ring-accent/20 focus-within:ring-2'
             )}
           >
-            <IconMail className='text-muted-foreground ml-3 size-5 shrink-0' />
+            <IconMail className='text-muted-foreground ms-3 size-5 shrink-0' />
             <input
               type='email'
               value={email}
@@ -67,9 +74,10 @@ export function Newsletter() {
                 setEmail(e.target.value);
                 if (status === 'error') setStatus('idle');
               }}
-              placeholder='you@domain.com'
-              aria-label='Email address'
+              placeholder={t('emailPlaceholder')}
+              aria-label={t('emailAriaLabel')}
               className='placeholder:text-muted-foreground flex-1 bg-transparent px-1 py-2 text-sm outline-none'
+              dir='ltr'
             />
             <button
               type='submit'
@@ -79,37 +87,35 @@ export function Newsletter() {
               {status === 'success' ? (
                 <>
                   <IconCheck className='size-4' />
-                  Subscribed
+                  {t('subscribed')}
                 </>
               ) : status === 'loading' ? (
                 <>
                   <span className='border-background/30 border-t-background size-4 animate-spin rounded-full border-2' />
-                  Joining
+                  {t('joining')}
                 </>
               ) : (
                 <>
-                  Subscribe
-                  <IconArrowRight className='size-4 transition-transform group-focus-within:translate-x-0.5' />
+                  {t('subscribe')}
+                  <IconArrowRight className='cn-rtl-flip size-4 transition-transform group-focus-within:translate-x-0.5 rtl:group-focus-within:-translate-x-0.5' />
                 </>
               )}
             </button>
           </div>
           <p
-            className={cn('text-xs', status === 'error' ? 'text-red-500' : 'text-muted-foreground')}
+            className={cn('text-xs text-start', status === 'error' ? 'text-red-500' : 'text-muted-foreground')}
           >
             {status === 'error'
-              ? 'Please enter a valid email address.'
+              ? t('errorInvalidEmail')
               : status === 'success'
-                ? 'Your email app should open — send the message to complete signup.'
-                : (
-                    <>
-                      Opens your email app to subscribe. Or{' '}
+                ? t('successHint')
+                : t.rich('idleHint', {
+                    link: (chunks) => (
                       <Link href='/register' className='text-accent hover:underline'>
-                        create an account
-                      </Link>{' '}
-                      for order updates.
-                    </>
-                  )}
+                        {chunks}
+                      </Link>
+                    )
+                  })}
           </p>
         </form>
       </div>

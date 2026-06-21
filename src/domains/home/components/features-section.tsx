@@ -8,7 +8,7 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-import { features } from '../lib/home-mock-data';
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
 
@@ -20,13 +20,15 @@ const iconMap = {
 } as const;
 
 export function FeaturesSection() {
+  const { features, t } = useHomeContent();
+
   return (
     <section id='features' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Shopping experience'
-          title='Why shoppers choose LUXE'
-          description='Every touchpoint — from discovery to delivery — is designed to feel premium, transparent, and effortless.'
+          eyebrow={t('features.eyebrow')}
+          title={t('features.title')}
+          description={t('features.description')}
         />
 
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5'>

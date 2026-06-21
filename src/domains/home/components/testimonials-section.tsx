@@ -4,22 +4,24 @@ import { IconQuote, IconStar } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-import { testimonials } from '../lib/home-mock-data';
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
 
 export function TestimonialsSection() {
+  const { testimonialItems, t } = useHomeContent();
+
   return (
     <section id='testimonials' className='bg-secondary/30 py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Customer stories'
-          title='Loved by thousands'
-          description='Editorial highlights from our community. Live product reviews appear on each product page.'
+          eyebrow={t('testimonials.eyebrow')}
+          title={t('testimonials.title')}
+          description={t('testimonials.description')}
         />
 
         <div className='custom-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-5 lg:overflow-visible lg:px-0 xl:grid-cols-4'>
-          {testimonials.map((testimonial, index) => (
+          {testimonialItems.map((testimonial, index) => (
             <motion.blockquote
               key={testimonial.id}
               initial={{ opacity: 0, y: 20 }}
@@ -29,7 +31,10 @@ export function TestimonialsSection() {
               className='bg-card border-border/60 w-[85vw] shrink-0 snap-start rounded-2xl border p-6 shadow-sm sm:w-[70vw] md:w-[45vw] lg:w-auto'
             >
               <IconQuote className='text-muted-foreground/25 h-8 w-8' aria-hidden />
-              <div className='mt-4 flex gap-0.5' aria-label={`${testimonial.rating} out of 5 stars`}>
+              <div
+                className='mt-4 flex gap-0.5'
+                aria-label={t('common.starsRating', { rating: testimonial.rating })}
+              >
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
                   <IconStar key={i} className='fill-accent text-accent h-4 w-4' />
                 ))}

@@ -8,33 +8,35 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { COLLECTION_BANNERS } from '../lib/home-mock-data';
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 
 export function CollectionBanner() {
+  const { collectionBanners, t } = useHomeContent();
+
   return (
     <section className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <div className='mb-8 flex flex-wrap items-end justify-between gap-4'>
           <div>
             <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
-              Collections
+              {t('collections.eyebrow')}
             </p>
             <h2 className='font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl'>
-              Curated edits
+              {t('collections.title')}
             </h2>
           </div>
           <Link
             href='/collections'
             className='text-accent inline-flex items-center gap-1 text-sm font-medium hover:underline'
           >
-            View all collections
-            <IconArrowRight className='h-4 w-4' />
+            {t('collections.viewAll')}
+            <IconArrowRight className='cn-rtl-flip h-4 w-4' />
           </Link>
         </div>
 
         <div className='grid gap-4 sm:gap-5 lg:grid-cols-2 lg:gap-6'>
-          {COLLECTION_BANNERS.map((banner, index) => (
+          {collectionBanners.map((banner, index) => (
             <motion.article
               key={banner.id}
               initial={{ opacity: 0, y: 24 }}
@@ -70,7 +72,7 @@ export function CollectionBanner() {
                   )}
                 >
                   {banner.cta}
-                  <IconArrowRight className='ml-2 h-4 w-4' />
+                  <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4' />
                 </Link>
               </div>
             </motion.article>

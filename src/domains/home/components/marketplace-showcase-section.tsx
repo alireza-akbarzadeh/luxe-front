@@ -2,20 +2,22 @@
 
 import { IconStar } from '@tabler/icons-react';
 
-import { HOME_MARKETPLACE_BENEFITS } from '../lib/home-mock-data';
+import { useHomeContent } from '../hooks/use-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
 import { HomeFadeIn } from './ui/home-fade-in';
 
 export function MarketplaceShowcaseSection() {
+  const { marketplaceBenefits, marketplaceTiles, marketingCopy, t } = useHomeContent();
+
   return (
     <section id='marketplace' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <HomeFadeIn>
           <SectionHeader
-            eyebrow='The marketplace'
-            title='One premium destination for modern shopping'
-            description='LUXE brings together independent brands, curated collections, and a shopping experience designed to feel effortless from discovery to delivery.'
+            eyebrow={t('marketplace.eyebrow')}
+            title={t('marketplace.title')}
+            description={t('marketplace.description')}
           />
         </HomeFadeIn>
 
@@ -34,13 +36,17 @@ export function MarketplaceShowcaseSection() {
               <div className='relative space-y-6'>
                 <div>
                   <p className='text-muted-foreground text-xs font-medium tracking-widest uppercase'>
-                    Live marketplace
+                    {t('marketplace.liveLabel')}
                   </p>
-                  <p className='font-display mt-2 text-4xl font-semibold tracking-tight'>2,400+</p>
-                  <p className='text-muted-foreground text-sm'>Products across 120+ brands</p>
+                  <p className='font-display mt-2 text-4xl font-semibold tracking-tight'>
+                    {t('marketplace.productCount', marketingCopy.marketplace)}
+                  </p>
+                  <p className='text-muted-foreground text-sm'>
+                    {t('marketplace.productSubtext', marketingCopy.marketplace)}
+                  </p>
                 </div>
                 <div className='grid grid-cols-2 gap-3'>
-                  {['Stores', 'Collections', 'Reviews', 'Checkout'].map((label) => (
+                  {marketplaceTiles.map((label) => (
                     <div
                       key={label}
                       className='border-border/40 bg-background/60 rounded-2xl border px-4 py-3 text-sm font-medium backdrop-blur'
@@ -54,8 +60,8 @@ export function MarketplaceShowcaseSection() {
                     <IconStar className='size-5 fill-current' />
                   </div>
                   <div>
-                    <p className='text-sm font-semibold'>4.9 average store rating</p>
-                    <p className='text-muted-foreground text-xs'>From verified buyer reviews</p>
+                    <p className='text-sm font-semibold'>{t('marketplace.ratingTitle', marketingCopy.marketplace)}</p>
+                    <p className='text-muted-foreground text-xs'>{t('marketplace.ratingSubtext')}</p>
                   </div>
                 </div>
               </div>
@@ -63,7 +69,7 @@ export function MarketplaceShowcaseSection() {
           </HomeFadeIn>
 
           <div className='grid gap-4 sm:grid-cols-2'>
-            {HOME_MARKETPLACE_BENEFITS.map((benefit, index) => (
+            {marketplaceBenefits.map((benefit, index) => (
               <HomeFadeIn key={benefit.title} delay={0.08 + index * 0.05}>
                 <article className='border-border/50 bg-card/50 hover:border-border h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg'>
                   <h3 className='font-display text-lg font-semibold'>{benefit.title}</h3>

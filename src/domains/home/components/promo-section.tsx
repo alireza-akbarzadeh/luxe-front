@@ -7,8 +7,10 @@ import Link from 'next/link';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useCountdown } from '@/hooks/useCountdown';
+import { formatLocaleCountdownUnit } from '@/lib/i18n/format-number';
 import { cn } from '@/lib/utils';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { CATEGORY_IMAGES } from '../lib/home-mock-data';
 import { sectionContainerClass } from '../lib/home-utils';
 
@@ -16,12 +18,14 @@ const PROMO_END = new Date('2026-06-30T23:59:59');
 const PROMO_IMAGE = CATEGORY_IMAGES.lifestyle;
 
 export function PromoSection() {
+  const { locale, marketingCopy, t } = useHomeContent();
   const { hours, minutes, seconds } = useCountdown(PROMO_END);
+  const promoCode = t('promo.code');
 
   const countdownItems = [
-    { value: String(hours).padStart(2, '0'), label: 'Hours' },
-    { value: String(minutes).padStart(2, '0'), label: 'Min' },
-    { value: String(seconds).padStart(2, '0'), label: 'Sec' }
+    { value: formatLocaleCountdownUnit(hours, locale), label: t('promo.countdown.hours') },
+    { value: formatLocaleCountdownUnit(minutes, locale), label: t('promo.countdown.minutes') },
+    { value: formatLocaleCountdownUnit(seconds, locale), label: t('promo.countdown.seconds') }
   ];
 
   return (
@@ -38,7 +42,7 @@ export function PromoSection() {
             <div className='relative min-h-[14rem] lg:min-h-full'>
               <Image
                 src={PROMO_IMAGE}
-                alt='Curated seasonal sale collection'
+                alt={t('common.promoImageAlt')}
                 fill
                 className='object-cover'
                 sizes='(max-width: 1024px) 100vw, 50vw'
@@ -54,17 +58,14 @@ export function PromoSection() {
 
               <span className='border-gold/30 bg-surface/90 text-foreground dark:bg-muted/50 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium backdrop-blur-sm'>
                 <IconTag className='text-gold h-3.5 w-3.5' />
-                Limited time
+                {t('promo.badge')}
               </span>
 
               <h2 className='font-display text-foreground mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
-                30% off your first order
+                {t('promo.title', marketingCopy.promo)}
               </h2>
               <p className='text-muted-foreground mt-4 max-w-md text-sm leading-relaxed sm:text-base'>
-                Join the LUXE community and unlock exclusive access to private sales, early drops,
-                and member-only styling sessions. Use code{' '}
-                <span className='text-gold-strong dark:text-gold font-semibold'>WELCOME30</span> at
-                checkout.
+                {t('promo.description', { code: promoCode })}
               </p>
 
               <div className='mt-8 flex flex-wrap gap-3 sm:gap-4'>
@@ -91,8 +92,8 @@ export function PromoSection() {
                     'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8 shadow-sm'
                   )}
                 >
-                  Shop the sale
-                  <IconArrowRight className='ml-2 h-4 w-4' />
+                  {t('promo.shopSale')}
+                  <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4' />
                 </Link>
                 <Button
                   variant='outline'
@@ -100,7 +101,7 @@ export function PromoSection() {
                   className='border-border text-foreground hover:bg-muted/70 dark:hover:bg-muted/40 h-12 rounded-full px-8'
                   asChild
                 >
-                  <Link href='/register'>Create account</Link>
+                  <Link href='/register'>{t('promo.createAccount')}</Link>
                 </Button>
               </div>
             </div>

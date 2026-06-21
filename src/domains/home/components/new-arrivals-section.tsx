@@ -3,11 +3,13 @@
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetProducts } from '~/src/services/-products-get';
 
+import { useHomeContent } from '../hooks/use-home-content';
 import { mapProductForCard, resolveProducts, sectionContainerClass } from '../lib/home-utils';
 import { ProductGridSkeleton } from './product-grid-skeleton';
 import { SectionHeader } from './section-header';
 
 export function NewArrivalsSection() {
+  const { t } = useHomeContent();
   const { data, isLoading, isError } = useGetProducts(
     {
       status: 'active',
@@ -27,27 +29,24 @@ export function NewArrivalsSection() {
     }
   );
 
-  // Now data is already transformed and limited to 5 products
-  const products = data ?? []; // No need for useMemo anymore
-
-  // Check if we're using mock data
+  const products = data ?? [];
   const usingMock = isError || !data?.length;
 
   return (
     <section className='border-border/50 border-y py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <SectionHeader
-          eyebrow='Just dropped'
-          title='New arrivals'
-          description='Fresh finds added weekly — be first to shop limited releases and seasonal colorways.'
+          eyebrow={t('newArrivals.eyebrow')}
+          title={t('newArrivals.title')}
+          description={t('newArrivals.description')}
           href='/shop?sortBy=newest'
-          linkLabel='See all new'
+          linkLabel={t('newArrivals.linkLabel')}
           align='left'
         />
 
         {usingMock && !isLoading && (
           <p className='text-muted-foreground -mt-6 mb-6 text-sm sm:mb-8'>
-            Showing curated picks while we connect to the catalog.
+            {t('common.catalogMockNotice')}
           </p>
         )}
 
@@ -55,8 +54,6 @@ export function NewArrivalsSection() {
           <ProductGridSkeleton count={5} columns={5} />
         ) : (
           <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 lg:gap-4'>
-            {' '}
-            {/* Changed to grid-cols-5 */}
             {products.map((product, index) => (
               <ProductCard
                 key={product.id ?? index}

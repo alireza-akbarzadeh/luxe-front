@@ -3,6 +3,7 @@
 import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 
@@ -21,10 +22,12 @@ export function SectionHeader({
   title,
   description,
   href,
-  linkLabel = 'View all',
+  linkLabel,
   align = 'center',
   className
 }: SectionHeaderProps) {
+  const t = useTranslations('home');
+  const resolvedLinkLabel = linkLabel ?? t('common.viewAll');
   const isCenter = align === 'center';
 
   return (
@@ -35,36 +38,36 @@ export function SectionHeader({
       transition={{ duration: 0.5 }}
       className={cn(
         'mb-10 flex flex-col gap-4 md:mb-14',
-        isCenter ? 'items-center text-center' : 'items-start text-left',
+        isCenter ? 'items-center text-center' : 'items-start text-start',
         href && !isCenter && 'md:flex-row md:items-end md:justify-between',
         className
       )}
     >
       <div className={cn('max-w-2xl', isCenter && 'mx-auto')}>
-        {eyebrow && (
+        {eyebrow ? (
           <span className='text-accent mb-3 inline-block text-xs font-semibold tracking-[0.2em] uppercase'>
             {eyebrow}
           </span>
-        )}
+        ) : null}
         <h2 className='font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]'>
           {title}
         </h2>
-        {description && (
+        {description ? (
           <p className='text-muted-foreground mt-3 text-base leading-relaxed sm:text-lg'>
             {description}
           </p>
-        )}
+        ) : null}
       </div>
 
-      {href && (
+      {href ? (
         <Link
           href={href}
           className='text-foreground hover:text-accent group flex-start shrink-0 gap-2 text-sm font-medium transition-colors'
         >
-          {linkLabel}
-          <IconArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-0.5' />
+          {resolvedLinkLabel}
+          <IconArrowRight className='cn-rtl-flip h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
         </Link>
-      )}
+      ) : null}
     </motion.div>
   );
 }

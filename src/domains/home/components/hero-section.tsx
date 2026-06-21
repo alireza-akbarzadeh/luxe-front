@@ -10,7 +10,8 @@ import { getProductPath } from '@/domains/product/lib/product-routes';
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '~/src/services/-products-get';
 
-import { HERO_FALLBACK_IMAGE, HERO_TRUST_AVATARS, HOME_STATS } from '../lib/home-mock-data';
+import { useHomeContent } from '../hooks/use-home-content';
+import { HERO_FALLBACK_IMAGE, HERO_TRUST_AVATARS } from '../lib/home-mock-data';
 import {
   formatPrice,
   fullBleedClass,
@@ -31,6 +32,7 @@ const itemVariants = {
 };
 
 export function HeroSection() {
+  const { heroStats, marketingCopy, t } = useHomeContent();
   const { data } = useGetProducts({
     status: 'active',
     limit: 3,
@@ -44,14 +46,11 @@ export function HeroSection() {
 
   return (
     <section className={`${fullBleedClass} relative overflow-hidden`}>
-      {/* Warm luxury base wash */}
       <div className='from-background via-background to-surface absolute inset-0 bg-linear-to-b' />
 
-      {/* Gold geometric glow accents */}
       <div className='bg-gold/10 dark:bg-gold/15 pointer-events-none absolute -top-32 right-0 h-112 w-md rounded-full blur-3xl' />
       <div className='bg-gold/8 pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full blur-3xl' />
 
-      {/* Subtle geometric grid pattern in accent tone */}
       <div
         aria-hidden
         className='pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.06]'
@@ -71,7 +70,7 @@ export function HeroSection() {
             variants={containerVariants}
             initial='hidden'
             animate='show'
-            className='text-center lg:col-span-6 lg:text-left'
+            className='text-center lg:col-span-6 lg:text-start'
           >
             <motion.div
               variants={itemVariants}
@@ -79,32 +78,31 @@ export function HeroSection() {
             >
               <IconSparkles className='text-gold h-4 w-4' />
               <span className='text-gold-strong dark:text-gold tracking-wide'>
-                Spring / Summer 2026
+                {t('hero.seasonBadge', marketingCopy.hero)}
               </span>
-              <span className='text-muted-foreground'>— Now live</span>
+              <span className='text-muted-foreground'>— {t('hero.seasonLive')}</span>
             </motion.div>
 
             <motion.h1
               variants={itemVariants}
               className='font-display text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl xl:text-[5.25rem]'
             >
-              Curated luxury for
-              <span className='text-gold-gradient mt-1 block italic'>everyday life</span>
+              {t('hero.titleLine1')}
+              <span className='text-gold-gradient mt-1 block italic'>{t('hero.titleLine2')}</span>
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
               className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg lg:mx-0'
             >
-              Discover designer-grade fashion, home, and lifestyle from verified independent stores
-              — curated for quality, sustainability, and timeless style.
+              {t('hero.description')}
             </motion.p>
 
             <motion.div
               variants={itemVariants}
               className='mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start'
             >
-              <div className='flex -space-x-2'>
+              <div className='flex -space-x-2 rtl:space-x-reverse'>
                 {HERO_TRUST_AVATARS.map((src, i) => (
                   <div
                     key={src}
@@ -115,7 +113,7 @@ export function HeroSection() {
                   </div>
                 ))}
               </div>
-              <div className='text-center sm:text-left'>
+              <div className='text-center sm:text-start'>
                 <div className='flex items-center justify-center gap-1 sm:justify-start'>
                   {Array.from({ length: 5 }).map((_, i) => (
                     <IconStar
@@ -124,11 +122,9 @@ export function HeroSection() {
                       aria-hidden
                     />
                   ))}
-                  <span className='ml-1 text-sm font-semibold'>4.9</span>
+                  <span className='ms-1 text-sm font-semibold'>{t('hero.ratingValue', marketingCopy.hero)}</span>
                 </div>
-                <p className='text-muted-foreground text-xs sm:text-sm'>
-                  Trusted by 50,000+ shoppers
-                </p>
+                <p className='text-muted-foreground text-xs sm:text-sm'>{t('hero.socialProof', marketingCopy.hero)}</p>
               </div>
             </motion.div>
 
@@ -143,8 +139,8 @@ export function HeroSection() {
                   'group h-12 rounded-full px-8 text-base shadow-lg sm:h-14'
                 )}
               >
-                Shop new arrivals
-                <IconArrowRight className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5' />
+                {t('hero.shopNewArrivals')}
+                <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
               </Link>
               <Button
                 variant='outline'
@@ -152,7 +148,7 @@ export function HeroSection() {
                 className='border-gold/40 hover:border-gold hover:text-gold-strong dark:hover:text-gold bg-card/50 h-12 rounded-full px-8 text-base backdrop-blur-sm transition-colors sm:h-14'
                 asChild
               >
-                <Link href='/collection'>Explore collections</Link>
+                <Link href='/collection'>{t('hero.exploreCollections')}</Link>
               </Button>
             </motion.div>
 
@@ -160,8 +156,8 @@ export function HeroSection() {
               variants={itemVariants}
               className='border-gold/15 mt-12 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4 lg:gap-6'
             >
-              {HOME_STATS.map((stat) => (
-                <dl key={stat.label} className='text-left'>
+              {heroStats.map((stat) => (
+                <dl key={stat.label} className='text-start'>
                   <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
                   <dd className='text-muted-foreground mt-1 text-xs tracking-wide sm:text-sm'>
                     {stat.label}
@@ -173,7 +169,7 @@ export function HeroSection() {
               variants={itemVariants}
               className='text-muted-foreground/80 mt-3 text-[11px] tracking-wide'
             >
-              Marketplace highlights · updated seasonally
+              {t('hero.statsFootnote')}
             </motion.p>
           </motion.div>
 
@@ -187,7 +183,7 @@ export function HeroSection() {
               <div className='border-gold/20 relative col-span-7 aspect-4/5 overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl'>
                 <Image
                   src={heroImage}
-                  alt='Featured collection'
+                  alt={t('common.featuredCollectionAlt')}
                   fill
                   priority
                   sizes='(max-width: 1024px) 60vw, 35vw'
@@ -196,14 +192,14 @@ export function HeroSection() {
                 <div className='from-foreground/70 absolute inset-0 bg-linear-to-t via-transparent to-transparent' />
                 <div className='absolute right-0 bottom-0 left-0 p-4 sm:p-5'>
                   <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>
-                    Editor&apos;s pick
+                    {t('hero.editorsPick')}
                   </p>
                   <p className='text-primary-foreground font-display mt-1 text-lg font-medium sm:text-xl'>
-                    {spotlight[0]?.name ?? 'The Signature Edit'}
+                    {spotlight[0]?.name ?? t('hero.signatureEditFallback')}
                   </p>
                   {spotlightPrice !== undefined && (
                     <p className='text-primary-foreground/90 mt-1 text-sm'>
-                      From {formatPrice(spotlightPrice)}
+                      {t('common.fromPrice', { price: formatPrice(spotlightPrice) })}
                     </p>
                   )}
                 </div>
@@ -218,7 +214,7 @@ export function HeroSection() {
                   >
                     <Image
                       src={product?.images?.[0] ?? HERO_FALLBACK_IMAGE}
-                      alt={product?.name ?? 'Product'}
+                      alt={product?.name ?? t('common.productAlt')}
                       fill
                       priority={index === 0}
                       sizes='25vw'
@@ -239,7 +235,7 @@ export function HeroSection() {
                     >
                       <Image
                         src={HERO_FALLBACK_IMAGE}
-                        alt='Collection preview'
+                        alt={t('common.collectionPreviewAlt')}
                         fill
                         className='object-cover opacity-60'
                       />
@@ -248,7 +244,6 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Floating product badge with animated pulse ring */}
             <motion.div
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -260,10 +255,10 @@ export function HeroSection() {
                 <span className='bg-gold/30 absolute inset-0 animate-pulse rounded-full blur-md' />
                 <div className='bg-gold text-gold-foreground relative flex h-20 w-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:h-24 sm:w-24'>
                   <span className='font-display text-base leading-none font-bold sm:text-lg'>
-                    New
+                    {t('hero.newSeasonBadge')}
                   </span>
                   <span className='mt-0.5 text-[0.6rem] font-semibold tracking-[0.2em] uppercase'>
-                    Season
+                    {t('hero.seasonBadgeSub')}
                   </span>
                 </div>
               </div>

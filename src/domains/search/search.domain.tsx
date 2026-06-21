@@ -2,6 +2,7 @@
 
 import { IconClock, IconFilter2 } from '@tabler/icons-react';
 import { useQueries } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +25,7 @@ import { useSearchStore } from './search.store';
 import { buildSearchQueryParams } from './search.utils';
 
 export default function SearchDomain() {
+  const t = useTranslations('search');
   const searchParams = useSearchParams();
   const searchStore = useSearchStore();
 
@@ -36,25 +38,53 @@ export default function SearchDomain() {
     ? categoriesList.find((c) => c.name === searchParams.categories[0])?.slug
     : undefined;
 
+  const {
+    page,
+    perPage,
+    query,
+    categories: selectedCategories,
+    stores: selectedStores,
+    sortBy,
+    priceRange,
+    minRating,
+    inStock,
+    onSale,
+    isNew,
+    isDigital
+  } = searchParams;
+
   const searchQueryParams = useMemo(
     () =>
-      buildSearchQueryParams(searchParams, {
-        id: categoryId,
-        slug: categorySlug
-      }),
+      buildSearchQueryParams(
+        {
+          query,
+          page,
+          perPage,
+          categories: selectedCategories,
+          stores: selectedStores,
+          sortBy,
+          priceRange,
+          minRating,
+          inStock,
+          onSale,
+          isNew,
+          isDigital
+        },
+        { id: categoryId, slug: categorySlug }
+      ),
     [
-      searchParams.page,
-      searchParams.perPage,
-      searchParams.query,
-      searchParams.categories,
-      searchParams.stores,
-      searchParams.sortBy,
-      searchParams.priceRange,
-      searchParams.minRating,
-      searchParams.inStock,
-      searchParams.onSale,
-      searchParams.isNew,
-      searchParams.isDigital,
+      page,
+      perPage,
+      query,
+      selectedCategories,
+      selectedStores,
+      sortBy,
+      priceRange,
+      minRating,
+      inStock,
+      onSale,
+      isNew,
+      isDigital,
       categoryId,
       categorySlug
     ]
@@ -97,9 +127,9 @@ export default function SearchDomain() {
       <>
         <SearchHero />
         <div className='py-20 text-center'>
-          <p className='text-destructive'>Failed to load search results. Please try again.</p>
+          <p className='text-destructive'>{t('error.loadFailed')}</p>
           <Button variant='outline' className='mt-4' onClick={() => refetch()}>
-            Retry
+            {t('error.retry')}
           </Button>
         </div>
       </>
@@ -115,12 +145,12 @@ export default function SearchDomain() {
             <div className='bg-card sticky top-24 rounded-2xl border p-6'>
               <h2 className='mb-4 flex items-center gap-2 font-semibold'>
                 <IconFilter2 className='h-4 w-4' />
-                Filters
-                {searchParams.activeFilterCount > 0 && (
-                  <Badge variant='secondary' className='ml-auto'>
+                {t('filters.title')}
+                {searchParams.activeFilterCount > 0 ? (
+                  <Badge variant='secondary' className='ms-auto'>
                     {searchParams.activeFilterCount}
                   </Badge>
-                )}
+                ) : null}
               </h2>
               <SearchFilterContent categories={categories} stores={stores} products={products} />
             </div>
@@ -155,10 +185,10 @@ export default function SearchDomain() {
             <div className='mb-6 flex items-center justify-between'>
               <h2 className='flex items-center gap-2 text-xl font-semibold'>
                 <IconClock className='h-5 w-5' />
-                Recently Viewed
+                {t('recentlyViewed.title')}
               </h2>
               <Button variant='ghost' size='sm' onClick={searchStore.clearRecentlyViewedProducts}>
-                Clear
+                {t('recentlyViewed.clear')}
               </Button>
             </div>
             <div className='grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
