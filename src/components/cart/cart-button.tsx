@@ -2,6 +2,7 @@
 
 import { IconShoppingBag } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { navbarActionButtonClassName } from '@/components/navbar/navbar-action-button';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,10 @@ interface CartButtonProps {
 export function CartButton({ showLabel = false }: CartButtonProps) {
   const { itemCount } = useCartController();
   const openCart = useCartStore((state) => state.openCart);
+  const t = useTranslations('common');
+
+  const ariaLabel =
+    itemCount > 0 ? t('openCartWithCount', { count: itemCount }) : t('openCart');
 
   return (
     <Button
@@ -29,11 +34,13 @@ export function CartButton({ showLabel = false }: CartButtonProps) {
           : cn(navbarActionButtonClassName, 'relative'),
         showLabel && 'h-10'
       )}
-      aria-label={`Open cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
+      aria-label={ariaLabel}
     >
       <IconShoppingBag className='size-5' stroke={1.75} />
 
-      {showLabel ? <span className='hidden text-sm font-medium sm:inline-block'>Cart</span> : null}
+      {showLabel ? (
+        <span className='hidden text-sm font-medium sm:inline-block'>{t('cart')}</span>
+      ) : null}
 
       <AnimatePresence mode='popLayout'>
         {itemCount > 0 ? (
@@ -42,8 +49,8 @@ export function CartButton({ showLabel = false }: CartButtonProps) {
             className={cn(
               'bg-gold text-gold-foreground ring-background absolute flex items-center justify-center rounded-full text-[10px] font-bold shadow-sm ring-2',
               showLabel
-                ? '-top-0.5 -right-0.5 h-4 min-w-4 px-1'
-                : 'top-1 right-1 h-4 min-w-4 px-0.5'
+                ? '-top-0.5 -end-0.5 h-4 min-w-4 px-1'
+                : 'top-1 end-1 h-4 min-w-4 px-0.5'
             )}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

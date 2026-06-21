@@ -9,12 +9,16 @@ import { Toaster } from '@/components/ui/sonner';
 import { DirectionProvider } from '../ui/direction';
 import TanstackQueryProvider from './client/tanstack-query';
 
-type TRootProvider = Readonly<PropsWithChildren>;
+type TRootProvider = Readonly<
+  PropsWithChildren<{
+    dir: 'ltr' | 'rtl';
+  }>
+>;
 
-export default function RootProvider({ children }: TRootProvider) {
+export default function RootProvider({ children, dir }: TRootProvider) {
   return (
     <ThemeProvider defaultTheme='system'>
-      <DirectionProvider dir='ltr'>
+      <DirectionProvider dir={dir}>
         <NuqsAdapter>
           <Toaster />
           <TanstackQueryProvider>

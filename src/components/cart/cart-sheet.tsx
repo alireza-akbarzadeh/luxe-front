@@ -3,6 +3,7 @@
 import { IconArrowRight, IconRefresh, IconShoppingBag } from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -48,6 +49,8 @@ export function CartSheet() {
   const isOpen = useCartStore((s) => s.isOpen);
   const setOpen = useCartStore((s) => s.setOpen);
   const closeCart = useCartStore((s) => s.closeCart);
+  const t = useTranslations('common');
+  const tCart = useTranslations('cart');
 
   const { isAuthenticated } = useUser();
   const { items, isLoading, error, refetch, itemCount, subtotal, updatingItemId, removingItemId } =
@@ -65,7 +68,7 @@ export function CartSheet() {
           <div className='flex items-start justify-between gap-3'>
             <div>
               <SheetTitle className='font-display text-xl'>
-                Your cart{itemCount > 0 ? ` · ${itemCount}` : ''}
+                {itemCount > 0 ? tCart('titleWithCount', { count: itemCount }) : tCart('sheetTitle')}
               </SheetTitle>
               {isAuthenticated && itemCount > 0 ? (
                 <p className='text-muted-foreground mt-1 text-sm'>
@@ -96,20 +99,20 @@ export function CartSheet() {
               <IconShoppingBag className='text-muted-foreground size-8' />
             </div>
             <div className='space-y-1'>
-              <p className='font-display text-lg font-semibold'>Sign in to view your cart</p>
+              <p className='font-display text-lg font-semibold'>{tCart('signInTitle')}</p>
               <p className='text-muted-foreground text-sm leading-relaxed'>
-                Save items across devices, track orders, and checkout securely.
+                {tCart('signInDescriptionAlt')}
               </p>
             </div>
             <div className='flex w-full max-w-xs flex-col gap-2'>
               <Button asChild className='rounded-full' onClick={closeCart}>
                 <Link href='/login?callbackUrl=/cart'>
-                  Sign in
-                  <IconArrowRight className='size-4' />
+                  {t('signIn')}
+                  <IconArrowRight className='cn-rtl-flip size-4' />
                 </Link>
               </Button>
               <Button asChild variant='outline' className='rounded-full' onClick={closeCart}>
-                <Link href='/shop'>Continue shopping</Link>
+                <Link href='/shop'>{t('continueShopping')}</Link>
               </Button>
             </div>
           </div>
@@ -131,15 +134,15 @@ export function CartSheet() {
               <IconShoppingBag className='text-muted-foreground size-8' />
             </div>
             <div className='space-y-1'>
-              <p className='font-display text-lg font-semibold'>Your cart is empty</p>
+              <p className='font-display text-lg font-semibold'>{tCart('emptyTitle')}</p>
               <p className='text-muted-foreground text-sm'>
-                Discover curated pieces designed to last — start building your collection.
+                {tCart('emptyDescriptionAlt')}
               </p>
             </div>
             <Button asChild className='mt-1 rounded-full' onClick={closeCart}>
               <Link href='/shop'>
-                Continue shopping
-                <IconArrowRight className='size-4' />
+                {t('continueShopping')}
+                <IconArrowRight className='cn-rtl-flip size-4' />
               </Link>
             </Button>
           </div>
@@ -169,7 +172,7 @@ export function CartSheet() {
 
                 <div className='space-y-2 text-sm'>
                   <div className='flex justify-between'>
-                    <span className='text-muted-foreground'>Subtotal</span>
+                    <span className='text-muted-foreground'>{tCart('subtotal')}</span>
                     <span className={cartMoneyClassName}>{formatCartMoney(subtotal)}</span>
                   </div>
                   {totalDiscount > 0 ? (
@@ -201,7 +204,7 @@ export function CartSheet() {
                 <Separator />
 
                 <div className='flex items-center justify-between'>
-                  <span className='font-semibold'>Estimated total</span>
+                  <span className='font-semibold'>{tCart('estimatedTotal')}</span>
                   <span className={cn('text-xl font-semibold', cartMoneyClassName)}>
                     {formatCartMoney(total)}
                   </span>
@@ -228,8 +231,8 @@ export function CartSheet() {
                     disabled={itemCount === 0}
                     onClick={() => proceedToCheckout(closeCart)}
                   >
-                    Proceed to checkout
-                    <IconArrowRight className='size-4' />
+                    {t('proceedToCheckout')}
+                    <IconArrowRight className='cn-rtl-flip size-4' />
                   </Button>
                   <div className='grid grid-cols-2 gap-2'>
                     <Button

@@ -1,0 +1,93 @@
+{
+  "common": {
+    "search": "جستجو",
+    "wishlist": "علاقه‌مندی‌ها",
+    "cart": "سبد خرید",
+    "openCart": "باز کردن سبد خرید",
+    "openCartWithCount": "باز کردن سبد خرید، {count} قلم",
+    "signIn": "ورود",
+    "continueShopping": "ادامه خرید",
+    "proceedToCheckout": "ادامه به پرداخت",
+    "backToTop": "بازگشت به بالا"
+  },
+  "nav": {
+    "openMenu": "باز کردن منو",
+    "closeMenu": "بستن منو"
+  },
+  "language": {
+    "label": "زبان",
+    "en": "انگلیسی",
+    "es": "اسپانیایی",
+    "fa": "فارسی"
+  },
+  "cart": {
+    "signInTitle": "برای مشاهده سبد خرید وارد شوید",
+    "signInDescription": "کالاها را در همه دستگاه‌ها ذخیره کنید و با ورود سریع‌تر پرداخت کنید.",
+    "signInDescriptionAlt": "کالاها را در همه دستگاه‌ها ذخیره کنید، سفارش‌ها را پیگیری کنید و امن پرداخت کنید.",
+    "emptyTitle": "سبد خرید شما خالی است",
+    "emptyDescription": "قطعات منتخب از برندهای لوکس مستقل را کشف کنید.",
+    "emptyDescriptionAlt": "قطعات منتخب ماندگار را کشف کنید — مجموعه خود را بسازید.",
+    "sheetTitle": "سبد خرید",
+    "titleWithCount": "سبد خرید · {count}",
+    "subtotal": "جمع جزء",
+    "estimatedTotal": "جمع تقریبی",
+    "taxNote": "مالیات و هزینه ارسال در مرحله پرداخت محاسبه می‌شود."
+  },
+  "footer": {
+    "tagline": "بازارچه چندفروشنده‌ای منتخب برای طراحی ماندگار، کیفیت برتر و برندهای لوکس مستقل — همه در یک جا.",
+    "followUs": "ما را دنبال کنید",
+    "shopOnTheGoTitle": "خرید در هر مکان",
+    "shopOnTheGoDescription": "اپلیکیشن لوکس را برای پیش‌فروش‌های اختصاصی و پیگیری سفارش دریافت کنید.",
+    "downloadOn": "دانلود از",
+    "appStore": "App Store",
+    "getItOn": "دریافت از",
+    "googlePlay": "Google Play",
+    "copyright": "© {year} Luxe Marketplace, Inc. تمامی حقوق محفوظ است.",
+    "secureCheckout": "پرداخت امن · SSL 256 بیتی",
+    "sections": {
+      "shop": "فروشگاه",
+      "stores": "فروشگاه‌ها",
+      "help": "راهنما و پشتیبانی",
+      "company": "شرکت"
+    },
+    "links": {
+      "newArrivals": "تازه‌ها",
+      "bestSellers": "پرفروش‌ها",
+      "trendingNow": "ترندها",
+      "sale": "حراج",
+      "giftCards": "کارت هدیه",
+      "collections": "مجموعه‌ها",
+      "discoverStores": "کشف فروشگاه‌ها",
+      "topRated": "برترین‌ها",
+      "verifiedVendors": "فروشندگان تأییدشده",
+      "sellOnLuxe": "فروش در لوکس",
+      "vendorSignIn": "ورود فروشنده",
+      "vendorPanel": "پنل فروشنده",
+      "orderTracking": "پیگیری سفارش",
+      "shippingDelivery": "ارسال و تحویل",
+      "returnsRefunds": "مرجوعی و بازپرداخت",
+      "sizeGuide": "راهنمای سایز",
+      "faq": "سوالات متداول",
+      "contactUs": "تماس با ما",
+      "helpCenter": "مرکز راهنما",
+      "shopLuxe": "خرید از لوکس",
+      "ourStores": "فروشگاه‌های ما"
+    },
+    "legal": {
+      "privacy": "سیاست حریم خصوصی",
+      "terms": "شرایط استفاده",
+      "cookies": "سیاست کوکی",
+      "accessibility": "دسترس‌پذیری"
+    },
+    "trust": {
+      "freeShippingTitle": "ارسال رایگان",
+      "freeShippingSubtitle": "برای سفارش‌های بالای ۱۵۰ دلار",
+      "returnsTitle": "مرجوعی ۳۰ روزه",
+      "returnsSubtitle": "بدون دردسر",
+      "authenticityTitle": "اصالت کالا",
+      "authenticitySubtitle": "برندهای ۱۰۰٪ تأییدشده",
+      "conciergeTitle": "پشتیبانی ۲۴/۷",
+      "conciergeSubtitle": "همیشه پاسخگوی شما"
+    }
+  }
+}

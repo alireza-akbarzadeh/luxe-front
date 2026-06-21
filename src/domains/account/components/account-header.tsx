@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 
-import { useUser } from '@/hooks/useUser';
+import { useAuth } from '@/components/providers/auth-provider';
 
 export function AccountHeader() {
-  const { user } = useUser();
+  const { user } = useAuth();
   if (!user) return;
   return (
     <motion.div

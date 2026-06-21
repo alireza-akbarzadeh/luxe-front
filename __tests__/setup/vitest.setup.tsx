@@ -3,6 +3,43 @@ import '@testing-library/jest-dom/vitest';
 import React from 'react';
 import { vi } from 'vitest';
 
+import en from '../../messages/en.json';
+
+function readMessage(namespace: string | undefined, key: string): string {
+  if (!namespace) {
+    return key;
+  }
+
+  const section = namespace.split('.').reduce<unknown>((acc, part) => {
+    if (acc && typeof acc === 'object' && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return undefined;
+  }, en);
+
+  if (section && typeof section === 'object' && key in section) {
+    return String((section as Record<string, unknown>)[key]);
+  }
+
+  return key;
+}
+
+vi.mock('next-intl', () => ({
+  useLocale: () => 'en',
+  useTranslations: (namespace?: string) => (key: string, values?: Record<string, string | number>) => {
+    let message = readMessage(namespace, key);
+
+    if (values) {
+      for (const [name, value] of Object.entries(values)) {
+        message = message.replaceAll(`{${name}}`, String(value));
+      }
+    }
+
+    return message;
+  },
+  NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => children
+}));
+
 class ResizeObserverMock {
   observe() {}
   unobserve() {}

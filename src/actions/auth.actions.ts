@@ -4,7 +4,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { BASE_URL } from '@/lib/api/api-client';
-import { getCallbackeUrl } from '@/lib/utils';
+import { getCallbackUrl } from '@/lib/utils';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
 import { clearAuthCookies, setAuthCookies } from '~/src/lib/auth/auth-helpers';
 import { refreshSessionFromCookies } from '~/src/lib/auth/auth-refresh';
@@ -33,9 +33,7 @@ async function getClientRequestHeaders(): Promise<Record<string, string>> {
 
   return {
     'Content-Type': 'application/json',
-    ...(headersList.get('user-agent')
-      ? { 'User-Agent': headersList.get('user-agent')! }
-      : {}),
+    ...(headersList.get('user-agent') ? { 'User-Agent': headersList.get('user-agent')! } : {}),
     ...(headersList.get('x-forwarded-for')
       ? { 'X-Forwarded-For': headersList.get('x-forwarded-for')! }
       : {}),
@@ -72,12 +70,12 @@ async function resolvePostAuthRedirect(
 ): Promise<string> {
   const fromForm = formData?.get('callbackUrl');
   if (typeof fromForm === 'string' && fromForm.startsWith('/')) {
-    return getCallbackeUrl(fromForm);
+    return getCallbackUrl(fromForm);
   }
 
   const fromReferer = await getCallbackUrlFromReferer();
   if (fromReferer) {
-    return getCallbackeUrl(fromReferer);
+    return getCallbackUrl(fromReferer);
   }
 
   return defaultRedirect;
@@ -176,7 +174,9 @@ export async function registerAction(formData: FormData) {
   }
 }
 
-export async function forgotPasswordAction(email: string): Promise<{ success: boolean; error?: string }> {
+export async function forgotPasswordAction(
+  email: string
+): Promise<{ success: boolean; error?: string }> {
   if (!email) {
     return { success: false, error: 'Email is required' };
   }
@@ -258,7 +258,9 @@ export async function changePasswordAction(
   }
 }
 
-export async function verifyEmailAction(token: string): Promise<{ success: boolean; error?: string }> {
+export async function verifyEmailAction(
+  token: string
+): Promise<{ success: boolean; error?: string }> {
   if (!token) {
     return { success: false, error: 'Verification token is required' };
   }

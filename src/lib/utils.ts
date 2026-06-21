@@ -118,7 +118,7 @@ export interface SiteMetaInput {
   openGraph?: {
     url?: string;
     siteName?: string;
-    type?: OpenGraphType; // Changed from LiteralUnion to specific type
+    type?: OpenGraphType;
     locale?: string;
   };
   twitter?: {
@@ -126,65 +126,6 @@ export interface SiteMetaInput {
     creator?: string;
     card?: TwitterCard;
   };
-}
-
-export function createMetadata(metadata: SiteMetaInput): Meta[] {
-  const meta: Meta[] = [];
-
-  if (metadata.charSet) {
-    meta.push({ charSet: metadata.charSet });
-  }
-
-  if (metadata.title) {
-    meta.push({ title: metadata.title });
-  }
-
-  if (metadata.viewport) {
-    const viewport = Object.entries(metadata.viewport)
-      .map(([key, value]) => `${key}=${value}`)
-      .join(', ');
-
-    meta.push({ name: 'viewport', content: viewport });
-  }
-
-  addMetaTag('name', 'description', metadata.description);
-  addMetaTag('name', 'author', metadata.author);
-  addMetaTag('name', 'robots', metadata.robots);
-  addMetaTag('name', 'keywords', metadata.keywords);
-
-  addMetaTag('property', 'og:title', metadata.title);
-  addMetaTag('property', 'og:description', metadata.description);
-  addMetaTag('property', 'og:url', metadata?.openGraph?.url);
-  addMetaTag('property', 'og:site_name', metadata?.openGraph?.siteName);
-  addMetaTag('property', 'og:type', metadata?.openGraph?.type);
-  addMetaTag('property', 'og:locale', metadata?.openGraph?.locale);
-
-  addMetaTag('name', 'twitter:card', metadata?.twitter?.card);
-  addMetaTag('name', 'twitter:site', metadata?.twitter?.site);
-  addMetaTag('name', 'twitter:creator', metadata?.twitter?.creator);
-  addMetaTag('name', 'twitter:title', metadata.title);
-  addMetaTag('name', 'twitter:description', metadata.description);
-
-  addMetaTag('name', 'twitter:image', metadata.images?.[0]?.url);
-  addMetaTag('name', 'twitter:image:alt', metadata.images?.[0]?.alt);
-  addMetaTag('name', 'twitter:image:width', metadata.images?.[0]?.width?.toString());
-  addMetaTag('name', 'twitter:image:height', metadata.images?.[0]?.height?.toString());
-
-  for (const image of metadata?.images || []) {
-    addMetaTag('property', 'og:image', image.url);
-    addMetaTag('property', 'og:image:alt', image.alt);
-    addMetaTag('property', 'og:image:type', image.format);
-    addMetaTag('property', 'og:image:width', image.width?.toString());
-    addMetaTag('property', 'og:image:height', image.height?.toString());
-  }
-
-  function addMetaTag(keyType: 'name' | 'property', keyName: string, content?: string) {
-    if (typeof content === 'string' && content?.trim() !== '') {
-      meta.push({ [keyType]: keyName, content });
-    }
-  }
-
-  return meta;
 }
 
 export function toNextMetadata(
@@ -246,19 +187,15 @@ export function toCamelCase(value: string) {
 }
 
 export const generateIdFromObject = (obj: any) => {
-  // 1. Extract values and flatten any arrays (like your coordinates)
-  // 2. Filter out non-primitive values or stringify them
-  // 3. Join them with a delimiter to create a "seed" string
   const seed = Object.values(obj)
     .map((value) => (Array.isArray(value) ? value.join('-') : String(value)))
     .join('|');
 
-  // 4. Create a simple hash (djb2 algorithm) to keep the ID clean and short
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
     const char = seed.charCodeAt(i);
     hash = (hash << 5) - hash + char;
-    hash |= 0; // Convert to 32bit integer
+    hash |= 0;
   }
 
   return `id_${Math.abs(hash).toString(36)}`;
@@ -354,7 +291,7 @@ export const getCurrentUrl = () => {
   return window.location.href;
 };
 
-export function getCallbackeUrl(callbackUrl?: string | null): string {
+export function getCallbackUrl(callbackUrl?: string | null): string {
   if (!callbackUrl) return '/account';
 
   try {
@@ -406,7 +343,6 @@ export const copyToClipboard = async (text: string, description: string) => {
     toast.error('Failed to copy value');
   }
 };
-
 
 export function slugify(value: string) {
   return value

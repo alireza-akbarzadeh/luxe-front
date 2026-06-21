@@ -11,70 +11,89 @@ import {
   IconTruck
 } from '@tabler/icons-react';
 
-const trustBadges = [
-  {
-    icon: IconTruck,
-    title: 'Free Shipping',
-    subtitle: 'On orders over $150'
-  },
-  {
-    icon: IconRotateClockwise2,
-    title: '30-Day Returns',
-    subtitle: 'Hassle-free, on us'
-  },
-  {
-    icon: IconShieldCheck,
-    title: 'Authenticity',
-    subtitle: '100% verified brands'
-  },
-  {
-    icon: IconHeadphones,
-    title: '24/7 Concierge',
-    subtitle: 'Real humans, always'
-  }
+type FooterLinkKey =
+  | 'newArrivals'
+  | 'bestSellers'
+  | 'trendingNow'
+  | 'sale'
+  | 'giftCards'
+  | 'collections'
+  | 'discoverStores'
+  | 'topRated'
+  | 'verifiedVendors'
+  | 'sellOnLuxe'
+  | 'vendorSignIn'
+  | 'vendorPanel'
+  | 'orderTracking'
+  | 'shippingDelivery'
+  | 'returnsRefunds'
+  | 'sizeGuide'
+  | 'faq'
+  | 'contactUs'
+  | 'helpCenter'
+  | 'shopLuxe'
+  | 'ourStores';
+
+type FooterSectionKey = 'shop' | 'stores' | 'help' | 'company';
+
+type LegalLinkKey = 'privacy' | 'terms' | 'cookies' | 'accessibility';
+
+type TrustBadgeKey = 'freeShipping' | 'returns' | 'authenticity' | 'concierge';
+
+const trustBadges: ReadonlyArray<{
+  key: TrustBadgeKey;
+  icon: typeof IconTruck;
+}> = [
+  { key: 'freeShipping', icon: IconTruck },
+  { key: 'returns', icon: IconRotateClockwise2 },
+  { key: 'authenticity', icon: IconShieldCheck },
+  { key: 'concierge', icon: IconHeadphones }
 ] as const;
 
-const footerSections = [
+const footerSections: ReadonlyArray<{
+  titleKey: FooterSectionKey;
+  links: ReadonlyArray<{ nameKey: FooterLinkKey; href: string; badge?: string }>;
+}> = [
   {
-    title: 'Shop',
+    titleKey: 'shop',
     links: [
-      { name: 'New Arrivals', href: '/shop?sortBy=newest&showOnlyNew=true', badge: 'New' },
-      { name: 'Best Sellers', href: '/shop?sortBy=rating_desc' },
-      { name: 'Trending Now', href: '/shop?sortBy=trending' },
-      { name: 'Sale', href: '/shop?showOnlySale=true', badge: '-30%' },
-      { name: 'Gift Cards', href: '/gift-cards' },
-      { name: 'Collections', href: '/collections' }
+      { nameKey: 'newArrivals', href: '/shop?sortBy=newest&showOnlyNew=true', badge: 'New' },
+      { nameKey: 'bestSellers', href: '/shop?sortBy=rating_desc' },
+      { nameKey: 'trendingNow', href: '/shop?sortBy=trending' },
+      { nameKey: 'sale', href: '/shop?showOnlySale=true', badge: '-30%' },
+      { nameKey: 'giftCards', href: '/gift-cards' },
+      { nameKey: 'collections', href: '/collections' }
     ]
   },
   {
-    title: 'Stores',
+    titleKey: 'stores',
     links: [
-      { name: 'Discover Stores', href: '/store' },
-      { name: 'Top Rated', href: '/store?sort=top_rated' },
-      { name: 'Verified Vendors', href: '/store?verified=true' },
-      { name: 'Sell on Luxe', href: '/vendor' },
-      { name: 'Vendor sign in', href: '/vendor/login' },
-      { name: 'Vendor panel', href: '/vendor/panel' }
+      { nameKey: 'discoverStores', href: '/store' },
+      { nameKey: 'topRated', href: '/store?sort=top_rated' },
+      { nameKey: 'verifiedVendors', href: '/store?verified=true' },
+      { nameKey: 'sellOnLuxe', href: '/vendor' },
+      { nameKey: 'vendorSignIn', href: '/vendor/login' },
+      { nameKey: 'vendorPanel', href: '/vendor/panel' }
     ]
   },
   {
-    title: 'Help & Support',
+    titleKey: 'help',
     links: [
-      { name: 'Order Tracking', href: '/help/order-tracking' },
-      { name: 'Shipping & Delivery', href: '/help/shipping' },
-      { name: 'Returns & Refunds', href: '/help/returns' },
-      { name: 'Size Guide', href: '/help/size-guide' },
-      { name: 'FAQ', href: '/help/faq' },
-      { name: 'Contact Us', href: '/contact' }
+      { nameKey: 'orderTracking', href: '/help/order-tracking' },
+      { nameKey: 'shippingDelivery', href: '/help/shipping' },
+      { nameKey: 'returnsRefunds', href: '/help/returns' },
+      { nameKey: 'sizeGuide', href: '/help/size-guide' },
+      { nameKey: 'faq', href: '/help/faq' },
+      { nameKey: 'contactUs', href: '/contact' }
     ]
   },
   {
-    title: 'Company',
+    titleKey: 'company',
     links: [
-      { name: 'Help Center', href: '/help' },
-      { name: 'Contact Us', href: '/contact' },
-      { name: 'Shop Luxe', href: '/shop' },
-      { name: 'Our Stores', href: '/store' }
+      { nameKey: 'helpCenter', href: '/help' },
+      { nameKey: 'contactUs', href: '/contact' },
+      { nameKey: 'shopLuxe', href: '/shop' },
+      { nameKey: 'ourStores', href: '/store' }
     ]
   }
 ] as const;
@@ -99,11 +118,13 @@ const paymentMethods = [
   'Crypto'
 ] as const;
 
-const legalLinks = [
-  { name: 'Privacy Policy', href: '/legal/privacy' },
-  { name: 'Terms of Service', href: '/legal/terms' },
-  { name: 'Cookie Policy', href: '/legal/cookies' },
-  { name: 'Accessibility', href: '/legal/accessibility' }
+const legalLinks: ReadonlyArray<{ key: LegalLinkKey; href: string }> = [
+  { key: 'privacy', href: '/legal/privacy' },
+  { key: 'terms', href: '/legal/terms' },
+  { key: 'cookies', href: '/legal/cookies' },
+  { key: 'accessibility', href: '/legal/accessibility' }
 ] as const;
 
 export { footerSections, legalLinks, paymentMethods, socialLinks, trustBadges };
+
+export type { FooterLinkKey, FooterSectionKey, LegalLinkKey, TrustBadgeKey };

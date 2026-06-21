@@ -2,13 +2,17 @@ import '../styles/globals.css';
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display } from 'next/font/google';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display, Vazirmatn } from 'next/font/google';
 import Script from 'next/script';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
+import { getDirection, type Locale } from '@/i18n/config';
 import { themeInitScript } from '@/lib/theme';
+import { cn } from '@/lib/utils';
 
 const nunitoSans = Nunito_Sans({ variable: '--font-sans' });
 
@@ -27,6 +31,12 @@ const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
+  display: 'swap'
+});
+
+const vazirmatn = Vazirmatn({
+  variable: '--font-vazirmatn',
+  subsets: ['arabic'],
   display: 'swap'
 });
 
@@ -53,16 +63,26 @@ export const viewport: Viewport = {
 
 type TRootLayout = Readonly<PropsWithChildren>;
 
-export default function RootLayout({ children }: TRootLayout) {
+export default async function RootLayout({ children }: TRootLayout) {
+  const locale = (await getLocale()) as Locale;
+  const messages = await getMessages();
+  const dir = getDirection(locale);
+
   return (
     <html
-      lang='en'
+      lang={locale}
+      dir={dir}
       className={`${nunitoSans.variable} ${playfairDisplay.variable}`}
       suppressHydrationWarning
       data-scroll-behavior='smooth'
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn(
+          geistSans.variable,
+          geistMono.variable,
+          vazirmatn.variable,
+          'antialiased'
+        )}
         suppressHydrationWarning
       >
         <Script
@@ -70,7 +90,9 @@ export default function RootLayout({ children }: TRootLayout) {
           strategy='beforeInteractive'
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
         />
-        <RootProvider>{children}</RootProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <RootProvider dir={dir}>{children}</RootProvider>
+        </NextIntlClientProvider>
       </body>
       <SpeedInsights />
     </html>

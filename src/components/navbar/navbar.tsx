@@ -3,8 +3,10 @@
 import { IconMenu, IconSearch, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
 import { useSearchStore } from '@/domains/search/search.store';
@@ -20,6 +22,8 @@ import { UserProfile } from './user/user-profile';
 import { WishlistButton } from './wishlist-button';
 
 export function Navbar() {
+  const t = useTranslations('common');
+  const tNav = useTranslations('nav');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
@@ -40,7 +44,7 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
           isScrolled
             ? 'border-border/50 bg-background/85 border-b shadow-sm backdrop-blur-xl'
             : 'bg-transparent'
@@ -64,14 +68,14 @@ export function Navbar() {
             <div className='ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
               <NavbarActionButton
                 className='lg:hidden'
-                aria-label='Search'
+                aria-label={t('search')}
                 onClick={openSearchSheet}
               >
                 <IconSearch className='size-5' stroke={1.75} />
               </NavbarActionButton>
 
               <NavbarActionButton asChild className='hidden lg:inline-flex'>
-                <Link href='/search' aria-label='Search'>
+                <Link href='/search' aria-label={t('search')}>
                   <IconSearch className='size-5' stroke={1.75} />
                 </Link>
               </NavbarActionButton>
@@ -79,6 +83,8 @@ export function Navbar() {
               <WishlistButton />
 
               <NotificationButton />
+
+              <LanguageSwitcher />
 
               <CartButton />
 
@@ -91,7 +97,7 @@ export function Navbar() {
 
               <NavbarActionButton
                 className='lg:hidden'
-                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-label={isMobileMenuOpen ? tNav('closeMenu') : tNav('openMenu')}
                 aria-expanded={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >

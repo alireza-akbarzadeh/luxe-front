@@ -12,13 +12,13 @@ import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { loginFormSchema } from '@/domains/auth/auth.schema';
 import { VendorLoginSidebar } from '@/domains/vendor/auth/components/vendor-login-sidebar';
-import { getCallbackeUrl } from '@/lib/utils';
+import { getCallbackUrl } from '@/lib/utils';
 
 const DEFAULT_VENDOR_CALLBACK = '/vendor/panel';
 
 export function VendorLoginDomain() {
   const searchParams = useSearchParams();
-  const callbackUrl = getCallbackeUrl(searchParams.get('callbackUrl') ?? DEFAULT_VENDOR_CALLBACK);
+  const callbackUrl = getCallbackUrl(searchParams.get('callbackUrl') ?? DEFAULT_VENDOR_CALLBACK);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 

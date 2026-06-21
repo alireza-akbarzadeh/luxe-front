@@ -1,0 +1,93 @@
+{
+  "common": {
+    "search": "Search",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "openCart": "Open cart",
+    "openCartWithCount": "Open cart, {count} items",
+    "signIn": "Sign in",
+    "continueShopping": "Continue shopping",
+    "proceedToCheckout": "Proceed to checkout",
+    "backToTop": "Back to top"
+  },
+  "nav": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Spanish",
+    "fa": "Persian"
+  },
+  "cart": {
+    "signInTitle": "Sign in to view your cart",
+    "signInDescription": "Save items across devices and checkout faster when you are signed in.",
+    "signInDescriptionAlt": "Save items across devices, track orders, and checkout securely.",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Discover curated pieces from independent luxury brands.",
+    "emptyDescriptionAlt": "Discover curated pieces designed to last — start building your collection.",
+    "sheetTitle": "Shopping cart",
+    "titleWithCount": "Your cart · {count}",
+    "subtotal": "Subtotal",
+    "estimatedTotal": "Estimated total",
+    "taxNote": "Taxes and shipping calculated at checkout."
+  },
+  "footer": {
+    "tagline": "A curated multi-vendor marketplace for timeless design, premium craftsmanship, and independent luxury brands — all in one place.",
+    "followUs": "Follow us",
+    "shopOnTheGoTitle": "Shop on the go",
+    "shopOnTheGoDescription": "Get the Luxe app for exclusive in-app drops & order tracking.",
+    "downloadOn": "Download on the",
+    "appStore": "App Store",
+    "getItOn": "Get it on",
+    "googlePlay": "Google Play",
+    "copyright": "© {year} Luxe Marketplace, Inc. All rights reserved.",
+    "secureCheckout": "Secure checkout · 256-bit SSL",
+    "sections": {
+      "shop": "Shop",
+      "stores": "Stores",
+      "help": "Help & Support",
+      "company": "Company"
+    },
+    "links": {
+      "newArrivals": "New Arrivals",
+      "bestSellers": "Best Sellers",
+      "trendingNow": "Trending Now",
+      "sale": "Sale",
+      "giftCards": "Gift Cards",
+      "collections": "Collections",
+      "discoverStores": "Discover Stores",
+      "topRated": "Top Rated",
+      "verifiedVendors": "Verified Vendors",
+      "sellOnLuxe": "Sell on Luxe",
+      "vendorSignIn": "Vendor sign in",
+      "vendorPanel": "Vendor panel",
+      "orderTracking": "Order Tracking",
+      "shippingDelivery": "Shipping & Delivery",
+      "returnsRefunds": "Returns & Refunds",
+      "sizeGuide": "Size Guide",
+      "faq": "FAQ",
+      "contactUs": "Contact Us",
+      "helpCenter": "Help Center",
+      "shopLuxe": "Shop Luxe",
+      "ourStores": "Our Stores"
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy",
+      "accessibility": "Accessibility"
+    },
+    "trust": {
+      "freeShippingTitle": "Free Shipping",
+      "freeShippingSubtitle": "On orders over $150",
+      "returnsTitle": "30-Day Returns",
+      "returnsSubtitle": "Hassle-free, on us",
+      "authenticityTitle": "Authenticity",
+      "authenticitySubtitle": "100% verified brands",
+      "conciergeTitle": "24/7 Concierge",
+      "conciergeSubtitle": "Real humans, always"
+    }
+  }
+}

@@ -210,3 +210,18 @@
 .delivery-location-map .leaflet-marker-icon:active {
   cursor: grabbing;
 }
+
+/** Flip directional icons (chevrons, arrows) in RTL layouts. */
+.cn-rtl-flip {
+  [dir='rtl'] & {
+    transform: scaleX(-1);
+  }
+}
+
+[dir='rtl'] .font-display {
+  letter-spacing: 0;
+}
+
+[dir='rtl'] body {
+  font-family: var(--font-vazirmatn), var(--font-geist-sans), sans-serif;
+}

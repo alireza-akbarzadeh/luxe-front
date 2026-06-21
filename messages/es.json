@@ -1,0 +1,93 @@
+{
+  "common": {
+    "search": "Buscar",
+    "wishlist": "Favoritos",
+    "cart": "Carrito",
+    "openCart": "Abrir carrito",
+    "openCartWithCount": "Abrir carrito, {count} artículos",
+    "signIn": "Iniciar sesión",
+    "continueShopping": "Seguir comprando",
+    "proceedToCheckout": "Ir al pago",
+    "backToTop": "Volver arriba"
+  },
+  "nav": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "fa": "Persa"
+  },
+  "cart": {
+    "signInTitle": "Inicia sesión para ver tu carrito",
+    "signInDescription": "Guarda artículos en todos tus dispositivos y paga más rápido al iniciar sesión.",
+    "signInDescriptionAlt": "Guarda artículos en todos tus dispositivos, sigue pedidos y paga de forma segura.",
+    "emptyTitle": "Tu carrito está vacío",
+    "emptyDescription": "Descubre piezas seleccionadas de marcas de lujo independientes.",
+    "emptyDescriptionAlt": "Descubre piezas seleccionadas diseñadas para durar — empieza tu colección.",
+    "sheetTitle": "Carrito de compras",
+    "titleWithCount": "Tu carrito · {count}",
+    "subtotal": "Subtotal",
+    "estimatedTotal": "Total estimado",
+    "taxNote": "Impuestos y envío calculados en el pago."
+  },
+  "footer": {
+    "tagline": "Un marketplace multimarca curado para diseño atemporal, artesanía premium y marcas de lujo independientes — todo en un solo lugar.",
+    "followUs": "Síguenos",
+    "shopOnTheGoTitle": "Compra donde estés",
+    "shopOnTheGoDescription": "Descarga la app Luxe para lanzamientos exclusivos y seguimiento de pedidos.",
+    "downloadOn": "Descargar en",
+    "appStore": "App Store",
+    "getItOn": "Disponible en",
+    "googlePlay": "Google Play",
+    "copyright": "© {year} Luxe Marketplace, Inc. Todos los derechos reservados.",
+    "secureCheckout": "Pago seguro · SSL de 256 bits",
+    "sections": {
+      "shop": "Tienda",
+      "stores": "Tiendas",
+      "help": "Ayuda y soporte",
+      "company": "Empresa"
+    },
+    "links": {
+      "newArrivals": "Novedades",
+      "bestSellers": "Más vendidos",
+      "trendingNow": "Tendencias",
+      "sale": "Rebajas",
+      "giftCards": "Tarjetas regalo",
+      "collections": "Colecciones",
+      "discoverStores": "Descubrir tiendas",
+      "topRated": "Mejor valoradas",
+      "verifiedVendors": "Vendedores verificados",
+      "sellOnLuxe": "Vender en Luxe",
+      "vendorSignIn": "Acceso vendedor",
+      "vendorPanel": "Panel vendedor",
+      "orderTracking": "Seguimiento de pedido",
+      "shippingDelivery": "Envío y entrega",
+      "returnsRefunds": "Devoluciones y reembolsos",
+      "sizeGuide": "Guía de tallas",
+      "faq": "Preguntas frecuentes",
+      "contactUs": "Contáctanos",
+      "helpCenter": "Centro de ayuda",
+      "shopLuxe": "Comprar en Luxe",
+      "ourStores": "Nuestras tiendas"
+    },
+    "legal": {
+      "privacy": "Política de privacidad",
+      "terms": "Términos del servicio",
+      "cookies": "Política de cookies",
+      "accessibility": "Accesibilidad"
+    },
+    "trust": {
+      "freeShippingTitle": "Envío gratis",
+      "freeShippingSubtitle": "En pedidos superiores a $150",
+      "returnsTitle": "Devoluciones 30 días",
+      "returnsSubtitle": "Sin complicaciones",
+      "authenticityTitle": "Autenticidad",
+      "authenticitySubtitle": "Marcas 100% verificadas",
+      "conciergeTitle": "Conserjería 24/7",
+      "conciergeSubtitle": "Personas reales, siempre"
+    }
+  }
+}
