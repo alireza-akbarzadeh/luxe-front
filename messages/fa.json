@@ -177,7 +177,15 @@
       "createAccount": "همین حالا بسازید",
       "welcomeBackToast": "خوش آمدید!",
       "invalidCredentials": "اطلاعات ورود نادرست است",
-      "socialComingSoon": "ورود با شبکه‌های اجتماعی به‌زودی — فعلاً با ایمیل وارد شوید"
+      "socialComingSoon": "ورود با شبکه‌های اجتماعی به‌زودی — فعلاً با ایمیل وارد شوید",
+      "legalPrefix": "با ورود، با"
+    },
+    "legal": {
+      "loading": "در حال بارگذاری سند...",
+      "loadError": "بارگذاری این سند ممکن نشد. لطفاً بعداً دوباره تلاش کنید.",
+      "updated": "آخرین به‌روزرسانی: {version}",
+      "termsFallbackTitle": "شرایط استفاده",
+      "privacyFallbackTitle": "حریم خصوصی"
     },
     "register": {
       "title": "ایجاد حساب",

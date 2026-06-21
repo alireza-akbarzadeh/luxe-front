@@ -177,7 +177,15 @@
       "createAccount": "Create one now",
       "welcomeBackToast": "Welcome back!",
       "invalidCredentials": "Invalid credentials",
-      "socialComingSoon": "Social sign-in is coming soon — use email for now"
+      "socialComingSoon": "Social sign-in is coming soon — use email for now",
+      "legalPrefix": "By signing in, you agree to our"
+    },
+    "legal": {
+      "loading": "Loading document...",
+      "loadError": "Unable to load this document. Please try again later.",
+      "updated": "Last updated: {version}",
+      "termsFallbackTitle": "Terms of Service",
+      "privacyFallbackTitle": "Privacy Policy"
     },
     "register": {
       "title": "Create your account",

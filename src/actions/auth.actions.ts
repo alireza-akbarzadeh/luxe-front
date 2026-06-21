@@ -145,9 +145,14 @@ export async function registerAction(formData: FormData) {
     const firstName = formData.get('firstName') as string;
     const lastName = formData.get('lastName') as string;
     const phone = (formData.get('phone') as string) || undefined;
+    const acceptTerms = formData.get('acceptTerms') === 'true';
 
     if (!email || !password || !firstName || !lastName) {
       return { error: 'All required fields must be filled' };
+    }
+
+    if (!acceptTerms) {
+      return { error: 'You must accept the terms and privacy policy' };
     }
 
     const res = await fetch(`${BASE_URL}/auth/register`, {
@@ -158,7 +163,9 @@ export async function registerAction(formData: FormData) {
         password,
         first_name: firstName,
         last_name: lastName,
-        phone
+        phone,
+        accept_terms: true,
+        accept_privacy: true
       })
     });
 

@@ -177,7 +177,15 @@
       "createAccount": "Cree una ahora",
       "welcomeBackToast": "¡Bienvenido de nuevo!",
       "invalidCredentials": "Credenciales no válidas",
-      "socialComingSoon": "El inicio de sesión social llegará pronto — use el correo por ahora"
+      "socialComingSoon": "El inicio de sesión social llegará pronto — use el correo por ahora",
+      "legalPrefix": "Al iniciar sesión, acepta nuestros"
+    },
+    "legal": {
+      "loading": "Cargando documento...",
+      "loadError": "No se pudo cargar este documento. Inténtelo más tarde.",
+      "updated": "Última actualización: {version}",
+      "termsFallbackTitle": "Términos del servicio",
+      "privacyFallbackTitle": "Política de privacidad"
     },
     "register": {
       "title": "Cree su cuenta",

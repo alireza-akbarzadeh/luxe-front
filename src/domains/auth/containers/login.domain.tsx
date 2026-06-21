@@ -14,6 +14,7 @@ import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createLoginFormSchema } from '../auth.schema';
 import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
+import { LegalDocumentLink } from '../components/legal-document-link';
 import { LoginSidebar } from '../components/login-sidebar';
 
 export function LoginDomain() {
@@ -21,6 +22,7 @@ export function LoginDomain() {
   const pageDir = getDirection(locale);
   const t = useTranslations('auth');
   const tLogin = useTranslations('auth.login');
+  const tRegister = useTranslations('auth.register');
   const tValidation = useTranslations('auth.validation');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -176,6 +178,13 @@ export function LoginDomain() {
             <Link href='/register' className='text-accent font-medium hover:underline'>
               {tLogin('createAccount')}
             </Link>
+          </p>
+
+          <p className='text-muted-foreground mt-4 text-center text-xs leading-relaxed'>
+            {tLogin('legalPrefix')}{' '}
+            <LegalDocumentLink kind='terms'>{tRegister('termsLink')}</LegalDocumentLink>{' '}
+            {tRegister('termsAnd')}{' '}
+            <LegalDocumentLink kind='privacy'>{tRegister('privacyLink')}</LegalDocumentLink>
           </p>
         </motion.div>
       </div>

@@ -16,6 +16,7 @@ import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createRegisterFormSchema } from '../auth.schema';
 import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
+import { LegalDocumentLink } from '../components/legal-document-link';
 import { RegisterSidebar } from '../components/register-sidebar';
 import { getPasswordStrength, passwordRequirementKeys } from '../utils.auth';
 
@@ -58,6 +59,7 @@ export function RegisterDomain() {
         formData.append('firstName', value.firstName);
         formData.append('lastName', value.lastName);
         if (value.phone) formData.append('phone', value.phone);
+        formData.append('acceptTerms', String(value.acceptTerms));
         formData.append('acceptMarketing', String(value.acceptMarketing));
 
         const result = await registerAction(formData);
@@ -269,13 +271,9 @@ export function RegisterDomain() {
                         className='cursor-pointer text-sm leading-relaxed font-normal'
                       >
                         {tRegister('termsPrefix')}{' '}
-                        <Link href='/terms' className='text-accent hover:underline'>
-                          {tRegister('termsLink')}
-                        </Link>{' '}
+                        <LegalDocumentLink kind='terms'>{tRegister('termsLink')}</LegalDocumentLink>{' '}
                         {tRegister('termsAnd')}{' '}
-                        <Link href='/privacy' className='text-accent hover:underline'>
-                          {tRegister('privacyLink')}
-                        </Link>
+                        <LegalDocumentLink kind='privacy'>{tRegister('privacyLink')}</LegalDocumentLink>
                       </Label>
                     </div>
                   )}

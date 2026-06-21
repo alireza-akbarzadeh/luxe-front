@@ -12,7 +12,7 @@ import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
-import { Text, Typography } from '@/components/ui/typography';
+import { Text } from '@/components/ui/typography';
 
 import { WelcomeShowcase } from './components/welcome-showcase';
 
@@ -63,13 +63,13 @@ export function WelcomeDomain() {
         >
           <motion.div custom={0.05} initial='hidden' animate='show' variants={fadeUp}>
             <Link href='/' className='inline-block'>
-              <Typography
+              <Text
                 variant='h4'
                 family='display'
                 className='from-gold-strong via-gold to-gold-strong bg-linear-to-r bg-clip-text text-transparent'
               >
                 LUXE
-              </Typography>
+              </Text>
             </Link>
           </motion.div>
 
@@ -81,9 +81,9 @@ export function WelcomeDomain() {
           </motion.div>
 
           <motion.div custom={0.18} initial='hidden' animate='show' variants={fadeUp}>
-            <Typography variant='h1' family='display' balance className='mt-6 max-w-lg'>
+            <Text variant='h1' family='display' balance className='mt-6 max-w-lg'>
               {t('title')}
-            </Typography>
+            </Text>
           </motion.div>
 
           <motion.div custom={0.24} initial='hidden' animate='show' variants={fadeUp}>

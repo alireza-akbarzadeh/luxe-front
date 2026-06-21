@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Box } from '@/components/ui/box';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
-import { Text, Typography } from '@/components/ui/typography';
+import { Text } from '@/components/ui/typography';
 
 const WELCOME_IMAGE =
   'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1600&h=2000&fit=crop';
@@ -63,14 +63,14 @@ export function WelcomeShowcase() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.35 }}
           >
-            <Typography
+            <Text
               variant='h2'
               family='display'
               tone='inherit'
               className='max-w-md text-4xl leading-[1.05] text-white xl:text-5xl'
             >
               {t('showcase.headline')}
-            </Typography>
+            </Text>
             <Text variant='lead' tone='inherit' className='mt-4 max-w-sm text-white/75'>
               {t('showcase.subhead')}
             </Text>

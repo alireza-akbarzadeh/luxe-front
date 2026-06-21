@@ -100,7 +100,10 @@ export function AppDialog(props: AppDialogProps) {
             </SheetHeader>
           )}
           <div
-            className={cn('flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-6', contentClassName)}
+            className={cn(
+              'flex min-h-0 flex-1 flex-col overflow-hidden px-4 pb-6',
+              contentClassName
+            )}
           >
             {children}
           </div>
