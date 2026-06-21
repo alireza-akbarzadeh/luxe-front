@@ -1,19 +1,24 @@
-import { AxiosError, type AxiosRequestConfig,HttpStatusCode } from 'axios';
+import { AxiosError, type AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { toast } from 'sonner';
 
-import { extractErrorMessage } from '@/lib/api/api-utils';
+import {
+  extractErrorMessage,
+  getServerErrorMessage,
+  isNetworkError
+} from '@/lib/api/api-utils';
 import { logger } from '@/lib/api/logger';
+import {
+  formatErrorMessage,
+  getErrorMessages
+} from '@/lib/i18n/error-messages';
+import { getClientLocaleFromCookie } from '@/lib/i18n/request-locale';
 
 import type { ApiClientOptions, ApiErrorResponse } from './type';
 
 /**
- * Handle API errors with appropriate toast notifications
- * @param axiosError - The axios error object
- * @param config - The request configuration
- * @param apiOptions - Additional API client options
+ * Show API errors in toasts. Server `message` is shown as-is (localized via Accept-Language).
+ * Client-only fallbacks use the active UI locale from the cookie.
  */
-// ---------- Advanced error handler ----------
-// ---------- Advanced error handler ----------
 export const handleApiError = (
   axiosError: AxiosError<ApiErrorResponse>,
   config: AxiosRequestConfig,
@@ -21,68 +26,67 @@ export const handleApiError = (
 ): void => {
   if (typeof window === 'undefined' || apiOptions.skipToast) return;
 
-  const message = extractErrorMessage(axiosError);
+  const t = getErrorMessages(getClientLocaleFromCookie());
+  const serverMessage = getServerErrorMessage(axiosError);
+  const detail = extractErrorMessage(axiosError);
   const status = axiosError.response?.status;
   const url = config.url ?? '';
 
   if (!status) {
-    // Network-level failure (no response at all)
-    toast.error(`Network error: ${message}`);
+    toast.error(
+      isNetworkError(axiosError) || !axiosError.request
+        ? t.network
+        : formatErrorMessage(t.networkError, { detail })
+    );
     return;
   }
 
   switch (status) {
-    // ── 4xx client errors ────────────────────────────────
     case HttpStatusCode.BadRequest:
-      toast.error(`Bad request — ${message}`);
+    case HttpStatusCode.NotFound:
+    case HttpStatusCode.Conflict:
+    case HttpStatusCode.UnprocessableEntity:
+      toast.error(serverMessage ?? detail ?? t.unexpected);
       break;
 
     case HttpStatusCode.Unauthorized:
-      toast.error('Your session has expired. Please log in again.');
+      toast.error(serverMessage ?? t.sessionExpired);
       break;
 
     case HttpStatusCode.Forbidden:
-      toast.error(message || 'You do not have permission to perform this action.');
-      break;
-
-    case HttpStatusCode.NotFound:
-      toast.error(`Not found — ${message}`);
-      break;
-
-    case HttpStatusCode.Conflict:
-      toast.error(`Conflict — ${message}`);
-      break;
-
-    case HttpStatusCode.UnprocessableEntity:
-      // Most common for validation; message already contains the first failing field
-      toast.error(`Validation error — ${message}`);
+      toast.error(serverMessage ?? detail ?? t.forbiddenFallback);
       break;
 
     case HttpStatusCode.TooManyRequests: {
+      if (serverMessage) {
+        toast.error(serverMessage);
+        break;
+      }
       const retryAfter = axiosError.response?.headers?.['retry-after'];
-      const suffix = retryAfter ? ` Try again in ${retryAfter}s.` : '';
-      toast.error(`Too many requests.${suffix}`);
+      const suffix =
+        typeof retryAfter === 'string' && retryAfter
+          ? formatErrorMessage(t.tryAgainIn, { seconds: retryAfter })
+          : '';
+      toast.error(`${t.tooManyRequests}${suffix}`);
       break;
     }
 
-    // ── 5xx server errors ────────────────────────────────
     case HttpStatusCode.InternalServerError:
       if (!url.includes('Insight')) {
-        toast.error(`Server error — ${message}`);
+        toast.error(serverMessage ?? detail ?? t.unexpected);
       }
       break;
 
     case HttpStatusCode.BadGateway:
     case HttpStatusCode.ServiceUnavailable:
     case HttpStatusCode.GatewayTimeout:
-      toast.error('The server is temporarily unavailable. Please try again shortly.');
+      toast.error(serverMessage ?? t.serverUnavailable);
       break;
 
     default:
-      toast.error(message);
+      toast.error(serverMessage ?? detail ?? t.unexpected);
   }
 
-  // Always log full error in non-production for debugging
   if (process.env['NODE_ENV'] !== 'production') {
     logger.info(`[API error] ${axiosError.config?.method?.toUpperCase()} ${url}`, {
       status,

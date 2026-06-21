@@ -81,13 +81,24 @@ export const isRateLimitError = (error: unknown): boolean => {
 };
 
 /**
+ * Returns the API `message` field when present (already localized via Accept-Language).
+ */
+export function getServerErrorMessage(error: AxiosError<ApiErrorResponse>): string | undefined {
+  const message = error.response?.data?.message;
+  return typeof message === 'string' && message.trim() ? message.trim() : undefined;
+}
+
+/**
  * Utility function to extract error message from API error response
  * @param error - The axios error object
  * @returns The error message string
  */
 export const getErrorMessage = (error: AxiosError<ApiErrorResponse>): string => {
   return (
-    error.response?.data?.message || error.response?.data?.error || error.message || 'unkown error'
+    getServerErrorMessage(error) ||
+    error.response?.data?.error ||
+    error.message ||
+    'unkown error'
   );
 };
 
@@ -100,6 +111,11 @@ export function extractErrorMessage(error: AxiosError<ApiErrorResponse>): string
   const data = error.response?.data as Record<string, unknown> | undefined;
 
   if (data) {
+    const serverMessage = getServerErrorMessage(error);
+    if (serverMessage) {
+      return serverMessage;
+    }
+
     // Handle validation arrays: { errors: [{ field, message }] }
     if (Array.isArray(data['errors']) && data['errors'].length > 0) {
       const first = data['errors'][0] as Record<string, unknown>;
@@ -108,9 +124,6 @@ export function extractErrorMessage(error: AxiosError<ApiErrorResponse>): string
       return `${field}${msg}`;
     }
 
-    if (typeof data['message'] === 'string' && data['message']) {
-      return data['message'];
-    }
     if (typeof data['error'] === 'string' && data['error']) {
       return data['error'];
     }

@@ -16,6 +16,12 @@ import {
   setClientAccessToken
 } from '../auth/auth-token-client';
 import { APP_CONFIG } from '../config';
+import {
+  getClientLocaleFromCookie,
+  getRequestLocale,
+  localeToAcceptLanguage
+} from '../i18n/request-locale';
+import { getErrorMessages } from '../i18n/error-messages';
 import { isRequestCancelled } from './api-utils';
 import { handleApiError } from './handle-api-error';
 import { logger } from './logger';
@@ -68,6 +74,11 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 };
 
 AXIOS_INSTANCE.interceptors.request.use(async (config) => {
+  const locale =
+    typeof window === 'undefined' ? await getRequestLocale() : getClientLocaleFromCookie();
+
+  config.headers['Accept-Language'] = localeToAcceptLanguage(locale);
+
   const token = await ensureClientAccessToken();
 
   if (token) {
@@ -101,7 +112,7 @@ AXIOS_INSTANCE.interceptors.response.use(
     // Don't retry if this is a refresh endpoint or already retried
     if (originalRequest.url?.includes('/auth/refresh') || originalRequest._retry) {
       clearClientAccessToken();
-      toast.error('Session expired. Please log in again.');
+      toast.error(getErrorMessages(getClientLocaleFromCookie()).sessionExpired);
 
       // Clear local storage/cookies if needed
       if (typeof window !== 'undefined') {
@@ -117,7 +128,7 @@ AXIOS_INSTANCE.interceptors.response.use(
     // Max retry limit
     if (originalRequest._retryCount >= APP_CONFIG.MAX_RETRY_LIMIT) {
       clearClientAccessToken();
-      toast.error('Authentication failed. Please log in again.');
+      toast.error(getErrorMessages(getClientLocaleFromCookie()).authFailed);
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }

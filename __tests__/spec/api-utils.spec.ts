@@ -5,6 +5,7 @@ import { AxiosError, CanceledError } from 'axios';
 import {
   extractErrorMessage,
   getErrorMessage,
+  getServerErrorMessage,
   isForbiddenError,
   isNetworkError,
   isRateLimitError,
@@ -111,8 +112,26 @@ describe('extractErrorMessage', () => {
       }
     });
 
+    expect(getServerErrorMessage(withMessage)).toBe('Coupon expired');
     expect(extractErrorMessage(withMessage)).toBe('Coupon expired');
     expect(extractErrorMessage(withErrorField)).toBe('Invalid payload');
+  });
+
+  it('prefers server message over validation error arrays', () => {
+    const error = createAxiosError({
+      response: {
+        status: 400,
+        statusText: 'Bad Request',
+        headers: {},
+        config: {},
+        data: {
+          message: 'validación fallida',
+          errors: [{ field: 'email', message: 'required' }]
+        }
+      }
+    });
+
+    expect(extractErrorMessage(error)).toBe('validación fallida');
   });
 
   it('returns a network hint when the server never responded', () => {
