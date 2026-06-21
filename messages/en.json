@@ -100,5 +100,28 @@
     "unexpected": "An unexpected error occurred.",
     "tooManyRequests": "Too many requests.",
     "tryAgainIn": " Try again in {seconds}s."
+  },
+  "welcome": {
+    "metaTitle": "Welcome to Luxe",
+    "metaDescription": "Join Luxe or continue as a guest to explore curated luxury from independent brands.",
+    "badge": "Curated luxury marketplace",
+    "title": "Where independent luxury finds you",
+    "subtitle": "Create an account for wishlists and order tracking, sign in to pick up where you left off, or browse freely as a guest.",
+    "signUp": "Create account",
+    "signIn": "Sign in",
+    "continueAsGuest": "Continue as guest",
+    "guestNote": "Guest browsing works for discovery and cart. Sign in later to save items across devices and checkout securely.",
+    "showcase": {
+      "eyebrow": "Editor's selection",
+      "headline": "Craft, provenance, and pieces worth keeping.",
+      "subhead": "Shop verified sellers, compare with confidence, and return within 30 days.",
+      "cardEyebrow": "Member perk",
+      "cardBody": "Save favorites, track orders, and get early access to drops when you create a free account."
+    },
+    "highlights": {
+      "curated": "Verified brands",
+      "secure": "Secure checkout",
+      "delivery": "Global shipping"
+    }
   }
 }

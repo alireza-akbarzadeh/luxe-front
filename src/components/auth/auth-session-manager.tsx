@@ -10,6 +10,7 @@ import {
   setClientAccessToken,
   shouldRefreshAccessToken
 } from '@/lib/auth/auth-session';
+import { isGuestOnlyAuthPath } from '@/lib/auth/routes';
 
 /**
  * Proactively refreshes the access token before it expires.
@@ -79,13 +80,22 @@ export function AuthSessionManager() {
       }
     };
 
-    void bootstrapAuthSession().then((token) => {
-      if (token) {
-        scheduleRefresh();
-      }
-    });
+    const shouldBootstrapSession =
+      typeof window === 'undefined' || !isGuestOnlyAuthPath(window.location.pathname);
+
+    if (shouldBootstrapSession) {
+      void bootstrapAuthSession().then((token) => {
+        if (token) {
+          scheduleRefresh();
+        }
+      });
+    }
 
     const onFocus = () => {
+      if (typeof window !== 'undefined' && isGuestOnlyAuthPath(window.location.pathname)) {
+        return;
+      }
+
       void bootstrapAuthSession().then((token) => {
         if (token) {
           void refreshUser();

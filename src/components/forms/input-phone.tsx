@@ -28,14 +28,18 @@ import {
   ScrollViewport
 } from '@/components/ui/scroll-area';
 import { TwemojiFlag } from '@/components/ui/twemoji';
+import { createContextFactory } from '@/hooks/useContextFactory';
 import { useDynamicNode } from '@/hooks/useDynamicNode';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { DEFAULT_PHONE_COUNTRY, toPhoneInputValue } from '@/lib/phone-utils';
 import { cn } from '@/lib/utils';
-import { createContextFactory } from '~/src/hooks/useContextFactory';
-import { useMediaDevices } from '~/src/hooks/useMediaDevices';
 
 import { FieldContainer } from './form';
 import { useFieldContext } from './useFormContext';
+
+/** Shared shell — matches `Input` border/focus; ring applies to the whole control via focus-within. */
+const phoneInputShellClassName =
+  'border-input flex h-9 w-full min-w-0 overflow-hidden rounded-md border bg-transparent shadow-xs transition-[color,box-shadow] outline-none focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] has-[[data-slot=input][aria-invalid=true]]:border-destructive has-[[data-slot=input][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot=input][aria-invalid=true]]:ring-destructive/40';
 
 type InputPhoneProps = Omit<
   ComponentProps<typeof PhoneInputPrimitive.default>,
@@ -51,22 +55,31 @@ export function InputPhone({
 }: InputPhoneProps) {
   const field = useFieldContext<string>();
   const phoneValue = toPhoneInputValue(field.state.value, defaultCountry);
+  const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
 
   return (
     <FieldContainer label={label}>
-      <PhoneInputPrimitive.default
-        {...props}
-        defaultCountry={defaultCountry}
-        value={phoneValue}
-        onChange={(value) => {
-          field.handleChange(value ?? '');
-        }}
-        onBlur={field.handleBlur}
-        className={cn('flex', className)}
-        flagComponent={FlagComponent}
-        inputComponent={InputComponent}
-        countrySelectComponent={CountrySelect}
-      />
+      <div
+        className={cn(
+          phoneInputShellClassName,
+          hasError && 'border-destructive ring-destructive/20 dark:ring-destructive/40',
+          className
+        )}
+      >
+        <PhoneInputPrimitive.default
+          {...props}
+          defaultCountry={defaultCountry}
+          value={phoneValue}
+          onChange={(value) => {
+            field.handleChange(value ?? '');
+          }}
+          onBlur={field.handleBlur}
+          className='flex h-full min-h-0 w-full'
+          flagComponent={FlagComponent}
+          inputComponent={InputComponent}
+          countrySelectComponent={CountrySelect}
+        />
+      </div>
     </FieldContainer>
   );
 }
@@ -75,7 +88,8 @@ function InputComponent({ className, ...props }: ComponentProps<typeof Input>) {
   return (
     <Input
       className={cn(
-        'h-full w-full rounded-s-none rounded-e-xl border-none bg-transparent outline-none placeholder:text-slate-500 dark:text-white',
+        'h-full min-h-0 w-full rounded-none border-0 bg-transparent px-3 shadow-none',
+        'focus-visible:border-0 focus-visible:ring-0',
         className
       )}
       {...props}
@@ -150,9 +164,12 @@ function CountrySelect({ disabled, value, options, onChange }: CountrySelectProp
       <DynamicView>
         <Button
           role='combobox'
+          type='button'
           variant='ghost'
           className={cn(
-            'flex h-full gap-2 rounded-s-xl rounded-e-none border-r border-white/10 px-3 text-white transition-colors hover:bg-white/5',
+            'text-foreground border-input flex h-full min-h-0 shrink-0 gap-2 self-stretch rounded-none border-0 border-r px-3 shadow-none',
+            'hover:bg-muted/50 dark:hover:bg-muted/30',
+            'focus-visible:ring-0 focus-visible:ring-offset-0',
             disabled && 'opacity-50'
           )}
           disabled={disabled}
@@ -208,10 +225,9 @@ function CountrySelectCommand() {
         <ScrollAreaRoot className='h-72'>
           <ScrollViewport ref={context.parentNodeRef}>
             <div
+              className='relative w-full'
               style={{
-                height: context.virtualizer.getTotalSize(),
-                width: '100%',
-                position: 'relative'
+                height: context.virtualizer.getTotalSize()
               }}
             >
               <CommandEmpty

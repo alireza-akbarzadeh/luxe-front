@@ -15,6 +15,7 @@ import { getClientUser } from '@/actions/users.actions';
 import type { UserPayload } from '@/lib/auth/auth-server';
 import { bootstrapAuthSession, clearClientAccessToken } from '@/lib/auth/auth-session';
 import { AUTH_SESSION_CHANGED_EVENT } from '@/lib/auth/auth-session-events';
+import { isGuestOnlyAuthPath } from '@/lib/auth/routes';
 
 import { AuthSessionManager } from '../auth/auth-session-manager';
 
@@ -47,7 +48,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
   });
 
   const refreshUser = useCallback(async () => {
-    await bootstrapAuthSession();
+    const onGuestAuthPage =
+      typeof window !== 'undefined' && isGuestOnlyAuthPath(window.location.pathname);
+
+    if (!onGuestAuthPage) {
+      await bootstrapAuthSession();
+    }
+
     await queryClient.invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY });
     await refetch();
   }, [queryClient, refetch]);

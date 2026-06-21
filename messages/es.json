@@ -100,5 +100,28 @@
     "unexpected": "Se produjo un error inesperado.",
     "tooManyRequests": "Demasiadas solicitudes.",
     "tryAgainIn": " Inténtelo de nuevo en {seconds}s."
+  },
+  "welcome": {
+    "metaTitle": "Bienvenido a Luxe",
+    "metaDescription": "Únase a Luxe o continúe como invitado para explorar lujo curado de marcas independientes.",
+    "badge": "Marketplace de lujo curado",
+    "title": "Donde el lujo independiente le encuentra",
+    "subtitle": "Cree una cuenta para favoritos y seguimiento de pedidos, inicie sesión para continuar, o explore libremente como invitado.",
+    "signUp": "Crear cuenta",
+    "signIn": "Iniciar sesión",
+    "continueAsGuest": "Continuar como invitado",
+    "guestNote": "Como invitado puede explorar y usar el carrito. Inicie sesión más tarde para guardar artículos y pagar con seguridad.",
+    "showcase": {
+      "eyebrow": "Selección del editor",
+      "headline": "Artesanía, procedencia y piezas que perduran.",
+      "subhead": "Compre a vendedores verificados, compare con confianza y devuelva en 30 días.",
+      "cardEyebrow": "Beneficio de miembro",
+      "cardBody": "Guarde favoritos, siga pedidos y acceda antes a lanzamientos con una cuenta gratuita."
+    },
+    "highlights": {
+      "curated": "Marcas verificadas",
+      "secure": "Pago seguro",
+      "delivery": "Envío global"
+    }
   }
 }

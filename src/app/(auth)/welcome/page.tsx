@@ -1,0 +1,17 @@
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+
+import { WelcomeDomain } from '@/domains/welcome/welcome.domain';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('welcome');
+
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription')
+  };
+}
+
+export default function WelcomePage() {
+  return <WelcomeDomain />;
+}

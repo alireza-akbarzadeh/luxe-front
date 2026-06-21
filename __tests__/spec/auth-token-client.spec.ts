@@ -89,6 +89,22 @@ describe('auth-token-client', () => {
 
     expect(await ensureClientAccessToken()).toBeNull();
     expect(getClientAccessToken()).toBeNull();
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+
+  it('does not call the BFF on guest auth pages without a cached token', async () => {
+    vi.stubGlobal('window', { location: { pathname: '/register' } });
+
+    expect(await ensureClientAccessToken()).toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not retry the BFF after a 401 until session changes', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(null, { status: 401 }));
+
+    expect(await ensureClientAccessToken()).toBeNull();
+    expect(await ensureClientAccessToken()).toBeNull();
+    expect(fetch).toHaveBeenCalledOnce();
   });
 
   it('refetches when cached token is expired', async () => {

@@ -15,6 +15,25 @@ import { getClientLocaleFromCookie } from '@/lib/i18n/request-locale';
 
 import type { ApiClientOptions, ApiErrorResponse } from './type';
 
+function responseHasPayload(error: AxiosError<ApiErrorResponse>): boolean {
+  const data = error.response?.data;
+  if (data == null) return false;
+  if (typeof data === 'string') return data.length > 0;
+  if (typeof data === 'object') return Object.keys(data).length > 0;
+  return false;
+}
+
+function resolveToastMessage(
+  error: AxiosError<ApiErrorResponse>,
+  serverMessage: string | undefined,
+  detail: string,
+  fallback: string
+): string {
+  if (serverMessage) return serverMessage;
+  if (responseHasPayload(error) && detail) return detail;
+  return fallback;
+}
+
 /**
  * Show API errors in toasts. Server `message` is shown as-is (localized via Accept-Language).
  * Client-only fallbacks use the active UI locale from the cookie.
@@ -46,7 +65,7 @@ export const handleApiError = (
     case HttpStatusCode.NotFound:
     case HttpStatusCode.Conflict:
     case HttpStatusCode.UnprocessableEntity:
-      toast.error(serverMessage ?? detail ?? t.unexpected);
+      toast.error(resolveToastMessage(axiosError, serverMessage, detail, t.unexpected));
       break;
 
     case HttpStatusCode.Unauthorized:
@@ -54,7 +73,9 @@ export const handleApiError = (
       break;
 
     case HttpStatusCode.Forbidden:
-      toast.error(serverMessage ?? detail ?? t.forbiddenFallback);
+      toast.error(
+        resolveToastMessage(axiosError, serverMessage, detail, t.forbiddenFallback)
+      );
       break;
 
     case HttpStatusCode.TooManyRequests: {
@@ -73,7 +94,7 @@ export const handleApiError = (
 
     case HttpStatusCode.InternalServerError:
       if (!url.includes('Insight')) {
-        toast.error(serverMessage ?? detail ?? t.unexpected);
+        toast.error(resolveToastMessage(axiosError, serverMessage, detail, t.unexpected));
       }
       break;
 
@@ -84,7 +105,7 @@ export const handleApiError = (
       break;
 
     default:
-      toast.error(serverMessage ?? detail ?? t.unexpected);
+      toast.error(resolveToastMessage(axiosError, serverMessage, detail, t.unexpected));
   }
 
   if (process.env['NODE_ENV'] !== 'production') {

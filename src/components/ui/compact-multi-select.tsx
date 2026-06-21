@@ -91,6 +91,7 @@ export function CompactMultiSelect<TOption>({
                   >
                     {getLabel(opt)}
                     <button
+                      title={getLabel(opt)}
                       type='button'
                       onClick={(e) => removeOption(getValue(opt), e)}
                       className='hover:text-primary/80 ml-1'

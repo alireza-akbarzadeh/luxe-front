@@ -4,11 +4,22 @@
  * origin and requires an explicit Authorization header.
  */
 
+import { isGuestOnlyAuthPath } from '@/lib/auth/routes';
+
 import { isAccessTokenExpired } from './auth-jwt';
 import { notifyAuthSessionChanged } from './auth-session-events';
 
 let accessToken: string | null = null;
 let tokenPromise: Promise<string | null> | null = null;
+/** After a 401 from /api/auth/token, skip repeat BFF calls until session cookies change. */
+let authCookiesUnavailable = false;
+
+function isBrowserGuestAuthPage(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  return isGuestOnlyAuthPath(window.location.pathname);
+}
 
 export function getClientAccessToken(): string | null {
   return accessToken;
@@ -16,12 +27,14 @@ export function getClientAccessToken(): string | null {
 
 export function setClientAccessToken(token: string | null): void {
   accessToken = token;
+  authCookiesUnavailable = false;
   notifyAuthSessionChanged();
 }
 
 export function clearClientAccessToken(): void {
   accessToken = null;
   tokenPromise = null;
+  authCookiesUnavailable = false;
   notifyAuthSessionChanged();
 }
 
@@ -36,6 +49,11 @@ export async function ensureClientAccessToken(): Promise<string | null> {
 
   accessToken = null;
 
+  // Guest auth pages (login/register) have no session yet — avoid pointless BFF calls.
+  if (isBrowserGuestAuthPage() || authCookiesUnavailable) {
+    return null;
+  }
+
   if (tokenPromise) {
     return tokenPromise;
   }
@@ -48,6 +66,9 @@ export async function ensureClientAccessToken(): Promise<string | null> {
     .then(async (response) => {
       if (!response.ok) {
         accessToken = null;
+        if (response.status === 401) {
+          authCookiesUnavailable = true;
+        }
         return null;
       }
 

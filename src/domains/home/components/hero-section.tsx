@@ -96,8 +96,8 @@ export function HeroSection() {
               variants={itemVariants}
               className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg lg:mx-0'
             >
-              Discover designer-grade fashion, home, and lifestyle from verified independent stores —
-              curated for quality, sustainability, and timeless style.
+              Discover designer-grade fashion, home, and lifestyle from verified independent stores
+              — curated for quality, sustainability, and timeless style.
             </motion.p>
 
             <motion.div
@@ -118,11 +118,17 @@ export function HeroSection() {
               <div className='text-center sm:text-left'>
                 <div className='flex items-center justify-center gap-1 sm:justify-start'>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <IconStar key={i} className='fill-gold text-gold size-3.5 sm:size-4' aria-hidden />
+                    <IconStar
+                      key={i}
+                      className='fill-gold text-gold size-3.5 sm:size-4'
+                      aria-hidden
+                    />
                   ))}
                   <span className='ml-1 text-sm font-semibold'>4.9</span>
                 </div>
-                <p className='text-muted-foreground text-xs sm:text-sm'>Trusted by 50,000+ shoppers</p>
+                <p className='text-muted-foreground text-xs sm:text-sm'>
+                  Trusted by 50,000+ shoppers
+                </p>
               </div>
             </motion.div>
 
@@ -146,23 +152,23 @@ export function HeroSection() {
                 className='border-gold/40 hover:border-gold hover:text-gold-strong dark:hover:text-gold bg-card/50 h-12 rounded-full px-8 text-base backdrop-blur-sm transition-colors sm:h-14'
                 asChild
               >
-                <Link href='/shop?sortBy=newest'>Explore collections</Link>
+                <Link href='/collection'>Explore collections</Link>
               </Button>
             </motion.div>
 
-            <motion.dl
+            <motion.div
               variants={itemVariants}
               className='border-gold/15 mt-12 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4 lg:gap-6'
             >
               {HOME_STATS.map((stat) => (
-                <div key={stat.label} className='text-left'>
+                <dl key={stat.label} className='text-left'>
                   <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
                   <dd className='text-muted-foreground mt-1 text-xs tracking-wide sm:text-sm'>
                     {stat.label}
                   </dd>
-                </div>
+                </dl>
               ))}
-            </motion.dl>
+            </motion.div>
             <motion.p
               variants={itemVariants}
               className='text-muted-foreground/80 mt-3 text-[11px] tracking-wide'

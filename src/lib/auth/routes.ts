@@ -15,7 +15,7 @@ export const AUTH_ROUTES = {
     '/order-tracking',
     '/vendor/panel'
   ],
-  guestOnly: ['/login', '/register', '/forgot-password', '/vendor/login'],
+  guestOnly: ['/welcome', '/login', '/register', '/forgot-password', '/vendor/login'],
   publicAuth: ['/reset-password', '/verify-email'],
   admin: ['/dashboard']
 } as const;
