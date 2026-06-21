@@ -15,7 +15,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Typography } from '@/components/ui/typography';
 import { useGetSettingsKey } from '@/services/-settings-{key}-get';
 
-import { LEGAL_SETTING_KEYS, type LegalDocumentKind,parseLegalDocument } from '../lib/legal-document';
+import {
+  LEGAL_SETTING_KEYS,
+  type LegalDocumentKind,
+  parseLegalDocument
+} from '../lib/legal-document';
 
 type LegalDocumentDialogProps = {
   kind: LegalDocumentKind;
@@ -34,17 +38,15 @@ export function LegalDocumentDialog({ kind, open, onOpenChange }: LegalDocumentD
     }
   });
 
-  const document = useMemo(
-    () => parseLegalDocument(data?.data?.value),
-    [data?.data?.value]
-  );
+  const document = useMemo(() => parseLegalDocument(data?.data?.value), [data?.data?.value]);
 
-  const title = document?.title ?? (kind === 'terms' ? t('termsFallbackTitle') : t('privacyFallbackTitle'));
+  const title =
+    document?.title ?? (kind === 'terms' ? t('termsFallbackTitle') : t('privacyFallbackTitle'));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='flex max-h-[min(85vh,720px)] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl'>
-        <DialogHeader className='border-border shrink-0 border-b px-6 py-5 text-start'>
+        <DialogHeader className='border-border shrink-0 border-b px-6 py-5 pe-14 text-start'>
           <DialogTitle>{title}</DialogTitle>
           {document?.version ? (
             <DialogDescription>{t('updated', { version: document.version })}</DialogDescription>
@@ -58,7 +60,9 @@ export function LegalDocumentDialog({ kind, open, onOpenChange }: LegalDocumentD
             ) : isError || !document ? (
               <Typography.Muted>{t('loadError')}</Typography.Muted>
             ) : document.content ? (
-              <Typography.P className='leading-relaxed whitespace-pre-wrap'>{document.content}</Typography.P>
+              <Typography.P className='leading-relaxed whitespace-pre-wrap'>
+                {document.content}
+              </Typography.P>
             ) : (
               document.sections?.map((section, index) => (
                 <Flex key={`${section.heading ?? 'section'}-${index}`} direction='column' gap={2}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowRight, IconSparkles, IconUserPlus } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconSparkles, IconUserPlus } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -9,6 +9,7 @@ import { useTransition } from 'react';
 
 import { continueAsGuestAction } from '@/actions/welcome.actions';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
+import { useDirection } from '@/components/ui/direction';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
@@ -27,8 +28,10 @@ const fadeUp = {
 
 export function WelcomeDomain() {
   const t = useTranslations('welcome');
+  const dir = useDirection();
   const router = useRouter();
   const [isGuestPending, startGuestTransition] = useTransition();
+  const ForwardArrow = dir === 'rtl' ? IconArrowLeft : IconArrowRight;
 
   const onContinueAsGuest = () => {
     startGuestTransition(async () => {
@@ -74,7 +77,11 @@ export function WelcomeDomain() {
           </motion.div>
 
           <motion.div custom={0.12} initial='hidden' animate='show' variants={fadeUp}>
-            <Flex align='center' gap={2} className='border-gold/25 bg-card/70 mt-8 inline-flex rounded-full border px-3 py-1.5 backdrop-blur-sm'>
+            <Flex
+              align='center'
+              gap={2}
+              className='border-gold/25 bg-card/70 mt-8 inline-flex rounded-full border px-3 py-1.5 backdrop-blur-sm'
+            >
               <IconSparkles className='text-gold size-4' aria-hidden />
               <Text variant='small'>{t('badge')}</Text>
             </Flex>
@@ -95,10 +102,10 @@ export function WelcomeDomain() {
           <motion.div custom={0.32} initial='hidden' animate='show' variants={fadeUp}>
             <Flex direction='column' gap={3} className='mt-10 w-full max-w-md'>
               <Button asChild variant='brand' size='lg' className='h-12 w-full'>
-                <Link href='/register'>
-                  <IconUserPlus aria-hidden />
+                <Link href='/register' className='inline-flex w-full items-center justify-center gap-2'>
+                  <IconUserPlus aria-hidden className='shrink-0' />
                   {t('signUp')}
-                  <IconArrowRight aria-hidden className='ms-auto' />
+                  <ForwardArrow aria-hidden className='size-4 shrink-0' />
                 </Link>
               </Button>
 

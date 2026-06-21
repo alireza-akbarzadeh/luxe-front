@@ -2,17 +2,15 @@ import '../styles/globals.css';
 
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono, Playfair_Display, Vazirmatn } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Geist, Geist_Mono, Nunito_Sans, Playfair_Display, Vazirmatn } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
 import { getDirection, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
-
-const nunitoSans = Nunito_Sans({ variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,7 +32,8 @@ const playfairDisplay = Playfair_Display({
 
 const vazirmatn = Vazirmatn({
   variable: '--font-vazirmatn',
-  subsets: ['arabic'],
+  subsets: ['arabic', 'latin'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap'
 });
 
@@ -70,17 +69,18 @@ export default async function RootLayout({ children }: TRootLayout) {
     <html
       lang={locale}
       dir={dir}
-      className={`${nunitoSans.variable} ${playfairDisplay.variable}`}
+      className={cn(
+        playfairDisplay.variable,
+        geistSans.variable,
+        geistMono.variable,
+        vazirmatn.variable,
+        locale === 'fa' && 'locale-fa'
+      )}
       suppressHydrationWarning
       data-scroll-behavior='smooth'
     >
       <body
-        className={cn(
-          geistSans.variable,
-          geistMono.variable,
-          vazirmatn.variable,
-          'antialiased'
-        )}
+        className={cn('antialiased', locale === 'fa' && vazirmatn.className)}
         suppressHydrationWarning
       >
         <NextIntlClientProvider locale={locale} messages={messages}>

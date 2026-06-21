@@ -82,8 +82,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-geist-sans), 'Geist', 'Geist Fallback', ui-sans-serif, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
   --font-display: var(--font-playfair), 'Playfair Display', Georgia, 'Times New Roman', serif;
 
   /* v4 Variable Color Bindings */
@@ -125,7 +125,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     background-color: var(--background);
     color: var(--foreground);
     font-feature-settings: 'cv11', 'ss01';
@@ -263,10 +263,8 @@
 }
 
 /** Flip directional icons (chevrons, arrows) in RTL layouts. */
-.cn-rtl-flip {
-  [dir='rtl'] & {
-    transform: scaleX(-1);
-  }
+[dir='rtl'] .cn-rtl-flip {
+  transform: scaleX(-1);
 }
 
 /**
@@ -276,10 +274,32 @@
  * - Email/phone values: `dir="ltr"` on the input
  */
 
-[dir='rtl'] .font-display {
-  letter-spacing: 0;
+/**
+ * RTL / Persian (fa): swap sans + display stacks to Vazirmatn.
+ * Playfair/Geist lack Persian glyphs.
+ * Must use html[dir='rtl'] — do not reuse --font-sans for next/font variables (Nunito conflict).
+ */
+html[dir='rtl'],
+html.locale-fa {
+  --font-sans: var(--font-vazirmatn), 'Vazirmatn', ui-sans-serif, sans-serif;
+  --font-display: var(--font-vazirmatn), 'Vazirmatn', ui-sans-serif, sans-serif;
 }
 
-[dir='rtl'] body {
-  font-family: var(--font-vazirmatn), var(--font-geist-sans), sans-serif;
+/*
+ * Tailwind font-* utilities use var(--font-sans), not inheritance from body.
+ * next/font className on body alone is not enough for .font-sans / .font-display children.
+ */
+html[dir='rtl'] body,
+html.locale-fa body {
+  font-family: var(--font-vazirmatn), 'Vazirmatn', ui-sans-serif, sans-serif;
+  font-feature-settings: normal;
+}
+
+html[dir='rtl'] .font-sans,
+html[dir='rtl'] .font-display,
+html.locale-fa .font-sans,
+html.locale-fa .font-display {
+  font-family: var(--font-vazirmatn), 'Vazirmatn', ui-sans-serif, sans-serif;
+  letter-spacing: 0;
+  font-feature-settings: normal;
 }

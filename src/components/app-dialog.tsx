@@ -67,13 +67,11 @@ export function AppDialog(props: AppDialogProps) {
           <div className='mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20' />
 
           {(title || description) && (
-            <DrawerHeader className='mt-2 shrink-0'>
+            <DrawerHeader className='mt-2 shrink-0 text-center sm:text-start'>
               {title && (
-                <DrawerTitle className='text-center text-lg font-semibold'>{title}</DrawerTitle>
+                <DrawerTitle className='text-lg font-semibold'>{title}</DrawerTitle>
               )}
-              {description && (
-                <DrawerDescription className='text-center'>{description}</DrawerDescription>
-              )}
+              {description && <DrawerDescription>{description}</DrawerDescription>}
             </DrawerHeader>
           )}
 
@@ -94,7 +92,7 @@ export function AppDialog(props: AppDialogProps) {
           className={cn('flex h-full w-full flex-col gap-0 p-0', sizeClasses.sheet)}
         >
           {(title || description) && (
-            <SheetHeader className='shrink-0 space-y-1 border-b px-6 py-5 pr-14 text-left'>
+            <SheetHeader className='shrink-0 space-y-1 border-b px-6 py-5 pe-14 text-start'>
               {title && <SheetTitle className='text-lg font-semibold'>{title}</SheetTitle>}
               {description && <SheetDescription>{description}</SheetDescription>}
             </SheetHeader>
@@ -117,7 +115,7 @@ export function AppDialog(props: AppDialogProps) {
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className={sizeClasses.dialog}>
         {(title || description) && (
-          <DialogHeader>
+          <DialogHeader className='pe-14 text-start'>
             {title && <DialogTitle>{title}</DialogTitle>}
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
