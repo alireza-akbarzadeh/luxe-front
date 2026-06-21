@@ -9,6 +9,7 @@ import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
 import RootProvider from '@/components/providers/root';
+import { SerwistProvider } from '@/components/providers/serwist-provider';
 import { getDirection, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
 
@@ -84,7 +85,9 @@ export default async function RootLayout({ children }: TRootLayout) {
         suppressHydrationWarning
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <RootProvider dir={dir}>{children}</RootProvider>
+          <SerwistProvider swUrl='/serwist/sw.js'>
+            <RootProvider dir={dir}>{children}</RootProvider>
+          </SerwistProvider>
         </NextIntlClientProvider>
         <SpeedInsights />
       </body>

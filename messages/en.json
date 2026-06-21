@@ -303,5 +303,24 @@
         }
       }
     }
+  },
+  "pwa": {
+    "push": {
+      "title": "Browser push notifications",
+      "descriptionDisabled": "Get order updates and alerts even when Luxe is closed. Requires an installed PWA on iOS 16.4+.",
+      "descriptionEnabled": "Push notifications are active on this device.",
+      "enable": "Enable push",
+      "disable": "Disable push",
+      "working": "Updating…",
+      "enabledSuccess": "Push notifications enabled",
+      "disabledSuccess": "Push notifications disabled",
+      "unsupported": "Push notifications are not supported in this browser.",
+      "permissionDenied": "Notifications are blocked. Enable them in your browser settings.",
+      "error": "Could not update push notifications",
+      "sendTest": "Send test",
+      "sendingTest": "Sending…",
+      "testSent": "Test notification sent",
+      "testError": "Could not send test notification"
+    }
   }
 }

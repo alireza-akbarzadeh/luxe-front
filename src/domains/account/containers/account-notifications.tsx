@@ -16,6 +16,7 @@ import { useRealtime } from '@/lib/realtime/realtime-provider';
 
 import { AccountNotificationRow } from '../components/account-notification-row';
 import { AccountNotificationsSkeleton } from '../components/account-notifications-skeleton';
+import { PushNotificationPanel } from '../components/push-notification-panel';
 import { useAccountNotifications } from '../hooks/use-account-notifications';
 
 const PAGE_SIZE = 8;
@@ -80,6 +81,8 @@ export function AccountNotifications() {
 
   return (
     <div className='space-y-6'>
+      <PushNotificationPanel />
+
       <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
         <div>
           <h2 className='font-display text-2xl font-semibold tracking-tight'>Notifications</h2>

@@ -67,3 +67,78 @@ const serwist = new Serwist({
 });
 
 serwist.addEventListeners();
+
+interface PushPayload {
+  title?: string;
+  body?: string;
+  url?: string;
+  tag?: string;
+  icon?: string;
+}
+
+function parsePushPayload(event: PushEvent): PushPayload {
+  const fallback: PushPayload = {
+    title: 'Luxe',
+    body: '',
+    url: '/notifications',
+    tag: 'luxe-notification'
+  };
+
+  if (!event.data) {
+    return fallback;
+  }
+
+  try {
+    const parsed = event.data.json() as PushPayload;
+    return { ...fallback, ...parsed };
+  } catch {
+    const text = event.data.text();
+    return { ...fallback, body: text || fallback.body };
+  }
+}
+
+self.addEventListener('push', (event: PushEvent) => {
+  const payload = parsePushPayload(event);
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title ?? 'Luxe', {
+      body: payload.body,
+      tag: payload.tag,
+      icon: payload.icon ?? '/favicon.svg',
+      badge: '/favicon.svg',
+      data: { url: payload.url ?? '/notifications' }
+    })
+  );
+});
+
+self.addEventListener('notificationclick', (event: NotificationEvent) => {
+  event.notification.close();
+
+  const targetUrl = (event.notification.data?.url as string | undefined) ?? '/notifications';
+  const absoluteUrl = new URL(targetUrl, self.location.origin).href;
+
+  event.waitUntil(
+    (async () => {
+      const windowClients = await self.clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      });
+
+      for (const client of windowClients) {
+        if (!('focus' in client)) {
+          continue;
+        }
+
+        await client.focus();
+
+        if ('navigate' in client) {
+          await (client as WindowClient).navigate(absoluteUrl);
+        }
+
+        return;
+      }
+
+      await self.clients.openWindow(absoluteUrl);
+    })()
+  );
+});

@@ -6,6 +6,7 @@ import './src/env';
 
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
+import { withSerwist } from '@serwist/turbopack';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
@@ -18,6 +19,7 @@ const backendApiUrl = (
 const config = {
   reactCompiler: true,
   reactStrictMode: true,
+  serverExternalPackages: ['esbuild'],
   async rewrites() {
     return [
       {
@@ -66,4 +68,4 @@ const config = {
   }
 } satisfies NextConfig;
 
-export default withNextIntl(config);
+export default withSerwist(withNextIntl(config));
