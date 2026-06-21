@@ -7,10 +7,10 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
+import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
 import { useSearchStore } from '@/domains/search/search.store';
-import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
@@ -27,7 +27,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
-  const { data: { data: navMenus } = {} } = useGetNavMenus();
+  const { data: { data: navMenus } = {} } = useNavMenus();
   const sortedNavMenus = navMenus ? sortNavMenuItems(navMenus) : undefined;
 
   useEffect(() => {

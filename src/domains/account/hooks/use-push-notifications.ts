@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
-import { sendTestPushNotification } from '@/domains/account/api/push-subscriptions-api';
+import { postAccountPushTest } from '@/services/-account-push-test-post';
 import {
   getActivePushSubscription,
   getPushSupportStatus,
@@ -45,7 +45,7 @@ export function usePushNotifications() {
   });
 
   const testMutation = useMutation({
-    mutationFn: sendTestPushNotification
+    mutationFn: () => postAccountPushTest()
   });
 
   const isSubscribed = Boolean(subscriptionQuery.data);

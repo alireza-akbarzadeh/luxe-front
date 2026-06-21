@@ -21,7 +21,7 @@ export function MenuLink({ href, icon, title, subtitle }: MenuLinkProps) {
           {icon}
         </div>
 
-        <div className='flex-1 text-left'>
+        <div className='flex-1 text-start'>
           <p className='text-sm font-medium'>{title}</p>
 
           <p className='text-muted-foreground text-xs'>{subtitle}</p>
@@ -29,7 +29,7 @@ export function MenuLink({ href, icon, title, subtitle }: MenuLinkProps) {
 
         <IconChevronRight
           size={16}
-          className='text-muted-foreground transition-transform group-hover:translate-x-1'
+          className='text-muted-foreground cn-rtl-flip shrink-0 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1'
         />
       </Link>
     </DropdownMenuItem>

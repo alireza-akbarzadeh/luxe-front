@@ -12,7 +12,62 @@
   },
   "nav": {
     "openMenu": "Abrir menú",
-    "closeMenu": "Cerrar menú"
+    "closeMenu": "Cerrar menú",
+    "mobile": {
+      "more": "Más",
+      "notifications": "Notificaciones",
+      "stores": "Tiendas",
+      "wishlist": "Favoritos",
+      "account": "Mi cuenta",
+      "shopAllProducts": "Ver todos los productos"
+    },
+    "userProfile": {
+      "accountMenu": "Menú de cuenta",
+      "signedIn": "Sesión iniciada",
+      "guestSession": "Sesión de invitado",
+      "guestUser": "Usuario invitado",
+      "guestEmail": "Sin iniciar sesión",
+      "menu": {
+        "profile": {
+          "title": "Mi perfil",
+          "subtitle": "Administrar información de la cuenta"
+        },
+        "dashboard": {
+          "title": "Panel",
+          "subtitle": "Resumen del espacio de trabajo"
+        },
+        "wishlist": {
+          "title": "Mis favoritos",
+          "subtitle": "Productos guardados para más tarde"
+        },
+        "stores": {
+          "title": "Tiendas",
+          "subtitle": "Explorar todas las tiendas disponibles"
+        },
+        "compare": {
+          "title": "Comparar",
+          "subtitle": "Encuentra tu opción ideal"
+        },
+        "notifications": {
+          "title": "Notificaciones",
+          "subtitle": "Alertas de pedidos y envíos"
+        },
+        "settings": {
+          "title": "Ajustes",
+          "subtitle": "Preferencias y privacidad"
+        }
+      },
+      "theme": {
+        "title": "Apariencia",
+        "subtitle": "Alternar entre claro y oscuro"
+      },
+      "auth": {
+        "signOut": "Cerrar sesión",
+        "signOutSubtitle": "Finalizar sesión actual",
+        "logIn": "Iniciar sesión",
+        "logInSubtitle": "Acceder a tu cuenta"
+      }
+    }
   },
   "language": {
     "label": "Idioma",
@@ -302,6 +357,25 @@
           "orders": "Seguimiento e historial de pedidos"
         }
       }
+    }
+  },
+  "pwa": {
+    "push": {
+      "title": "Notificaciones push del navegador",
+      "descriptionDisabled": "Reciba actualizaciones de pedidos y alertas aunque Luxe esté cerrado. Requiere PWA instalada en iOS 16.4+.",
+      "descriptionEnabled": "Las notificaciones push están activas en este dispositivo.",
+      "enable": "Activar push",
+      "disable": "Desactivar push",
+      "working": "Actualizando…",
+      "enabledSuccess": "Notificaciones push activadas",
+      "disabledSuccess": "Notificaciones push desactivadas",
+      "unsupported": "Las notificaciones push no son compatibles con este navegador.",
+      "permissionDenied": "Las notificaciones están bloqueadas. Actívelas en la configuración del navegador.",
+      "error": "No se pudieron actualizar las notificaciones push",
+      "sendTest": "Enviar prueba",
+      "sendingTest": "Enviando…",
+      "testSent": "Notificación de prueba enviada",
+      "testError": "No se pudo enviar la notificación de prueba"
     }
   }
 }

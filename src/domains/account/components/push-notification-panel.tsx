@@ -27,9 +27,7 @@ export function PushNotificationPanel() {
       <div className='bg-muted/40 border-border rounded-2xl border p-5'>
         <Flex align='center' gap={3}>
           <IconBellOff className='text-muted-foreground size-5 shrink-0' />
-          <Typography variant='small' className='text-muted-foreground'>
-            {t('unsupported')}
-          </Typography>
+          <Typography.Small className='text-muted-foreground'>{t('unsupported')}</Typography.Small>
         </Flex>
       </div>
     );
@@ -61,17 +59,13 @@ export function PushNotificationPanel() {
           <Flex direction='column' gap={1}>
             <Flex align='center' gap={2}>
               <IconBellRinging className='text-primary size-5' />
-              <Typography variant='large' className='font-semibold'>
-                {t('title')}
-              </Typography>
+              <Typography.Large className='font-semibold'>{t('title')}</Typography.Large>
             </Flex>
-            <Typography variant='small' className='text-muted-foreground max-w-xl'>
+            <Typography.Small className='text-muted-foreground max-w-xl'>
               {isSubscribed ? t('descriptionEnabled') : t('descriptionDisabled')}
-            </Typography>
+            </Typography.Small>
             {supportStatus === 'denied' ? (
-              <Typography variant='small' className='text-destructive'>
-                {t('permissionDenied')}
-              </Typography>
+              <Typography.Small className='text-destructive'>{t('permissionDenied')}</Typography.Small>
             ) : null}
           </Flex>
 

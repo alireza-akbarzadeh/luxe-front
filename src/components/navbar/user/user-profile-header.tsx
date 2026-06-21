@@ -1,9 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { useNavbarProfile } from '@/components/navbar/user/useNavbarProfile';
 import { cn } from '@/lib/utils';
 
 export function UserProfileHeader() {
+  const t = useTranslations('nav.userProfile');
   const { avatarFallback, userName, userEmail, sessionDot, isLoggedIn } = useNavbarProfile();
 
   return (
@@ -28,7 +31,7 @@ export function UserProfileHeader() {
 
           <div className='bg-muted/60 ring-border/60 mt-2 inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs ring-1'>
             <span className={cn('size-2 rounded-full', sessionDot)} />
-            {isLoggedIn ? 'Signed in' : 'Guest session'}
+            {isLoggedIn ? t('signedIn') : t('guestSession')}
           </div>
         </div>
       </div>

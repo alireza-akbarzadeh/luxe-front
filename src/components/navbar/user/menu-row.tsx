@@ -24,13 +24,13 @@ export function MenuRow({ icon, title, subtitle, onClickAction, href }: MenuRowP
       </div>
       <IconChevronRight
         size={16}
-        className='text-muted-foreground transition-transform group-hover:translate-x-1'
+        className='text-muted-foreground cn-rtl-flip shrink-0 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1'
       />
     </>
   );
 
   const className = cn(
-    'flex w-full items-center gap-3 rounded-2xl p-3 text-left transition-colors',
+    'group flex w-full items-center gap-3 rounded-2xl p-3 text-start transition-colors',
     'hover:bg-accent/50'
   );
 

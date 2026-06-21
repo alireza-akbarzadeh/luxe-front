@@ -1,7 +1,8 @@
 'use client';
 
 import { IconUser } from '@tabler/icons-react';
-import { type ComponentPropsWithoutRef,forwardRef } from 'react';
+import { useTranslations } from 'next-intl';
+import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 
 import { navbarActionButtonClassName } from '@/components/navbar/navbar-action-button';
 import { useNavbarProfile } from '@/components/navbar/user/useNavbarProfile';
@@ -12,6 +13,7 @@ type UserProfileTriggerProps = ComponentPropsWithoutRef<'button'>;
 
 export const UserProfileTrigger = forwardRef<HTMLButtonElement, UserProfileTriggerProps>(
   function UserProfileTrigger({ className, ...props }, ref) {
+    const t = useTranslations('nav.userProfile');
     const { avatarFallback, statusDot, isLoggedIn } = useNavbarProfile();
 
     return (
@@ -20,7 +22,7 @@ export const UserProfileTrigger = forwardRef<HTMLButtonElement, UserProfileTrigg
         type='button'
         variant='ghost'
         size='icon'
-        aria-label='Account menu'
+        aria-label={t('accountMenu')}
         className={cn(
           navbarActionButtonClassName,
           'hover:bg-muted/70 relative p-0',

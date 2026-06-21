@@ -1,10 +1,13 @@
 'use client';
+
 import { IconLogout, IconUserCircle } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
 import { useNavbarProfile } from '~/src/components/navbar/user/useNavbarProfile';
 
 export function AuthMenuItem() {
+  const t = useTranslations('nav.userProfile.auth');
   const { isLoggedIn, handleLogout } = useNavbarProfile();
 
   return (
@@ -22,18 +25,18 @@ export function AuthMenuItem() {
         )}
       >
         {isLoggedIn ? (
-          <IconLogout size={18} className={cn(isLoggedIn && 'text-destructive')} />
+          <IconLogout size={18} className={cn('cn-rtl-flip', isLoggedIn && 'text-destructive')} />
         ) : (
           <IconUserCircle size={18} className='text-foreground' />
         )}
       </div>
 
-      <div className='flex-1 text-left'>
+      <div className='flex-1 text-start'>
         <span className={cn('text-sm font-medium', isLoggedIn && 'text-destructive')}>
-          {isLoggedIn ? 'Sign out' : 'Log in'}
+          {isLoggedIn ? t('signOut') : t('logIn')}
         </span>
         <span className='text-muted-foreground block text-xs'>
-          {isLoggedIn ? 'End current session' : 'Access your account'}
+          {isLoggedIn ? t('signOutSubtitle') : t('logInSubtitle')}
         </span>
       </div>
     </button>

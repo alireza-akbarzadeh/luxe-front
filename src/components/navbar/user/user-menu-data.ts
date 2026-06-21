@@ -8,53 +8,60 @@ import {
   IconUserCircle
 } from '@tabler/icons-react';
 
-export const profileMenuItems = [
+export type ProfileMenuItemKey =
+  | 'profile'
+  | 'dashboard'
+  | 'wishlist'
+  | 'stores'
+  | 'compare'
+  | 'notifications'
+  | 'settings';
+
+export const profileMenuItems: Array<{
+  type: 'link' | 'button';
+  href?: string;
+  key: ProfileMenuItemKey;
+  icon: typeof IconUserCircle;
+}> = [
   {
     type: 'link',
     href: '/account',
-    title: 'My Profile',
-    subtitle: 'Manage account information',
+    key: 'profile',
     icon: IconUserCircle
   },
   {
     type: 'link',
     href: '/dashboard',
-    title: 'Dashboard',
-    subtitle: 'Workspace overview',
+    key: 'dashboard',
     icon: IconDashboard
   },
   {
     type: 'link',
     href: '/wishlist',
-    title: 'My Wishlist',
-    subtitle: 'Products you saved for later',
+    key: 'wishlist',
     icon: IconHeart
   },
   {
     type: 'link',
     href: '/store',
-    title: 'Stores',
-    subtitle: 'Browse all available stores',
+    key: 'stores',
     icon: IconBuildingStore
   },
   {
     type: 'link',
     href: '/compare',
-    subtitle: 'Find your perfect match',
-    title: 'Compare',
+    key: 'compare',
     icon: IconLayersIntersect2
   },
   {
     type: 'link',
     href: '/notifications',
-    title: 'Notifications',
-    subtitle: 'Order and shipping alerts',
+    key: 'notifications',
     icon: IconBell
   },
   {
     type: 'button',
-    title: 'Settings',
-    subtitle: 'Preferences & privacy',
+    key: 'settings',
     icon: IconSettings
   }
 ];

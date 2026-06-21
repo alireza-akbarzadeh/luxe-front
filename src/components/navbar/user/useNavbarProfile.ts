@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { logoutAction } from '@/actions/auth.actions';
@@ -6,6 +9,7 @@ import { useUser } from '@/hooks/useUser';
 import { clearClientAccessToken } from '@/lib/auth/auth-token-client';
 
 export function useNavbarProfile() {
+  const t = useTranslations('nav.userProfile');
   const { user, isAuthenticated } = useUser();
   const { clearSession } = useAuth();
   const [openMenu, setOpenMenu] = useState(false);
@@ -13,9 +17,11 @@ export function useNavbarProfile() {
   const isLoggedIn = isAuthenticated && !!user;
 
   const userName =
-    user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : 'Guest User';
+    user?.first_name && user?.last_name
+      ? `${user.first_name} ${user.last_name}`
+      : t('guestUser');
 
-  const userEmail = user?.email ?? 'guest@example.com';
+  const userEmail = user?.email ?? t('guestEmail');
 
   const avatarFallback = userName.charAt(0).toUpperCase();
 

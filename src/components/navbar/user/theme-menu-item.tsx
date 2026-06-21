@@ -1,10 +1,13 @@
 'use client';
+
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { useTheme } from '@/components/providers/client/theme';
 
 export function ThemeMenuItem() {
+  const t = useTranslations('nav.userProfile.theme');
   const { resolvedTheme, setTheme } = useTheme();
 
   const nextTheme = resolvedTheme === 'light' ? 'dark' : 'light';
@@ -32,9 +35,9 @@ export function ThemeMenuItem() {
         </AnimatePresence>
       </div>
 
-      <div className='flex-1 text-left'>
-        <span className='text-sm font-medium'>Appearance</span>
-        <span className='text-muted-foreground block text-xs'>Switch between light & dark</span>
+      <div className='flex-1 text-start'>
+        <span className='text-sm font-medium'>{t('title')}</span>
+        <span className='text-muted-foreground block text-xs'>{t('subtitle')}</span>
       </div>
     </button>
   );

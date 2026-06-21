@@ -1,7 +1,7 @@
 module.exports = [
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-orders-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-orders-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -195,7 +195,396 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-summary-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-push-subscriptions-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/subscriptions": {
+            "delete": {
+              "description": "Removes a Web Push subscription by endpoint for the current user",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.DeletePushSubscriptionRequest"
+                    }
+                  }
+                },
+                "description": "Push subscription endpoint",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete push subscription",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.DeletePushSubscriptionRequest": {
+              "properties": {
+                "endpoint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "endpoint"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-push-subscriptions-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/subscriptions": {
+            "post": {
+              "description": "Stores a Web Push subscription endpoint and keys for the current user",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.RegisterPushSubscriptionRequest"
+                    }
+                  }
+                },
+                "description": "Push subscription",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Register push subscription",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.RegisterPushSubscriptionRequest": {
+              "properties": {
+                "endpoint": {
+                  "type": "string"
+                },
+                "keys": {
+                  "$ref": "#/components/schemas/dto.PushSubscriptionKeys"
+                }
+              },
+              "required": [
+                "endpoint",
+                "keys"
+              ],
+              "type": "object"
+            },
+            "dto.PushSubscriptionKeys": {
+              "properties": {
+                "auth": {
+                  "type": "string"
+                },
+                "p256dh": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "auth",
+                "p256dh"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-push-test-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/test": {
+            "post": {
+              "description": "Sends a test push notification to all registered devices for the current user",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Send test push notification",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-summary-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -404,7 +793,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-wishlist-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-account-wishlist-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -608,7 +997,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -804,7 +1193,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -1081,7 +1470,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-default-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-default-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -1299,7 +1688,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -1452,7 +1841,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -1748,7 +2137,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-addresses-{id}-default-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-addresses-{id}-default-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -1901,7 +2290,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-audit-logs-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-audit-logs-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -2054,7 +2443,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-audit-logs-summary-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-audit-logs-summary-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -2170,7 +2559,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -2833,7 +3222,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -2906,7 +3308,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-bulk-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-bulk-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -3070,7 +3472,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-bulk-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-bulk-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -3739,7 +4141,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -3812,7 +4227,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -3975,7 +4390,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -4622,7 +5037,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -4695,7 +5123,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-categories-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-categories-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -5376,7 +5804,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -5449,7 +5890,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-coupons-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-coupons-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -5779,7 +6220,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-dashboard-overview-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-dashboard-overview-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -6126,7 +6567,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-import-categories-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-categories-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -6340,7 +6781,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-import-products-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-products-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -6564,7 +7005,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-import-template-{entity}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-import-template-{entity}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -6695,7 +7136,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -6985,7 +7426,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-adjust-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-adjust-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -7250,7 +7691,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-adjustments-recent-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-adjustments-recent-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -7428,7 +7869,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-bulk-adjust-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-bulk-adjust-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -7656,7 +8097,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-overview-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-overview-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -7799,7 +8240,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-inventory-products-{id}-history-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-inventory-products-{id}-history-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8022,7 +8463,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-invoices-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8251,7 +8692,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-invoices-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8467,7 +8908,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-invoices-{id}-pdf-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-pdf-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8548,7 +8989,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-invoices-{id}-send-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-send-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8646,7 +9087,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-invoices-{id}-status-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-invoices-{id}-status-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8774,7 +9215,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-groups-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-groups-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -8954,7 +9395,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-groups-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-groups-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -9167,7 +9608,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-groups-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-groups-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -9286,7 +9727,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-groups-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-groups-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -9494,7 +9935,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-groups-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-groups-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -9728,7 +10169,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-items-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-items-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -9910,7 +10351,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-items-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-items-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10114,7 +10555,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-items-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-items-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10233,7 +10674,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-items-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-items-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10415,7 +10856,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-menu-items-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-menu-items-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10640,7 +11081,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-orders-bulk-status-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-orders-bulk-status-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10823,7 +11264,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-orders-export-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-orders-export-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -10968,7 +11409,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-permissions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-permissions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11087,7 +11528,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-reports-revenue-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-reports-revenue-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11298,7 +11739,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-returns-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11419,7 +11860,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-returns-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11596,7 +12037,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-returns-{id}-transition-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-returns-{id}-transition-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11784,7 +12225,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -11930,7 +12371,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12108,7 +12549,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12206,7 +12647,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12360,7 +12801,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12543,7 +12984,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-{id}-permissions-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-roles-{id}-permissions-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12720,7 +13161,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-sales-feed-snapshot-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-sales-feed-snapshot-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -12930,7 +13371,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-shipments-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -13172,7 +13613,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-shipments-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -13488,7 +13929,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-shipments-{id}-status-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipments-{id}-status-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -13649,7 +14090,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-shipping-providers-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-shipping-providers-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -13788,7 +14229,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-stats-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stats-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -13950,7 +14391,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-stores-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -14225,7 +14666,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-stores-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -14374,7 +14815,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-stores-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -14600,7 +15041,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-stores-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-stores-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -14896,7 +15337,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-users-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -15125,7 +15566,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-users-{id}-active-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-{id}-active-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -15294,7 +15735,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-users-{id}-role-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-users-{id}-role-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -15468,7 +15909,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-wallet-adjust-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-wallet-adjust-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -15627,7 +16068,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-webhooks-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-webhooks-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -15787,7 +16228,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16036,7 +16477,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16164,7 +16605,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16262,7 +16703,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16389,7 +16830,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-states-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16537,7 +16978,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-states-{stateId}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-{stateId}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16644,7 +17085,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-states-{stateId}-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-states-{stateId}-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16792,7 +17233,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-transitions-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -16946,7 +17387,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-transitions-{transitionId}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-{transitionId}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17053,7 +17494,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-workflows-{id}-transitions-{transitionId}-patch.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-admin-workflows-{id}-transitions-{transitionId}-patch.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17200,7 +17641,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-change-password-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-change-password-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17341,7 +17782,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-forgot-password-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-forgot-password-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17451,7 +17892,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-login-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-login-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17626,7 +18067,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-logout-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-logout-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17729,7 +18170,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-refresh-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-refresh-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17879,7 +18320,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-register-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-register-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -17972,6 +18413,12 @@ module.exports = [
           "schemas": {
             "dto.RegisterRequest": {
               "properties": {
+                "accept_privacy": {
+                  "type": "boolean"
+                },
+                "accept_terms": {
+                  "type": "boolean"
+                },
                 "email": {
                   "type": "string"
                 },
@@ -17994,6 +18441,8 @@ module.exports = [
                 }
               },
               "required": [
+                "accept_privacy",
+                "accept_terms",
                 "email",
                 "first_name",
                 "last_name",
@@ -18070,7 +18519,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-reset-password-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-reset-password-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18185,7 +18634,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-send-verification-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-send-verification-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18287,7 +18736,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-verify-email-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-auth-verify-email-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18385,7 +18834,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-brands-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-brands-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18612,7 +19061,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-brands-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-brands-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18824,7 +19273,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-brands-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-brands-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -18948,7 +19397,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-brands-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-brands-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -19145,7 +19594,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-brands-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-brands-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -19374,7 +19823,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-cart-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-cart-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -19559,7 +20008,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-cart-items-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-cart-items-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -19681,7 +20130,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-cart-items-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-cart-items-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -19866,7 +20315,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-cart-items-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-cart-items-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -20009,7 +20458,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-cart-items-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-cart-items-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -20178,7 +20627,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-categories-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-categories-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -20846,7 +21295,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -20919,7 +21381,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-categories-{identifier}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-categories-{identifier}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -21541,7 +22003,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -21614,7 +22089,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-checkout-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-checkout-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -22432,7 +22907,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -22636,7 +23124,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-collections-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -22882,7 +23370,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-collections-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -23152,7 +23640,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-collections-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -23255,7 +23743,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-collections-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -23452,7 +23940,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-collections-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-collections-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -23718,7 +24206,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-compare-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-compare-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -23849,7 +24337,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-compare-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-compare-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -24296,7 +24784,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-compare-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-compare-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -24428,7 +24916,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -24774,7 +25262,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -25113,7 +25601,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-my-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-my-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -25364,7 +25852,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-validate-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-validate-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -25658,7 +26146,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -25821,7 +26309,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26113,7 +26601,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-coupons-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-coupons-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26462,7 +26950,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-health-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-health-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26539,7 +27027,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-health-live-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-health-live-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26605,7 +27093,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-health-ready-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-health-ready-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26682,7 +27170,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26777,6 +27265,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -26798,6 +27289,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -26807,6 +27301,12 @@ module.exports = [
                 "viewAll": {
                   "$ref": "#/components/schemas/dto.ViewAll"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -26820,6 +27320,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26831,6 +27334,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26840,8 +27346,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -26851,6 +27363,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26862,6 +27377,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26873,7 +27391,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -26960,6 +27478,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -26977,6 +27498,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -26998,6 +27522,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "dto.Column": {
               "properties": {
                 "links": {
@@ -27008,6 +27538,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27019,6 +27552,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27028,8 +27564,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27039,6 +27581,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27050,6 +27595,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27076,6 +27624,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27097,6 +27648,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -27116,7 +27670,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-reorder-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-reorder-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -27240,7 +27794,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -27333,7 +27887,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -27436,6 +27990,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27457,6 +28014,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -27466,6 +28026,12 @@ module.exports = [
                 "viewAll": {
                   "$ref": "#/components/schemas/dto.ViewAll"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -27479,6 +28045,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27490,6 +28059,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27499,8 +28071,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27510,6 +28088,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27521,6 +28102,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27532,7 +28116,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-nav-menus-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-nav-menus-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -27630,6 +28214,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27647,6 +28234,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -27668,6 +28258,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "dto.Column": {
               "properties": {
                 "links": {
@@ -27678,6 +28274,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27689,6 +28288,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27698,8 +28300,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27709,6 +28317,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27720,6 +28331,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27746,6 +28360,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27767,6 +28384,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -27786,7 +28406,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -28047,7 +28667,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-my-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-my-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -28793,7 +29413,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -28997,7 +29630,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -29226,7 +29859,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-{id}-available-transitions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-available-transitions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -29411,7 +30044,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-{id}-cancel-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-cancel-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -29550,7 +30183,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-{id}-status-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-status-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -29711,7 +30344,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-orders-{id}-transition-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-orders-{id}-transition-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -29911,7 +30544,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-payment-providers-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-payment-providers-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -30049,7 +30682,113 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-payments-stripe-config-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/payments/stripe-config": {
+            "get": {
+              "description": "Returns whether Stripe is enabled and the publishable key for client-side checkout.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StripeConfigResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Get Stripe client configuration",
+              "tags": [
+                "Payment"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StripeConfigResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "publishable_key": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -30612,7 +31351,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -31196,7 +31935,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-bulk-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-bulk-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -31351,7 +32090,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-bulk-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-bulk-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -31931,7 +32670,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-suggestions-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-suggestions-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -32369,7 +33108,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -32508,7 +33247,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -32938,7 +33677,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -33538,7 +34277,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-alternatives-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-alternatives-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -33966,7 +34705,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-available-transitions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-available-transitions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -34152,7 +34891,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-like-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-like-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -34321,7 +35060,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-liked-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-liked-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -34467,7 +35206,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-price-history-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-price-history-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -34614,7 +35353,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-questions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -34820,7 +35559,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-questions-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -35021,7 +35760,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-questions-{questionId}-answers-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-questions-{questionId}-answers-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -35202,7 +35941,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-related-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-related-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -35632,7 +36371,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-stock-notifications-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -35760,7 +36499,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-stock-notifications-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -35888,7 +36627,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-stock-notifications-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-stock-notifications-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -36016,7 +36755,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-{id}-transition-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-products-{id}-transition-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -36470,7 +37209,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-profile-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-profile-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -36632,7 +37371,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-profile-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-profile-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -36801,7 +37540,113 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-returns-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-push-vapid-public-key-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/push/vapid-public-key": {
+            "get": {
+              "description": "Returns the public VAPID key used by the browser PushManager.subscribe()",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.VapidPublicKeyResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Get VAPID public key",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.VapidPublicKeyResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "public_key": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -36996,7 +37841,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-returns-my-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-my-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37101,7 +37946,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-returns-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-returns-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37278,7 +38123,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-reviews-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37390,7 +38235,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-reviews-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37583,7 +38428,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-reviews-me-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-me-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37732,7 +38577,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-reviews-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -37831,7 +38676,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-reviews-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-reviews-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -38008,7 +38853,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-search-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-search-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -38592,7 +39437,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-search-suggestions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-search-suggestions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -38750,7 +39595,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-search-trending-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-search-trending-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -38877,7 +39722,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-settings-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-settings-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -38995,7 +39840,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-settings-{key}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-settings-{key}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -39099,7 +39944,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-settings-{key}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-settings-{key}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -39235,7 +40080,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-settings-{key}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-settings-{key}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -39419,7 +40264,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipments-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -39727,7 +40572,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipments-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40022,7 +40867,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipments-{id}-available-transitions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-{id}-available-transitions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40207,7 +41052,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipments-{id}-transition-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipments-{id}-transition-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40407,7 +41252,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipping-providers-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipping-providers-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40531,7 +41376,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipping-providers-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipping-providers-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40715,7 +41560,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipping-providers-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipping-providers-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -40841,7 +41686,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipping-providers-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipping-providers-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41003,7 +41848,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-shipping-providers-{id}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-shipping-providers-{id}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41195,7 +42040,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41472,7 +42317,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41683,7 +42528,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-follow-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-follow-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41812,7 +42657,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-follow-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-follow-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -41941,7 +42786,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-products-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-products-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -42457,7 +43302,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-reviews-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-reviews-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -42569,7 +43414,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-reviews-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-reviews-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -42699,7 +43544,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-reviews-me-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-reviews-me-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -42798,7 +43643,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-reviews-{reviewId}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-reviews-{reviewId}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -42906,7 +43751,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-stores-{slug}-reviews-{reviewId}-put.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-stores-{slug}-reviews-{reviewId}-put.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43041,7 +43886,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-uploads-config-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-uploads-config-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43150,7 +43995,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-uploads-presign-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-uploads-presign-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43330,7 +44175,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-user-menu-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-user-menu-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43487,7 +44332,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-user-menu-structure-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-user-menu-structure-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43677,7 +44522,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-users-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-users-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -43927,7 +44772,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-users-me-liked-products-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-users-me-liked-products-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44045,7 +44890,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-users-{id}-delete.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-users-{id}-delete.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44194,7 +45039,215 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-wallet-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-vendor-stores-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/vendor/stores": {
+            "get": {
+              "description": "Returns stores owned by the current seller, or all stores for admins/moderators",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/dto.StoreResponse"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List vendor stores",
+              "tags": [
+                "Vendor"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StoreResponse": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CategoryResponse"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_followed": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "joined_at": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-wallet-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44395,7 +45448,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-wallet-deposit-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-wallet-deposit-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44572,7 +45625,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-wallet-deposit-{id}-cancel-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-wallet-deposit-{id}-cancel-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44701,7 +45754,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-wallet-transactions-{id}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-wallet-transactions-{id}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -44877,7 +45930,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-wallet-withdraw-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-wallet-withdraw-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -45038,7 +46091,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-workflows-{key}-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -45255,7 +46308,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-workflows-{key}-{entityId}-available-transitions-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-available-transitions-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -45449,7 +46502,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-workflows-{key}-{entityId}-history-get.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-history-get.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",
@@ -45573,7 +46626,7 @@ module.exports = [
   },
   {
     "output": {
-      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-workflows-{key}-{entityId}-transition-post.ts",
+      "target": "/Users/alirezaakbarzadeh/workshop/github.com/alireza-akbarzadeh/src/luxe-front/src/services/-workflows-{key}-{entityId}-transition-post.ts",
       "client": "react-query",
       "httpClient": "axios",
       "mode": "split",

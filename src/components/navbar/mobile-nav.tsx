@@ -2,6 +2,7 @@
 
 import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import {
   Accordion,
@@ -13,21 +14,22 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 
-export const navUtilityLinks = [
-  { label: 'Notifications', href: '/notifications' },
-  { label: 'Stores', href: '/store' },
-  { label: 'Wishlist', href: '/wishlist' },
-  { label: 'My Account', href: '/account' }
-];
-
 type MobileNavProps = {
   onNavigateAction?: () => void;
   navMenus: DtoNavItemResponse[] | undefined;
 };
 
 export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
+  const t = useTranslations('nav.mobile');
   const megaItems = navMenus?.filter((item) => item.type === 'mega');
   const linkItems = navMenus?.filter((item) => item.type === 'link');
+
+  const utilityLinks = [
+    { label: t('notifications'), href: '/notifications' },
+    { label: t('stores'), href: '/store' },
+    { label: t('wishlist'), href: '/wishlist' },
+    { label: t('account'), href: '/account' }
+  ] as const;
 
   return (
     <div className='space-y-2'>
@@ -66,7 +68,7 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
                     className='text-accent inline-flex items-center gap-1 text-sm font-medium'
                   >
                     {item.viewAll.label}
-                    <IconArrowRight className='size-4' />
+                    <IconArrowRight className='cn-rtl-flip size-4' />
                   </Link>
                 )}
               </div>
@@ -99,11 +101,11 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
 
       <div className='space-y-1'>
         <p className='text-muted-foreground py-2 text-xs font-semibold tracking-wider uppercase'>
-          More
+          {t('more')}
         </p>
-        {navUtilityLinks.map((link) => (
+        {utilityLinks.map((link) => (
           <Link
-            key={link.label}
+            key={link.href}
             href={link.href}
             onClick={onNavigateAction}
             className='text-muted-foreground hover:text-foreground block py-2 text-sm transition-colors'
@@ -116,8 +118,8 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
           onClick={onNavigateAction}
           className='text-accent inline-flex items-center gap-1 py-2 text-sm font-medium'
         >
-          Shop all products
-          <IconArrowRight className='size-4' />
+          {t('shopAllProducts')}
+          <IconArrowRight className='cn-rtl-flip size-4' />
         </Link>
       </div>
     </div>

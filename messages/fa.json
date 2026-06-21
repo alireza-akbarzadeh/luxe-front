@@ -12,7 +12,62 @@
   },
   "nav": {
     "openMenu": "باز کردن منو",
-    "closeMenu": "بستن منو"
+    "closeMenu": "بستن منو",
+    "mobile": {
+      "more": "بیشتر",
+      "notifications": "اعلان‌ها",
+      "stores": "فروشگاه‌ها",
+      "wishlist": "علاقه‌مندی‌ها",
+      "account": "حساب من",
+      "shopAllProducts": "مشاهده همه محصولات"
+    },
+    "userProfile": {
+      "accountMenu": "منوی حساب کاربری",
+      "signedIn": "وارد شده",
+      "guestSession": "نشست مهمان",
+      "guestUser": "کاربر مهمان",
+      "guestEmail": "وارد نشده‌اید",
+      "menu": {
+        "profile": {
+          "title": "پروفایل من",
+          "subtitle": "مدیریت اطلاعات حساب"
+        },
+        "dashboard": {
+          "title": "داشبورد",
+          "subtitle": "نمای کلی فضای کار"
+        },
+        "wishlist": {
+          "title": "علاقه‌مندی‌های من",
+          "subtitle": "محصولاتی که برای بعد ذخیره کردید"
+        },
+        "stores": {
+          "title": "فروشگاه‌ها",
+          "subtitle": "مرور همه فروشگاه‌های موجود"
+        },
+        "compare": {
+          "title": "مقایسه",
+          "subtitle": "گزینه مناسب خود را پیدا کنید"
+        },
+        "notifications": {
+          "title": "اعلان‌ها",
+          "subtitle": "هشدارهای سفارش و ارسال"
+        },
+        "settings": {
+          "title": "تنظیمات",
+          "subtitle": "ترجیحات و حریم خصوصی"
+        }
+      },
+      "theme": {
+        "title": "ظاهر",
+        "subtitle": "جابه‌جایی بین روشن و تاریک"
+      },
+      "auth": {
+        "signOut": "خروج",
+        "signOutSubtitle": "پایان نشست فعلی",
+        "logIn": "ورود",
+        "logInSubtitle": "دسترسی به حساب کاربری"
+      }
+    }
   },
   "language": {
     "label": "زبان",
@@ -302,6 +357,25 @@
           "orders": "پیگیری و تاریخچه سفارش"
         }
       }
+    }
+  },
+  "pwa": {
+    "push": {
+      "title": "اعلان‌های مرورگر",
+      "descriptionDisabled": "به‌روزرسانی سفارش و هشدارها را حتی وقتی لوکس بسته است دریافت کنید. نیاز به PWA نصب‌شده در iOS 16.4+ دارد.",
+      "descriptionEnabled": "اعلان‌های push در این دستگاه فعال است.",
+      "enable": "فعال‌سازی push",
+      "disable": "غیرفعال‌سازی push",
+      "working": "در حال به‌روزرسانی…",
+      "enabledSuccess": "اعلان‌های push فعال شد",
+      "disabledSuccess": "اعلان‌های push غیرفعال شد",
+      "unsupported": "اعلان push در این مرورگر پشتیبانی نمی‌شود.",
+      "permissionDenied": "اعلان‌ها مسدود شده‌اند. آن‌ها را در تنظیمات مرورگر فعال کنید.",
+      "error": "به‌روزرسانی اعلان push ممکن نشد",
+      "sendTest": "ارسال تست",
+      "sendingTest": "در حال ارسال…",
+      "testSent": "اعلان تست ارسال شد",
+      "testError": "ارسال اعلان تست ممکن نشد"
     }
   }
 }

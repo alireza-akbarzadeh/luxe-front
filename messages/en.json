@@ -12,7 +12,62 @@
   },
   "nav": {
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "mobile": {
+      "more": "More",
+      "notifications": "Notifications",
+      "stores": "Stores",
+      "wishlist": "Wishlist",
+      "account": "My Account",
+      "shopAllProducts": "Shop all products"
+    },
+    "userProfile": {
+      "accountMenu": "Account menu",
+      "signedIn": "Signed in",
+      "guestSession": "Guest session",
+      "guestUser": "Guest User",
+      "guestEmail": "Not signed in",
+      "menu": {
+        "profile": {
+          "title": "My Profile",
+          "subtitle": "Manage account information"
+        },
+        "dashboard": {
+          "title": "Dashboard",
+          "subtitle": "Workspace overview"
+        },
+        "wishlist": {
+          "title": "My Wishlist",
+          "subtitle": "Products you saved for later"
+        },
+        "stores": {
+          "title": "Stores",
+          "subtitle": "Browse all available stores"
+        },
+        "compare": {
+          "title": "Compare",
+          "subtitle": "Find your perfect match"
+        },
+        "notifications": {
+          "title": "Notifications",
+          "subtitle": "Order and shipping alerts"
+        },
+        "settings": {
+          "title": "Settings",
+          "subtitle": "Preferences & privacy"
+        }
+      },
+      "theme": {
+        "title": "Appearance",
+        "subtitle": "Switch between light & dark"
+      },
+      "auth": {
+        "signOut": "Sign out",
+        "signOutSubtitle": "End current session",
+        "logIn": "Log in",
+        "logInSubtitle": "Access your account"
+      }
+    }
   },
   "language": {
     "label": "Language",
