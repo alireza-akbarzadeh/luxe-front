@@ -4,14 +4,15 @@ import { IconBasketCheck, IconShoppingBag, IconStarFilled } from '@tabler/icons-
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import type { MouseEvent } from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -35,6 +36,8 @@ function mapProductToCartPayload(product: DtoProductWithLike): CartItemPayload {
 
 /** Horizontal product row for search/list views — actions stay outside the product link. */
 export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
+  const t = useTranslations('shop.productCard');
+  const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const { increment, isLoading, items: cartItems } = useCartController();
 
   const productHref = getProductPath(product);
@@ -51,12 +54,12 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
   };
 
   const cartLabel = isLoading
-    ? 'Adding…'
+    ? t('adding')
     : isOutOfStock
-      ? 'Out of stock'
+      ? t('outOfStock')
       : cartQuantity > 0
-        ? `In cart (${cartQuantity})`
-        : 'Add to cart';
+        ? t('inCart', { count: cartQuantity })
+        : t('addToCart');
 
   return (
     <motion.article
@@ -68,7 +71,7 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
       <Link
         href={productHref}
         className='bg-secondary relative h-32 w-32 shrink-0 overflow-hidden rounded-lg'
-        aria-label={`View ${product.name}`}
+        aria-label={t('viewProduct', { name: product.name ?? '' })}
       >
         <Image
           src={primaryImage}
@@ -78,14 +81,14 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
           className='object-cover transition-transform duration-500 group-hover:scale-105'
         />
         {product.is_new && (
-          <Badge className='absolute top-2 left-2' variant='secondary'>
-            New
+          <Badge className='absolute top-2 start-2' variant='secondary'>
+            {t('new')}
           </Badge>
         )}
         {isOutOfStock && (
           <div className='bg-background/55 absolute inset-0 flex items-center justify-center backdrop-blur-[1px]'>
             <Badge variant='inverse' size='sm'>
-              Sold out
+              {t('soldOut')}
             </Badge>
           </div>
         )}
@@ -108,14 +111,20 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
             {(product.rating ?? 0) > 0 && (
               <div className='text-muted-foreground flex items-center gap-1 text-sm'>
                 <IconStarFilled className='fill-accent text-accent h-4 w-4' />
-                <span>{product.rating?.toFixed(1)}</span>
-                {product.reviews_count ? <span>({product.reviews_count})</span> : null}
+                <span className='tabular-nums'>{formatDecimal(product.rating ?? 0, 1)}</span>
+                {product.reviews_count ? (
+                  <span className='tabular-nums'>({formatInteger(product.reviews_count)})</span>
+                ) : null}
               </div>
             )}
             <div className='flex items-center gap-2'>
-              <span className='font-semibold'>{formatPrice(product.price)}</span>
+              <span className={cn('font-semibold tabular-nums', moneyClassName)}>
+                {formatPrice(product.price)}
+              </span>
               {product.compare_at_price && product.compare_at_price > (product.price ?? 0) && (
-                <span className='text-muted-foreground text-sm line-through'>
+                <span
+                  className={cn('text-muted-foreground text-sm line-through tabular-nums', moneyClassName)}
+                >
                   {formatPrice(product.compare_at_price)}
                 </span>
               )}

@@ -1,4 +1,7 @@
+'use client';
+
 import { IconPackage, IconShieldCheck, IconTag, IconTruck } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -9,36 +12,38 @@ interface ProductDetailsHighlightsProps {
 
 /** Quick-read merchandising facts for the PDP details tab. */
 export function ProductDetailsHighlights({ product }: ProductDetailsHighlightsProps) {
+  const t = useTranslations('pdp.highlights');
+
   const highlights = [
     product.brand?.name && {
       icon: IconTag,
-      label: 'Brand',
+      label: t('brand'),
       value: product.brand.name
     },
     product.category?.name && {
       icon: IconTag,
-      label: 'Category',
+      label: t('category'),
       value: product.category.name
     },
     {
       icon: IconPackage,
-      label: 'Availability',
+      label: t('availability'),
       value:
         (product.stock ?? 0) > 0
-          ? `${product.stock} in stock`
+          ? t('inStock', { count: product.stock ?? 0 })
           : product.allow_backorder
-            ? 'Available on backorder'
-            : 'Out of stock'
+            ? t('backorder')
+            : t('outOfStock')
     },
     product.is_digital && {
       icon: IconShieldCheck,
-      label: 'Delivery',
-      value: 'Instant digital delivery'
+      label: t('delivery'),
+      value: t('instantDigital')
     },
     !product.is_digital && {
       icon: IconTruck,
-      label: 'Fulfillment',
-      value: product.track_inventory ? 'Tracked inventory' : 'Standard shipping'
+      label: t('fulfillment'),
+      value: product.track_inventory ? t('trackedInventory') : t('standardShipping')
     }
   ].filter(Boolean) as Array<{
     icon: typeof IconTag;
@@ -65,7 +70,7 @@ export function ProductDetailsHighlights({ product }: ProductDetailsHighlightsPr
 
       {product.tags && product.tags.length > 0 && (
         <div className='border-border/60 bg-muted/20 rounded-2xl border p-4 sm:col-span-2'>
-          <p className='text-muted-foreground mb-3 text-xs tracking-wide uppercase'>Tags</p>
+          <p className='text-muted-foreground mb-3 text-xs tracking-wide uppercase'>{t('tags')}</p>
           <div className='flex flex-wrap gap-2'>
             {product.tags.map((tag) => (
               <Badge key={tag} variant='outline' className='rounded-full font-normal'>

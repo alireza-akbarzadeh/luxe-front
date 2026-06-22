@@ -3,6 +3,7 @@
 import { IconBell, IconBellRinging } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/components/providers/auth-provider';
@@ -27,6 +28,7 @@ export function ProductStockNotify({
   productSlug,
   isOutOfStock
 }: ProductStockNotifyProps) {
+  const t = useTranslations('pdp.stockNotify');
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const productIdStr = String(productId);
@@ -56,23 +58,23 @@ export function ProductStockNotify({
 
   const handleClick = async () => {
     if (!isAuthenticated) {
-      toast.message('Sign in to get notified when this item is back');
+      toast.message(t('toastSignIn'));
       return;
     }
     try {
       if (subscribed) {
         await unsubscribe.mutateAsync({ id: productIdStr });
-        toast.success('Stock alert removed');
+        toast.success(t('toastRemoved'));
       } else {
         await subscribe.mutateAsync({ id: productIdStr });
-        toast.success("We'll notify you when this is back in stock");
+        toast.success(t('toastSubscribed'));
       }
     } catch (error) {
       if (isUnauthorizedError(error)) {
-        toast.error('Sign in to subscribe');
+        toast.error(t('toastSignInSubscribe'));
         return;
       }
-      toast.error('Could not update notification preference');
+      toast.error(t('toastFailed'));
     }
   };
 
@@ -80,8 +82,8 @@ export function ProductStockNotify({
     return (
       <Button asChild variant='outline' className='w-full rounded-full'>
         <Link href={`/login?callbackUrl=${encodeURIComponent(`/product/${productSlug}`)}`}>
-          <IconBell className='mr-2 h-4 w-4' />
-          Notify me when back in stock
+          <IconBell className='me-2 h-4 w-4' />
+          {t('notifyMe')}
         </Link>
       </Button>
     );
@@ -97,13 +99,13 @@ export function ProductStockNotify({
     >
       {subscribed ? (
         <>
-          <IconBellRinging className='mr-2 h-4 w-4' />
-          Alert on — click to unsubscribe
+          <IconBellRinging className='me-2 h-4 w-4' />
+          {t('subscribed')}
         </>
       ) : (
         <>
-          <IconBell className='mr-2 h-4 w-4' />
-          Notify me when back in stock
+          <IconBell className='me-2 h-4 w-4' />
+          {t('notifyMe')}
         </>
       )}
     </Button>

@@ -7,18 +7,19 @@ import { useMemo } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { cn } from '@/lib/utils';
 import { Button } from '~/src/components/ui/button';
 import type {
   DtoCategoryResponse,
   DtoProductResponse,
-  DtoStoreResponse} from '~/src/services/-search-get.schemas';
+  DtoStoreResponse
+} from '~/src/services/-search-get.schemas';
 
 import type { SearchFilterDraftActions } from '../hooks/useSearchFilterDraft';
 import { useSearchParams } from '../hooks/useSearchParams';
 import type { SearchFilterDraft } from '../search.utils';
-import {
-  hasActiveSearchFilterDraft
-} from '../search.utils';
+import { hasActiveSearchFilterDraft } from '../search.utils';
 import { SearchPriceRangeFilter } from './search-price-range-filter';
 
 interface SearchFilterContentProps {
@@ -41,6 +42,7 @@ export function SearchFilterContent({
   draftActions
 }: SearchFilterContentProps) {
   const t = useTranslations('search.filters');
+  const { formatInteger } = useLocaleFormatters();
   const searchParams = useSearchParams();
   const isDraftMode = draft != null && draftActions != null;
 
@@ -137,16 +139,27 @@ export function SearchFilterContent({
           <IconTag className='h-4 w-4' />
           {t('categories')}
         </h3>
-        <div className={variant === 'sheet' ? 'max-h-none space-y-2' : 'max-h-48 space-y-2 overflow-y-auto'}>
+        <div
+          className={cn(
+            variant === 'sheet'
+              ? 'max-h-none space-y-2'
+              : 'max-h-48 space-y-2 overflow-y-auto overscroll-y-contain pe-1'
+          )}
+        >
           {availableCategories.map((cat) => (
-            <label key={cat} className='group flex cursor-pointer items-center gap-2'>
+            <label
+              key={cat}
+              className='group grid cursor-pointer grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-0'
+            >
               <Checkbox
                 checked={categories.includes(cat)}
                 onCheckedChange={() => toggleCategory(cat)}
               />
-              <span className='group-hover:text-primary text-sm transition-colors'>{cat}</span>
-              <span className='text-muted-foreground ms-auto text-xs'>
-                {categoryCounts[cat] || 0}
+              <span className='group-hover:text-primary truncate text-sm transition-colors'>
+                {cat}
+              </span>
+              <span className='text-muted-foreground shrink-0 text-xs tabular-nums'>
+                {formatInteger(categoryCounts[cat] || 0)}
               </span>
             </label>
           ))}
@@ -169,16 +182,16 @@ export function SearchFilterContent({
                   if (store.id) toggleStore(store.id.toString());
                 }}
               />
-              {store.logo_url && (
+              {store.logo_url ? (
                 <Image
                   src={store.logo_url}
                   alt={store.name || ''}
                   width={20}
                   height={20}
-                  className='rounded-full'
+                  className='shrink-0 rounded-full'
                 />
-              )}
-              <span className='group-hover:text-primary text-sm transition-colors'>
+              ) : null}
+              <span className='group-hover:text-primary min-w-0 flex-1 truncate text-sm transition-colors'>
                 {store.name}
               </span>
             </label>
@@ -207,7 +220,7 @@ export function SearchFilterContent({
               onClick={() => setMinRating(rating)}
               className='flex-1'
             >
-              {rating === 0 ? t('ratingAny') : `${rating}+`}
+              {rating === 0 ? t('ratingAny') : t('ratingPlus', { rating })}
             </Button>
           ))}
         </div>

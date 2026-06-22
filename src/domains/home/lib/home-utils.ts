@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/config';
+import { formatLocaleCurrency } from '@/lib/i18n/format-number';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { ModelsCategory, ModelsProduct } from '~/src/services/-categories-get.schemas';
 
@@ -56,13 +58,11 @@ export function resolveProducts(
   return fallback;
 }
 
-export function formatPrice(value?: number): string {
-  if (value === undefined || Number.isNaN(value)) return '$0';
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  }).format(value);
+export function formatPrice(value?: number, locale: Locale = 'en'): string {
+  if (value === undefined || Number.isNaN(value)) {
+    return formatLocaleCurrency(0, locale);
+  }
+  return formatLocaleCurrency(value, locale);
 }
 
 /** Break out of parent padding for full-bleed sections */

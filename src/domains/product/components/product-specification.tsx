@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import {
@@ -23,17 +27,24 @@ function SpecCard({ label, value }: { label: string; value: string }) {
 }
 
 export function ProductSpecifications({ product }: ProductSpecificationsProps) {
+  const t = useTranslations('pdp.specs');
   const detailAttributes = getDetailTabAttributes(product.attributes);
 
+  const empty = t('emptyValue');
+  const yesNo = (value: boolean) => (value ? t('yes') : t('no'));
+
   const coreRows = [
-    ['SKU', product.sku],
-    ['Barcode', product.barcode ?? '—'],
-    ['Category', product.category?.name ?? '—'],
-    ['Brand', product.brand?.name ?? '—'],
-    ['Weight', product.weight ? `${product.weight} kg` : '—'],
-    ['Digital product', product.is_digital ? 'Yes' : 'No'],
-    ['Inventory tracking', product.track_inventory ? 'Enabled' : 'Disabled'],
-    ['Backorders', product.allow_backorder ? 'Allowed' : 'Not allowed']
+    [t('sku'), product.sku],
+    [t('barcode'), product.barcode ?? empty],
+    [t('category'), product.category?.name ?? empty],
+    [t('brand'), product.brand?.name ?? empty],
+    [
+      t('weight'),
+      product.weight ? t('weightValue', { weight: product.weight }) : empty
+    ],
+    [t('digitalProduct'), yesNo(Boolean(product.is_digital))],
+    [t('inventoryTracking'), product.track_inventory ? t('enabled') : t('disabled')],
+    [t('backorders'), product.allow_backorder ? t('allowed') : t('notAllowed')]
   ] as const;
 
   const attributeCards = detailAttributes
@@ -54,7 +65,7 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
 
       {attributeCards.length > 0 && (
         <div>
-          <h3 className='font-display mb-4 text-lg font-semibold'>Advanced details</h3>
+          <h3 className='font-display mb-4 text-lg font-semibold'>{t('advancedDetails')}</h3>
           <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>
             {attributeCards.map((card) => (
               <SpecCard key={card.key} label={card.label} value={card.value} />
@@ -64,12 +75,12 @@ export function ProductSpecifications({ product }: ProductSpecificationsProps) {
       )}
 
       <div>
-        <h3 className='font-display mb-4 text-lg font-semibold'>Core specifications</h3>
+        <h3 className='font-display mb-4 text-lg font-semibold'>{t('coreSpecs')}</h3>
         <dl className='divide-border divide-y'>
           {coreRows.map(([label, value]) => (
             <div key={label} className='flex justify-between gap-4 py-3 text-sm'>
               <dt className='text-muted-foreground'>{label}</dt>
-              <dd className='text-right font-medium'>{value}</dd>
+              <dd className='text-end font-medium'>{value}</dd>
             </div>
           ))}
         </dl>

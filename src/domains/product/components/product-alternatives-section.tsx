@@ -3,11 +3,13 @@
 import { IconArrowUpRight, IconStar } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { cn } from '@/lib/utils';
 import { useGetProductsIdAlternatives } from '@/services/-products-{id}-alternatives-get';
 
 interface ProductAlternativesSectionProps {
@@ -20,6 +22,9 @@ export function ProductAlternativesSection({
   productId,
   productName
 }: ProductAlternativesSectionProps) {
+  const t = useTranslations('pdp.alternatives');
+  const tPdp = useTranslations('pdp');
+  const { formatPrice, formatDecimal, moneyClassName } = useLocaleFormatters();
   const { data, isLoading } = useGetProductsIdAlternatives(String(productId));
   const alternatives = data?.data?.alternatives ?? [];
 
@@ -42,10 +47,10 @@ export function ProductAlternativesSection({
     <section className='mt-16 border-t pt-12'>
       <div className='mb-8 max-w-2xl'>
         <h2 className='font-display text-2xl font-semibold tracking-tight md:text-3xl'>
-          Same model, other stores
+          {t('title')}
         </h2>
         <p className='text-muted-foreground mt-2 text-sm'>
-          Compare {productName ?? 'this product'} from other verified sellers on Luxe.
+          {t('description', { name: productName ?? tPdp('thisProduct') })}
         </p>
       </div>
 
@@ -65,17 +70,17 @@ export function ProductAlternativesSection({
               <p className='line-clamp-2 text-sm font-medium leading-snug'>{item.name}</p>
               <p className='text-muted-foreground mt-1 text-xs'>{item.store_name}</p>
               <div className='mt-2 flex flex-wrap items-center gap-2'>
-                <span className='font-semibold tabular-nums'>{formatPrice(item.price)}</span>
+                <span className={cn('font-semibold', moneyClassName)}>{formatPrice(item.price)}</span>
                 {item.store_rating != null && (
                   <span className='text-muted-foreground inline-flex items-center gap-0.5 text-xs'>
                     <IconStar className='fill-accent text-accent h-3 w-3' />
-                    {item.store_rating.toFixed(1)}
+                    {formatDecimal(item.store_rating)}
                   </span>
                 )}
               </div>
               <Badge variant='outline' className='mt-2 rounded-full text-[10px]'>
-                View listing
-                <IconArrowUpRight className='ml-1 h-3 w-3' />
+                {t('viewListing')}
+                <IconArrowUpRight className='ms-1 h-3 w-3 cn-rtl-flip' />
               </Badge>
             </div>
           </Link>

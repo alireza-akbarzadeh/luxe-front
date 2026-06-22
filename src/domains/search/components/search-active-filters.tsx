@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatPrice } from '@/domains/home/lib/home-utils';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { cn } from '@/lib/utils';
 import type { DtoStoreResponse } from '~/src/services/-stores-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
@@ -22,6 +23,7 @@ interface SearchActiveFiltersProps {
 export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
   const searchParams = useSearchParams();
   const t = useTranslations('search.filters');
+  const { formatPrice, moneyClassName } = useLocaleFormatters();
 
   const getStoreName = (storeId: string) =>
     stores.find((store) => store.id?.toString() === storeId)?.name ?? t('storeFallback', { id: storeId });
@@ -57,7 +59,10 @@ export function SearchActiveFilters({ stores = [] }: SearchActiveFiltersProps) {
       {isSearchPriceFilterActive(searchParams.priceRange) ? (
         <Badge
           variant='secondary'
-          className='hover:bg-destructive hover:text-destructive-foreground cursor-pointer'
+          className={cn(
+            'hover:bg-destructive hover:text-destructive-foreground cursor-pointer tabular-nums',
+            moneyClassName
+          )}
           onClick={() =>
             searchParams.setPriceRange([SEARCH_DEFAULT_PRICE_MIN, SEARCH_DEFAULT_PRICE_MAX])
           }

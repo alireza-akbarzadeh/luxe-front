@@ -5,6 +5,7 @@ import {
   IconTrendingDown,
   IconTrendingUp
 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts';
 
 import {
@@ -14,13 +15,9 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatPrice } from '@/domains/home/lib/home-utils';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { useGetProductsIdAlternatives } from '@/services/-products-{id}-alternatives-get';
-
-const chartConfig = {
-  price: { label: 'Listing price', color: 'hsl(var(--foreground))' }
-} satisfies ChartConfig;
 
 interface ProductMarketSnapshotProps {
   productId: string | number;
@@ -34,10 +31,21 @@ export function ProductMarketSnapshot({
   productId,
   currentPrice = 0,
   compareAtPrice,
-  storeName = 'This listing'
+  storeName
 }: ProductMarketSnapshotProps) {
+  const t = useTranslations('pdp.market');
+  const tPdp = useTranslations('pdp');
+  const { formatPrice, moneyClassName } = useLocaleFormatters();
+  const resolvedStoreName = storeName ?? tPdp('thisListing');
+
+  const chartConfig = {
+    price: { label: t('listingPrice'), color: 'hsl(var(--foreground))' }
+  } satisfies ChartConfig;
+
   const { data, isLoading } = useGetProductsIdAlternatives(String(productId));
   const alternatives = data?.data?.alternatives ?? [];
+
+  const formatAxisPrice = (value: number) => formatPrice(Math.round(value / 100) * 100);
 
   if (isLoading) {
     return (
@@ -50,9 +58,9 @@ export function ProductMarketSnapshot({
   }
 
   const rows = [
-    { store: storeName, price: currentPrice, isCurrent: true },
+    { store: resolvedStoreName, price: currentPrice, isCurrent: true },
     ...alternatives.map((item) => ({
-      store: item.store_name ?? 'Store',
+      store: item.store_name ?? t('storeFallback'),
       price: Number(item.price ?? 0),
       isCurrent: false
     }))
@@ -73,8 +81,8 @@ export function ProductMarketSnapshot({
   return (
     <div className='border-border/60 bg-card flex h-full flex-col rounded-2xl border p-6'>
       <div className='mb-4'>
-        <h3 className='font-display text-lg font-semibold'>Marketplace comparison</h3>
-        <p className='text-muted-foreground text-sm'>Same model across Luxe sellers</p>
+        <h3 className='font-display text-lg font-semibold'>{t('title')}</h3>
+        <p className='text-muted-foreground text-sm'>{t('subtitle')}</p>
       </div>
 
       {rows.length > 1 ? (
@@ -90,7 +98,7 @@ export function ProductMarketSnapshot({
               type='number'
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value: number) => `$${Math.round(value / 100) * 100}`}
+              tickFormatter={formatAxisPrice}
             />
             <YAxis
               type='category'
@@ -119,43 +127,54 @@ export function ProductMarketSnapshot({
         </ChartContainer>
       ) : (
         <div className='bg-muted/30 flex flex-1 items-center justify-center rounded-xl px-4 py-8 text-center'>
-          <p className='text-muted-foreground text-sm'>
-            No other store listings yet — you&apos;re viewing the only offer for this model.
-          </p>
+          <p className='text-muted-foreground text-sm'>{t('empty')}</p>
         </div>
       )}
 
       <div className='mt-4 grid grid-cols-3 gap-2'>
-        <StatPill label='Market low' value={formatPrice(lowest)} positive={isBestPrice} />
-        <StatPill label='Average' value={formatPrice(Math.round(average))} />
         <StatPill
-          label='Market high'
+          label={t('marketLow')}
+          value={formatPrice(lowest)}
+          positive={isBestPrice}
+          moneyClassName={moneyClassName}
+        />
+        <StatPill
+          label={t('average')}
+          value={formatPrice(Math.round(average))}
+          moneyClassName={moneyClassName}
+        />
+        <StatPill
+          label={t('marketHigh')}
           value={formatPrice(highest)}
           positive={savingsVsHigh > 0 && isBestPrice}
-          hint={isBestPrice && savingsVsHigh > 0 ? `Save ${formatPrice(savingsVsHigh)}` : undefined}
+          hint={
+            isBestPrice && savingsVsHigh > 0
+              ? t('saveHint', { amount: formatPrice(savingsVsHigh) })
+              : undefined
+          }
+          moneyClassName={moneyClassName}
         />
       </div>
 
       <div className='mt-4 space-y-2'>
         {isBestPrice && rows.length > 1 && (
-          <InsightRow
-            icon={IconCircleCheck}
-            tone='success'
-            text='This listing is the best price on Luxe right now.'
-          />
+          <InsightRow icon={IconCircleCheck} tone='success' text={t('bestPrice')} />
         )}
-        {msrpSavings > 0 && (
+        {msrpSavings > 0 && compareAtPrice && (
           <InsightRow
             icon={IconTrendingDown}
             tone='success'
-            text={`${formatPrice(msrpSavings)} below MSRP (${formatPrice(compareAtPrice)}).`}
+            text={t('belowMsrp', {
+              savings: formatPrice(msrpSavings),
+              msrp: formatPrice(compareAtPrice)
+            })}
           />
         )}
         {!isBestPrice && rows.length > 1 && (
           <InsightRow
             icon={IconTrendingUp}
             tone='muted'
-            text={`Another seller lists this model from ${formatPrice(lowest)} — compare before you buy.`}
+            text={t('compareHint', { price: formatPrice(lowest) })}
           />
         )}
       </div>
@@ -167,19 +186,22 @@ function StatPill({
   label,
   value,
   positive,
-  hint
+  hint,
+  moneyClassName
 }: {
   label: string;
   value: string;
   positive?: boolean;
   hint?: string;
+  moneyClassName: string;
 }) {
   return (
     <div className='bg-muted/35 rounded-xl px-2.5 py-2 text-center'>
       <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>{label}</p>
       <p
         className={cn(
-          'mt-0.5 text-sm font-semibold tabular-nums',
+          'mt-0.5 text-sm font-semibold',
+          moneyClassName,
           positive && 'text-emerald-600 dark:text-emerald-400'
         )}
       >

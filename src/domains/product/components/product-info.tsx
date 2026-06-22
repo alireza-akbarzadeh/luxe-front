@@ -13,6 +13,7 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -27,8 +28,8 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import useCompareController from '@/domains/compare/hooks/useCompareController';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { useCartStore } from '~/src/store/card.store';
@@ -43,16 +44,14 @@ interface ProductInfoProps {
   is_liked: boolean;
 }
 
-const trustItems = [
-  { icon: IconTruck, label: 'Free shipping over $150' },
-  { icon: IconRosetteDiscountCheck, label: 'Authenticity guaranteed' },
-  { icon: IconShieldCheck, label: '30-day easy returns' }
-] as const;
-
 const iconActionClassName =
   'border-border/80 bg-background hover:bg-muted h-11 w-11 shrink-0 rounded-full border shadow-sm';
 
 export function ProductInfo({ product, is_liked }: ProductInfoProps) {
+  const t = useTranslations('pdp.info');
+  const tBreadcrumb = useTranslations('pdp.breadcrumb');
+  const tCard = useTranslations('shop.productCard');
+  const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
   const { increment, decrement, itemCount, items, isLoading } = useCartController();
@@ -99,7 +98,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
   const handleCompare = () => {
     if (!product.id) return;
     if (!isAuthenticated) {
-      toast.message('Sign in to compare products');
+      toast.message(t('toastSignInCompare'));
       return;
     }
     if (inCompare) {
@@ -107,7 +106,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
       return;
     }
     if (!canAddMore) {
-      toast.info('Compare list is full — open compare to make room');
+      toast.info(t('toastCompareFull'));
       router.push('/compare');
       return;
     }
@@ -118,15 +117,24 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
     const url = window.location.href;
     try {
       if (navigator.share) {
-        await navigator.share({ title: product.name ?? 'Product', url });
+        await navigator.share({ title: product.name ?? tBreadcrumb('product'), url });
         return;
       }
       await navigator.clipboard.writeText(url);
-      toast.success('Link copied to clipboard');
+      toast.success(t('toastLinkCopied'));
     } catch {
-      toast.error('Could not share product');
+      toast.error(t('toastShareFailed'));
     }
   };
+
+  const trustItems = [
+    { icon: IconTruck, label: t('freeShipping') },
+    { icon: IconRosetteDiscountCheck, label: t('authenticity') },
+    { icon: IconShieldCheck, label: t('returns') }
+  ] as const;
+
+  const cartBadgeLabel =
+    itemCount > 99 ? t('cartBadgeMax') : formatInteger(itemCount);
 
   return (
     <div className='flex flex-col gap-7'>
@@ -140,7 +148,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
               {product.category.name}
             </Link>
           )}
-          {product.sku && <span>SKU · {product.sku}</span>}
+          {product.sku && <span>{t('sku', { sku: product.sku })}</span>}
         </div>
 
         <div className='space-y-4'>
@@ -165,19 +173,28 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
               })}
             </div>
             <p className='text-muted-foreground text-sm'>
-              <span className='text-foreground font-medium'>{product.rating?.toFixed(1)}</span>
-              {product.reviews_count ? ` · ${product.reviews_count} reviews` : null}
+              <span className={cn('text-foreground font-medium', moneyClassName)}>
+                {formatDecimal(product.rating ?? 0)}
+              </span>
+              {product.reviews_count
+                ? t('ratingReviews', { count: product.reviews_count })
+                : null}
             </p>
           </div>
         </div>
 
         <div className='flex flex-wrap items-end gap-x-4 gap-y-2'>
-          <span className='text-4xl font-semibold tracking-tight tabular-nums'>
+          <span className={cn('text-4xl font-semibold tracking-tight', moneyClassName)}>
             {formatPrice(product.price)}
           </span>
           {product.compare_at_price && product.compare_at_price > Number(product.price ?? 0) && (
             <>
-              <span className='text-muted-foreground pb-1 text-lg line-through tabular-nums'>
+              <span
+                className={cn(
+                  'text-muted-foreground pb-1 text-lg line-through',
+                  moneyClassName
+                )}
+              >
                 {formatPrice(product.compare_at_price)}
               </span>
               {discountAmount > 0 && (
@@ -185,7 +202,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                   variant='outline'
                   className='border-accent/30 bg-accent/10 text-accent mb-1 rounded-full px-3 py-1 text-xs font-medium'
                 >
-                  Save {formatPrice(discountAmount)}
+                  {t('saveAmount', { amount: formatPrice(discountAmount) })}
                 </Badge>
               )}
             </>
@@ -195,21 +212,21 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         <div className='flex flex-wrap gap-2'>
           {isOutOfStock ? (
             <Badge variant='destructive' className='rounded-full px-3 py-1'>
-              Out of stock
+              {tCard('outOfStock')}
             </Badge>
           ) : isLowStock ? (
             <Badge variant='outline' className='rounded-full px-3 py-1'>
-              Only {stock} left
+              {tCard('onlyLeft', { count: stock })}
             </Badge>
           ) : (
             <Badge variant='secondary' className='gap-1.5 rounded-full px-3 py-1'>
               <IconPackage className='h-3.5 w-3.5' />
-              In stock
+              {t('inStock')}
             </Badge>
           )}
           {product.is_digital && (
             <Badge variant='outline' className='rounded-full px-3 py-1'>
-              Instant download
+              {t('instantDownload')}
             </Badge>
           )}
         </div>
@@ -246,7 +263,11 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
               className='bg-accent text-accent-foreground hover:bg-accent/90 h-14 min-w-0 flex-1 basis-[12rem] rounded-full text-base font-medium shadow-none'
               disabled={isLoading || isOutOfStock}
             >
-              {isLoading ? 'Adding…' : isOutOfStock ? 'Sold out' : 'Add to cart'}
+              {isLoading
+                ? tCard('adding')
+                : isOutOfStock
+                  ? tCard('soldOut')
+                  : tCard('addToCart')}
             </Button>
 
             <div className='flex shrink-0 items-center gap-1.5'>
@@ -258,12 +279,12 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                     size='icon'
                     className={iconActionClassName}
                     onClick={() => void handleShare()}
-                    aria-label='Share product'
+                    aria-label={t('shareProduct')}
                   >
                     <IconShare2 className='h-4 w-4' />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side='top'>Share product</TooltipContent>
+                <TooltipContent side='top'>{t('shareProduct')}</TooltipContent>
               </Tooltip>
 
               <Tooltip>
@@ -278,13 +299,13 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                     )}
                     disabled={!product.id}
                     onClick={handleCompare}
-                    aria-label={inCompare ? 'Open compare list' : 'Add to compare'}
+                    aria-label={inCompare ? t('openCompare') : t('addToCompare')}
                   >
                     <IconArrowsLeftRight className='h-4 w-4' />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side='top'>
-                  {inCompare ? 'Open compare list' : 'Add to compare'}
+                  {inCompare ? t('openCompare') : t('addToCompare')}
                 </TooltipContent>
               </Tooltip>
 
@@ -296,18 +317,24 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                     size='icon'
                     className={cn(iconActionClassName, 'relative')}
                     onClick={openCart}
-                    aria-label={`View cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
+                    aria-label={
+                      itemCount > 0
+                        ? t('viewCartWithCount', { count: itemCount })
+                        : t('viewCart')
+                    }
                   >
                     <IconBasket className='h-4 w-4' />
                     {itemCount > 0 ? (
                       <span className='bg-gold text-gold-foreground ring-background absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-0.5 text-[10px] font-bold ring-2'>
-                        {itemCount > 99 ? '99+' : itemCount}
+                        {cartBadgeLabel}
                       </span>
                     ) : null}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side='top'>
-                  View cart{itemCount > 0 ? ` (${itemCount})` : ''}
+                  {itemCount > 0
+                    ? t('viewCartWithCount', { count: itemCount })
+                    : t('viewCart')}
                 </TooltipContent>
               </Tooltip>
 
@@ -323,7 +350,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                   </span>
                 </TooltipTrigger>
                 <TooltipContent side='top'>
-                  {is_liked ? 'Remove from wishlist' : 'Add to wishlist'}
+                  {is_liked ? t('removeWishlist') : t('addWishlist')}
                 </TooltipContent>
               </Tooltip>
             </div>

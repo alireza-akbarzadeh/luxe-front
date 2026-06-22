@@ -2,6 +2,7 @@
 
 import { IconChevronDown } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,7 @@ export function ProductFeatureHighlights({
   attributes = [],
   detailsAnchorId = 'product-specs'
 }: ProductFeatureHighlightsProps) {
+  const t = useTranslations('pdp.features');
   const [expanded, setExpanded] = useState(false);
   const featureAttributes = getDetailTabAttributes(attributes);
 
@@ -61,7 +63,7 @@ export function ProductFeatureHighlights({
 
   return (
     <section className='space-y-4'>
-      <h2 className='text-base font-semibold tracking-tight'>Key features</h2>
+      <h2 className='text-base font-semibold tracking-tight'>{t('title')}</h2>
 
       <div className='grid grid-cols-2 gap-2 sm:grid-cols-3'>
         {visibleCards.map((card) => (
@@ -77,14 +79,14 @@ export function ProductFeatureHighlights({
             className='w-full rounded-full sm:w-auto'
             onClick={() => setExpanded((current) => !current)}
           >
-            {expanded ? 'Show fewer features' : 'View all features'}
+            {expanded ? t('showFewer') : t('viewAll')}
             <IconChevronDown
-              className={cn('ml-1 h-4 w-4 transition-transform', expanded && 'rotate-180')}
+              className={cn('ms-1 h-4 w-4 transition-transform', expanded && 'rotate-180')}
             />
           </Button>
           {!expanded && (
             <Button asChild variant='ghost' className='rounded-full'>
-              <Link href={`#${detailsAnchorId}`}>Full specifications</Link>
+              <Link href={`#${detailsAnchorId}`}>{t('fullSpecs')}</Link>
             </Button>
           )}
         </div>

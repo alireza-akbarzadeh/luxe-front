@@ -1,4 +1,7 @@
+'use client';
+
 import { IconCheck } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 interface ProductDescriptionProps {
   description: string;
@@ -6,6 +9,7 @@ interface ProductDescriptionProps {
 }
 
 export default function ProductDescription({ description, tags = [] }: ProductDescriptionProps) {
+  const t = useTranslations('pdp.description');
   const trimmedDescription = description.trim();
 
   return (
@@ -15,14 +19,12 @@ export default function ProductDescription({ description, tags = [] }: ProductDe
           {trimmedDescription}
         </div>
       ) : (
-        <p className='text-muted-foreground text-sm'>
-          A detailed description has not been added for this product yet.
-        </p>
+        <p className='text-muted-foreground text-sm'>{t('empty')}</p>
       )}
 
       {tags.length > 0 && (
         <div>
-          <h3 className='font-display text-foreground text-xl'>Highlights</h3>
+          <h3 className='font-display text-foreground text-xl'>{t('highlights')}</h3>
           <ul className='mt-4 space-y-2'>
             {tags.map((tag) => (
               <li key={tag} className='flex gap-2 text-sm'>

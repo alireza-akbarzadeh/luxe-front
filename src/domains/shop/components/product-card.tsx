@@ -10,14 +10,15 @@ import {
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -61,7 +62,15 @@ function StarRating({ rating = 0, compact = false }: { rating?: number; compact?
   );
 }
 
-function ColorSwatches({ colors, compact = false }: { colors?: unknown[]; compact?: boolean }) {
+function ColorSwatches({
+  colors,
+  compact = false,
+  moreColorsLabel
+}: {
+  colors?: unknown[];
+  compact?: boolean;
+  moreColorsLabel?: (count: number) => string;
+}) {
   const swatches = (colors ?? [])
     .map((color) => (typeof color === 'string' ? color : null))
     .filter(Boolean)
@@ -84,9 +93,11 @@ function ColorSwatches({ colors, compact = false }: { colors?: unknown[]; compac
           style={{ backgroundColor: color }}
         />
       ))}
-      {remaining > 0 && (
-        <span className='text-muted-foreground text-[10px] font-medium'>+{remaining}</span>
-      )}
+      {remaining > 0 && moreColorsLabel ? (
+        <span className='text-muted-foreground text-[10px] font-medium tabular-nums'>
+          {moreColorsLabel(remaining)}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -97,6 +108,8 @@ export function ProductCard({
   size = 'default',
   priority = false
 }: ProductCardProps) {
+  const t = useTranslations('shop.productCard');
+  const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const isCompact = size === 'compact';
   const { increment, isLoading, items: cartItems } = useCartController();
 
@@ -135,12 +148,12 @@ export function ProductCard({
   };
 
   const getButtonText = () => {
-    if (isLoading) return isCompact ? '...' : 'Adding...';
-    if (isOutOfStock) return isCompact ? 'Sold out' : 'Out of stock';
+    if (isLoading) return isCompact ? '...' : t('adding');
+    if (isOutOfStock) return isCompact ? t('soldOut') : t('outOfStock');
     if (cartQuantity > 0) {
-      return isCompact ? `${cartQuantity}` : `In cart (${cartQuantity})`;
+      return isCompact ? formatInteger(cartQuantity) : t('inCart', { count: cartQuantity });
     }
-    return isCompact ? 'Add' : 'Add to cart';
+    return isCompact ? t('add') : t('addToCart');
   };
 
   return (
@@ -165,7 +178,7 @@ export function ProductCard({
               'bg-muted relative block aspect-4/5 overflow-hidden',
               isCompact ? 'rounded-t-xl' : 'rounded-t-2xl'
             )}
-            aria-label={`View ${product.name}`}
+            aria-label={t('viewProduct', { name: product.name ?? '' })}
           >
             <Image
               src={primaryImage}
@@ -200,7 +213,7 @@ export function ProductCard({
             {isOutOfStock && (
               <div className='bg-background/55 absolute inset-0 flex items-center justify-center backdrop-blur-[2px]'>
                 <Badge variant='inverse' size={isCompact ? 'sm' : 'default'}>
-                  Sold out
+                  {t('soldOut')}
                 </Badge>
               </div>
             )}
@@ -208,32 +221,32 @@ export function ProductCard({
 
           <div
             className={cn(
-              'pointer-events-none absolute top-2.5 left-2.5 flex flex-col gap-1.5',
-              isCompact && 'top-2 left-2 gap-1'
+              'pointer-events-none absolute top-2.5 start-2.5 flex flex-col gap-1.5',
+              isCompact && 'top-2 start-2 gap-1'
             )}
           >
             {product.is_new && (
               <Badge variant='inverse' size={isCompact ? 'sm' : 'default'}>
-                New
+                {t('new')}
               </Badge>
             )}
             {discountPercent > 0 && (
-              <Badge variant='accent' size={isCompact ? 'sm' : 'default'}>
-                -{discountPercent}%
+              <Badge variant='accent' size={isCompact ? 'sm' : 'default'} className='tabular-nums'>
+                {t('discountBadge', { percent: discountPercent / 100 })}
               </Badge>
             )}
             {product.is_digital && (
               <Badge variant='accentOutline' size={isCompact ? 'sm' : 'default'}>
-                Digital
+                {t('digital')}
               </Badge>
             )}
-            {isLowStock && !isOutOfStock && (
+            {isLowStock && !isOutOfStock && product.stock != null && (
               <Badge
                 variant='outline'
                 size={isCompact ? 'sm' : 'default'}
-                className='bg-background/90'
+                className='bg-background/90 tabular-nums'
               >
-                Only {product.stock} left
+                {t('onlyLeft', { count: product.stock })}
               </Badge>
             )}
           </div>
@@ -243,7 +256,7 @@ export function ProductCard({
             productId={product.id as number}
             productName={product.name || ''}
             className={cn(
-              'bg-background/90 hover:bg-background absolute top-2.5 right-2.5 rounded-full shadow-sm backdrop-blur-sm transition-opacity',
+              'bg-background/90 hover:bg-background absolute top-2.5 end-2.5 rounded-full shadow-sm backdrop-blur-sm transition-opacity',
               'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
             )}
           />
@@ -265,7 +278,7 @@ export function ProductCard({
               >
                 <Link href={productHref}>
                   <IconEye className='h-4 w-4' />
-                  View
+                  {t('view')}
                 </Link>
               </Button>
             )}
@@ -319,19 +332,27 @@ export function ProductCard({
           {!isCompact && (product.rating || product.reviews_count) ? (
             <div className='text-muted-foreground flex items-center gap-2 text-xs'>
               <StarRating rating={product.rating} />
-              <span className='text-foreground/80 font-medium'>{product.rating?.toFixed(1)}</span>
-              {product.reviews_count ? <span>({product.reviews_count})</span> : null}
+              <span className='text-foreground/80 font-medium tabular-nums'>
+                {formatDecimal(product.rating ?? 0, 1)}
+              </span>
+              {product.reviews_count ? (
+                <span className='tabular-nums'>({formatInteger(product.reviews_count)})</span>
+              ) : null}
             </div>
           ) : null}
 
           {isCompact && product.rating ? (
             <div className='text-muted-foreground flex items-center gap-1 text-[11px]'>
               <IconStarFilled className='fill-accent text-accent h-3 w-3' />
-              <span>{product.rating.toFixed(1)}</span>
+              <span className='tabular-nums'>{formatDecimal(product.rating, 1)}</span>
             </div>
           ) : null}
 
-          <ColorSwatches colors={product.colors} compact={isCompact} />
+          <ColorSwatches
+            colors={product.colors}
+            compact={isCompact}
+            moreColorsLabel={(count) => t('moreColors', { count })}
+          />
 
           <div
             className={cn(
@@ -340,17 +361,28 @@ export function ProductCard({
             )}
           >
             <span
-              className={cn('text-foreground font-semibold', isCompact ? 'text-sm' : 'text-base')}
+              className={cn(
+                'text-foreground font-semibold tabular-nums',
+                moneyClassName,
+                isCompact ? 'text-sm' : 'text-base'
+              )}
             >
               {formatPrice(product.price)}
             </span>
             {product.compare_at_price && product.compare_at_price > (product.price ?? 0) && (
               <>
-                <span className='text-muted-foreground text-xs line-through sm:text-sm'>
+                <span
+                  className={cn(
+                    'text-muted-foreground text-xs line-through tabular-nums sm:text-sm',
+                    moneyClassName
+                  )}
+                >
                   {formatPrice(product.compare_at_price)}
                 </span>
                 {!isCompact && discountPercent > 0 && (
-                  <span className='text-accent text-xs font-medium'>Save {discountPercent}%</span>
+                  <span className='text-accent text-xs font-medium tabular-nums'>
+                    {t('savePercent', { percent: discountPercent / 100 })}
+                  </span>
                 )}
               </>
             )}

@@ -2,6 +2,7 @@
 
 import { IconMaximize, IconPhoto, IconVideo } from '@tabler/icons-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -29,6 +31,9 @@ interface ProductGalleryProps {
 type MediaMode = 'photos' | 'video';
 
 export function ProductGallery({ product, discount }: ProductGalleryProps) {
+  const t = useTranslations('pdp.gallery');
+  const tBreadcrumb = useTranslations('pdp.breadcrumb');
+  const { moneyClassName } = useLocaleFormatters();
   const images = product.images?.length ? product.images : ['/placeholder.png'];
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -62,6 +67,13 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
     };
   }, [carouselApi]);
 
+  const mediaModes = [
+    ['photos', IconPhoto, t('photos')],
+    ['video', IconVideo, t('video')]
+  ] as const;
+
+  const productLabel = product.name ?? tBreadcrumb('product');
+
   return (
     <>
       <div className='lg:sticky lg:top-28 lg:self-start'>
@@ -71,10 +83,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
             <div className='absolute bottom-4 left-4 z-20'>
               <div className='bg-background/90 border-border/50 inline-flex rounded-full border p-1 shadow-sm backdrop-blur-md'>
                 {(
-                  [
-                    ['photos', IconPhoto, 'Photos'],
-                    ['video', IconVideo, 'Video']
-                  ] as const
+                  mediaModes
                 ).map(([mode, Icon, label]) => (
                   <button
                     key={mode}
@@ -103,7 +112,10 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                     <CarouselItem key={`${image}-${index}`} className='pl-0'>
                       <ProductImageMagnifier
                         src={image}
-                        alt={`${product.name ?? 'Product'} — image ${index + 1}`}
+                        alt={t('imageAlt', {
+                          name: productLabel,
+                          index: index + 1
+                        })}
                         priority={index === 0}
                         onOpenLightbox={() => setLightboxOpen(true)}
                         className='rounded-3xl'
@@ -123,19 +135,27 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
               <div className='pointer-events-none absolute top-4 left-4 z-20 flex flex-wrap gap-2'>
                 {product.is_new && (
                   <Badge className='bg-foreground/90 text-background rounded-full border-0 px-3 py-1 text-[11px] font-medium'>
-                    New arrival
+                    {t('newArrival')}
                   </Badge>
                 )}
                 {discount > 0 && (
                   <Badge className='bg-accent text-accent-foreground rounded-full border-0 px-3 py-1 text-[11px] font-semibold'>
-                    -{discount}% off
+                    {t('discountOff', { percent: discount })}
                   </Badge>
                 )}
               </div>
 
               <div className='absolute top-4 right-4 z-20 flex items-center gap-2'>
-                <span className='bg-background/90 text-foreground rounded-full px-2.5 py-1 text-xs font-medium tabular-nums backdrop-blur-md'>
-                  {selectedImage + 1}/{images.length}
+                <span
+                  className={cn(
+                    'bg-background/90 text-foreground rounded-full px-2.5 py-1 text-xs font-medium backdrop-blur-md',
+                    moneyClassName
+                  )}
+                >
+                  {t('imageCounter', {
+                    current: selectedImage + 1,
+                    total: images.length
+                  })}
                 </span>
                 <Button
                   type='button'
@@ -143,7 +163,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                   size='icon'
                   className='bg-background/90 hover:bg-background h-10 w-10 rounded-full border-0 shadow-sm backdrop-blur-md'
                   onClick={() => setLightboxOpen(true)}
-                  aria-label='Open fullscreen gallery'
+                  aria-label={t('openFullscreen')}
                 >
                   <IconMaximize className='h-4 w-4' />
                 </Button>
@@ -151,12 +171,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
 
               <div className='absolute bottom-4 left-4 z-20'>
                 <div className='bg-background/90 border-border/50 inline-flex rounded-full border p-1 shadow-sm backdrop-blur-md'>
-                  {(
-                    [
-                      ['photos', IconPhoto, 'Photos'],
-                      ['video', IconVideo, 'Video']
-                    ] as const
-                  ).map(([mode, Icon, label]) => (
+                  {mediaModes.map(([mode, Icon, label]) => (
                     <button
                       key={mode}
                       type='button'
@@ -189,7 +204,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                         ? 'border-foreground ring-foreground/10 ring-2'
                         : 'border-transparent opacity-70 hover:opacity-100'
                     )}
-                    aria-label={`View image ${index + 1}`}
+                    aria-label={t('viewImage', { index: index + 1 })}
                     aria-current={selectedImage === index}
                   >
                     <Image src={image} alt='' fill sizes='72px' className='object-cover' />

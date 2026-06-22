@@ -9,8 +9,10 @@ import {
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductStoreSummary } from '@/services/-products-{id}-get.schemas';
 
@@ -20,6 +22,9 @@ interface ProductStorePanelProps {
 
 /** Compact seller strip on the product detail page. */
 export function ProductStorePanel({ store }: ProductStorePanelProps) {
+  const t = useTranslations('pdp.store');
+  const { formatDecimal, moneyClassName } = useLocaleFormatters();
+
   if (!store?.slug) return null;
 
   const rating = store.rating ?? 0;
@@ -39,10 +44,12 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
 
         <div className='min-w-0 flex-1'>
           <div className='flex flex-wrap items-center gap-2'>
-            <p className='text-muted-foreground text-[11px] tracking-[0.18em] uppercase'>Sold by</p>
+            <p className='text-muted-foreground text-[11px] tracking-[0.18em] uppercase'>
+              {t('soldBy')}
+            </p>
             {store.is_verified && (
               <Badge variant='secondary' className='rounded-full px-2 py-0 text-[10px]'>
-                Verified
+                {t('verified')}
               </Badge>
             )}
           </div>
@@ -63,8 +70,11 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
                   );
                 })}
               </div>
-              <span className='text-muted-foreground text-xs'>
-                {rating.toFixed(1)} · {store.review_count ?? 0} reviews
+              <span className={cn('text-muted-foreground text-xs', moneyClassName)}>
+                {t('ratingReviews', {
+                  rating: formatDecimal(rating),
+                  count: store.review_count ?? 0
+                })}
               </span>
             </div>
           </div>
@@ -80,8 +90,8 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
           href={`/store/${store.slug}`}
           className='text-foreground hover:bg-background hidden shrink-0 items-center gap-1 rounded-full border px-4 py-2 text-sm font-medium transition sm:inline-flex'
         >
-          Visit
-          <IconArrowUpRight className='h-4 w-4' />
+          {t('visit')}
+          <IconArrowUpRight className='h-4 w-4 cn-rtl-flip' />
         </Link>
       </div>
 
@@ -93,7 +103,7 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
               {store.shipping_info}
             </p>
           )}
-          {store.return_policy && <p className='text-muted-foreground pl-6'>{store.return_policy}</p>}
+          {store.return_policy && <p className='text-muted-foreground ps-6'>{store.return_policy}</p>}
         </div>
       )}
 
@@ -101,8 +111,8 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
         href={`/store/${store.slug}`}
         className='text-foreground mt-4 inline-flex w-full items-center justify-center gap-1 rounded-full border py-2.5 text-sm font-medium sm:hidden'
       >
-        Visit store
-        <IconArrowUpRight className='h-4 w-4' />
+        {t('visitStore')}
+        <IconArrowUpRight className='h-4 w-4 cn-rtl-flip' />
       </Link>
     </section>
   );

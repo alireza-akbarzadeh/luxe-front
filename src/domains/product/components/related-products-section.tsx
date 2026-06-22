@@ -2,6 +2,7 @@
 
 import { IconArrowUpRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -31,6 +32,7 @@ export function RelatedProductsSection({
   categoryId,
   categoryName
 }: RelatedProductsSectionProps) {
+  const t = useTranslations('pdp.related');
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const { data: previewData, isLoading: previewLoading } = useGetProductsIdRelated(productId, {
@@ -57,9 +59,11 @@ export function RelatedProductsSection({
       <section className='mt-20'>
         <div className='mb-8 flex items-end justify-between gap-4'>
           <div>
-            <h2 className='font-display text-2xl md:text-3xl'>You may also like</h2>
+            <h2 className='font-display text-2xl md:text-3xl'>{t('title')}</h2>
             {categoryName && (
-              <p className='text-muted-foreground mt-1 text-sm'>More picks in {categoryName}</p>
+              <p className='text-muted-foreground mt-1 text-sm'>
+                {t('moreInCategory', { category: categoryName })}
+              </p>
             )}
           </div>
           {previewProducts.length > 0 && (
@@ -69,8 +73,8 @@ export function RelatedProductsSection({
               className='text-accent hover:text-accent/80 shrink-0 rounded-full px-4'
               onClick={() => setSheetOpen(true)}
             >
-              View all
-              <IconArrowUpRight className='ml-1 h-4 w-4' />
+              {t('viewAll')}
+              <IconArrowUpRight className='ms-1 h-4 w-4 cn-rtl-flip' />
             </Button>
           )}
         </div>
@@ -92,12 +96,12 @@ export function RelatedProductsSection({
 
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetContent side='right' className='flex w-full flex-col gap-0 p-0 sm:max-w-xl'>
-          <SheetHeader className='border-border border-b px-6 py-5 text-left'>
-            <SheetTitle className='font-display text-xl'>You may also like</SheetTitle>
+          <SheetHeader className='border-border border-b px-6 py-5 text-start'>
+            <SheetTitle className='font-display text-xl'>{t('title')}</SheetTitle>
             <SheetDescription>
               {categoryName
-                ? `Hand-picked alternatives in ${categoryName}.`
-                : 'Explore more products you might love.'}
+                ? t('sheetDescriptionCategory', { category: categoryName })
+                : t('sheetDescriptionGeneric')}
             </SheetDescription>
           </SheetHeader>
 
@@ -120,8 +124,8 @@ export function RelatedProductsSection({
           <div className='border-border border-t px-6 py-4'>
             <Button asChild variant='outline' className='w-full rounded-full'>
               <Link href={categoryHref} onClick={() => setSheetOpen(false)}>
-                Browse all in {categoryName ?? 'shop'}
-                <IconArrowUpRight className='ml-1 h-4 w-4' />
+                {t('browseAll', { category: categoryName ?? t('shopFallback') })}
+                <IconArrowUpRight className='ms-1 h-4 w-4 cn-rtl-flip' />
               </Link>
             </Button>
           </div>

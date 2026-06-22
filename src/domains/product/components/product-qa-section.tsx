@@ -2,8 +2,8 @@
 
 import { IconBuildingStore, IconLoader2, IconRobot } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -20,18 +20,21 @@ import type { DtoProductQuestionResponse } from '@/services/-products-{id}-quest
 import { usePostProductsIdQuestions } from '@/services/-products-{id}-questions-post';
 
 function QuestionThread({ question }: { question: DtoProductQuestionResponse }) {
+  const t = useTranslations('pdp.qa');
+  const formatter = useFormatter();
+
   return (
     <article className='border-border/60 rounded-2xl border p-5'>
       <div className='flex items-start justify-between gap-3'>
         <div>
-          <p className='font-medium'>{question.author || 'Shopper'}</p>
+          <p className='font-medium'>{question.author || t('shopper')}</p>
           {question.is_owner && (
-            <span className='text-accent text-[11px] font-medium'>Your question</span>
+            <span className='text-accent text-[11px] font-medium'>{t('yourQuestion')}</span>
           )}
         </div>
         {question.created_at && (
           <time className='text-muted-foreground shrink-0 text-xs'>
-            {formatDistanceToNow(new Date(question.created_at), { addSuffix: true })}
+            {formatter.relativeTime(new Date(question.created_at))}
           </time>
         )}
       </div>
@@ -45,12 +48,12 @@ function QuestionThread({ question }: { question: DtoProductQuestionResponse }) 
                 <p className='text-sm font-medium'>{answer.author}</p>
                 {answer.is_store_reply && (
                   <Badge variant='secondary' className='gap-1 text-[10px]'>
-                    <IconBuildingStore className='h-3 w-3' /> Store
+                    <IconBuildingStore className='h-3 w-3' /> {t('store')}
                   </Badge>
                 )}
                 {answer.is_ai_reply && (
                   <Badge variant='outline' className='gap-1 text-[10px]'>
-                    <IconRobot className='h-3 w-3' /> AI assistant
+                    <IconRobot className='h-3 w-3' /> {t('aiAssistant')}
                   </Badge>
                 )}
               </div>
@@ -69,6 +72,7 @@ interface ProductQaSectionProps {
 }
 
 export function ProductQaSection({ productId, productSlug }: ProductQaSectionProps) {
+  const t = useTranslations('pdp.qa');
   const { isAuthenticated } = useAuth();
   const [body, setBody] = useState('');
   const queryClient = useQueryClient();
@@ -94,36 +98,34 @@ export function ProductQaSection({ productId, productSlug }: ProductQaSectionPro
   const handleSubmit = async () => {
     const trimmed = body.trim();
     if (trimmed.length < 5) {
-      toast.error('Question must be at least 5 characters');
+      toast.error(t('toastTooShort'));
       return;
     }
     try {
       await createQuestion.mutateAsync({ id: productIdStr, data: { body: trimmed } });
       setBody('');
-      toast.success('Question posted — the store assistant will reply shortly');
+      toast.success(t('toastPosted'));
     } catch (error) {
       if (isUnauthorizedError(error)) {
-        toast.error('Sign in to ask a question');
+        toast.error(t('toastSignIn'));
         return;
       }
-      toast.error('Failed to post question');
+      toast.error(t('toastFailed'));
     }
   };
 
   return (
     <div className='space-y-8'>
       <div className='border-border/60 bg-card rounded-2xl border p-6'>
-        <h3 className='font-display text-lg font-semibold'>Ask a question</h3>
-        <p className='text-muted-foreground mt-1 text-sm'>
-          Get answers from the seller or our AI shopping assistant before you buy.
-        </p>
+        <h3 className='font-display text-lg font-semibold'>{t('askTitle')}</h3>
+        <p className='text-muted-foreground mt-1 text-sm'>{t('askDescription')}</p>
 
         {isAuthenticated ? (
           <div className='mt-4 space-y-3'>
             <Textarea
               value={body}
               onChange={(event) => setBody(event.target.value)}
-              placeholder='e.g. Is this watch water resistant? What is the warranty?'
+              placeholder={t('placeholder')}
               rows={3}
               disabled={createQuestion.isPending}
             />
@@ -132,13 +134,13 @@ export function ProductQaSection({ productId, productSlug }: ProductQaSectionPro
               disabled={createQuestion.isPending}
               onClick={() => void handleSubmit()}
             >
-              Post question
+              {t('postQuestion')}
             </Button>
           </div>
         ) : (
           <Button asChild className='mt-4 rounded-full'>
             <Link href={`/login?callbackUrl=${encodeURIComponent(`/product/${productSlug}`)}`}>
-              Sign in to ask
+              {t('signInToAsk')}
             </Link>
           </Button>
         )}
@@ -155,9 +157,7 @@ export function ProductQaSection({ productId, productSlug }: ProductQaSectionPro
           ))}
         </div>
       ) : (
-        <p className='text-muted-foreground py-8 text-center text-sm'>
-          No questions yet. Be the first to ask about this product.
-        </p>
+        <p className='text-muted-foreground py-8 text-center text-sm'>{t('empty')}</p>
       )}
     </div>
   );

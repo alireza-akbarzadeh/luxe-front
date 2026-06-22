@@ -3,7 +3,7 @@
 import { IconMenu, IconSearch, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
@@ -11,6 +11,7 @@ import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
 import { useSearchStore } from '@/domains/search/search.store';
+import { cn } from '~/src/lib/utils';
 
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
@@ -25,6 +26,8 @@ import { WishlistButton } from './wishlist-button';
 export function Navbar() {
   const t = useTranslations('common');
   const tNav = useTranslations('nav');
+  const locale = useLocale();
+  console.log(locale);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
@@ -77,7 +80,10 @@ export function Navbar() {
 
               <NavbarActionButton asChild className='hidden lg:inline-flex'>
                 <Link href='/search' aria-label={t('search')}>
-                  <IconSearch className='size-5' stroke={1.75} />
+                  <IconSearch
+                    className={cn('size-5', locale === 'fa' ? 'rotate-80 transform' : '')}
+                    stroke={1.75}
+                  />
                 </Link>
               </NavbarActionButton>
 

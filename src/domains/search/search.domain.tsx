@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductGridSkeleton } from '@/domains/home/components/product-grid-skeleton';
 import { ProductCard } from '@/domains/shop/components/product-card';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { useGetCategories } from '~/src/services/-categories-get';
 import { getGetProductsIdQueryOptions } from '~/src/services/-products-{id}-get';
@@ -26,6 +27,7 @@ import { buildSearchQueryParams } from './search.utils';
 
 export default function SearchDomain() {
   const t = useTranslations('search');
+  const { formatInteger } = useLocaleFormatters();
   const searchParams = useSearchParams();
   const searchStore = useSearchStore();
 
@@ -141,14 +143,14 @@ export default function SearchDomain() {
       <SearchHero />
       <section className='py-8'>
         <div className='flex flex-col gap-8 lg:flex-row'>
-          <aside className='hidden w-64 shrink-0 lg:block'>
+          <aside className='hidden w-72 shrink-0 lg:block'>
             <div className='bg-card sticky top-24 rounded-2xl border p-6'>
               <h2 className='mb-4 flex items-center gap-2 font-semibold'>
                 <IconFilter2 className='h-4 w-4' />
                 {t('filters.title')}
                 {searchParams.activeFilterCount > 0 ? (
-                  <Badge variant='secondary' className='ms-auto'>
-                    {searchParams.activeFilterCount}
+                  <Badge variant='secondary' className='ms-auto tabular-nums'>
+                    {formatInteger(searchParams.activeFilterCount)}
                   </Badge>
                 ) : null}
               </h2>

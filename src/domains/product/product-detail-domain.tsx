@@ -2,9 +2,11 @@
 
 import { IconChevronRight } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 import { useGetProductsId } from '~/src/services/-products-{id}-get';
 
@@ -27,6 +29,7 @@ import { hasCustomProductVideo } from './lib/product-media-utils';
 import { ProductReviewsSection } from './sections/product-reviews-section';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
+  const t = useTranslations('pdp');
   const [chatOpen, setChatOpen] = useState(false);
   const { data, isPending, isError } = useGetProductsId(productId);
 
@@ -51,30 +54,34 @@ export default function ProductDetailDomain({ productId }: { productId: string }
     : 0;
 
   const breadcrumbItems = [
-    { label: 'Shop', href: '/shop' },
+    { label: t('breadcrumb.shop'), href: '/shop' },
     ...(product.store?.slug
-      ? [{ label: product.store.name ?? 'Store', href: `/store/${product.store.slug}` }]
+      ? [{ label: product.store.name ?? t('breadcrumb.store'), href: `/store/${product.store.slug}` }]
       : []),
     ...(product.category?.name
       ? [{ label: product.category.name, href: `/shop?categoryId=${product.category.id ?? ''}` }]
       : []),
-    { label: product.name || 'Product' }
+    { label: product.name || t('breadcrumb.product') }
   ];
 
   const tabs = [
-    { value: 'description', label: 'Description' },
-    ...(showVideoTab ? [{ value: 'video' as const, label: 'Video' }] : []),
-    { value: 'details', label: 'Details & specs' },
-    { value: 'qa', label: 'Q&A' },
-    { value: 'reviews', label: `Reviews (${product.reviews_count ?? 0})` }
+    { value: 'description', label: t('tabs.description') },
+    ...(showVideoTab ? [{ value: 'video' as const, label: t('tabs.video') }] : []),
+    { value: 'details', label: t('tabs.details') },
+    { value: 'qa', label: t('tabs.qa') },
+    {
+      value: 'reviews',
+      label: t('tabs.reviews', { count: product.reviews_count ?? 0 })
+    }
   ];
 
   return (
     <div className='app-container mt-20 pb-16'>
       <DynamicBreadcrumb
         items={breadcrumbItems}
+        homeLabel={t('breadcrumb.home')}
         direction='column'
-        separator={<IconChevronRight className='h-3 w-3' />}
+        separator={<IconChevronRight className={cn('h-3 w-3', 'cn-rtl-flip')} />}
         className='text-muted-foreground text-xs'
         breadcrumbClassName='flex items-center gap-1.5'
         showBackButton={false}
@@ -108,23 +115,22 @@ export default function ProductDetailDomain({ productId }: { productId: string }
           </TabsList>
 
           <TabsContent value='description' className='mt-10 max-w-3xl'>
-            <h2 className='font-display mb-4 text-2xl font-semibold'>About this piece</h2>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>{t('aboutTitle')}</h2>
             <ProductDescription description={product.description || ''} tags={product.tags} />
           </TabsContent>
 
           {showVideoTab && (
             <TabsContent value='video' className='mt-10 max-w-3xl'>
-              <h2 className='font-display mb-4 text-2xl font-semibold'>Product video</h2>
+              <h2 className='font-display mb-4 text-2xl font-semibold'>{t('videoTitle')}</h2>
               <p className='text-muted-foreground mb-6 text-sm leading-relaxed'>
-                Watch how this piece looks, moves, and fits — a closer look before you add it to
-                your cart.
+                {t('videoDescription')}
               </p>
               <ProductVideoPlayer product={product} className='max-w-2xl' />
             </TabsContent>
           )}
 
           <TabsContent value='details' id='product-specs' className='mt-10 max-w-4xl scroll-mt-28'>
-            <h2 className='font-display mb-4 text-2xl font-semibold'>Details & specifications</h2>
+            <h2 className='font-display mb-4 text-2xl font-semibold'>{t('detailsTitle')}</h2>
             <div className='border-border/60 bg-card rounded-2xl border p-6 sm:p-8'>
               <ProductSpecifications product={product} />
             </div>
@@ -133,11 +139,9 @@ export default function ProductDetailDomain({ productId }: { productId: string }
           <TabsContent value='qa' className='mt-10 max-w-3xl'>
             <div className='mb-8'>
               <h2 className='font-display text-2xl font-semibold tracking-tight md:text-3xl'>
-                Questions & answers
+                {t('qaTitle')}
               </h2>
-              <p className='text-muted-foreground mt-2 text-sm md:text-base'>
-                Ask the seller or browse answers from other shoppers before you buy.
-              </p>
+              <p className='text-muted-foreground mt-2 text-sm md:text-base'>{t('qaIntro')}</p>
             </div>
             <ProductQaSection productId={numericProductId} productSlug={productSlug} />
           </TabsContent>
@@ -145,15 +149,15 @@ export default function ProductDetailDomain({ productId }: { productId: string }
           <TabsContent value='reviews' className='mt-10'>
             <div className='mb-8 max-w-3xl'>
               <h2 className='font-display text-2xl font-semibold tracking-tight md:text-3xl'>
-                Customer reviews
+                {t('reviewsTitle')}
               </h2>
               <p className='text-muted-foreground mt-2 text-sm md:text-base'>
-                Read what shoppers say about {product.name}, or share your own experience.
+                {t('reviewsIntro', { name: product.name ?? t('thisProduct') })}
               </p>
             </div>
             <ProductReviewsSection
               productId={numericProductId}
-              productName={product.name ?? 'this product'}
+              productName={product.name ?? t('thisProduct')}
             />
           </TabsContent>
         </Tabs>

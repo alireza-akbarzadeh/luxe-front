@@ -4,8 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Slider } from '@/components/ui/slider';
-import { cartMoneyClassName } from '@/domains/cart/lib/cart-utils';
-import { formatPrice } from '@/domains/home/lib/home-utils';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 
 import { useSearchParams } from '../hooks/useSearchParams';
@@ -28,6 +27,7 @@ interface SearchPriceRangeFilterProps {
 export function SearchPriceRangeFilter(props: SearchPriceRangeFilterProps = {}) {
   const { value, onChange } = props;
   const t = useTranslations('search.filters');
+  const { formatPrice, moneyClassName } = useLocaleFormatters();
   const searchParams = useSearchParams();
   const committedRange = value ?? searchParams.priceRange;
   const isDraftMode = value != null && onChange != null;
@@ -63,7 +63,7 @@ export function SearchPriceRangeFilter(props: SearchPriceRangeFilterProps = {}) 
     <div>
       <div className='mb-3 flex items-center justify-between gap-2'>
         <h3 className='font-semibold'>{t('priceRange')}</h3>
-        <span className={cn('text-muted-foreground text-xs', cartMoneyClassName)}>
+        <span className={cn('text-muted-foreground text-xs', moneyClassName)}>
           {isDraftMode ? t('priceAdjustDraft') : t('priceAdjustSidebar')}
         </span>
       </div>
@@ -78,7 +78,7 @@ export function SearchPriceRangeFilter(props: SearchPriceRangeFilterProps = {}) 
         className='mb-3'
         aria-label={t('priceAriaLabel')}
       />
-      <div className={cn('flex items-center justify-between text-sm', cartMoneyClassName)}>
+      <div className={cn('flex items-center justify-between text-sm', moneyClassName)}>
         <span>{formatPrice(localRange[0])}</span>
         <span className='text-muted-foreground'>–</span>
         <span>{formatPrice(localRange[1])}</span>

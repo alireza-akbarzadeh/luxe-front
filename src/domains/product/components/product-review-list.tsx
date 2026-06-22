@@ -1,7 +1,7 @@
 'use client';
 
 import { IconCheck, IconStar } from '@tabler/icons-react';
-import { formatDistanceToNow } from 'date-fns';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -15,18 +15,21 @@ import {
   StoreReviewItemsSkeleton,
   StoreReviewListSkeleton
 } from '@/domains/store/components/store-skeleton-loading';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { getReviews, useGetReviews } from '@/services/-reviews-get';
 
 const PAGE_SIZE = 10;
 
 function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
+  const t = useTranslations('pdp.reviews');
+  const { formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const total = summary?.total ?? 0;
   const average = summary?.average ?? 0;
 
   return (
     <div className='border-border/60 bg-card rounded-2xl border p-6'>
-      <p className='font-display text-5xl tabular-nums'>{average.toFixed(1)}</p>
+      <p className={cn('font-display text-5xl', moneyClassName)}>{formatDecimal(average)}</p>
       <div className='mt-2 flex'>
         {Array.from({ length: 5 }).map((_, i) => (
           <IconStar
@@ -41,7 +44,7 @@ function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
         ))}
       </div>
       <p className='text-muted-foreground mt-2 text-sm'>
-        Based on {total.toLocaleString('en-US')} review{total === 1 ? '' : 's'}
+        {t('basedOn', { count: total })}
       </p>
 
       <div className='mt-6 space-y-1.5'>
@@ -50,11 +53,15 @@ function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
           const pct = total > 0 ? Math.round((count / total) * 100) : 0;
           return (
             <div key={stars} className='flex items-center gap-2 text-xs'>
-              <span className='text-muted-foreground w-12'>{stars} star</span>
+              <span className='text-muted-foreground w-12'>
+                {t('starLabel', { stars })}
+              </span>
               <div className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'>
                 <div className='bg-foreground h-full transition-all' style={{ width: `${pct}%` }} />
               </div>
-              <span className='text-muted-foreground w-8 text-right tabular-nums'>{pct}%</span>
+              <span className={cn('text-muted-foreground w-8 text-end', moneyClassName)}>
+                {formatInteger(pct)}%
+              </span>
             </div>
           );
         })}
@@ -64,25 +71,28 @@ function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
 }
 
 function ReviewItem({ review }: { review: ProductReviewResponse }) {
+  const t = useTranslations('pdp.reviews');
+  const formatter = useFormatter();
+
   return (
     <li className='border-border border-b pb-6 last:border-0'>
       <div className='flex items-start justify-between gap-3'>
         <div>
           <div className='flex flex-wrap items-center gap-2'>
-            <p className='font-medium'>{review.author || 'Anonymous'}</p>
+            <p className='font-medium'>{review.author || t('anonymous')}</p>
             {review.is_verified && (
               <Badge variant='outline' className='gap-1 text-[10px]'>
-                <IconCheck className='h-2.5 w-2.5' /> Verified purchase
+                <IconCheck className='h-2.5 w-2.5' /> {t('verifiedPurchase')}
               </Badge>
             )}
             {review.is_owner && (
-              <span className='text-accent text-[11px] font-medium'>Your review</span>
+              <span className='text-accent text-[11px] font-medium'>{t('yourReview')}</span>
             )}
           </div>
         </div>
         {review.created_at && (
           <p className='text-muted-foreground shrink-0 text-xs'>
-            {formatDistanceToNow(new Date(review.created_at), { addSuffix: true })}
+            {formatter.relativeTime(new Date(review.created_at))}
           </p>
         )}
       </div>
@@ -112,6 +122,7 @@ interface ProductReviewListProps {
 }
 
 export function ProductReviewList({ productId }: ProductReviewListProps) {
+  const t = useTranslations('pdp.reviews');
   const [extraReviews, setExtraReviews] = useState<ProductReviewResponse[]>([]);
   const [nextOffset, setNextOffset] = useState(PAGE_SIZE);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -173,15 +184,13 @@ export function ProductReviewList({ productId }: ProductReviewListProps) {
                 disabled={isLoadingMore}
                 onClick={() => void handleLoadMore()}
               >
-                Load more reviews
+                {t('loadMore')}
               </Button>
             </div>
           )}
         </>
       ) : (
-        <p className='text-muted-foreground py-8 text-center'>
-          No reviews yet. Be the first to share your experience!
-        </p>
+        <p className='text-muted-foreground py-8 text-center'>{t('empty')}</p>
       )}
     </div>
   );

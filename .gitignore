@@ -45,3 +45,5 @@ openapi3.json
 
 # CLI skill installs (ephemeral); team skills live in .cursor/skills/
 /.agents/
+
+src/services/

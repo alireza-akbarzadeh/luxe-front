@@ -1,6 +1,7 @@
 'use client';
 
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
+import { useFormatter, useTranslations } from 'next-intl';
 import { Area, AreaChart, CartesianGrid, Line, XAxis, YAxis } from 'recharts';
 
 import {
@@ -10,23 +11,10 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
-import { formatPrice } from '@/domains/home/lib/home-utils';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { useGetProductsIdPriceHistory } from '@/services/-products-{id}-price-history-get';
 import type { DtoPriceHistoryPoint } from '@/services/-products-{id}-price-history-get.schemas';
-
-const chartConfig = {
-  price: { label: 'Sale price', color: 'hsl(var(--foreground))' },
-  compare: { label: 'List price', color: 'hsl(var(--muted-foreground))' }
-} satisfies ChartConfig;
-
-function toChartRows(points: DtoPriceHistoryPoint[]) {
-  return points.map((point) => ({
-    date: point.recorded_at ? format(parseISO(point.recorded_at), 'MMM d') : '',
-    price: point.price ?? 0,
-    compare: point.compare_at_price ?? null
-  }));
-}
 
 interface ProductPriceChartProps {
   productId: string | number;
@@ -35,8 +23,31 @@ interface ProductPriceChartProps {
 
 /** Price trend over time for PDP transparency. */
 export function ProductPriceChart({ productId, className }: ProductPriceChartProps) {
+  const t = useTranslations('pdp.priceChart');
+  const formatter = useFormatter();
+  const { formatPrice, formatInteger, moneyClassName } = useLocaleFormatters();
+
+  const chartConfig = {
+    price: { label: t('salePrice'), color: 'hsl(var(--foreground))' },
+    compare: { label: t('listPrice'), color: 'hsl(var(--muted-foreground))' }
+  } satisfies ChartConfig;
+
   const { data, isLoading } = useGetProductsIdPriceHistory(String(productId), { days: 90 });
   const points = data?.data?.points ?? [];
+
+  const formatChartDate = (isoDate: string) => {
+    if (!isoDate) return '';
+    return formatter.dateTime(parseISO(isoDate), { month: 'short', day: 'numeric' });
+  };
+
+  const toChartRows = (historyPoints: DtoPriceHistoryPoint[]) =>
+    historyPoints.map((point) => ({
+      date: point.recorded_at ? formatChartDate(point.recorded_at) : '',
+      price: point.price ?? 0,
+      compare: point.compare_at_price ?? null
+    }));
+
+  const formatAxisPrice = (value: number) => formatPrice(Math.round(value));
 
   if (isLoading) {
     return (
@@ -60,10 +71,8 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
           className
         )}
       >
-        <h3 className='font-display text-lg font-semibold'>Price history</h3>
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Price tracking will appear once more history is recorded for this item.
-        </p>
+        <h3 className='font-display text-lg font-semibold'>{t('title')}</h3>
+        <p className='text-muted-foreground mt-2 text-sm'>{t('empty')}</p>
       </div>
     );
   }
@@ -75,6 +84,7 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
   const low = Math.min(...points.map((point) => point.price ?? 0));
   const delta = last - first;
   const deltaPct = first > 0 ? Math.round((delta / first) * 100) : 0;
+  const deltaSign = delta > 0 ? '+' : '';
 
   return (
     <div
@@ -85,17 +95,16 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
     >
       <div className='mb-4 flex flex-wrap items-end justify-between gap-3'>
         <div>
-          <h3 className='font-display text-lg font-semibold'>Price history</h3>
-          <p className='text-muted-foreground text-sm'>Last 90 days</p>
+          <h3 className='font-display text-lg font-semibold'>{t('title')}</h3>
+          <p className='text-muted-foreground text-sm'>{t('last90Days')}</p>
         </div>
-        <p className='text-sm tabular-nums'>
-          <span className='text-muted-foreground'>Current </span>
+        <p className={cn('text-sm', moneyClassName)}>
+          <span className='text-muted-foreground'>{t('current')} </span>
           <span className='font-semibold'>{formatPrice(last)}</span>
           {delta !== 0 && (
             <span className={delta < 0 ? 'text-emerald-600' : 'text-destructive'}>
               {' '}
-              ({delta > 0 ? '+' : ''}
-              {deltaPct}%)
+              {t('changePercent', { sign: deltaSign, percent: formatInteger(Math.abs(deltaPct)) })}
             </span>
           )}
         </p>
@@ -108,7 +117,7 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
           <YAxis
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value: number) => `$${Math.round(value)}`}
+            tickFormatter={formatAxisPrice}
             width={48}
             domain={['auto', 'auto']}
           />
@@ -139,18 +148,25 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
 
       <div className='mt-4 grid grid-cols-3 gap-2 text-center'>
         <div className='bg-muted/35 rounded-xl px-2 py-2'>
-          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>90-day high</p>
-          <p className='mt-0.5 text-sm font-semibold tabular-nums'>{formatPrice(high)}</p>
+          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>{t('high90')}</p>
+          <p className={cn('mt-0.5 text-sm font-semibold', moneyClassName)}>{formatPrice(high)}</p>
         </div>
         <div className='bg-muted/35 rounded-xl px-2 py-2'>
-          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>90-day low</p>
-          <p className='mt-0.5 text-sm font-semibold tabular-nums text-emerald-600 dark:text-emerald-400'>
+          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>{t('low90')}</p>
+          <p
+            className={cn(
+              'mt-0.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400',
+              moneyClassName
+            )}
+          >
             {formatPrice(low)}
           </p>
         </div>
         <div className='bg-muted/35 rounded-xl px-2 py-2'>
-          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>Range</p>
-          <p className='mt-0.5 text-sm font-semibold tabular-nums'>{formatPrice(high - low)}</p>
+          <p className='text-muted-foreground text-[10px] tracking-wide uppercase'>{t('range')}</p>
+          <p className={cn('mt-0.5 text-sm font-semibold', moneyClassName)}>
+            {formatPrice(high - low)}
+          </p>
         </div>
       </div>
     </div>

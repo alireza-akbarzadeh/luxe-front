@@ -2,6 +2,7 @@
 
 import { IconTrash } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/components/providers/auth-provider';
@@ -33,6 +34,7 @@ interface ProductReviewFormFieldsProps {
 }
 
 function ProductReviewFormFields({ productId, myReview }: ProductReviewFormFieldsProps) {
+  const t = useTranslations('pdp.reviews');
   const isEditing = Boolean(myReview?.id);
   const { createReview, updateReview, deleteReview } = useProductReviewMutations(productId);
 
@@ -58,7 +60,7 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
               comment: value.comment
             }
           });
-          toast.success('Review updated');
+          toast.success(t('toastUpdated'));
         } else {
           await createReview.mutateAsync({
             data: {
@@ -68,15 +70,15 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
               comment: value.comment
             }
           });
-          toast.success('Review published');
+          toast.success(t('toastPublished'));
           formApi.reset();
         }
       } catch (error) {
         if (isUnauthorizedError(error)) {
-          toast.error('Sign in to leave a review');
+          toast.error(t('toastSignIn'));
           return;
         }
-        toast.error(isEditing ? 'Failed to update review' : 'Failed to submit review');
+        toast.error(isEditing ? t('toastUpdateFailed') : t('toastSubmitFailed'));
       }
     }
   });
@@ -87,12 +89,10 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
     <div className='border-border/60 bg-card rounded-2xl border p-6 shadow-sm'>
       <div className='mb-5'>
         <h3 className='font-display text-lg font-semibold'>
-          {isEditing ? 'Update your review' : 'Write a review'}
+          {isEditing ? t('updateTitle') : t('writeTitle')}
         </h3>
         <p className='text-muted-foreground mt-1 text-sm'>
-          {isEditing
-            ? 'You can edit or remove your review anytime.'
-            : 'Help other shoppers by rating this product.'}
+          {isEditing ? t('editHint') : t('writeHint')}
         </p>
       </div>
 
@@ -108,7 +108,7 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
           <form.Field name='rating'>
             {(field) => (
               <div className='space-y-2'>
-                <label className='text-sm font-medium'>Your rating</label>
+                <label className='text-sm font-medium'>{t('yourRating')}</label>
                 <StoreRatingInput
                   value={field.state.value}
                   onChange={(rating) => field.handleChange(rating)}
@@ -124,8 +124,8 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
           <form.AppField name='title'>
             {(field) => (
               <field.TextField
-                label='Review title (optional)'
-                placeholder='Summarize your experience'
+                label={t('titleLabel')}
+                placeholder={t('titlePlaceholder')}
                 disabled={isPending}
               />
             )}
@@ -134,8 +134,8 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
           <form.AppField name='comment'>
             {(field) => (
               <field.TextArea
-                label='Your review'
-                placeholder='Quality, fit, delivery, value for money…'
+                label={t('commentLabel')}
+                placeholder={t('commentPlaceholder')}
                 rows={4}
                 disabled={isPending}
               />
@@ -144,7 +144,7 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
 
           <div className='flex flex-wrap items-center gap-2'>
             <form.Submit
-              label={isEditing ? 'Update review' : 'Post review'}
+              label={isEditing ? t('updateButton') : t('postButton')}
               isPending={isPending}
               className='rounded-full px-6'
             />
@@ -160,14 +160,14 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
                   try {
                     await deleteReview.mutateAsync({ id: myReview.id! });
                     form.reset(defaultProductReviewValues);
-                    toast.success('Review removed');
+                    toast.success(t('toastRemoved'));
                   } catch {
-                    toast.error('Failed to delete review');
+                    toast.error(t('toastDeleteFailed'));
                   }
                 }}
               >
-                <IconTrash className='mr-1.5 h-4 w-4' />
-                Delete
+                <IconTrash className='me-1.5 h-4 w-4' />
+                {t('delete')}
               </Button>
             )}
           </div>
@@ -178,6 +178,7 @@ function ProductReviewFormFields({ productId, myReview }: ProductReviewFormField
 }
 
 export function ProductReviewForm({ productId, productName }: ProductReviewFormProps) {
+  const t = useTranslations('pdp.reviews');
   const { isAuthenticated } = useAuth();
   const { data: myReviewData, isLoading: isLoadingMine } = useGetReviewsMe(
     { product_id: productId },
@@ -189,12 +190,10 @@ export function ProductReviewForm({ productId, productName }: ProductReviewFormP
   if (!isAuthenticated) {
     return (
       <div className='border-border/60 bg-muted/20 rounded-2xl border p-6 text-center'>
-        <p className='text-muted-foreground text-sm'>
-          Sign in to share your experience with {productName}.
-        </p>
+        <p className='text-muted-foreground text-sm'>{t('signInPrompt', { name: productName })}</p>
         <Button asChild className='mt-4 rounded-full'>
           <Link href={`/login?callbackUrl=${encodeURIComponent(`/product/${productId}`)}`}>
-            Sign in to review
+            {t('signInButton')}
           </Link>
         </Button>
       </div>
