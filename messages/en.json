@@ -938,7 +938,10 @@
       "defaultUpdated": "Default address updated",
       "setDefaultFailed": "Failed to set default",
       "deleted": "Address deleted",
-      "deleteFailed": "Failed to delete"
+      "deleteFailed": "Failed to delete",
+      "mapDialogTitle": "Choose delivery location",
+      "mapDialogDescription": "Search, use your current location, or drag the pin on the map.",
+      "useThisLocation": "Use this location"
     },
     "wallet": {
       "title": "My Wallet",

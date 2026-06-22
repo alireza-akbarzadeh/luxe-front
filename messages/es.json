@@ -938,7 +938,10 @@
       "defaultUpdated": "Dirección predeterminada actualizada",
       "setDefaultFailed": "No se pudo establecer como predeterminada",
       "deleted": "Dirección eliminada",
-      "deleteFailed": "No se pudo eliminar"
+      "deleteFailed": "No se pudo eliminar",
+      "mapDialogTitle": "Elegir ubicación de entrega",
+      "mapDialogDescription": "Busca, usa tu ubicación actual o arrastra el pin en el mapa.",
+      "useThisLocation": "Usar esta ubicación"
     },
     "wallet": {
       "title": "Mi billetera",

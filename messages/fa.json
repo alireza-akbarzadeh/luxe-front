@@ -938,7 +938,10 @@
       "defaultUpdated": "آدرس پیش‌فرض به‌روزرسانی شد",
       "setDefaultFailed": "تنظیم پیش‌فرض ناموفق بود",
       "deleted": "آدرس حذف شد",
-      "deleteFailed": "حذف ناموفق بود"
+      "deleteFailed": "حذف ناموفق بود",
+      "mapDialogTitle": "انتخاب محل تحویل",
+      "mapDialogDescription": "جستجو کنید، از موقعیت فعلی استفاده کنید یا پین را روی نقشه بکشید.",
+      "useThisLocation": "استفاده از این موقعیت"
     },
     "wallet": {
       "title": "کیف پول من",

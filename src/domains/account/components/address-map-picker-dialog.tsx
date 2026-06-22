@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { AppDialog } from '@/components/app-dialog';
@@ -52,6 +53,8 @@ function AddressMapPickerSession({
   onConfirm,
   onCancel
 }: AddressMapPickerSessionProps) {
+  const t = useTranslations('account.addresses');
+  const tCommon = useTranslations('account.common');
   const needsAsyncGeocode = !initialCoordinates && hasResolvableQuery(initialAddress);
 
   const [draftCoordinates, setDraftCoordinates] = useState<GeoCoordinates | null>(
@@ -110,10 +113,10 @@ function AddressMapPickerSession({
 
       <div className='mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
         <Button type='button' variant='outline' onClick={onCancel}>
-          Cancel
+          {tCommon('cancel')}
         </Button>
         <Button type='button' onClick={handleConfirm} disabled={!draftAddress || isResolvingSeed}>
-          Use this location
+          {t('useThisLocation')}
         </Button>
       </div>
     </>
@@ -131,6 +134,7 @@ export function AddressMapPickerDialog({
   initialAddress,
   onConfirm
 }: AddressMapPickerDialogProps) {
+  const t = useTranslations('account.addresses');
   const sessionKey = [
     initialCoordinates?.latitude ?? 'no-lat',
     initialCoordinates?.longitude ?? 'no-lng',
@@ -141,8 +145,8 @@ export function AddressMapPickerDialog({
     <AppDialog
       open={open}
       onOpenChange={onOpenChange}
-      title='Choose delivery location'
-      description='Search, use your current location, or drag the pin on the map.'
+      title={t('mapDialogTitle')}
+      description={t('mapDialogDescription')}
       size='full'
       className='flex max-h-[96dvh] flex-col'
       contentClassName='overflow-y-auto px-1 sm:px-2'
