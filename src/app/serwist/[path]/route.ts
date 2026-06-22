@@ -10,5 +10,7 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   createSerwistRoute({
     additionalPrecacheEntries: [{ url: '/~offline', revision }],
     swSrc: 'src/app/sw.ts',
-    useNativeEsbuild: true
+    useNativeEsbuild: true,
+    // Browserslist includes safari11; native esbuild cannot downlevel destructuring for that target.
+    esbuildOptions: { target: 'es2020' }
   });

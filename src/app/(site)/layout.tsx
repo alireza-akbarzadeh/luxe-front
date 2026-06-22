@@ -9,12 +9,10 @@ type TRootLayout = Readonly<PropsWithChildren>;
 
 export default function SiteLayout({ children }: TRootLayout) {
   return (
-    <div id="site-layout" className="px-4 md:px-8">
+    <div id='site-layout'>
       <Navbar />
       <SiteRealtimeProvider>
-        <main className='bg-background flex min-h-screen flex-col pt-16 lg:pt-20'>
-          {children}
-        </main>
+        <main className='bg-background flex min-h-screen flex-col pt-16 lg:pt-20'>{children}</main>
         <PwaInstallPrompt />
       </SiteRealtimeProvider>
       <Footer />

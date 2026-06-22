@@ -3,6 +3,7 @@
 import { IconCircleCheck, IconMail } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -16,16 +17,18 @@ import { usePostAuthSendVerification } from '~/src/services/-auth-send-verificat
 
 export function EmailVerificationPanel() {
   const queryClient = useQueryClient();
+  const t = useTranslations('account.verification');
   const { data: summaryResponse, isLoading } = useGetAccountSummary();
   const { mutateAsync, isPending } = usePostAuthSendVerification();
 
   const email = summaryResponse?.data?.email;
   const isVerified = Boolean(summaryResponse?.data?.email_verified_at);
+  const emailLabel = email ?? t('yourEmail');
 
   const handleSendVerification = async () => {
     try {
       await mutateAsync();
-      toast.success('Verification email sent — check your inbox');
+      toast.success(t('emailSent'));
     } catch (error) {
       toast.error(extractErrorMessage(error as AxiosError<ApiErrorResponse>));
     }
@@ -33,7 +36,7 @@ export function EmailVerificationPanel() {
 
   const handleRefreshStatus = () => {
     void queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
-    toast.message('Verification status refreshed');
+    toast.message(t('statusRefreshed'));
   };
 
   return (
@@ -54,15 +57,13 @@ export function EmailVerificationPanel() {
             )}
           </div>
           <div>
-            <h3 className='font-display text-lg font-semibold tracking-tight'>
-              Email verification
-            </h3>
+            <h3 className='font-display text-lg font-semibold tracking-tight'>{t('title')}</h3>
             <p className='text-muted-foreground mt-1 text-sm'>
               {isLoading
-                ? 'Checking verification status…'
+                ? t('checking')
                 : isVerified
-                  ? `${email ?? 'Your email'} is verified.`
-                  : `Verify ${email ?? 'your email'} to secure your account and receive order updates.`}
+                  ? t('verified', { email: emailLabel })
+                  : t('unverified', { email: emailLabel })}
             </p>
           </div>
         </div>
@@ -76,7 +77,7 @@ export function EmailVerificationPanel() {
               disabled={isPending || isLoading}
               onClick={() => void handleSendVerification()}
             >
-              Send verification email
+              {t('sendEmail')}
             </Button>
           ) : null}
           <Button
@@ -86,7 +87,7 @@ export function EmailVerificationPanel() {
             disabled={isLoading}
             onClick={handleRefreshStatus}
           >
-            Refresh status
+            {t('refreshStatus')}
           </Button>
         </div>
       </div>

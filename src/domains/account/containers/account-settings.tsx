@@ -1,19 +1,20 @@
 'use client';
 
 import { IconBell, IconShieldLock } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { ActiveSessionsPanel } from '../components/active-sessions-panel';
 import { ChangePasswordPanel } from '../components/change-password-panel';
 import { EmailVerificationPanel } from '../components/email-verification-panel';
 
 export function AccountSetting() {
+  const t = useTranslations('account.settings');
+
   return (
     <div className='space-y-6'>
       <div>
-        <h2 className='font-display text-2xl font-semibold tracking-tight'>Account Settings</h2>
-        <p className='text-muted-foreground mt-1 text-sm'>
-          Security, verification, and session management
-        </p>
+        <h2 className='font-display text-2xl font-semibold tracking-tight'>{t('title')}</h2>
+        <p className='text-muted-foreground mt-1 text-sm'>{t('subtitle')}</p>
       </div>
 
       <ChangePasswordPanel />
@@ -26,11 +27,10 @@ export function AccountSetting() {
             <IconBell className='text-muted-foreground size-5' />
           </div>
           <div>
-            <h3 className='font-display text-lg font-semibold tracking-tight'>Email preferences</h3>
-            <p className='text-muted-foreground mt-1 text-sm'>
-              Marketing and newsletter controls are not available yet. Order and account emails
-              related to your purchases will still be sent when needed.
-            </p>
+            <h3 className='font-display text-lg font-semibold tracking-tight'>
+              {t('emailPreferencesTitle')}
+            </h3>
+            <p className='text-muted-foreground mt-1 text-sm'>{t('emailPreferencesBody')}</p>
           </div>
         </div>
       </div>
@@ -42,11 +42,10 @@ export function AccountSetting() {
               <IconShieldLock className='text-muted-foreground size-5' />
             </div>
             <div>
-              <h3 className='font-display text-lg font-semibold tracking-tight'>Delete account</h3>
-              <p className='text-muted-foreground mt-1 max-w-xl text-sm'>
-                Self-service account deletion is not enabled yet. Contact support if you need your
-                account and data permanently removed.
-              </p>
+              <h3 className='font-display text-lg font-semibold tracking-tight'>
+                {t('deleteAccountTitle')}
+              </h3>
+              <p className='text-muted-foreground mt-1 max-w-xl text-sm'>{t('deleteAccountBody')}</p>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import {
   IconPlus,
   IconWallet
 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,8 @@ export function AccountPayment() {
   const [depositOpen, setDepositOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const offset = page * PAGE_SIZE;
+  const t = useTranslations('account.wallet');
+  const tCommon = useTranslations('account.common');
 
   const {
     data: listResponse,
@@ -76,12 +79,10 @@ export function AccountPayment() {
   if (isListError) {
     return (
       <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-12'>
-        <p className='text-destructive font-medium'>Failed to load wallet.</p>
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Please check your connection and try again.
-        </p>
+        <p className='text-destructive font-medium'>{t('loadError')}</p>
+        <p className='text-muted-foreground mt-2 text-sm'>{tCommon('connectionError')}</p>
         <Button variant='outline' className='mt-5' onClick={() => void refetchList()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -91,15 +92,13 @@ export function AccountPayment() {
     <div className='space-y-6'>
       <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
         <div>
-          <h2 className='font-display text-2xl font-semibold tracking-tight'>My Wallet</h2>
-          <p className='text-muted-foreground mt-1 text-sm'>
-            Manage balance, deposits, and transaction history
-          </p>
+          <h2 className='font-display text-2xl font-semibold tracking-tight'>{t('title')}</h2>
+          <p className='text-muted-foreground mt-1 text-sm'>{t('subtitle')}</p>
         </div>
         <div className='flex flex-wrap gap-2'>
           <Button className='rounded-full' onClick={() => setDepositOpen(true)}>
             <IconPlus className='size-4' />
-            Deposit
+            {t('deposit')}
           </Button>
           <Button
             variant='outline'
@@ -108,7 +107,7 @@ export function AccountPayment() {
             onClick={() => setWithdrawOpen(true)}
           >
             <IconArrowUpRight className='size-4' />
-            Withdraw
+            {t('withdraw')}
           </Button>
         </div>
       </div>
@@ -119,21 +118,21 @@ export function AccountPayment() {
           <div>
             <div className='text-gold-strong mb-2 flex items-center gap-2 text-sm font-medium'>
               <IconWallet className='size-4' />
-              Available balance
+              {t('availableBalance')}
             </div>
             <p className='font-display text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl'>
               {formatWalletAmount(balance)}
             </p>
             <p className='text-muted-foreground mt-2 text-sm'>
-              {currency} wallet · use at checkout
+              {t('walletCheckout', { currency })}
             </p>
           </div>
           <div className='grid grid-cols-3 gap-3 sm:gap-4'>
             {[
-              { label: 'Money in', value: formatWalletAmount(totalIn), icon: IconArrowDownLeft },
-              { label: 'Money out', value: formatWalletAmount(totalOut), icon: IconArrowUpRight },
+              { label: t('moneyIn'), value: formatWalletAmount(totalIn), icon: IconArrowDownLeft },
+              { label: t('moneyOut'), value: formatWalletAmount(totalOut), icon: IconArrowUpRight },
               {
-                label: 'Pending',
+                label: t('pending'),
                 value: String(pendingCount),
                 icon: IconClock
               }
@@ -161,18 +160,18 @@ export function AccountPayment() {
       <div className='space-y-4'>
         <div className='flex flex-wrap items-center justify-between gap-3'>
           <div>
-            <h3 className='font-display text-lg font-semibold'>Recent transactions</h3>
+            <h3 className='font-display text-lg font-semibold'>{t('recentTransactions')}</h3>
             <p className='text-muted-foreground text-sm'>
-              {totalTransactions} total {totalTransactions === 1 ? 'entry' : 'entries'}
+              {t('totalEntries', { count: totalTransactions })}
             </p>
           </div>
           {totalPages > 1 ? (
             <div className='flex items-center gap-1'>
               <Button variant='outline' size='icon-sm' onClick={handlePrev} disabled={page === 0}>
-                <IconChevronLeft className='size-4' />
+                <IconChevronLeft className='cn-rtl-flip size-4' />
               </Button>
               <span className='text-muted-foreground min-w-24 text-center text-sm tabular-nums'>
-                Page {page + 1} of {totalPages}
+                {tCommon('pageOf', { current: page + 1, total: totalPages })}
               </span>
               <Button
                 variant='outline'
@@ -180,7 +179,7 @@ export function AccountPayment() {
                 onClick={handleNext}
                 disabled={page + 1 >= totalPages}
               >
-                <IconChevronRight className='size-4' />
+                <IconChevronRight className='cn-rtl-flip size-4' />
               </Button>
             </div>
           ) : null}
@@ -191,13 +190,11 @@ export function AccountPayment() {
             <div className='bg-muted/60 mx-auto mb-4 flex size-14 items-center justify-center rounded-full'>
               <IconWallet className='text-muted-foreground size-7' />
             </div>
-            <h4 className='font-medium'>No transactions yet</h4>
-            <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
-              Deposit funds to your wallet and they will appear here with full history and charts.
-            </p>
+            <h4 className='font-medium'>{t('emptyTitle')}</h4>
+            <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>{t('emptyDescription')}</p>
             <Button className='mt-5 rounded-full' onClick={() => setDepositOpen(true)}>
               <IconPlus className='size-4' />
-              Make your first deposit
+              {t('firstDeposit')}
             </Button>
           </div>
         ) : (

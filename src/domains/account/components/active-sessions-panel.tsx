@@ -2,6 +2,7 @@
 
 import { IconDeviceDesktop, IconLoader2, IconTrash } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -26,21 +27,11 @@ function formatSessionDate(value: string) {
   }
 }
 
-function summarizeUserAgent(userAgent?: string) {
-  if (!userAgent) return 'Unknown device';
-
-  if (/iPhone|iPad/i.test(userAgent)) return 'Apple mobile device';
-  if (/Android/i.test(userAgent)) return 'Android device';
-  if (/Macintosh/i.test(userAgent)) return 'Mac';
-  if (/Windows/i.test(userAgent)) return 'Windows PC';
-  if (/Linux/i.test(userAgent)) return 'Linux device';
-
-  return userAgent.length > 48 ? `${userAgent.slice(0, 48)}…` : userAgent;
-}
-
 export function ActiveSessionsPanel() {
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations('account.sessions');
+  const tCommon = useTranslations('account.common');
 
   const {
     data: sessions = [],
@@ -52,6 +43,16 @@ export function ActiveSessionsPanel() {
     queryFn: getAuthSessionsAction
   });
 
+  const summarizeUserAgent = (userAgent?: string) => {
+    if (!userAgent) return t('unknownDevice');
+    if (/iPhone|iPad/i.test(userAgent)) return t('appleMobile');
+    if (/Android/i.test(userAgent)) return t('androidDevice');
+    if (/Macintosh/i.test(userAgent)) return t('mac');
+    if (/Windows/i.test(userAgent)) return t('windowsPc');
+    if (/Linux/i.test(userAgent)) return t('linuxDevice');
+    return userAgent.length > 48 ? `${userAgent.slice(0, 48)}…` : userAgent;
+  };
+
   const reloadSessions = () => {
     void refetch();
   };
@@ -60,11 +61,11 @@ export function ActiveSessionsPanel() {
     startTransition(async () => {
       const result = await revokeAuthSessionAction(sessionId);
       if (result.success) {
-        toast.success('Session revoked');
+        toast.success(t('revoked'));
         await queryClient.invalidateQueries({ queryKey: AUTH_SESSIONS_QUERY_KEY });
         return;
       }
-      toast.error('Unable to revoke session');
+      toast.error(t('revokeFailed'));
     });
   };
 
@@ -72,11 +73,11 @@ export function ActiveSessionsPanel() {
     startTransition(async () => {
       const result = await revokeOtherSessionsAction();
       if (result.success) {
-        toast.success('Signed out of other devices');
+        toast.success(t('othersRevoked'));
         await queryClient.invalidateQueries({ queryKey: AUTH_SESSIONS_QUERY_KEY });
         return;
       }
-      toast.error('Unable to revoke other sessions');
+      toast.error(t('revokeOthersFailed'));
     });
   };
 
@@ -84,10 +85,8 @@ export function ActiveSessionsPanel() {
     <div className='bg-card border-border rounded-2xl border p-6 sm:p-7'>
       <div className='mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <div>
-          <h3 className='font-display text-lg font-semibold tracking-tight'>Active sessions</h3>
-          <p className='text-muted-foreground mt-1 text-sm'>
-            Devices currently signed in to your account
-          </p>
+          <h3 className='font-display text-lg font-semibold tracking-tight'>{t('title')}</h3>
+          <p className='text-muted-foreground mt-1 text-sm'>{t('subtitle')}</p>
         </div>
         <Button
           variant='outline'
@@ -96,7 +95,7 @@ export function ActiveSessionsPanel() {
           disabled={isPending || isLoading || sessions.length <= 1}
           onClick={handleRevokeOthers}
         >
-          Sign out other devices
+          {t('signOutOthers')}
         </Button>
       </div>
 
@@ -108,18 +107,18 @@ export function ActiveSessionsPanel() {
         </div>
       ) : isError ? (
         <div className='bg-muted/40 rounded-xl p-5 text-center'>
-          <p className='text-muted-foreground text-sm'>Unable to load active sessions.</p>
+          <p className='text-muted-foreground text-sm'>{t('loadError')}</p>
           <Button
             variant='outline'
             size='sm'
             className='mt-4 rounded-full'
             onClick={reloadSessions}
           >
-            Retry
+            {tCommon('retry')}
           </Button>
         </div>
       ) : sessions.length === 0 ? (
-        <p className='text-muted-foreground text-sm'>No active sessions found.</p>
+        <p className='text-muted-foreground text-sm'>{t('empty')}</p>
       ) : (
         <div className='space-y-3'>
           {sessions.map((session) => (
@@ -135,16 +134,18 @@ export function ActiveSessionsPanel() {
                   <p className='font-medium'>
                     {summarizeUserAgent(session.user_agent)}
                     {session.is_current ? (
-                      <span className='text-gold ml-2 text-xs font-semibold uppercase'>
-                        Current
+                      <span className='text-gold ms-2 text-xs font-semibold uppercase'>
+                        {t('current')}
                       </span>
                     ) : null}
                   </p>
                   <p className='text-muted-foreground text-sm'>
-                    {session.ip_address || 'Unknown IP'}
+                    {session.ip_address || t('unknownIp')}
                   </p>
                   <p className='text-muted-foreground text-xs'>
-                    Last active {formatSessionDate(session.last_used_at || session.created_at)}
+                    {t('lastActive', {
+                      date: formatSessionDate(session.last_used_at || session.created_at)
+                    })}
                   </p>
                 </div>
               </div>
@@ -155,7 +156,7 @@ export function ActiveSessionsPanel() {
                   size='icon-sm'
                   disabled={isPending}
                   onClick={() => handleRevoke(session.id)}
-                  aria-label='Revoke session'
+                  aria-label={t('revokeAria')}
                 >
                   {isPending ? (
                     <IconLoader2 className='size-4 animate-spin' />

@@ -7,6 +7,7 @@ import {
   IconShoppingBag
 } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,8 @@ const PAGE_SIZE = 5;
 export function AccountOrder() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
+  const t = useTranslations('account.orders');
+  const tCommon = useTranslations('account.common');
 
   const {
     data: response,
@@ -47,12 +50,10 @@ export function AccountOrder() {
   if (isError) {
     return (
       <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-12'>
-        <p className='text-destructive font-medium'>Failed to load order history.</p>
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Please check your connection and try again.
-        </p>
+        <p className='text-destructive font-medium'>{t('loadError')}</p>
+        <p className='text-muted-foreground mt-2 text-sm'>{tCommon('connectionError')}</p>
         <Button variant='outline' className='mt-5' onClick={() => void refetch()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -64,14 +65,12 @@ export function AccountOrder() {
         <div className='bg-muted/60 mx-auto mb-5 flex size-16 items-center justify-center rounded-full'>
           <IconPackage className='text-muted-foreground size-8' />
         </div>
-        <h3 className='font-display text-xl font-semibold'>No orders yet</h3>
-        <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
-          When you place your first order, it will appear here with tracking and item details.
-        </p>
+        <h3 className='font-display text-xl font-semibold'>{t('emptyTitle')}</h3>
+        <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>{t('emptyDescription')}</p>
         <Button asChild className='mt-6'>
           <Link href='/shop'>
             <IconShoppingBag className='size-4' />
-            Start shopping
+            {t('startShopping')}
           </Link>
         </Button>
       </div>
@@ -82,19 +81,17 @@ export function AccountOrder() {
     <div className='space-y-6'>
       <div className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
         <div>
-          <h2 className='font-display text-2xl font-semibold tracking-tight'>Order History</h2>
-          <p className='text-muted-foreground mt-1 text-sm'>
-            {totalOrders} {totalOrders === 1 ? 'order' : 'orders'} placed with your account
-          </p>
+          <h2 className='font-display text-2xl font-semibold tracking-tight'>{t('title')}</h2>
+          <p className='text-muted-foreground mt-1 text-sm'>{t('subtitle', { count: totalOrders })}</p>
         </div>
 
         {totalPages > 1 ? (
           <div className='flex items-center gap-2 self-start sm:self-auto'>
             <Button variant='outline' size='icon-sm' onClick={handlePrev} disabled={page === 0}>
-              <IconChevronLeft className='size-4' />
+              <IconChevronLeft className='cn-rtl-flip size-4' />
             </Button>
             <span className='text-muted-foreground min-w-24 text-center text-sm tabular-nums'>
-              Page {page + 1} of {totalPages}
+              {tCommon('pageOf', { current: page + 1, total: totalPages })}
             </span>
             <Button
               variant='outline'
@@ -102,7 +99,7 @@ export function AccountOrder() {
               onClick={handleNext}
               disabled={page + 1 >= totalPages}
             >
-              <IconChevronRight className='size-4' />
+              <IconChevronRight className='cn-rtl-flip size-4' />
             </Button>
           </div>
         ) : null}
@@ -117,10 +114,10 @@ export function AccountOrder() {
       {totalPages > 1 ? (
         <div className='flex justify-center gap-2 pt-2'>
           <Button variant='outline' onClick={handlePrev} disabled={page === 0}>
-            Previous
+            {tCommon('previous')}
           </Button>
           <Button variant='outline' onClick={handleNext} disabled={page + 1 >= totalPages}>
-            Next
+            {tCommon('next')}
           </Button>
         </div>
       ) : null}

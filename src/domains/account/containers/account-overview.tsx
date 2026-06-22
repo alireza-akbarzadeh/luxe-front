@@ -9,6 +9,7 @@ import {
   IconMapPin,
   IconPackage
 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { OrderNumber } from '@/components/order-number';
@@ -24,6 +25,8 @@ import { formatOrderAmount } from '../lib/order-utils';
 export function AccountOverview() {
   const { setActiveTab } = useSidebarTab();
   const [isEditing, setIsEditing] = useState(false);
+  const t = useTranslations('account.overview');
+  const tCommon = useTranslations('account.common');
 
   const { data: summaryData, isLoading, error } = useGetAccountSummary();
 
@@ -35,9 +38,8 @@ export function AccountOverview() {
     setIsEditing(false);
   };
 
-  // Format address for display
   const formatAddress = (address: DtoDefaultAddressDTO) => {
-    if (!address) return 'No address set';
+    if (!address) return t('noAddress');
     const parts = [
       address.address_line1,
       address.address_line2,
@@ -49,7 +51,6 @@ export function AccountOverview() {
     return parts.join(', ');
   };
 
-  // Extract summary data
   const addressCount = summaryData?.data?.address_count ?? 0;
   const likedProductsCount = summaryData?.data?.liked_products_count ?? 0;
   const recentOrders = summaryData?.data?.recent_orders ?? [];
@@ -70,9 +71,9 @@ export function AccountOverview() {
   if (error) {
     return (
       <div className='bg-card border-border rounded-2xl border p-6 text-center'>
-        <p className='text-destructive'>Failed to load dashboard data. Please try again later.</p>
+        <p className='text-destructive'>{t('loadError')}</p>
         <Button variant='outline' className='mt-4' onClick={() => window.location.reload()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -81,26 +82,31 @@ export function AccountOverview() {
   if (!user) {
     return (
       <div className='bg-card border-border rounded-2xl border p-6 text-center'>
-        <p className='text-muted-foreground'>No profile data available.</p>
+        <p className='text-muted-foreground'>{t('noProfile')}</p>
       </div>
     );
   }
 
+  const stats = [
+    { label: t('stats.totalOrders'), value: recentOrders.length, icon: IconPackage },
+    { label: t('stats.wishlistItems'), value: likedProductsCount, icon: IconHeart },
+    { label: t('stats.savedAddresses'), value: addressCount, icon: IconMapPin }
+  ];
+
   return (
     <div className='space-y-6'>
-      {/* Profile Card */}
       <div className='bg-card border-border rounded-2xl border p-6'>
         <div className='mb-6 flex items-start justify-between'>
-          <h2 className='text-xl font-semibold'>Profile Information</h2>
+          <h2 className='text-xl font-semibold'>{t('profileTitle')}</h2>
           {isEditing ? (
             <Button variant='ghost' size='sm' onClick={handleCancelEditing}>
-              <IconEdit className='mr-2 h-4 w-4' />
-              Cancel
+              <IconEdit className='me-2 h-4 w-4' />
+              {tCommon('cancel')}
             </Button>
           ) : (
             <Button onClick={() => setIsEditing(true)} variant='ghost' size='sm'>
-              <IconEdit className='mr-2 h-4 w-4' />
-              Edit
+              <IconEdit className='me-2 h-4 w-4' />
+              {tCommon('edit')}
             </Button>
           )}
         </div>
@@ -128,19 +134,18 @@ export function AccountOverview() {
               {user.first_name} {user.last_name}
             </h3>
             <p className='text-muted-foreground'>{user.email}</p>
-            {user.phone && <p className='text-muted-foreground'>{user.phone}</p>}
+            {user.phone ? <p className='text-muted-foreground'>{user.phone}</p> : null}
           </div>
         </div>
       </div>
 
-      {/* Default Addresses Section */}
       <div className='bg-card border-border rounded-2xl border p-6'>
-        <h2 className='mb-4 text-xl font-semibold'>Default Addresses</h2>
+        <h2 className='mb-4 text-xl font-semibold'>{t('defaultAddressesTitle')}</h2>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <div className='bg-muted/50 rounded-xl p-4'>
             <div className='mb-2 flex items-center gap-2'>
               <IconHome className='text-accent h-5 w-5' />
-              <h3 className='font-medium'>Shipping Address</h3>
+              <h3 className='font-medium'>{t('shippingAddress')}</h3>
             </div>
             <p className='text-muted-foreground text-sm'>
               {formatAddress(defaultShipping as DtoDefaultAddressDTO)}
@@ -149,7 +154,7 @@ export function AccountOverview() {
           <div className='bg-muted/50 rounded-xl p-4'>
             <div className='mb-2 flex items-center gap-2'>
               <IconCreditCard className='text-accent h-5 w-5' />
-              <h3 className='font-medium'>Billing Address</h3>
+              <h3 className='font-medium'>{t('billingAddress')}</h3>
             </div>
             <p className='text-muted-foreground text-sm'>
               {formatAddress(defaultBilling as DtoDefaultAddressDTO)}
@@ -158,13 +163,8 @@ export function AccountOverview() {
         </div>
       </div>
 
-      {/* Quick Stats using real data from summary API */}
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
-        {[
-          { label: 'Total Orders', value: recentOrders.length, icon: IconPackage },
-          { label: 'Wishlist Items', value: likedProductsCount, icon: IconHeart },
-          { label: 'Saved Addresses', value: addressCount, icon: IconMapPin }
-        ].map((stat) => {
+        {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <div
@@ -179,19 +179,18 @@ export function AccountOverview() {
         })}
       </div>
 
-      {/* Recent Orders using real data from summary API */}
       <div className='bg-card border-border rounded-2xl border p-6'>
         <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-xl font-semibold'>Recent Orders</h2>
+          <h2 className='text-xl font-semibold'>{t('recentOrdersTitle')}</h2>
           <Button variant='ghost' size='sm' onClick={() => setActiveTab('orders')}>
-            View All
-            <IconChevronRight className='ml-1 h-4 w-4' />
+            {tCommon('viewAll')}
+            <IconChevronRight className='cn-rtl-flip ms-1 h-4 w-4' />
           </Button>
         </div>
         <div className='space-y-4'>
           {recentOrders.length === 0 ? (
             <div className='bg-muted/50 text-muted-foreground rounded-xl p-4 text-center'>
-              No orders yet.
+              {t('noOrders')}
             </div>
           ) : (
             recentOrders.map((order) => {
@@ -208,7 +207,9 @@ export function AccountOverview() {
                   <div className='min-w-0'>
                     <OrderNumber value={orderNumber} size='sm' />
                     <p className='text-muted-foreground text-sm'>
-                      {createdAt ? new Date(createdAt).toLocaleDateString() : 'No date'}
+                      {createdAt
+                        ? new Date(createdAt).toLocaleDateString()
+                        : tCommon('noDate')}
                     </p>
                   </div>
                   <div className='flex flex-col gap-2 sm:items-end'>

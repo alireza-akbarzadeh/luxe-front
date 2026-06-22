@@ -9,6 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -41,6 +42,8 @@ export function AccountWishlist() {
   const [removingProductId, setRemovingProductId] = useState<number | null>(null);
   const offset = page * PAGE_SIZE;
   const queryClient = useQueryClient();
+  const t = useTranslations('account.wishlist');
+  const tCommon = useTranslations('account.common');
 
   const {
     data: response,
@@ -77,9 +80,9 @@ export function AccountWishlist() {
         setPage((current) => Math.max(0, current - 1));
       }
 
-      toast.success('Removed from wishlist');
+      toast.success(t('removed'));
     } catch {
-      toast.error('Failed to remove item');
+      toast.error(t('removeFailed'));
     } finally {
       setRemovingProductId(null);
     }
@@ -100,12 +103,10 @@ export function AccountWishlist() {
   if (isError) {
     return (
       <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-12'>
-        <p className='text-destructive font-medium'>Failed to load wishlist.</p>
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Please check your connection and try again.
-        </p>
+        <p className='text-destructive font-medium'>{t('loadError')}</p>
+        <p className='text-muted-foreground mt-2 text-sm'>{tCommon('connectionError')}</p>
         <Button variant='outline' className='mt-5' onClick={() => void refetch()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -117,14 +118,12 @@ export function AccountWishlist() {
         <div className='bg-muted/60 mx-auto mb-5 flex size-16 items-center justify-center rounded-full'>
           <IconHeart className='text-muted-foreground size-8' />
         </div>
-        <h3 className='font-display text-xl font-semibold'>Your wishlist is empty</h3>
-        <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
-          Save items you love with the heart icon on any product, then find them here.
-        </p>
+        <h3 className='font-display text-xl font-semibold'>{t('emptyTitle')}</h3>
+        <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>{t('emptyDescription')}</p>
         <Button asChild className='mt-6'>
           <Link href='/shop'>
             <IconShoppingBag className='size-4' />
-            Explore products
+            {t('exploreProducts')}
           </Link>
         </Button>
       </div>
@@ -135,17 +134,13 @@ export function AccountWishlist() {
     <div className='space-y-6'>
       <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
         <div>
-          <h2 className='font-display text-2xl font-semibold tracking-tight'>My Wishlist</h2>
+          <h2 className='font-display text-2xl font-semibold tracking-tight'>{t('title')}</h2>
           <p className='text-muted-foreground mt-1 text-sm'>
-            {total} saved {total === 1 ? 'item' : 'items'}
+            {t('savedCount', { count: total })}
             {totalSavings > 0 ? (
               <>
                 {' '}
-                · save up to{' '}
-                <span className='text-accent font-medium'>
-                  {formatOrderAmount(totalSavings)}
-                </span>{' '}
-                on this page
+                {t('saveUpTo', { amount: formatOrderAmount(totalSavings) })}
               </>
             ) : null}
           </p>
@@ -154,29 +149,29 @@ export function AccountWishlist() {
         <div className='flex flex-wrap items-center gap-2'>
           <Select value={sort} onValueChange={(value) => handleSortChange(value as WishlistSort)}>
             <SelectTrigger className='w-[180px] rounded-full'>
-              <SelectValue placeholder='Sort by' />
+              <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='name'>Name (A–Z)</SelectItem>
-              <SelectItem value='price-asc'>Price: low to high</SelectItem>
-              <SelectItem value='price-desc'>Price: high to low</SelectItem>
+              <SelectItem value='name'>{t('sortName')}</SelectItem>
+              <SelectItem value='price-asc'>{t('sortPriceAsc')}</SelectItem>
+              <SelectItem value='price-desc'>{t('sortPriceDesc')}</SelectItem>
             </SelectContent>
           </Select>
 
           <Button asChild variant='outline' size='sm'>
             <Link href='/wishlist'>
-              Full wishlist
-              <IconArrowRight className='size-4' />
+              {t('fullWishlist')}
+              <IconArrowRight className='cn-rtl-flip size-4' />
             </Link>
           </Button>
 
           {totalPages > 1 ? (
             <div className='flex items-center gap-1'>
               <Button variant='outline' size='icon-sm' onClick={handlePrev} disabled={page === 0}>
-                <IconChevronLeft className='size-4' />
+                <IconChevronLeft className='cn-rtl-flip size-4' />
               </Button>
               <span className='text-muted-foreground min-w-24 text-center text-sm tabular-nums'>
-                Page {page + 1} of {totalPages}
+                {tCommon('pageOf', { current: page + 1, total: totalPages })}
               </span>
               <Button
                 variant='outline'
@@ -184,7 +179,7 @@ export function AccountWishlist() {
                 onClick={handleNext}
                 disabled={page + 1 >= totalPages}
               >
-                <IconChevronRight className='size-4' />
+                <IconChevronRight className='cn-rtl-flip size-4' />
               </Button>
             </div>
           ) : null}
@@ -207,10 +202,10 @@ export function AccountWishlist() {
       {totalPages > 1 ? (
         <div className='flex justify-center gap-2 pt-2'>
           <Button variant='outline' onClick={handlePrev} disabled={page === 0}>
-            Previous
+            {tCommon('previous')}
           </Button>
           <Button variant='outline' onClick={handleNext} disabled={page + 1 >= totalPages}>
-            Next
+            {tCommon('next')}
           </Button>
         </div>
       ) : null}

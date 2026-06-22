@@ -1,16 +1,19 @@
 'use client';
 
 import { IconLogout } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { logoutAction } from '@/actions/auth.actions';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { clearClientAccessToken } from '@/lib/auth/auth-token-client';
 
-import { menuItems } from '../data';
+import { useAccountMenuItems } from '../hooks/use-account-menu-items';
 import { useSidebarTab } from '../hooks/useSidebarTab';
 
 export function MobileAccountSidebar() {
   const { activeTab, handleTabChange } = useSidebarTab();
+  const menuItems = useAccountMenuItems();
+  const t = useTranslations('account.nav');
 
   return (
     <div className='bg-background/95 sticky top-20 z-30 space-y-3 pb-2 backdrop-blur-sm sm:top-24 lg:hidden'>
@@ -41,7 +44,7 @@ export function MobileAccountSidebar() {
         className='text-muted-foreground hover:text-destructive flex w-full items-center justify-center gap-2 rounded-xl border border-dashed px-4 py-2.5 text-sm transition-colors'
       >
         <IconLogout className='h-4 w-4' />
-        Sign out
+        {t('signOut')}
       </button>
     </div>
   );

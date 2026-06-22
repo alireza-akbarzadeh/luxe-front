@@ -18,20 +18,19 @@ export type AccountTab =
   | 'notifications'
   | 'settings';
 
-type MenuItems = {
+type AccountMenuConfigItem = {
   id: AccountTab;
-  label: string;
   icon: TablerIcon;
 };
 
-const menuItems: MenuItems[] = [
-  { id: 'overview', label: 'Overview', icon: IconUser },
-  { id: 'orders', label: 'Orders', icon: IconPackage },
-  { id: 'wishlist', label: 'Wishlist', icon: IconHeart },
-  { id: 'addresses', label: 'Addresses', icon: IconMapPin },
-  { id: 'payment', label: 'Wallet', icon: IconWallet },
-  { id: 'notifications', label: 'Notifications', icon: IconBell },
-  { id: 'settings', label: 'Settings', icon: IconSettings }
+const ACCOUNT_MENU_CONFIG: AccountMenuConfigItem[] = [
+  { id: 'overview', icon: IconUser },
+  { id: 'orders', icon: IconPackage },
+  { id: 'wishlist', icon: IconHeart },
+  { id: 'addresses', icon: IconMapPin },
+  { id: 'payment', icon: IconWallet },
+  { id: 'notifications', icon: IconBell },
+  { id: 'settings', icon: IconSettings }
 ];
 
-export { menuItems };
+export { ACCOUNT_MENU_CONFIG };

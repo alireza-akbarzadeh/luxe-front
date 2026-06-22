@@ -8,6 +8,7 @@ import {
   IconWifi,
   IconWifiOff
 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -25,6 +26,8 @@ export function AccountNotifications() {
   const [page, setPage] = useState(0);
   const offset = page * PAGE_SIZE;
   const { status: socketStatus } = useRealtime();
+  const t = useTranslations('account.notifications');
+  const tCommon = useTranslations('account.common');
 
   const {
     notifications,
@@ -45,16 +48,16 @@ export function AccountNotifications() {
     try {
       await markAsRead(id);
     } catch {
-      toast.error('Unable to mark notification as read');
+      toast.error(t('markReadFailed'));
     }
   };
 
   const handleMarkAllRead = async () => {
     try {
       await markAllRead();
-      toast.success('All notifications marked as read');
+      toast.success(t('markAllReadSuccess'));
     } catch {
-      toast.error('Unable to mark all as read');
+      toast.error(t('markAllReadFailed'));
     }
   };
 
@@ -68,12 +71,10 @@ export function AccountNotifications() {
   if (isError) {
     return (
       <div className='bg-card border-border rounded-2xl border p-10 text-center sm:p-12'>
-        <p className='text-destructive font-medium'>Failed to load notifications.</p>
-        <p className='text-muted-foreground mt-2 text-sm'>
-          Please check your connection and try again.
-        </p>
+        <p className='text-destructive font-medium'>{t('loadError')}</p>
+        <p className='text-muted-foreground mt-2 text-sm'>{tCommon('connectionError')}</p>
         <Button variant='outline' className='mt-5 rounded-full' onClick={() => void refetch()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -85,22 +86,20 @@ export function AccountNotifications() {
 
       <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
         <div>
-          <h2 className='font-display text-2xl font-semibold tracking-tight'>Notifications</h2>
+          <h2 className='font-display text-2xl font-semibold tracking-tight'>{t('title')}</h2>
           <p className='text-muted-foreground mt-1 text-sm'>
-            {total} total · {unreadOnPage} unread on this page
+            {t('subtitle', { total, unread: unreadOnPage })}
           </p>
           <div className='text-muted-foreground mt-2 inline-flex items-center gap-1.5 text-xs'>
             {socketStatus === 'connected' ? (
               <>
                 <IconWifi className='size-3.5 text-emerald-600 dark:text-emerald-400' />
-                Live updates connected
+                {t('liveConnected')}
               </>
             ) : (
               <>
                 <IconWifiOff className='size-3.5' />
-                {socketStatus === 'connecting'
-                  ? 'Connecting to live updates…'
-                  : 'Live updates offline'}
+                {socketStatus === 'connecting' ? t('liveConnecting') : t('liveOffline')}
               </>
             )}
           </div>
@@ -114,13 +113,13 @@ export function AccountNotifications() {
             disabled={isMarkingAllRead || unreadOnPage === 0}
             onClick={() => void handleMarkAllRead()}
           >
-            Mark all read
+            {t('markAllRead')}
           </Button>
           <Button
             variant='ghost'
             size='icon-sm'
             className='rounded-full'
-            aria-label='Refresh notifications'
+            aria-label={t('refreshAria')}
             onClick={() => void refetch()}
           >
             <IconRefresh className='size-4' />
@@ -128,10 +127,10 @@ export function AccountNotifications() {
           {totalPages > 1 ? (
             <div className='flex items-center gap-1'>
               <Button variant='outline' size='icon-sm' onClick={handlePrev} disabled={page === 0}>
-                <IconChevronLeft className='size-4' />
+                <IconChevronLeft className='cn-rtl-flip size-4' />
               </Button>
               <span className='text-muted-foreground min-w-24 text-center text-sm tabular-nums'>
-                Page {page + 1} of {totalPages}
+                {tCommon('pageOf', { current: page + 1, total: totalPages })}
               </span>
               <Button
                 variant='outline'
@@ -139,7 +138,7 @@ export function AccountNotifications() {
                 onClick={handleNext}
                 disabled={page + 1 >= totalPages}
               >
-                <IconChevronRight className='size-4' />
+                <IconChevronRight className='cn-rtl-flip size-4' />
               </Button>
             </div>
           ) : null}
@@ -151,10 +150,8 @@ export function AccountNotifications() {
           <div className='bg-muted/60 mx-auto mb-5 flex size-16 items-center justify-center rounded-full'>
             <IconBell className='text-muted-foreground size-8' />
           </div>
-          <h3 className='font-display text-xl font-semibold'>No notifications yet</h3>
-          <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
-            Order updates, payment confirmations, and shipping alerts will appear here in real time.
-          </p>
+          <h3 className='font-display text-xl font-semibold'>{t('emptyTitle')}</h3>
+          <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>{t('emptyDescription')}</p>
         </div>
       ) : (
         <div className='space-y-3'>
