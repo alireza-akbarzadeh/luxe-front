@@ -5,12 +5,13 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface UtilsResponse {
-  code?: number;
-  error?: string;
-  message?: string;
-  success?: boolean;
-}
+export type DtoUpsertNavMenuRequestType = typeof DtoUpsertNavMenuRequestType[keyof typeof DtoUpsertNavMenuRequestType];
+
+
+export const DtoUpsertNavMenuRequestType = {
+  mega: 'mega',
+  link: 'link',
+} as const;
 
 export interface DtoLink {
   href?: string;
@@ -35,6 +36,24 @@ export interface DtoViewAll {
   label?: string;
 }
 
+export interface DtoUpsertNavMenuRequest {
+  badge?: string;
+  columns?: DtoColumn[];
+  featured?: DtoFeaturedItem[];
+  href?: string;
+  label: string;
+  order?: number;
+  type: DtoUpsertNavMenuRequestType;
+  viewAll?: DtoViewAll;
+}
+
+export interface UtilsResponse {
+  code?: number;
+  error?: string;
+  message?: string;
+  success?: boolean;
+}
+
 export interface DtoNavItemResponse {
   badge?: string;
   columns?: DtoColumn[];
@@ -47,7 +66,7 @@ export interface DtoNavItemResponse {
   viewAll?: DtoViewAll;
 }
 
-export type GetNavMenus200 = UtilsResponse & {
-  data?: DtoNavItemResponse[];
+export type PutNavMenusId200 = UtilsResponse & {
+  data?: DtoNavItemResponse;
 };
 

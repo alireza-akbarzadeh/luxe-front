@@ -12,16 +12,12 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export interface I18nLocalizedMap {[key: string]: string}
-
 export interface DtoCategoryResponse {
   description?: string;
-  descriptionI18n?: I18nLocalizedMap;
   id?: number;
   is_active?: boolean;
   level?: number;
   name?: string;
-  nameI18n?: I18nLocalizedMap;
   parent_id?: number;
   path?: string;
   slug?: string;

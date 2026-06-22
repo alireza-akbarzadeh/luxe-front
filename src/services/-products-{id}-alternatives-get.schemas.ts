@@ -40,16 +40,12 @@ export interface DtoBrandResponse {
   workflow_state?: DtoStateView;
 }
 
-export interface I18nLocalizedMap {[key: string]: string}
-
 export interface DtoCategoryResponse {
   description?: string;
-  descriptionI18n?: I18nLocalizedMap;
   id?: number;
   is_active?: boolean;
   level?: number;
   name?: string;
-  nameI18n?: I18nLocalizedMap;
   parent_id?: number;
   path?: string;
   slug?: string;
@@ -83,7 +79,6 @@ export interface DtoProductAlternativeResponse {
   cost?: number;
   created_at?: string;
   description?: string;
-  descriptionI18n?: I18nLocalizedMap;
   id?: number;
   images?: string[];
   is_digital?: boolean;
@@ -92,7 +87,6 @@ export interface DtoProductAlternativeResponse {
   meta_description?: string;
   meta_title?: string;
   name?: string;
-  nameI18n?: I18nLocalizedMap;
   price?: number;
   published_at?: string;
   rating?: number;

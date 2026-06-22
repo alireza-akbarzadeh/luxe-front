@@ -12,46 +12,36 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export interface I18nLocalizedMap {[key: string]: string}
-
 export interface DtoLink {
   href?: string;
   title?: string;
-  titleI18n?: I18nLocalizedMap;
 }
 
 export interface DtoColumn {
   links?: DtoLink[];
   title?: string;
-  titleI18n?: I18nLocalizedMap;
 }
 
 export interface DtoFeaturedItem {
   badge?: string;
-  badgeI18n?: I18nLocalizedMap;
   description?: string;
-  descriptionI18n?: I18nLocalizedMap;
   href?: string;
   image?: string;
   title?: string;
-  titleI18n?: I18nLocalizedMap;
 }
 
 export interface DtoViewAll {
   href?: string;
   label?: string;
-  labelI18n?: I18nLocalizedMap;
 }
 
 export interface DtoNavItemResponse {
   badge?: string;
-  badgeI18n?: I18nLocalizedMap;
   columns?: DtoColumn[];
   featured?: DtoFeaturedItem[];
   href?: string;
   id?: number;
   label?: string;
-  labelI18n?: I18nLocalizedMap;
   order?: number;
   type?: string;
   viewAll?: DtoViewAll;
