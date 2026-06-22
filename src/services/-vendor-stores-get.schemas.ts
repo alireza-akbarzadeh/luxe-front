@@ -46,45 +46,7 @@ export interface DtoStoreResponse {
   slug?: string;
 }
 
-export type GetStoresParams = {
-/**
- * Items per page (default 20, max 100)
- */
-limit?: number;
-/**
- * Number of items to skip
- */
-offset?: number;
-/**
- * Search by name or description
- */
-search?: string;
-/**
- * Filter by location (partial match)
- */
-location?: string;
-/**
- * Minimum rating (0-5)
- */
-min_rating?: number;
-/**
- * Filter by category slug
- */
-category_slug?: string;
-/**
- * Sort order (rating, followers, newest)
- */
-sort_by?: string;
-};
-
-export type GetStores200Data = {
-  limit?: number;
-  offset?: number;
-  stores?: DtoStoreResponse[];
-  total?: number;
-};
-
-export type GetStores200 = UtilsResponse & {
-  data?: GetStores200Data;
+export type GetVendorStores200 = UtilsResponse & {
+  data?: DtoStoreResponse[];
 };
 

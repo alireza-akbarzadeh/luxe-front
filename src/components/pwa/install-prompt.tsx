@@ -4,10 +4,10 @@ import { IconDownload, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
-import { usePwaInstall } from '@/lib/pwa/use-pwa-install';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
+import { usePwaInstall } from '@/lib/pwa/use-pwa-install';
 
 const DISMISS_KEY = 'luxe-pwa-install-dismissed';
 

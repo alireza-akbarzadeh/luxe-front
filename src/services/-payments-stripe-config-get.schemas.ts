@@ -12,5 +12,12 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type PutAdminShipmentsIdStatusBody = { [key: string]: unknown };
+export interface DtoStripeConfigResponse {
+  enabled?: boolean;
+  publishable_key?: string;
+}
+
+export type GetPaymentsStripeConfig200 = UtilsResponse & {
+  data?: DtoStripeConfigResponse;
+};
 

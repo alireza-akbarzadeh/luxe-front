@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0
  */
 export interface DtoRegisterRequest {
+  accept_privacy: boolean;
+  accept_terms: boolean;
   email: string;
   /**
      * @minLength 1

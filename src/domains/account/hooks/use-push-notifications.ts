@@ -3,14 +3,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
-import { postAccountPushTest } from '@/services/-account-push-test-post';
 import {
   getActivePushSubscription,
   getPushSupportStatus,
+  type PushSupportStatus,
   subscribeToWebPush,
-  unsubscribeFromWebPush,
-  type PushSupportStatus
-} from '@/lib/pwa/push-subscription';
+  unsubscribeFromWebPush} from '@/lib/pwa/push-subscription';
+import { postAccountPushTest } from '@/services/-account-push-test-post';
 
 export const PUSH_SUBSCRIPTION_QUERY_KEY = ['push-subscription'] as const;
 

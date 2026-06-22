@@ -12,5 +12,12 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
-export type PutOrdersIdStatusBody = { [key: string]: unknown };
+export interface DtoVapidPublicKeyResponse {
+  enabled?: boolean;
+  public_key?: string;
+}
+
+export type GetPushVapidPublicKey200 = UtilsResponse & {
+  data?: DtoVapidPublicKeyResponse;
+};
 

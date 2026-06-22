@@ -2,11 +2,9 @@
  * Web Push helpers — subscribe/unsubscribe via the Serwist service worker.
  */
 
-import {
-  deletePushSubscription,
-  fetchVapidPublicKey,
-  registerPushSubscription
-} from '@/domains/account/api/push-subscriptions-api';
+import { deleteAccountPushSubscriptions } from '@/services/-account-push-subscriptions-delete';
+import { postAccountPushSubscriptions } from '@/services/-account-push-subscriptions-post';
+import { getPushVapidPublicKey } from '@/services/-push-vapid-public-key-get';
 
 export type PushSupportStatus = 'unsupported' | 'denied' | 'default' | 'granted';
 
@@ -46,7 +44,9 @@ export async function getActivePushSubscription(): Promise<PushSubscription | nu
 }
 
 export async function subscribeToWebPush(): Promise<PushSubscription> {
-  const { enabled, public_key: publicKey } = await fetchVapidPublicKey();
+  const vapid = await getPushVapidPublicKey();
+  const enabled = vapid.data?.enabled ?? false;
+  const publicKey = vapid.data?.public_key ?? '';
 
   if (!enabled || !publicKey) {
     throw new Error('Push notifications are not configured on the server.');
@@ -73,7 +73,7 @@ export async function subscribeToWebPush(): Promise<PushSubscription> {
     throw new Error('Invalid push subscription from the browser.');
   }
 
-  await registerPushSubscription({
+  await postAccountPushSubscriptions({
     endpoint: json.endpoint,
     keys: {
       p256dh: json.keys['p256dh'],
@@ -94,5 +94,5 @@ export async function unsubscribeFromWebPush(): Promise<void> {
   const endpoint = subscription.endpoint;
 
   await subscription.unsubscribe();
-  await deletePushSubscription(endpoint);
+  await deleteAccountPushSubscriptions({ endpoint });
 }
