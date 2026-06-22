@@ -125,7 +125,6 @@ export function useProductFilters() {
     () => ({
       limit: SHOP_PAGE_SIZE,
       offset: (page - 1) * SHOP_PAGE_SIZE,
-      name: searchQuery || undefined,
       category_id: categoryId > 0 ? categoryId : undefined,
       min_price: priceMin > 0 ? priceMin : undefined,
       max_price: priceMax < 500 ? priceMax : undefined,
@@ -147,7 +146,6 @@ export function useProductFilters() {
       page,
       priceMax,
       priceMin,
-      searchQuery,
       showOnlyNew,
       sortBy
     ]

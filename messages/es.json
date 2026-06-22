@@ -100,7 +100,9 @@
     },
     "toolbar": {
       "filters": "Filtros",
-      "searchPlaceholder": "Buscar productos…",
+      "searchPlaceholder": "Buscar en esta colección…",
+      "searchAriaLabel": "Buscar productos",
+      "clearSearch": "Borrar búsqueda",
       "sortBy": "Ordenar por",
       "noProducts": "Sin productos",
       "productCount": "{count, plural, one {# producto} other {# productos}}",

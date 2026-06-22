@@ -49,11 +49,6 @@ const config = {
         source: '/vendor/login',
         destination: '/login?callbackUrl=%2Fdashboard',
         permanent: false
-      },
-      {
-        source: '/products',
-        destination: '/shop',
-        permanent: true
       }
     ];
   },

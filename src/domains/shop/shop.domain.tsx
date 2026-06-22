@@ -3,12 +3,11 @@
 import { IconRefresh } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { SHOP_PAGE_SIZE } from '@/domains/shop/useProductFilters';
 import { cn } from '@/lib/utils';
-import type { DtoProductWithLike } from '@/services/-products-get.schemas';
-import { useGetProducts } from '~/src/services/-products-get';
 
 import { ActiveFilter } from './components/active-filter';
 import { FilterContent } from './components/filter-content';
@@ -16,31 +15,27 @@ import { ProductGrid } from './components/product-grid';
 import { ShopPagination } from './components/shop-pagination';
 import { ShopProductsSkeleton } from './components/shop-products-skeleton';
 import { ShopToolbar } from './components/shop-toolbar';
-import { SHOP_PAGE_SIZE, useProductFilters } from './useProductFilters';
-
-function filterSaleProducts(products: DtoProductWithLike[]) {
-  return products.filter(
-    (product) => product.compare_at_price && product.compare_at_price > (product.price ?? 0)
-  );
-}
+import { useShopCatalog } from './hooks/useShopCatalog';
 
 export function ShopDomain() {
   const t = useTranslations('shop');
-  const { apiParams, showOnlySale, page } = useProductFilters();
+  const {
+    products,
+    total,
+    apiProducts,
+    showOnlySale,
+    usesSearchApi,
+    page,
+    isLoading,
+    isError,
+    refetch,
+    isFetching
+  } = useShopCatalog();
 
-  const { data, isLoading, isError, refetch, isFetching } = useGetProducts(apiParams);
-
-  const products = useMemo(() => {
-    const list = data?.data?.products ?? [];
-    return showOnlySale ? filterSaleProducts(list) : list;
-  }, [data?.data?.products, showOnlySale]);
-
-  const total = data?.data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / SHOP_PAGE_SIZE));
-  const apiProducts = data?.data?.products ?? [];
   const rangeStart = total === 0 ? 0 : (page - 1) * SHOP_PAGE_SIZE + 1;
   const rangeEnd = Math.min(page * SHOP_PAGE_SIZE, total);
-  const isInitialLoading = isLoading && !data;
+  const isInitialLoading = isLoading && products.length === 0 && !isError;
   const isPageLoading = isFetching && !isInitialLoading;
 
   useEffect(() => {
@@ -94,7 +89,7 @@ export function ShopDomain() {
             <ShopProductsSkeleton />
           ) : (
             <>
-              {showOnlySale && products.length < apiProducts.length && (
+              {showOnlySale && !usesSearchApi && products.length < apiProducts.length && (
                 <p className='text-muted-foreground mb-4 text-sm'>{t('results.salePageNote')}</p>
               )}
               <div className={cn('relative', isPageLoading && 'pointer-events-none opacity-60')}>

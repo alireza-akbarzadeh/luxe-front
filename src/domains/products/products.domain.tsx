@@ -2,31 +2,23 @@
 
 import { IconRefresh } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { ActiveFilter } from '@/domains/shop/components/active-filter';
 import { FilterContent } from '@/domains/shop/components/filter-content';
 import { ShopProductsSkeleton } from '@/domains/shop/components/shop-products-skeleton';
 import { ShopToolbar } from '@/domains/shop/components/shop-toolbar';
-import { useProductFilters } from '@/domains/shop/useProductFilters';
 
 import { ProductsHero } from './components/products-hero';
 import { ProductsInfiniteGrid } from './components/products-infinite-grid';
-import { useInfiniteProducts } from './hooks/useInfiniteProducts';
-import {
-  filterSaleProducts,
-  flattenInfiniteProducts,
-  getInfiniteProductsTotal,
-  toProductsCatalogParams
-} from './lib/products.utils';
+import { useInfiniteProductCatalog } from './hooks/useInfiniteProductCatalog';
 
 export function ProductsDomain() {
-  const { apiParams, showOnlySale } = useProductFilters();
-  const catalogParams = useMemo(() => toProductsCatalogParams(apiParams), [apiParams]);
-
   const {
-    data,
+    products,
+    total,
+    loadedCount,
     isLoading,
     isError,
     refetch,
@@ -34,17 +26,8 @@ export function ProductsDomain() {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage
-  } = useInfiniteProducts(catalogParams);
+  } = useInfiniteProductCatalog();
 
-  const rawProducts = useMemo(() => flattenInfiniteProducts(data?.pages ?? []), [data?.pages]);
-
-  const products = useMemo(
-    () => (showOnlySale ? filterSaleProducts(rawProducts) : rawProducts),
-    [rawProducts, showOnlySale]
-  );
-
-  const total = getInfiniteProductsTotal(data?.pages);
-  const loadedCount = rawProducts.length;
   const hasLoadedProducts = loadedCount > 0;
   const isInitialLoading = isLoading && !hasLoadedProducts;
   const isRefetching = isFetching && !isFetchingNextPage && !isInitialLoading;

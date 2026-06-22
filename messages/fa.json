@@ -100,7 +100,9 @@
     },
     "toolbar": {
       "filters": "فیلترها",
-      "searchPlaceholder": "جستجوی محصولات…",
+      "searchPlaceholder": "جستجو در این مجموعه…",
+      "searchAriaLabel": "جستجوی محصولات",
+      "clearSearch": "پاک کردن جستجو",
       "sortBy": "مرتب‌سازی",
       "noProducts": "محصولی نیست",
       "productCount": "{count, plural, one {# محصول} other {# محصول}}",

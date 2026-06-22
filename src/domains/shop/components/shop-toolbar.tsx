@@ -5,10 +5,12 @@ import {
   IconLayoutGrid,
   IconLayoutGridRemove,
   IconLoader2,
-  IconSearch
+  IconSearch,
+  IconX
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,6 +46,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
   const { total, rangeStart, rangeEnd, isFetching = false } = props;
   const t = useTranslations('shop.toolbar');
   const tSort = useTranslations('shop.sort');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const {
     sortBy,
     searchQuery,
@@ -62,61 +65,93 @@ export function ShopToolbar(props: ShopToolbarProps) {
         ? t('productCount', { count: total })
         : t('resultsRange', { start: rangeStart, end: rangeEnd, total });
 
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    searchInputRef.current?.focus();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className='border-border mb-8 flex flex-col items-start justify-between gap-4 border-b pb-8 sm:flex-row sm:items-center'
+      className='border-border mb-8 space-y-5 border-b pb-8'
     >
-      <div className='flex w-full items-center gap-4 sm:w-auto'>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant='outline' className='gap-2 lg:hidden'>
-              <IconArrowsHorizontal className='h-4 w-4' />
-              {t('filters')}
-              {activeFilterCount > 0 && (
-                <span className='bg-accent text-accent-foreground ms-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold tabular-nums'>
-                  {activeFilterCount}
-                </span>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent side='left' className='w-80 overflow-y-auto'>
-            <SheetHeader>
-              <SheetTitle>{t('filters')}</SheetTitle>
-            </SheetHeader>
-            <div className='mt-6 pb-8'>
-              <FilterContent />
-            </div>
-          </SheetContent>
-        </Sheet>
-
-        <div className='relative min-w-0 flex-1 sm:w-72 sm:flex-initial'>
-          <IconSearch className='text-muted-foreground absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2' />
-          <Input
-            placeholder={t('searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className='ps-10'
-          />
-        </div>
+      <div
+        className={cn(
+          'bg-background focus-within:border-primary focus-within:ring-primary/15 relative flex w-full items-center rounded-full border-2 shadow-sm transition-[border-color,box-shadow] focus-within:ring-[3px]',
+          searchQuery ? 'border-primary/40' : 'border-border hover:border-primary/25'
+        )}
+      >
+        <IconSearch
+          className='text-muted-foreground pointer-events-none absolute start-4 h-5 w-5 shrink-0'
+          aria-hidden
+        />
+        <Input
+          ref={searchInputRef}
+          type='text'
+          enterKeyHint='search'
+          autoComplete='off'
+          autoCorrect='off'
+          spellCheck={false}
+          placeholder={t('searchPlaceholder')}
+          aria-label={t('searchAriaLabel')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className='h-12 border-0 bg-transparent pe-12 ps-12 text-base shadow-none focus-visible:ring-0 md:h-14 md:text-base [&::-webkit-search-cancel-button]:hidden'
+        />
+        {searchQuery ? (
+          <Button
+            type='button'
+            variant='ghost'
+            size='icon'
+            className='text-muted-foreground hover:text-foreground absolute end-2 h-9 w-9 shrink-0 rounded-full'
+            aria-label={t('clearSearch')}
+            onClick={handleClearSearch}
+          >
+            <IconX className='h-4 w-4' />
+          </Button>
+        ) : null}
       </div>
 
-      <div className='flex w-full items-center justify-between gap-4 sm:w-auto sm:justify-end'>
-        <span
-          className={cn(
-            'text-muted-foreground flex items-center gap-2 text-sm tabular-nums',
-            isFetching && 'opacity-70'
-          )}
-        >
-          {isFetching && <IconLoader2 className='h-3.5 w-3.5 animate-spin' />}
-          {resultsLabel}
-        </span>
+      <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
+        <div className='flex w-full items-center gap-3 sm:w-auto'>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant='outline' className='h-10 gap-2 rounded-full lg:hidden'>
+                <IconArrowsHorizontal className='h-4 w-4' />
+                {t('filters')}
+                {activeFilterCount > 0 && (
+                  <span className='bg-accent text-accent-foreground ms-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold tabular-nums'>
+                    {activeFilterCount}
+                  </span>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side='left' className='w-80 overflow-y-auto'>
+              <SheetHeader>
+                <SheetTitle>{t('filters')}</SheetTitle>
+              </SheetHeader>
+              <div className='mt-6 pb-8'>
+                <FilterContent />
+              </div>
+            </SheetContent>
+          </Sheet>
 
-        <div className='flex items-center gap-3'>
+          <span
+            className={cn(
+              'text-muted-foreground flex items-center gap-2 text-sm tabular-nums',
+              isFetching && 'opacity-70'
+            )}
+          >
+            {isFetching && <IconLoader2 className='h-3.5 w-3.5 animate-spin' />}
+            {resultsLabel}
+          </span>
+        </div>
+
+        <div className='flex w-full items-center justify-end gap-3 sm:w-auto'>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className='w-40 gap-2 sm:w-44'>
+            <SelectTrigger className='h-10 w-full gap-2 rounded-full sm:w-44'>
               <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>
             <SelectContent>
@@ -128,11 +163,11 @@ export function ShopToolbar(props: ShopToolbarProps) {
             </SelectContent>
           </Select>
 
-          <div className='border-border hidden items-center gap-1 rounded-lg border p-1 md:flex'>
+          <div className='border-border hidden items-center gap-1 rounded-full border p-1 md:flex'>
             <Button
               variant={gridCols === 3 ? 'secondary' : 'ghost'}
               size='icon'
-              className='h-8 w-8'
+              className='h-8 w-8 rounded-full'
               onClick={() => setGridCols(3)}
               aria-label={t('grid3')}
             >
@@ -141,7 +176,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
             <Button
               variant={gridCols === 4 ? 'secondary' : 'ghost'}
               size='icon'
-              className='h-8 w-8'
+              className='h-8 w-8 rounded-full'
               onClick={() => setGridCols(4)}
               aria-label={t('grid4')}
             >
@@ -152,7 +187,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
       </div>
 
       {hasActiveFilters && (
-        <p className='text-muted-foreground w-full text-xs sm:hidden'>
+        <p className='text-muted-foreground -mt-2 text-xs sm:hidden'>
           {t('filtersActive', { count: activeFilterCount })}
         </p>
       )}
