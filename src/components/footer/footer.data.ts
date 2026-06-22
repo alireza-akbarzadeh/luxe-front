@@ -30,6 +30,7 @@ type FooterLinkKey =
   | 'sizeGuide'
   | 'faq'
   | 'contactUs'
+  | 'getLuxeApp'
   | 'helpCenter'
   | 'shopLuxe'
   | 'ourStores';
@@ -84,7 +85,8 @@ const footerSections: ReadonlyArray<{
       { nameKey: 'returnsRefunds', href: '/help/returns' },
       { nameKey: 'sizeGuide', href: '/help/size-guide' },
       { nameKey: 'faq', href: '/help/faq' },
-      { nameKey: 'contactUs', href: '/contact' }
+      { nameKey: 'contactUs', href: '/contact' },
+      { nameKey: 'getLuxeApp', href: '/apps' }
     ]
   },
   {

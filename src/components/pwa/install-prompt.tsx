@@ -4,52 +4,36 @@ import { IconDownload, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { usePwaInstall } from '@/lib/pwa/use-pwa-install';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
-
 const DISMISS_KEY = 'luxe-pwa-install-dismissed';
-
-function isStandaloneDisplay(): boolean {
-  if (typeof window === 'undefined') return false;
-  return (
-    window.matchMedia('(display-mode: standalone)').matches ||
-    ('standalone' in window.navigator &&
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true)
-  );
-}
 
 /** Storefront-only install banner — listens for `beforeinstallprompt`. */
 export function PwaInstallPrompt() {
   const t = useTranslations('pwa.install');
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const { canInstall, promptInstall } = usePwaInstall();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (isStandaloneDisplay()) return;
-    if (window.localStorage.getItem(DISMISS_KEY) === '1') return;
+    if (!canInstall) {
+      setVisible(false);
+      return;
+    }
 
-    const onBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setDeferredPrompt(event as BeforeInstallPromptEvent);
-      setVisible(true);
-    };
+    if (window.localStorage.getItem(DISMISS_KEY) === '1') {
+      setVisible(false);
+      return;
+    }
 
-    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
-    return () => window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
-  }, []);
+    setVisible(true);
+  }, [canInstall]);
 
   const onInstall = async () => {
-    if (!deferredPrompt) return;
-
-    await deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    setDeferredPrompt(null);
+    if (!canInstall) return;
+    await promptInstall();
     setVisible(false);
   };
 

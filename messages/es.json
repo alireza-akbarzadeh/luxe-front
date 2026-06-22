@@ -124,6 +124,7 @@
       "sizeGuide": "Guía de tallas",
       "faq": "Preguntas frecuentes",
       "contactUs": "Contáctanos",
+      "getLuxeApp": "Descargar app de Luxe",
       "helpCenter": "Centro de ayuda",
       "shopLuxe": "Comprar en Luxe",
       "ourStores": "Nuestras tiendas"
@@ -773,6 +774,13 @@
     }
   },
   "pwa": {
+    "install": {
+      "ariaLabel": "Instalar app de Luxe",
+      "title": "Instalar Luxe",
+      "description": "Agrega Luxe a tu pantalla de inicio para acceso rápido.",
+      "action": "Instalar",
+      "dismiss": "Cerrar"
+    },
     "push": {
       "title": "Notificaciones push del navegador",
       "descriptionDisabled": "Reciba actualizaciones de pedidos y alertas aunque Luxe esté cerrado. Requiere PWA instalada en iOS 16.4+.",
@@ -789,6 +797,53 @@
       "sendingTest": "Enviando…",
       "testSent": "Notificación de prueba enviada",
       "testError": "No se pudo enviar la notificación de prueba"
+    }
+  },
+  "platforms": {
+    "hero": {
+      "eyebrow": "Plataformas de Luxe",
+      "title": "Usa Luxe en cualquier dispositivo",
+      "description": "Compra desde la web, instala la PWA y pronto usa apps nativas para iPhone y Android.",
+      "home": "Inicio",
+      "current": "Apps"
+    },
+    "footnote": "Las apps nativas de iPhone y Android están en desarrollo. Mientras tanto instala la PWA de Luxe.",
+    "cards": {
+      "comingSoon": "Próximamente",
+      "web": {
+        "title": "Sitio web",
+        "description": "Usa Luxe al instante en cualquier navegador moderno.",
+        "action": "Abrir sitio web",
+        "recommended": "Recomendado"
+      },
+      "ios": {
+        "title": "App para iPhone",
+        "description": "La app nativa de iOS está en desarrollo.",
+        "recommended": "Tu dispositivo"
+      },
+      "android": {
+        "title": "App para Android",
+        "description": "La app nativa de Android está en desarrollo.",
+        "recommended": "Tu dispositivo"
+      },
+      "pwa": {
+        "title": "PWA instalable",
+        "description": "Instala Luxe en tu dispositivo y ábrelo como una app.",
+        "install": "Instalar PWA",
+        "openWeb": "Abrir tienda",
+        "installed": "Instalada",
+        "recommended": "Mejor opción",
+        "iosManual": "Instalación manual",
+        "unsupported": "La instalación no está disponible en este navegador.",
+        "installFailed": "No se pudo iniciar la instalación.",
+        "iosGuide": {
+          "title": "Instalar en iPhone",
+          "description": "Usa Safari para agregar Luxe a la pantalla de inicio.",
+          "step1": "Toca el botón Compartir en Safari.",
+          "step2": "Selecciona Añadir a pantalla de inicio.",
+          "step3": "Toca Añadir para finalizar."
+        }
+      }
     }
   }
 }

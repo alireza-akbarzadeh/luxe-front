@@ -124,6 +124,7 @@
       "sizeGuide": "راهنمای سایز",
       "faq": "سوالات متداول",
       "contactUs": "تماس با ما",
+      "getLuxeApp": "دریافت اپ لوکس",
       "helpCenter": "مرکز راهنما",
       "shopLuxe": "خرید از لوکس",
       "ourStores": "فروشگاه‌های ما"
@@ -773,6 +774,13 @@
     }
   },
   "pwa": {
+    "install": {
+      "ariaLabel": "نصب اپ لوکس",
+      "title": "نصب لوکس",
+      "description": "لوکس را برای دسترسی سریع به صفحه اصلی اضافه کنید.",
+      "action": "نصب",
+      "dismiss": "بستن"
+    },
     "push": {
       "title": "اعلان‌های مرورگر",
       "descriptionDisabled": "به‌روزرسانی سفارش و هشدارها را حتی وقتی لوکس بسته است دریافت کنید. نیاز به PWA نصب‌شده در iOS 16.4+ دارد.",
@@ -789,6 +797,53 @@
       "sendingTest": "در حال ارسال…",
       "testSent": "اعلان تست ارسال شد",
       "testError": "ارسال اعلان تست ممکن نشد"
+    }
+  },
+  "platforms": {
+    "hero": {
+      "eyebrow": "پلتفرم‌های لوکس",
+      "title": "لوکس را در همه دستگاه‌ها استفاده کنید",
+      "description": "از وب خرید کنید، PWA را نصب کنید، و به‌زودی از اپ‌های بومی iPhone و Android استفاده کنید.",
+      "home": "خانه",
+      "current": "اپ‌ها"
+    },
+    "footnote": "اپ‌های بومی iPhone و Android در حال توسعه هستند. تا آن زمان PWA لوکس را نصب کنید.",
+    "cards": {
+      "comingSoon": "به‌زودی",
+      "web": {
+        "title": "وب‌سایت",
+        "description": "لوکس را در هر مرورگر مدرن سریع باز کنید.",
+        "action": "باز کردن وب‌سایت",
+        "recommended": "پیشنهادی"
+      },
+      "ios": {
+        "title": "اپ iPhone",
+        "description": "اپ بومی iOS در حال توسعه است.",
+        "recommended": "دستگاه شما"
+      },
+      "android": {
+        "title": "اپ Android",
+        "description": "اپ بومی Android در حال توسعه است.",
+        "recommended": "دستگاه شما"
+      },
+      "pwa": {
+        "title": "PWA قابل نصب",
+        "description": "لوکس را روی دستگاه نصب کنید و مانند یک اپ اجرا کنید.",
+        "install": "نصب PWA",
+        "openWeb": "باز کردن فروشگاه",
+        "installed": "نصب شده",
+        "recommended": "بهترین گزینه فعلی",
+        "iosManual": "نصب دستی",
+        "unsupported": "نصب در این مرورگر در دسترس نیست.",
+        "installFailed": "شروع نصب ممکن نشد.",
+        "iosGuide": {
+          "title": "نصب روی iPhone",
+          "description": "در Safari لوکس را به صفحه اصلی اضافه کنید.",
+          "step1": "در Safari دکمه Share را بزنید.",
+          "step2": "گزینه Add to Home Screen را انتخاب کنید.",
+          "step3": "برای نهایی شدن نصب روی Add بزنید."
+        }
+      }
     }
   }
 }

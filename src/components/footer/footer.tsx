@@ -137,20 +137,20 @@ export function Footer() {
             </div>
           </div>
           <div className='flex flex-wrap gap-3'>
-            <a
-              href='#'
+            <Link
+              href='/apps'
               className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
             >
               <span className='text-xs opacity-70'>{t('downloadOn')}</span>
               <span className='font-semibold'>{t('appStore')}</span>
-            </a>
-            <a
-              href='#'
+            </Link>
+            <Link
+              href='/apps'
               className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
             >
               <span className='text-xs opacity-70'>{t('getItOn')}</span>
               <span className='font-semibold'>{t('googlePlay')}</span>
-            </a>
+            </Link>
             <LanguageSwitcher variant='footer' />
           </div>
         </div>
