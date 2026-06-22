@@ -1,6 +1,9 @@
-import { cn } from '@/lib/utils';
+'use client';
 
-import { formatWalletStatus, getWalletStatusStyle } from '../lib/wallet-utils';
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+
+import { getWalletStatusStyle } from '../lib/wallet-utils';
 
 interface WalletStatusBadgeProps {
   status?: string;
@@ -8,6 +11,12 @@ interface WalletStatusBadgeProps {
 }
 
 export function WalletStatusBadge({ status, className }: WalletStatusBadgeProps) {
+  const t = useTranslations('account.wallet.walletStatus');
+  const key = status?.toLowerCase() ?? 'unknown';
+  const label = ['completed', 'pending', 'failed', 'cancelled', 'unknown'].includes(key)
+    ? t(key as 'completed' | 'pending' | 'failed' | 'cancelled' | 'unknown')
+    : t('unknown');
+
   return (
     <span
       className={cn(
@@ -16,7 +25,7 @@ export function WalletStatusBadge({ status, className }: WalletStatusBadgeProps)
         className
       )}
     >
-      {formatWalletStatus(status)}
+      {label}
     </span>
   );
 }

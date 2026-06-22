@@ -1,6 +1,7 @@
 'use client';
 
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useTranslations } from 'next-intl';
 
 import {
   type ChartConfig,
@@ -13,41 +14,42 @@ import { formatCurrency } from '@/lib/format';
 import type { WalletActivityPoint, WalletBalancePoint } from '../lib/wallet-utils';
 import { formatWalletChartAxis } from '../lib/wallet-utils';
 
-const balanceChartConfig = {
-  balance: {
-    label: 'Balance',
-    color: 'var(--gold)'
-  }
-} satisfies ChartConfig;
-
-const activityChartConfig = {
-  inflow: {
-    label: 'Money in',
-    color: 'var(--gold)'
-  },
-  outflow: {
-    label: 'Money out',
-    color: 'hsl(var(--destructive))'
-  }
-} satisfies ChartConfig;
-
 interface WalletBalanceChartProps {
   balanceSeries: WalletBalancePoint[];
   activitySeries: WalletActivityPoint[];
 }
 
 export function WalletBalanceChart({ balanceSeries, activitySeries }: WalletBalanceChartProps) {
+  const t = useTranslations('account.wallet');
   const hasActivity = activitySeries.some((point) => point.inflow > 0 || point.outflow > 0);
+
+  const balanceChartConfig = {
+    balance: {
+      label: t('chartBalance'),
+      color: 'var(--gold)'
+    }
+  } satisfies ChartConfig;
+
+  const activityChartConfig = {
+    inflow: {
+      label: t('chartInflow'),
+      color: 'var(--gold)'
+    },
+    outflow: {
+      label: t('chartOutflow'),
+      color: 'hsl(var(--destructive))'
+    }
+  } satisfies ChartConfig;
 
   return (
     <div className='grid gap-4 lg:grid-cols-5'>
       <div className='bg-card border-border rounded-2xl border p-4 sm:p-5 lg:col-span-3'>
         <div className='mb-4 flex items-start justify-between gap-3'>
           <div>
-            <h3 className='font-display text-lg font-semibold tracking-tight'>Balance trend</h3>
-            <p className='text-muted-foreground text-sm'>
-              Your wallet balance over recent activity
-            </p>
+            <h3 className='font-display text-lg font-semibold tracking-tight'>
+              {t('balanceTrend')}
+            </h3>
+            <p className='text-muted-foreground text-sm'>{t('balanceTrendHint')}</p>
           </div>
         </div>
         <ChartContainer config={balanceChartConfig} className='aspect-auto h-56 w-full'>
@@ -97,10 +99,8 @@ export function WalletBalanceChart({ balanceSeries, activitySeries }: WalletBala
 
       <div className='bg-card border-border rounded-2xl border p-4 sm:p-5 lg:col-span-2'>
         <div className='mb-4'>
-          <h3 className='font-display text-lg font-semibold tracking-tight'>Cash flow</h3>
-          <p className='text-muted-foreground text-sm'>
-            Gold bars = money added (deposits, refunds). Red bars = money spent or withdrawn.
-          </p>
+          <h3 className='font-display text-lg font-semibold tracking-tight'>{t('cashFlow')}</h3>
+          <p className='text-muted-foreground text-sm'>{t('cashFlowHint')}</p>
         </div>
         {hasActivity ? (
           <ChartContainer config={activityChartConfig} className='aspect-auto h-56 w-full'>
@@ -128,7 +128,7 @@ export function WalletBalanceChart({ balanceSeries, activitySeries }: WalletBala
                     formatter={(value, name) => (
                       <>
                         <span className='text-muted-foreground'>{String(name)}</span>
-                        <span className='text-foreground ml-auto font-mono font-medium tabular-nums'>
+                        <span className='text-foreground ms-auto font-mono font-medium tabular-nums'>
                           {formatCurrency(Number(value))}
                         </span>
                       </>
@@ -152,7 +152,7 @@ export function WalletBalanceChart({ balanceSeries, activitySeries }: WalletBala
           </ChartContainer>
         ) : (
           <div className='bg-muted/40 text-muted-foreground flex h-56 items-center justify-center rounded-xl text-sm'>
-            Activity will appear after your first deposit or purchase.
+            {t('chartEmpty')}
           </div>
         )}
       </div>

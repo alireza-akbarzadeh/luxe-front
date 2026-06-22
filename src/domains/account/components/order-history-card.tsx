@@ -4,6 +4,7 @@ import { IconChevronDown, IconExternalLink, IconPackage, IconTruck } from '@tabl
 import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { OrderNumber } from '@/components/order-number';
@@ -26,12 +27,17 @@ interface OrderHistoryCardProps {
 
 export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations('account.orders');
+  const tCommon = useTranslations('account.common');
   const items = order.items ?? [];
   const itemCount = countOrderItems(items);
   const trackingHref = getOrderTrackingHref(order);
   const previewItems = items.slice(0, 4);
   const hiddenCount = Math.max(items.length - previewItems.length, 0);
   const shipment = order.shipment;
+  const placedDate = order.created_at
+    ? format(new Date(order.created_at), 'PPP')
+    : t('dateUnavailable');
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
@@ -47,15 +53,12 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                   className='min-w-0'
                 />
               </div>
-              <p className='text-muted-foreground text-sm'>
-                Placed{' '}
-                {order.created_at ? format(new Date(order.created_at), 'PPP') : 'Date unavailable'}
-              </p>
+              <p className='text-muted-foreground text-sm'>{t('placed', { date: placedDate })}</p>
               {shipment?.tracking_number ? (
                 <p className='text-muted-foreground flex items-start gap-1.5 text-xs'>
                   <IconTruck className='mt-0.5 size-3.5 shrink-0' />
                   <span>
-                    Tracking{' '}
+                    {t('tracking')}{' '}
                     <span className='font-mono tracking-normal break-all tabular-nums'>
                       {shipment.tracking_number}
                     </span>
@@ -69,7 +72,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
               {trackingHref ? (
                 <Button asChild variant='outline' size='sm'>
                   <Link href={trackingHref}>
-                    Track order
+                    {t('trackOrder')}
                     <IconExternalLink className='size-3.5' />
                   </Link>
                 </Button>
@@ -82,7 +85,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
               <div className='flex -space-x-2'>
                 {previewItems.map((item, index) => {
                   const imageUrl = item.product?.images?.[0];
-                  const productName = item.product?.name ?? 'Product';
+                  const productName = item.product?.name ?? tCommon('product');
 
                   return (
                     <div
@@ -106,14 +109,17 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                 ) : null}
               </div>
               <p className='text-muted-foreground text-sm'>
-                {itemCount} {itemCount === 1 ? 'item' : 'items'}
+                {itemCount}{' '}
+                {itemCount === 1 ? tCommon('item') : tCommon('items')}
               </p>
             </div>
           ) : null}
 
           <div className='border-border mt-5 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between'>
             <div>
-              <p className='text-muted-foreground text-xs tracking-wide uppercase'>Order total</p>
+              <p className='text-muted-foreground text-xs tracking-wide uppercase'>
+                {t('orderTotal')}
+              </p>
               <p className='text-xl font-semibold tabular-nums'>
                 {formatOrderAmount(order.total_amount)}
               </p>
@@ -122,7 +128,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
             {items.length > 0 ? (
               <CollapsibleTrigger asChild>
                 <Button variant='ghost' size='sm' className='self-start sm:self-auto'>
-                  {open ? 'Hide details' : 'View details'}
+                  {open ? t('hideDetails') : t('viewDetails')}
                   <IconChevronDown
                     className={cn('size-4 transition-transform', open && 'rotate-180')}
                   />
@@ -136,7 +142,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
           <div className='border-border border-t px-5 pb-5 sm:px-6 sm:pb-6'>
             <div className='divide-border divide-y'>
               {items.map((item, index) => {
-                const productName = item.product?.name ?? 'Product';
+                const productName = item.product?.name ?? tCommon('product');
                 const imageUrl = item.product?.images?.[0];
 
                 return (
@@ -157,7 +163,10 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                       <div className='min-w-0'>
                         <p className='truncate font-medium'>{productName}</p>
                         <p className='text-muted-foreground text-sm'>
-                          Qty {item.quantity ?? 0} · {formatOrderAmount(item.price)} each
+                          {t('qtyEach', {
+                            qty: item.quantity ?? 0,
+                            price: formatOrderAmount(item.price)
+                          })}
                         </p>
                       </div>
                       <p className='font-medium tabular-nums'>

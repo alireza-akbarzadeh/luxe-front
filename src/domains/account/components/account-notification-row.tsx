@@ -1,6 +1,7 @@
 'use client';
 
 import { IconBell } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -9,7 +10,6 @@ import type { AccountNotification } from '../api/account-notifications-api';
 import {
   formatNotificationDate,
   formatNotificationTime,
-  formatNotificationType,
   getNotificationTypeStyle
 } from '../lib/notification-utils';
 
@@ -19,11 +19,21 @@ interface AccountNotificationRowProps {
   onMarkRead: (id: number) => void;
 }
 
+function getNotificationTypeKey(type?: string): string {
+  if (!type) return 'update';
+  const known = ['order_update', 'payment_success', 'payment_failed', 'shipment_update'];
+  return known.includes(type) ? type : 'update';
+}
+
 export function AccountNotificationRow({
   notification,
   isMarkingRead,
   onMarkRead
 }: AccountNotificationRowProps) {
+  const t = useTranslations('account.notifications');
+  const typeKey = getNotificationTypeKey(notification.type);
+  const typeLabel = t(`notificationType.${typeKey}` as 'notificationType.order_update');
+
   return (
     <div
       className={cn(
@@ -49,10 +59,10 @@ export function AccountNotificationRow({
                 getNotificationTypeStyle(notification.type)
               )}
             >
-              {formatNotificationType(notification.type)}
+              {typeLabel}
             </span>
             {!notification.is_read ? (
-              <span className='bg-gold size-2 rounded-full' aria-label='Unread' />
+              <span className='bg-gold size-2 rounded-full' aria-label={t('unreadAria')} />
             ) : null}
           </div>
           <p className='text-muted-foreground mt-1 text-sm leading-relaxed'>
@@ -73,7 +83,7 @@ export function AccountNotificationRow({
           disabled={isMarkingRead}
           onClick={() => onMarkRead(notification.id)}
         >
-          Mark read
+          {t('markRead')}
         </Button>
       ) : null}
     </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { type Dispatch, type SetStateAction } from 'react';
 import { toast } from 'sonner';
 
@@ -28,6 +29,8 @@ export function WalletWithdrawDialog({
 }: WalletWithdrawDialogProps) {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = usePostWalletWithdraw();
+  const t = useTranslations('account.wallet');
+  const tCommon = useTranslations('account.common');
 
   const form = useAppForm({
     defaultValues,
@@ -37,7 +40,7 @@ export function WalletWithdrawDialog({
     onSubmit: async ({ value }) => {
       const amount = Number(value.amount);
       if (amount > availableBalance) {
-        toast.error(`Maximum withdrawable is ${formatWalletAmount(availableBalance)}`);
+        toast.error(t('withdrawMaxError', { amount: formatWalletAmount(availableBalance) }));
         return;
       }
 
@@ -49,13 +52,13 @@ export function WalletWithdrawDialog({
           }
         });
         await queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
-        toast.success('Withdrawal completed');
+        toast.success(t('withdrawSuccess'));
         form.reset();
         onOpenChange(false);
       } catch (error: unknown) {
         const message =
           (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-          'Withdrawal failed';
+          t('withdrawFailed');
         toast.error(message);
       }
     }
@@ -68,8 +71,10 @@ export function WalletWithdrawDialog({
 
   return (
     <AppDialog
-      title='Withdraw funds'
-      description={`Available balance: ${formatWalletAmount(availableBalance)}`}
+      title={t('withdrawDialogTitle')}
+      description={t('withdrawDialogDescription', {
+        balance: formatWalletAmount(availableBalance)
+      })}
       open={open}
       onOpenChange={onOpenChange}
       size='sm'
@@ -87,7 +92,7 @@ export function WalletWithdrawDialog({
             {(field) => (
               <>
                 <field.TextField
-                  label='Amount (USD)'
+                  label={t('depositAmount')}
                   type='number'
                   min={0}
                   max={availableBalance}
@@ -98,10 +103,9 @@ export function WalletWithdrawDialog({
                 {parseWalletNumber(field.state.value) != null &&
                 parseWalletNumber(field.state.value)! > 0 ? (
                   <p className='text-muted-foreground mt-2 text-sm'>
-                    You will withdraw{' '}
-                    <span className='text-foreground font-mono font-medium tabular-nums'>
-                      {formatWalletAmount(parseWalletNumber(field.state.value)!)}
-                    </span>
+                    {t('withdrawPreview', {
+                      amount: formatWalletAmount(parseWalletNumber(field.state.value)!)
+                    })}
                   </p>
                 ) : null}
               </>
@@ -111,21 +115,21 @@ export function WalletWithdrawDialog({
           <form.AppField name='description'>
             {(field) => (
               <field.TextField
-                label='Note (optional)'
-                placeholder='Bank transfer, payout request…'
+                label={t('withdrawNoteLabel')}
+                placeholder={t('withdrawNotePlaceholder')}
               />
             )}
           </form.AppField>
 
           <div className='flex gap-2'>
             <Button type='button' variant='outline' className='flex-1' onClick={handleClose}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <form.Submit
               className='flex-1'
               isPending={isPending}
               disabled={availableBalance <= 0}
-              label='Withdraw'
+              label={t('withdraw')}
             />
           </div>
         </form.Root>

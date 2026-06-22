@@ -2,6 +2,7 @@
 
 import { IconArrowDownLeft, IconArrowUpRight } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import type { DtoTransactionResponse } from '~/src/services/-wallet-get.schemas'
 
 import {
   formatTransactionDate,
-  formatTransactionType,
   formatWalletAmount,
   getTransactionAmountDisplay,
   parseWalletNumber
@@ -22,9 +22,20 @@ interface WalletTransactionRowProps {
   transaction: DtoTransactionResponse;
 }
 
+function getTransactionTypeKey(type?: string): string {
+  if (!type) return 'transaction';
+  const normalized = type.toLowerCase();
+  if (['deposit', 'payment', 'refund', 'adjustment'].includes(normalized)) {
+    return normalized;
+  }
+  return 'transaction';
+}
+
 export function WalletTransactionRow({ transaction }: WalletTransactionRowProps) {
   const queryClient = useQueryClient();
   const { mutateAsync: cancelDeposit, isPending: isCancelling } = usePostWalletDepositIdCancel();
+  const t = useTranslations('account.wallet');
+  const tCommon = useTranslations('account.common');
 
   const amountDisplay = getTransactionAmountDisplay(transaction);
   const canCancel =
@@ -32,16 +43,19 @@ export function WalletTransactionRow({ transaction }: WalletTransactionRowProps)
     transaction.type === 'deposit' &&
     typeof transaction.id === 'number';
 
+  const typeKey = getTransactionTypeKey(transaction.type);
+  const typeLabel = t(`transactionType.${typeKey}` as 'transactionType.deposit');
+
   const handleCancel = async () => {
     if (!transaction.id) return;
     try {
       await cancelDeposit({ id: transaction.id });
       await queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
-      toast.success('Deposit cancelled');
+      toast.success(t('depositCancelled'));
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        'Failed to cancel deposit';
+        t('cancelDepositFailed');
       toast.error(message);
     }
   };
@@ -64,11 +78,11 @@ export function WalletTransactionRow({ transaction }: WalletTransactionRowProps)
         </div>
         <div className='min-w-0'>
           <div className='flex flex-wrap items-center gap-2'>
-            <p className='font-medium'>{formatTransactionType(transaction.type)}</p>
+            <p className='font-medium'>{typeLabel}</p>
             <WalletStatusBadge status={transaction.status} />
           </div>
           <p className='text-muted-foreground mt-0.5 truncate text-sm'>
-            {transaction.description || 'Wallet transaction'}
+            {transaction.description || t('transactionFallback')}
           </p>
           <p className='text-muted-foreground mt-1 text-xs'>
             {formatTransactionDate(transaction.created_at)}
@@ -90,7 +104,9 @@ export function WalletTransactionRow({ transaction }: WalletTransactionRowProps)
         {parseWalletNumber(transaction.balance_after) != null &&
         transaction.status === 'completed' ? (
           <p className='text-muted-foreground text-xs tabular-nums'>
-            Balance {formatWalletAmount(parseWalletNumber(transaction.balance_after)!)}
+            {t('balanceAfter', {
+              amount: formatWalletAmount(parseWalletNumber(transaction.balance_after)!)
+            })}
           </p>
         ) : null}
         {canCancel ? (
@@ -101,7 +117,7 @@ export function WalletTransactionRow({ transaction }: WalletTransactionRowProps)
             disabled={isCancelling}
             onClick={() => void handleCancel()}
           >
-            Cancel
+            {tCommon('cancel')}
           </Button>
         ) : null}
       </div>

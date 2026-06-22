@@ -3,6 +3,7 @@
 import { IconHeartFilled, IconMinus, IconPlus, IconShoppingCart } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,8 @@ export function AccountWishlistItemCard({
   isRemoving = false,
   onRemove
 }: AccountWishlistItemCardProps) {
+  const t = useTranslations('account.wishlist');
+  const tCommon = useTranslations('account.common');
   const { increment, decrement, getProductQuantity, isAdding } = useCartController();
   const productId = item.product_id;
   const productQuantity = getProductQuantity(productId);
@@ -55,19 +58,19 @@ export function AccountWishlistItemCard({
         {item.image_url ? (
           <Image
             src={item.image_url}
-            alt={item.product_name ?? 'Product'}
+            alt={item.product_name ?? tCommon('product')}
             fill
             sizes='(max-width: 768px) 50vw, 33vw'
             className='object-cover transition-transform duration-300 group-hover:scale-105'
           />
         ) : (
           <div className='bg-muted text-muted-foreground flex h-full w-full items-center justify-center text-xs'>
-            No image
+            {t('noImage')}
           </div>
         )}
 
         {hasDiscount && item.discount_percent ? (
-          <Badge className='absolute top-2 left-2 border-none bg-emerald-600 text-white shadow-sm'>
+          <Badge className='absolute start-2 top-2 border-none bg-emerald-600 text-white shadow-sm'>
             -{item.discount_percent}%
           </Badge>
         ) : null}
@@ -75,7 +78,7 @@ export function AccountWishlistItemCard({
         {!item.is_in_stock ? (
           <div className='absolute inset-0 flex items-center justify-center bg-black/45'>
             <span className='rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white'>
-              Out of stock
+              {t('outOfStock')}
             </span>
           </div>
         ) : null}
@@ -86,11 +89,11 @@ export function AccountWishlistItemCard({
         onClick={() => onRemove(productId)}
         disabled={isRemoving}
         className={cn(
-          'bg-background/90 absolute top-2 right-2 flex size-9 items-center justify-center rounded-full',
+          'bg-background/90 absolute end-2 top-2 flex size-9 items-center justify-center rounded-full',
           'text-red-500 shadow-sm backdrop-blur-sm transition-colors',
           'hover:bg-red-500 hover:text-white disabled:opacity-60'
         )}
-        aria-label='Remove from wishlist'
+        aria-label={t('removeAria')}
       >
         {isRemoving ? (
           <Spinner className='size-4' />
@@ -151,7 +154,7 @@ export function AccountWishlistItemCard({
               onClick={() => increment(cartPayload)}
             >
               <IconShoppingCart className='size-4' />
-              {item.is_in_stock ? 'Add to cart' : 'Unavailable'}
+              {item.is_in_stock ? t('addToCart') : t('unavailable')}
             </Button>
           )}
         </div>

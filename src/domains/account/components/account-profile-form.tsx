@@ -1,7 +1,7 @@
-// containers/account-profile-form.tsx
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { type Dispatch, type SetStateAction, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -25,6 +25,9 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
   const [isPending, startTransition] = useTransition();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending: isMutating } = usePutProfile();
+  const t = useTranslations('account.overview');
+  const tCommon = useTranslations('account.common');
+  const tFields = useTranslations('auth.fields');
 
   const form = useAppForm({
     defaultValues: defaultValues,
@@ -43,11 +46,12 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
             }
           });
           await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
-          toast.success('Profile updated successfully');
+          toast.success(t('profileUpdated'));
           onClose();
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-          const message = error?.response?.data?.message || 'Failed to update profile';
+        } catch (error: unknown) {
+          const message =
+            (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+            t('profileUpdateFailed');
           toast.error(message);
         }
       });
@@ -55,7 +59,7 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
   });
 
   return (
-    <AppDialog title='Profile Information' open={open} onOpenChange={onOpenChange}>
+    <AppDialog title={t('profileTitle')} open={open} onOpenChange={onOpenChange}>
       <form.AppForm>
         <form.Root
           onSubmit={(e) => {
@@ -66,25 +70,27 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
           className='grid grid-cols-2 gap-4'
         >
           <form.AppField name='firstName'>
-            {(field) => <field.TextField label='First Name' />}
+            {(field) => <field.TextField label={tFields('firstName')} />}
           </form.AppField>
           <form.AppField name='lastName'>
-            {(field) => <field.TextField label='Last Name' />}
+            {(field) => <field.TextField label={tFields('lastName')} />}
           </form.AppField>
           <form.AppField name='email'>
-            {(field) => <field.TextField label='Email' disabled />}
+            {(field) => <field.TextField label={tFields('email')} disabled />}
           </form.AppField>
           <form.AppField name='phone'>
-            {(field) => <field.TextField label='Phone' placeholder='+1 (555) 000-0000' />}
+            {(field) => (
+              <field.TextField label={tFields('phone')} placeholder={tFields('phonePlaceholder')} />
+            )}
           </form.AppField>
           <div className='col-span-2 flex items-center justify-end gap-2'>
             <Button className='flex-1' size='lg' type='button' variant='outline' onClick={onClose}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <form.Submit
               className='flex-1'
               isPending={isPending || isMutating}
-              label='Save Changes'
+              label={tCommon('saveChanges')}
             />
           </div>
         </form.Root>

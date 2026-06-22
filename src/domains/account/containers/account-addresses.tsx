@@ -56,11 +56,9 @@ export function AccountAddresses() {
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Fetch addresses
   const { data: addressesResponse, isLoading, isError, refetch } = useGetAddresses();
   const addresses = addressesResponse?.data?.addresses || [];
 
-  // Mutations
   const createAddress = usePostAddresses();
   const updateAddress = usePutAddressesId();
   const setDefaultAddress = usePatchAddressesIdDefault();
@@ -75,7 +73,6 @@ export function AccountAddresses() {
     onSubmit: async ({ value }) => {
       startTransition(async () => {
         try {
-          // Map form fields to backend DTO
           const recipientName = `${value.firstName} ${value.lastName}`.trim();
 
           const payload: DtoCreateAddressRequest = {
@@ -103,7 +100,6 @@ export function AccountAddresses() {
             toast.success(t('added'));
           }
 
-          // Invalidate both address list and account summary (for default addresses)
           await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
           await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
 
@@ -150,7 +146,7 @@ export function AccountAddresses() {
       latitude: address.latitude,
       longitude: address.longitude
     });
-    toast.success('Delivery location updated');
+    toast.success(t('locationUpdated'));
   };
 
   const handleEditAddress = (address: ModelsAddress) => {
@@ -163,35 +159,41 @@ export function AccountAddresses() {
   const handleSetDefault = async (id: number) => {
     try {
       await setDefaultAddress.mutateAsync({ id });
-      toast.success('Default address updated');
+      toast.success(t('defaultUpdated'));
       await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
       await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to set default');
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        t('setDefaultFailed');
+      toast.error(message);
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
       await deleteAddress.mutateAsync({ id });
-      toast.success('Address deleted');
+      toast.success(t('deleted'));
       await queryClient.invalidateQueries({ queryKey: getGetAddressesQueryKey() });
       await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Failed to delete');
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        t('deleteFailed');
+      toast.error(message);
     }
   };
 
   if (isLoading) {
-    return <div className='animate-pulse'>Loading addresses...</div>;
+    return <div className='animate-pulse'>{t('loading')}</div>;
   }
 
   if (isError) {
     return (
       <div className='rounded-2xl border p-6 text-center'>
-        <p className='text-destructive'>Failed to load addresses.</p>
+        <p className='text-destructive'>{t('loadError')}</p>
         <Button variant='outline' className='mt-4' onClick={() => refetch()}>
-          Retry
+          {tCommon('retry')}
         </Button>
       </div>
     );
@@ -200,18 +202,18 @@ export function AccountAddresses() {
   return (
     <div>
       <div className='mb-4 flex items-center justify-between'>
-        <h2 className='text-xl font-semibold'>Saved Addresses</h2>
+        <h2 className='text-xl font-semibold'>{t('title')}</h2>
         <Button onClick={handleAddNewAddress}>
-          <IconPlus className='mr-2 h-4 w-4' />
-          Add Address
+          <IconPlus className='me-2 h-4 w-4' />
+          {t('addAddress')}
         </Button>
       </div>
 
       <AppDialog
         open={isAddressDialogOpen}
         onOpenChange={setIsAddressDialogOpen}
-        title={editingAddressId ? 'Edit Address' : 'Add New Address'}
-        description='Fill in your details or pick a precise delivery point on the map.'
+        title={editingAddressId ? t('editAddress') : t('addNewAddress')}
+        description={t('dialogDescription')}
         size='lg'
         contentClassName='max-h-[min(72dvh,720px)] overflow-y-auto'
       >
@@ -231,56 +233,54 @@ export function AccountAddresses() {
                 className='w-full rounded-full sm:w-auto'
                 onClick={handleOpenMapPicker}
               >
-                <IconMapPin className='mr-2 h-4 w-4' />
-                Pick delivery location on map
+                <IconMapPin className='me-2 h-4 w-4' />
+                {t('pickOnMap')}
               </Button>
             </div>
             <form.AppField name='label'>
               {(field) => (
                 <field.TextField
-                  label='Label (e.g., Home, Work)'
-                  placeholder='Home, Work, etc.'
+                  label={t('labelField')}
+                  placeholder={t('labelPlaceholder')}
                   className='col-span-2'
                 />
               )}
             </form.AppField>
             <form.AppField name='firstName'>
-              {(field) => <field.TextField label='First Name' />}
+              {(field) => <field.TextField label={tFields('firstName')} />}
             </form.AppField>
             <form.AppField name='lastName'>
-              {(field) => <field.TextField label='Last Name' />}
+              {(field) => <field.TextField label={tFields('lastName')} />}
             </form.AppField>
             <form.AppField name='street'>
-              {(field) => <field.TextField label='Street Address' className='col-span-2' />}
+              {(field) => <field.TextField label={t('street')} className='col-span-2' />}
             </form.AppField>
             <form.AppField name='apartment'>
-              {(field) => (
-                <field.TextField label='Apartment, suite, etc. (optional)' className='col-span-2' />
-              )}
+              {(field) => <field.TextField label={t('apartment')} className='col-span-2' />}
             </form.AppField>
-            <form.AppField name='city'>{(field) => <field.TextField label='City' />}</form.AppField>
+            <form.AppField name='city'>{(field) => <field.TextField label={t('city')} />}</form.AppField>
             <form.AppField name='state'>
-              {(field) => <field.TextField label='State' />}
+              {(field) => <field.TextField label={t('state')} />}
             </form.AppField>
             <form.AppField name='zipCode'>
-              {(field) => <field.TextField label='ZIP Code' />}
+              {(field) => <field.TextField label={t('zipCode')} />}
             </form.AppField>
             <form.AppField name='phone'>
-              {(field) => <field.InputPhone label='Phone' />}
+              {(field) => <field.InputPhone label={tFields('phone')} />}
             </form.AppField>
             <form.AppField name='country'>
-              {(field) => <field.TextField label='Country' />}
+              {(field) => <field.TextField label={t('country')} />}
             </form.AppField>
             <form.AppField name='isDefault'>
               {(field) => (
-                <field.Checkbox label='Set as default address' className='col-span-2 mt-2' />
+                <field.Checkbox label={t('setAsDefault')} className='col-span-2 mt-2' />
               )}
             </form.AppField>
             <div className='col-span-2 mt-4 flex justify-end gap-2'>
               <Button variant='outline' type='button' onClick={() => setIsAddressDialogOpen(false)}>
-                Cancel
+                {tCommon('cancel')}
               </Button>
-              <form.Submit isPending={isPending} label='Save Address' />
+              <form.Submit isPending={isPending} label={tCommon('saveAddress')} />
             </div>
           </form.Root>
         </form.AppForm>
@@ -304,12 +304,12 @@ export function AccountAddresses() {
               }`}
             >
               {address.is_default && (
-                <span className='text-accent absolute top-4 right-4 flex items-center gap-1 text-xs font-medium'>
+                <span className='text-accent absolute end-4 top-4 flex items-center gap-1 text-xs font-medium'>
                   <IconCheck className='h-3 w-3' />
-                  Default
+                  {tCommon('default')}
                 </span>
               )}
-              <h3 className='mb-2 font-semibold'>{address.instructions || 'Address'}</h3>
+              <h3 className='mb-2 font-semibold'>{address.instructions || t('addressFallback')}</h3>
               <p className='text-muted-foreground text-sm'>{address.recipient_name}</p>
               <p className='text-muted-foreground text-sm'>
                 {address.address_line1}
@@ -323,8 +323,8 @@ export function AccountAddresses() {
 
               <div className='border-border mt-4 flex items-center gap-2 border-t pt-4'>
                 <Button variant='ghost' size='sm' onClick={() => handleEditAddress(address)}>
-                  <IconEdit className='mr-1 h-4 w-4' />
-                  Edit
+                  <IconEdit className='me-1 h-4 w-4' />
+                  {tCommon('edit')}
                 </Button>
                 {!address.is_default && (
                   <Button
@@ -332,7 +332,7 @@ export function AccountAddresses() {
                     size='sm'
                     onClick={() => handleSetDefault(address.id as number)}
                   >
-                    Set Default
+                    {tCommon('setDefault')}
                   </Button>
                 )}
                 <AlertDialog>
@@ -347,19 +347,16 @@ export function AccountAddresses() {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Address?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete this address from
-                        your account.
-                      </AlertDialogDescription>
+                      <AlertDialogTitle>{t('deleteTitle')}</AlertDialogTitle>
+                      <AlertDialogDescription>{t('deleteDescription')}</AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => handleDelete(address.id as number)}
                         className='bg-red-600 hover:bg-red-700'
                       >
-                        Delete
+                        {tCommon('delete')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -371,11 +368,11 @@ export function AccountAddresses() {
       ) : (
         <div className='bg-muted/50 rounded-2xl py-12 text-center'>
           <IconMapPin className='text-muted-foreground mx-auto mb-4 h-12 w-12' />
-          <h3 className='mb-2 font-semibold'>No saved addresses</h3>
-          <p className='text-muted-foreground mb-4'>Add an address to speed up checkout</p>
+          <h3 className='mb-2 font-semibold'>{t('emptyTitle')}</h3>
+          <p className='text-muted-foreground mb-4'>{t('emptyDescription')}</p>
           <Button onClick={handleAddNewAddress}>
-            <IconPlus className='mr-2 h-4 w-4' />
-            Add Address
+            <IconPlus className='me-2 h-4 w-4' />
+            {t('addAddress')}
           </Button>
         </div>
       )}
