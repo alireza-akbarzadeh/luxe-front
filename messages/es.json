@@ -981,7 +981,24 @@
       "withdrawFailed": "Retiro fallido",
       "cancelDeposit": "Cancelar depósito",
       "depositCancelled": "Depósito cancelado",
-      "cancelDepositFailed": "No se pudo cancelar el depósito"
+      "cancelDepositFailed": "No se pudo cancelar el depósito",
+      "walletStatus": {
+        "unknown": "Desconocido",
+        "completed": "Completado",
+        "pending": "Pendiente",
+        "failed": "Fallido",
+        "cancelled": "Cancelado"
+      },
+      "transactionType": {
+        "transaction": "Transacción",
+        "deposit": "Depósito",
+        "payment": "Pago del pedido",
+        "refund": "Reembolso",
+        "adjustment": "Ajuste"
+      },
+      "transactionFallback": "Transacción de billetera",
+      "balanceAfter": "Saldo {amount}",
+      "chartStart": "Inicio"
     },
     "notifications": {
       "title": "Notificaciones",
@@ -997,7 +1014,15 @@
       "markReadFailed": "No se pudo marcar como leída",
       "markAllReadSuccess": "Todas las notificaciones marcadas como leídas",
       "markAllReadFailed": "No se pudieron marcar todas como leídas",
-      "markRead": "Marcar como leída"
+      "markRead": "Marcar como leída",
+      "unreadAria": "No leída",
+      "notificationType": {
+        "update": "Actualización",
+        "order_update": "Actualización de pedido",
+        "payment_success": "Pago exitoso",
+        "payment_failed": "Pago fallido",
+        "shipment_update": "Actualización de envío"
+      }
     },
     "settings": {
       "title": "Configuración de la cuenta",

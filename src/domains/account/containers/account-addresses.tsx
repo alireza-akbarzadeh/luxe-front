@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { IconCheck, IconEdit, IconMapPin, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -44,6 +44,9 @@ import { AddressMapPickerDialog } from '../components/address-map-picker-dialog'
 
 export function AccountAddresses() {
   const queryClient = useQueryClient();
+  const t = useTranslations('account.addresses');
+  const tCommon = useTranslations('account.common');
+  const tFields = useTranslations('auth.fields');
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
   const [mapCoordinates, setMapCoordinates] = useState<GeoCoordinates | null>(null);
@@ -94,10 +97,10 @@ export function AccountAddresses() {
               id: editingAddressId,
               data: payload
             });
-            toast.success('Address updated');
+            toast.success(t('updated'));
           } else {
             await createAddress.mutateAsync({ data: payload });
-            toast.success('Address added');
+            toast.success(t('added'));
           }
 
           // Invalidate both address list and account summary (for default addresses)
@@ -108,8 +111,10 @@ export function AccountAddresses() {
           setEditingAddressId(null);
           setDialogInitialValues(EMPTY_ADDRESS_FORM_VALUES);
           form.reset();
-        } catch (error: any) {
-          const message = error?.response?.data?.message || 'Something went wrong';
+        } catch (error: unknown) {
+          const message =
+            (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+            tCommon('somethingWrong');
           toast.error(message);
         }
       });

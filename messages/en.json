@@ -981,7 +981,24 @@
       "withdrawFailed": "Withdrawal failed",
       "cancelDeposit": "Cancel deposit",
       "depositCancelled": "Deposit cancelled",
-      "cancelDepositFailed": "Failed to cancel deposit"
+      "cancelDepositFailed": "Failed to cancel deposit",
+      "walletStatus": {
+        "unknown": "Unknown",
+        "completed": "Completed",
+        "pending": "Pending",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "transactionType": {
+        "transaction": "Transaction",
+        "deposit": "Deposit",
+        "payment": "Order payment",
+        "refund": "Refund",
+        "adjustment": "Adjustment"
+      },
+      "transactionFallback": "Wallet transaction",
+      "balanceAfter": "Balance {amount}",
+      "chartStart": "Start"
     },
     "notifications": {
       "title": "Notifications",
@@ -997,7 +1014,15 @@
       "markReadFailed": "Unable to mark notification as read",
       "markAllReadSuccess": "All notifications marked as read",
       "markAllReadFailed": "Unable to mark all as read",
-      "markRead": "Mark as read"
+      "markRead": "Mark as read",
+      "unreadAria": "Unread",
+      "notificationType": {
+        "update": "Update",
+        "order_update": "Order Update",
+        "payment_success": "Payment Success",
+        "payment_failed": "Payment Failed",
+        "shipment_update": "Shipment Update"
+      }
     },
     "settings": {
       "title": "Account Settings",

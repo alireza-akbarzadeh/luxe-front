@@ -981,7 +981,24 @@
       "withdrawFailed": "برداشت ناموفق بود",
       "cancelDeposit": "لغو واریز",
       "depositCancelled": "واریز لغو شد",
-      "cancelDepositFailed": "لغو واریز ناموفق بود"
+      "cancelDepositFailed": "لغو واریز ناموفق بود",
+      "walletStatus": {
+        "unknown": "نامشخص",
+        "completed": "تکمیل‌شده",
+        "pending": "در انتظار",
+        "failed": "ناموفق",
+        "cancelled": "لغو‌شده"
+      },
+      "transactionType": {
+        "transaction": "تراکنش",
+        "deposit": "واریز",
+        "payment": "پرداخت سفارش",
+        "refund": "بازپرداخت",
+        "adjustment": "تعدیل"
+      },
+      "transactionFallback": "تراکنش کیف پول",
+      "balanceAfter": "موجودی {amount}",
+      "chartStart": "شروع"
     },
     "notifications": {
       "title": "اعلان‌ها",
@@ -997,7 +1014,15 @@
       "markReadFailed": "علامت‌گذاری به‌عنوان خوانده‌شده ممکن نشد",
       "markAllReadSuccess": "همه اعلان‌ها خوانده‌شده علامت خوردند",
       "markAllReadFailed": "علامت‌گذاری همه ممکن نشد",
-      "markRead": "علامت به‌عنوان خوانده‌شده"
+      "markRead": "علامت به‌عنوان خوانده‌شده",
+      "unreadAria": "خوانده‌نشده",
+      "notificationType": {
+        "update": "به‌روزرسانی",
+        "order_update": "به‌روزرسانی سفارش",
+        "payment_success": "پرداخت موفق",
+        "payment_failed": "پرداخت ناموفق",
+        "shipment_update": "به‌روزرسانی ارسال"
+      }
     },
     "settings": {
       "title": "تنظیمات حساب",
