@@ -2,12 +2,17 @@
 
 import { IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { cn } from '@/lib/utils';
 import { useGetCategories } from '~/src/services/-categories-get';
 
 import { useProductFilters } from '../useProductFilters';
 
 export function ActiveFilter() {
+  const t = useTranslations('shop.activeFilters');
+  const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const {
     categoryId,
     priceRange,
@@ -44,7 +49,6 @@ export function ActiveFilter() {
           exit={{ opacity: 0, height: 0 }}
           className='mb-8 flex flex-wrap gap-2'
         >
-          {/* Category badge (if any) */}
           {categoryId > 0 && selectedCategory && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
@@ -66,14 +70,13 @@ export function ActiveFilter() {
               exit={{ opacity: 0, scale: 0.8 }}
               className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
             >
-              Search: &ldquo;{searchQuery}&rdquo;
+              {t('search', { query: searchQuery })}
               <button onClick={() => setSearchQuery('')} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* New arrivals */}
           {showOnlyNew && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
@@ -81,14 +84,13 @@ export function ActiveFilter() {
               exit={{ opacity: 0, scale: 0.8 }}
               className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
             >
-              New Arrivals
+              {t('newArrivals')}
               <button onClick={() => setShowOnlyNew(false)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* On sale (client‑side only, but we keep it) */}
           {showOnlySale && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
@@ -96,59 +98,68 @@ export function ActiveFilter() {
               exit={{ opacity: 0, scale: 0.8 }}
               className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
             >
-              On Sale
+              {t('onSale')}
               <button onClick={() => setShowOnlySale(false)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* Price range */}
           {(priceRange[0] > 0 || priceRange[1] < 500) && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+              className={cn(
+                'bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm tabular-nums',
+                moneyClassName
+              )}
             >
-              ${priceRange[0]} - ${priceRange[1]}
+              {t('priceRange', {
+                min: formatPrice(priceRange[0]),
+                max: formatPrice(priceRange[1])
+              })}
               <button onClick={() => setPriceRange([0, 500])} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* Rating range */}
           {(minRating > 0 || maxRating < 5) && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm tabular-nums'
             >
-              Rating: {minRating} – {maxRating} ★
+              {t('ratingRange', {
+                min: formatDecimal(minRating),
+                max: formatDecimal(maxRating)
+              })}{' '}
+              ★
               <button onClick={() => setRatingRange(0, 5)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* Reviews count range */}
           {(minReviews > 0 || maxReviews < 1000) && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm tabular-nums'
             >
-              Reviews: {minReviews} – {maxReviews}
+              {t('reviewsRange', {
+                min: formatInteger(minReviews),
+                max: formatInteger(maxReviews)
+              })}
               <button onClick={() => setReviewsRange(0, 1000)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* Digital products only */}
           {isDigital && (
             <motion.span
               initial={{ opacity: 0, scale: 0.8 }}
@@ -156,19 +167,18 @@ export function ActiveFilter() {
               exit={{ opacity: 0, scale: 0.8 }}
               className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
             >
-              Digital Only
+              {t('digitalOnly')}
               <button onClick={() => setIsDigital(false)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
           )}
 
-          {/* Clear all button */}
           <button
             onClick={clearFilters}
             className='text-muted-foreground hover:text-foreground text-sm underline transition-colors'
           >
-            Clear all
+            {t('clearAll')}
           </button>
         </motion.div>
       )}

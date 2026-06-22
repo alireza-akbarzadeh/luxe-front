@@ -93,6 +93,69 @@
       "inCart": "در سبد ({count, number})",
       "viewProduct": "مشاهده {name}",
       "moreColors": "+{count, number}"
+    },
+    "hero": {
+      "title": "همه محصولات",
+      "subtitle": "مجموعه کامل محصولات منتخب ما را ببینید — برای کسانی که کیفیت و طراحی ماندگار را می‌پسندند."
+    },
+    "toolbar": {
+      "filters": "فیلترها",
+      "searchPlaceholder": "جستجوی محصولات…",
+      "sortBy": "مرتب‌سازی",
+      "noProducts": "محصولی نیست",
+      "productCount": "{count, plural, one {# محصول} other {# محصول}}",
+      "resultsRange": "{start, number}–{end, number} از {total, number}",
+      "filtersActive": "{count, plural, one {# فیلتر فعال} other {# فیلتر فعال}}",
+      "grid3": "شبکه ۳ ستونه",
+      "grid4": "شبکه ۴ ستونه"
+    },
+    "sort": {
+      "featured": "ویژه",
+      "newest": "جدیدترین",
+      "priceAsc": "قیمت: کم به زیاد",
+      "priceDesc": "قیمت: زیاد به کم",
+      "rating": "بهترین امتیاز"
+    },
+    "filters": {
+      "categories": "دسته‌بندی‌ها",
+      "allCategories": "همه دسته‌ها",
+      "priceRange": "محدوده قیمت",
+      "rating": "امتیاز",
+      "reviewCount": "تعداد نظرات",
+      "min": "حداقل",
+      "max": "حداکثر",
+      "quickFilters": "فیلترهای سریع",
+      "newArrivalsOnly": "فقط تازه‌واردها",
+      "onSaleOnly": "فقط حراج",
+      "digitalOnly": "فقط محصولات دیجیتال",
+      "clearAll": "پاک کردن همه فیلترها"
+    },
+    "activeFilters": {
+      "search": "جستجو: «{query}»",
+      "newArrivals": "تازه‌واردها",
+      "onSale": "حراج",
+      "priceRange": "{min} – {max}",
+      "ratingRange": "امتیاز: {min} – {max}",
+      "reviewsRange": "نظرات: {min} – {max}",
+      "digitalOnly": "فقط دیجیتال",
+      "clearAll": "پاک کردن همه"
+    },
+    "results": {
+      "salePageNote": "نمایش کالاهای حراج از صفحه فعلی نتایج.",
+      "loadFailed": "بارگذاری محصولات ممکن نشد. دوباره تلاش کنید.",
+      "retry": "تلاش مجدد",
+      "empty": "محصولی با این معیارها پیدا نشد.",
+      "clearFilters": "پاک کردن فیلترها"
+    },
+    "pagination": {
+      "ariaLabel": "صفحه‌بندی فروشگاه",
+      "previous": "قبلی",
+      "next": "بعدی"
+    },
+    "error": {
+      "title": "مشکلی پیش آمد",
+      "description": "در حال حاضر فروشگاه بارگذاری نشد. لطفاً دوباره تلاش کنید.",
+      "retry": "تلاش مجدد"
     }
   },
   "pdp": {

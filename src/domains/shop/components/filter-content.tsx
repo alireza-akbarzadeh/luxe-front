@@ -1,16 +1,22 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { cn } from '@/lib/utils';
 import { useGetCategories } from '~/src/services/-categories-get';
 
 import { useProductFilters } from '../useProductFilters';
 
 export function FilterContent() {
+  const t = useTranslations('shop.filters');
+  const { formatPrice, formatDecimal, moneyClassName } = useLocaleFormatters();
   const {
     categoryId,
     priceRange,
@@ -37,22 +43,21 @@ export function FilterContent() {
 
   return (
     <div className='space-y-8'>
-      {/* Categories – Radio buttons (single selection) */}
       <div>
-        <h3 className='mb-4 font-semibold'>Categories</h3>
+        <h3 className='mb-4 font-semibold'>{t('categories')}</h3>
         <RadioGroup
           value={categoryId > 0 ? categoryId.toString() : ''}
           onValueChange={(val) => setCategoryId(val ? Number(val) : null)}
           className='space-y-3'
         >
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <RadioGroupItem value='' id='category-all' />
             <Label htmlFor='category-all' className='text-sm font-normal'>
-              All Categories
+              {t('allCategories')}
             </Label>
           </div>
           {categories.map((category) => (
-            <div key={category.id} className='flex items-center space-x-2'>
+            <div key={category.id} className='flex items-center gap-2'>
               <RadioGroupItem value={category.id!.toString()} id={`cat-${category.id}`} />
               <Label htmlFor={`cat-${category.id}`} className='text-sm font-normal'>
                 {category.name}
@@ -62,9 +67,8 @@ export function FilterContent() {
         </RadioGroup>
       </div>
 
-      {/* Price Range */}
       <div>
-        <h3 className='mb-4 font-semibold'>Price Range</h3>
+        <h3 className='mb-4 font-semibold'>{t('priceRange')}</h3>
         <Slider
           value={priceRange}
           onValueChange={setPriceRange}
@@ -73,15 +77,19 @@ export function FilterContent() {
           step={10}
           className='mb-4'
         />
-        <div className='text-muted-foreground flex items-center justify-between text-sm'>
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
+        <div
+          className={cn(
+            'text-muted-foreground flex items-center justify-between text-sm tabular-nums',
+            moneyClassName
+          )}
+        >
+          <span>{formatPrice(priceRange[0])}</span>
+          <span>{formatPrice(priceRange[1])}</span>
         </div>
       </div>
 
-      {/* Rating Range */}
       <div>
-        <h3 className='mb-4 font-semibold'>Rating</h3>
+        <h3 className='mb-4 font-semibold'>{t('rating')}</h3>
         <Slider
           value={[minRating, maxRating]}
           onValueChange={([min, max]) => setRatingRange(min as number, max as number)}
@@ -90,19 +98,22 @@ export function FilterContent() {
           step={0.5}
           className='mb-4'
         />
-        <div className='text-muted-foreground flex items-center justify-between text-sm'>
-          <span>{minRating} ★</span>
-          <span>{maxRating} ★</span>
+        <div className='text-muted-foreground flex items-center justify-between text-sm tabular-nums'>
+          <span>
+            {formatDecimal(minRating)} ★
+          </span>
+          <span>
+            {formatDecimal(maxRating)} ★
+          </span>
         </div>
       </div>
 
-      {/* Reviews Count Range */}
       <div>
-        <h3 className='mb-4 font-semibold'>Number of Reviews</h3>
+        <h3 className='mb-4 font-semibold'>{t('reviewCount')}</h3>
         <div className='flex gap-3'>
           <div className='flex-1'>
             <Label htmlFor='min-reviews' className='text-xs'>
-              Min
+              {t('min')}
             </Label>
             <Input
               id='min-reviews'
@@ -111,12 +122,12 @@ export function FilterContent() {
               onChange={(e) => setReviewsRange(Number(e.target.value), maxReviews)}
               min={0}
               max={maxReviews}
-              className='mt-1'
+              className='mt-1 tabular-nums'
             />
           </div>
           <div className='flex-1'>
             <Label htmlFor='max-reviews' className='text-xs'>
-              Max
+              {t('max')}
             </Label>
             <Input
               id='max-reviews'
@@ -124,53 +135,51 @@ export function FilterContent() {
               value={maxReviews}
               onChange={(e) => setReviewsRange(minReviews, Number(e.target.value))}
               min={minReviews}
-              className='mt-1'
+              className='mt-1 tabular-nums'
             />
           </div>
         </div>
       </div>
 
-      {/* Quick Filters */}
       <div>
-        <h3 className='mb-4 font-semibold'>Quick Filters</h3>
+        <h3 className='mb-4 font-semibold'>{t('quickFilters')}</h3>
         <div className='space-y-3'>
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <Checkbox
               id='new-only'
               checked={showOnlyNew}
               onCheckedChange={(checked) => setShowOnlyNew(checked as boolean)}
             />
             <Label htmlFor='new-only' className='text-sm'>
-              New Arrivals Only
+              {t('newArrivalsOnly')}
             </Label>
           </div>
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <Checkbox
               id='sale-only'
               checked={showOnlySale}
               onCheckedChange={(checked) => setShowOnlySale(checked as boolean)}
             />
             <Label htmlFor='sale-only' className='text-sm'>
-              On Sale Only
+              {t('onSaleOnly')}
             </Label>
           </div>
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <Checkbox
               id='digital'
               checked={isDigital}
               onCheckedChange={(checked) => setIsDigital(checked as boolean)}
             />
             <Label htmlFor='digital' className='text-sm'>
-              Digital Products Only
+              {t('digitalOnly')}
             </Label>
           </div>
         </div>
       </div>
 
-      {/* Clear Filters */}
       {hasActiveFilters && (
         <Button variant='outline' className='w-full' onClick={clearFilters}>
-          Clear All Filters
+          {t('clearAll')}
         </Button>
       )}
     </div>

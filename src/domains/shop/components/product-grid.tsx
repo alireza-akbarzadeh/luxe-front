@@ -1,5 +1,6 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -13,15 +14,16 @@ interface ProductGridDataProps {
 
 export function ProductGrid(props: ProductGridDataProps) {
   const { products } = props;
+  const t = useTranslations('shop.results');
   const { gridCols, clearFilters } = useProductFilters();
 
   return (
     <div className='flex-1'>
       {products?.length === 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='py-20 text-center'>
-          <p className='text-muted-foreground mb-4'>No products found matching your criteria.</p>
+          <p className='text-muted-foreground mb-4'>{t('empty')}</p>
           <Button variant='outline' onClick={clearFilters}>
-            Clear Filters
+            {t('clearFilters')}
           </Button>
         </motion.div>
       ) : (

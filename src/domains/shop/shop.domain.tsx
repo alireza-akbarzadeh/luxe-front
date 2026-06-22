@@ -2,6 +2,7 @@
 
 import { IconRefresh } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ function filterSaleProducts(products: DtoProductWithLike[]) {
 }
 
 export function ShopDomain() {
+  const t = useTranslations('shop');
   const { apiParams, showOnlySale, page } = useProductFilters();
 
   const { data, isLoading, isError, refetch, isFetching } = useGetProducts(apiParams);
@@ -53,11 +55,10 @@ export function ShopDomain() {
         transition={{ duration: 0.6 }}
         className='mb-12'
       >
-        <h1 className='font-display text-4xl font-bold tracking-tight lg:text-5xl'>Shop All</h1>
-        <p className='text-muted-foreground mt-4 max-w-2xl'>
-          Explore our complete collection of premium products, curated for those who appreciate
-          quality and timeless design.
-        </p>
+        <h1 className='font-display text-4xl font-bold tracking-tight lg:text-5xl'>
+          {t('hero.title')}
+        </h1>
+        <p className='text-muted-foreground mt-4 max-w-2xl'>{t('hero.subtitle')}</p>
       </motion.div>
 
       <ShopToolbar
@@ -83,10 +84,10 @@ export function ShopDomain() {
         <div className='min-w-0 flex-1'>
           {isError ? (
             <div className='border-border bg-muted/20 flex flex-col items-center justify-center gap-4 rounded-2xl border py-20 text-center'>
-              <p className='text-muted-foreground'>Could not load products. Please try again.</p>
+              <p className='text-muted-foreground'>{t('results.loadFailed')}</p>
               <Button variant='outline' onClick={() => refetch()} className='gap-2 rounded-full'>
                 <IconRefresh className='h-4 w-4' />
-                Retry
+                {t('results.retry')}
               </Button>
             </div>
           ) : isInitialLoading ? (
@@ -94,9 +95,7 @@ export function ShopDomain() {
           ) : (
             <>
               {showOnlySale && products.length < apiProducts.length && (
-                <p className='text-muted-foreground mb-4 text-sm'>
-                  Showing sale items from the current page of results.
-                </p>
+                <p className='text-muted-foreground mb-4 text-sm'>{t('results.salePageNote')}</p>
               )}
               <div className={cn('relative', isPageLoading && 'pointer-events-none opacity-60')}>
                 <ProductGrid products={products} />

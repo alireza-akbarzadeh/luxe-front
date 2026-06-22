@@ -1,11 +1,16 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 
 import { useProductFilters } from '../useProductFilters';
 
 export function ShopPagination({ page, totalPages }: { page: number; totalPages: number }) {
+  const t = useTranslations('shop.pagination');
+  const { formatInteger } = useLocaleFormatters();
   const { setPage } = useProductFilters();
 
   if (totalPages <= 1) return null;
@@ -28,7 +33,7 @@ export function ShopPagination({ page, totalPages }: { page: number; totalPages:
   })();
 
   return (
-    <nav className='flex flex-wrap items-center justify-center gap-2 pt-8' aria-label='Shop pagination'>
+    <nav className='flex flex-wrap items-center justify-center gap-2 pt-8' aria-label={t('ariaLabel')}>
       <Button
         variant='outline'
         size='sm'
@@ -36,7 +41,7 @@ export function ShopPagination({ page, totalPages }: { page: number; totalPages:
         onClick={() => setPage(page - 1)}
         className='rounded-full'
       >
-        Previous
+        {t('previous')}
       </Button>
 
       <div className='flex items-center gap-1'>
@@ -49,7 +54,7 @@ export function ShopPagination({ page, totalPages }: { page: number; totalPages:
             onClick={() => setPage(pageNum)}
             aria-current={page === pageNum ? 'page' : undefined}
           >
-            {pageNum}
+            {formatInteger(pageNum)}
           </Button>
         ))}
       </div>
@@ -61,7 +66,7 @@ export function ShopPagination({ page, totalPages }: { page: number; totalPages:
         onClick={() => setPage(page + 1)}
         className='rounded-full'
       >
-        Next
+        {t('next')}
       </Button>
     </nav>
   );

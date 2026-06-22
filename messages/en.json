@@ -93,6 +93,69 @@
       "inCart": "In cart ({count, number})",
       "viewProduct": "View {name}",
       "moreColors": "+{count, number}"
+    },
+    "hero": {
+      "title": "Shop All",
+      "subtitle": "Explore our complete collection of premium products, curated for those who appreciate quality and timeless design."
+    },
+    "toolbar": {
+      "filters": "Filters",
+      "searchPlaceholder": "Search products...",
+      "sortBy": "Sort by",
+      "noProducts": "No products",
+      "productCount": "{count, plural, one {# product} other {# products}}",
+      "resultsRange": "{start, number}–{end, number} of {total, number}",
+      "filtersActive": "{count, plural, one {# filter active} other {# filters active}}",
+      "grid3": "3 column grid",
+      "grid4": "4 column grid"
+    },
+    "sort": {
+      "featured": "Featured",
+      "newest": "Newest",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "rating": "Best Rating"
+    },
+    "filters": {
+      "categories": "Categories",
+      "allCategories": "All Categories",
+      "priceRange": "Price Range",
+      "rating": "Rating",
+      "reviewCount": "Number of Reviews",
+      "min": "Min",
+      "max": "Max",
+      "quickFilters": "Quick Filters",
+      "newArrivalsOnly": "New Arrivals Only",
+      "onSaleOnly": "On Sale Only",
+      "digitalOnly": "Digital Products Only",
+      "clearAll": "Clear All Filters"
+    },
+    "activeFilters": {
+      "search": "Search: \"{query}\"",
+      "newArrivals": "New Arrivals",
+      "onSale": "On Sale",
+      "priceRange": "{min} – {max}",
+      "ratingRange": "Rating: {min} – {max}",
+      "reviewsRange": "Reviews: {min} – {max}",
+      "digitalOnly": "Digital Only",
+      "clearAll": "Clear all"
+    },
+    "results": {
+      "salePageNote": "Showing sale items from the current page of results.",
+      "loadFailed": "Could not load products. Please try again.",
+      "retry": "Retry",
+      "empty": "No products found matching your criteria.",
+      "clearFilters": "Clear Filters"
+    },
+    "pagination": {
+      "ariaLabel": "Shop pagination",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "description": "We could not load the shop right now. Please try again.",
+      "retry": "Try again"
     }
   },
   "pdp": {

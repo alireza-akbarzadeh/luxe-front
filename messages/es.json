@@ -93,6 +93,69 @@
       "inCart": "En carrito ({count, number})",
       "viewProduct": "Ver {name}",
       "moreColors": "+{count, number}"
+    },
+    "hero": {
+      "title": "Toda la tienda",
+      "subtitle": "Explora nuestra colección completa de productos premium, seleccionados para quienes aprecian la calidad y el diseño atemporal."
+    },
+    "toolbar": {
+      "filters": "Filtros",
+      "searchPlaceholder": "Buscar productos…",
+      "sortBy": "Ordenar por",
+      "noProducts": "Sin productos",
+      "productCount": "{count, plural, one {# producto} other {# productos}}",
+      "resultsRange": "{start, number}–{end, number} de {total, number}",
+      "filtersActive": "{count, plural, one {# filtro activo} other {# filtros activos}}",
+      "grid3": "Cuadrícula de 3 columnas",
+      "grid4": "Cuadrícula de 4 columnas"
+    },
+    "sort": {
+      "featured": "Destacados",
+      "newest": "Más recientes",
+      "priceAsc": "Precio: menor a mayor",
+      "priceDesc": "Precio: mayor a menor",
+      "rating": "Mejor valorados"
+    },
+    "filters": {
+      "categories": "Categorías",
+      "allCategories": "Todas las categorías",
+      "priceRange": "Rango de precio",
+      "rating": "Valoración",
+      "reviewCount": "Número de reseñas",
+      "min": "Mín",
+      "max": "Máx",
+      "quickFilters": "Filtros rápidos",
+      "newArrivalsOnly": "Solo novedades",
+      "onSaleOnly": "Solo en oferta",
+      "digitalOnly": "Solo productos digitales",
+      "clearAll": "Borrar todos los filtros"
+    },
+    "activeFilters": {
+      "search": "Búsqueda: \"{query}\"",
+      "newArrivals": "Novedades",
+      "onSale": "En oferta",
+      "priceRange": "{min} – {max}",
+      "ratingRange": "Valoración: {min} – {max}",
+      "reviewsRange": "Reseñas: {min} – {max}",
+      "digitalOnly": "Solo digital",
+      "clearAll": "Borrar todo"
+    },
+    "results": {
+      "salePageNote": "Mostrando artículos en oferta de la página actual de resultados.",
+      "loadFailed": "No se pudieron cargar los productos. Inténtalo de nuevo.",
+      "retry": "Reintentar",
+      "empty": "No se encontraron productos con estos criterios.",
+      "clearFilters": "Borrar filtros"
+    },
+    "pagination": {
+      "ariaLabel": "Paginación de la tienda",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "error": {
+      "title": "Algo salió mal",
+      "description": "No pudimos cargar la tienda ahora. Inténtalo de nuevo.",
+      "retry": "Reintentar"
     }
   },
   "pdp": {

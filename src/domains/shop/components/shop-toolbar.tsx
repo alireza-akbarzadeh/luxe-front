@@ -8,6 +8,7 @@ import {
   IconSearch
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,11 +20,18 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { sortOptions } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
 import { useProductFilters } from '../useProductFilters';
 import { FilterContent } from './filter-content';
+
+const SHOP_SORT_OPTIONS = [
+  { value: 'featured', labelKey: 'featured' },
+  { value: 'newest', labelKey: 'newest' },
+  { value: 'price-asc', labelKey: 'priceAsc' },
+  { value: 'price-desc', labelKey: 'priceDesc' },
+  { value: 'rating', labelKey: 'rating' }
+] as const;
 
 interface ShopToolbarProps {
   total: number;
@@ -34,6 +42,8 @@ interface ShopToolbarProps {
 
 export function ShopToolbar(props: ShopToolbarProps) {
   const { total, rangeStart, rangeEnd, isFetching = false } = props;
+  const t = useTranslations('shop.toolbar');
+  const tSort = useTranslations('shop.sort');
   const {
     sortBy,
     searchQuery,
@@ -47,10 +57,10 @@ export function ShopToolbar(props: ShopToolbarProps) {
 
   const resultsLabel =
     total === 0
-      ? 'No products'
+      ? t('noProducts')
       : total <= rangeEnd - rangeStart + 1
-        ? `${total} product${total === 1 ? '' : 's'}`
-        : `${rangeStart}–${rangeEnd} of ${total}`;
+        ? t('productCount', { count: total })
+        : t('resultsRange', { start: rangeStart, end: rangeEnd, total });
 
   return (
     <motion.div
@@ -64,9 +74,9 @@ export function ShopToolbar(props: ShopToolbarProps) {
           <SheetTrigger asChild>
             <Button variant='outline' className='gap-2 lg:hidden'>
               <IconArrowsHorizontal className='h-4 w-4' />
-              Filters
+              {t('filters')}
               {activeFilterCount > 0 && (
-                <span className='bg-accent text-accent-foreground ml-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold'>
+                <span className='bg-accent text-accent-foreground ms-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold tabular-nums'>
                   {activeFilterCount}
                 </span>
               )}
@@ -74,7 +84,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
           </SheetTrigger>
           <SheetContent side='left' className='w-80 overflow-y-auto'>
             <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
+              <SheetTitle>{t('filters')}</SheetTitle>
             </SheetHeader>
             <div className='mt-6 pb-8'>
               <FilterContent />
@@ -83,12 +93,12 @@ export function ShopToolbar(props: ShopToolbarProps) {
         </Sheet>
 
         <div className='relative min-w-0 flex-1 sm:w-72 sm:flex-initial'>
-          <IconSearch className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+          <IconSearch className='text-muted-foreground absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2' />
           <Input
-            placeholder='Search products...'
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className='pl-10'
+            className='ps-10'
           />
         </div>
       </div>
@@ -107,12 +117,12 @@ export function ShopToolbar(props: ShopToolbarProps) {
         <div className='flex items-center gap-3'>
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className='w-40 gap-2 sm:w-44'>
-              <SelectValue placeholder='Sort by' />
+              <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((option) => (
+              {SHOP_SORT_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {tSort(option.labelKey)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -124,7 +134,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
               size='icon'
               className='h-8 w-8'
               onClick={() => setGridCols(3)}
-              aria-label='3 column grid'
+              aria-label={t('grid3')}
             >
               <IconLayoutGridRemove className='h-4 w-4' />
             </Button>
@@ -133,7 +143,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
               size='icon'
               className='h-8 w-8'
               onClick={() => setGridCols(4)}
-              aria-label='4 column grid'
+              aria-label={t('grid4')}
             >
               <IconLayoutGrid className='h-4 w-4' />
             </Button>
@@ -143,7 +153,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
 
       {hasActiveFilters && (
         <p className='text-muted-foreground w-full text-xs sm:hidden'>
-          {activeFilterCount} filter{activeFilterCount === 1 ? '' : 's'} active
+          {t('filtersActive', { count: activeFilterCount })}
         </p>
       )}
     </motion.div>
