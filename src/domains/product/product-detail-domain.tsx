@@ -2,12 +2,17 @@
 
 import { IconChevronRight } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
+import { useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 import { useGetProductsId } from '~/src/services/-products-{id}-get';
 
 import { ProductAlternativesSection } from './components/product-alternatives-section';
+import {
+  ProductChatFab,
+  ProductChatSheet
+} from './components/product-chat-sheet';
 import ProductDescription from './components/product-description';
 import { ProductDetailSkeleton } from './components/product-detail-skeleton';
 import { ProductGallery } from './components/product-gallery';
@@ -22,6 +27,7 @@ import { hasCustomProductVideo } from './lib/product-media-utils';
 import { ProductReviewsSection } from './sections/product-reviews-section';
 
 export default function ProductDetailDomain({ productId }: { productId: string }) {
+  const [chatOpen, setChatOpen] = useState(false);
   const { data, isPending, isError } = useGetProductsId(productId);
 
   if (isPending) {
@@ -158,6 +164,9 @@ export default function ProductDetailDomain({ productId }: { productId: string }
         categoryId={product.category?.id}
         categoryName={product.category?.name}
       />
+
+      <ProductChatFab onClick={() => setChatOpen(true)} />
+      <ProductChatSheet open={chatOpen} onOpenChange={setChatOpen} product={product} />
     </div>
   );
 }

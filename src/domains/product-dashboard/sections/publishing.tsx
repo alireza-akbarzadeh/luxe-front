@@ -9,6 +9,9 @@ import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
+import { Typography } from '@/components/ui/typography';
+import { AiGenerateButton } from '@/domains/ai/components/ai-generate-button';
+import { AI_TASKS } from '@/domains/ai/lib/ai-tasks';
 import { cn } from '@/lib/utils';
 
 import { productDefaultValues } from '../product-schema';
@@ -47,6 +50,7 @@ export const PublishingStep = withForm({
   defaultValues: productDefaultValues,
   render: function PublishingStepRender({ form }) {
     const name = useStore(form.store, (s) => s.values.name);
+    const description = useStore(form.store, (s) => s.values.description);
     const seoTitle = useStore(form.store, (s) => s.values.seoTitle);
     const seoDescription = useStore(form.store, (s) => s.values.seoDescription);
 
@@ -227,11 +231,32 @@ export const PublishingStep = withForm({
 
         {/* ── SEO ───────────────────────────────────────────────────── */}
         <Flex direction='column' spacing={4}>
-          <Flex direction='column' spacing={0.5}>
-            <h3 className='text-foreground text-sm font-medium'>Search engine preview</h3>
-            <p className='text-muted-foreground text-xs'>
-              Customize how this product appears in search results.
-            </p>
+          <Flex direction='row' align='center' justify='between' wrap='wrap' spacing={2}>
+            <Flex direction='column' spacing={0.5}>
+              <Typography.Label>Search engine preview</Typography.Label>
+              <Typography.Muted className='text-xs'>
+                Customize how this product appears in search results.
+              </Typography.Muted>
+            </Flex>
+            <AiGenerateButton
+              label='Generate SEO'
+              task={AI_TASKS.seoMeta}
+              buildContext={() => ({
+                name,
+                description_snippet: description?.slice(0, 300) ?? ''
+              })}
+              onResult={(result) => {
+                if (result.fields?.['meta_title']) {
+                  form.setFieldValue('seoTitle', result.fields['meta_title']);
+                }
+                if (result.fields?.['meta_description']) {
+                  form.setFieldValue('seoDescription', result.fields['meta_description']);
+                } else if (result.text) {
+                  form.setFieldValue('seoDescription', result.text);
+                }
+              }}
+              disabled={!name?.trim()}
+            />
           </Flex>
 
           {/* Live SEO preview */}

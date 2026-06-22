@@ -66,6 +66,7 @@ export interface ModelsCategory {
   created_at?: string;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   is_active?: boolean;
   level?: number;
@@ -74,6 +75,7 @@ export interface ModelsCategory {
      * @maxLength 100
      */
   name: string;
+  nameI18n?: number[];
   /** Associations */
   parent?: ModelsCategory;
   parent_id?: number;
@@ -107,7 +109,12 @@ export interface ModelsUser {
      */
   last_name: string;
   phone?: string;
+  privacy_accepted_at?: string;
+  privacy_version?: string;
   role?: string;
+  /** Legal acceptance (set at registration) */
+  terms_accepted_at?: string;
+  terms_version?: string;
   updated_at?: string;
   workflow_state_id?: number;
 }
@@ -170,6 +177,7 @@ export interface ModelsProduct {
   created_by?: number;
   deleted_at?: GormDeletedAt;
   description?: string;
+  descriptionI18n?: number[];
   id?: number;
   images?: string[];
   is_digital?: boolean;
@@ -182,10 +190,12 @@ export interface ModelsProduct {
      * @maxLength 255
      */
   name: string;
+  nameI18n?: number[];
   price: number;
   published_at?: string;
   rating?: number;
   reviews_count?: number;
+  searchAliases?: number[];
   sizes?: string[];
   sku: string;
   slug: string;

@@ -195,6 +195,395 @@ module.exports = [
   },
   {
     "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-push-subscriptions-delete.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/subscriptions": {
+            "delete": {
+              "description": "Removes a Web Push subscription by endpoint for the current user",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.DeletePushSubscriptionRequest"
+                    }
+                  }
+                },
+                "description": "Push subscription endpoint",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Not Found"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Delete push subscription",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.DeletePushSubscriptionRequest": {
+              "properties": {
+                "endpoint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "endpoint"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-push-subscriptions-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/subscriptions": {
+            "post": {
+              "description": "Stores a Web Push subscription endpoint and keys for the current user",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.RegisterPushSubscriptionRequest"
+                    }
+                  }
+                },
+                "description": "Push subscription",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "201": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Created"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Register push subscription",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.RegisterPushSubscriptionRequest": {
+              "properties": {
+                "endpoint": {
+                  "type": "string"
+                },
+                "keys": {
+                  "$ref": "#/components/schemas/dto.PushSubscriptionKeys"
+                }
+              },
+              "required": [
+                "endpoint",
+                "keys"
+              ],
+              "type": "object"
+            },
+            "dto.PushSubscriptionKeys": {
+              "properties": {
+                "auth": {
+                  "type": "string"
+                },
+                "p256dh": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "auth",
+                "p256dh"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-push-test-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/account/push/test": {
+            "post": {
+              "description": "Sends a test push notification to all registered devices for the current user",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Send test push notification",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-account-summary-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -1901,6 +2290,291 @@ module.exports = [
   },
   {
     "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-ai-generate-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/ai/generate": {
+            "post": {
+              "description": "Generates product description, SEO metadata, or coupon copy for staff",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.AiGenerateRequest"
+                    }
+                  }
+                },
+                "description": "Generate request",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AiGenerateResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "429": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Too Many Requests"
+                },
+                "503": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Service Unavailable"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Generate AI copy",
+              "tags": [
+                "Admin AI"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.AiGenerateRequest": {
+              "properties": {
+                "context": {
+                  "additionalProperties": {},
+                  "type": "object"
+                },
+                "task": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "task"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AiGenerateResponse": {
+              "properties": {
+                "fields": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-ai-status-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/ai/status": {
+            "get": {
+              "description": "Returns AI provider configuration for admin UI",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AiStatusResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "AI status",
+              "tags": [
+                "Admin AI"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AiStatusResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "provider": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-audit-logs-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -2291,6 +2965,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -2298,6 +2975,9 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -2309,6 +2989,12 @@ module.exports = [
               "required": [
                 "name"
               ],
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
               "type": "object"
             },
             "dto.CategorySingleResponse": {
@@ -2353,6 +3039,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -2366,6 +3058,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -2474,6 +3172,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -2503,6 +3207,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -2514,6 +3224,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -2833,7 +3549,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -3194,6 +3923,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -3201,6 +3933,9 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -3212,6 +3947,12 @@ module.exports = [
               "required": [
                 "name"
               ],
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
               "type": "object"
             },
             "dto.BulkCreateCategoryResponse": {
@@ -3259,6 +4000,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -3272,6 +4019,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -3380,6 +4133,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -3409,6 +4168,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -3420,6 +4185,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -3739,7 +4510,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -4142,6 +4926,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -4155,6 +4945,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -4263,6 +5059,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -4292,6 +5094,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -4303,6 +5111,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -4622,7 +5436,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -4837,6 +5664,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "is_active": {
                   "type": "boolean"
                 },
@@ -4845,12 +5675,21 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -4896,6 +5735,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -4909,6 +5754,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -5017,6 +5868,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -5046,6 +5903,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -5057,6 +5920,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -5376,7 +6245,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -14194,6 +15076,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -14206,6 +15091,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -14215,6 +15103,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -14569,6 +15463,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -14581,6 +15478,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -14590,6 +15490,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -14865,6 +15771,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -14877,6 +15786,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -14886,6 +15798,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -17200,6 +18118,191 @@ module.exports = [
   },
   {
     "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-ai-chat-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/ai/chat": {
+            "post": {
+              "description": "Grounded product assistant chat for shoppers (guest or authenticated)",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.AiChatRequest"
+                    }
+                  }
+                },
+                "description": "Chat request",
+                "required": true,
+                "x-originalParamName": "body"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.AiChatResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Bad Request"
+                },
+                "429": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Too Many Requests"
+                },
+                "503": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Service Unavailable"
+                }
+              },
+              "summary": "Product AI chat",
+              "tags": [
+                "AI"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.AiChatRequest": {
+              "properties": {
+                "messages": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.AiChatMessage"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "product_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "messages",
+                "product_id"
+              ],
+              "type": "object"
+            },
+            "dto.AiChatMessage": {
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "content",
+                "role"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.AiChatResponse": {
+              "properties": {
+                "reply": {
+                  "type": "string"
+                },
+                "sources": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-auth-change-password-post.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -17972,6 +19075,12 @@ module.exports = [
           "schemas": {
             "dto.RegisterRequest": {
               "properties": {
+                "accept_privacy": {
+                  "type": "boolean"
+                },
+                "accept_terms": {
+                  "type": "boolean"
+                },
                 "email": {
                   "type": "string"
                 },
@@ -17994,6 +19103,8 @@ module.exports = [
                 }
               },
               "required": [
+                "accept_privacy",
+                "accept_terms",
                 "email",
                 "first_name",
                 "last_name",
@@ -20366,6 +21477,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -20379,6 +21496,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -20487,6 +21610,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -20516,6 +21645,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -20527,6 +21662,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -20846,7 +21987,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -21061,6 +22215,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -21074,6 +22234,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -21182,6 +22348,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -21211,6 +22383,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -21222,6 +22400,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -21541,7 +22725,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -22003,6 +23200,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -22032,6 +23235,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -22043,6 +23252,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -22239,6 +23454,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -22252,6 +23473,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -22432,7 +23659,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -24038,6 +25278,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "discount_percent": {
                   "type": "number"
                 },
@@ -24067,6 +25310,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -24227,6 +25473,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -24239,6 +25488,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -24248,6 +25500,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -26777,6 +28035,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -26798,6 +28059,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -26807,6 +28071,12 @@ module.exports = [
                 "viewAll": {
                   "$ref": "#/components/schemas/dto.ViewAll"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -26820,6 +28090,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26831,6 +28104,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26840,8 +28116,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -26851,6 +28133,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26862,6 +28147,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -26960,6 +28248,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -26977,6 +28268,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -26998,6 +28292,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "dto.Column": {
               "properties": {
                 "links": {
@@ -27008,6 +28308,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27019,6 +28322,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27028,8 +28334,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27039,6 +28351,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27050,6 +28365,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27076,6 +28394,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27096,6 +28417,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -27436,6 +28760,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27457,6 +28784,9 @@ module.exports = [
                 "label": {
                   "type": "string"
                 },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "order": {
                   "type": "integer"
                 },
@@ -27466,6 +28796,12 @@ module.exports = [
                 "viewAll": {
                   "$ref": "#/components/schemas/dto.ViewAll"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -27479,6 +28815,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27490,6 +28829,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27499,8 +28841,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27510,6 +28858,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27521,6 +28872,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27630,6 +28984,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27647,6 +29004,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -27668,6 +29028,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "dto.Column": {
               "properties": {
                 "links": {
@@ -27678,6 +29044,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27689,6 +29058,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27698,8 +29070,14 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "description": {
                   "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "href": {
                   "type": "string"
@@ -27709,6 +29087,9 @@ module.exports = [
                 },
                 "title": {
                   "type": "string"
+                },
+                "titleI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27720,6 +29101,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 }
               },
               "type": "object"
@@ -27746,6 +29130,9 @@ module.exports = [
                 "badge": {
                   "type": "string"
                 },
+                "badgeI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "columns": {
                   "items": {
                     "$ref": "#/components/schemas/dto.Column"
@@ -27766,6 +29153,9 @@ module.exports = [
                 },
                 "label": {
                   "type": "string"
+                },
+                "labelI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "order": {
                   "type": "integer"
@@ -28364,6 +29754,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -28393,6 +29789,12 @@ module.exports = [
                   "minLength": 2,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "price": {
                   "type": "number"
                 },
@@ -28404,6 +29806,12 @@ module.exports = [
                 },
                 "reviews_count": {
                   "type": "integer"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -28600,6 +30008,12 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -28613,6 +30027,12 @@ module.exports = [
                   "maxLength": 100,
                   "minLength": 2,
                   "type": "string"
+                },
+                "nameI18n": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
                 },
                 "parent": {
                   "allOf": [
@@ -28793,7 +30213,20 @@ module.exports = [
                 "phone": {
                   "type": "string"
                 },
+                "privacy_accepted_at": {
+                  "type": "string"
+                },
+                "privacy_version": {
+                  "type": "string"
+                },
                 "role": {
+                  "type": "string"
+                },
+                "terms_accepted_at": {
+                  "description": "Legal acceptance (set at registration)",
+                  "type": "string"
+                },
+                "terms_version": {
                   "type": "string"
                 },
                 "updated_at": {
@@ -30049,6 +31482,112 @@ module.exports = [
   },
   {
     "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-payments-stripe-config-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/payments/stripe-config": {
+            "get": {
+              "description": "Returns whether Stripe is enabled and the publishable key for client-side checkout.",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.StripeConfigResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Get Stripe client configuration",
+              "tags": [
+                "Payment"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StripeConfigResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "publishable_key": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-products-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -30369,6 +31908,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -30398,6 +31940,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -30543,6 +32088,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -30555,6 +32103,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -30564,6 +32115,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -30783,6 +32340,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -30809,12 +32369,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -30889,6 +32458,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -30956,6 +32531,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -30982,6 +32560,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -31127,6 +32708,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31138,6 +32722,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -31518,6 +33105,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -31544,12 +33134,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -31624,6 +33223,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -31691,6 +33296,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31717,6 +33325,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -31862,6 +33473,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -31873,6 +33487,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -32129,6 +33746,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32155,6 +33775,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -32300,6 +33923,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32312,6 +33938,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -32321,6 +33950,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -32698,6 +34333,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32724,6 +34362,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -32869,6 +34510,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -32881,6 +34525,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -32890,6 +34537,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -33130,6 +34783,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "images": {
                   "items": {
                     "type": "string"
@@ -33156,12 +34812,21 @@ module.exports = [
                   "minLength": 3,
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "price": {
                   "minimum": 0,
                   "type": "number"
                 },
                 "published_at": {
                   "type": "string"
+                },
+                "searchAliases": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
                 },
                 "sizes": {
                   "items": {
@@ -33231,6 +34896,12 @@ module.exports = [
               ],
               "type": "object"
             },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
             "utils.Response": {
               "properties": {
                 "code": {
@@ -33298,6 +34969,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33324,6 +34998,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -33469,6 +35146,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33480,6 +35160,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "parent_id": {
                   "type": "integer"
@@ -33714,6 +35397,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33740,6 +35426,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -33897,6 +35586,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -33909,6 +35601,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -33918,6 +35613,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -35392,6 +37093,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -35418,6 +37122,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -35563,6 +37270,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -35575,6 +37285,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -35584,6 +37297,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -36210,6 +37929,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -36236,6 +37958,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -36381,6 +38106,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -36393,6 +38121,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -36402,6 +38133,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -36790,6 +38527,112 @@ module.exports = [
                 },
                 "success": {
                   "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-push-vapid-public-key-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/push/vapid-public-key": {
+            "get": {
+              "description": "Returns the public VAPID key used by the browser PushManager.subscribe()",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.VapidPublicKeyResponse"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "summary": "Get VAPID public key",
+              "tags": [
+                "Push"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.VapidPublicKeyResponse": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "public_key": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -38251,6 +40094,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -38263,6 +40109,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -38272,6 +40121,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -38325,6 +40180,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -38351,6 +40209,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -41441,6 +43302,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -41453,6 +43317,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -41462,6 +43329,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -41652,6 +43525,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -41664,6 +43540,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -41673,6 +43552,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }
@@ -42217,6 +44102,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -42243,6 +44131,9 @@ module.exports = [
                 },
                 "name": {
                   "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
                 },
                 "price": {
                   "type": "number"
@@ -42388,6 +44279,9 @@ module.exports = [
                 "description": {
                   "type": "string"
                 },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "id": {
                   "type": "integer"
                 },
@@ -42400,6 +44294,9 @@ module.exports = [
                 "name": {
                   "type": "string"
                 },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
                 "parent_id": {
                   "type": "integer"
                 },
@@ -42409,6 +44306,12 @@ module.exports = [
                 "slug": {
                   "type": "string"
                 }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             },
@@ -44184,6 +46087,226 @@ module.exports = [
                 "success": {
                   "type": "boolean"
                 }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-vendor-stores-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/vendor/stores": {
+            "get": {
+              "description": "Returns stores owned by the current seller, or all stores for admins/moderators",
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "items": {
+                                  "$ref": "#/components/schemas/dto.StoreResponse"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                },
+                "401": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Unauthorized"
+                },
+                "500": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "Internal Server Error"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List vendor stores",
+              "tags": [
+                "Vendor"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StoreResponse": {
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "$ref": "#/components/schemas/dto.CategoryResponse"
+                  },
+                  "type": "array"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "follower_count": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_followed": {
+                  "type": "boolean"
+                },
+                "is_verified": {
+                  "type": "boolean"
+                },
+                "joined_at": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "rating": {
+                  "type": "number"
+                },
+                "return_policy": {
+                  "type": "string"
+                },
+                "review_count": {
+                  "type": "integer"
+                },
+                "shipping_info": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dto.CategoryResponse": {
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "descriptionI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_active": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "nameI18n": {
+                  "$ref": "#/components/schemas/i18n.LocalizedMap"
+                },
+                "parent_id": {
+                  "type": "integer"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "i18n.LocalizedMap": {
+              "additionalProperties": {
+                "type": "string"
               },
               "type": "object"
             }

@@ -21,6 +21,8 @@ export interface DtoProductAttributeInput {
   values: string[];
 }
 
+export interface I18nLocalizedMap {[key: string]: string}
+
 export interface DtoUpdateProductRequest {
   allow_backorder?: boolean;
   attributes?: DtoProductAttributeInput[];
@@ -34,6 +36,7 @@ export interface DtoUpdateProductRequest {
   /** @minimum 0 */
   cost?: number;
   description?: string;
+  descriptionI18n?: I18nLocalizedMap;
   images?: string[];
   is_digital?: boolean;
   is_new?: boolean;
@@ -45,9 +48,11 @@ export interface DtoUpdateProductRequest {
      * @maxLength 255
      */
   name?: string;
+  nameI18n?: I18nLocalizedMap;
   /** @minimum 0 */
   price?: number;
   published_at?: string;
+  searchAliases?: string[];
   sizes?: string[];
   /**
      * @minLength 3
@@ -103,10 +108,12 @@ export interface DtoBrandResponse {
 
 export interface DtoCategoryResponse {
   description?: string;
+  descriptionI18n?: I18nLocalizedMap;
   id?: number;
   is_active?: boolean;
   level?: number;
   name?: string;
+  nameI18n?: I18nLocalizedMap;
   parent_id?: number;
   path?: string;
   slug?: string;
@@ -140,6 +147,7 @@ export interface DtoProductResponse {
   cost?: number;
   created_at?: string;
   description?: string;
+  descriptionI18n?: I18nLocalizedMap;
   id?: number;
   images?: string[];
   is_digital?: boolean;
@@ -148,6 +156,7 @@ export interface DtoProductResponse {
   meta_description?: string;
   meta_title?: string;
   name?: string;
+  nameI18n?: I18nLocalizedMap;
   price?: number;
   published_at?: string;
   rating?: number;
