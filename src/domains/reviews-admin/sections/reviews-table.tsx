@@ -1,0 +1,111 @@
+'use client';
+
+import { useCallback } from 'react';
+
+import type { TableState } from '@/components/table/data-table';
+import { Table, useServerTable } from '@/components/table/data-table';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useReviewsQueryState } from '@/domains/reviews-admin/hooks/use-reviews-query';
+import {
+  type DtoAdminReviewResponse,
+  type GetAdminReviews200,
+  getReviewsFromListResponse,
+  getReviewsTotalFromListResponse
+} from '@/domains/reviews-admin/lib/review-list';
+import type { ReviewStatusFilter } from '@/domains/reviews-admin/reviews.schema';
+import { REVIEW_STATUS_TABS } from '@/domains/reviews-admin/reviews.schema';
+import {
+  reviewColumns,
+  reviewRowMenuActions
+} from '@/domains/reviews-admin/sections/reviews-columns';
+import { useGetAdminReviews } from '@/services/-admin-reviews-get';
+
+export function ReviewsTable() {
+  const { status, setStatus } = useReviewsQueryState();
+
+  const getQueryParams = useCallback(
+    (state: TableState) => ({
+      limit: state.pagination.pageSize,
+      offset: state.pagination.pageIndex * state.pagination.pageSize,
+      status: status === 'all' ? undefined : status
+    }),
+    [status]
+  );
+
+  const getRows = useCallback(
+    (data: GetAdminReviews200 | undefined) => getReviewsFromListResponse(data),
+    []
+  );
+
+  const getTotal = useCallback(
+    (data: GetAdminReviews200 | undefined) => getReviewsTotalFromListResponse(data),
+    []
+  );
+
+  const serverTable = useServerTable({
+    columns: reviewColumns,
+    initialPageSize: 20,
+    getQueryParams: (state) => getQueryParams(state),
+    getRows,
+    getTotal,
+    useQuery: useGetAdminReviews,
+    manualFiltering: false
+  });
+
+  if (serverTable.isError) {
+    return (
+      <div className='rounded-xl border border-dashed p-12 text-center'>
+        <p className='text-lg font-semibold'>Reviews unavailable</p>
+        <p className='text-muted-foreground mt-1 text-sm'>Check your connection and try again.</p>
+        <Button className='mt-4' variant='outline' onClick={() => serverTable.refetch()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Table.Root {...serverTable.rootProps}>
+      <Tabs
+        value={status}
+        onValueChange={(value) => void setStatus(value as ReviewStatusFilter)}
+        className='px-1'
+      >
+        <TabsList className='mb-3 h-auto flex-wrap'>
+          {REVIEW_STATUS_TABS.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      <Table.Toolbar
+        showSearch={false}
+        showRefresh
+        onRefresh={serverTable.refetch}
+        isLoading={serverTable.isFetching}
+        showClear={false}
+        showColumnVisibility
+        showSorting={false}
+        showExport={false}
+        showBulkActions={false}
+      />
+
+      <Table.Grid<DtoAdminReviewResponse>
+        isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+        extendMenuActions={(row) =>
+          reviewRowMenuActions(row.original, () => void serverTable.refetch())
+        }
+      />
+
+      <Table.Pagination
+        showPageSize
+        showTotalRows
+        showJumpToPage
+        pageSizeOptions={[10, 20, 50, 100]}
+      />
+    </Table.Root>
+  );
+}

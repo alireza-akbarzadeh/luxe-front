@@ -23,6 +23,17 @@ export interface UtilsResponse {
   success?: boolean;
 }
 
+export interface DtoStateView {
+  code?: string;
+  color?: string;
+  id?: number;
+  is_final?: boolean;
+  is_initial?: boolean;
+  name?: string;
+  sort_order?: number;
+  text_color?: string;
+}
+
 export interface DtoReviewResponse {
   author?: string;
   comment?: string;
@@ -32,9 +43,12 @@ export interface DtoReviewResponse {
   is_verified?: boolean;
   product_id?: number;
   rating?: number;
+  state?: DtoStateView;
+  status?: string;
   title?: string;
   updated_at?: string;
   user_id?: number;
+  workflow_state_id?: number;
 }
 
 export type PostReviews201 = UtilsResponse & {

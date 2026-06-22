@@ -12666,6 +12666,317 @@ module.exports = [
   },
   {
     "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-reviews-get.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/reviews": {
+            "get": {
+              "description": "Paginated list of product reviews with optional status and product filters",
+              "parameters": [
+                {
+                  "description": "Filter by status (pending, approved, rejected)",
+                  "in": "query",
+                  "name": "status",
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "description": "Filter by product ID",
+                  "in": "query",
+                  "name": "product_id",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Items per page",
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "description": "Offset",
+                  "in": "query",
+                  "name": "offset",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/utils.Response"
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "List product reviews (admin)",
+              "tags": [
+                "Reviews"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
+      "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-reviews-{id}-transition-post.ts",
+      "client": "react-query",
+      "httpClient": "axios",
+      "mode": "split",
+      "prettier": true,
+      "override": {
+        "mutator": {
+          "path": "../lib/api/api-client.ts",
+          "name": "customInstance"
+        }
+      }
+    },
+    "input": {
+      "target": {
+        "openapi": "3.0.3",
+        "info": {
+          "contact": {
+            "email": "support@luxe.com",
+            "name": "API Support"
+          },
+          "description": "Production-grade e-commerce backend",
+          "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+          },
+          "termsOfService": "http://swagger.io/terms/",
+          "title": "Shopping Platform API",
+          "version": "1.0"
+        },
+        "servers": [
+          {
+            "url": "https://localhost:8080/api/v1"
+          }
+        ],
+        "paths": {
+          "/admin/reviews/{id}/transition": {
+            "post": {
+              "description": "Approve or reject a product review via workflow events (approve, reject)",
+              "parameters": [
+                {
+                  "description": "Review ID",
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              ],
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/dto.PerformReviewTransitionRequest"
+                    }
+                  }
+                },
+                "description": "Transition event",
+                "required": true,
+                "x-originalParamName": "request"
+              },
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/utils.Response"
+                          },
+                          {
+                            "properties": {
+                              "data": {
+                                "$ref": "#/components/schemas/dto.TransitionResultView"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "description": "OK"
+                }
+              },
+              "security": [
+                {
+                  "BearerAuth": []
+                }
+              ],
+              "summary": "Transition review state (admin)",
+              "tags": [
+                "Reviews"
+              ]
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "dto.PerformReviewTransitionRequest": {
+              "properties": {
+                "event": {
+                  "maxLength": 64,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "note": {
+                  "maxLength": 512,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "type": "object"
+            },
+            "utils.Response": {
+              "properties": {
+                "code": {
+                  "type": "integer"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "dto.TransitionResultView": {
+              "properties": {
+                "entity_id": {
+                  "type": "integer"
+                },
+                "entity_type": {
+                  "type": "string"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "from_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "to_state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "output": {
       "target": "A:\\workshop\\full-stack-luxe\\luxe-front\\src\\services/-admin-roles-get.ts",
       "client": "react-query",
       "httpClient": "axios",
@@ -39407,6 +39718,12 @@ module.exports = [
                 "rating": {
                   "type": "integer"
                 },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
                 "title": {
                   "type": "string"
                 },
@@ -39415,6 +39732,38 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -39556,6 +39905,12 @@ module.exports = [
                 "rating": {
                   "type": "integer"
                 },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
                 "title": {
                   "type": "string"
                 },
@@ -39564,6 +39919,38 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
@@ -39832,6 +40219,12 @@ module.exports = [
                 "rating": {
                   "type": "integer"
                 },
+                "state": {
+                  "$ref": "#/components/schemas/dto.StateView"
+                },
+                "status": {
+                  "type": "string"
+                },
                 "title": {
                   "type": "string"
                 },
@@ -39840,6 +40233,38 @@ module.exports = [
                 },
                 "user_id": {
                   "type": "integer"
+                },
+                "workflow_state_id": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "dto.StateView": {
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "is_final": {
+                  "type": "boolean"
+                },
+                "is_initial": {
+                  "type": "boolean"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "sort_order": {
+                  "type": "integer"
+                },
+                "text_color": {
+                  "type": "string"
                 }
               },
               "type": "object"
