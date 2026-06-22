@@ -13,11 +13,13 @@
   "nav": {
     "openMenu": "باز کردن منو",
     "closeMenu": "بستن منو",
+    "apps": "دریافت اپ لوکس",
     "mobile": {
       "more": "بیشتر",
       "notifications": "اعلان‌ها",
       "stores": "فروشگاه‌ها",
       "wishlist": "علاقه‌مندی‌ها",
+      "apps": "دریافت اپ لوکس",
       "account": "حساب من",
       "shopAllProducts": "مشاهده همه محصولات"
     },

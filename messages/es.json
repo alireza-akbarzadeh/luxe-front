@@ -13,11 +13,13 @@
   "nav": {
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
+    "apps": "Descargar app de Luxe",
     "mobile": {
       "more": "Más",
       "notifications": "Notificaciones",
       "stores": "Tiendas",
       "wishlist": "Favoritos",
+      "apps": "Descargar app de Luxe",
       "account": "Mi cuenta",
       "shopAllProducts": "Ver todos los productos"
     },

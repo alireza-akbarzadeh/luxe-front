@@ -28,6 +28,7 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
     { label: t('notifications'), href: '/notifications' },
     { label: t('stores'), href: '/store' },
     { label: t('wishlist'), href: '/wishlist' },
+    { label: t('apps'), href: '/apps' },
     { label: t('account'), href: '/account' }
   ] as const;
 

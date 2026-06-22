@@ -14,6 +14,7 @@ import { useSearchStore } from '@/domains/search/search.store';
 
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
+import { AppsButton } from './apps-button';
 import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
 import { NavbarActionButton } from './navbar-action-button';
@@ -81,6 +82,8 @@ export function Navbar() {
               </NavbarActionButton>
 
               <WishlistButton />
+
+              <AppsButton />
 
               <NotificationButton />
 

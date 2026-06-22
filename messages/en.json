@@ -13,11 +13,13 @@
   "nav": {
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
+    "apps": "Get Luxe app",
     "mobile": {
       "more": "More",
       "notifications": "Notifications",
       "stores": "Stores",
       "wishlist": "Wishlist",
+      "apps": "Get Luxe app",
       "account": "My Account",
       "shopAllProducts": "Shop all products"
     },
