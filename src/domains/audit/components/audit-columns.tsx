@@ -1,9 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { AuditActionBadge } from '@/domains/audit/components/audit-action-badge';
+import type { DtoAuditLogResponse } from '@/domains/audit/lib/audit-types';
 import { DATE_FORMATS, formatDate, timeFromNow } from '@/lib/date';
 import { cn } from '@/lib/utils';
-import type { DtoAuditLogResponse } from '@/services/-admin-audit-logs-get.schemas';
 
 function shortenResource(resource: string) {
   return resource.replace('/api/v1', '').replace(/\/:id/g, '') || resource;
@@ -18,7 +18,9 @@ export const auditColumns: ColumnDef<DtoAuditLogResponse>[] = [
       if (!createdAt) return '—';
       return (
         <div className='flex flex-col'>
-          <span className='text-xs font-medium'>{formatDate(createdAt, DATE_FORMATS.WITH_TIME)}</span>
+          <span className='text-xs font-medium'>
+            {formatDate(createdAt, DATE_FORMATS.WITH_TIME)}
+          </span>
           <span className='text-muted-foreground text-[10px]'>{timeFromNow(createdAt)}</span>
         </div>
       );
@@ -72,7 +74,9 @@ export const auditColumns: ColumnDef<DtoAuditLogResponse>[] = [
     accessorKey: 'ip_address',
     header: 'IP',
     cell: ({ row }) => (
-      <span className={cn('font-mono text-[11px]', !row.original.ip_address && 'text-muted-foreground')}>
+      <span
+        className={cn('font-mono text-[11px]', !row.original.ip_address && 'text-muted-foreground')}
+      >
         {row.original.ip_address || '—'}
       </span>
     )

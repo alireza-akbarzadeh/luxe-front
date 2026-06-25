@@ -1,7 +1,7 @@
 import type { ShippingProviderFormValues } from '@/domains/shipping-providers/shipping-provider.schema';
-import type { DtoCreateShippingProviderRequest } from '@/services/-shipping-providers-post.schemas';
 import type { DtoUpdateShippingProviderRequest } from '@/services/-shipping-providers-{id}-put.schemas';
 import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
+import type { DtoCreateShippingProviderRequest } from '@/services/-shipping-providers-post.schemas';
 
 function optionalText(value: string | undefined): string | undefined {
   const trimmed = value?.trim();

@@ -8,18 +8,21 @@ import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useInvoicesQueryState } from '@/domains/invoices-admin/hooks/use-invoices-query';
+import type { InvoiceStatusFilter } from '@/domains/invoices-admin/invoices.schema';
+import { INVOICE_STATUS_TABS } from '@/domains/invoices-admin/invoices.schema';
 import {
   getInvoicesFromListResponse,
   getInvoicesTotalFromListResponse
 } from '@/domains/invoices-admin/lib/invoice-list';
-import type { InvoiceStatusFilter } from '@/domains/invoices-admin/invoices.schema';
-import { INVOICE_STATUS_TABS } from '@/domains/invoices-admin/invoices.schema';
 import {
   invoiceColumns,
   invoiceRowMenuActions
 } from '@/domains/invoices-admin/sections/invoices-columns';
 import { useGetAdminInvoices } from '@/services/-admin-invoices-get';
-import type { DtoAdminInvoiceListItem, GetAdminInvoices200 } from '@/services/-admin-invoices-get.schemas';
+import type {
+  DtoAdminInvoiceListItem,
+  GetAdminInvoices200
+} from '@/services/-admin-invoices-get.schemas';
 
 export function InvoicesTable() {
   const router = useRouter();

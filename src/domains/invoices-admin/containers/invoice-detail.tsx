@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -16,21 +16,21 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { downloadInvoicePdf } from '@/domains/invoices-admin/lib/invoice-export';
 import { InvoiceStatusBadge } from '@/domains/invoices-admin/components/invoice-status-badge';
 import { INVOICE_STATUS_OPTIONS } from '@/domains/invoices-admin/invoices.schema';
+import { downloadInvoicePdf } from '@/domains/invoices-admin/lib/invoice-export';
 import { ApiPaymentStatusBadge } from '@/domains/orders/components/order-api-badges';
 import { OrderLineItems } from '@/domains/orders/sections/order-line-items';
 import { formatCurrency } from '@/lib/format';
-import { getGetAdminInvoicesQueryKey } from '@/services/-admin-invoices-get';
 import {
   getGetAdminInvoicesIdQueryKey,
   useGetAdminInvoicesId
 } from '@/services/-admin-invoices-{id}-get';
+import type { DtoInvoiceDetailResponse } from '@/services/-admin-invoices-{id}-get.schemas';
 import { usePostAdminInvoicesIdSend } from '@/services/-admin-invoices-{id}-send-post';
 import { usePutAdminInvoicesIdStatus } from '@/services/-admin-invoices-{id}-status-put';
-import type { DtoInvoiceDetailResponse } from '@/services/-admin-invoices-{id}-get.schemas';
 import type { DtoUpdateInvoiceStatusRequest } from '@/services/-admin-invoices-{id}-status-put.schemas';
+import { getGetAdminInvoicesQueryKey } from '@/services/-admin-invoices-get';
 import type { DtoAdminOrderItemView } from '@/services/-orders-{id}-get.schemas';
 
 import { InvoiceDetailSkeleton } from '../sections/invoice-detail-skeleton';
@@ -97,30 +97,23 @@ export function InvoiceDetailDomain({ invoiceId }: InvoiceDetailDomainProps) {
     notFound();
   }
 
-  return (
-    <InvoiceDetailView invoice={invoice} onStatusChange={invalidateInvoiceQueries} />
-  );
+  return <InvoiceDetailView invoice={invoice} onStatusChange={invalidateInvoiceQueries} />;
 }
 
-function InvoiceDetailView({
-  invoice,
+function InvoiceStatusUpdate({
+  invoiceId,
+  status,
   onStatusChange
 }: {
-  invoice: DtoInvoiceDetailResponse;
+  invoiceId: number;
+  status?: string;
   onStatusChange: () => void;
 }) {
-  const invoiceId = invoice.id!;
-  const [selectedStatus, setSelectedStatus] = useState(invoice.status ?? 'issued');
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(status ?? 'issued');
   const { mutateAsync: updateStatus, isPending } = usePutAdminInvoicesIdStatus();
-  const { mutateAsync: sendInvoice, isPending: isSending } = usePostAdminInvoicesIdSend();
-
-  useEffect(() => {
-    setSelectedStatus(invoice.status ?? 'issued');
-  }, [invoice.status]);
 
   const handleStatusUpdate = async () => {
-    if (!selectedStatus || selectedStatus === invoice.status) return;
+    if (!selectedStatus || selectedStatus === status) return;
 
     try {
       await updateStatus({
@@ -133,6 +126,45 @@ function InvoiceDetailView({
       toast.error('Failed to update invoice status');
     }
   };
+
+  return (
+    <div className='bg-card border-border/40 space-y-4 rounded-2xl border p-6 shadow-sm'>
+      <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
+        Update status
+      </h2>
+      <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+        <SelectTrigger>
+          <SelectValue placeholder='Select status' />
+        </SelectTrigger>
+        <SelectContent>
+          {INVOICE_STATUS_OPTIONS.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button
+        className='w-full'
+        disabled={isPending || selectedStatus === status}
+        onClick={() => void handleStatusUpdate()}
+      >
+        {isPending ? 'Saving…' : 'Save status'}
+      </Button>
+    </div>
+  );
+}
+
+function InvoiceDetailView({
+  invoice,
+  onStatusChange
+}: {
+  invoice: DtoInvoiceDetailResponse;
+  onStatusChange: () => void;
+}) {
+  const invoiceId = invoice.id!;
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { mutateAsync: sendInvoice, isPending: isSending } = usePostAdminInvoicesIdSend();
 
   const handleDownloadPdf = async () => {
     setIsDownloading(true);
@@ -247,7 +279,9 @@ function InvoiceDetailView({
               <div className='text-muted-foreground mt-4 space-y-2 text-xs'>
                 <div className='flex justify-between gap-4'>
                   <span>Subtotal</span>
-                  <span className='tabular-nums'>{formatCurrency(invoice.subtotal ?? 0, currency)}</span>
+                  <span className='tabular-nums'>
+                    {formatCurrency(invoice.subtotal ?? 0, currency)}
+                  </span>
                 </div>
                 <div className='flex justify-between gap-4'>
                   <span>Shipping</span>
@@ -257,7 +291,9 @@ function InvoiceDetailView({
                 </div>
                 <div className='flex justify-between gap-4'>
                   <span>Tax</span>
-                  <span className='tabular-nums'>{formatCurrency(invoice.tax_amount ?? 0, currency)}</span>
+                  <span className='tabular-nums'>
+                    {formatCurrency(invoice.tax_amount ?? 0, currency)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -268,7 +304,9 @@ function InvoiceDetailView({
               </h2>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Name</span>
-                <span className='text-right text-xs font-semibold'>{invoice.billing_name ?? '—'}</span>
+                <span className='text-right text-xs font-semibold'>
+                  {invoice.billing_name ?? '—'}
+                </span>
               </div>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Email</span>
@@ -280,7 +318,9 @@ function InvoiceDetailView({
               </div>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Method</span>
-                <span className='text-xs font-semibold capitalize'>{invoice.payment_method ?? '—'}</span>
+                <span className='text-xs font-semibold capitalize'>
+                  {invoice.payment_method ?? '—'}
+                </span>
               </div>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Paid</span>
@@ -288,30 +328,12 @@ function InvoiceDetailView({
               </div>
             </div>
 
-            <div className='bg-card border-border/40 space-y-4 rounded-2xl border p-6 shadow-sm'>
-              <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
-                Update status
-              </h2>
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Select status' />
-                </SelectTrigger>
-                <SelectContent>
-                  {INVOICE_STATUS_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                className='w-full'
-                disabled={isPending || selectedStatus === invoice.status}
-                onClick={() => void handleStatusUpdate()}
-              >
-                {isPending ? 'Saving…' : 'Save status'}
-              </Button>
-            </div>
+            <InvoiceStatusUpdate
+              key={invoice.status ?? 'issued'}
+              invoiceId={invoiceId}
+              status={invoice.status}
+              onStatusChange={onStatusChange}
+            />
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface ControllersRefreshRequest {
+export interface HandlersRefreshRequest {
   refresh_token: string;
 }
 

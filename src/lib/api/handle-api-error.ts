@@ -1,16 +1,9 @@
 import { AxiosError, type AxiosRequestConfig, HttpStatusCode } from 'axios';
 import { toast } from 'sonner';
 
-import {
-  extractErrorMessage,
-  getServerErrorMessage,
-  isNetworkError
-} from '@/lib/api/api-utils';
+import { extractErrorMessage, getServerErrorMessage, isNetworkError } from '@/lib/api/api-utils';
 import { logger } from '@/lib/api/logger';
-import {
-  formatErrorMessage,
-  getErrorMessages
-} from '@/lib/i18n/error-messages';
+import { formatErrorMessage, getErrorMessages } from '@/lib/i18n/error-messages';
 import { getClientLocaleFromCookie } from '@/lib/i18n/request-locale';
 
 import type { ApiClientOptions, ApiErrorResponse } from './type';
@@ -18,7 +11,6 @@ import type { ApiClientOptions, ApiErrorResponse } from './type';
 function responseHasPayload(error: AxiosError<ApiErrorResponse>): boolean {
   const data = error.response?.data;
   if (data == null) return false;
-  if (typeof data === 'string') return data.length > 0;
   if (typeof data === 'object') return Object.keys(data).length > 0;
   return false;
 }
@@ -73,9 +65,7 @@ export const handleApiError = (
       break;
 
     case HttpStatusCode.Forbidden:
-      toast.error(
-        resolveToastMessage(axiosError, serverMessage, detail, t.forbiddenFallback)
-      );
+      toast.error(resolveToastMessage(axiosError, serverMessage, detail, t.forbiddenFallback));
       break;
 
     case HttpStatusCode.TooManyRequests: {

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 
-import { Flex } from '@/components/ui/flex';
 import { Button } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
 import { ShipmentsKPICards } from '@/domains/shipments-admin/sections/shipments-kpi-cards';
 import { ShipmentsTable } from '@/domains/shipments-admin/sections/shipments-table';
 
@@ -14,7 +14,8 @@ export function ShipmentsAdminDomain() {
         <div>
           <h1 className='text-2xl font-semibold tracking-tight'>Shipments</h1>
           <p className='text-muted-foreground mt-1 text-sm'>
-            Track fulfillment, monitor carrier status, and advance shipments through delivery workflow.
+            Track fulfillment, monitor carrier status, and advance shipments through delivery
+            workflow.
           </p>
         </div>
         <Button variant='outline' size='sm' asChild>

@@ -5,7 +5,7 @@
  * Production-grade e-commerce backend
  * OpenAPI spec version: 1.0
  */
-export interface ServicesAddItemRequest {
+export interface CartAddItemRequest {
   color?: string;
   product_id: number;
   quantity: number;

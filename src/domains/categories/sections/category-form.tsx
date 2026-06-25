@@ -25,9 +25,9 @@ import {
   useGetAdminCategoriesId
 } from '@/services/-admin-categories-{id}-get';
 import { usePutAdminCategoriesId } from '@/services/-admin-categories-{id}-put';
+import { usePostAdminCategories } from '@/services/-admin-categories-post';
 import { getGetCategoriesQueryKey, useGetCategories } from '@/services/-categories-get';
 import type { ModelsCategory } from '@/services/-categories-get.schemas';
-import { usePostAdminCategories } from '@/services/-admin-categories-post';
 
 import { categoryDefaultValues, categoryFormSchema } from '../category.schema';
 

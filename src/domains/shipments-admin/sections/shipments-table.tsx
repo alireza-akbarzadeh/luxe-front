@@ -12,14 +12,17 @@ import {
   getShipmentsFromListResponse,
   getShipmentsTotalFromListResponse
 } from '@/domains/shipments-admin/lib/shipment-list';
-import type { ShipmentStatusFilter } from '@/domains/shipments-admin/shipments.schema';
-import { SHIPMENT_STATUS_TABS } from '@/domains/shipments-admin/shipments.schema';
 import {
   shipmentColumns,
   shipmentRowMenuActions
 } from '@/domains/shipments-admin/sections/shipments-columns';
+import type { ShipmentStatusFilter } from '@/domains/shipments-admin/shipments.schema';
+import { SHIPMENT_STATUS_TABS } from '@/domains/shipments-admin/shipments.schema';
 import { useGetAdminShipments } from '@/services/-admin-shipments-get';
-import type { DtoAdminShipmentListItem, GetAdminShipments200 } from '@/services/-admin-shipments-get.schemas';
+import type {
+  DtoAdminShipmentListItem,
+  GetAdminShipments200
+} from '@/services/-admin-shipments-get.schemas';
 
 export function ShipmentsTable() {
   const router = useRouter();

@@ -19185,7 +19185,7 @@ module.exports = [
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/controllers.RefreshRequest"
+                      "$ref": "#/components/schemas/handlers.RefreshRequest"
                     }
                   }
                 },
@@ -19239,7 +19239,7 @@ module.exports = [
         },
         "components": {
           "schemas": {
-            "controllers.RefreshRequest": {
+            "handlers.RefreshRequest": {
               "properties": {
                 "refresh_token": {
                   "type": "string"
@@ -21145,7 +21145,7 @@ module.exports = [
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/services.AddItemRequest"
+                      "$ref": "#/components/schemas/cart.AddItemRequest"
                     }
                   }
                 },
@@ -21209,7 +21209,7 @@ module.exports = [
         },
         "components": {
           "schemas": {
-            "services.AddItemRequest": {
+            "cart.AddItemRequest": {
               "properties": {
                 "color": {
                   "type": "string"
@@ -21484,7 +21484,7 @@ module.exports = [
                 "content": {
                   "application/json": {
                     "schema": {
-                      "$ref": "#/components/schemas/services.UpdateCartItemRequest"
+                      "$ref": "#/components/schemas/cart.UpdateCartItemRequest"
                     }
                   }
                 },
@@ -21548,7 +21548,7 @@ module.exports = [
         },
         "components": {
           "schemas": {
-            "services.UpdateCartItemRequest": {
+            "cart.UpdateCartItemRequest": {
               "properties": {
                 "color": {
                   "type": "string"

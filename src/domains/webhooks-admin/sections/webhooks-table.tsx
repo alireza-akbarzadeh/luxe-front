@@ -8,15 +8,15 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useWebhooksQueryState } from '@/domains/webhooks-admin/hooks/use-webhooks-query';
 import {
+  type GetAdminWebhooks200,
   getWebhooksFromListResponse,
   getWebhooksTotalFromListResponse,
   WEBHOOK_STATUS_TABS,
-  type GetAdminWebhooks200,
   type WebhookEvent,
   type WebhookStatusFilter
 } from '@/domains/webhooks-admin/lib/webhook-list';
-import { WebhookDetailSheet } from '@/domains/webhooks-admin/sections/webhook-detail-sheet';
 import { webhookColumns } from '@/domains/webhooks-admin/sections/webhook-columns';
+import { WebhookDetailSheet } from '@/domains/webhooks-admin/sections/webhook-detail-sheet';
 import { useGetAdminWebhooks } from '@/services/-admin-webhooks-get';
 import type { GetAdminWebhooksParams } from '@/services/-admin-webhooks-get.schemas';
 

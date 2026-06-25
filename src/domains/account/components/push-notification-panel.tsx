@@ -1,6 +1,6 @@
 'use client';
 
-import { IconBellRinging, IconBellOff, IconSend } from '@tabler/icons-react';
+import { IconBellOff, IconBellRinging, IconSend } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
@@ -12,15 +12,8 @@ import { usePushNotifications } from '../hooks/use-push-notifications';
 
 export function PushNotificationPanel() {
   const t = useTranslations('pwa.push');
-  const {
-    supportStatus,
-    isSubscribed,
-    isLoading,
-    isPending,
-    isTesting,
-    toggle,
-    sendTest
-  } = usePushNotifications();
+  const { supportStatus, isSubscribed, isLoading, isPending, isTesting, toggle, sendTest } =
+    usePushNotifications();
 
   if (supportStatus === 'unsupported') {
     return (
@@ -65,7 +58,9 @@ export function PushNotificationPanel() {
               {isSubscribed ? t('descriptionEnabled') : t('descriptionDisabled')}
             </Typography.Small>
             {supportStatus === 'denied' ? (
-              <Typography.Small className='text-destructive'>{t('permissionDenied')}</Typography.Small>
+              <Typography.Small className='text-destructive'>
+                {t('permissionDenied')}
+              </Typography.Small>
             ) : null}
           </Flex>
 

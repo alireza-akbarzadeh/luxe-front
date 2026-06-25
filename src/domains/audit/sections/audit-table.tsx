@@ -18,12 +18,9 @@ import {
 } from '@/domains/audit/components/audit-action-badge';
 import { auditColumns } from '@/domains/audit/components/audit-columns';
 import { AuditDetailSheet } from '@/domains/audit/components/audit-detail-sheet';
+import type { DtoAuditLogResponse, GetAdminAuditLogs200 } from '@/domains/audit/lib/audit-types';
 import { useGetAdminAuditLogs } from '@/services/-admin-audit-logs-get';
-import type {
-  DtoAuditLogResponse,
-  GetAdminAuditLogs200,
-  GetAdminAuditLogsParams
-} from '@/services/-admin-audit-logs-get.schemas';
+import type { GetAdminAuditLogsParams } from '@/services/-admin-audit-logs-get.schemas';
 
 export function AuditLogTable() {
   const [selectedLog, setSelectedLog] = useState<DtoAuditLogResponse | null>(null);

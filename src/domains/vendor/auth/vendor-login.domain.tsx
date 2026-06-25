@@ -3,16 +3,16 @@
 import { IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { loginAction } from '@/actions/auth.actions';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
-import { AuthLanguageSwitcher } from '@/domains/auth/components/auth-language-switcher';
 import { createLoginFormSchema } from '@/domains/auth/auth.schema';
+import { AuthLanguageSwitcher } from '@/domains/auth/components/auth-language-switcher';
 import { VendorLoginSidebar } from '@/domains/vendor/auth/components/vendor-login-sidebar';
 import { getDirection, type Locale } from '@/i18n/config';
 import { getCallbackUrl } from '@/lib/utils';

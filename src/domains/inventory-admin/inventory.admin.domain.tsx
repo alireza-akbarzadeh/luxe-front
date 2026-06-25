@@ -35,12 +35,12 @@ import { InventoryHistorySheet } from '@/domains/inventory-admin/sections/invent
 import { InventoryOverview } from '@/domains/inventory-admin/sections/inventory-overview';
 import { useInventoryStore } from '@/domains/inventory-admin/stores/inventory-store';
 import { useGetAdminInventory } from '@/services/-admin-inventory-get';
-import { useGetAdminInventoryOverview } from '@/services/-admin-inventory-overview-get';
 import type {
   DtoInventoryItemResponse,
   GetAdminInventory200,
   GetAdminInventoryStockStatus
 } from '@/services/-admin-inventory-get.schemas';
+import { useGetAdminInventoryOverview } from '@/services/-admin-inventory-overview-get';
 
 export type InventoryStockStatus = GetAdminInventoryStockStatus;
 

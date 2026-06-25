@@ -24,10 +24,10 @@ import {
   getGetAdminStoresIdQueryKey,
   useGetAdminStoresId
 } from '@/services/-admin-stores-{id}-get';
-import { useGetCategories } from '@/services/-categories-get';
-import { getGetStoresQueryKey } from '@/services/-stores-get';
 import { usePutAdminStoresId } from '@/services/-admin-stores-{id}-put';
 import { usePostAdminStores } from '@/services/-admin-stores-post';
+import { useGetCategories } from '@/services/-categories-get';
+import { getGetStoresQueryKey } from '@/services/-stores-get';
 
 interface StoreFormProps {
   storeId?: string;

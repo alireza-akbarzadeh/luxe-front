@@ -16,12 +16,12 @@ import {
   setClientAccessToken
 } from '../auth/auth-token-client';
 import { APP_CONFIG } from '../config';
+import { getErrorMessages } from '../i18n/error-messages';
 import {
   getClientLocaleFromCookie,
   getRequestLocale,
   localeToAcceptLanguage
 } from '../i18n/request-locale';
-import { getErrorMessages } from '../i18n/error-messages';
 import { isRequestCancelled } from './api-utils';
 import { handleApiError } from './handle-api-error';
 import { logger } from './logger';

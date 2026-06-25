@@ -20,8 +20,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Separator } from '@/components/ui/separator';
-import { WalletUserPicker } from '@/domains/wallet-admin/components/wallet-user-picker';
 import { formatPrice } from '@/domains/discounts/lib/discount-utils';
+import { WalletUserPicker } from '@/domains/wallet-admin/components/wallet-user-picker';
 import {
   walletAdjustDefaultValues,
   walletAdjustFormSchema,

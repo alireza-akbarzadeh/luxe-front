@@ -14,10 +14,10 @@ import { getGetOrdersIdQueryKey, useGetOrdersId } from '@/services/-orders-{id}-
 import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 import { getGetOrdersQueryKey } from '@/services/-orders-get';
 
-import { OrderActivityCard } from '../sections/order-activity-card';
 import { OrderCustomerCard } from '../sections/customer-order-detail';
-import { OrderDetailHeader } from '../sections/order-details-header';
+import { OrderActivityCard } from '../sections/order-activity-card';
 import { OrderDetailSkeleton } from '../sections/order-detail-skeleton';
+import { OrderDetailHeader } from '../sections/order-details-header';
 import { OrderLineItems } from '../sections/order-line-items';
 import { OrderPaymentSummary } from '../sections/order-payment-summary';
 import { OrderShippingCard } from '../sections/order-shipping-card';

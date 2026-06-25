@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 
 import { handleApiError } from '@/lib/api/handle-api-error';
 import { localeCookieName } from '@/i18n/config';
+import type { ApiErrorResponse } from '@/lib/api/type';
 
 const toastError = vi.fn();
 
@@ -17,14 +18,25 @@ vi.mock('@/lib/api/logger', () => ({
   logger: { info: vi.fn() }
 }));
 
-function createAxiosError(status: number, data?: Record<string, unknown>): AxiosError {
-  return new AxiosError('Request failed', undefined, { url: '/test' }, {}, {
-    status,
-    statusText: 'Error',
-    headers: {},
-    config: {},
-    data
-  });
+const emptyConfig = { headers: new AxiosHeaders(), url: '/test' } as InternalAxiosRequestConfig;
+
+function createAxiosError(
+  status: number,
+  data: ApiErrorResponse = {}
+): AxiosError<ApiErrorResponse> {
+  return new AxiosError<ApiErrorResponse>(
+    'Request failed',
+    undefined,
+    emptyConfig,
+    {},
+    {
+      status,
+      statusText: 'Error',
+      headers: {},
+      config: emptyConfig,
+      data
+    }
+  );
 }
 
 describe('handleApiError', () => {
@@ -50,7 +62,12 @@ describe('handleApiError', () => {
   });
 
   it('uses localized network copy when there is no HTTP status', () => {
-    const error = new AxiosError('Network Error', 'ERR_NETWORK', { url: '/products' }, {});
+    const error = new AxiosError(
+      'Network Error',
+      'ERR_NETWORK',
+      { headers: new AxiosHeaders(), url: '/products' } as InternalAxiosRequestConfig,
+      {}
+    ) as AxiosError<ApiErrorResponse>;
     handleApiError(error, { url: '/products' }, {});
 
     expect(toastError).toHaveBeenCalledWith(

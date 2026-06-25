@@ -1,4 +1,7 @@
-import type { DtoStateView, DtoTransitionView } from '@/services/-workflows-{key}-{entityId}-available-transitions-get.schemas';
+import type {
+  DtoStateView,
+  DtoTransitionView
+} from '@/services/-workflows-{key}-{entityId}-available-transitions-get.schemas';
 
 /** Supported workflow entity keys (matches backend workflow definitions). */
 export type WorkflowEntityKey =
@@ -10,7 +13,8 @@ export type WorkflowEntityKey =
   | 'category'
   | 'brand'
   | 'collection'
-  | 'coupon';
+  | 'coupon'
+  | 'review';
 
 export interface WorkflowHistoryEntry {
   id?: number;

@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { DtoInventoryItemResponse } from '@/services/-admin-inventory-get.schemas';
 import { createSelectColumn } from '~/src/components/table/data-table';
 import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
 import { mapBrandStatusToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
-import type { DtoInventoryItemResponse } from '@/services/-admin-inventory-get.schemas';
 
 function stockStatusLabel(status?: string) {
   switch (status) {
@@ -138,7 +138,9 @@ export const inventoryColumns: ColumnDef<DtoInventoryItemResponse>[] = [
     accessorKey: 'warehouse_location',
     header: 'Location',
     cell: ({ row }) => (
-      <span className='text-muted-foreground text-xs'>{row.original.warehouse_location || '—'}</span>
+      <span className='text-muted-foreground text-xs'>
+        {row.original.warehouse_location || '—'}
+      </span>
     )
   },
 

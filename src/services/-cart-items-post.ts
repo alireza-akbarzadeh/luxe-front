@@ -16,8 +16,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CartAddItemRequest,
   DtoAddItemResponse,
-  ServicesAddItemRequest,
   UtilsResponse
 } from './-cart-items-post.schemas';
 
@@ -33,7 +33,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary Add item to cart
  */
 export const postCartItems = (
-    servicesAddItemRequest: ServicesAddItemRequest,
+    cartAddItemRequest: CartAddItemRequest,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
@@ -41,7 +41,7 @@ export const postCartItems = (
       return customInstance<DtoAddItemResponse>(
       {url: `/cart/items`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: servicesAddItemRequest, signal
+      data: cartAddItemRequest, signal
     },
       options);
     }
@@ -49,8 +49,8 @@ export const postCartItems = (
 
 
 export const getPostCartItemsMutationOptions = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: ServicesAddItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: ServicesAddItemRequest}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: CartAddItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: CartAddItemRequest}, TContext> => {
 
 const mutationKey = ['postCartItems'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -62,7 +62,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCartItems>>, {data: ServicesAddItemRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postCartItems>>, {data: CartAddItemRequest}> = (props) => {
           const {data} = props ?? {};
 
           return  postCartItems(data,requestOptions)
@@ -76,18 +76,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type PostCartItemsMutationResult = NonNullable<Awaited<ReturnType<typeof postCartItems>>>
-    export type PostCartItemsMutationBody = ServicesAddItemRequest
+    export type PostCartItemsMutationBody = CartAddItemRequest
     export type PostCartItemsMutationError = UtilsResponse
 
     /**
  * @summary Add item to cart
  */
 export const usePostCartItems = <TError = UtilsResponse,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: ServicesAddItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCartItems>>, TError,{data: CartAddItemRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postCartItems>>,
         TError,
-        {data: ServicesAddItemRequest},
+        {data: CartAddItemRequest},
         TContext
       > => {
       return useMutation(getPostCartItemsMutationOptions(options), queryClient);

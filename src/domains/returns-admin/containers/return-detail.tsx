@@ -12,9 +12,9 @@ import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workf
 import { WorkflowHistoryTimeline } from '@/domains/workflows/components/workflow-history-timeline';
 import { parseWorkflowHistoryResponse } from '@/domains/workflows/lib/workflow-runtime';
 import { formatCurrency } from '@/lib/format';
-import { getGetAdminReturnsQueryKey } from '@/services/-admin-returns-get';
 import { useGetAdminReturnsId } from '@/services/-admin-returns-{id}-get';
 import type { DtoReturnResponse } from '@/services/-admin-returns-{id}-get.schemas';
+import { getGetAdminReturnsQueryKey } from '@/services/-admin-returns-get';
 import { useGetWorkflowsKeyEntityIdHistory } from '@/services/-workflows-{key}-{entityId}-history-get';
 
 import { ReturnDetailSkeleton } from '../sections/return-detail-skeleton';

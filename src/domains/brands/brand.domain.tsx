@@ -16,7 +16,7 @@ import {
 import { brandColumns } from '@/domains/brands/sections/brand-columns';
 import { deleteBrandsId } from '@/services/-brands-{id}-delete';
 import { getGetBrandsQueryKey, useGetBrands } from '@/services/-brands-get';
-import type { DtoBrandResponse, GetBrands200 } from '@/services/-brands-get.schemas';
+import type { DtoBrandListResponse, DtoBrandResponse } from '@/services/-brands-get.schemas';
 
 export function BrandsDomains() {
   const { push } = useRouter();
@@ -32,12 +32,12 @@ export function BrandsDomains() {
   );
 
   const getRows = useCallback(
-    (data: GetBrands200 | undefined) => getBrandsFromListResponse(data),
+    (data: DtoBrandListResponse | undefined) => getBrandsFromListResponse(data),
     []
   );
 
   const getTotal = useCallback(
-    (data: GetBrands200 | undefined) => getBrandsTotalFromListResponse(data),
+    (data: DtoBrandListResponse | undefined) => getBrandsTotalFromListResponse(data),
     []
   );
 

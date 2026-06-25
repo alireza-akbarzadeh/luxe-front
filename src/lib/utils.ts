@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Row } from '@tanstack/react-table';
 import { type ClassValue, clsx } from 'clsx';
-import type { JSX } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
@@ -79,8 +78,6 @@ export async function tryCatchErrorsAsync<E extends (new (...args: any[]) => any
     }
   }
 }
-
-type Meta = JSX.IntrinsicElements['meta'];
 
 type ViewportWidthHeightValues = StringNumber | 'device-width' | 'device-height';
 

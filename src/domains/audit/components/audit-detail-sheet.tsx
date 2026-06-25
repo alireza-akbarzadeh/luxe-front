@@ -13,8 +13,8 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { AuditActionBadge } from '@/domains/audit/components/audit-action-badge';
+import type { DtoAuditLogResponse } from '@/domains/audit/lib/audit-types';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
-import type { DtoAuditLogResponse } from '@/services/-admin-audit-logs-get.schemas';
 
 interface AuditDetailSheetProps {
   log: DtoAuditLogResponse | null;

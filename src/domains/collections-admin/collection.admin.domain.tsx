@@ -16,7 +16,10 @@ import {
 import { collectionColumns } from '@/domains/collections-admin/sections/collection-columns';
 import { deleteCollectionsId } from '@/services/-collections-{id}-delete';
 import { getGetCollectionsQueryKey, useGetCollections } from '@/services/-collections-get';
-import type { DtoCollectionResponse, GetCollections200 } from '@/services/-collections-get.schemas';
+import type {
+  DtoCollectionListResponse,
+  DtoCollectionResponse
+} from '@/services/-collections-get.schemas';
 
 export function CollectionsAdminDomain() {
   const { push } = useRouter();
@@ -32,12 +35,12 @@ export function CollectionsAdminDomain() {
   );
 
   const getRows = useCallback(
-    (data: GetCollections200 | undefined) => getCollectionsFromListResponse(data),
+    (data: DtoCollectionListResponse | undefined) => getCollectionsFromListResponse(data),
     []
   );
 
   const getTotal = useCallback(
-    (data: GetCollections200 | undefined) => getCollectionsTotalFromListResponse(data),
+    (data: DtoCollectionListResponse | undefined) => getCollectionsTotalFromListResponse(data),
     []
   );
 
@@ -54,7 +57,9 @@ export function CollectionsAdminDomain() {
     async (collection: DtoCollectionResponse) => {
       if (!collection.id) return;
 
-      const confirmed = window.confirm(`Delete collection "${collection.title ?? 'this collection'}"?`);
+      const confirmed = window.confirm(
+        `Delete collection "${collection.title ?? 'this collection'}"?`
+      );
       if (!confirmed) return;
 
       try {

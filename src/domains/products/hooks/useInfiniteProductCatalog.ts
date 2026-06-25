@@ -33,8 +33,7 @@ export function useInfiniteProductCatalog() {
     searchQuery,
     showOnlySale,
     categoryId,
-    priceMin,
-    priceMax,
+    priceRange,
     minRating,
     maxRating,
     minReviews,
@@ -43,6 +42,8 @@ export function useInfiniteProductCatalog() {
     isDigital,
     sortBy
   } = filters;
+
+  const [priceMin, priceMax] = priceRange;
 
   const trimmedQuery = searchQuery.trim();
   const usesSearchApi = trimmedQuery.length > 0;

@@ -55,18 +55,22 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
   );
 
   const { mutateAsync: createCollection, isPending: isCreating } = usePostCollections({
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
+      }
     }
   });
 
   const { mutateAsync: updateCollection, isPending: isUpdating } = usePutCollectionsId({
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
-      if (collection?.id) {
-        void queryClient.invalidateQueries({
-          queryKey: getGetCollectionsIdQueryKey(collection.id)
-        });
+    mutation: {
+      onSuccess: () => {
+        void queryClient.invalidateQueries({ queryKey: getGetCollectionsQueryKey() });
+        if (collection?.id) {
+          void queryClient.invalidateQueries({
+            queryKey: getGetCollectionsIdQueryKey(collection.id)
+          });
+        }
       }
     }
   });

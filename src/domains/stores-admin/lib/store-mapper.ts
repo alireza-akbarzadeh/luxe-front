@@ -1,6 +1,6 @@
 import type { StoreFormValues } from '@/domains/stores-admin/store.schema';
-import type { DtoCreateStoreRequest } from '@/services/-admin-stores-post.schemas';
 import type { DtoUpdateStoreRequest } from '@/services/-admin-stores-{id}-put.schemas';
+import type { DtoCreateStoreRequest } from '@/services/-admin-stores-post.schemas';
 import type { DtoStoreResponse } from '@/services/-stores-get.schemas';
 
 function optionalText(value: string | undefined): string | undefined {

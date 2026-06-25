@@ -31,8 +31,7 @@ export function useShopCatalog() {
     showOnlySale,
     page,
     categoryId,
-    priceMin,
-    priceMax,
+    priceRange,
     minRating,
     maxRating,
     minReviews,
@@ -41,6 +40,8 @@ export function useShopCatalog() {
     isDigital,
     sortBy
   } = filters;
+
+  const [priceMin, priceMax] = priceRange;
 
   const trimmedQuery = searchQuery.trim();
   const usesSearchApi = trimmedQuery.length > 0;

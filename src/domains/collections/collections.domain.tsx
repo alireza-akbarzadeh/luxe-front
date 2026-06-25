@@ -8,7 +8,7 @@ import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetCollections } from '@/services/-collections-get';
-import type { GetCollections200 } from '@/services/-collections-get.schemas';
+import type { DtoCollectionListResponse } from '@/services/-collections-get.schemas';
 
 import { CollectionCard } from './components/collection-card';
 import { CollectionHeroGrid } from './components/collection-hero-grid';
@@ -22,14 +22,14 @@ export function CollectionsDomain() {
     { query: { staleTime: 60_000 } }
   );
 
-  const listData = listResponse as GetCollections200 | undefined;
+  const listData = listResponse as DtoCollectionListResponse | undefined;
 
   const collections = useMemo(() => {
     const fromApi = (listData?.data?.collections ?? []).map(mapApiCollectionToCurated);
     return fromApi.length > 0 ? fromApi : CURATED_COLLECTIONS;
   }, [listData]);
 
-  const showSkeleton = isLoading && !(listData?.data?.collections?.length);
+  const showSkeleton = isLoading && !listData?.data?.collections?.length;
 
   return (
     <main className='pb-24'>

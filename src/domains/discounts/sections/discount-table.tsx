@@ -14,10 +14,9 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDiscountsQueryState } from '@/domains/discounts/hooks/use-discounts-query';
 import {
   COUPON_STATUS_TABS,
+  type CouponStatusFilter,
   getCouponsFromListResponse,
-  getCouponsTotalFromListResponse,
-  type CouponStatusFilter
-} from '@/domains/discounts/lib/discount-filters';
+  getCouponsTotalFromListResponse} from '@/domains/discounts/lib/discount-filters';
 import { couponColumns } from '@/domains/discounts/sections/discount-column';
 import { getGetAdminCouponsQueryKey, useGetAdminCoupons } from '@/services/-admin-coupons-get';
 import type { DtoCouponListResponse, ModelsCoupon } from '@/services/-admin-coupons-get.schemas';

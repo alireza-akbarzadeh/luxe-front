@@ -11,9 +11,9 @@ import { ProductGridSkeleton } from '@/domains/home/components/product-grid-skel
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
-import { useGetCategories } from '~/src/services/-categories-get';
-import { getGetProductsIdQueryOptions } from '~/src/services/-products-{id}-get';
-import { useGetSearch } from '~/src/services/-search-get';
+import { useGetCategories } from '@/services/-categories-get';
+import { getGetProductsIdQueryOptions } from '@/services/-products-{id}-get';
+import { useGetSearch } from '@/services/-search-get';
 
 import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
@@ -139,7 +139,7 @@ export default function SearchDomain() {
   }
 
   return (
-    <>
+    <div id='search-domain' className='md:px8 px-4'>
       <SearchHero />
       <section className='py-8'>
         <div className='flex flex-col gap-8 lg:flex-row'>
@@ -205,6 +205,6 @@ export default function SearchDomain() {
           </section>
         )}
       </section>
-    </>
+    </div>
   );
 }

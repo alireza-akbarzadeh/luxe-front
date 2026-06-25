@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { IconRotateClockwise2, IconShield } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { UserManagementTable } from '@/domains/users/sections/user-table';
