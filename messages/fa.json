@@ -1631,6 +1631,10 @@
             "label": "تنظیمات فروشگاه",
             "description": "برند، سیاست‌ها و سئو"
           },
+          "account": {
+            "label": "تنظیمات حساب",
+            "description": "پروفایل، ایمیل و رمز عبور"
+          },
           "team": {
             "label": "اعضای تیم",
             "description": "نقش‌ها و دسترسی‌ها"
@@ -1682,6 +1686,53 @@
         "accountSettings": "تنظیمات حساب",
         "storeSettings": "تنظیمات فروشگاه",
         "vendorHome": "صفحه فروشندگان"
+      },
+      "account": {
+        "title": "تنظیمات حساب",
+        "description": "پروفایل شخصی و امنیت خود را بدون خروج از داشبورد فروشنده به‌روز کنید.",
+        "profileTitle": "پروفایل",
+        "loading": "در حال بارگذاری حساب…",
+        "loadError": "بارگذاری پروفایل حساب ممکن نشد.",
+        "saveChanges": "ذخیره تغییرات",
+        "saving": "در حال ذخیره…",
+        "saved": "پروفایل به‌روزرسانی شد",
+        "saveFailed": "به‌روزرسانی پروفایل ناموفق بود"
+      },
+      "orders": {
+        "title": "سفارش‌ها",
+        "description": "پیگیری ارسال و مدیریت سفارش‌های فروشگاه خود.",
+        "ordersBadge": "{count} سفارش",
+        "searchPlaceholder": "جستجوی شماره سفارش، نام یا ایمیل مشتری…",
+        "filtersButton": "فیلترها",
+        "loadErrorTitle": "سفارش‌ها در دسترس نیست",
+        "loadErrorBody": "اتصال را بررسی کنید و دوباره تلاش کنید.",
+        "retry": "تلاش مجدد",
+        "kpi": {
+          "total": "کل سفارش‌ها",
+          "pending": "در انتظار",
+          "paid": "آماده ارسال",
+          "shipped": "در مسیر / تحویل‌شده"
+        },
+        "filters": {
+          "title": "فیلتر سفارش‌ها",
+          "description": "با بازه تاریخ و مبلغ لیست را محدود کنید. تب وضعیت روی فیلترها اعمال می‌شود.",
+          "fromDate": "از تاریخ",
+          "toDate": "تا تاریخ",
+          "minAmount": "حداقل مبلغ",
+          "maxAmount": "حداکثر مبلغ",
+          "anyAmount": "هر مبلغ",
+          "reset": "پاک کردن فیلترها",
+          "apply": "اعمال"
+        },
+        "loadingDetail": "در حال بارگذاری سفارش…",
+        "detailNotFound": "سفارش یافت نشد یا متعلق به فروشگاه شما نیست.",
+        "backToOrders": "بازگشت به سفارش‌ها",
+        "detailStatus": "وضعیت",
+        "detailYourTotal": "مجموع فروشگاه شما",
+        "detailOrderTotal": "مجموع سفارش:",
+        "detailCustomer": "مشتری",
+        "detailShipping": "ارسال",
+        "detailLineItems": "اقلام فروشگاه شما"
       }
     },
     "landing": {

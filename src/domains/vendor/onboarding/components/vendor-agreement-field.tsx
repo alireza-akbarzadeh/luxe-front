@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-import { FieldContainer, getFieldErrorMessage } from '@/components/forms/form';
+import { FieldContainer } from '@/components/forms/form';
 import { useFieldContext } from '@/components/forms/useFormContext';
 import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox';
 import { Flex } from '@/components/ui/flex';
@@ -12,7 +12,6 @@ import { VendorAgreementDialog } from '@/domains/vendor/onboarding/components/ve
 export function VendorAgreementField() {
   const t = useTranslations('vendor.onboarding.fields.acceptVendorTerms');
   const field = useFieldContext<boolean>();
-  const errorMessage = getFieldErrorMessage(field.state.meta.errors?.[0]);
 
   return (
     <FieldContainer>
@@ -39,9 +38,6 @@ export function VendorAgreementField() {
           {t('suffix')}
         </Typography.Text>
       </Flex>
-      {errorMessage ? (
-        <Typography.Text className='text-destructive mt-1 text-xs'>{errorMessage}</Typography.Text>
-      ) : null}
     </FieldContainer>
   );
 }

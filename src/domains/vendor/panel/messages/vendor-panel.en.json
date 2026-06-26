@@ -88,6 +88,10 @@
         "label": "Store Settings",
         "description": "Branding, policies, and SEO"
       },
+      "account": {
+        "label": "Account Settings",
+        "description": "Profile, email, and password"
+      },
       "team": {
         "label": "Team Members",
         "description": "Roles and permissions"
@@ -139,5 +143,16 @@
     "accountSettings": "Account settings",
     "storeSettings": "Store settings",
     "vendorHome": "Vendor home"
+  },
+  "account": {
+    "title": "Account settings",
+    "description": "Update your personal profile and security preferences without leaving the vendor dashboard.",
+    "profileTitle": "Profile",
+    "loading": "Loading account…",
+    "loadError": "Could not load your account profile.",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "saved": "Profile updated",
+    "saveFailed": "Failed to update profile"
   }
 }

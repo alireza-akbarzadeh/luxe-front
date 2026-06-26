@@ -128,8 +128,7 @@ export function VendorOnboardingDomain({
   const form = useAppForm({
     defaultValues,
     validators: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onChange: vendorOnboardingSchema as any,
+      // Step navigation validates explicitly; full-schema onChange caused re-render loops after auth.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onSubmit: vendorOnboardingSchema as any
     },
@@ -177,7 +176,6 @@ export function VendorOnboardingDomain({
         resetOnboarding();
         toast.success(t('success.title'), { description: t('success.description') });
         router.push('/vendor/panel');
-        router.refresh();
       } catch (error) {
         const message = error instanceof Error ? error.message : t('errors.submitFailed');
         toast.error(t('errors.submitFailed'), { description: message });
@@ -188,14 +186,22 @@ export function VendorOnboardingDomain({
   });
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) return;
+    if (!accountCreated) {
       setAccountCreated(true);
-      if (currentStepId === 'account') {
-        markCompleted('account');
-        setCurrentStep('business');
-      }
     }
-  }, [isAuthenticated, currentStepId, markCompleted, setAccountCreated, setCurrentStep]);
+    if (currentStepId === 'account') {
+      markCompleted('account');
+      setCurrentStep('business');
+    }
+  }, [
+    accountCreated,
+    currentStepId,
+    isAuthenticated,
+    markCompleted,
+    setAccountCreated,
+    setCurrentStep
+  ]);
 
   const currentIdx = steps.findIndex((s) => s.id === currentStepId);
   const isLastStep = currentStepId === 'review';
@@ -225,6 +231,8 @@ export function VendorOnboardingDomain({
 
   const goToStep = useCallback(
     async (targetId: VendorOnboardingStepId, skipValidation = false) => {
+      if (targetId === currentStepId) return;
+
       const targetIdx = steps.findIndex((s) => s.id === targetId);
       const movingForward = targetIdx > currentIdx;
 
@@ -261,6 +269,8 @@ export function VendorOnboardingDomain({
 
   const handleStepperClick = useCallback(
     async (stepId: VendorOnboardingStepId) => {
+      if (stepId === currentStepId) return;
+
       if (
         !canOpenOnboardingStep(stepId, completedSteps, accountCreated || isAuthenticated) &&
         stepId !== currentStepId
@@ -319,7 +329,10 @@ export function VendorOnboardingDomain({
             <Stepper
               steps={steps}
               value={currentStepId}
-              onValueChange={(id) => void handleStepperClick(id as VendorOnboardingStepId)}
+              onValueChange={(id) => {
+                if (id === currentStepId) return;
+                void handleStepperClick(id as VendorOnboardingStepId);
+              }}
               orientation='horizontal'
               responsive
             >

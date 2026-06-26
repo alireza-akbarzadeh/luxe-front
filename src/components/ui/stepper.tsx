@@ -7,6 +7,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from 'react';
 
@@ -147,17 +148,24 @@ function Stepper({
   children,
   ...props
 }: StepperProps) {
-  const state = useStepperState(steps, defaultValue ?? steps[0]?.id);
+  const skipNotifyRef = useRef(false);
+  const initialStep = value ?? defaultValue ?? steps[0]?.id;
+  const state = useStepperState(steps, initialStep);
 
-  // Controlled support
+  // Controlled support — sync external value without notifying parent (avoids feedback loops).
   useEffect(() => {
     if (typeof value === 'string' && value !== state.currentId) {
+      skipNotifyRef.current = true;
       state.navigation.goTo(value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   useEffect(() => {
+    if (skipNotifyRef.current) {
+      skipNotifyRef.current = false;
+      return;
+    }
     onValueChange?.(state.currentId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.currentId]);

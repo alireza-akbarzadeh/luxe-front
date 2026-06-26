@@ -36,7 +36,8 @@ export const useVendorOnboardingStore = create<VendorOnboardingStore>()(
   persist(
     (set) => ({
       ...initialState,
-      setCurrentStep: (stepId) => set({ currentStepId: stepId }),
+      setCurrentStep: (stepId) =>
+        set((state) => (state.currentStepId === stepId ? state : { currentStepId: stepId })),
       markCompleted: (stepId) =>
         set((state) => ({
           completedSteps: state.completedSteps.includes(stepId)

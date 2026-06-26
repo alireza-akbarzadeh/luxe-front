@@ -20,6 +20,7 @@ import {
   IconShoppingBag,
   IconStar,
   IconTruck,
+  IconUser,
   IconUsers,
   IconWallet
 } from '@tabler/icons-react';
@@ -177,6 +178,11 @@ export const VENDOR_NAV_GROUP_DEFS: VendorNavGroupDef[] = [
   {
     id: 'settings',
     items: [
+      {
+        id: 'account',
+        href: '/vendor/panel/account',
+        icon: IconUser
+      },
       {
         id: 'store',
         href: '/vendor/panel/store',
