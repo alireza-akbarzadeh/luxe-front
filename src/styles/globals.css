@@ -203,8 +203,13 @@
   .dark select:-webkit-autofill:focus,
   .dark select:-webkit-autofill:active {
     -webkit-text-fill-color: var(--foreground) !important;
-    -webkit-box-shadow: 0 0 0 1000px color-mix(in oklab, var(--input) 30%, transparent) inset !important;
-    box-shadow: 0 0 0 1000px color-mix(in oklab, var(--input) 30%, transparent) inset !important;
+    caret-color: var(--foreground);
+    /* Opaque surface — transparent mixes let Chrome's blue/white autofill bleed through */
+    -webkit-box-shadow: 0 0 0 1000px var(--card) inset !important;
+    box-shadow: 0 0 0 1000px var(--card) inset !important;
+    transition:
+      background-color 600000s ease-in-out 0s,
+      color 600000s ease-in-out 0s;
   }
 
   input:-internal-autofill-selected,
@@ -212,6 +217,15 @@
   select:-internal-autofill-selected {
     appearance: none;
     background-color: var(--background) !important;
+    background-image: none !important;
+    color: var(--foreground) !important;
+  }
+
+  .dark input:-internal-autofill-selected,
+  .dark textarea:-internal-autofill-selected,
+  .dark select:-internal-autofill-selected {
+    appearance: none;
+    background-color: var(--card) !important;
     background-image: none !important;
     color: var(--foreground) !important;
   }

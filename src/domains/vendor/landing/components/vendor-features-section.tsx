@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
+import { DirectionalChevron } from '@/components/ui/directional-icon';
 import {
   FadeInView,
   LandingContainer,
@@ -10,14 +14,12 @@ import { ALTERNATING_FEATURES } from '@/domains/vendor/landing/data/vendor-landi
 import { cn } from '@/lib/utils';
 
 export function VendorFeaturesSection() {
+  const t = useTranslations('vendor.landing.features');
+
   return (
     <LandingContainer className='py-20 md:py-28'>
       <FadeInView>
-        <SectionTitle
-          eyebrow='Platform features'
-          title='Powerful tools for every stage of your business'
-          description='Deep capabilities without the complexity — so your team can move fast.'
-        />
+        <SectionTitle eyebrow={t('eyebrow')} title={t('title')} description={t('subtitle')} />
       </FadeInView>
 
       <div className='space-y-20 md:space-y-28'>
@@ -31,7 +33,11 @@ export function VendorFeaturesSection() {
                   reversed && 'lg:[&>*:first-child]:order-2'
                 )}
               >
-                <FeatureIllustration icon={feature.icon} title={feature.title} variant={index % 3} />
+                <FeatureIllustration
+                  icon={feature.icon}
+                  title={feature.title}
+                  variant={index % 3}
+                />
 
                 <div>
                   <h3 className='text-2xl font-semibold tracking-tight md:text-3xl'>
@@ -49,7 +55,10 @@ export function VendorFeaturesSection() {
                     ))}
                   </ul>
                   <Button asChild variant='link' className='mt-6 h-auto px-0'>
-                    <Link href='/register?callbackUrl=/vendor/panel'>Explore {feature.title} →</Link>
+                    <Link href='/vendor/apply' className='inline-flex items-center gap-1'>
+                      {t('exploreFeature', { title: feature.title })}
+                      <DirectionalChevron />
+                    </Link>
                   </Button>
                 </div>
               </article>
@@ -98,7 +107,10 @@ function FeatureIllustration({
             <div className='space-y-2'>
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className='bg-muted/50 flex h-8 items-center rounded-lg px-3'>
-                  <div className='bg-gold/40 h-2 rounded-full' style={{ width: `${70 - i * 12}%` }} />
+                  <div
+                    className='bg-gold/40 h-2 rounded-full'
+                    style={{ width: `${70 - i * 12}%` }}
+                  />
                 </div>
               ))}
             </div>

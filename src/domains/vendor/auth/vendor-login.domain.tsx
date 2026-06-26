@@ -73,7 +73,7 @@ export function VendorLoginDomain() {
   });
 
   const forgotPasswordHref = `/forgot-password?callbackUrl=${encodeURIComponent(callbackUrl)}`;
-  const registerHref = `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+  const registerHref = '/vendor/apply';
 
   return (
     <div className='bg-background flex min-h-screen' dir='ltr'>

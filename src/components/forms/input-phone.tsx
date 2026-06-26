@@ -40,7 +40,7 @@ import { useFieldContext } from './useFormContext';
 
 /** Shared shell — matches `Input` border/focus; ring applies to the whole control via focus-within. */
 const phoneInputShellClassName =
-  'border-input flex h-9 w-full min-w-0 overflow-hidden rounded-md border bg-transparent shadow-xs transition-[color,box-shadow] outline-none focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] has-[[data-slot=input][aria-invalid=true]]:border-destructive has-[[data-slot=input][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot=input][aria-invalid=true]]:ring-destructive/40';
+  'border-input flex h-9 w-full min-w-0 overflow-hidden rounded-md border bg-transparent shadow-xs transition-[color,box-shadow] outline-none focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] has-[[data-slot=input][aria-invalid=true]]:border-destructive has-[[data-slot=input][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot=input][aria-invalid=true]]:ring-destructive/40 dark:has-[[data-slot=input]:-webkit-autofill]:bg-card';
 
 type InputPhoneProps = Omit<
   ComponentProps<typeof PhoneInputPrimitive.default>,

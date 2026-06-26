@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import {
   FadeInView,
   LandingContainer,
@@ -6,14 +10,12 @@ import {
 import { INTEGRATIONS } from '@/domains/vendor/landing/data/vendor-landing.data';
 
 export function VendorIntegrationsSection() {
+  const t = useTranslations('vendor.landing.integrations');
+
   return (
     <LandingContainer className='py-20 md:py-28'>
       <FadeInView>
-        <SectionTitle
-          eyebrow='Integrations'
-          title='Connect the tools you already use'
-          description='Payments, shipping, analytics, and marketing — integrated out of the box.'
-        />
+        <SectionTitle eyebrow={t('eyebrow')} title={t('title')} description={t('subtitle')} />
       </FadeInView>
 
       <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6'>

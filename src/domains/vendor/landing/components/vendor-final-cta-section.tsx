@@ -1,23 +1,25 @@
 'use client';
 
-import { IconArrowRight, IconCalendar } from '@tabler/icons-react';
+import { IconCalendar } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { DirectionalArrow } from '@/components/ui/directional-icon';
 import {
   FadeInView,
   LandingContainer
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
+import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
 import { cn } from '@/lib/utils';
 
 interface VendorFinalCtaSectionProps {
-  isAuthenticated: boolean;
+  hasVendorStore: boolean;
 }
 
-export function VendorFinalCtaSection({ isAuthenticated }: VendorFinalCtaSectionProps) {
+export function VendorFinalCtaSection({ hasVendorStore }: VendorFinalCtaSectionProps) {
   const t = useTranslations('vendor.landing.finalCta');
-  const vendorHref = isAuthenticated ? '/vendor/panel' : '/register?callbackUrl=/vendor/panel';
+  const vendorHref = getVendorStartHref(hasVendorStore);
 
   return (
     <LandingContainer className='pb-20 md:pb-28'>
@@ -40,7 +42,7 @@ export function VendorFinalCtaSection({ isAuthenticated }: VendorFinalCtaSection
                 className={cn(buttonVariants({ size: 'lg' }), 'gap-2 rounded-full px-8')}
               >
                 {t('becomeVendor')}
-                <IconArrowRight className='size-4' aria-hidden />
+                <DirectionalArrow />
               </Link>
               <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
                 <Link href='/contact'>

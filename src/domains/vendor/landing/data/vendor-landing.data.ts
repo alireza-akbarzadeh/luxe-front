@@ -126,6 +126,28 @@ export const WHY_SELL_FEATURES: {
   }
 ];
 
+export const MARKETPLACE_BENEFIT_IDS = [
+  'revenue',
+  'audience',
+  'costs',
+  'onboarding',
+  'support',
+  'shipping',
+  'inventory',
+  'marketing',
+  'seo',
+  'reviews'
+] as const;
+
+export const PLATFORM_STAT_IDS = [
+  'vendors',
+  'customers',
+  'countries',
+  'uptime',
+  'orders',
+  'satisfaction'
+] as const;
+
 export const MARKETPLACE_BENEFITS = [
   'Increase revenue with built-in discovery',
   'Expand your audience across 120+ countries',
@@ -163,12 +185,18 @@ export const HOW_IT_WORKS_STEPS = [
 ] as const;
 
 export const PLATFORM_STATS = [
-  { value: 25000, suffix: '+', label: 'Vendors' },
-  { value: 5, suffix: 'M+', label: 'Customers' },
-  { value: 120, suffix: '+', label: 'Countries' },
-  { value: 99.9, suffix: '%', label: 'Platform uptime', decimals: 1 },
-  { value: 250, suffix: 'M+', label: 'Orders processed' },
-  { value: 4.9, suffix: '★', label: 'Vendor satisfaction', decimals: 1 }
+  { id: 'vendors' as const, value: 25000, suffix: '+', label: 'Vendors' },
+  { id: 'customers' as const, value: 5, suffix: 'M+', label: 'Customers' },
+  { id: 'countries' as const, value: 120, suffix: '+', label: 'Countries' },
+  { id: 'uptime' as const, value: 99.9, suffix: '%', label: 'Platform uptime', decimals: 1 },
+  { id: 'orders' as const, value: 250, suffix: 'M+', label: 'Orders processed' },
+  {
+    id: 'satisfaction' as const,
+    value: 4.9,
+    suffix: '★',
+    label: 'Vendor satisfaction',
+    decimals: 1
+  }
 ] as const;
 
 export const TESTIMONIALS = [

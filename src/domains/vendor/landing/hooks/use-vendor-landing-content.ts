@@ -5,12 +5,15 @@ import { useTranslations } from 'next-intl';
 import {
   FAQ_ITEM_IDS,
   HOW_IT_WORKS_STEP_IDS,
+  MARKETPLACE_BENEFIT_IDS,
+  PLATFORM_STAT_IDS,
   PRICING_PLAN_IDS,
   TRUST_STAT_IDS,
   VENDOR_NAV_LINK_IDS,
   WHY_SELL_FEATURE_IDS,
   WHY_SELL_FEATURES
 } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 
 const NAV_LINK_HREFS: Record<(typeof VENDOR_NAV_LINK_IDS)[number], string> = {
   features: '#features',
@@ -18,12 +21,6 @@ const NAV_LINK_HREFS: Record<(typeof VENDOR_NAV_LINK_IDS)[number], string> = {
   successStories: '#success-stories',
   faq: '#faq',
   contact: '#contact'
-};
-
-const TRUST_STAT_VALUES: Record<(typeof TRUST_STAT_IDS)[number], string> = {
-  vendors: '10,000+',
-  shoppers: '5M+',
-  sales: '$250M+'
 };
 
 const PRICING_COMMISSION: Record<(typeof PRICING_PLAN_IDS)[number], string> = {
@@ -47,6 +44,20 @@ const PRICING_FEATURE_KEYS: Record<(typeof PRICING_PLAN_IDS)[number], readonly s
 /** Translated vendor landing marketing copy (not mock dashboard API preview data). */
 export function useVendorLandingContent() {
   const t = useTranslations('vendor.landing');
+  const { formatInteger } = useLocaleFormatters();
+
+  const formatTrustStatValue = (id: (typeof TRUST_STAT_IDS)[number]) => {
+    switch (id) {
+      case 'vendors':
+        return `${formatInteger(10000)}+`;
+      case 'shoppers':
+        return `${formatInteger(5)}M+`;
+      case 'sales':
+        return `${formatInteger(250)}M+`;
+      default:
+        return '';
+    }
+  };
 
   return {
     screen: {
@@ -60,7 +71,7 @@ export function useVendorLandingContent() {
     })),
     trustStats: TRUST_STAT_IDS.map((id) => ({
       id,
-      value: TRUST_STAT_VALUES[id],
+      value: formatTrustStatValue(id),
       label: t(`trustStats.${id}.label`)
     })),
     whySellFeatures: WHY_SELL_FEATURE_IDS.map((id, index) => ({
@@ -92,6 +103,11 @@ export function useVendorLandingContent() {
       id,
       question: t(`faq.${id}.question`),
       answer: t(`faq.${id}.answer`)
+    })),
+    marketplaceBenefits: MARKETPLACE_BENEFIT_IDS.map((id) => t(`marketplaceBenefits.items.${id}`)),
+    platformStats: PLATFORM_STAT_IDS.map((id) => ({
+      id,
+      label: t(`statistics.labels.${id}`)
     }))
   };
 }

@@ -1888,6 +1888,168 @@
         "title": "Brands scaling on Luxe",
         "description": "Join thousands of sellers who trust our platform to power their growth.",
         "partnerBrandsAria": "Partner brands"
+      },
+      "features": {
+        "eyebrow": "Platform features",
+        "title": "Powerful tools for every stage of your business",
+        "subtitle": "Deep capabilities without the complexity — so your team can move fast.",
+        "exploreFeature": "Explore {title}"
+      },
+      "marketplaceBenefits": {
+        "eyebrow": "Marketplace benefits",
+        "title": "Built for brands that want to scale without the chaos",
+        "subtitle": "Lower overhead, higher reach, and tools that keep your team focused on what matters.",
+        "visualEyebrow": "Marketplace growth",
+        "visualHeadline": "+127%",
+        "visualSubtitle": "Average seller revenue year one",
+        "stages": {
+          "discovery": "Discovery",
+          "conversion": "Conversion",
+          "retention": "Retention"
+        },
+        "campaignsTitle": "Active campaigns",
+        "campaignsSubtitle": "3 promotions · 12 featured SKUs",
+        "items": {
+          "revenue": "Increase revenue with built-in discovery",
+          "audience": "Expand your audience across 120+ countries",
+          "costs": "Lower operational costs with unified tooling",
+          "onboarding": "Fast onboarding — live in days, not months",
+          "support": "Dedicated seller success support",
+          "shipping": "Automated shipping label workflows",
+          "inventory": "Real-time inventory syncing",
+          "marketing": "Marketing campaigns & featured placements",
+          "seo": "SEO-optimized storefront pages",
+          "reviews": "Verified customer reviews & social proof"
+        }
+      },
+      "statistics": {
+        "eyebrow": "By the numbers",
+        "title": "A marketplace built for scale",
+        "subtitle": "Trusted infrastructure powering sellers and shoppers worldwide.",
+        "labels": {
+          "vendors": "Vendors",
+          "customers": "Customers",
+          "countries": "Countries",
+          "uptime": "Platform uptime",
+          "orders": "Orders processed",
+          "satisfaction": "Vendor satisfaction"
+        }
+      },
+      "integrations": {
+        "eyebrow": "Integrations",
+        "title": "Connect the tools you already use",
+        "subtitle": "Payments, shipping, analytics, and marketing — integrated out of the box."
+      },
+      "footer": {
+        "tagline": "The premium marketplace platform for modern brands. Sell smarter, scale faster."
+      }
+    },
+    "onboarding": {
+      "title": "Launch your seller account",
+      "subtitle": "Complete your business profile in a few steps. Your progress is saved automatically — refresh or switch tabs anytime.",
+      "progress": "Step {current} of {total}",
+      "steps": {
+        "account": {
+          "title": "Account",
+          "description": "Your login",
+          "cardTitle": "Seller account",
+          "cardDescription": "Create credentials to access your vendor dashboard.",
+          "signedInAs": "Signed in as {email}. Continue to business details."
+        },
+        "business": {
+          "title": "Business",
+          "description": "Legal profile",
+          "cardTitle": "Business details",
+          "cardDescription": "Tell us who operates this storefront for compliance and payouts."
+        },
+        "store": {
+          "title": "Storefront",
+          "description": "Brand & catalog",
+          "cardTitle": "Your store",
+          "cardDescription": "How shoppers will discover and trust your brand on Luxe."
+        },
+        "operations": {
+          "title": "Operations",
+          "description": "Ship & returns",
+          "cardTitle": "Fulfillment & policies",
+          "cardDescription": "Set expectations for shipping speed and returns upfront."
+        },
+        "review": {
+          "title": "Review",
+          "description": "Launch",
+          "cardTitle": "Review & launch",
+          "cardDescription": "Confirm your details and open your vendor dashboard."
+        }
+      },
+      "fields": {
+        "firstName": { "label": "First name" },
+        "lastName": { "label": "Last name" },
+        "email": { "label": "Work email" },
+        "phone": { "label": "Phone (optional)" },
+        "password": { "label": "Password" },
+        "confirmPassword": { "label": "Confirm password" },
+        "businessLegalName": { "label": "Legal business name" },
+        "businessType": {
+          "label": "Business type",
+          "options": {
+            "brand": "Brand / DTC",
+            "company": "Registered company",
+            "individual": "Individual seller"
+          }
+        },
+        "country": {
+          "label": "Country of operation",
+          "options": {
+            "us": "United States",
+            "ca": "Canada",
+            "gb": "United Kingdom",
+            "de": "Germany",
+            "fr": "France",
+            "ir": "Iran",
+            "ae": "United Arab Emirates"
+          }
+        },
+        "website": { "label": "Website (optional)" },
+        "taxId": { "label": "Tax / VAT ID (optional)" },
+        "storeName": { "label": "Store name" },
+        "storeDescription": { "label": "Store description" },
+        "location": { "label": "Primary location (city, country)" },
+        "categoryIds": {
+          "label": "Primary categories",
+          "placeholder": "Select categories you sell in"
+        },
+        "logoUrl": {
+          "label": "Logo URL (optional)",
+          "detail": "Add a square logo now or upload later in your dashboard."
+        },
+        "fulfillmentModel": {
+          "label": "Fulfillment model",
+          "options": {
+            "self": "I ship orders myself",
+            "platform": "Use Luxe fulfillment partners",
+            "hybrid": "Mix of self-ship and partners"
+          }
+        },
+        "shippingInfo": { "label": "Shipping policy summary" },
+        "returnPolicy": { "label": "Return policy summary" },
+        "acceptVendorTerms": {
+          "label": "I agree to the Luxe Seller Agreement and marketplace policies"
+        }
+      },
+      "actions": {
+        "back": "Back",
+        "continue": "Continue",
+        "launchStore": "Launch store",
+        "submitting": "Launching…"
+      },
+      "success": {
+        "title": "Your store is live",
+        "description": "Welcome to the vendor dashboard — add products and configure payouts next."
+      },
+      "errors": {
+        "registerFailed": "Could not create account",
+        "submitFailed": "Could not launch store",
+        "validationFailed": "Please fix the highlighted fields"
       }
     }
   }

@@ -2,20 +2,24 @@
 
 import { IconMenu, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
+import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
+import { getDirection, type Locale } from '@/i18n/config';
 import { cn } from '@/lib/utils';
 
 interface VendorLandingNavProps {
-  isAuthenticated: boolean;
+  hasVendorStore: boolean;
 }
 
-export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
+export function VendorLandingNav({ hasVendorStore }: VendorLandingNavProps) {
   const t = useTranslations('vendor.landing.nav');
+  const locale = useLocale() as Locale;
+  const sheetSide = getDirection(locale) === 'rtl' ? 'left' : 'right';
   const { navLinks } = useVendorLandingContent();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -27,9 +31,7 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const startSellingHref = isAuthenticated
-    ? '/vendor/panel'
-    : '/register?callbackUrl=/vendor/panel';
+  const startSellingHref = getVendorStartHref(hasVendorStore);
   const signInHref = '/vendor/login?callbackUrl=/vendor/panel';
 
   return (
@@ -90,7 +92,7 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
       </nav>
 
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side='right' className='w-full max-w-sm p-0'>
+        <SheetContent side={sheetSide} className='w-full max-w-sm p-0'>
           <SheetTitle className='sr-only'>{t('navigationSr')}</SheetTitle>
           <div className='flex items-center justify-between border-b p-4'>
             <span className='font-semibold'>{t('menu')}</span>

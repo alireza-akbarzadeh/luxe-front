@@ -181,6 +181,55 @@ export async function registerAction(formData: FormData) {
   }
 }
 
+/** Seller onboarding registration — sets session cookies without redirecting. */
+export async function vendorRegisterAction(payload: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+}): Promise<{ error?: string }> {
+  const { email, password, firstName, lastName, phone } = payload;
+
+  if (!email || !password || !firstName || !lastName) {
+    return { error: 'All required fields must be filled' };
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({
+        email,
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+        accept_terms: true,
+        accept_privacy: true
+      })
+    });
+
+    const json = (await res.json()) as DtoRegisterResponse;
+
+    if (!res.ok || !json.success) {
+      return { error: json.message || 'Registration failed' };
+    }
+
+    const { access_token, refresh_token } = json.data ?? {};
+
+    if (!access_token || !refresh_token) {
+      return { error: 'Invalid response from authentication server' };
+    }
+
+    await setAuthCookies(access_token, refresh_token, true);
+    return {};
+  } catch (error) {
+    console.error('Vendor registration error:', error);
+    return { error: 'An unexpected error occurred during registration' };
+  }
+}
+
 export async function forgotPasswordAction(
   email: string
 ): Promise<{ success: boolean; error?: string }> {

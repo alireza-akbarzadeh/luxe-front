@@ -1,3 +1,5 @@
+'use client';
+
 import type { TablerIcon } from '@tabler/icons-react';
 import {
   IconHeadset,
@@ -7,13 +9,16 @@ import {
   IconUsers,
   IconWallet
 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import {
   FadeInView,
   LandingContainer,
   SectionTitle
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
-import { MARKETPLACE_BENEFITS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { MARKETPLACE_BENEFIT_IDS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 
 const BENEFIT_ICONS: TablerIcon[] = [
   IconTrendingUp,
@@ -25,6 +30,10 @@ const BENEFIT_ICONS: TablerIcon[] = [
 ];
 
 export function VendorMarketplaceBenefitsSection() {
+  const t = useTranslations('vendor.landing.marketplaceBenefits');
+  const { marketplaceBenefits } = useVendorLandingContent();
+  const { formatInteger } = useLocaleFormatters();
+
   return (
     <LandingContainer className='py-20 md:py-28'>
       <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-20'>
@@ -42,13 +51,15 @@ export function VendorMarketplaceBenefitsSection() {
             <div className='relative flex h-full flex-col justify-between'>
               <div>
                 <p className='text-muted-foreground text-xs font-medium tracking-widest uppercase'>
-                  Marketplace growth
+                  {t('visualEyebrow')}
                 </p>
-                <p className='mt-2 text-3xl font-semibold tracking-tight'>+127%</p>
-                <p className='text-muted-foreground text-sm'>Average seller revenue year one</p>
+                <p className='mt-2 text-3xl font-semibold tracking-tight tabular-nums'>
+                  +{formatInteger(127)}%
+                </p>
+                <p className='text-muted-foreground text-sm'>{t('visualSubtitle')}</p>
               </div>
               <div className='space-y-3'>
-                {['Discovery', 'Conversion', 'Retention'].map((stage, i) => (
+                {(['discovery', 'conversion', 'retention'] as const).map((stage, i) => (
                   <div key={stage} className='flex items-center gap-3'>
                     <div className='bg-gold/20 h-2 flex-1 overflow-hidden rounded-full'>
                       <div
@@ -56,13 +67,15 @@ export function VendorMarketplaceBenefitsSection() {
                         style={{ width: `${85 - i * 15}%` }}
                       />
                     </div>
-                    <span className='text-muted-foreground w-20 text-xs'>{stage}</span>
+                    <span className='text-muted-foreground w-20 text-xs'>
+                      {t(`stages.${stage}`)}
+                    </span>
                   </div>
                 ))}
               </div>
               <div className='border-border/50 bg-background/60 rounded-2xl border p-4 backdrop-blur'>
-                <p className='text-xs font-medium'>Active campaigns</p>
-                <p className='text-muted-foreground mt-1 text-sm'>3 promotions · 12 featured SKUs</p>
+                <p className='text-xs font-medium'>{t('campaignsTitle')}</p>
+                <p className='text-muted-foreground mt-1 text-sm'>{t('campaignsSubtitle')}</p>
               </div>
             </div>
           </div>
@@ -71,17 +84,17 @@ export function VendorMarketplaceBenefitsSection() {
         <div>
           <FadeInView>
             <SectionTitle
-              eyebrow='Marketplace benefits'
-              title='Built for brands that want to scale without the chaos'
-              description='Lower overhead, higher reach, and tools that keep your team focused on what matters.'
+              eyebrow={t('eyebrow')}
+              title={t('title')}
+              description={t('subtitle')}
               align='left'
               className='mb-8'
             />
           </FadeInView>
 
           <ul className='grid gap-4 sm:grid-cols-2'>
-            {MARKETPLACE_BENEFITS.map((benefit, index) => (
-              <FadeInView key={benefit} delay={index * 0.03}>
+            {marketplaceBenefits.map((benefit, index) => (
+              <FadeInView key={MARKETPLACE_BENEFIT_IDS[index]} delay={index * 0.03}>
                 <BenefitListItem
                   benefit={benefit}
                   icon={BENEFIT_ICONS[index % BENEFIT_ICONS.length] ?? IconTrendingUp}

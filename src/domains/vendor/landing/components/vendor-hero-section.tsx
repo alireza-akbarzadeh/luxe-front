@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  IconArrowRight,
   IconChartBar,
   IconPackage,
   IconPlayerPlay,
@@ -14,18 +13,20 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { DirectionalArrow } from '@/components/ui/directional-icon';
 import { FadeInView } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
 import { DASHBOARD_METRICS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
 import { cn } from '@/lib/utils';
 
 interface VendorHeroSectionProps {
-  isAuthenticated: boolean;
+  hasVendorStore: boolean;
 }
 
-export function VendorHeroSection({ isAuthenticated }: VendorHeroSectionProps) {
+export function VendorHeroSection({ hasVendorStore }: VendorHeroSectionProps) {
   const t = useTranslations('vendor.landing.hero');
   const reduceMotion = useReducedMotion();
-  const startHref = isAuthenticated ? '/vendor/panel' : '/register?callbackUrl=/vendor/panel';
+  const startHref = getVendorStartHref(hasVendorStore);
 
   return (
     <section className='relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24 lg:pt-36 lg:pb-28'>
@@ -63,7 +64,7 @@ export function VendorHeroSection({ isAuthenticated }: VendorHeroSectionProps) {
               className={cn(buttonVariants({ size: 'lg' }), 'gap-2 rounded-full px-8')}
             >
               {t('startSelling')}
-              <IconArrowRight className='size-4' aria-hidden />
+              <DirectionalArrow />
             </Link>
             <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
               <a href='#dashboard'>

@@ -9,10 +9,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAnimatedCounter } from '@/domains/vendor/landing/hooks/use-animated-counter';
+import { useClientMounted } from '@/hooks/use-client-mounted';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 
-function formatStatic(value: number, decimals: number) {
-  return decimals > 0 ? value.toFixed(decimals) : value.toLocaleString();
+function useFormatStatValue(value: number, decimals: number) {
+  const { formatInteger, formatDecimal } = useLocaleFormatters();
+  return decimals > 0 ? formatDecimal(value, decimals) : formatInteger(value);
 }
 
 interface FadeInViewProps {
@@ -25,7 +28,12 @@ interface FadeInViewProps {
 /** Fade/slide children into view on scroll with reduced-motion support. */
 export function FadeInView({ children, className, delay = 0, direction = 'up' }: FadeInViewProps) {
   const reduceMotion = useReducedMotion();
+  const mounted = useClientMounted();
   const offset = direction === 'up' ? 28 : direction === 'down' ? -28 : 0;
+
+  if (!mounted) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div
@@ -100,13 +108,14 @@ export function AnimatedStat({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const reduceMotion = useReducedMotion();
+  const formatStatValue = useFormatStatValue(value, decimals);
   const display = useAnimatedCounter({
     end: value,
     decimals,
     enabled: inView && !reduceMotion
   });
 
-  const formatted = reduceMotion ? formatStatic(value, decimals) : display;
+  const formatted = reduceMotion ? formatStatValue : display;
 
   return (
     <div ref={ref} className={cn('text-center', className)}>

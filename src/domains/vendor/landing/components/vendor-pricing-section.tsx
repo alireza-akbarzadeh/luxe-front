@@ -23,10 +23,7 @@ export function VendorPricingSection() {
       <div className='grid gap-6 lg:grid-cols-3 lg:gap-8'>
         {pricingPlans.map((plan, index) => (
           <FadeInView key={plan.id} delay={index * 0.08}>
-            <PricingCard
-              {...plan}
-              href={plan.id === 'enterprise' ? '/contact' : '/register?callbackUrl=/vendor/panel'}
-            />
+            <PricingCard {...plan} href={plan.id === 'enterprise' ? '/contact' : '/vendor/apply'} />
           </FadeInView>
         ))}
       </div>

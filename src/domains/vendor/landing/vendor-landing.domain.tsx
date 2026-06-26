@@ -14,16 +14,18 @@ import { VendorStatisticsSection } from '@/domains/vendor/landing/components/ven
 import { VendorTestimonialsSection } from '@/domains/vendor/landing/components/vendor-testimonials-section';
 import { VendorWhySellSection } from '@/domains/vendor/landing/components/vendor-why-sell-section';
 import { getServerUser } from '@/lib/auth/auth-server';
+import { getServerVendorStores, isVendorPanelAdmin } from '@/lib/auth/vendor-server';
 
 export async function VendorLandingDomain() {
   const user = await getServerUser();
-  const isAuthenticated = Boolean(user);
+  const stores = user ? await getServerVendorStores() : [];
+  const hasVendorStore = stores.length > 0 || (user ? isVendorPanelAdmin(user) : false);
 
   return (
     <>
-      <VendorLandingNav isAuthenticated={isAuthenticated} />
+      <VendorLandingNav hasVendorStore={hasVendorStore} />
       <main>
-        <VendorHeroSection isAuthenticated={isAuthenticated} />
+        <VendorHeroSection hasVendorStore={hasVendorStore} />
         <VendorLogoCloudSection />
         <VendorWhySellSection />
         <VendorMarketplaceBenefitsSection />
@@ -35,7 +37,7 @@ export async function VendorLandingDomain() {
         <VendorPricingSection />
         <VendorIntegrationsSection />
         <VendorFaqSection />
-        <VendorFinalCtaSection isAuthenticated={isAuthenticated} />
+        <VendorFinalCtaSection hasVendorStore={hasVendorStore} />
       </main>
       <VendorLandingFooter />
     </>
