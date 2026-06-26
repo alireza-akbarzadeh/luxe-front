@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 
+import { getSiteUrl } from '@/lib/seo/site-url';
 import { type SiteMetaInput, toNextMetadata } from '@/lib/utils';
 
-const SITE_URL = 'https://luxe.vercel.app';
+const SITE_URL = getSiteUrl();
 
 export const siteMetaInput: SiteMetaInput = {
   title: 'Luxe | Premium Fashion & Lifestyle',

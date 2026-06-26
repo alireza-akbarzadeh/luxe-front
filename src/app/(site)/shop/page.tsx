@@ -1,11 +1,20 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { ShopProductsSkeleton } from '@/domains/shop/components/shop-products-skeleton';
 import { ShopDomain } from '@/domains/shop/shop.domain';
 import { getQueryClient } from '@/lib/query-client';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import { getGetProductsQueryOptions } from '@/services/-products-get';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Shop',
+  description:
+    'Browse the full Luxe catalog — luxury fashion, accessories, and lifestyle products with filters for category, brand, and price.',
+  path: '/shop'
+});
 
 export default async function ShopPage() {
   const cookieStore = await cookies();

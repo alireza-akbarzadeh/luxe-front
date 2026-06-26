@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
@@ -9,7 +10,15 @@ import {
   STORES_PAGE_SIZE
 } from '@/domains/store/lib/infinite-stores-query';
 import { getQueryClient } from '@/lib/query-client';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import { getStores } from '@/services/-stores-get';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Stores',
+  description:
+    'Discover verified Luxe sellers — boutique brands, specialty stores, and marketplace favorites.',
+  path: '/store'
+});
 
 export default async function StorePage() {
   const cookieStore = await cookies();

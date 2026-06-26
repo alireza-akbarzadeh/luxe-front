@@ -1,3 +1,4 @@
+import { absoluteUrl } from '@/lib/seo/site-url';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 interface ProductJsonLdProps {
@@ -9,6 +10,7 @@ interface ProductJsonLdProps {
 export function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
   const inStock = Number(product.stock ?? 0) > 0;
   const price = product.price != null ? String(product.price) : undefined;
+  const productUrl = absoluteUrl(`/product/${slug}`);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -17,7 +19,7 @@ export function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
     description: product.description,
     sku: product.sku,
     image: product.images?.length ? product.images : undefined,
-    url: `/product/${slug}`,
+    url: productUrl,
     ...(product.brand?.name
       ? {
           brand: {
@@ -41,10 +43,8 @@ export function ProductJsonLd({ product, slug }: ProductJsonLdProps) {
             '@type': 'Offer',
             price,
             priceCurrency: 'USD',
-            availability: inStock
-              ? 'https://schema.org/InStock'
-              : 'https://schema.org/OutOfStock',
-            url: `/product/${slug}`
+            availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            url: productUrl
           }
         }
       : {})

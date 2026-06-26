@@ -6,18 +6,20 @@ import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { getProductsId } from '~/src/services/-products-{id}-get';
 
 /** Server-side product fetch for PDP route + metadata (deduped per request). */
-export const getProductPageData = cache(async (param: string): Promise<DtoProductWithLike | null> => {
-  const cookieStore = await cookies();
+export const getProductPageData = cache(
+  async (param: string): Promise<DtoProductWithLike | null> => {
+    const cookieStore = await cookies();
 
-  try {
-    const response = await getProductsId(param, {
-      headers: { Cookie: cookieStore.toString() }
-    });
-    return response.data?.product ?? null;
-  } catch {
-    return null;
+    try {
+      const response = await getProductsId(param, {
+        headers: { Cookie: cookieStore.toString() }
+      });
+      return response.data?.product ?? null;
+    } catch {
+      return null;
+    }
   }
-});
+);
 
 export function buildProductMetadata(product: DtoProductWithLike, slug: string): Metadata {
   const title = product.meta_title?.trim() || product.name || 'Product';
@@ -41,7 +43,7 @@ export function buildProductMetadata(product: DtoProductWithLike, slug: string):
       title,
       description,
       url: canonicalPath,
-      type: 'website',
+      type: 'website' as const,
       siteName: 'Luxe',
       ...(image
         ? {

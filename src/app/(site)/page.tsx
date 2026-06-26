@@ -1,11 +1,23 @@
 // app/page.tsx
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import type { Metadata } from 'next';
 
+import { SiteJsonLd } from '@/components/seo/site-json-ld';
 import { HomeDomains } from '@/domains/home/home.domain';
+import { buildPageMetadata } from '@/lib/seo/metadata';
 import { getQueryClient } from '~/src/lib/query-client';
 import { getGetCategoriesQueryOptions } from '~/src/services/-categories-get';
 import { getGetProductsQueryOptions } from '~/src/services/-products-get';
 import type { GetProductsParams } from '~/src/services/-products-get.schemas';
+
+export const metadata: Metadata = buildPageMetadata({
+  title: 'Premium Fashion & Lifestyle',
+  description:
+    'Shop curated luxury fashion, accessories, and lifestyle products at Luxe. Premium brands, fast shipping, easy returns, and exceptional service.',
+  path: '/',
+  keywords:
+    'luxe, luxury fashion, premium ecommerce, designer clothing, luxury accessories, lifestyle products'
+});
 
 export default async function HomePage() {
   const queryClient = getQueryClient();
@@ -42,8 +54,11 @@ export default async function HomePage() {
   ]);
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <HomeDomains />
-    </HydrationBoundary>
+    <>
+      <SiteJsonLd />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <HomeDomains />
+      </HydrationBoundary>
+    </>
   );
 }
