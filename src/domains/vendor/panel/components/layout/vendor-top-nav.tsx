@@ -33,7 +33,12 @@ import { Flex } from '@/components/ui/flex';
 import { FlexItem } from '@/components/ui/flex-item';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import ThemeToggle from '@/components/ui/theme-toggle';
-import { VENDOR_NOTIFICATIONS } from '@/domains/vendor/panel/data/vendor-dashboard.data';
+import { useAccountNotifications } from '@/domains/account/hooks/use-account-notifications';
+import {
+  formatNotificationTime,
+  formatNotificationType,
+  getNotificationTypeStyle
+} from '@/domains/account/lib/notification-utils';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import { type Locale, locales } from '@/i18n/config';
 import { listVendorStores } from '@/lib/api/vendor-stores';
@@ -66,7 +71,12 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
   });
   const vendorStores = storesData?.data ?? [];
 
-  const unreadCount = VENDOR_NOTIFICATIONS.filter((n) => !n.read).length;
+  const {
+    notifications,
+    unreadOnPage,
+    isLoading: notificationsLoading
+  } = useAccountNotifications(8, 0);
+  const unreadCount = unreadOnPage;
   const userInitials = `${user.first_name?.[0] ?? ''}${user.last_name?.[0] ?? ''}`;
 
   const onLocaleChange = (nextLocale: string) => {
@@ -210,19 +220,41 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
                   <p className='text-sm font-semibold'>{t('notifications')}</p>
                 </div>
                 <ul className='max-h-80 overflow-y-auto'>
-                  {VENDOR_NOTIFICATIONS.map((notification) => (
-                    <li
-                      key={notification.id}
-                      className={cn(
-                        'border-b px-4 py-3 last:border-0',
-                        !notification.read && 'bg-muted/30'
-                      )}
-                    >
-                      <p className='text-sm font-medium'>{notification.title}</p>
-                      <p className='text-muted-foreground mt-0.5 text-xs'>{notification.body}</p>
-                      <p className='text-muted-foreground mt-1 text-[10px]'>{notification.time}</p>
+                  {notificationsLoading ? (
+                    <li className='text-muted-foreground px-4 py-6 text-center text-sm'>…</li>
+                  ) : notifications.length === 0 ? (
+                    <li className='text-muted-foreground px-4 py-6 text-center text-sm'>
+                      {t('noNotifications')}
                     </li>
-                  ))}
+                  ) : (
+                    notifications.map((notification) => (
+                      <li
+                        key={notification.id}
+                        className={cn(
+                          'border-b px-4 py-3 last:border-0',
+                          !notification.is_read && 'bg-muted/30'
+                        )}
+                      >
+                        <p className='text-sm font-medium'>{notification.title}</p>
+                        <p className='text-muted-foreground mt-0.5 text-xs'>
+                          {notification.message}
+                        </p>
+                        <div className='mt-2 flex items-center justify-between gap-2'>
+                          <span
+                            className={cn(
+                              'rounded-full border px-2 py-0.5 text-[10px] font-medium',
+                              getNotificationTypeStyle(notification.type)
+                            )}
+                          >
+                            {formatNotificationType(notification.type)}
+                          </span>
+                          <p className='text-muted-foreground text-[10px]'>
+                            {formatNotificationTime(notification.created_at)}
+                          </p>
+                        </div>
+                      </li>
+                    ))
+                  )}
                 </ul>
                 <div className='border-t p-2'>
                   <Button variant='ghost' size='sm' className='w-full' asChild>

@@ -1682,10 +1682,18 @@
         "inviteStaff": "دعوت همکار",
         "notifications": "اعلان‌ها",
         "viewAllNotifications": "مشاهده همه",
+        "noNotifications": "هنوز اعلانی نیست",
         "messages": "پیام‌ها",
         "accountSettings": "تنظیمات حساب",
         "storeSettings": "تنظیمات فروشگاه",
         "vendorHome": "صفحه فروشندگان"
+      },
+      "realtime": {
+        "notificationFallback": "اعلان جدید",
+        "newOrder": "سفارش جدید {order}",
+        "orderUpdate": "به‌روزرسانی سفارش {order}",
+        "shipmentUpdate": "به‌روزرسانی ارسال {order}",
+        "newMessage": "پیام جدید"
       },
       "account": {
         "title": "تنظیمات حساب",

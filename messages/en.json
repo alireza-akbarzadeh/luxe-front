@@ -1682,10 +1682,18 @@
         "inviteStaff": "Invite staff",
         "notifications": "Notifications",
         "viewAllNotifications": "View all",
+        "noNotifications": "No notifications yet",
         "messages": "Messages",
         "accountSettings": "Account settings",
         "storeSettings": "Store settings",
         "vendorHome": "Vendor home"
+      },
+      "realtime": {
+        "notificationFallback": "New notification",
+        "newOrder": "New order {order}",
+        "orderUpdate": "Order updated {order}",
+        "shipmentUpdate": "Shipment update {order}",
+        "newMessage": "New message"
       },
       "account": {
         "title": "Account settings",
