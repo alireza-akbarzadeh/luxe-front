@@ -24,7 +24,8 @@ export function SuppliersAdminDomain() {
         ]}
         links={[
           { label: 'Inventory', href: '/dashboard/inventory' },
-          { label: 'Stores', href: '/dashboard/stores' }
+          { label: 'Stores', href: '/dashboard/stores' },
+          { label: 'Vendor applications', href: '/dashboard/vendor-applications' }
         ]}
       />
     </Flex>

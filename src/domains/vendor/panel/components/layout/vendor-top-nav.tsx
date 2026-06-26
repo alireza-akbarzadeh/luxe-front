@@ -10,6 +10,7 @@ import {
   IconPlus,
   IconSearch
 } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -24,11 +25,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import ThemeToggle from '@/components/ui/theme-toggle';
-import {
-  VENDOR_NOTIFICATIONS,
-  VENDOR_STORES
-} from '@/domains/vendor/panel/data/vendor-dashboard.data';
+import { VENDOR_NOTIFICATIONS } from '@/domains/vendor/panel/data/vendor-dashboard.data';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
+import { listVendorStores } from '@/lib/api/vendor-stores';
 import type { UserPayload } from '@/lib/auth/auth-server';
 import { cn } from '@/lib/utils';
 
@@ -43,7 +42,14 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
   const toggleSidebarCollapsed = useVendorPanelStore((s) => s.toggleSidebarCollapsed);
   const sidebarCollapsed = useVendorPanelStore((s) => s.sidebarCollapsed);
   const activeStoreName = useVendorPanelStore((s) => s.activeStoreName);
+  const activeStoreId = useVendorPanelStore((s) => s.activeStoreId);
   const setActiveStore = useVendorPanelStore((s) => s.setActiveStore);
+
+  const { data: storesData } = useQuery({
+    queryKey: ['vendor-stores'],
+    queryFn: listVendorStores
+  });
+  const vendorStores = storesData?.data ?? [];
 
   const unreadCount = VENDOR_NOTIFICATIONS.filter((n) => !n.read).length;
 
@@ -98,11 +104,11 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         <DropdownMenuContent align='end' className='w-56'>
           <DropdownMenuLabel>{t('switchStore')}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {VENDOR_STORES.map((store) => (
+          {vendorStores.map((store) => (
             <DropdownMenuItem
               key={store.id}
               onClick={() => setActiveStore(store)}
-              className={cn(activeStoreName === store.name && 'bg-accent')}
+              className={cn(activeStoreId === store.id && 'bg-accent')}
             >
               {store.name}
             </DropdownMenuItem>

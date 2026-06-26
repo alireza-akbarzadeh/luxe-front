@@ -4,6 +4,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { VendorCommandPalette } from '@/domains/vendor/panel/components/layout/vendor-command-palette';
 import { VendorSidebar } from '@/domains/vendor/panel/components/layout/vendor-sidebar';
 import { VendorTopNav } from '@/domains/vendor/panel/components/layout/vendor-top-nav';
+import { VendorStoresHydrator } from '@/domains/vendor/panel/components/vendor-stores-hydrator';
 import { useVendorShortcuts } from '@/domains/vendor/panel/hooks/use-vendor-shortcuts';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import type { UserPayload } from '@/lib/auth/auth-server';
@@ -22,6 +23,7 @@ export function VendorPanelShell({ children, user }: VendorPanelShellProps) {
 
   return (
     <div className='bg-background flex h-screen w-full overflow-hidden'>
+      <VendorStoresHydrator />
       <VendorSidebar className='hidden md:flex' />
 
       <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>

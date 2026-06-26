@@ -30,9 +30,9 @@ const initialState: VendorPanelState = {
   mobileSidebarOpen: false,
   commandOpen: false,
   notificationsOpen: false,
-  activeStoreId: 1,
-  activeStoreName: 'Maison Marchetti',
-  activeStoreSlug: 'maison-marchetti',
+  activeStoreId: 0,
+  activeStoreName: '',
+  activeStoreSlug: '',
   productViewMode: 'table'
 };
 

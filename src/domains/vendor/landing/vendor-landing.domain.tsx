@@ -31,15 +31,15 @@ export async function VendorLandingDomain() {
         <VendorMarketplaceBenefitsSection />
         <VendorDashboardShowcaseSection />
         <VendorHowItWorksSection />
-        <VendorFeaturesSection />
+        <VendorFeaturesSection hasVendorStore={hasVendorStore} />
         <VendorStatisticsSection />
         <VendorTestimonialsSection />
-        <VendorPricingSection />
+        <VendorPricingSection hasVendorStore={hasVendorStore} />
         <VendorIntegrationsSection />
         <VendorFaqSection />
         <VendorFinalCtaSection hasVendorStore={hasVendorStore} />
       </main>
-      <VendorLandingFooter />
+      <VendorLandingFooter hasVendorStore={hasVendorStore} />
     </>
   );
 }

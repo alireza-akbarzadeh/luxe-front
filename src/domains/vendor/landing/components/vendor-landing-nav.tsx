@@ -32,6 +32,7 @@ export function VendorLandingNav({ hasVendorStore }: VendorLandingNavProps) {
   }, []);
 
   const startSellingHref = getVendorStartHref(hasVendorStore);
+  const startSellingLabel = hasVendorStore ? t('goToDashboard') : t('startSelling');
   const signInHref = '/vendor/login?callbackUrl=/vendor/panel';
 
   return (
@@ -75,7 +76,7 @@ export function VendorLandingNav({ hasVendorStore }: VendorLandingNavProps) {
             href={startSellingHref}
             className={cn(buttonVariants({ size: 'sm' }), 'rounded-full px-5')}
           >
-            {t('startSelling')}
+            {startSellingLabel}
           </Link>
         </div>
 
@@ -131,7 +132,7 @@ export function VendorLandingNav({ hasVendorStore }: VendorLandingNavProps) {
               className={cn(buttonVariants(), 'rounded-full')}
               onClick={() => setMobileOpen(false)}
             >
-              {t('startSelling')}
+              {startSellingLabel}
             </Link>
           </div>
         </SheetContent>

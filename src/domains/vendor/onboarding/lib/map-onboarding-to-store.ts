@@ -20,6 +20,8 @@ export function mapOnboardingToStorePayload(
     fulfillment_model: values.fulfillmentModel,
     category_ids: values.categoryIds
       .map((id) => Number(id))
-      .filter((id) => Number.isFinite(id) && id > 0)
+      .filter((id) => Number.isFinite(id) && id > 0),
+    latitude: values.locationLat,
+    longitude: values.locationLng
   };
 }

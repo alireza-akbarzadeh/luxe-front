@@ -1871,6 +1871,7 @@
         "brandSuffix": "Sellers",
         "signIn": "Sign in",
         "startSelling": "Start selling",
+        "goToDashboard": "Go to dashboard",
         "openMenu": "Open menu",
         "closeMenu": "Close menu",
         "navigationSr": "Vendor navigation",
@@ -2013,7 +2014,14 @@
         "taxId": { "label": "Tax / VAT ID (optional)" },
         "storeName": { "label": "Store name" },
         "storeDescription": { "label": "Store description" },
-        "location": { "label": "Primary location (city, country)" },
+        "location": {
+          "label": "Primary location (city, country)",
+          "placeholder": "Pick your store location on the map",
+          "pickOnMap": "Pick on map",
+          "mapDialogTitle": "Choose store location",
+          "mapDialogDescription": "Search or drop a pin — we use this for shipping and marketplace discovery.",
+          "useThisLocation": "Use this location"
+        },
         "categoryIds": {
           "label": "Primary categories",
           "placeholder": "Select categories you sell in"
@@ -2033,8 +2041,17 @@
         "shippingInfo": { "label": "Shipping policy summary" },
         "returnPolicy": { "label": "Return policy summary" },
         "acceptVendorTerms": {
-          "label": "I agree to the Luxe Seller Agreement and marketplace policies"
+          "prefix": "I agree to the",
+          "agreementLink": "Luxe Seller Agreement",
+          "suffix": " and marketplace policies"
         }
+      },
+      "agreement": {
+        "title": "Luxe Seller Agreement",
+        "subtitle": "Summary of key terms for marketplace sellers",
+        "body": "By selling on Luxe you agree to:\n\n• Provide accurate product listings, pricing, and inventory\n• Ship orders within stated handling times and honor your return policy\n• Comply with applicable tax, consumer protection, and brand authenticity laws\n• Keep customer data confidential and use it only to fulfill orders\n• Accept Luxe commission and payout schedules for your plan\n\nLuxe may suspend or remove stores that violate these terms or receive sustained negative buyer feedback.\n\nThis summary does not replace the full Terms of Service.",
+        "fullTermsLink": "Read full Terms of Service",
+        "close": "Close"
       },
       "actions": {
         "back": "Back",
@@ -2043,8 +2060,8 @@
         "submitting": "Launching…"
       },
       "success": {
-        "title": "Your store is live",
-        "description": "Welcome to the vendor dashboard — add products and configure payouts next."
+        "title": "Application submitted",
+        "description": "Your store is pending review. You can finish setup in the vendor dashboard while we approve your application."
       },
       "errors": {
         "registerFailed": "Could not create account",

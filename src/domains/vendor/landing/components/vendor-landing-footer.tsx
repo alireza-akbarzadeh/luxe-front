@@ -1,11 +1,22 @@
 import { IconMail, IconMapPin, IconPhone } from '@tabler/icons-react';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { Newsletter } from '@/components/footer/news-letter';
+import { buttonVariants } from '@/components/ui/button';
 import { LandingContainer } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
 import { FOOTER_CONTACT, FOOTER_SECTIONS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
+import { cn } from '@/lib/utils';
 
-export function VendorLandingFooter() {
+interface VendorLandingFooterProps {
+  hasVendorStore: boolean;
+}
+
+export async function VendorLandingFooter({ hasVendorStore }: VendorLandingFooterProps) {
+  const t = await getTranslations('vendor.landing.nav');
+  const startHref = getVendorStartHref(hasVendorStore);
+  const startLabel = hasVendorStore ? t('goToDashboard') : t('startSelling');
   return (
     <footer id='contact' className='border-border/60 bg-muted/20 border-t'>
       <LandingContainer className='py-16 md:py-20'>
@@ -51,7 +62,13 @@ export function VendorLandingFooter() {
 
         <div className='border-border/50 text-muted-foreground mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-xs sm:flex-row'>
           <p>© {new Date().getFullYear()} Luxe Marketplace. All rights reserved.</p>
-          <div className='flex gap-4'>
+          <div className='flex flex-wrap items-center justify-center gap-4'>
+            <Link
+              href={startHref}
+              className={cn(buttonVariants({ size: 'sm' }), 'rounded-full px-4')}
+            >
+              {startLabel}
+            </Link>
             <Link href='/legal/terms' className='hover:text-foreground'>
               Terms
             </Link>

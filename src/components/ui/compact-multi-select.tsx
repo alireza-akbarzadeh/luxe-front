@@ -2,7 +2,6 @@ import { IconCheck, IconChevronDown, IconX, type TablerIcon } from '@tabler/icon
 import React from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -66,13 +65,13 @@ export function CompactMultiSelect<TOption>({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          type='button'
-          variant='outline'
+        <div
           role='combobox'
+          tabIndex={0}
+          aria-expanded={open}
           className={cn(
-            'border-input bg-background h-auto min-h-9 w-full justify-between rounded-md border px-3 py-2 text-base shadow-xs transition-all md:text-sm',
-            'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+            'border-input bg-background inline-flex h-auto min-h-9 w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-base shadow-xs transition-all md:text-sm',
+            'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-none',
             currentValues.length > 0 ? 'text-foreground' : 'text-muted-foreground',
             baseStyles
           )}
@@ -109,7 +108,7 @@ export function CompactMultiSelect<TOption>({
               open && 'rotate-180'
             )}
           />
-        </Button>
+        </div>
       </PopoverTrigger>
 
       <PopoverContent

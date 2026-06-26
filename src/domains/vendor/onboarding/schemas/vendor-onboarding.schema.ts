@@ -26,6 +26,8 @@ export const vendorOnboardingSchema = z
     storeName: z.string().min(2, 'Store name is required'),
     storeDescription: z.string().min(20, 'Tell shoppers about your brand (min 20 chars)'),
     location: z.string().min(2, 'Primary location is required'),
+    locationLat: z.number().optional(),
+    locationLng: z.number().optional(),
     categoryIds: z.array(z.string()).min(1, 'Select at least one category'),
     logoUrl: z.string().optional(),
     shippingInfo: z.string().min(10, 'Describe how you ship orders'),
@@ -59,6 +61,8 @@ export const vendorOnboardingDefaults: VendorOnboardingValues = {
   storeName: '',
   storeDescription: '',
   location: '',
+  locationLat: undefined,
+  locationLng: undefined,
   categoryIds: [],
   logoUrl: '',
   shippingInfo: '',
@@ -73,7 +77,15 @@ export const vendorOnboardingStepFields: Record<
 > = {
   account: ['firstName', 'lastName', 'email', 'phone', 'password', 'confirmPassword'],
   business: ['businessLegalName', 'businessType', 'country', 'website', 'taxId'],
-  store: ['storeName', 'storeDescription', 'location', 'categoryIds', 'logoUrl'],
+  store: [
+    'storeName',
+    'storeDescription',
+    'location',
+    'locationLat',
+    'locationLng',
+    'categoryIds',
+    'logoUrl'
+  ],
   operations: ['shippingInfo', 'returnPolicy', 'fulfillmentModel'],
   review: ['acceptVendorTerms']
 };

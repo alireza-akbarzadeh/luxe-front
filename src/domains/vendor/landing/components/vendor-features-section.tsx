@@ -11,10 +11,16 @@ import {
   SectionTitle
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
 import { ALTERNATING_FEATURES } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
 import { cn } from '@/lib/utils';
 
-export function VendorFeaturesSection() {
+interface VendorFeaturesSectionProps {
+  hasVendorStore: boolean;
+}
+
+export function VendorFeaturesSection({ hasVendorStore }: VendorFeaturesSectionProps) {
   const t = useTranslations('vendor.landing.features');
+  const startHref = getVendorStartHref(hasVendorStore);
 
   return (
     <LandingContainer className='py-20 md:py-28'>
@@ -55,7 +61,7 @@ export function VendorFeaturesSection() {
                     ))}
                   </ul>
                   <Button asChild variant='link' className='mt-6 h-auto px-0'>
-                    <Link href='/vendor/apply' className='inline-flex items-center gap-1'>
+                    <Link href={startHref} className='inline-flex items-center gap-1'>
                       {t('exploreFeature', { title: feature.title })}
                       <DirectionalChevron />
                     </Link>

@@ -35,6 +35,8 @@ import {
   StepperTrigger
 } from '@/components/ui/stepper';
 import { Typography } from '@/components/ui/typography';
+import { VendorAgreementField } from '@/domains/vendor/onboarding/components/vendor-agreement-field';
+import { VendorLocationField } from '@/domains/vendor/onboarding/components/vendor-location-field';
 import { mapOnboardingToStorePayload } from '@/domains/vendor/onboarding/lib/map-onboarding-to-store';
 import {
   vendorOnboardingSchema,
@@ -468,7 +470,21 @@ export function VendorOnboardingDomain({
                         <form.AppField
                           name='location'
                           children={(field) => (
-                            <field.TextField label={t('fields.location.label')} required />
+                            <VendorLocationField
+                              location={field.state.value ?? ''}
+                              locationLat={form.state.values.locationLat}
+                              locationLng={form.state.values.locationLng}
+                              onChange={({ location, locationLat, locationLng }) => {
+                                field.handleChange(location);
+                                form.setFieldValue('locationLat', locationLat);
+                                form.setFieldValue('locationLng', locationLng);
+                              }}
+                              error={
+                                field.state.meta.errors?.[0]
+                                  ? String(field.state.meta.errors[0])
+                                  : undefined
+                              }
+                            />
                           )}
                         />
                         <form.AppField
@@ -558,9 +574,7 @@ export function VendorOnboardingDomain({
                         <ReviewRow label={t('fields.location.label')} value={draft.location} />
                         <form.AppField
                           name='acceptVendorTerms'
-                          children={(field) => (
-                            <field.Checkbox label={t('fields.acceptVendorTerms.label')} />
-                          )}
+                          children={() => <VendorAgreementField />}
                         />
                       </Flex>
                     </OnboardingCard>
@@ -569,7 +583,13 @@ export function VendorOnboardingDomain({
               </StepperPanel>
             </Stepper>
 
-            <Flex justify='between' align='center' className='border-border/50 border-t pt-6'>
+            <Flex
+              direction='row'
+              fullWidth
+              justify='between'
+              align='center'
+              className='border-border/50 border-t pt-6'
+            >
               <Button
                 type='button'
                 variant='outline'
@@ -585,7 +605,7 @@ export function VendorOnboardingDomain({
                 {t('actions.back')}
               </Button>
 
-              <Typography.Muted className='text-xs tabular-nums'>
+              <Typography.Muted className='hidden text-xs tabular-nums sm:block'>
                 {t('progress', { current: currentIdx + 1, total: steps.length })}
               </Typography.Muted>
 
