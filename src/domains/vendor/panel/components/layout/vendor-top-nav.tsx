@@ -11,6 +11,7 @@ import {
   IconSearch
 } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,7 +24,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import ThemeToggle from '@/components/ui/theme-toggle';
-import { VENDOR_NOTIFICATIONS, VENDOR_STORES } from '@/domains/vendor/panel/data/vendor-dashboard.data';
+import {
+  VENDOR_NOTIFICATIONS,
+  VENDOR_STORES
+} from '@/domains/vendor/panel/data/vendor-dashboard.data';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import type { UserPayload } from '@/lib/auth/auth-server';
 import { cn } from '@/lib/utils';
@@ -34,6 +38,7 @@ interface VendorTopNavProps {
 }
 
 export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
+  const t = useTranslations('vendor.panel.topNav');
   const setCommandOpen = useVendorPanelStore((s) => s.setCommandOpen);
   const toggleSidebarCollapsed = useVendorPanelStore((s) => s.toggleSidebarCollapsed);
   const sidebarCollapsed = useVendorPanelStore((s) => s.sidebarCollapsed);
@@ -49,7 +54,7 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         variant='ghost'
         size='icon'
         className='md:hidden'
-        aria-label='Open navigation'
+        aria-label={t('openNavigation')}
         onClick={onOpenMobileNav}
       >
         <IconMenu className='size-5' />
@@ -60,7 +65,7 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         variant='ghost'
         size='icon'
         className='hidden md:inline-flex'
-        aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={sidebarCollapsed ? t('expandSidebar') : t('collapseSidebar')}
         onClick={toggleSidebarCollapsed}
       >
         {sidebarCollapsed ? (
@@ -74,10 +79,10 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         type='button'
         onClick={() => setCommandOpen(true)}
         className='border-border/60 bg-muted/30 text-muted-foreground hover:bg-muted/50 flex h-9 min-w-0 flex-1 items-center gap-2 rounded-xl border px-3 text-sm transition-colors md:max-w-md'
-        aria-label='Open search'
+        aria-label={t('openSearch')}
       >
         <IconSearch className='size-4 shrink-0' />
-        <span className='truncate'>Search orders, products, customers…</span>
+        <span className='truncate'>{t('searchPlaceholder')}</span>
         <kbd className='bg-background ml-auto hidden rounded border px-1.5 py-0.5 text-[10px] md:inline'>
           ⌘K
         </kbd>
@@ -91,7 +96,7 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-56'>
-          <DropdownMenuLabel>Switch store</DropdownMenuLabel>
+          <DropdownMenuLabel>{t('switchStore')}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {VENDOR_STORES.map((store) => (
             <DropdownMenuItem
@@ -109,31 +114,36 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         <DropdownMenuTrigger asChild>
           <Button size='sm' className='hidden gap-1 rounded-xl sm:inline-flex'>
             <IconPlus className='size-4' />
-            <span className='hidden md:inline'>Quick actions</span>
+            <span className='hidden md:inline'>{t('quickActions')}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end' className='w-52'>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/products'>Create product</Link>
+            <Link href='/vendor/panel/products'>{t('createProduct')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/discounts'>Create coupon</Link>
+            <Link href='/vendor/panel/discounts'>{t('createCoupon')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/marketing'>Create campaign</Link>
+            <Link href='/vendor/panel/marketing'>{t('createCampaign')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/inventory'>Add inventory</Link>
+            <Link href='/vendor/panel/inventory'>{t('addInventory')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/team'>Invite staff</Link>
+            <Link href='/vendor/panel/team'>{t('inviteStaff')}</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant='ghost' size='icon' className='relative rounded-xl' aria-label='Notifications'>
+          <Button
+            variant='ghost'
+            size='icon'
+            className='relative rounded-xl'
+            aria-label={t('notifications')}
+          >
             <IconBell className='size-5' />
             {unreadCount > 0 ? (
               <span className='bg-gold text-gold-foreground absolute top-1.5 right-1.5 flex size-4 items-center justify-center rounded-full text-[10px] font-medium'>
@@ -144,7 +154,7 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
         </PopoverTrigger>
         <PopoverContent align='end' className='w-80 p-0'>
           <div className='border-b px-4 py-3'>
-            <p className='text-sm font-semibold'>Notifications</p>
+            <p className='text-sm font-semibold'>{t('notifications')}</p>
           </div>
           <ul className='max-h-80 overflow-y-auto'>
             {VENDOR_NOTIFICATIONS.map((notification) => (
@@ -163,14 +173,14 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
           </ul>
           <div className='border-t p-2'>
             <Button variant='ghost' size='sm' className='w-full' asChild>
-              <Link href='/vendor/panel/notifications'>View all</Link>
+              <Link href='/vendor/panel/notifications'>{t('viewAllNotifications')}</Link>
             </Button>
           </div>
         </PopoverContent>
       </Popover>
 
       <Button variant='ghost' size='icon' className='rounded-xl' asChild>
-        <Link href='/vendor/panel/messages' aria-label='Messages'>
+        <Link href='/vendor/panel/messages' aria-label={t('messages')}>
           <IconMessage className='size-5' />
         </Link>
       </Button>
@@ -199,13 +209,13 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href='/account'>Account settings</Link>
+            <Link href='/account'>{t('accountSettings')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor/panel/store'>Store settings</Link>
+            <Link href='/vendor/panel/store'>{t('storeSettings')}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href='/vendor'>Vendor home</Link>
+            <Link href='/vendor'>{t('vendorHome')}</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

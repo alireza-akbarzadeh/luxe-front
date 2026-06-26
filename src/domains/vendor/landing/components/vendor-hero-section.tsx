@@ -11,6 +11,7 @@ import {
 } from '@tabler/icons-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { FadeInView } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
@@ -22,6 +23,7 @@ interface VendorHeroSectionProps {
 }
 
 export function VendorHeroSection({ isAuthenticated }: VendorHeroSectionProps) {
+  const t = useTranslations('vendor.landing.hero');
   const reduceMotion = useReducedMotion();
   const startHref = isAuthenticated ? '/vendor/panel' : '/register?callbackUrl=/vendor/panel';
 
@@ -44,17 +46,15 @@ export function VendorHeroSection({ isAuthenticated }: VendorHeroSectionProps) {
         <FadeInView>
           <div className='border-border/60 bg-card/50 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium tracking-wide uppercase backdrop-blur'>
             <IconSparkles className='text-gold size-3.5' aria-hidden />
-            Multi-vendor marketplace
+            {t('eyebrow')}
           </div>
 
           <h1 className='mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl'>
-            Grow your business with thousands of new customers
+            {t('title')}
           </h1>
 
           <p className='text-muted-foreground mt-5 max-w-xl text-base leading-relaxed md:text-lg'>
-            Join a premium marketplace built for modern brands. Launch your storefront, reach
-            high-intent shoppers worldwide, and manage everything from one beautiful vendor
-            dashboard.
+            {t('description')}
           </p>
 
           <div className='mt-8 flex flex-wrap items-center gap-3'>
@@ -62,13 +62,13 @@ export function VendorHeroSection({ isAuthenticated }: VendorHeroSectionProps) {
               href={startHref}
               className={cn(buttonVariants({ size: 'lg' }), 'gap-2 rounded-full px-8')}
             >
-              Start selling today
+              {t('startSelling')}
               <IconArrowRight className='size-4' aria-hidden />
             </Link>
             <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
               <a href='#dashboard'>
                 <IconPlayerPlay className='size-4' aria-hidden />
-                Watch demo
+                {t('watchDemo')}
               </a>
             </Button>
           </div>
@@ -98,17 +98,14 @@ function DashboardMockup({ reduceMotion }: { reduceMotion: boolean }) {
               <p className='text-muted-foreground text-[10px]'>Live overview</p>
             </div>
           </div>
-          <span className='bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-full px-2 py-0.5 text-[10px] font-medium'>
+          <span className='rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400'>
             Online
           </span>
         </div>
 
         <div className='grid grid-cols-2 gap-3'>
           {DASHBOARD_METRICS.map((metric) => (
-            <div
-              key={metric.label}
-              className='border-border/40 bg-muted/30 rounded-2xl border p-3'
-            >
+            <div key={metric.label} className='border-border/40 bg-muted/30 rounded-2xl border p-3'>
               <p className='text-muted-foreground text-[10px]'>{metric.label}</p>
               <p className='mt-1 text-lg font-semibold tabular-nums'>{metric.value}</p>
               <p

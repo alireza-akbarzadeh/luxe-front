@@ -1,0 +1,200 @@
+{
+  "screen": {
+    "title": "Vende en Luxe",
+    "subtitle": "Programa para vendedores"
+  },
+  "alerts": {
+    "panelTitle": "Panel de vendedor",
+    "panelFailed": "No se pudo abrir el panel de vendedor",
+    "signInTitle": "Inicio de sesión de vendedor",
+    "signInFailed": "No se pudo abrir el inicio de sesión de vendedor",
+    "contactTitle": "Contacto",
+    "contactFailed": "No se pudo abrir la página de contacto"
+  },
+  "hero": {
+    "eyebrow": "Marketplace multivendedor",
+    "title": "Haz crecer tu negocio con miles de clientes nuevos",
+    "description": "Únete a un marketplace premium para marcas modernas. Lanza tu tienda, llega a compradores de alta intención en todo el mundo y gestiona todo desde el panel de vendedor en la web.",
+    "startSelling": "Empieza a vender hoy",
+    "vendorSignIn": "Inicio de vendedor (web)",
+    "watchDemo": "Ver demo"
+  },
+  "trustStats": {
+    "vendors": { "label": "Vendedores activos" },
+    "shoppers": { "label": "Compradores mensuales" },
+    "sales": { "label": "Ventas procesadas" }
+  },
+  "whySell": {
+    "eyebrow": "Por qué vender en Luxe",
+    "title": "Todo lo que necesitas para escalar",
+    "titleWeb": "Todo lo que necesitas para triunfar en un marketplace moderno",
+    "subtitle": "Del descubrimiento al pago — una plataforma para vendedores que valoran la calidad y el crecimiento.",
+    "reach": {
+      "title": "Gran alcance de clientes",
+      "description": "Hazte visible para millones de compradores que exploran colecciones curadas y categorías premium."
+    },
+    "catalog": {
+      "title": "Gestión fácil de productos",
+      "description": "Gestiona catálogo, variantes e inventario desde un panel de vendedor intuitivo."
+    },
+    "payments": {
+      "title": "Pagos seguros",
+      "description": "Pagos rápidos con proveedores de confianza e informes de liquidación transparentes."
+    },
+    "marketing": {
+      "title": "Herramientas de marketing",
+      "description": "Promociones que convierten — cupones, productos destacados y campañas estacionales."
+    },
+    "analytics": {
+      "title": "Analítica",
+      "description": "Informes de ventas, insights de inventario, métricas de rendimiento y tendencias de clientes."
+    },
+    "mobile": {
+      "title": "Listo para móvil",
+      "description": "Gestiona tu tienda, pedidos y mensajes desde cualquier lugar — escritorio o web móvil."
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "Cómo funciona",
+    "title": "Del registro al primer pago en cuatro pasos",
+    "subtitle": "Un camino sencillo para marcas independientes y operadores multitienda.",
+    "createAccount": {
+      "title": "Crear cuenta",
+      "description": "Regístrate, verifica tu negocio y completa tu perfil de vendedor en minutos."
+    },
+    "addProducts": {
+      "title": "Añadir productos",
+      "description": "Sube catálogo, variantes y medios. Importa en bloque o añade uno a uno."
+    },
+    "receiveOrders": {
+      "title": "Recibir pedidos",
+      "description": "Recibe avisos al instante. Cumple desde tu panel con integraciones de envío."
+    },
+    "getPaid": {
+      "title": "Cobrar",
+      "description": "Sigue pagos, comisiones y estados de cuenta — depositados según tu calendario."
+    }
+  },
+  "pricing": {
+    "eyebrow": "Precios",
+    "title": "Planes que crecen con tu negocio",
+    "subtitle": "Comisiones transparentes. Sin sorpresas. Mejora cuando estés listo para escalar.",
+    "commission": "{rate} de comisión",
+    "monthlyFee": "{fee}/mes",
+    "recommended": "Recomendado",
+    "commissionLabel": "comisión",
+    "customMonthlyFee": "Cuota mensual personalizada",
+    "perMonth": "{fee}/mes",
+    "cta": {
+      "starter": "Empezar a vender",
+      "growth": "Empezar con Growth",
+      "enterprise": "Hablar con ventas"
+    },
+    "starter": {
+      "name": "Starter",
+      "description": "Para vendedores nuevos que prueban el marketplace.",
+      "features": {
+        "skus": "Hasta 100 SKU",
+        "payouts": "Pagos estándar",
+        "analytics": "Analítica básica",
+        "support": "Soporte por email"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "description": "Para marcas en crecimiento listas para acelerar.",
+      "features": {
+        "skus": "SKU ilimitados",
+        "payouts": "Pagos prioritarios",
+        "analytics": "Analítica avanzada",
+        "promotions": "Cupones y promociones",
+        "featured": "Créditos de listado destacado",
+        "support": "Soporte prioritario"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "Para operadores de alto volumen y equipos multitienda.",
+      "commission": "Personalizado",
+      "monthlyFee": "Personalizado",
+      "features": {
+        "manager": "Gestor de cuenta dedicado",
+        "api": "API e importación masiva",
+        "warehouse": "Multi-almacén",
+        "integrations": "Integraciones personalizadas",
+        "support": "Soporte con SLA"
+      }
+    }
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Preguntas que nos hacen los vendedores",
+    "subtitle": "Todo lo que debes saber antes de lanzar en Luxe.",
+    "payouts": {
+      "question": "¿Cómo funcionan los pagos?",
+      "answer": "Los pagos se depositan según un calendario continuo según tu plan. Sigue saldos pendientes, disponibles y pagados en el panel de vendedor en la web."
+    },
+    "commission": {
+      "question": "¿Cuánta comisión cobran?",
+      "answer": "Starter es 12%, Growth 8% y Enterprise se negocia. Sin tarifas ocultas de listado en Growth y superiores."
+    },
+    "international": {
+      "question": "¿Puedo vender internacionalmente?",
+      "answer": "Sí. Luxe admite venta transfronteriza con checkout localizado y transportistas integrados. Tú controlas a qué mercados envías."
+    },
+    "dashboard": {
+      "question": "¿Dónde está el panel de vendedor?",
+      "answer": "El panel completo está en la app web de Luxe — inicia sesión allí para gestionar productos, pedidos y pagos. Esta app cubre compras y marketing de vendedores."
+    },
+    "approval": {
+      "question": "¿Cuánto tarda la aprobación?",
+      "answer": "La mayoría de solicitudes se revisan en 2–3 días laborables. Los perfiles completos con datos verificados suelen aprobarse más rápido."
+    },
+    "bulkImport": {
+      "question": "¿Puedo importar productos en bloque?",
+      "answer": "Sí. Usa importación CSV en Growth o conecta vía API en Enterprise. Mapea variantes, inventario y medios en un solo flujo."
+    },
+    "variants": {
+      "question": "¿Admiten variantes de producto?",
+      "answer": "Soporte completo — talla, color, material y opciones personalizadas — con inventario y precio por variante."
+    },
+    "returns": {
+      "question": "¿Cómo se gestionan las devoluciones?",
+      "answer": "Las devoluciones pasan por el mismo sistema de pedidos. Defines políticas por tienda; Luxe proporciona etiquetas RMA y seguimiento en tu panel."
+    }
+  },
+  "finalCta": {
+    "title": "¿Listo para lanzar tu tienda?",
+    "growTitle": "¿Listo para hacer crecer tu negocio?",
+    "description": "Crea tu cuenta de vendedor en la app y termina la configuración en el panel web.",
+    "growDescription": "Únete a miles de vendedores en Luxe. Lanza tu tienda, llega a nuevos clientes y escala con confianza.",
+    "getStarted": "Empezar",
+    "talkToSales": "Hablar con ventas",
+    "becomeVendor": "Ser vendedor",
+    "scheduleDemo": "Agendar demo"
+  },
+  "nav": {
+    "landingAria": "Landing de vendedor",
+    "brand": "LUXE",
+    "brandSuffix": "Vendedores",
+    "signIn": "Iniciar sesión",
+    "startSelling": "Empezar a vender",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "navigationSr": "Navegación de vendedor",
+    "menu": "Menú",
+    "links": {
+      "features": "Funciones",
+      "pricing": "Precios",
+      "successStories": "Casos de éxito",
+      "faq": "FAQ",
+      "contact": "Contacto"
+    }
+  },
+  "logoCloud": {
+    "eyebrow": "Con la confianza de",
+    "title": "Marcas que escalan en Luxe",
+    "description": "Únete a miles de vendedores que confían en nuestra plataforma para impulsar su crecimiento.",
+    "partnerBrandsAria": "Marcas asociadas"
+  }
+}

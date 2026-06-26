@@ -1,5 +1,8 @@
+'use client';
+
 import { IconArrowRight, IconCalendar } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -13,6 +16,7 @@ interface VendorFinalCtaSectionProps {
 }
 
 export function VendorFinalCtaSection({ isAuthenticated }: VendorFinalCtaSectionProps) {
+  const t = useTranslations('vendor.landing.finalCta');
   const vendorHref = isAuthenticated ? '/vendor/panel' : '/register?callbackUrl=/vendor/panel';
 
   return (
@@ -25,24 +29,23 @@ export function VendorFinalCtaSection({ isAuthenticated }: VendorFinalCtaSection
           />
           <div className='relative'>
             <h2 className='text-3xl font-semibold tracking-tight text-balance md:text-4xl lg:text-5xl'>
-              Ready to grow your business?
+              {t('growTitle')}
             </h2>
             <p className='text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed md:text-lg'>
-              Join thousands of sellers on Luxe. Launch your storefront, reach new customers, and
-              scale with confidence.
+              {t('growDescription')}
             </p>
             <div className='mt-8 flex flex-wrap items-center justify-center gap-3'>
               <Link
                 href={vendorHref}
                 className={cn(buttonVariants({ size: 'lg' }), 'gap-2 rounded-full px-8')}
               >
-                Become a vendor
+                {t('becomeVendor')}
                 <IconArrowRight className='size-4' aria-hidden />
               </Link>
               <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
                 <Link href='/contact'>
                   <IconCalendar className='size-4' aria-hidden />
-                  Schedule a demo
+                  {t('scheduleDemo')}
                 </Link>
               </Button>
             </div>

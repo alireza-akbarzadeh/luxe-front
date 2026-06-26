@@ -1,32 +1,31 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import {
   FadeInView,
   LandingContainer,
   PricingCard,
   SectionTitle
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
-import { PRICING_PLANS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
 
 export function VendorPricingSection() {
+  const t = useTranslations('vendor.landing.pricing');
+  const { pricingPlans } = useVendorLandingContent();
+
   return (
     <LandingContainer id='pricing' className='py-20 md:py-28'>
       <FadeInView>
-        <SectionTitle
-          eyebrow='Pricing'
-          title='Plans that grow with your business'
-          description='Transparent commissions. No surprises. Upgrade when you are ready to scale.'
-        />
+        <SectionTitle eyebrow={t('eyebrow')} title={t('title')} description={t('subtitle')} />
       </FadeInView>
 
       <div className='grid gap-6 lg:grid-cols-3 lg:gap-8'>
-        {PRICING_PLANS.map((plan, index) => (
+        {pricingPlans.map((plan, index) => (
           <FadeInView key={plan.id} delay={index * 0.08}>
             <PricingCard
               {...plan}
-              href={
-                plan.id === 'enterprise'
-                  ? '/contact'
-                  : '/register?callbackUrl=/vendor/panel'
-              }
+              href={plan.id === 'enterprise' ? '/contact' : '/register?callbackUrl=/vendor/panel'}
             />
           </FadeInView>
         ))}

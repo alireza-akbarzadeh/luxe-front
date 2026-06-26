@@ -2,6 +2,7 @@
 
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -22,12 +23,7 @@ interface FadeInViewProps {
 }
 
 /** Fade/slide children into view on scroll with reduced-motion support. */
-export function FadeInView({
-  children,
-  className,
-  delay = 0,
-  direction = 'up'
-}: FadeInViewProps) {
+export function FadeInView({ children, className, delay = 0, direction = 'up' }: FadeInViewProps) {
   const reduceMotion = useReducedMotion();
   const offset = direction === 'up' ? 28 : direction === 'down' ? -28 : 0;
 
@@ -94,7 +90,13 @@ interface AnimatedStatProps {
   className?: string;
 }
 
-export function AnimatedStat({ value, suffix = '', label, decimals = 0, className }: AnimatedStatProps) {
+export function AnimatedStat({
+  value,
+  suffix = '',
+  label,
+  decimals = 0,
+  className
+}: AnimatedStatProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   const reduceMotion = useReducedMotion();
@@ -129,12 +131,12 @@ export function FeatureCard({ icon, title, description, bullets, className }: Fe
   return (
     <Card
       className={cn(
-        'border-border/50 bg-card/40 group h-full rounded-2xl backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-border hover:shadow-lg hover:shadow-black/5',
+        'border-border/50 bg-card/40 group hover:border-border h-full rounded-2xl backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/5',
         className
       )}
     >
       <CardHeader className='pb-2'>
-        <div className='bg-gold/10 text-gold mb-4 flex size-11 items-center justify-center rounded-xl transition-colors group-hover:bg-gold/15'>
+        <div className='bg-gold/10 text-gold group-hover:bg-gold/15 mb-4 flex size-11 items-center justify-center rounded-xl transition-colors'>
           {icon}
         </div>
         <CardTitle className='text-lg'>{title}</CardTitle>
@@ -179,18 +181,20 @@ export function PricingCard({
   highlighted = false,
   href
 }: PricingCardProps) {
+  const t = useTranslations('vendor.landing.pricing');
+
   return (
     <Card
       className={cn(
         'relative flex h-full flex-col rounded-3xl border p-1',
         highlighted
-          ? 'border-gold/40 bg-gradient-to-b from-gold/10 via-card/80 to-card/40 shadow-xl shadow-gold/10'
+          ? 'border-gold/40 from-gold/10 via-card/80 to-card/40 shadow-gold/10 bg-gradient-to-b shadow-xl'
           : 'border-border/50 bg-card/40'
       )}
     >
       {highlighted ? (
         <Badge className='bg-gold text-gold-foreground absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3'>
-          Recommended
+          {t('recommended')}
         </Badge>
       ) : null}
       <CardHeader className='p-6 pb-4'>
@@ -198,10 +202,10 @@ export function PricingCard({
         <CardDescription className='text-sm'>{description}</CardDescription>
         <div className='mt-6 flex items-end gap-2'>
           <span className='text-4xl font-semibold tracking-tight'>{commission}</span>
-          <span className='text-muted-foreground mb-1 text-sm'>commission</span>
+          <span className='text-muted-foreground mb-1 text-sm'>{t('commissionLabel')}</span>
         </div>
         <p className='text-muted-foreground mt-1 text-sm'>
-          {monthlyFee === 'Custom' ? 'Custom monthly fee' : `${monthlyFee}/month`}
+          {monthlyFee === 'Custom' ? t('customMonthlyFee') : t('perMonth', { fee: monthlyFee })}
         </p>
       </CardHeader>
       <CardContent className='flex flex-1 flex-col p-6 pt-0'>
@@ -251,7 +255,9 @@ export function TestimonialCard({ name, business, avatar, quote, metrics }: Test
             </div>
           ))}
         </div>
-        <blockquote className='text-foreground flex-1 text-base leading-relaxed'>&ldquo;{quote}&rdquo;</blockquote>
+        <blockquote className='text-foreground flex-1 text-base leading-relaxed'>
+          &ldquo;{quote}&rdquo;
+        </blockquote>
         <div className='mt-6 flex items-center gap-3'>
           <div
             className='bg-gold/15 text-gold flex size-11 items-center justify-center rounded-full text-sm font-semibold'

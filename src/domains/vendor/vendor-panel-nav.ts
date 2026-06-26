@@ -39,231 +39,213 @@ export interface VendorNavGroup {
   items: VendorNavItem[];
 }
 
-export const VENDOR_NAV_GROUPS: VendorNavGroup[] = [
+interface VendorNavItemDef {
+  id: string;
+  href: string;
+  icon: TablerIcon;
+  badge?: string;
+}
+
+interface VendorNavGroupDef {
+  id: string;
+  items: VendorNavItemDef[];
+}
+
+export const VENDOR_NAV_GROUP_DEFS: VendorNavGroupDef[] = [
   {
     id: 'main',
-    label: 'Main',
     items: [
       {
         id: 'dashboard',
-        label: 'Dashboard',
         href: '/vendor/panel',
-        icon: IconLayoutDashboard,
-        description: 'Business overview and KPIs'
+        icon: IconLayoutDashboard
       }
     ]
   },
   {
     id: 'commerce',
-    label: 'Commerce',
     items: [
       {
         id: 'orders',
-        label: 'Orders',
         href: '/vendor/panel/orders',
         icon: IconShoppingBag,
-        description: 'Fulfillment and order management',
         badge: '12'
       },
       {
         id: 'products',
-        label: 'Products',
         href: '/vendor/panel/products',
-        icon: IconPackage,
-        description: 'Catalog, variants, and media'
+        icon: IconPackage
       },
       {
         id: 'categories',
-        label: 'Categories',
         href: '/vendor/panel/categories',
-        icon: IconCategory,
-        description: 'Category tree and attributes'
+        icon: IconCategory
       },
       {
         id: 'inventory',
-        label: 'Inventory',
         href: '/vendor/panel/inventory',
-        icon: IconMapPin,
-        description: 'Stock, warehouses, and transfers'
+        icon: IconMapPin
       }
     ]
   },
   {
     id: 'customers',
-    label: 'Customers',
     items: [
       {
         id: 'customers',
-        label: 'Customers',
         href: '/vendor/panel/customers',
-        icon: IconUsers,
-        description: 'Profiles, segments, and LTV'
+        icon: IconUsers
       },
       {
         id: 'messages',
-        label: 'Messages',
         href: '/vendor/panel/messages',
         icon: IconMessage,
-        description: 'Buyer conversations',
         badge: '3'
       },
       {
         id: 'reviews',
-        label: 'Reviews',
         href: '/vendor/panel/reviews',
-        icon: IconStar,
-        description: 'Ratings and responses'
+        icon: IconStar
       }
     ]
   },
   {
     id: 'growth',
-    label: 'Growth',
     items: [
       {
         id: 'discounts',
-        label: 'Discounts',
         href: '/vendor/panel/discounts',
-        icon: IconDiscount,
-        description: 'Coupons and promotions'
+        icon: IconDiscount
       },
       {
         id: 'marketing',
-        label: 'Marketing',
         href: '/vendor/panel/marketing',
-        icon: IconMail,
-        description: 'Campaigns and automation'
+        icon: IconMail
       },
       {
         id: 'analytics',
-        label: 'Analytics',
         href: '/vendor/panel/analytics',
-        icon: IconChartBar,
-        description: 'Performance insights'
+        icon: IconChartBar
       }
     ]
   },
   {
     id: 'finance',
-    label: 'Finance',
     items: [
       {
         id: 'finance',
-        label: 'Finance',
         href: '/vendor/panel/finance',
-        icon: IconCreditCard,
-        description: 'Revenue, fees, and taxes'
+        icon: IconCreditCard
       },
       {
         id: 'payouts',
-        label: 'Payouts',
         href: '/vendor/panel/payouts',
-        icon: IconWallet,
-        description: 'Withdrawals and statements'
+        icon: IconWallet
       }
     ]
   },
   {
     id: 'operations',
-    label: 'Operations',
     items: [
       {
         id: 'shipping',
-        label: 'Shipping',
         href: '/vendor/panel/shipping',
-        icon: IconTruck,
-        description: 'Rates, zones, and labels'
+        icon: IconTruck
       },
       {
         id: 'returns',
-        label: 'Returns',
         href: '/vendor/panel/returns',
-        icon: IconRotate,
-        description: 'RMAs and refunds'
+        icon: IconRotate
       },
       {
         id: 'support',
-        label: 'Support Tickets',
         href: '/vendor/panel/support',
-        icon: IconHeadset,
-        description: 'Seller support center'
+        icon: IconHeadset
       }
     ]
   },
   {
     id: 'insights',
-    label: 'Insights',
     items: [
       {
         id: 'reports',
-        label: 'Reports',
         href: '/vendor/panel/reports',
-        icon: IconReportAnalytics,
-        description: 'Exportable business reports'
+        icon: IconReportAnalytics
       }
     ]
   },
   {
     id: 'settings',
-    label: 'Settings',
     items: [
       {
         id: 'store',
-        label: 'Store Settings',
         href: '/vendor/panel/store',
-        icon: IconBuildingStore,
-        description: 'Branding, policies, and SEO'
+        icon: IconBuildingStore
       },
       {
         id: 'team',
-        label: 'Team Members',
         href: '/vendor/panel/team',
-        icon: IconUsers,
-        description: 'Roles and permissions'
+        icon: IconUsers
       },
       {
         id: 'notifications',
-        label: 'Notifications',
         href: '/vendor/panel/notifications',
-        icon: IconBell,
-        description: 'Alert preferences'
+        icon: IconBell
       },
       {
         id: 'integrations',
-        label: 'Apps & Integrations',
         href: '/vendor/panel/integrations',
-        icon: IconApps,
-        description: 'Connected services'
+        icon: IconApps
       },
       {
         id: 'help',
-        label: 'Help Center',
         href: '/vendor/panel/help',
-        icon: IconHelp,
-        description: 'Guides and documentation'
+        icon: IconHelp
       }
     ]
   }
 ];
 
-export const VENDOR_LOGOUT_ITEM: VendorNavItem = {
+export const VENDOR_LOGOUT_ITEM_DEF = {
   id: 'logout',
-  label: 'Logout',
   href: '#logout',
-  icon: IconLogout,
+  icon: IconLogout
+} as const;
+
+export const VENDOR_LOGOUT_ITEM: VendorNavItem = {
+  ...VENDOR_LOGOUT_ITEM_DEF,
+  label: 'Logout',
   description: 'Sign out of vendor dashboard'
 };
 
 /** Flat list for command palette search. */
 export function flattenVendorNav(): VendorNavItem[] {
-  return VENDOR_NAV_GROUPS.flatMap((group) => group.items);
+  return flattenVendorNavGroups(VENDOR_NAV_GROUPS);
 }
 
-/** @deprecated Use VENDOR_NAV_GROUPS — kept for gradual migration. */
+/** @deprecated Use `useVendorPanelNav` — kept for gradual migration. */
+export const VENDOR_NAV_GROUPS: VendorNavGroup[] = VENDOR_NAV_GROUP_DEFS.map((group) => ({
+  id: group.id,
+  label: group.id,
+  items: group.items.map((item) => ({
+    ...item,
+    label: item.id,
+    description: undefined
+  }))
+}));
+
+/** @deprecated Use flattenVendorNavGroups with `useVendorPanelNav` */
 export const VENDOR_PANEL_NAV = flattenVendorNav();
 
-export function findVendorNavItem(pathname: string): VendorNavItem | undefined {
-  const items = flattenVendorNav();
+export function flattenVendorNavGroups(groups: VendorNavGroup[]): VendorNavItem[] {
+  return groups.flatMap((group) => group.items);
+}
+
+export function findVendorNavItem(
+  pathname: string,
+  groups: VendorNavGroup[]
+): VendorNavItem | undefined {
+  const items = flattenVendorNavGroups(groups);
   return items.find((item) =>
     item.href === '/vendor/panel' ? pathname === item.href : pathname.startsWith(item.href)
   );

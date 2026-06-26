@@ -2,11 +2,12 @@
 
 import { IconMenu, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
-import { VENDOR_NAV_LINKS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
 import { cn } from '@/lib/utils';
 
 interface VendorLandingNavProps {
@@ -14,6 +15,8 @@ interface VendorLandingNavProps {
 }
 
 export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
+  const t = useTranslations('vendor.landing.nav');
+  const { navLinks } = useVendorLandingContent();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -39,18 +42,18 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
       )}
     >
       <nav
-        aria-label='Vendor landing'
+        aria-label={t('landingAria')}
         className='mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-[4.5rem] lg:px-8'
       >
         <Link href='/vendor' className='flex items-center gap-2'>
-          <span className='text-xl font-bold tracking-tight'>LUXE</span>
+          <span className='text-xl font-bold tracking-tight'>{t('brand')}</span>
           <span className='text-muted-foreground hidden text-xs font-medium tracking-[0.2em] uppercase sm:inline'>
-            Sellers
+            {t('brandSuffix')}
           </span>
         </Link>
 
         <ul className='hidden items-center gap-8 lg:flex'>
-          {VENDOR_NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
@@ -64,13 +67,13 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
 
         <div className='hidden items-center gap-2 lg:flex'>
           <Link href={signInHref} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
-            Sign in
+            {t('signIn')}
           </Link>
           <Link
             href={startSellingHref}
             className={cn(buttonVariants({ size: 'sm' }), 'rounded-full px-5')}
           >
-            Start selling
+            {t('startSelling')}
           </Link>
         </div>
 
@@ -79,7 +82,7 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
           variant='ghost'
           size='icon'
           className='lg:hidden'
-          aria-label='Open menu'
+          aria-label={t('openMenu')}
           onClick={() => setMobileOpen(true)}
         >
           <IconMenu className='size-5' />
@@ -88,21 +91,21 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
 
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent side='right' className='w-full max-w-sm p-0'>
-          <SheetTitle className='sr-only'>Vendor navigation</SheetTitle>
+          <SheetTitle className='sr-only'>{t('navigationSr')}</SheetTitle>
           <div className='flex items-center justify-between border-b p-4'>
-            <span className='font-semibold'>Menu</span>
+            <span className='font-semibold'>{t('menu')}</span>
             <Button
               type='button'
               variant='ghost'
               size='icon'
-              aria-label='Close menu'
+              aria-label={t('closeMenu')}
               onClick={() => setMobileOpen(false)}
             >
               <IconX className='size-5' />
             </Button>
           </div>
           <div className='flex flex-col gap-1 p-4'>
-            {VENDOR_NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -119,14 +122,14 @@ export function VendorLandingNav({ isAuthenticated }: VendorLandingNavProps) {
               className={buttonVariants({ variant: 'outline' })}
               onClick={() => setMobileOpen(false)}
             >
-              Sign in
+              {t('signIn')}
             </Link>
             <Link
               href={startSellingHref}
               className={cn(buttonVariants(), 'rounded-full')}
               onClick={() => setMobileOpen(false)}
             >
-              Start selling
+              {t('startSelling')}
             </Link>
           </div>
         </SheetContent>

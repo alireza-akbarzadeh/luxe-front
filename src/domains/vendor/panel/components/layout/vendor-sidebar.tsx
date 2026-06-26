@@ -3,24 +3,17 @@
 import { AnimatePresence, motion, type Transition } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { logoutAction } from '@/actions/auth.actions';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useVendorPanelNav } from '@/domains/vendor/panel/hooks/use-vendor-panel-nav';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
-import {
-  VENDOR_LOGOUT_ITEM,
-  VENDOR_NAV_GROUPS,
-  type VendorNavItem
-} from '@/domains/vendor/vendor-panel-nav';
+import type { VendorNavItem } from '@/domains/vendor/vendor-panel-nav';
 import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { cn } from '@/lib/utils';
 
@@ -30,6 +23,8 @@ interface VendorSidebarProps {
 }
 
 export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
+  const t = useTranslations('vendor.panel.shell');
+  const { groups, logoutItem } = useVendorPanelNav();
   const pathname = usePathname();
   const { isMobile } = useMediaDevices();
   const sidebarCollapsed = useVendorPanelStore((s) => s.sidebarCollapsed);
@@ -49,21 +44,26 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
         animate={{ width: effectiveCollapsed ? 76 : 272 }}
         transition={springTransition}
         className={cn(
-          'bg-card/95 relative z-30 flex h-full shrink-0 flex-col border-r border-border/60 backdrop-blur-sm',
+          'bg-card/95 border-border/60 relative z-30 flex h-full shrink-0 flex-col border-r backdrop-blur-sm',
           className
         )}
       >
-        <div className={cn('p-3', effectiveCollapsed ? 'flex flex-col items-center gap-2' : 'px-4 py-3')}>
+        <div
+          className={cn(
+            'p-3',
+            effectiveCollapsed ? 'flex flex-col items-center gap-2' : 'px-4 py-3'
+          )}
+        >
           <Link href='/vendor/panel' className='block min-w-0' onClick={onNavigate}>
             {effectiveCollapsed ? (
               <span className='text-gold text-lg font-bold'>L</span>
             ) : (
               <>
                 <p className='text-muted-foreground text-[10px] font-bold tracking-[0.18em] uppercase'>
-                  Luxe Vendor
+                  {t('brandEyebrow')}
                 </p>
                 <p className='text-foreground mt-0.5 truncate text-sm font-semibold tracking-tight'>
-                  Seller Dashboard
+                  {t('brandTitle')}
                 </p>
               </>
             )}
@@ -74,7 +74,7 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
 
         <ScrollArea className='flex-1 py-3'>
           <div className={cn('space-y-5', effectiveCollapsed ? 'px-1.5' : 'px-2')}>
-            {VENDOR_NAV_GROUPS.map((group) => (
+            {groups.map((group) => (
               <div key={group.id}>
                 <AnimatePresence initial={false}>
                   {!effectiveCollapsed ? (
@@ -106,7 +106,7 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
 
         <div className='border-border/60 space-y-1 border-t p-2'>
           <VendorSidebarLink
-            item={VENDOR_LOGOUT_ITEM}
+            item={logoutItem}
             pathname={pathname}
             collapsed={effectiveCollapsed}
             onLogout
@@ -115,7 +115,7 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
           {!effectiveCollapsed ? (
             <Button variant='ghost' size='sm' className='w-full justify-start text-xs' asChild>
               <Link href='/vendor' onClick={onNavigate}>
-                ← Vendor marketing
+                {t('backToMarketing')}
               </Link>
             </Button>
           ) : null}

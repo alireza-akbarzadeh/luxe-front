@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import {
   CommandDialog,
@@ -11,15 +12,18 @@ import {
   CommandList,
   CommandSeparator
 } from '@/components/ui/command';
+import { useVendorPanelNav } from '@/domains/vendor/panel/hooks/use-vendor-panel-nav';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
-import { flattenVendorNav } from '@/domains/vendor/vendor-panel-nav';
+import { flattenVendorNavGroups } from '@/domains/vendor/vendor-panel-nav';
 
 export function VendorCommandPalette() {
+  const t = useTranslations('vendor.panel.commandPalette');
   const router = useRouter();
   const commandOpen = useVendorPanelStore((s) => s.commandOpen);
   const setCommandOpen = useVendorPanelStore((s) => s.setCommandOpen);
+  const { groups } = useVendorPanelNav();
 
-  const navItems = flattenVendorNav();
+  const navItems = flattenVendorNavGroups(groups);
 
   const onSelect = (href: string) => {
     setCommandOpen(false);
@@ -28,10 +32,10 @@ export function VendorCommandPalette() {
 
   return (
     <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
-      <CommandInput placeholder='Search orders, products, pages, settings…' />
+      <CommandInput placeholder={t('placeholder')} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading='Navigation'>
+        <CommandEmpty>{t('empty')}</CommandEmpty>
+        <CommandGroup heading={t('navigationHeading')}>
           {navItems.map((item) => (
             <CommandItem key={item.id} onSelect={() => onSelect(item.href)} className='gap-3'>
               <item.icon className='size-4' aria-hidden />
@@ -45,11 +49,19 @@ export function VendorCommandPalette() {
           ))}
         </CommandGroup>
         <CommandSeparator />
-        <CommandGroup heading='Quick actions'>
-          <CommandItem onSelect={() => onSelect('/vendor/panel/products')}>Create product</CommandItem>
-          <CommandItem onSelect={() => onSelect('/vendor/panel/discounts')}>Create coupon</CommandItem>
-          <CommandItem onSelect={() => onSelect('/vendor/panel/orders')}>View orders</CommandItem>
-          <CommandItem onSelect={() => onSelect('/vendor/panel/analytics')}>Open analytics</CommandItem>
+        <CommandGroup heading={t('quickActionsHeading')}>
+          <CommandItem onSelect={() => onSelect('/vendor/panel/products')}>
+            {t('createProduct')}
+          </CommandItem>
+          <CommandItem onSelect={() => onSelect('/vendor/panel/discounts')}>
+            {t('createCoupon')}
+          </CommandItem>
+          <CommandItem onSelect={() => onSelect('/vendor/panel/orders')}>
+            {t('viewOrders')}
+          </CommandItem>
+          <CommandItem onSelect={() => onSelect('/vendor/panel/analytics')}>
+            {t('openAnalytics')}
+          </CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>

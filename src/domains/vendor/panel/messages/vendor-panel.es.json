@@ -1,0 +1,143 @@
+{
+  "shell": {
+    "brandEyebrow": "Vendedor Luxe",
+    "brandTitle": "Panel de vendedor",
+    "backToMarketing": "← Marketing de vendedores"
+  },
+  "nav": {
+    "groups": {
+      "main": "Principal",
+      "commerce": "Comercio",
+      "customers": "Clientes",
+      "growth": "Crecimiento",
+      "finance": "Finanzas",
+      "operations": "Operaciones",
+      "insights": "Información",
+      "settings": "Ajustes"
+    },
+    "items": {
+      "dashboard": {
+        "label": "Panel",
+        "description": "Resumen del negocio y KPI"
+      },
+      "orders": {
+        "label": "Pedidos",
+        "description": "Cumplimiento y gestión de pedidos"
+      },
+      "products": {
+        "label": "Productos",
+        "description": "Catálogo, variantes y medios"
+      },
+      "categories": {
+        "label": "Categorías",
+        "description": "Árbol de categorías y atributos"
+      },
+      "inventory": {
+        "label": "Inventario",
+        "description": "Stock, almacenes y transferencias"
+      },
+      "customers": {
+        "label": "Clientes",
+        "description": "Perfiles, segmentos y LTV"
+      },
+      "messages": {
+        "label": "Mensajes",
+        "description": "Conversaciones con compradores"
+      },
+      "reviews": {
+        "label": "Reseñas",
+        "description": "Valoraciones y respuestas"
+      },
+      "discounts": {
+        "label": "Descuentos",
+        "description": "Cupones y promociones"
+      },
+      "marketing": {
+        "label": "Marketing",
+        "description": "Campañas y automatización"
+      },
+      "analytics": {
+        "label": "Analítica",
+        "description": "Insights de rendimiento"
+      },
+      "finance": {
+        "label": "Finanzas",
+        "description": "Ingresos, comisiones e impuestos"
+      },
+      "payouts": {
+        "label": "Pagos",
+        "description": "Retiros y estados de cuenta"
+      },
+      "shipping": {
+        "label": "Envíos",
+        "description": "Tarifas, zonas y etiquetas"
+      },
+      "returns": {
+        "label": "Devoluciones",
+        "description": "RMA y reembolsos"
+      },
+      "support": {
+        "label": "Tickets de soporte",
+        "description": "Centro de soporte del vendedor"
+      },
+      "reports": {
+        "label": "Informes",
+        "description": "Informes exportables del negocio"
+      },
+      "store": {
+        "label": "Ajustes de tienda",
+        "description": "Marca, políticas y SEO"
+      },
+      "team": {
+        "label": "Miembros del equipo",
+        "description": "Roles y permisos"
+      },
+      "notifications": {
+        "label": "Notificaciones",
+        "description": "Preferencias de alertas"
+      },
+      "integrations": {
+        "label": "Apps e integraciones",
+        "description": "Servicios conectados"
+      },
+      "help": {
+        "label": "Centro de ayuda",
+        "description": "Guías y documentación"
+      },
+      "logout": {
+        "label": "Cerrar sesión",
+        "description": "Salir del panel de vendedor"
+      }
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Buscar pedidos, productos, páginas, ajustes…",
+    "empty": "No se encontraron resultados.",
+    "navigationHeading": "Navegación",
+    "quickActionsHeading": "Acciones rápidas",
+    "createProduct": "Crear producto",
+    "createCoupon": "Crear cupón",
+    "viewOrders": "Ver pedidos",
+    "openAnalytics": "Abrir analítica"
+  },
+  "topNav": {
+    "openNavigation": "Abrir navegación",
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Contraer barra lateral",
+    "openSearch": "Abrir búsqueda",
+    "searchPlaceholder": "Buscar pedidos, productos, clientes…",
+    "switchStore": "Cambiar tienda",
+    "quickActions": "Acciones rápidas",
+    "createProduct": "Crear producto",
+    "createCoupon": "Crear cupón",
+    "createCampaign": "Crear campaña",
+    "addInventory": "Añadir inventario",
+    "inviteStaff": "Invitar personal",
+    "notifications": "Notificaciones",
+    "viewAllNotifications": "Ver todo",
+    "messages": "Mensajes",
+    "accountSettings": "Ajustes de cuenta",
+    "storeSettings": "Ajustes de tienda",
+    "vendorHome": "Inicio de vendedor"
+  }
+}

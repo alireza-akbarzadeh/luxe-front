@@ -21,6 +21,45 @@ import {
   IconWorld
 } from '@tabler/icons-react';
 
+export const VENDOR_NAV_LINK_IDS = [
+  'features',
+  'pricing',
+  'successStories',
+  'faq',
+  'contact'
+] as const;
+
+export const TRUST_STAT_IDS = ['vendors', 'shoppers', 'sales'] as const;
+
+export const WHY_SELL_FEATURE_IDS = [
+  'reach',
+  'catalog',
+  'payments',
+  'marketing',
+  'analytics',
+  'mobile'
+] as const;
+
+export const HOW_IT_WORKS_STEP_IDS = [
+  'createAccount',
+  'addProducts',
+  'receiveOrders',
+  'getPaid'
+] as const;
+
+export const PRICING_PLAN_IDS = ['starter', 'growth', 'enterprise'] as const;
+
+export const FAQ_ITEM_IDS = [
+  'payouts',
+  'commission',
+  'international',
+  'approval',
+  'bulkImport',
+  'variants',
+  'returns',
+  'dashboard'
+] as const;
+
 export const VENDOR_NAV_LINKS = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
@@ -55,7 +94,8 @@ export const WHY_SELL_FEATURES: {
   {
     icon: IconUsers,
     title: 'Massive customer reach',
-    description: 'Get discovered by millions of buyers browsing curated collections and premium categories.'
+    description:
+      'Get discovered by millions of buyers browsing curated collections and premium categories.'
   },
   {
     icon: IconPackage,
@@ -281,7 +321,8 @@ export const ALTERNATING_FEATURES = [
   {
     id: 'fulfillment',
     title: 'Order fulfillment',
-    description: 'Pick, pack, and ship from one queue with carrier rates and label printing built in.',
+    description:
+      'Pick, pack, and ship from one queue with carrier rates and label printing built in.',
     bullets: ['Batch processing', 'Shipping rules', 'Tracking sync', 'SLA reminders'],
     icon: IconTruck
   },

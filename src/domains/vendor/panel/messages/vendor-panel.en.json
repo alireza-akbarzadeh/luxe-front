@@ -1,0 +1,143 @@
+{
+  "shell": {
+    "brandEyebrow": "Luxe Vendor",
+    "brandTitle": "Seller Dashboard",
+    "backToMarketing": "← Vendor marketing"
+  },
+  "nav": {
+    "groups": {
+      "main": "Main",
+      "commerce": "Commerce",
+      "customers": "Customers",
+      "growth": "Growth",
+      "finance": "Finance",
+      "operations": "Operations",
+      "insights": "Insights",
+      "settings": "Settings"
+    },
+    "items": {
+      "dashboard": {
+        "label": "Dashboard",
+        "description": "Business overview and KPIs"
+      },
+      "orders": {
+        "label": "Orders",
+        "description": "Fulfillment and order management"
+      },
+      "products": {
+        "label": "Products",
+        "description": "Catalog, variants, and media"
+      },
+      "categories": {
+        "label": "Categories",
+        "description": "Category tree and attributes"
+      },
+      "inventory": {
+        "label": "Inventory",
+        "description": "Stock, warehouses, and transfers"
+      },
+      "customers": {
+        "label": "Customers",
+        "description": "Profiles, segments, and LTV"
+      },
+      "messages": {
+        "label": "Messages",
+        "description": "Buyer conversations"
+      },
+      "reviews": {
+        "label": "Reviews",
+        "description": "Ratings and responses"
+      },
+      "discounts": {
+        "label": "Discounts",
+        "description": "Coupons and promotions"
+      },
+      "marketing": {
+        "label": "Marketing",
+        "description": "Campaigns and automation"
+      },
+      "analytics": {
+        "label": "Analytics",
+        "description": "Performance insights"
+      },
+      "finance": {
+        "label": "Finance",
+        "description": "Revenue, fees, and taxes"
+      },
+      "payouts": {
+        "label": "Payouts",
+        "description": "Withdrawals and statements"
+      },
+      "shipping": {
+        "label": "Shipping",
+        "description": "Rates, zones, and labels"
+      },
+      "returns": {
+        "label": "Returns",
+        "description": "RMAs and refunds"
+      },
+      "support": {
+        "label": "Support Tickets",
+        "description": "Seller support center"
+      },
+      "reports": {
+        "label": "Reports",
+        "description": "Exportable business reports"
+      },
+      "store": {
+        "label": "Store Settings",
+        "description": "Branding, policies, and SEO"
+      },
+      "team": {
+        "label": "Team Members",
+        "description": "Roles and permissions"
+      },
+      "notifications": {
+        "label": "Notifications",
+        "description": "Alert preferences"
+      },
+      "integrations": {
+        "label": "Apps & Integrations",
+        "description": "Connected services"
+      },
+      "help": {
+        "label": "Help Center",
+        "description": "Guides and documentation"
+      },
+      "logout": {
+        "label": "Logout",
+        "description": "Sign out of vendor dashboard"
+      }
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Search orders, products, pages, settings…",
+    "empty": "No results found.",
+    "navigationHeading": "Navigation",
+    "quickActionsHeading": "Quick actions",
+    "createProduct": "Create product",
+    "createCoupon": "Create coupon",
+    "viewOrders": "View orders",
+    "openAnalytics": "Open analytics"
+  },
+  "topNav": {
+    "openNavigation": "Open navigation",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "openSearch": "Open search",
+    "searchPlaceholder": "Search orders, products, customers…",
+    "switchStore": "Switch store",
+    "quickActions": "Quick actions",
+    "createProduct": "Create product",
+    "createCoupon": "Create coupon",
+    "createCampaign": "Create campaign",
+    "addInventory": "Add inventory",
+    "inviteStaff": "Invite staff",
+    "notifications": "Notifications",
+    "viewAllNotifications": "View all",
+    "messages": "Messages",
+    "accountSettings": "Account settings",
+    "storeSettings": "Store settings",
+    "vendorHome": "Vendor home"
+  }
+}

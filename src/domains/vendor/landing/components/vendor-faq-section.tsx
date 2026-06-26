@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import {
   Accordion,
   AccordionContent,
@@ -9,23 +13,22 @@ import {
   LandingContainer,
   SectionTitle
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
-import { FAQ_ITEMS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
 
 export function VendorFaqSection() {
+  const t = useTranslations('vendor.landing.faq');
+  const { faqItems } = useVendorLandingContent();
+
   return (
     <LandingContainer id='faq' className='py-20 md:py-28'>
       <FadeInView>
-        <SectionTitle
-          eyebrow='FAQ'
-          title='Questions sellers ask us'
-          description='Everything you need to know before launching on Luxe.'
-        />
+        <SectionTitle eyebrow={t('eyebrow')} title={t('title')} description={t('subtitle')} />
       </FadeInView>
 
       <FadeInView delay={0.1}>
         <Accordion type='single' collapsible className='mx-auto max-w-3xl'>
-          {FAQ_ITEMS.map((item, index) => (
-            <AccordionItem key={item.question} value={`faq-${index}`}>
+          {faqItems.map((item) => (
+            <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger className='text-base font-medium hover:no-underline'>
                 {item.question}
               </AccordionTrigger>

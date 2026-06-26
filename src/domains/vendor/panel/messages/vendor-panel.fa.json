@@ -1,0 +1,143 @@
+{
+  "shell": {
+    "brandEyebrow": "فروشنده لوکس",
+    "brandTitle": "داشبورد فروشنده",
+    "backToMarketing": "← بازاریابی فروشندگان"
+  },
+  "nav": {
+    "groups": {
+      "main": "اصلی",
+      "commerce": "فروش",
+      "customers": "مشتریان",
+      "growth": "رشد",
+      "finance": "مالی",
+      "operations": "عملیات",
+      "insights": "تحلیل‌ها",
+      "settings": "تنظیمات"
+    },
+    "items": {
+      "dashboard": {
+        "label": "داشبورد",
+        "description": "نمای کلی کسب‌وکار و شاخص‌های کلیدی"
+      },
+      "orders": {
+        "label": "سفارش‌ها",
+        "description": "مدیریت ارسال و سفارش‌ها"
+      },
+      "products": {
+        "label": "محصولات",
+        "description": "کاتالوگ، تنوع‌ها و رسانه"
+      },
+      "categories": {
+        "label": "دسته‌بندی‌ها",
+        "description": "درخت دسته‌بندی و ویژگی‌ها"
+      },
+      "inventory": {
+        "label": "موجودی",
+        "description": "انبار، موجودی و انتقال‌ها"
+      },
+      "customers": {
+        "label": "مشتریان",
+        "description": "پروفایل، بخش‌بندی و ارزش طول عمر"
+      },
+      "messages": {
+        "label": "پیام‌ها",
+        "description": "گفتگو با خریداران"
+      },
+      "reviews": {
+        "label": "نظرات",
+        "description": "امتیازها و پاسخ‌ها"
+      },
+      "discounts": {
+        "label": "تخفیف‌ها",
+        "description": "کوپن و پروموشن"
+      },
+      "marketing": {
+        "label": "بازاریابی",
+        "description": "کمپین و اتوماسیون"
+      },
+      "analytics": {
+        "label": "تحلیل‌ها",
+        "description": "بینش عملکرد"
+      },
+      "finance": {
+        "label": "مالی",
+        "description": "درآمد، کارمزد و مالیات"
+      },
+      "payouts": {
+        "label": "تسویه‌ها",
+        "description": "برداشت و صورتحساب"
+      },
+      "shipping": {
+        "label": "ارسال",
+        "description": "نرخ، منطقه و برچسب"
+      },
+      "returns": {
+        "label": "مرجوعی‌ها",
+        "description": "RMA و بازپرداخت"
+      },
+      "support": {
+        "label": "تیکت پشتیبانی",
+        "description": "مرکز پشتیبانی فروشنده"
+      },
+      "reports": {
+        "label": "گزارش‌ها",
+        "description": "گزارش‌های قابل خروجی"
+      },
+      "store": {
+        "label": "تنظیمات فروشگاه",
+        "description": "برند، سیاست‌ها و سئو"
+      },
+      "team": {
+        "label": "اعضای تیم",
+        "description": "نقش‌ها و دسترسی‌ها"
+      },
+      "notifications": {
+        "label": "اعلان‌ها",
+        "description": "ترجیحات هشدار"
+      },
+      "integrations": {
+        "label": "اپ‌ها و یکپارچه‌سازی",
+        "description": "سرویس‌های متصل"
+      },
+      "help": {
+        "label": "مرکز راهنما",
+        "description": "راهنما و مستندات"
+      },
+      "logout": {
+        "label": "خروج",
+        "description": "خروج از داشبورد فروشنده"
+      }
+    }
+  },
+  "commandPalette": {
+    "placeholder": "جستجوی سفارش، محصول، صفحه، تنظیمات…",
+    "empty": "نتیجه‌ای یافت نشد.",
+    "navigationHeading": "ناوبری",
+    "quickActionsHeading": "اقدامات سریع",
+    "createProduct": "ایجاد محصول",
+    "createCoupon": "ایجاد کوپن",
+    "viewOrders": "مشاهده سفارش‌ها",
+    "openAnalytics": "باز کردن تحلیل‌ها"
+  },
+  "topNav": {
+    "openNavigation": "باز کردن منو",
+    "expandSidebar": "باز کردن نوار کناری",
+    "collapseSidebar": "جمع کردن نوار کناری",
+    "openSearch": "باز کردن جستجو",
+    "searchPlaceholder": "جستجوی سفارش، محصول، مشتری…",
+    "switchStore": "تغییر فروشگاه",
+    "quickActions": "اقدامات سریع",
+    "createProduct": "ایجاد محصول",
+    "createCoupon": "ایجاد کوپن",
+    "createCampaign": "ایجاد کمپین",
+    "addInventory": "افزودن موجودی",
+    "inviteStaff": "دعوت همکار",
+    "notifications": "اعلان‌ها",
+    "viewAllNotifications": "مشاهده همه",
+    "messages": "پیام‌ها",
+    "accountSettings": "تنظیمات حساب",
+    "storeSettings": "تنظیمات فروشگاه",
+    "vendorHome": "صفحه فروشندگان"
+  }
+}

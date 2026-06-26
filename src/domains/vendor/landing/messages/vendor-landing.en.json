@@ -1,0 +1,200 @@
+{
+  "screen": {
+    "title": "Sell on Luxe",
+    "subtitle": "Vendor program"
+  },
+  "alerts": {
+    "panelTitle": "Vendor panel",
+    "panelFailed": "Could not open vendor panel",
+    "signInTitle": "Vendor sign in",
+    "signInFailed": "Could not open vendor login",
+    "contactTitle": "Contact",
+    "contactFailed": "Could not open contact page"
+  },
+  "hero": {
+    "eyebrow": "Multi-vendor marketplace",
+    "title": "Grow your business with thousands of new customers",
+    "description": "Join a premium marketplace built for modern brands. Launch your storefront, reach high-intent shoppers worldwide, and manage everything from the vendor dashboard on web.",
+    "startSelling": "Start selling today",
+    "vendorSignIn": "Vendor sign in (web)",
+    "watchDemo": "Watch demo"
+  },
+  "trustStats": {
+    "vendors": { "label": "Active vendors" },
+    "shoppers": { "label": "Monthly shoppers" },
+    "sales": { "label": "Sales processed" }
+  },
+  "whySell": {
+    "eyebrow": "Why sell on Luxe",
+    "title": "Everything you need to scale",
+    "titleWeb": "Everything you need to win on a modern marketplace",
+    "subtitle": "From discovery to payouts — one platform designed for sellers who care about craft and scale.",
+    "reach": {
+      "title": "Massive customer reach",
+      "description": "Get discovered by millions of buyers browsing curated collections and premium categories."
+    },
+    "catalog": {
+      "title": "Easy product management",
+      "description": "Manage catalog, variants, and inventory from one intuitive vendor dashboard."
+    },
+    "payments": {
+      "title": "Secure payments",
+      "description": "Fast payouts with trusted payment providers and transparent settlement reporting."
+    },
+    "marketing": {
+      "title": "Marketing tools",
+      "description": "Run promotions that convert — coupons, featured products, and seasonal campaigns."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Sales reports, inventory insights, performance metrics, and customer trends."
+    },
+    "mobile": {
+      "title": "Mobile-ready",
+      "description": "Manage your store, orders, and messages from anywhere — desktop or mobile web."
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "From sign-up to first payout in four steps",
+    "subtitle": "A straightforward path designed for independent brands and multi-store operators.",
+    "createAccount": {
+      "title": "Create account",
+      "description": "Sign up, verify your business, and complete your vendor profile in minutes."
+    },
+    "addProducts": {
+      "title": "Add products",
+      "description": "Upload catalog, variants, and media. Import in bulk or add items one by one."
+    },
+    "receiveOrders": {
+      "title": "Receive orders",
+      "description": "Get notified instantly. Fulfill from your dashboard with shipping integrations."
+    },
+    "getPaid": {
+      "title": "Get paid",
+      "description": "Track payouts, commissions, and statements — deposited on your schedule."
+    }
+  },
+  "pricing": {
+    "eyebrow": "Pricing",
+    "title": "Plans that grow with your business",
+    "subtitle": "Transparent commissions. No surprises. Upgrade when you are ready to scale.",
+    "commission": "{rate} commission",
+    "monthlyFee": "{fee}/mo",
+    "recommended": "Recommended",
+    "commissionLabel": "commission",
+    "customMonthlyFee": "Custom monthly fee",
+    "perMonth": "{fee}/month",
+    "cta": {
+      "starter": "Start selling",
+      "growth": "Start with Growth",
+      "enterprise": "Talk to sales"
+    },
+    "starter": {
+      "name": "Starter",
+      "description": "For new sellers testing the marketplace.",
+      "features": {
+        "skus": "Up to 100 SKUs",
+        "payouts": "Standard payouts",
+        "analytics": "Basic analytics",
+        "support": "Email support"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "description": "For scaling brands ready to accelerate.",
+      "features": {
+        "skus": "Unlimited SKUs",
+        "payouts": "Priority payouts",
+        "analytics": "Advanced analytics",
+        "promotions": "Coupons & promotions",
+        "featured": "Featured listing credits",
+        "support": "Priority support"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "For high-volume operators and multi-store teams.",
+      "commission": "Custom",
+      "monthlyFee": "Custom",
+      "features": {
+        "manager": "Dedicated account manager",
+        "api": "API & bulk import",
+        "warehouse": "Multi-warehouse",
+        "integrations": "Custom integrations",
+        "support": "SLA-backed support"
+      }
+    }
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Questions sellers ask us",
+    "subtitle": "Everything you need to know before launching on Luxe.",
+    "payouts": {
+      "question": "How do payouts work?",
+      "answer": "Payouts are deposited on a rolling schedule based on your plan. Track pending, available, and paid balances in the vendor dashboard on web."
+    },
+    "commission": {
+      "question": "How much commission do you charge?",
+      "answer": "Starter is 12%, Growth is 8%, and Enterprise is negotiated. No hidden listing fees on Growth and above."
+    },
+    "international": {
+      "question": "Can I sell internationally?",
+      "answer": "Yes. Luxe supports cross-border selling with localized checkout and integrated carriers. You control which markets you ship to."
+    },
+    "dashboard": {
+      "question": "Where is the vendor dashboard?",
+      "answer": "The full vendor panel runs on the Luxe web app — sign in there to manage products, orders, and payouts. This app covers shopping and seller marketing only."
+    },
+    "approval": {
+      "question": "How long does approval take?",
+      "answer": "Most applications are reviewed within 2–3 business days. Complete profiles with verified business details are typically approved faster."
+    },
+    "bulkImport": {
+      "question": "Can I import products in bulk?",
+      "answer": "Yes. Use CSV import on Growth plans or connect via API on Enterprise. Map variants, inventory, and media in a single workflow."
+    },
+    "variants": {
+      "question": "Do you support product variants?",
+      "answer": "Full variant support — size, color, material, and custom options — with per-variant inventory and pricing."
+    },
+    "returns": {
+      "question": "How are returns handled?",
+      "answer": "Returns flow through the same order system customers use. You set policies per store; Luxe provides RMA labels and status tracking in your panel."
+    }
+  },
+  "finalCta": {
+    "title": "Ready to launch your store?",
+    "growTitle": "Ready to grow your business?",
+    "description": "Create your seller account in the app, then finish setup in the vendor panel on web.",
+    "growDescription": "Join thousands of sellers on Luxe. Launch your storefront, reach new customers, and scale with confidence.",
+    "getStarted": "Get started",
+    "talkToSales": "Talk to sales",
+    "becomeVendor": "Become a vendor",
+    "scheduleDemo": "Schedule a demo"
+  },
+  "nav": {
+    "landingAria": "Vendor landing",
+    "brand": "LUXE",
+    "brandSuffix": "Sellers",
+    "signIn": "Sign in",
+    "startSelling": "Start selling",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "navigationSr": "Vendor navigation",
+    "menu": "Menu",
+    "links": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "successStories": "Success Stories",
+      "faq": "FAQ",
+      "contact": "Contact"
+    }
+  },
+  "logoCloud": {
+    "eyebrow": "Trusted by",
+    "title": "Brands scaling on Luxe",
+    "description": "Join thousands of sellers who trust our platform to power their growth.",
+    "partnerBrandsAria": "Partner brands"
+  }
+}
