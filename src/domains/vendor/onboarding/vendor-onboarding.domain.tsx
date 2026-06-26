@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { vendorRegisterAction } from '@/actions/auth.actions';
+import { getFieldErrorMessage } from '@/components/forms/form';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,8 +40,12 @@ import { VendorAgreementField } from '@/domains/vendor/onboarding/components/ven
 import { VendorLocationField } from '@/domains/vendor/onboarding/components/vendor-location-field';
 import { mapOnboardingToStorePayload } from '@/domains/vendor/onboarding/lib/map-onboarding-to-store';
 import {
+  applyVendorOnboardingFieldErrors,
+  findOnboardingStepForField,
+  getFirstOnboardingErrorMessage,
+  getVendorOnboardingFormErrors,
+  getVendorOnboardingStepErrors,
   vendorOnboardingSchema,
-  vendorOnboardingStepFields,
   type VendorOnboardingStepId,
   type VendorOnboardingValues
 } from '@/domains/vendor/onboarding/schemas/vendor-onboarding.schema';
@@ -118,22 +123,40 @@ export function VendorOnboardingDomain({
     [draft, isAuthenticated, userEmail]
   );
 
+  const skipAccountFields = isAuthenticated || accountCreated;
+
   const form = useAppForm({
     defaultValues,
+    validators: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onChange: vendorOnboardingSchema as any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onSubmit: vendorOnboardingSchema as any
+    },
     onSubmit: async ({ value }) => {
       setIsSubmitting(true);
       try {
-        const skipAccount = isAuthenticated || accountCreated;
-        const parsed = skipAccount
+        const formErrors = getVendorOnboardingFormErrors(value, { skipAccountFields });
+
+        if (Object.keys(formErrors).length > 0) {
+          applyVendorOnboardingFieldErrors(form, formErrors);
+          const firstField = Object.keys(formErrors)[0] as keyof VendorOnboardingValues;
+          setCurrentStep(findOnboardingStepForField(firstField));
+          toast.error(t('errors.validationFailed'), {
+            description: getFirstOnboardingErrorMessage(formErrors)
+          });
+          return;
+        }
+
+        const parsed = skipAccountFields
           ? vendorOnboardingSchema.omit({ password: true, confirmPassword: true }).safeParse(value)
           : vendorOnboardingSchema.safeParse(value);
 
         if (!parsed.success) {
-          toast.error(t('errors.validationFailed'));
           return;
         }
 
-        if (!skipAccount) {
+        if (!skipAccountFields) {
           const registerResult = await vendorRegisterAction({
             email: value.email,
             password: value.password,
@@ -179,22 +202,25 @@ export function VendorOnboardingDomain({
 
   const validateStep = useCallback(
     async (stepId: VendorOnboardingStepId) => {
-      const fields = vendorOnboardingStepFields[stepId];
-
-      if (stepId === 'account' && (isAuthenticated || accountCreated)) {
+      if (stepId === 'account' && skipAccountFields) {
         return true;
       }
 
-      await Promise.all(
-        fields.map((fieldName) =>
-          form.validateField(fieldName as keyof VendorOnboardingValues, 'submit')
-        )
-      );
+      const values = form.state.values as VendorOnboardingValues;
+      const stepErrors = getVendorOnboardingStepErrors(values, stepId, { skipAccountFields });
 
-      const meta = form.state.fieldMeta;
-      return fields.every((f) => !meta[f as keyof typeof meta]?.errors?.length);
+      applyVendorOnboardingFieldErrors(form, stepErrors);
+
+      if (Object.keys(stepErrors).length > 0) {
+        toast.error(t('errors.validationFailed'), {
+          description: getFirstOnboardingErrorMessage(stepErrors)
+        });
+        return false;
+      }
+
+      return true;
     },
-    [accountCreated, form, isAuthenticated]
+    [form, skipAccountFields, t]
   );
 
   const goToStep = useCallback(
@@ -207,11 +233,20 @@ export function VendorOnboardingDomain({
         if (!valid) return;
       }
 
-      markCompleted(currentStepId);
       updateDraft(form.state.values as VendorOnboardingValues);
+      markCompleted(currentStepId);
       setCurrentStep(targetId);
     },
-    [currentIdx, currentStepId, markCompleted, setCurrentStep, steps, validateStep]
+    [
+      currentIdx,
+      currentStepId,
+      form,
+      markCompleted,
+      setCurrentStep,
+      steps,
+      updateDraft,
+      validateStep
+    ]
   );
 
   const handleNext = useCallback(async () => {
@@ -480,8 +515,8 @@ export function VendorOnboardingDomain({
                                 form.setFieldValue('locationLng', locationLng);
                               }}
                               error={
-                                field.state.meta.errors?.[0]
-                                  ? String(field.state.meta.errors[0])
+                                field.state.meta.isTouched && field.state.meta.errors?.[0]
+                                  ? (getFieldErrorMessage(field.state.meta.errors[0]) ?? undefined)
                                   : undefined
                               }
                             />
@@ -491,7 +526,7 @@ export function VendorOnboardingDomain({
                           name='categoryIds'
                           children={(field) => (
                             <field.MultiSelect
-                              label={t('fields.categoryIds.label')}
+                              label={`${t('fields.categoryIds.label')} *`}
                               placeholder={t('fields.categoryIds.placeholder')}
                               props={{
                                 options: categoryOptions,
