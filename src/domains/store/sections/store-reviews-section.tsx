@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { StoreReviewForm } from '@/domains/store/components/store-review-form';
 import { StoreReviewList } from '@/domains/store/components/store-review-list';
 
@@ -10,14 +12,16 @@ interface StoreReviewsSectionProps {
 
 /** Store reviews — summary, list, and authenticated write/edit form. */
 export function StoreReviewsSection({ slug, storeName }: StoreReviewsSectionProps) {
+  const t = useTranslations('stores.detail.reviews');
+
   return (
     <section id='store-reviews' className='border-gold/10 mt-16 border-t pt-12'>
       <div className='mb-8'>
         <h2 className='font-display text-2xl font-semibold tracking-tight md:text-3xl'>
-          Customer reviews
+          {t('title')}
         </h2>
         <p className='text-muted-foreground mt-2 text-sm md:text-base'>
-          Read what shoppers say about {storeName}, or share your own experience.
+          {t('intro', { name: storeName })}
         </p>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { IconFilter, IconRefresh } from '@tabler/icons-react';
 import { notFound } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ import { useStoreStore } from '../hooks/useStoreStore';
 import { mapToStoreEssentials } from '../store.utils';
 
 export function StoreDomain({ slug }: { slug: string }) {
+  const t = useTranslations('stores.detail');
   const {
     data: storeData,
     isLoading: storeLoading,
@@ -111,7 +113,7 @@ export function StoreDomain({ slug }: { slug: string }) {
   if (storeError || !store) {
     return (
       <StoreErrorState
-        message={storeError?.message || 'Store not found'}
+        message={storeError?.message || t('notFound')}
         onRetryAction={() => {
           refetchStore();
         }}
@@ -139,7 +141,7 @@ export function StoreDomain({ slug }: { slug: string }) {
               <div className='sticky top-24'>
                 <h2 className='mb-4 flex items-center gap-2 font-semibold'>
                   <IconFilter className='h-4 w-4' />
-                  Filters
+                  {t('toolbar.filtersHeading')}
                 </h2>
                 <StoreFilterSidebar
                   storeCategories={store.categories}
@@ -151,16 +153,14 @@ export function StoreDomain({ slug }: { slug: string }) {
             <div className='flex-1'>
               {productsError && !hasLoadedProducts ? (
                 <div className='border-border bg-muted/20 flex flex-col items-center justify-center gap-4 rounded-2xl border py-20 text-center'>
-                  <p className='text-muted-foreground'>
-                    Could not load products. Please try again.
-                  </p>
+                  <p className='text-muted-foreground'>{t('results.loadFailed')}</p>
                   <Button
                     variant='outline'
                     onClick={() => refetchProducts()}
                     className='gap-2 rounded-full'
                   >
                     <IconRefresh className='h-4 w-4' />
-                    Retry
+                    {t('results.retry')}
                   </Button>
                 </div>
               ) : isInitialProductsLoading ? (
@@ -175,7 +175,7 @@ export function StoreDomain({ slug }: { slug: string }) {
                 />
               )}
               {isRefetchingProducts && hasLoadedProducts && (
-                <p className='text-gold mt-4 text-center text-xs'>Updating products…</p>
+                <p className='text-gold mt-4 text-center text-xs'>{t('updatingProducts')}</p>
               )}
             </div>
           </div>
@@ -185,7 +185,7 @@ export function StoreDomain({ slug }: { slug: string }) {
       </section>
 
       <AppDialog
-        title='Filters'
+        title={t('toolbar.filtersDialogTitle')}
         component='sheet'
         onOpenChange={toggleFilterMobileSheet}
         open={filterMobileSheetOpen}

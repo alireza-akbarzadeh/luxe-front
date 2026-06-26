@@ -1,11 +1,14 @@
-// components/filter-sidebar.tsx
+'use client';
+
 import { IconChevronDown, IconStar } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Slider } from '@/components/ui/slider';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import type { DtoProductResponse } from '~/src/services/-stores-{slug}-products-get.schemas';
 import type { DtoCategoryResponse } from '~/src/services/-stores-get.schemas';
 
@@ -22,6 +25,8 @@ export function StoreFilterSidebar({
   apiProducts,
   totalProducts
 }: FilterSidebarProps) {
+  const t = useTranslations('stores.detail.filters');
+  const { formatPrice, formatInteger } = useLocaleFormatters();
   const filters = useStoreFilters(storeCategories?.map((c) => c.name ?? '') || []);
   const {
     category,
@@ -51,13 +56,12 @@ export function StoreFilterSidebar({
 
   return (
     <div className='space-y-6'>
-      {/* Categories */}
       <Collapsible
         open={expandedSections.categories}
         onOpenChange={() => toggleSection('categories')}
       >
         <CollapsibleTrigger className='flex w-full items-center justify-between py-2'>
-          <span className='font-medium'>Categories</span>
+          <span className='font-medium'>{t('categories')}</span>
           <IconChevronDown
             className={`h-4 w-4 transition-transform ${expandedSections.categories ? 'rotate-180' : ''}`}
           />
@@ -69,7 +73,7 @@ export function StoreFilterSidebar({
               category === '' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
             }`}
           >
-            All Products ({totalProducts})
+            {t('allProducts', { count: totalProducts })}
           </button>
           {storeCategories?.map((cat) => {
             const count = apiProducts.filter((p) => p.category?.name === cat.name).length;
@@ -83,17 +87,16 @@ export function StoreFilterSidebar({
                     : 'hover:bg-secondary'
                 }`}
               >
-                {cat.name} ({count})
+                {cat.name} ({formatInteger(count)})
               </button>
             );
           })}
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Price Range */}
       <Collapsible open={expandedSections.price} onOpenChange={() => toggleSection('price')}>
         <CollapsibleTrigger className='flex w-full items-center justify-between py-2'>
-          <span className='font-medium'>Price Range</span>
+          <span className='font-medium'>{t('priceRange')}</span>
           <IconChevronDown
             className={`h-4 w-4 transition-transform ${expandedSections.price ? 'rotate-180' : ''}`}
           />
@@ -108,17 +111,16 @@ export function StoreFilterSidebar({
             className='mb-4'
           />
           <div className='flex items-center justify-between text-sm'>
-            <span className='bg-secondary rounded px-2 py-1'>${priceRange[0]}</span>
-            <span className='text-muted-foreground'>to</span>
-            <span className='bg-secondary rounded px-2 py-1'>${priceRange[1]}</span>
+            <span className='bg-secondary rounded px-2 py-1'>{formatPrice(priceRange[0])}</span>
+            <span className='text-muted-foreground'>{t('priceTo')}</span>
+            <span className='bg-secondary rounded px-2 py-1'>{formatPrice(priceRange[1])}</span>
           </div>
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Minimum Rating */}
       <Collapsible open={expandedSections.rating} onOpenChange={() => toggleSection('rating')}>
         <CollapsibleTrigger className='flex w-full items-center justify-between py-2'>
-          <span className='font-medium'>Minimum Rating</span>
+          <span className='font-medium'>{t('minimumRating')}</span>
           <IconChevronDown
             className={`h-4 w-4 transition-transform ${expandedSections.rating ? 'rotate-180' : ''}`}
           />
@@ -146,16 +148,15 @@ export function StoreFilterSidebar({
                   />
                 ))}
               </div>
-              <span>& up</span>
+              <span>{t('ratingAndUp')}</span>
             </button>
           ))}
         </CollapsibleContent>
       </Collapsible>
 
-      {/* Quick Filters */}
       <Collapsible open={expandedSections.more} onOpenChange={() => toggleSection('more')}>
         <CollapsibleTrigger className='flex w-full items-center justify-between py-2'>
-          <span className='font-medium'>Quick Filters</span>
+          <span className='font-medium'>{t('quickFilters')}</span>
           <IconChevronDown
             className={`h-4 w-4 transition-transform ${expandedSections.more ? 'rotate-180' : ''}`}
           />
@@ -166,14 +167,14 @@ export function StoreFilterSidebar({
               checked={showOnlyNew}
               onCheckedChange={(checked) => setShowOnlyNew(checked as boolean)}
             />
-            <span className='text-sm'>New Arrivals</span>
+            <span className='text-sm'>{t('newArrivals')}</span>
           </label>
           <label className='flex cursor-pointer items-center gap-2'>
             <Checkbox
               checked={showOnlySale}
               onCheckedChange={(checked) => setShowOnlySale(checked as boolean)}
             />
-            <span className='text-sm'>On Sale</span>
+            <span className='text-sm'>{t('onSale')}</span>
           </label>
           {apiProducts.some((p) => p.is_digital) && (
             <label className='flex cursor-pointer items-center gap-2'>
@@ -181,7 +182,7 @@ export function StoreFilterSidebar({
                 checked={isDigital}
                 onCheckedChange={(checked) => setIsDigital(checked as boolean)}
               />
-              <span className='text-sm'>Digital Products Only</span>
+              <span className='text-sm'>{t('digitalOnly')}</span>
             </label>
           )}
         </CollapsibleContent>
@@ -189,7 +190,7 @@ export function StoreFilterSidebar({
 
       {hasActiveFilters && (
         <Button variant='outline' className='w-full' onClick={clearFilters}>
-          Clear All Filters
+          {t('clearAll')}
         </Button>
       )}
     </div>

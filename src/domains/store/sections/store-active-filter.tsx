@@ -1,12 +1,18 @@
+'use client';
+
 import { IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 
 import { useStoreFilters } from '../hooks/useStoreFilter';
 
 export function ActiveFilters() {
+  const t = useTranslations('stores.detail.activeFilters');
+  const { formatPrice } = useLocaleFormatters();
   const {
     category,
     setCategory,
@@ -36,7 +42,7 @@ export function ActiveFilters() {
         exit={{ opacity: 0, height: 0 }}
         className='mb-6 flex flex-wrap items-center gap-2'
       >
-        <span className='text-muted-foreground text-sm'>Active filters:</span>
+        <span className='text-muted-foreground text-sm'>{t('label')}</span>
         {category && (
           <Badge variant='secondary' className='gap-1'>
             {category}
@@ -47,7 +53,7 @@ export function ActiveFilters() {
         )}
         {(priceRange[0] > 0 || priceRange[1] < 500) && (
           <Badge variant='secondary' className='gap-1'>
-            ${priceRange[0]} - ${priceRange[1]}
+            {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
             <button onClick={() => setPriceRange([0, 500])}>
               <IconX className='h-3 w-3' />
             </button>
@@ -55,7 +61,7 @@ export function ActiveFilters() {
         )}
         {minRating > 0 && (
           <Badge variant='secondary' className='gap-1'>
-            {minRating}+ stars
+            {t('minRating', { rating: minRating })}
             <button onClick={() => setMinRating(0)}>
               <IconX className='h-3 w-3' />
             </button>
@@ -63,7 +69,7 @@ export function ActiveFilters() {
         )}
         {showOnlyNew && (
           <Badge variant='secondary' className='gap-1'>
-            New Arrivals
+            {t('newArrivals')}
             <button onClick={() => setShowOnlyNew(false)}>
               <IconX className='h-3 w-3' />
             </button>
@@ -71,7 +77,7 @@ export function ActiveFilters() {
         )}
         {showOnlySale && (
           <Badge variant='secondary' className='gap-1'>
-            On Sale
+            {t('onSale')}
             <button onClick={() => setShowOnlySale(false)}>
               <IconX className='h-3 w-3' />
             </button>
@@ -79,7 +85,7 @@ export function ActiveFilters() {
         )}
         {isDigital && (
           <Badge variant='secondary' className='gap-1'>
-            Digital Only
+            {t('digitalOnly')}
             <button onClick={() => setIsDigital(false)}>
               <IconX className='h-3 w-3' />
             </button>
@@ -87,14 +93,14 @@ export function ActiveFilters() {
         )}
         {searchQuery && (
           <Badge variant='secondary' className='gap-1'>
-            "{searchQuery}"
+            {t('search', { query: searchQuery })}
             <button onClick={() => setSearchQuery('')}>
               <IconX className='h-3 w-3' />
             </button>
           </Badge>
         )}
         <Button variant='ghost' size='sm' onClick={clearFilters} className='text-muted-foreground'>
-          Clear all
+          {t('clearAll')}
         </Button>
       </motion.div>
     </AnimatePresence>

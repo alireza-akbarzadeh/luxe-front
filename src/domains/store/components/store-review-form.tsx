@@ -2,6 +2,7 @@
 
 import { IconTrash } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/components/providers/auth-provider';
@@ -12,7 +13,8 @@ import { useStoreReviewMutations } from '@/domains/store/hooks/useStoreReviewMut
 import {
   defaultStoreReviewValues,
   type StoreReviewFormValues,
-  storeReviewSchema} from '@/domains/store/schemas/store-review.schema';
+  storeReviewSchema
+} from '@/domains/store/schemas/store-review.schema';
 import type {
   StoreReviewMeResponse,
   StoreReviewResponse
@@ -31,6 +33,7 @@ interface StoreReviewFormFieldsProps {
 }
 
 function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
+  const t = useTranslations('stores.detail.reviews');
   const isEditing = Boolean(myReview?.id);
   const { createReview, updateReview, deleteReview } = useStoreReviewMutations(slug);
 
@@ -49,38 +52,35 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
             reviewId: myReview.id,
             data: { rating: value.rating, comment: value.comment }
           });
-          toast.success('Review updated');
+          toast.success(t('toastUpdated'));
         } else {
           await createReview.mutateAsync({
             slug,
             data: { rating: value.rating, comment: value.comment }
           });
-          toast.success('Review published');
+          toast.success(t('toastPublished'));
           formApi.reset();
         }
       } catch (error) {
         if (isUnauthorizedError(error)) {
-          toast.error('Sign in to leave a review');
+          toast.error(t('toastSignIn'));
           return;
         }
-        toast.error(isEditing ? 'Failed to update review' : 'Failed to submit review');
+        toast.error(isEditing ? t('toastUpdateFailed') : t('toastSubmitFailed'));
       }
     }
   });
 
-  const isPending =
-    createReview.isPending || updateReview.isPending || deleteReview.isPending;
+  const isPending = createReview.isPending || updateReview.isPending || deleteReview.isPending;
 
   return (
     <div className='border-gold/15 bg-card rounded-2xl border p-6 shadow-sm'>
       <div className='mb-5'>
         <h3 className='font-display text-lg font-semibold'>
-          {isEditing ? 'Update your review' : 'Write a review'}
+          {isEditing ? t('updateTitle') : t('writeTitle')}
         </h3>
         <p className='text-muted-foreground mt-1 text-sm'>
-          {isEditing
-            ? 'You can edit or remove your review anytime.'
-            : 'Help other shoppers by rating this store.'}
+          {isEditing ? t('editHint') : t('writeHint')}
         </p>
       </div>
 
@@ -96,7 +96,7 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
           <form.Field name='rating'>
             {(field) => (
               <div className='space-y-2'>
-                <label className='text-sm font-medium'>Your rating</label>
+                <label className='text-sm font-medium'>{t('yourRating')}</label>
                 <StoreRatingInput
                   value={field.state.value}
                   onChange={(rating) => field.handleChange(rating)}
@@ -112,8 +112,8 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
           <form.AppField name='comment'>
             {(field) => (
               <field.TextArea
-                label='Your review'
-                placeholder='Tell others about product quality, shipping, customer service…'
+                label={t('commentLabel')}
+                placeholder={t('commentPlaceholder')}
                 rows={4}
                 disabled={isPending}
               />
@@ -122,7 +122,7 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
 
           <div className='flex flex-wrap items-center gap-2'>
             <form.Submit
-              label={isEditing ? 'Update review' : 'Post review'}
+              label={isEditing ? t('updateButton') : t('postButton')}
               isPending={isPending}
               className='rounded-full px-6'
             />
@@ -138,14 +138,14 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
                   try {
                     await deleteReview.mutateAsync({ slug, reviewId: myReview.id! });
                     form.reset(defaultStoreReviewValues);
-                    toast.success('Review removed');
+                    toast.success(t('toastRemoved'));
                   } catch {
-                    toast.error('Failed to delete review');
+                    toast.error(t('toastDeleteFailed'));
                   }
                 }}
               >
                 <IconTrash className='mr-1.5 h-4 w-4' />
-                Delete
+                {t('delete')}
               </Button>
             )}
           </div>
@@ -156,6 +156,7 @@ function StoreReviewFormFields({ slug, myReview }: StoreReviewFormFieldsProps) {
 }
 
 export function StoreReviewForm({ slug }: StoreReviewFormProps) {
+  const t = useTranslations('stores.detail.reviews');
   const { isAuthenticated } = useAuth();
   const { data: myReviewData, isLoading: isLoadingMine } = useGetStoresSlugReviewsMe(slug, {
     query: { enabled: isAuthenticated }
@@ -166,12 +167,10 @@ export function StoreReviewForm({ slug }: StoreReviewFormProps) {
   if (!isAuthenticated) {
     return (
       <div className='border-gold/15 bg-muted/20 rounded-2xl border p-6 text-center'>
-        <p className='text-muted-foreground text-sm'>
-          Sign in to share your experience with this store.
-        </p>
+        <p className='text-muted-foreground text-sm'>{t('signInPrompt')}</p>
         <Button asChild className='mt-4 rounded-full'>
           <Link href={`/login?callbackUrl=${encodeURIComponent(`/store/${slug}`)}`}>
-            Sign in to review
+            {t('signInToReview')}
           </Link>
         </Button>
       </div>
@@ -183,10 +182,6 @@ export function StoreReviewForm({ slug }: StoreReviewFormProps) {
   }
 
   return (
-    <StoreReviewFormFields
-      key={myReview?.id ?? 'new-review'}
-      slug={slug}
-      myReview={myReview}
-    />
+    <StoreReviewFormFields key={myReview?.id ?? 'new-review'} slug={slug} myReview={myReview} />
   );
 }

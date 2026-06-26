@@ -1,7 +1,7 @@
 'use client';
 
 import { IconStar } from '@tabler/icons-react';
-import { formatDistanceToNow } from 'date-fns';
+import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,7 @@ import type {
   StoreReviewsListResponse,
   StoreReviewSummary
 } from '@/domains/store/types/store-review.types';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import {
   getStoresSlugReviews,
@@ -23,12 +24,16 @@ import {
 const PAGE_SIZE = 10;
 
 function RatingBreakdown({ summary }: { summary?: StoreReviewSummary }) {
+  const t = useTranslations('stores.detail.reviews');
+  const { formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const total = summary?.total ?? 0;
   const average = summary?.average ?? 0;
 
   return (
     <div className='border-gold/10 bg-card rounded-2xl border p-6'>
-      <p className='font-display text-5xl tabular-nums'>{average.toFixed(1)}</p>
+      <p className={cn('font-display text-5xl tabular-nums', moneyClassName)}>
+        {formatDecimal(average)}
+      </p>
       <div className='mt-2 flex'>
         {Array.from({ length: 5 }).map((_, i) => (
           <IconStar
@@ -40,9 +45,7 @@ function RatingBreakdown({ summary }: { summary?: StoreReviewSummary }) {
           />
         ))}
       </div>
-      <p className='text-muted-foreground mt-2 text-sm'>
-        Based on {total.toLocaleString('en-US')} review{total === 1 ? '' : 's'}
-      </p>
+      <p className='text-muted-foreground mt-2 text-sm'>{t('basedOn', { count: total })}</p>
 
       <div className='mt-6 space-y-1.5'>
         {[5, 4, 3, 2, 1].map((stars) => {
@@ -50,11 +53,15 @@ function RatingBreakdown({ summary }: { summary?: StoreReviewSummary }) {
           const pct = total > 0 ? Math.round((count / total) * 100) : 0;
           return (
             <div key={stars} className='flex items-center gap-2 text-xs'>
-              <span className='text-muted-foreground w-12'>{stars} star</span>
+              <span className='text-muted-foreground w-12'>{t('starLabel', { stars })}</span>
               <div className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'>
                 <div className='bg-gold h-full transition-all' style={{ width: `${pct}%` }} />
               </div>
-              <span className='text-muted-foreground w-8 text-right tabular-nums'>{pct}%</span>
+              <span
+                className={cn('text-muted-foreground w-8 text-right tabular-nums', moneyClassName)}
+              >
+                {formatInteger(pct)}%
+              </span>
             </div>
           );
         })}
@@ -64,20 +71,23 @@ function RatingBreakdown({ summary }: { summary?: StoreReviewSummary }) {
 }
 
 function ReviewItem({ review }: { review: StoreReviewResponse }) {
+  const t = useTranslations('stores.detail.reviews');
+  const formatter = useFormatter();
+
   return (
     <li className='border-gold/10 border-b pb-6 last:border-0'>
       <div className='flex items-start justify-between gap-3'>
         <div>
-          <p className='font-medium'>{review.author || 'Anonymous'}</p>
+          <p className='font-medium'>{review.author || t('anonymous')}</p>
           {review.is_owner && (
             <span className='text-gold-strong dark:text-gold text-[11px] font-medium'>
-              Your review
+              {t('yourReview')}
             </span>
           )}
         </div>
         {review.created_at && (
           <p className='text-muted-foreground shrink-0 text-xs'>
-            {formatDistanceToNow(new Date(review.created_at), { addSuffix: true })}
+            {formatter.relativeTime(new Date(review.created_at))}
           </p>
         )}
       </div>
@@ -104,6 +114,7 @@ interface StoreReviewListProps {
 }
 
 export function StoreReviewList({ slug }: StoreReviewListProps) {
+  const t = useTranslations('stores.detail.reviews');
   const [extraReviews, setExtraReviews] = useState<StoreReviewResponse[]>([]);
   const [nextOffset, setNextOffset] = useState(PAGE_SIZE);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -163,15 +174,13 @@ export function StoreReviewList({ slug }: StoreReviewListProps) {
                 disabled={isLoadingMore}
                 onClick={() => void handleLoadMore()}
               >
-                Load more reviews
+                {t('loadMore')}
               </Button>
             </div>
           )}
         </>
       ) : (
-        <p className='text-muted-foreground py-8 text-center'>
-          No reviews yet. Be the first to share your experience!
-        </p>
+        <p className='text-muted-foreground py-8 text-center'>{t('empty')}</p>
       )}
     </div>
   );

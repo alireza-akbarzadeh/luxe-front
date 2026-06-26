@@ -10,6 +10,7 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { fullBleedClass, sectionContainerClass } from '@/domains/home/lib/home-utils';
@@ -23,7 +24,6 @@ import {
 import { cn } from '@/lib/utils';
 import { FollowButton } from '~/src/components/buttons/follow-button';
 import { useSharing } from '~/src/hooks/useSharing';
-import { formatDate } from '~/src/lib/date';
 
 interface StoreHeaderProps {
   store: StoreEssentialsType;
@@ -32,16 +32,19 @@ interface StoreHeaderProps {
 
 export function StoreHeader(props: StoreHeaderProps) {
   const { store, totalProducts } = props;
+  const t = useTranslations('stores.detail.header');
+  const formatter = useFormatter();
+  const storeName = store.name ?? '';
   const bannerSrc = resolveStoreBanner(store.banner);
   const logoSrc = resolveStoreLogo(store.logo);
-  const { share } = useSharing(store.slug ?? '', store.name ?? '');
+  const { share } = useSharing(store.slug ?? '', storeName);
 
   return (
     <section className={cn(fullBleedClass, 'relative overflow-hidden border-b')}>
       <div className='relative h-44 overflow-hidden sm:h-52 md:h-64'>
         <Image
           src={bannerSrc}
-          alt={store.name ?? 'Store banner'}
+          alt={t('bannerAlt', { name: storeName })}
           fill
           className='object-cover'
           priority
@@ -58,7 +61,12 @@ export function StoreHeader(props: StoreHeaderProps) {
             animate={{ opacity: 1, scale: 1 }}
             className='border-gold/40 bg-card relative h-24 w-24 overflow-hidden rounded-2xl border-4 shadow-xl ring-4 ring-white/10 md:h-32 md:w-32'
           >
-            <Image src={logoSrc} alt={store.name ?? 'Store logo'} fill className='object-cover' />
+            <Image
+              src={logoSrc}
+              alt={t('logoAlt', { name: storeName })}
+              fill
+              className='object-cover'
+            />
           </motion.div>
 
           <motion.div
@@ -80,15 +88,17 @@ export function StoreHeader(props: StoreHeaderProps) {
               <div className='flex items-center gap-1'>
                 <IconStar className='fill-gold text-gold h-4 w-4' />
                 <span className='font-medium'>{store.rating}</span>
-                <span className='text-muted-foreground'>({store.reviewCount} reviews)</span>
+                <span className='text-muted-foreground'>
+                  {t('reviewCount', { count: store.reviewCount ?? 0 })}
+                </span>
               </div>
               <div className='text-muted-foreground flex items-center gap-1'>
                 <IconPackage className='h-4 w-4' />
-                <span>{totalProducts.toLocaleString('en-US')} products</span>
+                <span>{t('productCount', { count: totalProducts })}</span>
               </div>
               <div className='text-muted-foreground flex items-center gap-1'>
                 <IconUsers className='h-4 w-4' />
-                <span>{formatCount(store.followerCount ?? 0)} followers</span>
+                <span>{t('followerCount', { count: formatCount(store.followerCount ?? 0) })}</span>
               </div>
               {store.location && (
                 <div className='text-muted-foreground flex items-center gap-1'>
@@ -99,7 +109,14 @@ export function StoreHeader(props: StoreHeaderProps) {
               {store.joinedDate && (
                 <div className='text-muted-foreground flex items-center gap-1'>
                   <IconCalendar className='h-4 w-4' />
-                  <span>Since {formatDate(new Date(store.joinedDate as string), '')}</span>
+                  <span>
+                    {t('memberSince', {
+                      date: formatter.dateTime(new Date(store.joinedDate as string), {
+                        year: 'numeric',
+                        month: 'short'
+                      })
+                    })}
+                  </span>
                 </div>
               )}
             </div>
@@ -134,7 +151,7 @@ export function StoreHeader(props: StoreHeaderProps) {
               size='icon'
               onClick={share}
               className='border-gold/30 hover:border-gold shrink-0 rounded-full'
-              aria-label='Share store'
+              aria-label={t('shareAria')}
             >
               <IconShare2 className='h-4 w-4' />
             </Button>

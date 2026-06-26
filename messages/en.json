@@ -402,6 +402,105 @@
       "goHome": "Go Home"
     }
   },
+  "stores": {
+    "detail": {
+      "notFound": "Store not found",
+      "updatingProducts": "Updating products…",
+      "breadcrumb": {
+        "stores": "Stores"
+      },
+      "header": {
+        "bannerAlt": "{name} banner",
+        "logoAlt": "{name} logo",
+        "reviewCount": "({count, number} reviews)",
+        "productCount": "{count, plural, one {# product} other {# products}}",
+        "followerCount": "{count} followers",
+        "memberSince": "Since {date}",
+        "shareAria": "Share store"
+      },
+      "toolbar": {
+        "filters": "Filters",
+        "searchPlaceholder": "Search products…",
+        "filtersHeading": "Filters",
+        "filtersDialogTitle": "Filters"
+      },
+      "sort": {
+        "featured": "Featured",
+        "newest": "Newest",
+        "priceAsc": "Price: Low to High",
+        "priceDesc": "Price: High to Low",
+        "rating": "Best Rating"
+      },
+      "filters": {
+        "categories": "Categories",
+        "allProducts": "All Products ({count, number})",
+        "priceRange": "Price Range",
+        "priceTo": "to",
+        "minimumRating": "Minimum Rating",
+        "ratingAndUp": "& up",
+        "quickFilters": "Quick Filters",
+        "newArrivals": "New Arrivals",
+        "onSale": "On Sale",
+        "digitalOnly": "Digital Products Only",
+        "clearAll": "Clear All Filters"
+      },
+      "activeFilters": {
+        "label": "Active filters:",
+        "minRating": "{rating}+ stars",
+        "newArrivals": "New Arrivals",
+        "onSale": "On Sale",
+        "digitalOnly": "Digital Only",
+        "search": "\"{query}\"",
+        "clearAll": "Clear all"
+      },
+      "results": {
+        "loadFailed": "Could not load products. Please try again.",
+        "retry": "Retry",
+        "emptyTitle": "No products found",
+        "emptyDescription": "Try adjusting your filters to find what you're looking for.",
+        "showing": "Showing {shown, number} of {total, number} products",
+        "loadMore": "Load more products",
+        "loading": "Loading…",
+        "allSeenTitle": "You've seen all products",
+        "allSeenDescription": "{count, plural, one {# product from this store} other {# products from this store}}"
+      },
+      "reviews": {
+        "title": "Customer reviews",
+        "intro": "Read what shoppers say about {name}, or share your own experience.",
+        "basedOn": "Based on {count, number} {count, plural, one {review} other {reviews}}",
+        "starLabel": "{stars, number} star",
+        "anonymous": "Anonymous",
+        "yourReview": "Your review",
+        "loadMore": "Load more reviews",
+        "empty": "No reviews yet. Be the first to share your experience!",
+        "updateTitle": "Update your review",
+        "writeTitle": "Write a review",
+        "editHint": "You can edit or remove your review anytime.",
+        "writeHint": "Help other shoppers by rating this store.",
+        "yourRating": "Your rating",
+        "commentLabel": "Your review",
+        "commentPlaceholder": "Tell others about product quality, shipping, customer service…",
+        "updateButton": "Update review",
+        "postButton": "Post review",
+        "delete": "Delete",
+        "signInPrompt": "Sign in to share your experience with this store.",
+        "signInToReview": "Sign in to review",
+        "toastUpdated": "Review updated",
+        "toastPublished": "Review published",
+        "toastSignIn": "Sign in to leave a review",
+        "toastUpdateFailed": "Failed to update review",
+        "toastSubmitFailed": "Failed to submit review",
+        "toastRemoved": "Review removed",
+        "toastDeleteFailed": "Failed to delete review"
+      },
+      "error": {
+        "title": "Something went wrong",
+        "notFound": "Store not found",
+        "loadFailed": "We couldn't load this store right now. Please try again.",
+        "retry": "Retry"
+      }
+    }
+  },
   "cart": {
     "signInTitle": "Sign in to view your cart",
     "signInDescription": "Save items across devices and checkout faster when you are signed in.",

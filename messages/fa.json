@@ -402,6 +402,105 @@
       "goHome": "رفتن به خانه"
     }
   },
+  "stores": {
+    "detail": {
+      "notFound": "فروشگاه یافت نشد",
+      "updatingProducts": "در حال به‌روزرسانی محصولات…",
+      "breadcrumb": {
+        "stores": "فروشگاه‌ها"
+      },
+      "header": {
+        "bannerAlt": "بنر {name}",
+        "logoAlt": "لوگوی {name}",
+        "reviewCount": "({count, number} نظر)",
+        "productCount": "{count, plural, one {# محصول} other {# محصول}}",
+        "followerCount": "{count} دنبال‌کننده",
+        "memberSince": "از {date}",
+        "shareAria": "اشتراک‌گذاری فروشگاه"
+      },
+      "toolbar": {
+        "filters": "فیلترها",
+        "searchPlaceholder": "جستجوی محصولات…",
+        "filtersHeading": "فیلترها",
+        "filtersDialogTitle": "فیلترها"
+      },
+      "sort": {
+        "featured": "ویژه",
+        "newest": "جدیدترین",
+        "priceAsc": "قیمت: کم به زیاد",
+        "priceDesc": "قیمت: زیاد به کم",
+        "rating": "بهترین امتیاز"
+      },
+      "filters": {
+        "categories": "دسته‌ها",
+        "allProducts": "همه محصولات ({count, number})",
+        "priceRange": "محدوده قیمت",
+        "priceTo": "تا",
+        "minimumRating": "حداقل امتیاز",
+        "ratingAndUp": "به بالا",
+        "quickFilters": "فیلترهای سریع",
+        "newArrivals": "تازه‌ها",
+        "onSale": "حراج",
+        "digitalOnly": "فقط محصولات دیجیتال",
+        "clearAll": "پاک کردن همه فیلترها"
+      },
+      "activeFilters": {
+        "label": "فیلترهای فعال:",
+        "minRating": "{rating}+ ستاره",
+        "newArrivals": "تازه‌ها",
+        "onSale": "حراج",
+        "digitalOnly": "فقط دیجیتال",
+        "search": "«{query}»",
+        "clearAll": "پاک کردن همه"
+      },
+      "results": {
+        "loadFailed": "بارگذاری محصولات ممکن نشد. دوباره تلاش کنید.",
+        "retry": "تلاش مجدد",
+        "emptyTitle": "محصولی یافت نشد",
+        "emptyDescription": "فیلترها را تغییر دهید تا آنچه می‌خواهید را پیدا کنید.",
+        "showing": "نمایش {shown, number} از {total, number} محصول",
+        "loadMore": "بارگذاری محصولات بیشتر",
+        "loading": "در حال بارگذاری…",
+        "allSeenTitle": "همه محصولات را دیدید",
+        "allSeenDescription": "{count, plural, one {# محصول از این فروشگاه} other {# محصول از این فروشگاه}}"
+      },
+      "reviews": {
+        "title": "نظرات مشتریان",
+        "intro": "نظر خریداران درباره {name} را بخوانید یا تجربه خود را به اشتراک بگذارید.",
+        "basedOn": "بر اساس {count, number} {count, plural, one {نظر} other {نظر}}",
+        "starLabel": "{stars, number} ستاره",
+        "anonymous": "ناشناس",
+        "yourReview": "نظر شما",
+        "loadMore": "نظرات بیشتر",
+        "empty": "هنوز نظری ثبت نشده. اولین نفری باشید که تجربه خود را می‌نویسد!",
+        "updateTitle": "ویرایش نظر شما",
+        "writeTitle": "نوشتن نظر",
+        "editHint": "هر زمان می‌توانید نظر خود را ویرایش یا حذف کنید.",
+        "writeHint": "با امتیاز دادن به این فروشگاه به دیگران کمک کنید.",
+        "yourRating": "امتیاز شما",
+        "commentLabel": "نظر شما",
+        "commentPlaceholder": "کیفیت محصول، ارسال، خدمات مشتری و…",
+        "updateButton": "به‌روزرسانی نظر",
+        "postButton": "ثبت نظر",
+        "delete": "حذف",
+        "signInPrompt": "برای ثبت تجربه خود با این فروشگاه وارد شوید.",
+        "signInToReview": "ورود برای ثبت نظر",
+        "toastUpdated": "نظر به‌روزرسانی شد",
+        "toastPublished": "نظر منتشر شد",
+        "toastSignIn": "برای ثبت نظر وارد شوید",
+        "toastUpdateFailed": "به‌روزرسانی نظر ناموفق بود",
+        "toastSubmitFailed": "ثبت نظر ناموفق بود",
+        "toastRemoved": "نظر حذف شد",
+        "toastDeleteFailed": "حذف نظر ناموفق بود"
+      },
+      "error": {
+        "title": "مشکلی پیش آمد",
+        "notFound": "فروشگاه یافت نشد",
+        "loadFailed": "بارگذاری این فروشگاه ممکن نشد. دوباره تلاش کنید.",
+        "retry": "تلاش مجدد"
+      }
+    }
+  },
   "cart": {
     "signInTitle": "برای مشاهده سبد خرید وارد شوید",
     "signInDescription": "کالاها را در همه دستگاه‌ها ذخیره کنید و با ورود سریع‌تر پرداخت کنید.",

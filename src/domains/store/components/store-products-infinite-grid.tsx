@@ -2,6 +2,7 @@
 
 import { IconCheck, IconPackage } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { InfiniteScrollSentinel } from '@/domains/products/components/infinite-scroll-sentinel';
@@ -26,6 +27,8 @@ export function StoreProductsInfiniteGrid({
   isFetchingNextPage,
   onLoadMore
 }: StoreProductsInfiniteGridProps) {
+  const t = useTranslations('stores.detail.results');
+  const tFilters = useTranslations('stores.detail.filters');
   const { showOnlySale, gridCols, clearFilters } = useStoreFilters([]);
 
   const filteredProducts = showOnlySale
@@ -64,12 +67,10 @@ export function StoreProductsInfiniteGrid({
         <div className='bg-secondary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full'>
           <IconPackage className='text-muted-foreground h-8 w-8' />
         </div>
-        <h3 className='text-lg font-medium'>No products found</h3>
-        <p className='text-muted-foreground mt-1'>
-          Try adjusting your filters to find what you&apos;re looking for.
-        </p>
+        <h3 className='text-lg font-medium'>{t('emptyTitle')}</h3>
+        <p className='text-muted-foreground mt-1'>{t('emptyDescription')}</p>
         <Button variant='outline' className='mt-4 rounded-full' onClick={clearFilters}>
-          Clear All Filters
+          {tFilters('clearAll')}
         </Button>
       </motion.div>
     );
@@ -84,8 +85,7 @@ export function StoreProductsInfiniteGrid({
     <>
       <div className='mb-4 flex items-center justify-between'>
         <p className='text-muted-foreground text-sm'>
-          Showing {adaptedProducts.length.toLocaleString('en-US')} of{' '}
-          {totalProducts.toLocaleString('en-US')} products
+          {t('showing', { shown: adaptedProducts.length, total: totalProducts })}
         </p>
       </div>
 
@@ -109,7 +109,7 @@ export function StoreProductsInfiniteGrid({
               disabled={isFetchingNextPage}
               onClick={onLoadMore}
             >
-              {isFetchingNextPage ? 'Loading…' : 'Load more products'}
+              {isFetchingNextPage ? t('loading') : t('loadMore')}
             </Button>
           </div>
         </>
@@ -117,10 +117,9 @@ export function StoreProductsInfiniteGrid({
         adaptedProducts.length > 0 && (
           <div className='border-gold/15 bg-muted/20 mt-10 flex flex-col items-center gap-2 rounded-2xl border px-6 py-10 text-center'>
             <IconCheck className='text-gold h-8 w-8' />
-            <p className='font-medium'>You&apos;ve seen all products</p>
+            <p className='font-medium'>{t('allSeenTitle')}</p>
             <p className='text-muted-foreground text-sm'>
-              {adaptedProducts.length.toLocaleString('en-US')} product
-              {adaptedProducts.length === 1 ? '' : 's'} from this store
+              {t('allSeenDescription', { count: adaptedProducts.length })}
             </p>
           </div>
         )

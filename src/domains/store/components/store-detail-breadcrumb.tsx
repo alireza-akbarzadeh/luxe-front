@@ -1,6 +1,7 @@
 'use client';
 
 import { IconChevronRight, IconRotateClockwise, IconTruck } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { sectionContainerClass } from '@/domains/home/lib/home-utils';
@@ -20,6 +21,8 @@ export function StoreDetailMetaBar({
   shippingInfo,
   className
 }: StoreDetailMetaBarProps) {
+  const t = useTranslations('stores.detail.breadcrumb');
+
   return (
     <div
       className={cn(
@@ -29,10 +32,7 @@ export function StoreDetailMetaBar({
       )}
     >
       <DynamicBreadcrumb
-        items={[
-          { label: 'Stores', href: '/store' },
-          { label: storeName }
-        ]}
+        items={[{ label: t('stores'), href: '/store' }, { label: storeName }]}
         showBackButton={false}
         direction='row'
         separator={<IconChevronRight className='h-3 w-3' aria-hidden />}

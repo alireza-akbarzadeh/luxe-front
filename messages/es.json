@@ -402,6 +402,105 @@
       "goHome": "Ir al inicio"
     }
   },
+  "stores": {
+    "detail": {
+      "notFound": "Tienda no encontrada",
+      "updatingProducts": "Actualizando productos…",
+      "breadcrumb": {
+        "stores": "Tiendas"
+      },
+      "header": {
+        "bannerAlt": "Banner de {name}",
+        "logoAlt": "Logo de {name}",
+        "reviewCount": "({count, number} reseñas)",
+        "productCount": "{count, plural, one {# producto} other {# productos}}",
+        "followerCount": "{count} seguidores",
+        "memberSince": "Desde {date}",
+        "shareAria": "Compartir tienda"
+      },
+      "toolbar": {
+        "filters": "Filtros",
+        "searchPlaceholder": "Buscar productos…",
+        "filtersHeading": "Filtros",
+        "filtersDialogTitle": "Filtros"
+      },
+      "sort": {
+        "featured": "Destacados",
+        "newest": "Más recientes",
+        "priceAsc": "Precio: menor a mayor",
+        "priceDesc": "Precio: mayor a menor",
+        "rating": "Mejor valoración"
+      },
+      "filters": {
+        "categories": "Categorías",
+        "allProducts": "Todos los productos ({count, number})",
+        "priceRange": "Rango de precio",
+        "priceTo": "a",
+        "minimumRating": "Valoración mínima",
+        "ratingAndUp": "o más",
+        "quickFilters": "Filtros rápidos",
+        "newArrivals": "Novedades",
+        "onSale": "En oferta",
+        "digitalOnly": "Solo productos digitales",
+        "clearAll": "Borrar todos los filtros"
+      },
+      "activeFilters": {
+        "label": "Filtros activos:",
+        "minRating": "{rating}+ estrellas",
+        "newArrivals": "Novedades",
+        "onSale": "En oferta",
+        "digitalOnly": "Solo digital",
+        "search": "\"{query}\"",
+        "clearAll": "Borrar todo"
+      },
+      "results": {
+        "loadFailed": "No se pudieron cargar los productos. Inténtalo de nuevo.",
+        "retry": "Reintentar",
+        "emptyTitle": "No se encontraron productos",
+        "emptyDescription": "Prueba a ajustar los filtros para encontrar lo que buscas.",
+        "showing": "Mostrando {shown, number} de {total, number} productos",
+        "loadMore": "Cargar más productos",
+        "loading": "Cargando…",
+        "allSeenTitle": "Has visto todos los productos",
+        "allSeenDescription": "{count, plural, one {# producto de esta tienda} other {# productos de esta tienda}}"
+      },
+      "reviews": {
+        "title": "Opiniones de clientes",
+        "intro": "Lee lo que dicen los compradores sobre {name} o comparte tu experiencia.",
+        "basedOn": "Basado en {count, number} {count, plural, one {reseña} other {reseñas}}",
+        "starLabel": "{stars, number} estrella",
+        "anonymous": "Anónimo",
+        "yourReview": "Tu reseña",
+        "loadMore": "Cargar más reseñas",
+        "empty": "Aún no hay reseñas. ¡Sé el primero en compartir tu experiencia!",
+        "updateTitle": "Actualizar tu reseña",
+        "writeTitle": "Escribir una reseña",
+        "editHint": "Puedes editar o eliminar tu reseña en cualquier momento.",
+        "writeHint": "Ayuda a otros compradores valorando esta tienda.",
+        "yourRating": "Tu valoración",
+        "commentLabel": "Tu reseña",
+        "commentPlaceholder": "Calidad del producto, envío, atención al cliente…",
+        "updateButton": "Actualizar reseña",
+        "postButton": "Publicar reseña",
+        "delete": "Eliminar",
+        "signInPrompt": "Inicia sesión para compartir tu experiencia con esta tienda.",
+        "signInToReview": "Iniciar sesión para reseñar",
+        "toastUpdated": "Reseña actualizada",
+        "toastPublished": "Reseña publicada",
+        "toastSignIn": "Inicia sesión para dejar una reseña",
+        "toastUpdateFailed": "No se pudo actualizar la reseña",
+        "toastSubmitFailed": "No se pudo enviar la reseña",
+        "toastRemoved": "Reseña eliminada",
+        "toastDeleteFailed": "No se pudo eliminar la reseña"
+      },
+      "error": {
+        "title": "Algo salió mal",
+        "notFound": "Tienda no encontrada",
+        "loadFailed": "No pudimos cargar esta tienda. Inténtalo de nuevo.",
+        "retry": "Reintentar"
+      }
+    }
+  },
   "cart": {
     "signInTitle": "Inicia sesión para ver tu carrito",
     "signInDescription": "Guarda artículos en todos tus dispositivos y paga más rápido al iniciar sesión.",
