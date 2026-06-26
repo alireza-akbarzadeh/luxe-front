@@ -56,6 +56,7 @@ page.tsx → domains/<name>/*.domain.tsx → Orval hooks → API
 - No `any`; minimal justified `as` casts.
 - Table filter/pagination → URL (`nuqs`), not Zustand.
 - Don't edit `src/components/ui/*` unless asked.
+- **Max ~200 lines per file** (components, hooks, domain modules). Split with `withForm` step sections, hooks, and small presentational components — see `product-form.tsx` / vendor onboarding.
 
 ## Before done
 

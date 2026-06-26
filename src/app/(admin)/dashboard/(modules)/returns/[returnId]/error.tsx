@@ -1,23 +1,13 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { AdminModuleError } from '@/components/error-state/admin-module-error';
 
-export default function ReturnDetailError({
+export default function ReturnError({
   error,
   reset
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return (
-    <div className='flex min-h-[50vh] items-center justify-center p-8'>
-      <div className='max-w-md rounded-2xl border border-dashed p-12 text-center'>
-        <h2 className='text-lg font-semibold'>Could not load return</h2>
-        <p className='text-muted-foreground mt-2 text-sm'>{error.message}</p>
-        <Button className='mt-4' variant='outline' onClick={reset}>
-          Try again
-        </Button>
-      </div>
-    </div>
-  );
+  return <AdminModuleError module='return' error={error} reset={reset} />;
 }

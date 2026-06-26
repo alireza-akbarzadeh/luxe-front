@@ -1,21 +1,25 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { AdminErrorState } from '@/components/cart/admin-error-state';
 
 export default function Forbidden() {
+  const t = useTranslations('errors.admin.forbidden');
+
   return (
     <AdminErrorState
       code='403'
-      badge='Insufficient permissions'
+      badge={t('badge')}
       tone='danger'
-      title="You don't have access to this section"
-      description="Your role doesn't include the permissions required for this admin resource. Ask an owner to grant access or switch to an account with the correct scopes."
-      primary={{ label: 'Back to dashboard', href: '/dashboard' }}
-      secondary={{ label: 'Go to storefront', href: '/' }}
+      title={t('title')}
+      description={t('description')}
+      primary={{ label: t('primary'), href: '/dashboard' }}
+      secondary={{ label: t('secondary'), href: '/' }}
       meta={[
-        { label: 'Required role', value: 'admin' },
-        { label: 'Access level', value: 'restricted' },
-        { label: 'Scope', value: 'dashboard:write' }
+        { label: t('requiredRole'), value: t('adminRole') },
+        { label: t('accessLevel'), value: t('restricted') },
+        { label: t('scope'), value: t('scopeValue') }
       ]}
     />
   );

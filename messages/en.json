@@ -10,6 +10,150 @@
     "proceedToCheckout": "Proceed to checkout",
     "backToTop": "Back to top"
   },
+  "errors": {
+    "common": {
+      "tryAgain": "Try again",
+      "goHome": "Go home",
+      "home": "Home",
+      "signIn": "Sign in",
+      "logIn": "Log in",
+      "backToHome": "Back to home",
+      "continueShopping": "Continue shopping",
+      "goShopping": "Go Shopping"
+    },
+    "site": {
+      "recovery": {
+        "heading": "Quick recovery",
+        "newArrivals": "New arrivals",
+        "bestSellers": "Best sellers",
+        "contactSupport": "Contact support"
+      }
+    },
+    "global": {
+      "notFound": {
+        "metadataTitle": "Page Not Found — Luxe Marketplace",
+        "metadataDescription": "The page you're looking for doesn't exist or may have been moved. Explore our latest collections, best sellers, and new arrivals.",
+        "eyebrow": "Lost your way?",
+        "title": "This page could not be found",
+        "description": "The destination you requested is no longer available. Discover new arrivals, curated collections, and products selected just for you.",
+        "primary": "Explore collections",
+        "secondary": "View best sellers"
+      },
+      "forbidden": {
+        "title": "Access forbidden",
+        "description": "You don't have permission to view this page. Please contact your administrator if you believe this is a mistake."
+      },
+      "unauthorized": {
+        "title": "Authentication required",
+        "description": "Please log in to continue. You need an active session to access this page."
+      }
+    },
+    "cart": {
+      "emptyTitle": "Your Cart is empty",
+      "emptyDescription": "Add some items to your cart before checking out."
+    },
+    "store": {
+      "notFoundTitle": "Store Not Found",
+      "notFoundDescription": "The store you're looking for doesn't exist or may have been removed.",
+      "primaryAction": "Browse Stores"
+    },
+    "orderTracking": {
+      "notFoundTitle": "Order Not Found",
+      "notFoundDescription": "The order you're looking for doesn't exist or may have been removed.",
+      "primaryAction": "Continue Shopping"
+    },
+    "orderConfirmed": {
+      "notFoundTitle": "Order not found",
+      "notFoundDescription": "We couldn't find this order. It may have been removed or the link is invalid.",
+      "primaryAction": "Continue shopping"
+    },
+    "products": {
+      "errorTitle": "Something went wrong",
+      "errorDescription": "We couldn't load the product catalog. Check your connection and try again."
+    },
+    "admin": {
+      "ui": {
+        "defaultBadge": "Resource Not Found",
+        "defaultTitle": "Object or Route Missing",
+        "defaultDescription": "The administrative asset you are attempting to access does not exist, has been permanently migrated, or you lack the required database permissions to read it.",
+        "returnToDashboard": "Return to Dashboard",
+        "retryRequest": "Retry Request",
+        "httpStatus": "HTTP Status",
+        "entityNotDiscovered": "Entity Not Discovered",
+        "systemDiagnostics": "System Diagnostics",
+        "requestPath": "Request Path",
+        "activeNode": "Active Node",
+        "environment": "Environment",
+        "timestamp": "Timestamp",
+        "consultRunbook": "Consult missing route runbook →"
+      },
+      "notFound": {
+        "badge": "Route not found",
+        "title": "This dashboard page doesn't exist",
+        "description": "The admin route you're looking for isn't registered in this workspace. It may have been renamed, removed, or the URL contains a typo.",
+        "primary": "Back to dashboard",
+        "secondary": "View orders"
+      },
+      "forbidden": {
+        "badge": "Insufficient permissions",
+        "title": "You don't have access to this section",
+        "description": "Your role doesn't include the permissions required for this admin resource. Ask an owner to grant access or switch to an account with the correct scopes.",
+        "primary": "Back to dashboard",
+        "secondary": "Go to storefront",
+        "requiredRole": "Required role",
+        "accessLevel": "Access level",
+        "scope": "Scope",
+        "adminRole": "admin",
+        "restricted": "restricted",
+        "scopeValue": "dashboard:write"
+      },
+      "catchAll": {
+        "badge": "Resource not found",
+        "title": "We couldn't find that admin page",
+        "description": "The page you're trying to open doesn't exist, was moved, or the resource ID is invalid. Check the URL or jump back to the dashboard.",
+        "primary": "Back to dashboard",
+        "secondary": "Storefront"
+      },
+      "orderNotFound": {
+        "eyebrow": "Order missing",
+        "title": "Order Not Found",
+        "description": "Sorry, we couldn't find the order you're looking for. The order ID might be incorrect, or it may have been permanently archived.",
+        "backToOrders": "Back to Orders",
+        "dashboardHome": "Dashboard Home"
+      },
+      "moduleError": {
+        "tryAgain": "Try again"
+      },
+      "modules": {
+        "orders": { "title": "Could not load orders" },
+        "order": { "title": "Could not load order" },
+        "shipments": { "title": "Could not load shipments" },
+        "shipment": { "title": "Could not load shipment" },
+        "returns": { "title": "Could not load returns" },
+        "return": { "title": "Could not load return" },
+        "invoices": { "title": "Could not load invoices" },
+        "invoice": { "title": "Could not load invoice" },
+        "discounts": { "title": "Could not load discounts" },
+        "stores": { "title": "Could not load stores" },
+        "wallet": { "title": "Could not load wallet tools" },
+        "webhooks": { "title": "Could not load webhook events" },
+        "revenue": {
+          "title": "Something went wrong",
+          "description": "The revenue report could not be loaded. Please try again.",
+          "retry": "Retry"
+        }
+      }
+    },
+    "vendor": {
+      "error": {
+        "badge": "Vendor panel",
+        "title": "Something went wrong",
+        "description": "We could not load this vendor section. Try again or return to your overview.",
+        "primary": "Vendor overview",
+        "secondary": "Vendor home"
+      }
+    }
+  },
   "nav": {
     "openMenu": "Open menu",
     "closeMenu": "Close menu",

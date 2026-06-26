@@ -10,6 +10,150 @@
     "proceedToCheckout": "Ir al pago",
     "backToTop": "Volver arriba"
   },
+  "errors": {
+    "common": {
+      "tryAgain": "Intentar de nuevo",
+      "goHome": "Ir al inicio",
+      "home": "Inicio",
+      "signIn": "Iniciar sesión",
+      "logIn": "Iniciar sesión",
+      "backToHome": "Volver al inicio",
+      "continueShopping": "Seguir comprando",
+      "goShopping": "Ir a la tienda"
+    },
+    "site": {
+      "recovery": {
+        "heading": "Recuperación rápida",
+        "newArrivals": "Novedades",
+        "bestSellers": "Más vendidos",
+        "contactSupport": "Contactar soporte"
+      }
+    },
+    "global": {
+      "notFound": {
+        "metadataTitle": "Página no encontrada — Luxe",
+        "metadataDescription": "La página que buscas no existe o fue movida. Explora colecciones, más vendidos y novedades.",
+        "eyebrow": "¿Te perdiste?",
+        "title": "No se encontró esta página",
+        "description": "El destino que solicitaste ya no está disponible. Descubre novedades, colecciones curadas y productos seleccionados para ti.",
+        "primary": "Explorar colecciones",
+        "secondary": "Ver más vendidos"
+      },
+      "forbidden": {
+        "title": "Acceso prohibido",
+        "description": "No tienes permiso para ver esta página. Contacta al administrador si crees que es un error."
+      },
+      "unauthorized": {
+        "title": "Autenticación requerida",
+        "description": "Inicia sesión para continuar. Necesitas una sesión activa para acceder a esta página."
+      }
+    },
+    "cart": {
+      "emptyTitle": "Tu carrito está vacío",
+      "emptyDescription": "Añade artículos al carrito antes de pagar."
+    },
+    "store": {
+      "notFoundTitle": "Tienda no encontrada",
+      "notFoundDescription": "La tienda que buscas no existe o fue eliminada.",
+      "primaryAction": "Ver tiendas"
+    },
+    "orderTracking": {
+      "notFoundTitle": "Pedido no encontrado",
+      "notFoundDescription": "El pedido que buscas no existe o fue eliminado.",
+      "primaryAction": "Seguir comprando"
+    },
+    "orderConfirmed": {
+      "notFoundTitle": "Pedido no encontrado",
+      "notFoundDescription": "No encontramos este pedido. Puede haber sido eliminado o el enlace no es válido.",
+      "primaryAction": "Seguir comprando"
+    },
+    "products": {
+      "errorTitle": "Algo salió mal",
+      "errorDescription": "No pudimos cargar el catálogo. Revisa tu conexión e inténtalo de nuevo."
+    },
+    "admin": {
+      "ui": {
+        "defaultBadge": "Recurso no encontrado",
+        "defaultTitle": "Objeto o ruta ausente",
+        "defaultDescription": "El recurso administrativo al que intentas acceder no existe, fue migrado o no tienes permisos para leerlo.",
+        "returnToDashboard": "Volver al panel",
+        "retryRequest": "Reintentar",
+        "httpStatus": "Estado HTTP",
+        "entityNotDiscovered": "Entidad no encontrada",
+        "systemDiagnostics": "Diagnóstico del sistema",
+        "requestPath": "Ruta de solicitud",
+        "activeNode": "Nodo activo",
+        "environment": "Entorno",
+        "timestamp": "Marca de tiempo",
+        "consultRunbook": "Consultar runbook de ruta faltante →"
+      },
+      "notFound": {
+        "badge": "Ruta no encontrada",
+        "title": "Esta página del panel no existe",
+        "description": "La ruta de administración no está registrada. Puede haber sido renombrada, eliminada o la URL tiene un error.",
+        "primary": "Volver al panel",
+        "secondary": "Ver pedidos"
+      },
+      "forbidden": {
+        "badge": "Permisos insuficientes",
+        "title": "No tienes acceso a esta sección",
+        "description": "Tu rol no incluye los permisos necesarios. Pide acceso a un propietario o usa una cuenta con los alcances correctos.",
+        "primary": "Volver al panel",
+        "secondary": "Ir a la tienda",
+        "requiredRole": "Rol requerido",
+        "accessLevel": "Nivel de acceso",
+        "scope": "Alcance",
+        "adminRole": "admin",
+        "restricted": "restringido",
+        "scopeValue": "dashboard:write"
+      },
+      "catchAll": {
+        "badge": "Recurso no encontrado",
+        "title": "No encontramos esa página de administración",
+        "description": "La página que intentas abrir no existe, fue movida o el ID del recurso no es válido. Revisa la URL o vuelve al panel.",
+        "primary": "Volver al panel",
+        "secondary": "Tienda"
+      },
+      "orderNotFound": {
+        "eyebrow": "Pedido ausente",
+        "title": "Pedido no encontrado",
+        "description": "No encontramos el pedido que buscas. El ID puede ser incorrecto o el pedido fue archivado.",
+        "backToOrders": "Volver a pedidos",
+        "dashboardHome": "Inicio del panel"
+      },
+      "moduleError": {
+        "tryAgain": "Intentar de nuevo"
+      },
+      "modules": {
+        "orders": { "title": "No se pudieron cargar los pedidos" },
+        "order": { "title": "No se pudo cargar el pedido" },
+        "shipments": { "title": "No se pudieron cargar los envíos" },
+        "shipment": { "title": "No se pudo cargar el envío" },
+        "returns": { "title": "No se pudieron cargar las devoluciones" },
+        "return": { "title": "No se pudo cargar la devolución" },
+        "invoices": { "title": "No se pudieron cargar las facturas" },
+        "invoice": { "title": "No se pudo cargar la factura" },
+        "discounts": { "title": "No se pudieron cargar los descuentos" },
+        "stores": { "title": "No se pudieron cargar las tiendas" },
+        "wallet": { "title": "No se pudieron cargar las herramientas de billetera" },
+        "webhooks": { "title": "No se pudieron cargar los eventos webhook" },
+        "revenue": {
+          "title": "Algo salió mal",
+          "description": "No se pudo cargar el informe de ingresos. Inténtalo de nuevo.",
+          "retry": "Reintentar"
+        }
+      }
+    },
+    "vendor": {
+      "error": {
+        "badge": "Panel de vendedor",
+        "title": "Algo salió mal",
+        "description": "No pudimos cargar esta sección del vendedor. Inténtalo de nuevo o vuelve al resumen.",
+        "primary": "Resumen del vendedor",
+        "secondary": "Inicio del vendedor"
+      }
+    }
+  },
   "nav": {
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",

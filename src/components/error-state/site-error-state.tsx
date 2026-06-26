@@ -2,6 +2,7 @@
 
 import { motion, type Variants } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type StateProps = {
   code: string;
@@ -40,12 +41,6 @@ const codeVariants: Variants = {
   }
 };
 
-const recoveryLinks = [
-  { label: 'New arrivals', href: '/shop?sortBy=newest&showOnlyNew=true' },
-  { label: 'Best sellers', href: '/store?rating=4.5' },
-  { label: 'Contact support', href: '/help' }
-];
-
 export function SiteErrorState({
   code,
   eyebrow,
@@ -55,6 +50,14 @@ export function SiteErrorState({
   secondary,
   accent = 'from-orange-200/40 via-rose-200/30 to-amber-100/40'
 }: StateProps) {
+  const t = useTranslations('errors.site.recovery');
+
+  const recoveryLinks = [
+    { label: t('newArrivals'), href: '/shop?sortBy=newest&showOnlyNew=true' },
+    { label: t('bestSellers'), href: '/store?rating=4.5' },
+    { label: t('contactSupport'), href: '/help' }
+  ];
+
   return (
     <section className='relative mx-auto w-full max-w-3xl overflow-hidden py-16'>
       <motion.div
@@ -71,7 +74,7 @@ export function SiteErrorState({
       />
       <motion.div
         aria-hidden
-        className='bg-rose-300/30 pointer-events-none absolute -right-6 bottom-10 -z-10 h-32 w-32 rounded-full blur-2xl'
+        className='pointer-events-none absolute -right-6 bottom-10 -z-10 h-32 w-32 rounded-full bg-rose-300/30 blur-2xl'
         animate={{ x: [0, -14, 0], y: [0, 10, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
       />
@@ -162,7 +165,7 @@ export function SiteErrorState({
 
         <motion.div variants={itemVariants} className='mt-10 border-t pt-6'>
           <p className='text-muted-foreground mb-3 text-xs tracking-widest uppercase'>
-            Quick recovery
+            {t('heading')}
           </p>
 
           <div className='grid gap-2 sm:grid-cols-3'>

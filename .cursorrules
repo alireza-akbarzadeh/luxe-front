@@ -144,6 +144,7 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 - **Accessibility**: all interactive elements must be keyboard-navigable and have proper ARIA attributes (enforced via `eslint-plugin-jsx-a11y`)
 - **Performance**: rely on React Compiler for memoization — avoid manual `useMemo`/`useCallback` unless profiling shows a real need
 - **File naming**: kebab-case for files (`user-profile-card.tsx`), PascalCase for component names, camelCase for hooks/functions
+- **File size**: keep components, hooks, and domain modules **≤ ~200 lines**. Split multi-step forms into `withForm` sections (`sections/*-step.tsx`), extract hooks (`hooks/use-*-wizard.ts`) and presentational pieces — follow `product-form.tsx` and `vendor/onboarding/`.
 - **Imports**: follow `eslint-plugin-simple-import-sort` ordering — do not manually reorder imports against the linter
 
 ---

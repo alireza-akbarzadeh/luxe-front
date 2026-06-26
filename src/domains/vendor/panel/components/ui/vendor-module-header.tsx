@@ -17,7 +17,9 @@ export function VendorModuleHeader({
   className
 }: VendorModuleHeaderProps) {
   return (
-    <div className={cn('flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between', className)}>
+    <div
+      className={cn('flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between', className)}
+    >
       <div>
         <div className='flex items-center gap-2'>
           <h1 className='text-2xl font-semibold tracking-tight md:text-3xl'>{title}</h1>

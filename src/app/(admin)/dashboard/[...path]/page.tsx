@@ -1,17 +1,21 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { AdminErrorState } from '@/components/cart/admin-error-state';
 
 export default function CatchAllPath() {
+  const t = useTranslations('errors.admin.catchAll');
+
   return (
     <AdminErrorState
       code='404'
-      badge='Resource not found'
+      badge={t('badge')}
       tone='warn'
-      title="We couldn't find that admin page"
-      description="The page you're trying to open doesn't exist, was moved, or the resource ID is invalid. Check the URL or jump back to the dashboard."
-      primary={{ label: 'Back to dashboard', href: '/dashboard' }}
-      secondary={{ label: 'Storefront', href: '/' }}
+      title={t('title')}
+      description={t('description')}
+      primary={{ label: t('primary'), href: '/dashboard' }}
+      secondary={{ label: t('secondary'), href: '/' }}
     />
   );
 }

@@ -3,6 +3,7 @@
 import { IconAlertCircle, IconArrowLeft, IconQuestionMark, IconRefresh } from '@tabler/icons-react';
 import { motion, type Variants } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   code?: string;
@@ -50,32 +51,37 @@ const metaRowVariants: Variants = {
 
 export function AdminErrorState({
   code = '404',
-  badge = 'Resource Not Found',
-  title = 'Object or Route Missing',
-  description = 'The administrative asset you are attempting to access does not exist, has been permanently migrated, or you lack the required database permissions to read it.',
+  badge,
+  title,
+  description,
   primary,
   secondary,
   meta,
   tone = 'warn'
 }: Props) {
+  const t = useTranslations('errors.admin.ui');
+
+  const finalBadge = badge ?? t('defaultBadge');
+  const finalTitle = title ?? t('defaultTitle');
+  const finalDescription = description ?? t('defaultDescription');
+
   const finalPrimary = primary ?? {
-    label: 'Return to Dashboard',
+    label: t('returnToDashboard'),
     href: '/dashboard'
   };
 
-  const metaRows =
-    meta ?? [
-      {
-        label: 'Request Path',
-        value: typeof window !== 'undefined' ? window.location.pathname : '/dashboard/unknown'
-      },
-      { label: 'Active Node', value: 'cluster-edge-04' },
-      { label: 'Environment', value: 'production' },
-      {
-        label: 'Timestamp',
-        value: new Date().toISOString().replace('T', ' ').slice(0, 19)
-      }
-    ];
+  const metaRows = meta ?? [
+    {
+      label: t('requestPath'),
+      value: typeof window !== 'undefined' ? window.location.pathname : '/dashboard/unknown'
+    },
+    { label: t('activeNode'), value: 'cluster-edge-04' },
+    { label: t('environment'), value: 'production' },
+    {
+      label: t('timestamp'),
+      value: new Date().toISOString().replace('T', ' ').slice(0, 19)
+    }
+  ];
 
   return (
     <motion.div
@@ -111,7 +117,7 @@ export function AdminErrorState({
               animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
               transition={{ duration: 1.6, repeat: Infinity }}
             />
-            {badge}
+            {finalBadge}
           </motion.span>
 
           <div className='mt-8 flex items-baseline gap-4'>
@@ -138,14 +144,13 @@ export function AdminErrorState({
                 </motion.span>
               ))}
             </motion.span>
-            <motion.div
-              variants={cardVariants}
-              className='flex flex-col'
-            >
+            <motion.div variants={cardVariants} className='flex flex-col'>
               <span className='text-muted-foreground text-[10px] font-semibold tracking-widest uppercase'>
-                HTTP Status
+                {t('httpStatus')}
               </span>
-              <span className='text-foreground/60 text-xs font-medium'>Entity Not Discovered</span>
+              <span className='text-foreground/60 text-xs font-medium'>
+                {t('entityNotDiscovered')}
+              </span>
             </motion.div>
           </div>
 
@@ -153,13 +158,13 @@ export function AdminErrorState({
             variants={cardVariants}
             className='text-foreground mt-6 text-2xl font-bold tracking-tight md:text-3xl'
           >
-            {title}
+            {finalTitle}
           </motion.h1>
           <motion.p
             variants={cardVariants}
             className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'
           >
-            {description}
+            {finalDescription}
           </motion.p>
 
           <motion.div variants={cardVariants} className='mt-8 flex flex-wrap gap-3'>
@@ -202,7 +207,7 @@ export function AdminErrorState({
                 className='border-border bg-background text-foreground hover:bg-muted/60 inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-semibold transition'
               >
                 <IconRefresh className='size-3.5' />
-                Retry Request
+                {t('retryRequest')}
               </motion.button>
             )}
           </motion.div>
@@ -221,7 +226,7 @@ export function AdminErrorState({
                 <IconAlertCircle className='text-muted-foreground size-4' />
               </motion.div>
               <h3 className='text-muted-foreground text-xs font-bold tracking-widest uppercase'>
-                System Diagnostics
+                {t('systemDiagnostics')}
               </h3>
             </div>
 
@@ -257,7 +262,7 @@ export function AdminErrorState({
               href='#runbooks'
               className='text-muted-foreground hover:text-foreground text-xs font-semibold underline-offset-4 transition-colors hover:underline'
             >
-              Consult missing route runbook →
+              {t('consultRunbook')}
             </a>
             <motion.span
               className='bg-muted text-muted-foreground border-border/40 rounded border px-1.5 py-0.5 font-mono text-[10px]'

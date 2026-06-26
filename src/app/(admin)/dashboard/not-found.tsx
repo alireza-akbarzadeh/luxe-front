@@ -1,17 +1,21 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { AdminErrorState } from '@/components/cart/admin-error-state';
 
 export default function DashboardNotFound() {
+  const t = useTranslations('errors.admin.notFound');
+
   return (
     <AdminErrorState
       code='404'
-      badge='Route not found'
+      badge={t('badge')}
       tone='warn'
-      title="This dashboard page doesn't exist"
-      description="The admin route you're looking for isn't registered in this workspace. It may have been renamed, removed, or the URL contains a typo."
-      primary={{ label: 'Back to dashboard', href: '/dashboard' }}
-      secondary={{ label: 'View orders', href: '/dashboard/orders' }}
+      title={t('title')}
+      description={t('description')}
+      primary={{ label: t('primary'), href: '/dashboard' }}
+      secondary={{ label: t('secondary'), href: '/dashboard/orders' }}
     />
   );
 }

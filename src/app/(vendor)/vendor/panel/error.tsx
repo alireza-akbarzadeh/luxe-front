@@ -1,17 +1,21 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { AdminErrorState } from '@/components/cart/admin-error-state';
 
 export default function VendorPanelError() {
+  const t = useTranslations('errors.vendor.error');
+
   return (
     <AdminErrorState
       code='500'
-      badge='Vendor panel'
+      badge={t('badge')}
       tone='danger'
-      title='Something went wrong'
-      description='We could not load this vendor section. Try again or return to your overview.'
-      primary={{ label: 'Vendor overview', href: '/vendor/panel' }}
-      secondary={{ label: 'Vendor home', href: '/vendor' }}
+      title={t('title')}
+      description={t('description')}
+      primary={{ label: t('primary'), href: '/vendor/panel' }}
+      secondary={{ label: t('secondary'), href: '/vendor' }}
     />
   );
 }

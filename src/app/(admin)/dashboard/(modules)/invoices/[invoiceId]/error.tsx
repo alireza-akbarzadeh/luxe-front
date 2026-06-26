@@ -1,21 +1,13 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { AdminModuleError } from '@/components/error-state/admin-module-error';
 
-export default function InvoiceDetailError({
+export default function InvoiceError({
   error,
   reset
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return (
-    <div className='rounded-xl border border-dashed p-12 text-center'>
-      <h2 className='text-lg font-semibold'>Could not load invoice</h2>
-      <p className='text-muted-foreground mt-2 text-sm'>{error.message}</p>
-      <Button className='mt-4' variant='outline' onClick={reset}>
-        Try again
-      </Button>
-    </div>
-  );
+  return <AdminModuleError module='invoice' error={error} reset={reset} />;
 }
