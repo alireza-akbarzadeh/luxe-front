@@ -16,6 +16,7 @@ import { cn } from '~/src/lib/utils';
 import { CartButton } from '../cart/cart-button';
 import { CartSheet } from '../cart/cart-sheet';
 import { AppsButton } from './apps-button';
+import { DeliveryLocationButton } from './delivery-location-button';
 import { DesktopNav } from './desktop-nav';
 import { MobileNav } from './mobile-nav';
 import { NavbarActionButton } from './navbar-action-button';
@@ -27,7 +28,6 @@ export function Navbar() {
   const t = useTranslations('common');
   const tNav = useTranslations('nav');
   const locale = useLocale();
-  console.log(locale);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
@@ -86,6 +86,8 @@ export function Navbar() {
                   />
                 </Link>
               </NavbarActionButton>
+
+              <DeliveryLocationButton />
 
               <WishlistButton />
 

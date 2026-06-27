@@ -2,10 +2,14 @@
 
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { Suspense } from 'react';
+
+import { PlusStripeReturnHandler } from '@/domains/plus/components/plus-stripe-return-handler';
 
 import { AccountHeader } from './components/account-header';
 import { AccountSidebar } from './components/account-sidebar';
 import { MobileAccountSidebar } from './components/mobile-account-sidebar';
+import { WalletStripeReturnHandler } from './components/wallet-stripe-return-handler';
 import { AccountActivity } from './containers/account-activity';
 import { AccountAddresses } from './containers/account-addresses';
 import { AccountGiftCards } from './containers/account-gift-cards';
@@ -51,6 +55,10 @@ export function AccountDomain() {
   return (
     <div className='pt-20 pb-12 sm:pt-24 sm:pb-16'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <Suspense fallback={null}>
+          <PlusStripeReturnHandler />
+          <WalletStripeReturnHandler />
+        </Suspense>
         <AccountHeader />
 
         <div className='space-y-6 lg:hidden'>

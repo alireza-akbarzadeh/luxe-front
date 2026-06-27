@@ -158,6 +158,19 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "apps": "Get Luxe app",
+    "deliveryLocation": {
+      "setLocation": "Set location",
+      "ariaSetLocation": "Set delivery location",
+      "ariaWithLocation": "Delivery location: {location}",
+      "dialogTitle": "Delivery location",
+      "dialogDescription": "Choose where you want orders delivered. We use this for shipping estimates and checkout.",
+      "confirm": "Use this location",
+      "cancel": "Cancel",
+      "saved": "Delivery location updated",
+      "savedAsDefault": "Default delivery address saved",
+      "saving": "Saving…",
+      "saveDefaultFailed": "Could not save default address. Add a phone number in your account profile and try again."
+    },
     "mobile": {
       "more": "More",
       "notifications": "Notifications",
@@ -1390,7 +1403,154 @@
       "description": "Real benefits applied at checkout and on returns: member pricing, extended return windows, faster fulfillment, and dedicated support.",
       "benefitsTitle": "What you get",
       "loadError": "Could not load membership benefits. Please try again.",
-      "finePrint": "Plus discounts apply after coupon codes on eligible orders. Return windows are measured from delivery date. Pay with wallet, gift card, or card via Stripe."
+      "finePrint": "Plus discounts apply after coupon codes on eligible orders. Return windows are measured from delivery date. Pay with wallet, gift card, or card via Stripe.",
+      "hero": {
+        "eyebrow": "Luxe Plus membership",
+        "title": "Save on every order. Shop with confidence.",
+        "description": "One annual membership unlocks automatic checkout savings, double the return window, priority shipping, and a dedicated support line — no codes to remember.",
+        "pillDiscount": "{percent}% off checkout",
+        "pillReturns": "{days}-day returns",
+        "pillShipping": "Priority shipping",
+        "ctaPrimary": "Get Luxe Plus",
+        "ctaSecondary": "Compare plans",
+        "priceHint": "From {price}/year · Free plan includes {freeDays}-day returns · Plus extends to {plusDays} days",
+        "previewLabel": "At checkout",
+        "previewTitle": "Member savings applied",
+        "previewSubtotal": "Order subtotal",
+        "previewDiscount": "Luxe Plus ({percent}% off)",
+        "previewTotal": "You pay",
+        "previewNote": "Example order — your discount applies automatically when signed in as a Plus member."
+      },
+      "stats": {
+        "discount": "Off every eligible order",
+        "returnDays": "Day return window",
+        "annualPrice": "Per year, cancel anytime",
+        "instantValue": "Instant",
+        "instantLabel": "Activation with wallet or gift card"
+      },
+      "compare": {
+        "eyebrow": "Plans",
+        "title": "Free vs Luxe Plus",
+        "description": "See exactly what changes when you upgrade — every perk is applied automatically, no coupon codes.",
+        "freePlan": "Free",
+        "plusPlan": "Luxe Plus",
+        "rowDiscount": "Checkout discount",
+        "rowReturns": "Return window",
+        "rowShipping": "Priority shipping",
+        "rowSupport": "Customer support",
+        "rowActivation": "Activation",
+        "discountValue": "{percent}% automatic",
+        "daysValue": "{days} days",
+        "standardSupport": "Standard queue",
+        "prioritySupport": "Priority Plus line",
+        "alwaysFree": "Always included",
+        "instantActivation": "Instant (wallet / gift card)"
+      },
+      "savings": {
+        "eyebrow": "Your savings",
+        "title": "See how fast Plus pays for itself",
+        "description": "Move the slider to match your typical annual spend. Most members break even after just a few orders.",
+        "sliderLabel": "Estimated annual spend on Luxe",
+        "sliderHint": "Include gifts, restocks, and seasonal purchases",
+        "annualSavings": "Member savings",
+        "membershipCost": "Membership",
+        "netBenefit": "Net benefit",
+        "breakEvenPositive": "At {percent}% off, you typically break even after about {orders} orders — everything after that is pure savings.",
+        "breakEvenNegative": "At this spend level you may not break even yet — try a higher estimate or shop our seasonal collections where a single order can cover the year."
+      },
+      "howItWorks": {
+        "eyebrow": "How it works",
+        "title": "Three steps to member perks",
+        "description": "Subscribe once, then every eligible order gets Plus benefits automatically.",
+        "stepLabel": "Step {step}",
+        "subscribe": {
+          "title": "Choose how to pay",
+          "description": "Use your Luxe wallet, a gift card, or pay securely with card via Stripe. Wallet and gift card activate instantly."
+        },
+        "shop": {
+          "title": "Shop as usual",
+          "description": "Browse the catalog, add to cart, and check out. No promo codes — your member discount is applied automatically."
+        },
+        "save": {
+          "title": "Enjoy member perks",
+          "description": "Save at checkout, ship faster on in-stock items, return within your extended window, and reach Plus support first."
+        }
+      },
+      "testimonials": {
+        "eyebrow": "Member stories",
+        "title": "Why shoppers upgrade",
+        "description": "Real scenarios from members who made Plus part of their routine.",
+        "sara": {
+          "quote": "I used to hunt for coupon codes before every purchase. Now the discount just shows up at checkout — and the longer return window saved me when a gift didn't fit.",
+          "name": "Sara M.",
+          "role": "Plus member · 14 months",
+          "initials": "SM",
+          "metricValue": "$127",
+          "metricLabel": "Saved last year",
+          "metric2Value": "8",
+          "metric2Label": "Orders"
+        },
+        "james": {
+          "quote": "Priority shipping mattered when I needed a last-minute anniversary gift. Plus paid for itself on that one order alone.",
+          "name": "James K.",
+          "role": "Plus member · 6 months",
+          "initials": "JK",
+          "metricValue": "2 days",
+          "metricLabel": "Faster delivery",
+          "metric2Value": "60",
+          "metric2Label": "Day returns"
+        },
+        "elena": {
+          "quote": "I subscribed with a gift card from my birthday email. Support answered my sizing question within an hour — worth it for peace of mind alone.",
+          "name": "Elena R.",
+          "role": "Plus member · 3 months",
+          "initials": "ER",
+          "metricValue": "<1 hr",
+          "metricLabel": "Support reply",
+          "metric2Value": "10%",
+          "metric2Label": "Every order"
+        }
+      },
+      "pricingSection": {
+        "eyebrow": "Subscribe",
+        "title": "Ready to upgrade?",
+        "description": "Pick your payment method and activate Luxe Plus on your account in minutes."
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Common questions",
+        "description": "Everything you need to know before subscribing.",
+        "billing": {
+          "question": "How does billing work?",
+          "answer": "Luxe Plus is an annual membership billed once per year. Your renewal date appears in your account under Membership. We do not auto-renew without your consent on your chosen payment method."
+        },
+        "discount": {
+          "question": "When does the checkout discount apply?",
+          "answer": "The member discount applies automatically at checkout on eligible orders after any coupon codes you enter. It does not stack on top of the same promotion twice — coupons apply first, then your Plus savings."
+        },
+        "returns": {
+          "question": "How do extended returns work?",
+          "answer": "Return windows are measured from the delivery date on your order. Free accounts get 30 days; Plus members get 60 days on delivered orders, subject to our standard return policy."
+        },
+        "cancel": {
+          "question": "Can I cancel?",
+          "answer": "Your membership stays active until the end of your paid term. We do not offer partial refunds for unused months, but you keep all perks until your expiry date."
+        },
+        "payment": {
+          "question": "Which payment methods are accepted?",
+          "answer": "You can pay with your Luxe wallet balance, redeem a gift card code, or use credit/debit card via Stripe. Wallet and gift card subscriptions activate immediately; card payments activate once Stripe confirms payment."
+        },
+        "giftCard": {
+          "question": "Can I use a gift card to subscribe?",
+          "answer": "Yes — enter your gift card code at checkout on this page. The card must cover the full annual membership price and be assigned to your account email."
+        }
+      },
+      "finalCta": {
+        "title": "Make every purchase count",
+        "description": "Join Luxe Plus today and start saving on checkout, shipping, returns, and support — automatically.",
+        "ctaPrimary": "Get Luxe Plus",
+        "ctaSecondary": "Read the FAQ"
+      }
     },
     "pricing": {
       "subtitle": "Annual membership",
@@ -1427,6 +1587,7 @@
       "freeDescription": "You are on the Free plan. Upgrade to unlock member perks.",
       "plusDescription": "You have Luxe Plus — perks apply automatically at checkout.",
       "renewsOn": "Renews on {date}",
+      "subscribedOn": "Member since {date}",
       "unlockDiscount": "{percent}% checkout discount",
       "unlockReturns": "{days}-day returns",
       "unlockShipping": "Priority shipping",
@@ -1436,7 +1597,22 @@
       "activeShipping": "Priority shipping (active)",
       "activeSupport": "Plus support (active)",
       "upgrade": "Upgrade to Luxe Plus",
-      "viewBenefits": "View Plus benefits"
+      "viewBenefits": "View Plus benefits",
+      "activating": "Activating your Luxe Plus membership…",
+      "activationSuccess": "Welcome to Luxe Plus! Your membership is now active.",
+      "activationError": "We could not confirm your payment yet. Try refreshing or contact support.",
+      "stripeCancelled": "Payment cancelled — your membership was not activated.",
+      "activation": {
+        "title": "Payment successful — Luxe Plus is active",
+        "description": "Your annual membership is active. Perks apply automatically on your next checkout.",
+        "dismiss": "Dismiss",
+        "plan": "Plan",
+        "amount": "Amount paid",
+        "paidAt": "Paid on",
+        "method": "Payment method",
+        "methodStripe": "Credit or debit card (Stripe)",
+        "reference": "Reference: {id}"
+      }
     }
   },
   "account": {
@@ -1629,6 +1805,8 @@
       "setDefaultFailed": "Failed to set default",
       "deleted": "Address deleted",
       "deleteFailed": "Failed to delete",
+      "defaultShippingTitle": "Default delivery address",
+      "otherAddressesTitle": "Other addresses",
       "mapDialogTitle": "Choose delivery location",
       "mapDialogDescription": "Search, use your current location, or drag the pin on the map.",
       "useThisLocation": "Use this location"
@@ -1661,8 +1839,12 @@
       "depositDialogDescription": "Top up your Luxe wallet for faster checkout.",
       "depositAmount": "Amount (USD)",
       "depositPreview": "You will deposit {amount}",
-      "depositNote": "Funds are added instantly in this demo environment. In production, this step would connect to your payment provider.",
+      "depositNote": "You will be redirected to Stripe to pay securely. Funds are credited after payment is confirmed.",
       "depositSuccess": "Deposit added to your wallet",
+      "depositConfirmed": "Deposit added to your wallet",
+      "depositConfirming": "Confirming your deposit…",
+      "depositConfirmError": "Could not confirm your deposit. If you were charged, contact support.",
+      "stripeDepositCancelled": "Deposit cancelled — no charge was made.",
       "depositFailed": "Deposit failed",
       "withdrawDialogTitle": "Withdraw funds",
       "withdrawDialogDescription": "Available balance: {balance}",
@@ -1714,7 +1896,9 @@
         "order_update": "Order Update",
         "payment_success": "Payment Success",
         "payment_failed": "Payment Failed",
-        "shipment_update": "Shipment Update"
+        "shipment_update": "Shipment Update",
+        "membership_activated": "Luxe Plus",
+        "wallet_deposit": "Wallet Deposit"
       }
     },
     "settings": {

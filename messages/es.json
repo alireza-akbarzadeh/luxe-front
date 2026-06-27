@@ -158,6 +158,19 @@
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
     "apps": "Descargar app de Luxe",
+    "deliveryLocation": {
+      "setLocation": "Ubicación",
+      "ariaSetLocation": "Establecer ubicación de entrega",
+      "ariaWithLocation": "Ubicación de entrega: {location}",
+      "dialogTitle": "Ubicación de entrega",
+      "dialogDescription": "Elige dónde quieres recibir los pedidos. Lo usamos para estimar envíos y en el checkout.",
+      "confirm": "Usar esta ubicación",
+      "cancel": "Cancelar",
+      "saved": "Ubicación de entrega actualizada",
+      "savedAsDefault": "Dirección de entrega predeterminada guardada",
+      "saving": "Guardando…",
+      "saveDefaultFailed": "No se pudo guardar la dirección predeterminada. Añade un teléfono en tu perfil e inténtalo de nuevo."
+    },
     "mobile": {
       "more": "Más",
       "notifications": "Notificaciones",
@@ -1390,7 +1403,154 @@
       "description": "Beneficios reales en el pago y devoluciones: precios de miembro, plazos extendidos, envío prioritario y soporte dedicado.",
       "benefitsTitle": "Lo que obtienes",
       "loadError": "No se pudieron cargar los beneficios. Inténtalo de nuevo.",
-      "finePrint": "Los descuentos Plus se aplican después de los cupones. El plazo de devolución cuenta desde la entrega. Paga con billetera, tarjeta regalo o Stripe."
+      "finePrint": "Los descuentos Plus se aplican después de los cupones. El plazo de devolución cuenta desde la entrega. Paga con billetera, tarjeta regalo o Stripe.",
+      "hero": {
+        "eyebrow": "Membresía Luxe Plus",
+        "title": "Ahorra en cada pedido. Compra con confianza.",
+        "description": "Una membresía anual desbloquea ahorros automáticos en el pago, el doble de plazo de devolución, envío prioritario y una línea de soporte dedicada — sin códigos.",
+        "pillDiscount": "{percent}% en el pago",
+        "pillReturns": "Devoluciones de {days} días",
+        "pillShipping": "Envío prioritario",
+        "ctaPrimary": "Obtener Luxe Plus",
+        "ctaSecondary": "Comparar planes",
+        "priceHint": "Desde {price}/año · Gratis incluye {freeDays} días de devolución · Plus extiende a {plusDays} días",
+        "previewLabel": "En el pago",
+        "previewTitle": "Ahorro de miembro aplicado",
+        "previewSubtotal": "Subtotal del pedido",
+        "previewDiscount": "Luxe Plus ({percent}% de descuento)",
+        "previewTotal": "Pagas",
+        "previewNote": "Pedido de ejemplo — tu descuento se aplica automáticamente como miembro Plus."
+      },
+      "stats": {
+        "discount": "En cada pedido elegible",
+        "returnDays": "Días de devolución",
+        "annualPrice": "Al año, cancela cuando quieras",
+        "instantValue": "Instantáneo",
+        "instantLabel": "Activación con billetera o tarjeta regalo"
+      },
+      "compare": {
+        "eyebrow": "Planes",
+        "title": "Gratis vs Luxe Plus",
+        "description": "Mira exactamente qué cambia al mejorar — cada ventaja se aplica automáticamente, sin cupones.",
+        "freePlan": "Gratis",
+        "plusPlan": "Luxe Plus",
+        "rowDiscount": "Descuento en el pago",
+        "rowReturns": "Plazo de devolución",
+        "rowShipping": "Envío prioritario",
+        "rowSupport": "Atención al cliente",
+        "rowActivation": "Activación",
+        "discountValue": "{percent}% automático",
+        "daysValue": "{days} días",
+        "standardSupport": "Cola estándar",
+        "prioritySupport": "Línea Plus prioritaria",
+        "alwaysFree": "Siempre incluido",
+        "instantActivation": "Instantáneo (billetera / tarjeta regalo)"
+      },
+      "savings": {
+        "eyebrow": "Tus ahorros",
+        "title": "Mira qué rápido se paga Luxe Plus",
+        "description": "Mueve el control según tu gasto anual típico. La mayoría de miembros recuperan la inversión en pocos pedidos.",
+        "sliderLabel": "Gasto anual estimado en Luxe",
+        "sliderHint": "Incluye regalos, reposiciones y compras de temporada",
+        "annualSavings": "Ahorro de miembro",
+        "membershipCost": "Membresía",
+        "netBenefit": "Beneficio neto",
+        "breakEvenPositive": "Con {percent}% de descuento, normalmente recuperas la inversión tras unos {orders} pedidos — lo demás es ahorro puro.",
+        "breakEvenNegative": "Con este nivel de gasto quizá aún no recuperes la inversión — sube la estimación o compra en nuestras colecciones de temporada."
+      },
+      "howItWorks": {
+        "eyebrow": "Cómo funciona",
+        "title": "Tres pasos hacia las ventajas",
+        "description": "Suscríbete una vez y cada pedido elegible recibe los beneficios Plus automáticamente.",
+        "stepLabel": "Paso {step}",
+        "subscribe": {
+          "title": "Elige cómo pagar",
+          "description": "Usa tu billetera Luxe, una tarjeta regalo o paga con tarjeta vía Stripe. Billetera y tarjeta regalo se activan al instante."
+        },
+        "shop": {
+          "title": "Compra como siempre",
+          "description": "Explora el catálogo, añade al carrito y paga. Sin códigos promocionales — tu descuento de miembro se aplica solo."
+        },
+        "save": {
+          "title": "Disfruta las ventajas",
+          "description": "Ahorra al pagar, envía más rápido artículos en stock, devuelve en tu plazo extendido y accede primero al soporte Plus."
+        }
+      },
+      "testimonials": {
+        "eyebrow": "Historias de miembros",
+        "title": "Por qué mejoran de plan",
+        "description": "Escenarios reales de miembros que hicieron Plus parte de su rutina.",
+        "sara": {
+          "quote": "Antes buscaba cupones antes de cada compra. Ahora el descuento aparece solo al pagar — y el plazo extendido me salvó cuando un regalo no servía.",
+          "name": "Sara M.",
+          "role": "Miembro Plus · 14 meses",
+          "initials": "SM",
+          "metricValue": "$127",
+          "metricLabel": "Ahorrado el año pasado",
+          "metric2Value": "8",
+          "metric2Label": "Pedidos"
+        },
+        "james": {
+          "quote": "El envío prioritario importó cuando necesitaba un regalo de aniversario de último momento. Plus se pagó solo con ese pedido.",
+          "name": "James K.",
+          "role": "Miembro Plus · 6 meses",
+          "initials": "JK",
+          "metricValue": "2 días",
+          "metricLabel": "Entrega más rápida",
+          "metric2Value": "60",
+          "metric2Label": "Días de devolución"
+        },
+        "elena": {
+          "quote": "Me suscribí con una tarjeta regalo de mi cumpleaños. Soporte respondió mi duda de talla en menos de una hora — valió la pena por la tranquilidad.",
+          "name": "Elena R.",
+          "role": "Miembro Plus · 3 meses",
+          "initials": "ER",
+          "metricValue": "<1 h",
+          "metricLabel": "Respuesta soporte",
+          "metric2Value": "10%",
+          "metric2Label": "Cada pedido"
+        }
+      },
+      "pricingSection": {
+        "eyebrow": "Suscríbete",
+        "title": "¿Listo para mejorar?",
+        "description": "Elige tu método de pago y activa Luxe Plus en tu cuenta en minutos."
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Preguntas frecuentes",
+        "description": "Todo lo que debes saber antes de suscribirte.",
+        "billing": {
+          "question": "¿Cómo funciona la facturación?",
+          "answer": "Luxe Plus es una membresía anual que se cobra una vez al año. La fecha de renovación aparece en tu cuenta en Membresía."
+        },
+        "discount": {
+          "question": "¿Cuándo se aplica el descuento?",
+          "answer": "El descuento de miembro se aplica automáticamente en pedidos elegibles después de los cupones que introduzcas."
+        },
+        "returns": {
+          "question": "¿Cómo funcionan las devoluciones extendidas?",
+          "answer": "El plazo cuenta desde la fecha de entrega. Cuentas Gratis tienen 30 días; miembros Plus 60 días según nuestra política."
+        },
+        "cancel": {
+          "question": "¿Puedo cancelar?",
+          "answer": "Tu membresía permanece activa hasta el final del periodo pagado. No hay reembolsos parciales por meses no usados."
+        },
+        "payment": {
+          "question": "¿Qué métodos de pago aceptáis?",
+          "answer": "Billetera Luxe, tarjeta regalo o tarjeta vía Stripe. Billetera y tarjeta regalo se activan al instante; la tarjeta tras confirmar Stripe."
+        },
+        "giftCard": {
+          "question": "¿Puedo usar una tarjeta regalo para suscribirme?",
+          "answer": "Sí — introduce el código en esta página. La tarjeta debe cubrir el precio anual completo y estar asociada a tu correo."
+        }
+      },
+      "finalCta": {
+        "title": "Haz que cada compra cuente",
+        "description": "Únete a Luxe Plus hoy y empieza a ahorrar en el pago, envío, devoluciones y soporte — automáticamente.",
+        "ctaPrimary": "Obtener Luxe Plus",
+        "ctaSecondary": "Leer el FAQ"
+      }
     },
     "pricing": {
       "subtitle": "Membresía anual",
@@ -1427,6 +1587,7 @@
       "freeDescription": "Estás en el plan Gratis. Mejora para desbloquear ventajas.",
       "plusDescription": "Tienes Luxe Plus — las ventajas se aplican automáticamente al pagar.",
       "renewsOn": "Se renueva el {date}",
+      "subscribedOn": "Miembro desde {date}",
       "unlockDiscount": "{percent}% de descuento en el pago",
       "unlockReturns": "Devoluciones de {days} días",
       "unlockShipping": "Envío prioritario",
@@ -1436,7 +1597,22 @@
       "activeShipping": "Envío prioritario (activo)",
       "activeSupport": "Soporte Plus (activo)",
       "upgrade": "Mejorar a Luxe Plus",
-      "viewBenefits": "Ver beneficios Plus"
+      "viewBenefits": "Ver beneficios Plus",
+      "activating": "Activando tu membresía Luxe Plus…",
+      "activationSuccess": "¡Bienvenido a Luxe Plus! Tu membresía ya está activa.",
+      "activationError": "No pudimos confirmar el pago. Actualiza la página o contacta soporte.",
+      "stripeCancelled": "Pago cancelado — la membresía no se activó.",
+      "activation": {
+        "title": "Pago exitoso — Luxe Plus está activo",
+        "description": "Tu membresía anual está activa. Las ventajas se aplican automáticamente en tu próximo pago.",
+        "dismiss": "Cerrar",
+        "plan": "Plan",
+        "amount": "Importe pagado",
+        "paidAt": "Pagado el",
+        "method": "Método de pago",
+        "methodStripe": "Tarjeta de crédito o débito (Stripe)",
+        "reference": "Referencia: {id}"
+      }
     }
   },
   "account": {
@@ -1629,6 +1805,8 @@
       "setDefaultFailed": "No se pudo establecer como predeterminada",
       "deleted": "Dirección eliminada",
       "deleteFailed": "No se pudo eliminar",
+      "defaultShippingTitle": "Dirección de entrega predeterminada",
+      "otherAddressesTitle": "Otras direcciones",
       "mapDialogTitle": "Elegir ubicación de entrega",
       "mapDialogDescription": "Busca, usa tu ubicación actual o arrastra el pin en el mapa.",
       "useThisLocation": "Usar esta ubicación"
@@ -1661,8 +1839,12 @@
       "depositDialogDescription": "Recarga tu billetera Luxe para pagar más rápido.",
       "depositAmount": "Importe (USD)",
       "depositPreview": "Depositarás {amount}",
-      "depositNote": "En este entorno demo los fondos se añaden al instante. En producción se conectaría al proveedor de pago.",
+      "depositNote": "Serás redirigido a Stripe para pagar de forma segura. Los fondos se acreditan tras confirmar el pago.",
       "depositSuccess": "Depósito añadido a tu billetera",
+      "depositConfirmed": "Depósito añadido a tu billetera",
+      "depositConfirming": "Confirmando tu depósito…",
+      "depositConfirmError": "No se pudo confirmar el depósito. Si se te cobró, contacta con soporte.",
+      "stripeDepositCancelled": "Depósito cancelado — no se realizó ningún cargo.",
       "depositFailed": "Depósito fallido",
       "withdrawDialogTitle": "Retirar fondos",
       "withdrawDialogDescription": "Saldo disponible: {balance}",
@@ -1714,7 +1896,9 @@
         "order_update": "Actualización de pedido",
         "payment_success": "Pago exitoso",
         "payment_failed": "Pago fallido",
-        "shipment_update": "Actualización de envío"
+        "shipment_update": "Actualización de envío",
+        "membership_activated": "Luxe Plus",
+        "wallet_deposit": "Depósito en billetera"
       }
     },
     "settings": {

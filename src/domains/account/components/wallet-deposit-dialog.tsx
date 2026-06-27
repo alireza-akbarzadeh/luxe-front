@@ -34,7 +34,14 @@ export function WalletDepositDialog({ open, onOpenChange }: WalletDepositDialogP
     },
     onSubmit: async ({ value }) => {
       try {
-        await mutateAsync({ data: { amount: Number(value.amount) } });
+        const response = await mutateAsync({ data: { amount: Number(value.amount) } });
+        const deposit = response.data;
+
+        if (deposit?.checkout_url && deposit.status === 'pending') {
+          window.location.assign(deposit.checkout_url);
+          return;
+        }
+
         await queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
         toast.success(t('depositSuccess'));
         form.reset();

@@ -33,7 +33,7 @@ interface LocationMapPickerSessionProps {
   initialAddress?: GeocodedAddress | null;
   confirmLabel: string;
   cancelLabel: string;
-  onConfirm: (address: GeocodedAddress) => void;
+  onConfirm: (address: GeocodedAddress) => void | Promise<void>;
   onCancel: () => void;
 }
 
@@ -80,9 +80,17 @@ function LocationMapPickerSession({
     };
   }, [initialAddress, needsAsyncGeocode]);
 
-  const handleConfirm = () => {
-    if (!draftAddress) return;
-    onConfirm(draftAddress);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const handleConfirm = async () => {
+    if (!draftAddress || isResolvingSeed) return;
+
+    setIsConfirming(true);
+    try {
+      await onConfirm(draftAddress);
+    } finally {
+      setIsConfirming(false);
+    }
   };
 
   return (
@@ -105,7 +113,11 @@ function LocationMapPickerSession({
         <Button type='button' variant='outline' onClick={onCancel}>
           {cancelLabel}
         </Button>
-        <Button type='button' onClick={handleConfirm} disabled={!draftAddress || isResolvingSeed}>
+        <Button
+          type='button'
+          onClick={handleConfirm}
+          disabled={!draftAddress || isResolvingSeed || isConfirming}
+        >
           {confirmLabel}
         </Button>
       </div>
@@ -122,7 +134,7 @@ export interface LocationMapPickerDialogProps {
   cancelLabel: string;
   initialCoordinates?: GeoCoordinates | null;
   initialAddress?: GeocodedAddress | null;
-  onConfirm: (address: GeocodedAddress) => void;
+  onConfirm: (address: GeocodedAddress) => void | Promise<void>;
 }
 
 /**
@@ -162,8 +174,8 @@ export function LocationMapPickerDialog({
           initialAddress={initialAddress}
           confirmLabel={confirmLabel}
           cancelLabel={cancelLabel}
-          onConfirm={(address) => {
-            onConfirm(address);
+          onConfirm={async (address) => {
+            await onConfirm(address);
             onOpenChange(false);
           }}
           onCancel={() => onOpenChange(false)}

@@ -35,9 +35,12 @@ import type {
 
 import { addressFormSchema, type AddressFormValues } from '../account.schema';
 import {
+  addressModelToGeocodedSeed,
   addressToFormValues,
   EMPTY_ADDRESS_FORM_VALUES,
   formValuesToGeocodedSeed,
+  hasValidGeoCoordinates,
+  isShippingDefaultAddress,
   mergeGeocodedAddress
 } from '../address-form-utils';
 import { AddressMapPickerDialog } from '../components/address-map-picker-dialog';
@@ -58,6 +61,11 @@ export function AccountAddresses() {
 
   const { data: addressesResponse, isLoading, isError, refetch } = useGetAddresses();
   const addresses = addressesResponse?.data?.addresses || [];
+  const defaultShippingAddress =
+    addresses.find((address) => isShippingDefaultAddress(address)) ?? null;
+  const otherAddresses = defaultShippingAddress
+    ? addresses.filter((address) => address.id !== defaultShippingAddress.id)
+    : addresses;
 
   const createAddress = usePostAddresses();
   const updateAddress = usePutAddressesId();
@@ -130,7 +138,17 @@ export function AccountAddresses() {
   };
 
   const handleOpenMapPicker = () => {
-    setMapPickerSeed(formValuesToGeocodedSeed(form.state.values, mapCoordinates));
+    const values = form.state.values;
+    const hasFormAddress = values.street.trim().length > 0;
+
+    if (hasFormAddress) {
+      setMapPickerSeed(formValuesToGeocodedSeed(values, mapCoordinates));
+    } else if (defaultShippingAddress) {
+      setMapPickerSeed(addressModelToGeocodedSeed(defaultShippingAddress));
+    } else {
+      setMapPickerSeed(null);
+    }
+
     setIsMapPickerOpen(true);
   };
 
@@ -152,9 +170,75 @@ export function AccountAddresses() {
   const handleEditAddress = (address: ModelsAddress) => {
     setEditingAddressId(address.id as number);
     setDialogInitialValues(addressToFormValues(address));
-    setMapCoordinates(null);
+    const seed = addressModelToGeocodedSeed(address);
+    setMapCoordinates(hasValidGeoCoordinates(seed) ? seed : null);
     setIsAddressDialogOpen(true);
   };
+
+  const renderAddressCard = (address: ModelsAddress) => (
+    <div
+      key={address.id}
+      className={`bg-card relative rounded-xl border p-6 ${
+        address.is_default ? 'border-accent' : 'border-border'
+      }`}
+    >
+      {address.is_default ? (
+        <span className='text-accent absolute end-4 top-4 flex items-center gap-1 text-xs font-medium'>
+          <IconCheck className='h-3 w-3' />
+          {tCommon('default')}
+        </span>
+      ) : null}
+      <h3 className='mb-2 font-semibold'>{address.instructions || t('addressFallback')}</h3>
+      <p className='text-muted-foreground text-sm'>{address.recipient_name}</p>
+      <p className='text-muted-foreground text-sm'>
+        {address.address_line1}
+        {address.address_line2 ? `, ${address.address_line2}` : null}
+      </p>
+      <p className='text-muted-foreground text-sm'>
+        {address.city}, {address.state} {address.postal_code}
+      </p>
+      <p className='text-muted-foreground text-sm'>{address.country}</p>
+      <p className='text-muted-foreground text-sm'>{address.phone}</p>
+
+      <div className='border-border mt-4 flex items-center gap-2 border-t pt-4'>
+        <Button variant='ghost' size='sm' onClick={() => handleEditAddress(address)}>
+          <IconEdit className='me-1 h-4 w-4' />
+          {tCommon('edit')}
+        </Button>
+        {!address.is_default ? (
+          <Button variant='ghost' size='sm' onClick={() => handleSetDefault(address.id as number)}>
+            {tCommon('setDefault')}
+          </Button>
+        ) : null}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant='ghost'
+              size='sm'
+              className='text-red-600 hover:bg-red-50 hover:text-red-700'
+            >
+              <IconTrash className='h-4 w-4' />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('deleteTitle')}</AlertDialogTitle>
+              <AlertDialogDescription>{t('deleteDescription')}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleDelete(address.id as number)}
+                className='bg-red-600 hover:bg-red-700'
+              >
+                {tCommon('delete')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+    </div>
+  );
 
   const handleSetDefault = async (id: number) => {
     try {
@@ -258,7 +342,9 @@ export function AccountAddresses() {
             <form.AppField name='apartment'>
               {(field) => <field.TextField label={t('apartment')} className='col-span-2' />}
             </form.AppField>
-            <form.AppField name='city'>{(field) => <field.TextField label={t('city')} />}</form.AppField>
+            <form.AppField name='city'>
+              {(field) => <field.TextField label={t('city')} />}
+            </form.AppField>
             <form.AppField name='state'>
               {(field) => <field.TextField label={t('state')} />}
             </form.AppField>
@@ -272,9 +358,7 @@ export function AccountAddresses() {
               {(field) => <field.TextField label={t('country')} />}
             </form.AppField>
             <form.AppField name='isDefault'>
-              {(field) => (
-                <field.Checkbox label={t('setAsDefault')} className='col-span-2 mt-2' />
-              )}
+              {(field) => <field.Checkbox label={t('setAsDefault')} className='col-span-2 mt-2' />}
             </form.AppField>
             <div className='col-span-2 mt-4 flex justify-end gap-2'>
               <Button variant='outline' type='button' onClick={() => setIsAddressDialogOpen(false)}>
@@ -295,75 +379,28 @@ export function AccountAddresses() {
       />
 
       {addresses.length > 0 ? (
-        <div className='grid grid-cols-2 gap-4'>
-          {addresses.map((address) => (
-            <div
-              key={address.id}
-              className={`bg-card relative rounded-xl border p-6 ${
-                address.is_default ? 'border-accent' : 'border-border'
-              }`}
-            >
-              {address.is_default && (
-                <span className='text-accent absolute end-4 top-4 flex items-center gap-1 text-xs font-medium'>
-                  <IconCheck className='h-3 w-3' />
-                  {tCommon('default')}
-                </span>
-              )}
-              <h3 className='mb-2 font-semibold'>{address.instructions || t('addressFallback')}</h3>
-              <p className='text-muted-foreground text-sm'>{address.recipient_name}</p>
-              <p className='text-muted-foreground text-sm'>
-                {address.address_line1}
-                {address.address_line2 && `, ${address.address_line2}`}
-              </p>
-              <p className='text-muted-foreground text-sm'>
-                {address.city}, {address.state} {address.postal_code}
-              </p>
-              <p className='text-muted-foreground text-sm'>{address.country}</p>
-              <p className='text-muted-foreground text-sm'>{address.phone}</p>
+        <div className='space-y-6'>
+          {defaultShippingAddress ? (
+            <div>
+              <h3 className='mb-3 text-sm font-medium tracking-wide uppercase opacity-70'>
+                {t('defaultShippingTitle')}
+              </h3>
+              {renderAddressCard(defaultShippingAddress)}
+            </div>
+          ) : null}
 
-              <div className='border-border mt-4 flex items-center gap-2 border-t pt-4'>
-                <Button variant='ghost' size='sm' onClick={() => handleEditAddress(address)}>
-                  <IconEdit className='me-1 h-4 w-4' />
-                  {tCommon('edit')}
-                </Button>
-                {!address.is_default && (
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    onClick={() => handleSetDefault(address.id as number)}
-                  >
-                    {tCommon('setDefault')}
-                  </Button>
-                )}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant='ghost'
-                      size='sm'
-                      className='text-red-600 hover:bg-red-50 hover:text-red-700'
-                    >
-                      <IconTrash className='h-4 w-4' />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>{t('deleteTitle')}</AlertDialogTitle>
-                      <AlertDialogDescription>{t('deleteDescription')}</AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>{tCommon('cancel')}</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleDelete(address.id as number)}
-                        className='bg-red-600 hover:bg-red-700'
-                      >
-                        {tCommon('delete')}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+          {otherAddresses.length > 0 ? (
+            <div>
+              {defaultShippingAddress ? (
+                <h3 className='mb-3 text-sm font-medium tracking-wide uppercase opacity-70'>
+                  {t('otherAddressesTitle')}
+                </h3>
+              ) : null}
+              <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+                {otherAddresses.map((address) => renderAddressCard(address))}
               </div>
             </div>
-          ))}
+          ) : null}
         </div>
       ) : (
         <div className='bg-muted/50 rounded-2xl py-12 text-center'>

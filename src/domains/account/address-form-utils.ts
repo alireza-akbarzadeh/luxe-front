@@ -62,6 +62,48 @@ export function formatAddressSearchQuery(
     .join(', ');
 }
 
+/** Builds a map-picker seed from a saved address row (no stored coordinates). */
+export function addressModelToGeocodedSeed(address: ModelsAddress): GeocodedAddress | null {
+  const displayName = formatAddressSearchQuery({
+    street: address.address_line1 ?? '',
+    apartment: address.address_line2 ?? '',
+    city: address.city ?? '',
+    state: address.state ?? '',
+    zipCode: address.postal_code ?? '',
+    country: address.country ?? ''
+  });
+
+  if (displayName.length < 3) return null;
+
+  return {
+    street: address.address_line1 ?? '',
+    city: address.city ?? '',
+    state: address.state ?? '',
+    zipCode: address.postal_code ?? '',
+    country: address.country ?? '',
+    latitude: 0,
+    longitude: 0,
+    displayName
+  };
+}
+
+export function hasValidGeoCoordinates(
+  coordinates: GeoCoordinates | null | undefined
+): coordinates is GeoCoordinates {
+  return Boolean(
+    coordinates &&
+    Number.isFinite(coordinates.latitude) &&
+    Number.isFinite(coordinates.longitude) &&
+    !(coordinates.latitude === 0 && coordinates.longitude === 0)
+  );
+}
+
+export function isShippingDefaultAddress(address: ModelsAddress): boolean {
+  if (!address.is_default) return false;
+  const type = address.address_type;
+  return type === 'shipping' || type === 'both' || !type;
+}
+
 export function formValuesToGeocodedSeed(
   values: AddressFormValues,
   coordinates?: GeoCoordinates | null

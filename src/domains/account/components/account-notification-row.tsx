@@ -21,7 +21,14 @@ interface AccountNotificationRowProps {
 
 function getNotificationTypeKey(type?: string): string {
   if (!type) return 'update';
-  const known = ['order_update', 'payment_success', 'payment_failed', 'shipment_update'];
+  const known = [
+    'order_update',
+    'payment_success',
+    'payment_failed',
+    'shipment_update',
+    'membership_activated',
+    'wallet_deposit'
+  ];
   return known.includes(type) ? type : 'update';
 }
 

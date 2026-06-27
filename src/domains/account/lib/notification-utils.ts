@@ -7,6 +7,10 @@ export const NOTIFICATION_TYPE_STYLES: Record<string, string> = {
     'border-sky-500/25 bg-sky-500/10 text-sky-800 dark:border-sky-400/20 dark:bg-sky-400/10 dark:text-sky-300',
   payment_success:
     'border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300',
+  membership_activated:
+    'border-violet-500/25 bg-violet-500/10 text-violet-800 dark:border-violet-400/20 dark:bg-violet-400/10 dark:text-violet-300',
+  wallet_deposit:
+    'border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300',
   payment_failed:
     'border-red-500/20 bg-red-500/10 text-red-700 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300',
   shipment_update:
