@@ -19,6 +19,8 @@ interface CheckoutState {
   submitError: string | null;
   /** True after a successful checkout while navigating away — prevents empty-cart flash. */
   isRedirecting: boolean;
+  /** Distinguishes Stripe payment redirect from post-order navigation. */
+  redirectMode: 'payment' | 'confirmed' | null;
 }
 
 interface CheckoutActions {
@@ -32,6 +34,7 @@ interface CheckoutActions {
   setAgreedToTerms: (value: boolean) => void;
   setSubmitError: (value: string | null) => void;
   setIsRedirecting: (value: boolean) => void;
+  setRedirectMode: (mode: CheckoutState['redirectMode']) => void;
 
   /** Clears all checkout-only UI state (call after a successful order). */
   reset: () => void;
@@ -46,7 +49,8 @@ const initialState: CheckoutState = {
   appliedCouponCode: '',
   agreedToTerms: false,
   submitError: null,
-  isRedirecting: false
+  isRedirecting: false,
+  redirectMode: null
 };
 
 export const useCheckoutStore = create<CheckoutStore>((set) => ({
@@ -67,6 +71,7 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
   setAgreedToTerms: (value) => set({ agreedToTerms: value }),
   setSubmitError: (value) => set({ submitError: value }),
   setIsRedirecting: (value) => set({ isRedirecting: value }),
+  setRedirectMode: (mode) => set({ redirectMode: mode }),
 
   reset: () => set({ ...initialState })
 }));

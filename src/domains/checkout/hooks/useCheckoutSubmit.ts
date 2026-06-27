@@ -14,7 +14,11 @@ import type { DtoCheckoutRequestPaymentMethod } from '@/services/-checkout-post.
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
 import type { CheckoutFormValues } from '../checkout.schema';
-import { paymentMethodRequiresCard, resolveCheckoutOrderId } from '../lib/checkout-utils';
+import {
+  paymentMethodRequiresCard,
+  resolveCheckoutOrderId,
+  resolveCheckoutStripeRedirect
+} from '../lib/checkout-utils';
 import { useCheckoutStore } from '../store/checkout.store';
 
 /** Maps storefront payment UI values to API payment_method enum. */
@@ -35,6 +39,7 @@ export function useCheckoutSubmit() {
   const { clearCart } = useCartController();
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
   const setIsRedirecting = useCheckoutStore((s) => s.setIsRedirecting);
+  const setRedirectMode = useCheckoutStore((s) => s.setRedirectMode);
   const { data: providersResponse } = useGetShippingProviders();
   const providers = providersResponse?.data ?? [];
   const submitLockRef = useRef(false);
@@ -86,6 +91,14 @@ export function useCheckoutSubmit() {
         throw new Error(message);
       }
 
+      const stripeRedirect = resolveCheckoutStripeRedirect(response);
+      if (stripeRedirect) {
+        setRedirectMode('payment');
+        setIsRedirecting(true);
+        window.location.assign(stripeRedirect.checkoutUrl);
+        return;
+      }
+
       const orderId = resolveCheckoutOrderId(response);
       if (!orderId) {
         const message = 'Order was created but no order ID was returned.';
@@ -94,17 +107,18 @@ export function useCheckoutSubmit() {
         throw new Error(message);
       }
 
-      // Block empty-cart UI while client navigates — never call reset() here (it clears this flag).
+      setRedirectMode('confirmed');
       setIsRedirecting(true);
       toast.success('Order placed successfully!');
 
-      router.replace(`/order-confirmed/${orderId}`);
+      router.replace(`/order-confirmed/${orderId}?confirmed=1`);
 
       void clearCart().catch(() => {
         // Cart is already cleared server-side during checkout.
       });
     } catch (error) {
       setIsRedirecting(false);
+      setRedirectMode(null);
       submitLockRef.current = false;
 
       const isAxiosError = error instanceof Error && 'isAxiosError' in error;

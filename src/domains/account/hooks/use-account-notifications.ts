@@ -14,12 +14,18 @@ export function getAccountNotificationsQueryKey(limit: number, offset: number) {
   return [...ACCOUNT_NOTIFICATIONS_QUERY_KEY, { limit, offset }] as const;
 }
 
-export function useAccountNotifications(limit: number, offset: number) {
+export function useAccountNotifications(
+  limit: number,
+  offset: number,
+  options?: { enabled?: boolean }
+) {
   const queryClient = useQueryClient();
+  const enabled = options?.enabled ?? true;
 
   const query = useQuery({
     queryKey: getAccountNotificationsQueryKey(limit, offset),
-    queryFn: () => fetchAccountNotifications({ limit, offset })
+    queryFn: () => fetchAccountNotifications({ limit, offset }),
+    enabled
   });
 
   const markAsReadMutation = useMutation({

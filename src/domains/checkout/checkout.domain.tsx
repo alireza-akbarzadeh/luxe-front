@@ -26,9 +26,11 @@ import {
   type CheckoutFormValues,
   checkoutStepFields,
   type CheckoutStepId,
-  getCheckoutStepErrors} from './checkout.schema';
+  getCheckoutStepErrors
+} from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
+import { CheckoutPaymentCancelledHandler } from './components/checkout-payment-cancelled-handler';
 import { CheckoutPlacingOrderOverlay } from './components/checkout-placing-order-overlay';
 import { CheckoutRedirectingScreen } from './components/checkout-redirecting';
 import { CheckoutSummary } from './components/checkout-summary';
@@ -184,6 +186,7 @@ export default function CheckoutDomain() {
 
   return (
     <div className='pt-24 pb-16'>
+      <CheckoutPaymentCancelledHandler />
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <CheckoutBreadcrumb />
 

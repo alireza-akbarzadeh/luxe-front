@@ -3,8 +3,13 @@
 import { IconLoader2 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-/** Shown after checkout succeeds while navigating to order tracking. */
+import { useCheckoutStore } from '../store/checkout.store';
+
+/** Shown after checkout while navigating to Stripe or the confirmation page. */
 export function CheckoutRedirectingScreen() {
+  const redirectMode = useCheckoutStore((s) => s.redirectMode);
+  const isStripePayment = redirectMode === 'payment';
+
   return (
     <div className='flex min-h-[60vh] items-center justify-center px-4 pt-24 pb-16'>
       <motion.div
@@ -15,8 +20,14 @@ export function CheckoutRedirectingScreen() {
         aria-live='polite'
       >
         <IconLoader2 className='text-accent mx-auto mb-4 h-10 w-10 animate-spin' />
-        <h2 className='text-lg font-semibold'>Order placed!</h2>
-        <p className='text-muted-foreground mt-1 text-sm'>Taking you to order tracking…</p>
+        <h2 className='text-lg font-semibold'>
+          {isStripePayment ? 'Redirecting to secure payment…' : 'Order placed!'}
+        </h2>
+        <p className='text-muted-foreground mt-1 text-sm'>
+          {isStripePayment
+            ? 'You will complete checkout on Stripe.'
+            : 'Taking you to your order confirmation…'}
+        </p>
       </motion.div>
     </div>
   );

@@ -171,6 +171,20 @@
       "saving": "Saving…",
       "saveDefaultFailed": "Could not save default address. Add a phone number in your account profile and try again."
     },
+    "notifications": {
+      "title": "Notifications",
+      "unread": "unread",
+      "latestSubtitle": "Latest {count, plural, one {# update} other {# updates}}",
+      "showMore": "Show all notifications",
+      "markAllRead": "Mark all read",
+      "loadError": "Could not load notifications",
+      "retry": "Try again",
+      "emptyTitle": "You're all caught up",
+      "emptyDescription": "Order updates and alerts will appear here.",
+      "signInTitle": "Sign in for notifications",
+      "signInDescription": "Get live order, shipping, and payment updates in one place.",
+      "signInButton": "Sign in"
+    },
     "mobile": {
       "more": "More",
       "notifications": "Notifications",
@@ -1988,6 +2002,17 @@
           "step3": "Tap Add to finish installation."
         }
       }
+    }
+  },
+  "checkout": {
+    "stripe": {
+      "paymentConfirming": "Confirming your payment…",
+      "paymentConfirmed": "Payment confirmed — your order is on its way!",
+      "paymentConfirmError": "We couldn't confirm your payment. Try refreshing or check your orders.",
+      "paymentCancelled": "Payment cancelled — your order is saved. Complete payment from order tracking.",
+      "paymentPendingTitle": "Payment pending",
+      "paymentPendingDescription": "We're waiting for payment confirmation. If you already paid, refresh in a moment.",
+      "refreshPaymentStatus": "Refresh payment status"
     }
   },
   "vendor": {

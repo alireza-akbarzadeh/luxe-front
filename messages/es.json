@@ -171,6 +171,20 @@
       "saving": "Guardando…",
       "saveDefaultFailed": "No se pudo guardar la dirección predeterminada. Añade un teléfono en tu perfil e inténtalo de nuevo."
     },
+    "notifications": {
+      "title": "Notificaciones",
+      "unread": "sin leer",
+      "latestSubtitle": "{count, plural, one {# reciente} other {# recientes}}",
+      "showMore": "Ver todas las notificaciones",
+      "markAllRead": "Marcar todo como leído",
+      "loadError": "No se pudieron cargar las notificaciones",
+      "retry": "Reintentar",
+      "emptyTitle": "Estás al día",
+      "emptyDescription": "Las actualizaciones de pedidos y alertas aparecerán aquí.",
+      "signInTitle": "Inicia sesión para notificaciones",
+      "signInDescription": "Recibe actualizaciones en vivo de pedidos, envíos y pagos en un solo lugar.",
+      "signInButton": "Iniciar sesión"
+    },
     "mobile": {
       "more": "Más",
       "notifications": "Notificaciones",
@@ -1988,6 +2002,17 @@
           "step3": "Toca Añadir para finalizar."
         }
       }
+    }
+  },
+  "checkout": {
+    "stripe": {
+      "paymentConfirming": "Confirmando tu pago…",
+      "paymentConfirmed": "Pago confirmado — ¡tu pedido está en camino!",
+      "paymentConfirmError": "No pudimos confirmar tu pago. Actualiza o revisa tus pedidos.",
+      "paymentCancelled": "Pago cancelado — tu pedido está guardado. Completa el pago desde el seguimiento.",
+      "paymentPendingTitle": "Pago pendiente",
+      "paymentPendingDescription": "Estamos esperando la confirmación del pago. Si ya pagaste, actualiza en un momento.",
+      "refreshPaymentStatus": "Actualizar estado del pago"
     }
   },
   "vendor": {
