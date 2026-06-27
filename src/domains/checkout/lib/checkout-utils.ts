@@ -106,15 +106,25 @@ export function resolveCheckoutOrderId(response: unknown): number | null {
 /** Stripe Checkout redirect URL + order id when checkout requires external payment. */
 export function resolveCheckoutStripeRedirect(
   response: unknown
-): { orderId: number; checkoutUrl: string } | null {
+): { orderId: number; checkoutUrl: string; stripeSessionId?: string } | null {
   const orderId = resolveCheckoutOrderId(response);
   if (!orderId || !response || typeof response !== 'object') return null;
 
   const data = (response as Record<string, unknown>)['data'];
   if (!data || typeof data !== 'object') return null;
 
-  const checkoutUrl = (data as Record<string, unknown>)['checkout_url'];
+  const nested = data as Record<string, unknown>;
+  const checkoutUrl = nested['checkout_url'];
   if (typeof checkoutUrl !== 'string' || checkoutUrl.trim() === '') return null;
 
-  return { orderId, checkoutUrl: checkoutUrl.trim() };
+  const stripeSessionId =
+    typeof nested['stripe_session_id'] === 'string'
+      ? nested['stripe_session_id'].trim()
+      : undefined;
+
+  return {
+    orderId,
+    checkoutUrl: checkoutUrl.trim(),
+    stripeSessionId: stripeSessionId || undefined
+  };
 }

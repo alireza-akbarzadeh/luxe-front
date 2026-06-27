@@ -15,23 +15,15 @@ import { useTranslations } from 'next-intl';
 import { OrderNumber } from '@/components/order-number';
 import { Button } from '@/components/ui/button';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
-import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { cn } from '@/lib/utils';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
 import { OrderTrackingSkeleton } from '../order-tracking/components/order-loading';
 import { OrderStripeReturnHandler } from './components/order-stripe-return-handler';
+import { isOrderPaymentComplete, resolveOrderPaymentStatus } from './lib/order-payment-status';
 
 interface OrderConfirmedDomainProps {
   orderId: string;
-}
-
-function isPaymentComplete(paymentStatus: string | undefined, orderStatus: string | undefined) {
-  const normalizedPayment = paymentStatus?.toLowerCase();
-  if (normalizedPayment === 'succeeded' || normalizedPayment === 'completed') {
-    return true;
-  }
-  return orderStatus?.toLowerCase() === OrderStatus.Paid;
 }
 
 export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
@@ -47,7 +39,8 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
 
   const itemCount = order.items?.reduce((sum, item) => sum + (item.quantity ?? 0), 0) ?? 0;
   const total = order.total_amount ?? 0;
-  const paymentComplete = isPaymentComplete(order.payment_status, order.status);
+  const paymentStatus = resolveOrderPaymentStatus(order);
+  const paymentComplete = isOrderPaymentComplete(order);
   const isPendingPayment = !paymentComplete;
 
   return (
@@ -111,7 +104,7 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
               <div className='flex items-center justify-between gap-4'>
                 <dt className='text-muted-foreground'>Payment status</dt>
                 <dd className='font-medium text-amber-600 capitalize'>
-                  {order.payment_status ?? 'pending'}
+                  {paymentStatus ?? 'pending'}
                 </dd>
               </div>
             ) : null}

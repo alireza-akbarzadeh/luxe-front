@@ -9,20 +9,49 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { postCheckoutConfirmStripe } from '@/domains/checkout/lib/confirm-checkout-stripe';
+import {
+  clearStripeCheckoutSession,
+  persistStripeCheckoutSession,
+  readStripeCheckoutSession
+} from '@/domains/checkout/lib/stripe-checkout-session-storage';
 import { useCartController } from '@/hooks/useCartController';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
 import { getGetOrdersIdQueryKey } from '@/services/-orders-{id}-get';
 
-function getStripeSessionId(searchParams: URLSearchParams) {
+function getStripeSessionIdFromUrl(searchParams: URLSearchParams) {
   return searchParams.get('session_id')?.trim() ?? '';
+}
+
+function resolveStripeSessionForConfirm(orderId: string, searchParams: URLSearchParams) {
+  const urlSessionId = getStripeSessionIdFromUrl(searchParams);
+  if (urlSessionId) {
+    return urlSessionId;
+  }
+
+  const payment = searchParams.get('payment');
+  const confirmed = searchParams.get('confirmed');
+  if (payment === 'success' || confirmed === '1') {
+    return readStripeCheckoutSession(orderId);
+  }
+
+  return null;
+}
+
+function shouldConfirmStripePayment(searchParams: URLSearchParams, sessionId: string | null) {
+  if (!sessionId) return false;
+
+  const payment = searchParams.get('payment');
+  if (payment === 'success') return true;
+
+  return searchParams.get('confirmed') === '1';
 }
 
 interface OrderStripeReturnHandlerProps {
   orderId: string;
 }
 
-/** Confirms Stripe order payment on return from Checkout. */
+/** Confirms Stripe order payment on return from Checkout (and retries after URL cleanup). */
 export function OrderStripeReturnHandler({ orderId }: OrderStripeReturnHandlerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -33,10 +62,8 @@ export function OrderStripeReturnHandler({ orderId }: OrderStripeReturnHandlerPr
   const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
-    const status = searchParams.get('payment');
-    const sessionId = getStripeSessionId(searchParams);
-
-    if (status !== 'success' || !sessionId) {
+    const sessionId = resolveStripeSessionForConfirm(orderId, searchParams);
+    if (!shouldConfirmStripePayment(searchParams, sessionId)) {
       return;
     }
 
@@ -44,13 +71,20 @@ export function OrderStripeReturnHandler({ orderId }: OrderStripeReturnHandlerPr
       return;
     }
 
+    const urlSessionId = getStripeSessionIdFromUrl(searchParams);
+    if (urlSessionId) {
+      persistStripeCheckoutSession(orderId, urlSessionId);
+    }
+
     handledSessionRef.current = sessionId;
     setIsConfirming(true);
 
     const confirm = async () => {
       try {
-        const result = await postCheckoutConfirmStripe({ session_id: sessionId });
+        const result = await postCheckoutConfirmStripe({ session_id: sessionId! });
         const confirmedOrderId = result.data?.id ?? Number(orderId);
+
+        queryClient.setQueryData(getGetOrdersIdQueryKey(confirmedOrderId), result);
 
         await Promise.all([
           queryClient.invalidateQueries({
@@ -59,15 +93,23 @@ export function OrderStripeReturnHandler({ orderId }: OrderStripeReturnHandlerPr
           clearCart().catch(() => undefined)
         ]);
 
+        clearStripeCheckoutSession(orderId);
+
         toast.success(result.message ?? t('paymentConfirmed'));
-        router.replace(`/order-confirmed/${confirmedOrderId}?confirmed=1`);
+
+        if (searchParams.get('confirmed') !== '1') {
+          router.replace(`/order-confirmed/${confirmedOrderId}?confirmed=1`);
+        }
       } catch (error: unknown) {
         const message =
           error instanceof AxiosError
             ? extractErrorMessage(error as AxiosError<ApiErrorResponse>)
             : t('paymentConfirmError');
         toast.error(message || t('paymentConfirmError'));
-        router.replace(`/order-confirmed/${orderId}`);
+
+        if (searchParams.get('payment') === 'success') {
+          router.replace(`/order-confirmed/${orderId}`);
+        }
       } finally {
         setIsConfirming(false);
       }

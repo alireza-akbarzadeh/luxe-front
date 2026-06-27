@@ -19,6 +19,7 @@ import {
   resolveCheckoutOrderId,
   resolveCheckoutStripeRedirect
 } from '../lib/checkout-utils';
+import { persistStripeCheckoutSession } from '../lib/stripe-checkout-session-storage';
 import { useCheckoutStore } from '../store/checkout.store';
 
 /** Maps storefront payment UI values to API payment_method enum. */
@@ -93,6 +94,9 @@ export function useCheckoutSubmit() {
 
       const stripeRedirect = resolveCheckoutStripeRedirect(response);
       if (stripeRedirect) {
+        if (stripeRedirect.stripeSessionId) {
+          persistStripeCheckoutSession(stripeRedirect.orderId, stripeRedirect.stripeSessionId);
+        }
         setRedirectMode('payment');
         setIsRedirecting(true);
         window.location.assign(stripeRedirect.checkoutUrl);
