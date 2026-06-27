@@ -19,6 +19,7 @@ import type { DtoDefaultAddressDTO } from '~/src/services/-account-summary-get.s
 
 import { AccountProfileForm } from '../components/account-profile-form';
 import { OrderStatusBadge } from '../components/order-status-badge';
+import { PlusMembershipPanel } from '../components/plus-membership-panel';
 import { useSidebarTab } from '../hooks/useSidebarTab';
 import { formatOrderAmount } from '../lib/order-utils';
 
@@ -95,6 +96,8 @@ export function AccountOverview() {
 
   return (
     <div className='space-y-6'>
+      <PlusMembershipPanel />
+
       <div className='bg-card border-border rounded-2xl border p-6'>
         <div className='mb-6 flex items-start justify-between'>
           <h2 className='text-xl font-semibold'>{t('profileTitle')}</h2>
@@ -207,9 +210,7 @@ export function AccountOverview() {
                   <div className='min-w-0'>
                     <OrderNumber value={orderNumber} size='sm' />
                     <p className='text-muted-foreground text-sm'>
-                      {createdAt
-                        ? new Date(createdAt).toLocaleDateString()
-                        : tCommon('noDate')}
+                      {createdAt ? new Date(createdAt).toLocaleDateString() : tCommon('noDate')}
                     </p>
                   </div>
                   <div className='flex flex-col gap-2 sm:items-end'>

@@ -178,6 +178,10 @@
           "title": "Mi perfil",
           "subtitle": "Administrar información de la cuenta"
         },
+        "plus": {
+          "title": "Luxe Plus",
+          "subtitle": "Envío, devoluciones y ahorros exclusivos"
+        },
         "dashboard": {
           "title": "Panel",
           "subtitle": "Resumen del espacio de trabajo"
@@ -1368,6 +1372,59 @@
       "sendingTest": "Enviando…",
       "testSent": "Notificación de prueba enviada",
       "testError": "No se pudo enviar la notificación de prueba"
+    }
+  },
+  "plus": {
+    "meta": {
+      "title": "Membresía Luxe Plus",
+      "description": "Descuentos en el pago, devoluciones extendidas, envío prioritario y soporte dedicado."
+    },
+    "badge": {
+      "guest": "Invitado",
+      "free": "Gratis",
+      "plus": "Luxe Plus"
+    },
+    "landing": {
+      "eyebrow": "Membresía",
+      "title": "Luxe Plus — compra con ventajas exclusivas",
+      "description": "Beneficios reales en el pago y devoluciones: precios de miembro, plazos extendidos, envío prioritario y soporte dedicado.",
+      "benefitsTitle": "Lo que obtienes",
+      "loadError": "No se pudieron cargar los beneficios. Inténtalo de nuevo.",
+      "finePrint": "Los descuentos Plus se aplican después de los cupones en pedidos elegibles. El plazo de devolución se cuenta desde la entrega. La membresía anual se cobra de tu billetera Luxe."
+    },
+    "pricing": {
+      "subtitle": "Membresía anual",
+      "perYear": "/ año",
+      "perkDiscount": "{percent}% de descuento en cada pedido elegible",
+      "perkReturns": "Devoluciones de {days} días tras la entrega",
+      "perkShipping": "Preparación prioritaria en artículos en stock",
+      "perkSupport": "Línea de soporte Plus dedicada",
+      "subscribe": "Obtener Luxe Plus",
+      "signInToSubscribe": "Inicia sesión para suscribirte",
+      "processing": "Procesando…",
+      "success": "¡Bienvenido a Luxe Plus!",
+      "error": "No se pudo completar la suscripción. Revisa el saldo de tu billetera.",
+      "active": "Tu membresía Luxe Plus está activa.",
+      "activeUntil": "Activa hasta {date}",
+      "manageAccount": "Ver cuenta",
+      "walletNote": "Se factura anualmente desde el saldo de tu billetera Luxe."
+    },
+    "account": {
+      "title": "Membresía",
+      "loading": "Cargando estado de membresía…",
+      "freeDescription": "Estás en el plan Gratis. Mejora para desbloquear ventajas.",
+      "plusDescription": "Tienes Luxe Plus — las ventajas se aplican automáticamente al pagar.",
+      "renewsOn": "Se renueva el {date}",
+      "unlockDiscount": "{percent}% de descuento en el pago",
+      "unlockReturns": "Devoluciones de {days} días",
+      "unlockShipping": "Envío prioritario",
+      "unlockSupport": "Soporte Plus",
+      "activeDiscount": "{percent}% de descuento (activo)",
+      "activeReturns": "Devoluciones de {days} días (activo)",
+      "activeShipping": "Envío prioritario (activo)",
+      "activeSupport": "Soporte Plus (activo)",
+      "upgrade": "Mejorar a Luxe Plus",
+      "viewBenefits": "Ver beneficios Plus"
     }
   },
   "account": {

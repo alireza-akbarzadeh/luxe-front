@@ -26,8 +26,9 @@ Index: `.cursor/skills/README.md`. Backend: `luxe/.cursor/skills/`.
 ## Before any API-related work
 
 1. Check `src/services/` for an existing Orval hook — **never** add raw `axios`/`fetch` in components.
-2. If endpoint/types missing or stale after backend Swagger change: `/api-gen` — `make swagger` → **restart API** → `pnpm api:gen` → `pnpm check`.
-3. **Never edit** `src/services/*` or `orval.config.js` by hand.
+2. **Never** add hand-written HTTP clients under `src/lib/api/` for domain endpoints (e.g. `plus-membership.ts`, `vendor-products.ts`). New/changed routes → backend Swagger → restart API → `pnpm api:gen` → import from `@/services/-<path>-<method>`.
+3. If endpoint/types missing or stale after backend Swagger change: `/api-gen` — `make swagger` → **restart API** → `pnpm api:gen` → `pnpm check`.
+4. **Never edit** `src/services/*` or `orval.config.js` by hand.
 
 ## Orval import pattern
 

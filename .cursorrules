@@ -178,6 +178,7 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 - ❌ Running `pnpm api:gen` while backend is down (wipes services folder)
 - ❌ `useState` for server data (use TanStack Query)
 - ❌ Raw `fetch`/`axios` in components (use Orval-generated services)
+- ❌ Hand-written domain API clients in `src/lib/api/` (e.g. `plus-membership.ts`) — add Swagger on handler → `make swagger` → restart API → `pnpm api:gen`; import `@/services/-<path>-<method>`
 - ❌ Raw `useReactTable` (use custom DataTable)
 - ❌ Raw `useForm` from TanStack Form (use `useAppForm`)
 - ❌ Putting fetched data into Zustand

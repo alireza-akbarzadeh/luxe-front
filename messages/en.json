@@ -178,6 +178,10 @@
           "title": "My Profile",
           "subtitle": "Manage account information"
         },
+        "plus": {
+          "title": "Luxe Plus",
+          "subtitle": "Unlock delivery, returns & savings"
+        },
         "dashboard": {
           "title": "Dashboard",
           "subtitle": "Workspace overview"
@@ -1368,6 +1372,59 @@
       "sendingTest": "Sending…",
       "testSent": "Test notification sent",
       "testError": "Could not send test notification"
+    }
+  },
+  "plus": {
+    "meta": {
+      "title": "Luxe Plus Membership",
+      "description": "Unlock member checkout discounts, extended returns, priority shipping, and dedicated support."
+    },
+    "badge": {
+      "guest": "Guest",
+      "free": "Free",
+      "plus": "Luxe Plus"
+    },
+    "landing": {
+      "eyebrow": "Membership",
+      "title": "Luxe Plus — shop with priority perks",
+      "description": "Real benefits applied at checkout and on returns: member pricing, extended return windows, faster fulfillment, and dedicated support.",
+      "benefitsTitle": "What you get",
+      "loadError": "Could not load membership benefits. Please try again.",
+      "finePrint": "Plus discounts apply after coupon codes on eligible orders. Return windows are measured from delivery date. Annual membership is charged from your Luxe wallet."
+    },
+    "pricing": {
+      "subtitle": "Annual membership",
+      "perYear": "/ year",
+      "perkDiscount": "{percent}% off every eligible order at checkout",
+      "perkReturns": "{days}-day return window on delivered orders",
+      "perkShipping": "Priority fulfillment on in-stock items",
+      "perkSupport": "Dedicated Plus support line",
+      "subscribe": "Get Luxe Plus",
+      "signInToSubscribe": "Sign in to subscribe",
+      "processing": "Processing…",
+      "success": "Welcome to Luxe Plus!",
+      "error": "Could not complete subscription. Check your wallet balance and try again.",
+      "active": "Your Luxe Plus membership is active.",
+      "activeUntil": "Active until {date}",
+      "manageAccount": "View account",
+      "walletNote": "Billed annually from your Luxe wallet balance."
+    },
+    "account": {
+      "title": "Membership",
+      "loading": "Loading membership status…",
+      "freeDescription": "You are on the Free plan. Upgrade to unlock member perks.",
+      "plusDescription": "You have Luxe Plus — perks apply automatically at checkout.",
+      "renewsOn": "Renews on {date}",
+      "unlockDiscount": "{percent}% checkout discount",
+      "unlockReturns": "{days}-day returns",
+      "unlockShipping": "Priority shipping",
+      "unlockSupport": "Plus support",
+      "activeDiscount": "{percent}% checkout discount (active)",
+      "activeReturns": "{days}-day returns (active)",
+      "activeShipping": "Priority shipping (active)",
+      "activeSupport": "Plus support (active)",
+      "upgrade": "Upgrade to Luxe Plus",
+      "viewBenefits": "View Plus benefits"
     }
   },
   "account": {

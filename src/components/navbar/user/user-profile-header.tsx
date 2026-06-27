@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { useNavbarProfile } from '@/components/navbar/user/useNavbarProfile';
+import { PlusMembershipBadge } from '@/domains/plus/components/plus-membership-badge';
 import { cn } from '@/lib/utils';
 
 export function UserProfileHeader() {
@@ -29,9 +30,12 @@ export function UserProfileHeader() {
           <h3 className='font-display truncate text-base font-semibold sm:text-lg'>{userName}</h3>
           <p className='text-muted-foreground truncate text-sm'>{userEmail}</p>
 
-          <div className='bg-muted/60 ring-border/60 mt-2 inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs ring-1'>
-            <span className={cn('size-2 rounded-full', sessionDot)} />
-            {isLoggedIn ? t('signedIn') : t('guestSession')}
+          <div className='bg-muted/60 ring-border/60 mt-2 inline-flex flex-wrap items-center gap-2'>
+            <span className='inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs ring-1'>
+              <span className={cn('size-2 rounded-full', sessionDot)} />
+              {isLoggedIn ? t('signedIn') : t('guestSession')}
+            </span>
+            {isLoggedIn ? <PlusMembershipBadge /> : null}
           </div>
         </div>
       </div>

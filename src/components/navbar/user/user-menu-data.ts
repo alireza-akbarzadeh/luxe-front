@@ -1,6 +1,7 @@
 import {
   IconBell,
   IconBuildingStore,
+  IconCrown,
   IconDashboard,
   IconHeart,
   IconLayersIntersect2,
@@ -10,6 +11,7 @@ import {
 
 export type ProfileMenuItemKey =
   | 'profile'
+  | 'plus'
   | 'dashboard'
   | 'wishlist'
   | 'stores'
@@ -28,6 +30,12 @@ export const profileMenuItems: Array<{
     href: '/account',
     key: 'profile',
     icon: IconUserCircle
+  },
+  {
+    type: 'link',
+    href: '/plus/landing',
+    key: 'plus',
+    icon: IconCrown
   },
   {
     type: 'link',
