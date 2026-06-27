@@ -2013,6 +2013,39 @@
     }
   },
   "checkout": {
+    "payment": {
+      "title": "Payment",
+      "secureNotice": "Your payment information is encrypted and secure.",
+      "stripeTitle": "Secure payment with Stripe",
+      "stripeDescription": "After you place your order, you'll be redirected to Stripe to enter your card details. We never store your full card number on our site.",
+      "demoNotice": "Demo checkout: card details are validated locally and processed through our checkout API. No real charge is made in development environments.",
+      "methodLabel": "Payment method",
+      "cardNumber": "Card number",
+      "expiryMonth": "Expiry month",
+      "expiryYear": "Expiry year",
+      "cvc": "CVC",
+      "saveInfo": "Save this information for next time"
+    },
+    "review": {
+      "title": "Review your order",
+      "subtitle": "Please confirm everything looks right before placing your order.",
+      "paymentMethod": "Payment method",
+      "stripeCheckout": "Stripe Checkout",
+      "stripeCheckoutHint": "You'll complete payment securely on Stripe after placing your order.",
+      "termsPrefix": "I agree to the",
+      "termsLink": "Terms of Service",
+      "termsAnd": "and",
+      "privacyLink": "Privacy Policy",
+      "termsSuffix": ", and confirm my order details are correct.",
+      "secureStripe": "You'll pay securely on Stripe — we never store your full card number.",
+      "secureDefault": "Your payment is encrypted and processed securely."
+    },
+    "legal": {
+      "termsTitle": "Terms of Service",
+      "termsDescription": "Please read before placing your order.",
+      "privacyTitle": "Privacy Policy",
+      "privacyDescription": "How we collect and use your information."
+    },
     "stripe": {
       "paymentConfirming": "Confirming your payment…",
       "paymentConfirmed": "Payment confirmed — your order is on its way!",

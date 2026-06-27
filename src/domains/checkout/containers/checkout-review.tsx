@@ -13,6 +13,7 @@ import {
 import { useStore } from '@tanstack/react-form';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
 import { withForm } from '@/components/forms/useAppForm';
@@ -24,6 +25,8 @@ import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-
 import { formatEstimatedTaxLabel } from '@/domains/cart/lib/cart-commerce-settings';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues, type CheckoutStepId } from '@/domains/checkout/checkout.schema';
+import { CheckoutLegalDialog } from '@/domains/checkout/components/checkout-legal-dialog';
+import { useStripeCheckoutEnabled } from '@/domains/checkout/hooks/useStripeCheckoutEnabled';
 import {
   detectCardBrand,
   getCardBrandLabel,
@@ -77,6 +80,8 @@ export const CheckoutReview = withForm({
   defaultValues: checkoutDefaultValues,
 
   render: function ReviewRender({ form }) {
+    const t = useTranslations('checkout.review');
+    const { isStripeCheckout } = useStripeCheckoutEnabled();
     const { items } = useCartController();
     const { settings } = useCartCommerceSettings();
     const setCurrentStep = useCheckoutStore((s) => s.setCurrentStep);
@@ -114,10 +119,8 @@ export const CheckoutReview = withForm({
         className='space-y-5'
       >
         <div>
-          <h2 className='text-2xl font-bold'>Review your order</h2>
-          <p className='text-muted-foreground mt-1 text-sm'>
-            Please confirm everything looks right before placing your order.
-          </p>
+          <h2 className='text-2xl font-bold'>{t('title')}</h2>
+          <p className='text-muted-foreground mt-1 text-sm'>{t('subtitle')}</p>
         </div>
 
         {submitError && (
@@ -204,19 +207,27 @@ export const CheckoutReview = withForm({
 
         {/* Payment */}
         <ReviewSection
-          title='Payment method'
+          title={t('paymentMethod')}
           icon={<IconCreditCard className='h-4 w-4' />}
           onEdit={() => goTo('payment')}
         >
           <div className='text-sm'>
-            <p className='font-medium'>{getPaymentMethodLabel(formValues.paymentMethod)}</p>
-            {requiresCard && (
-              <p className='text-muted-foreground font-mono tracking-wider'>
-                {maskCardNumber(formValues.cardNumber ?? '')}
-                {cardBrand !== 'unknown' && (
-                  <span className='ml-2 font-sans'>{getCardBrandLabel(cardBrand)}</span>
-                )}
-              </p>
+            <p className='font-medium'>
+              {isStripeCheckout
+                ? t('stripeCheckout')
+                : getPaymentMethodLabel(formValues.paymentMethod)}
+            </p>
+            {isStripeCheckout ? (
+              <p className='text-muted-foreground mt-1'>{t('stripeCheckoutHint')}</p>
+            ) : (
+              requiresCard && (
+                <p className='text-muted-foreground font-mono tracking-wider'>
+                  {maskCardNumber(formValues.cardNumber ?? '')}
+                  {cardBrand !== 'unknown' && (
+                    <span className='ml-2 font-sans'>{getCardBrandLabel(cardBrand)}</span>
+                  )}
+                </p>
+              )
             )}
           </div>
         </ReviewSection>
@@ -314,21 +325,25 @@ export const CheckoutReview = withForm({
             className='mt-0.5'
           />
           <Label htmlFor='agree-terms' className='text-muted-foreground text-sm leading-relaxed'>
-            I agree to the{' '}
-            <a href='/terms' target='_blank' className='text-accent underline'>
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href='/privacy' target='_blank' className='text-accent underline'>
-              Privacy Policy
-            </a>
-            , and confirm my order details are correct.
+            {t('termsPrefix')}{' '}
+            <CheckoutLegalDialog type='terms'>
+              <button type='button' className='text-accent underline'>
+                {t('termsLink')}
+              </button>
+            </CheckoutLegalDialog>{' '}
+            {t('termsAnd')}{' '}
+            <CheckoutLegalDialog type='privacy'>
+              <button type='button' className='text-accent underline'>
+                {t('privacyLink')}
+              </button>
+            </CheckoutLegalDialog>
+            {t('termsSuffix')}
           </Label>
         </div>
 
         <p className='text-muted-foreground flex items-center justify-center gap-1.5 text-xs'>
           <IconShieldLock className='h-3.5 w-3.5' />
-          Your payment is encrypted and processed securely.
+          {isStripeCheckout ? t('secureStripe') : t('secureDefault')}
         </p>
       </motion.div>
     );

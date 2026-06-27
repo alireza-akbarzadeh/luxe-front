@@ -1,8 +1,9 @@
 'use client';
 
-import { IconCreditCard, IconLock, IconTag } from '@tabler/icons-react';
+import { IconCreditCard, IconLock, IconShieldLock, IconTag } from '@tabler/icons-react';
 import { useStore } from '@tanstack/react-form';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 import { withForm } from '@/components/forms/useAppForm';
@@ -22,6 +23,7 @@ import { AvailableCoupons } from '../components/available-coupons';
 import { PaymentMethodSelector } from '../components/payment-providers';
 import { useCheckoutTotals } from '../hooks/useCartTotal';
 import { useCheckoutCoupon } from '../hooks/useCheckoutCoupon';
+import { useStripeCheckoutEnabled } from '../hooks/useStripeCheckoutEnabled';
 import { useCheckoutStore } from '../store/checkout.store';
 
 const onlyDigits = (max: number) => (value: string) => value.replace(/\D/g, '').slice(0, max);
@@ -30,6 +32,8 @@ export const CheckoutPayment = withForm({
   defaultValues: checkoutDefaultValues,
 
   render: function PaymentRender({ form }) {
+    const t = useTranslations('checkout.payment');
+    const { isStripeCheckout } = useStripeCheckoutEnabled();
     const shippingProviderId = useStore(form.store, (s) => s.values.shippingProviderId);
     const paymentMethod = useStore(form.store, (s) => s.values.paymentMethod);
     const cardNumberValue = useStore(form.store, (s) => s.values.cardNumber);
@@ -83,110 +87,117 @@ export const CheckoutPayment = withForm({
         className='space-y-6'
       >
         <div>
-          <h2 className='mb-6 text-2xl font-bold'>Payment Details</h2>
+          <h2 className='mb-6 text-2xl font-bold'>{t('title')}</h2>
           <div className='bg-muted/50 border-border mb-4 flex items-center gap-3 rounded-xl border p-4'>
             <IconLock className='text-muted-foreground h-5 w-5 shrink-0' />
-            <p className='text-muted-foreground text-sm'>
-              Your payment information is encrypted and secure
-            </p>
-          </div>
-          <div className='border-accent/30 bg-accent/5 text-muted-foreground mb-6 rounded-xl border px-4 py-3 text-sm'>
-            Demo checkout: card details are validated locally and processed through our checkout API.
-            No real charge is made in development environments.
+            <p className='text-muted-foreground text-sm'>{t('secureNotice')}</p>
           </div>
 
-          {/* Payment Method Selector */}
-          <div className='mb-6'>
-            <Label className='mb-3 block font-medium'>Payment Method</Label>
-            <form.AppField name='paymentMethod'>
-              {(field) => (
-                <PaymentMethodSelector
-                  value={field.state.value}
-                  onChange={(val) => field.handleChange(val)}
-                />
-              )}
-            </form.AppField>
-          </div>
+          {isStripeCheckout ? (
+            <div className='border-accent/30 bg-accent/5 mb-6 space-y-2 rounded-xl border px-4 py-4'>
+              <div className='flex items-center gap-2'>
+                <IconShieldLock className='text-accent h-5 w-5 shrink-0' />
+                <p className='font-medium'>{t('stripeTitle')}</p>
+              </div>
+              <p className='text-muted-foreground text-sm leading-relaxed'>
+                {t('stripeDescription')}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className='border-accent/30 bg-accent/5 text-muted-foreground mb-6 rounded-xl border px-4 py-3 text-sm'>
+                {t('demoNotice')}
+              </div>
 
-          <div className='space-y-4'>
-            {requiresCard && (
-              <>
-                {/* Card Number */}
-                <form.AppField name='cardNumber'>
+              <div className='mb-6'>
+                <Label className='mb-3 block font-medium'>{t('methodLabel')}</Label>
+                <form.AppField name='paymentMethod'>
                   {(field) => (
-                    <div className='relative'>
-                      <field.TextField
-                        startIcon={IconCreditCard}
-                        label='Card Number'
-                        placeholder='1234 5678 9012 3456'
-                        inputMode='numeric'
-                        autoComplete='cc-number'
-                        transform={formatCardNumber}
-                      />
-                      {cardBrand !== 'unknown' && (
-                        <span className='text-muted-foreground absolute top-9 right-4 text-xs font-medium'>
-                          {getCardBrandLabel(cardBrand)}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </form.AppField>
-
-                {/* Expiry Fields (split) */}
-                <div className='grid grid-cols-2 gap-4'>
-                  <form.AppField name='expiryMonth'>
-                    {(field) => (
-                      <field.TextField
-                        label='Expiry Month'
-                        placeholder='MM'
-                        inputMode='numeric'
-                        autoComplete='cc-exp-month'
-                        maxLength={2}
-                        transform={onlyDigits(2)}
-                      />
-                    )}
-                  </form.AppField>
-                  <form.AppField name='expiryYear'>
-                    {(field) => (
-                      <field.TextField
-                        label='Expiry Year'
-                        placeholder='YYYY'
-                        inputMode='numeric'
-                        autoComplete='cc-exp-year'
-                        maxLength={4}
-                        transform={onlyDigits(4)}
-                      />
-                    )}
-                  </form.AppField>
-                </div>
-
-                {/* CVC */}
-                <form.AppField name='cvv'>
-                  {(field) => (
-                    <field.TextField
-                      label='CVC'
-                      placeholder='123'
-                      inputMode='numeric'
-                      autoComplete='cc-csc'
-                      maxLength={4}
-                      transform={onlyDigits(4)}
+                    <PaymentMethodSelector
+                      value={field.state.value}
+                      onChange={(val) => field.handleChange(val)}
                     />
                   )}
                 </form.AppField>
-              </>
-            )}
+              </div>
 
-            {/* Save info toggle (UI only) */}
-            <div className='flex items-center gap-2 pt-2'>
-              <form.AppField name='saveInfo'>
-                {(field) => (
-                  <field.Checkbox label='Save this information for next time' id='saveInfo' />
+              <div className='space-y-4'>
+                {requiresCard && (
+                  <>
+                    <form.AppField name='cardNumber'>
+                      {(field) => (
+                        <div className='relative'>
+                          <field.TextField
+                            startIcon={IconCreditCard}
+                            label={t('cardNumber')}
+                            placeholder='1234 5678 9012 3456'
+                            inputMode='numeric'
+                            autoComplete='cc-number'
+                            transform={formatCardNumber}
+                          />
+                          {cardBrand !== 'unknown' && (
+                            <span className='text-muted-foreground absolute top-9 right-4 text-xs font-medium'>
+                              {getCardBrandLabel(cardBrand)}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </form.AppField>
+
+                    <div className='grid grid-cols-2 gap-4'>
+                      <form.AppField name='expiryMonth'>
+                        {(field) => (
+                          <field.TextField
+                            label={t('expiryMonth')}
+                            placeholder='MM'
+                            inputMode='numeric'
+                            autoComplete='cc-exp-month'
+                            maxLength={2}
+                            transform={onlyDigits(2)}
+                          />
+                        )}
+                      </form.AppField>
+                      <form.AppField name='expiryYear'>
+                        {(field) => (
+                          <field.TextField
+                            label={t('expiryYear')}
+                            placeholder='YYYY'
+                            inputMode='numeric'
+                            autoComplete='cc-exp-year'
+                            maxLength={4}
+                            transform={onlyDigits(4)}
+                          />
+                        )}
+                      </form.AppField>
+                    </div>
+
+                    <form.AppField name='cvv'>
+                      {(field) => (
+                        <field.TextField
+                          label={t('cvc')}
+                          placeholder='123'
+                          inputMode='numeric'
+                          autoComplete='cc-csc'
+                          maxLength={4}
+                          transform={onlyDigits(4)}
+                        />
+                      )}
+                    </form.AppField>
+                  </>
                 )}
-              </form.AppField>
-            </div>
 
+                <div className='flex items-center gap-2 pt-2'>
+                  <form.AppField name='saveInfo'>
+                    {(field) => <field.Checkbox label={t('saveInfo')} id='saveInfo' />}
+                  </form.AppField>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className='space-y-4'>
             {/* Coupon Section */}
-            <div className='pt-2'>
+            <div className={isStripeCheckout ? 'pt-0' : 'pt-2'}>
               <Label className='mb-2 block text-sm font-medium'>Coupon Code (optional)</Label>
               <div className='flex gap-2'>
                 <div className='relative flex-1'>

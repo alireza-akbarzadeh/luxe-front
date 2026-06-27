@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/checkout/hooks/useCheckoutForm.ts
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { normalizePhoneForInput } from '@/lib/phone-utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 
 import type { CheckoutFormValues } from '../checkout.schema';
-import { checkoutSchema } from '../checkout.schema';
+import { createCheckoutSchema } from '../checkout.schema';
+import { useStripeCheckoutEnabled } from './useStripeCheckoutEnabled';
 
 interface UseCheckoutFormArgs {
   onSubmit: (values: CheckoutFormValues) => Promise<void> | void;
@@ -15,7 +16,14 @@ interface UseCheckoutFormArgs {
 
 export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
   const hydratedRef = useRef(false);
+  const stripeHydratedRef = useRef(false);
   const { data: summaryData } = useGetAccountSummary();
+  const { isStripeCheckout } = useStripeCheckoutEnabled();
+
+  const checkoutValidator = useMemo(
+    () => createCheckoutSchema(isStripeCheckout) as any,
+    [isStripeCheckout]
+  );
 
   const defaultAddress = summaryData?.data?.default_shipping_address;
   const userEmail = summaryData?.data?.email;
@@ -51,15 +59,21 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
   const form = useAppForm({
     defaultValues: initialValues,
     validators: {
-      onSubmit: checkoutSchema as any,
-      onChange: checkoutSchema as any,
-      onBlur: checkoutSchema as any
+      onSubmit: checkoutValidator,
+      onChange: checkoutValidator,
+      onBlur: checkoutValidator
     },
 
     onSubmit: async ({ value }) => {
       await onSubmit(value);
     }
   });
+
+  useEffect(() => {
+    if (!isStripeCheckout || stripeHydratedRef.current) return;
+    form.setFieldValue('paymentMethod', 'paypal');
+    stripeHydratedRef.current = true;
+  }, [form, isStripeCheckout]);
 
   // Hydrate form when user data loads (only once)
   useEffect(() => {

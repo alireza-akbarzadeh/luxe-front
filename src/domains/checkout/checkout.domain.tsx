@@ -24,10 +24,9 @@ import { useCartController } from '@/hooks/useCartController';
 import {
   CHECKOUT_STEP_IDS,
   type CheckoutFormValues,
-  checkoutStepFields,
   type CheckoutStepId,
-  getCheckoutStepErrors
-} from './checkout.schema';
+  getCheckoutStepErrors,
+  getCheckoutStepFields} from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutPaymentCancelledHandler } from './components/checkout-payment-cancelled-handler';
@@ -42,6 +41,7 @@ import { useCheckoutTotals } from './hooks/useCartTotal';
 import { useCheckoutForm } from './hooks/useCheckoutForm';
 import { useCheckoutSteps } from './hooks/useCheckoutSteps';
 import { useCheckoutSubmit } from './hooks/useCheckoutSubmit';
+import { useStripeCheckoutEnabled } from './hooks/useStripeCheckoutEnabled';
 import { useCheckoutStore } from './store/checkout.store';
 
 export default function CheckoutDomain() {
@@ -61,6 +61,7 @@ export default function CheckoutDomain() {
   } = useCheckoutSteps();
 
   const { submitOrder, isPending } = useCheckoutSubmit();
+  const { isStripeCheckout } = useStripeCheckoutEnabled();
   const form = useCheckoutForm({ onSubmit: submitOrder });
 
   const agreedToTerms = useCheckoutStore((s) => s.agreedToTerms);
@@ -81,10 +82,12 @@ export default function CheckoutDomain() {
 
   const validateStep = useCallback(
     async (stepId: CheckoutStepId) => {
-      const fields = checkoutStepFields[stepId];
+      const fields = getCheckoutStepFields(stepId, isStripeCheckout);
       await Promise.all(fields.map((name) => form.validateField(name, 'submit')));
 
-      const stepErrors = getCheckoutStepErrors(form.state.values, stepId);
+      const stepErrors = getCheckoutStepErrors(form.state.values, stepId, {
+        stripeCheckout: isStripeCheckout
+      });
       for (const [fieldName, messages] of Object.entries(stepErrors)) {
         if (!messages?.length) continue;
         form.setFieldMeta(fieldName as keyof CheckoutFormValues, (prev) => ({
@@ -99,7 +102,7 @@ export default function CheckoutDomain() {
       const meta = form.state.fieldMeta;
       return fields.every((field) => !meta[field]?.errors?.length);
     },
-    [form]
+    [form, isStripeCheckout]
   );
 
   const onNext = useCallback(async () => {
@@ -156,7 +159,9 @@ export default function CheckoutDomain() {
         toast.error(
           stepId === 'shipping'
             ? 'Please complete your shipping details.'
-            : 'Please complete your payment details.'
+            : isStripeCheckout
+              ? 'Please review your order details.'
+              : 'Please complete your payment details.'
         );
         goToStep(stepId);
         return;
@@ -176,7 +181,8 @@ export default function CheckoutDomain() {
     validateStep,
     goToStep,
     submitOrder,
-    form
+    form,
+    isStripeCheckout
   ]);
 
   const isLoadingPage = isLoadingCart;
@@ -270,7 +276,7 @@ export default function CheckoutDomain() {
                             loading={isPending}
                             disabled={!agreedToTerms || isPending}
                             aria-busy={isPending}
-                            className='bg-accent text-accent-foreground w-56 rounded-full py-4.5'
+                            className='bg-accent text-accent-foreground w-56 rounded-full py-4.5 hover:text-white'
                           >
                             {isPending
                               ? 'Placing order…'

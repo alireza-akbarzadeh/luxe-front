@@ -2,38 +2,39 @@ import { z } from 'zod';
 
 const CARD_PAYMENT_METHODS = ['credit_card', 'debit_card'] as const;
 
-export const checkoutSchema = z
-  .object({
-    // --- Contact ---
-    email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
-    firstName: z.string().min(1, 'First name is required'),
-    lastName: z.string().min(1, 'Last name is required'),
-    phone: z.string().min(1, 'Phone number is required'),
-    newsletter: z.boolean().default(false),
-    saveInfo: z.boolean().default(false),
+const checkoutBaseSchema = z.object({
+  // --- Contact ---
+  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
+  newsletter: z.boolean().default(false),
+  saveInfo: z.boolean().default(false),
 
-    // --- Shipping address ---
-    addressLine1: z.string().min(1, 'Address is required'),
-    addressLine2: z.string().optional().default(''),
-    city: z.string().min(1, 'City is required'),
-    state: z.string().min(1, 'State is required'),
-    zip: z.string().min(1, 'ZIP code is required'),
-    country: z.string().min(1, 'Country is required'),
+  // --- Shipping address ---
+  addressLine1: z.string().min(1, 'Address is required'),
+  addressLine2: z.string().optional().default(''),
+  city: z.string().min(1, 'City is required'),
+  state: z.string().min(1, 'State is required'),
+  zip: z.string().min(1, 'ZIP code is required'),
+  country: z.string().min(1, 'Country is required'),
 
-    // --- Coupon ---
-    couponCode: z.string().optional().default(''),
+  // --- Coupon ---
+  couponCode: z.string().optional().default(''),
 
-    // --- Payment ---
-    paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
-    cardNumber: z.string().optional().default(''),
-    expiryMonth: z.string().optional().default(''),
-    expiryYear: z.string().optional().default(''),
-    cvv: z.string().optional().default(''),
+  // --- Payment ---
+  paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
+  cardNumber: z.string().optional().default(''),
+  expiryMonth: z.string().optional().default(''),
+  expiryYear: z.string().optional().default(''),
+  cvv: z.string().optional().default(''),
 
-    // --- Shipping method ---
-    shippingProviderId: z.number().int().positive().nullable()
-  })
-  .superRefine((val, ctx) => {
+  // --- Shipping method ---
+  shippingProviderId: z.number().int().positive().nullable()
+});
+
+function withCheckoutRefinements(stripeCheckout: boolean) {
+  return checkoutBaseSchema.superRefine((val, ctx) => {
     if (val.shippingProviderId == null) {
       ctx.addIssue({
         code: 'custom',
@@ -42,7 +43,8 @@ export const checkoutSchema = z
       });
     }
 
-    const requiresCard = (CARD_PAYMENT_METHODS as readonly string[]).includes(val.paymentMethod);
+    const requiresCard =
+      !stripeCheckout && (CARD_PAYMENT_METHODS as readonly string[]).includes(val.paymentMethod);
     if (!requiresCard) return;
 
     const digits = (val.cardNumber ?? '').replace(/\s/g, '');
@@ -67,7 +69,6 @@ export const checkoutSchema = z
     if (monthValid && yearValid) {
       const month = Number(val.expiryMonth);
       const year = Number(val.expiryYear);
-      // Last moment of the expiry month.
       const expiresAt = new Date(year, month, 0, 23, 59, 59);
       if (expiresAt.getTime() < Date.now()) {
         ctx.addIssue({ code: 'custom', path: ['expiryYear'], message: 'Card has expired' });
@@ -78,6 +79,13 @@ export const checkoutSchema = z
       ctx.addIssue({ code: 'custom', path: ['cvv'], message: 'Invalid CVV' });
     }
   });
+}
+
+export function createCheckoutSchema(stripeCheckout = false) {
+  return withCheckoutRefinements(stripeCheckout);
+}
+
+export const checkoutSchema = createCheckoutSchema(false);
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
@@ -126,13 +134,23 @@ export const checkoutStepFields: Record<CheckoutStepId, (keyof CheckoutFormValue
   review: []
 };
 
+/** Payment step has no required fields when Stripe Checkout handles card entry. */
+export function getCheckoutStepFields(
+  stepId: CheckoutStepId,
+  stripeCheckout = false
+): (keyof CheckoutFormValues)[] {
+  if (stripeCheckout && stepId === 'payment') return [];
+  return checkoutStepFields[stepId];
+}
+
 /** Collects schema errors scoped to a single checkout step (includes superRefine rules). */
 export function getCheckoutStepErrors(
   values: CheckoutFormValues,
-  stepId: CheckoutStepId
+  stepId: CheckoutStepId,
+  options?: { stripeCheckout?: boolean }
 ): Partial<Record<keyof CheckoutFormValues, string[]>> {
-  const fields = checkoutStepFields[stepId];
-  const parsed = checkoutSchema.safeParse(values);
+  const fields = getCheckoutStepFields(stepId, options?.stripeCheckout ?? false);
+  const parsed = createCheckoutSchema(options?.stripeCheckout ?? false).safeParse(values);
 
   if (parsed.success) return {};
 

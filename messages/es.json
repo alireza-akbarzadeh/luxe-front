@@ -2013,6 +2013,39 @@
     }
   },
   "checkout": {
+    "payment": {
+      "title": "Pago",
+      "secureNotice": "Tu información de pago está cifrada y es segura.",
+      "stripeTitle": "Pago seguro con Stripe",
+      "stripeDescription": "Después de realizar el pedido, serás redirigido a Stripe para introducir los datos de tu tarjeta. Nunca almacenamos el número completo en nuestro sitio.",
+      "demoNotice": "Checkout de demostración: los datos de la tarjeta se validan localmente. No se realiza un cargo real en desarrollo.",
+      "methodLabel": "Método de pago",
+      "cardNumber": "Número de tarjeta",
+      "expiryMonth": "Mes de vencimiento",
+      "expiryYear": "Año de vencimiento",
+      "cvc": "CVC",
+      "saveInfo": "Guardar esta información para la próxima vez"
+    },
+    "review": {
+      "title": "Revisa tu pedido",
+      "subtitle": "Confirma que todo esté correcto antes de realizar el pedido.",
+      "paymentMethod": "Método de pago",
+      "stripeCheckout": "Stripe Checkout",
+      "stripeCheckoutHint": "Completarás el pago de forma segura en Stripe después de realizar el pedido.",
+      "termsPrefix": "Acepto los",
+      "termsLink": "Términos de servicio",
+      "termsAnd": "y la",
+      "privacyLink": "Política de privacidad",
+      "termsSuffix": ", y confirmo que los detalles del pedido son correctos.",
+      "secureStripe": "Pagarás de forma segura en Stripe — no almacenamos el número completo de tu tarjeta.",
+      "secureDefault": "Tu pago está cifrado y se procesa de forma segura."
+    },
+    "legal": {
+      "termsTitle": "Términos de servicio",
+      "termsDescription": "Lee antes de realizar tu pedido.",
+      "privacyTitle": "Política de privacidad",
+      "privacyDescription": "Cómo recopilamos y usamos tu información."
+    },
     "stripe": {
       "paymentConfirming": "Confirmando tu pago…",
       "paymentConfirmed": "Pago confirmado — ¡tu pedido está en camino!",

@@ -2013,6 +2013,39 @@
     }
   },
   "checkout": {
+    "payment": {
+      "title": "پرداخت",
+      "secureNotice": "اطلاعات پرداخت شما رمزنگاری و امن است.",
+      "stripeTitle": "پرداخت امن با Stripe",
+      "stripeDescription": "پس از ثبت سفارش، به Stripe هدایت می‌شوید تا جزئیات کارت را وارد کنید. شماره کامل کارت روی سایت ما ذخیره نمی‌شود.",
+      "demoNotice": "تسویه آزمایشی: جزئیات کارت به‌صورت محلی اعتبارسنجی می‌شود. در محیط توسعه هزینه واقعی دریافت نمی‌شود.",
+      "methodLabel": "روش پرداخت",
+      "cardNumber": "شماره کارت",
+      "expiryMonth": "ماه انقضا",
+      "expiryYear": "سال انقضا",
+      "cvc": "CVC",
+      "saveInfo": "ذخیره این اطلاعات برای دفعات بعد"
+    },
+    "review": {
+      "title": "بازبینی سفارش",
+      "subtitle": "لطفاً قبل از ثبت سفارش، همه چیز را تأیید کنید.",
+      "paymentMethod": "روش پرداخت",
+      "stripeCheckout": "Stripe Checkout",
+      "stripeCheckoutHint": "پس از ثبت سفارش، پرداخت را به‌صورت امن در Stripe تکمیل می‌کنید.",
+      "termsPrefix": "با",
+      "termsLink": "شرایط استفاده",
+      "termsAnd": "و",
+      "privacyLink": "سیاست حریم خصوصی",
+      "termsSuffix": " موافقم و جزئیات سفارش را تأیید می‌کنم.",
+      "secureStripe": "پرداخت امن در Stripe — شماره کامل کارت ذخیره نمی‌شود.",
+      "secureDefault": "پرداخت شما رمزنگاری و به‌صورت امن پردازش می‌شود."
+    },
+    "legal": {
+      "termsTitle": "شرایط استفاده",
+      "termsDescription": "لطفاً قبل از ثبت سفارش بخوانید.",
+      "privacyTitle": "سیاست حریم خصوصی",
+      "privacyDescription": "نحوه جمع‌آوری و استفاده از اطلاعات شما."
+    },
     "stripe": {
       "paymentConfirming": "در حال تأیید پرداخت…",
       "paymentConfirmed": "پرداخت تأیید شد — سفارش شما در راه است!",
