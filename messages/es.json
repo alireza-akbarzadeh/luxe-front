@@ -1570,6 +1570,7 @@
       "paymentMethod": "Método de pago",
       "payWallet": "Billetera Luxe",
       "walletBalance": "Saldo: {amount}",
+      "walletBalanceLoading": "Saldo: …",
       "walletInsufficient": "El saldo de tu billetera es insuficiente.",
       "topUpWallet": "Recargar billetera en la cuenta",
       "payGiftCard": "Tarjeta regalo",

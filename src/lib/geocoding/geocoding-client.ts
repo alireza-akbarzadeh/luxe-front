@@ -11,6 +11,32 @@ async function fetchGeocoding<T>(params: URLSearchParams): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function assertNominatimResult(result: NominatimSearchResult): void {
+  if (result.error) {
+    throw new Error('Unable to look up this location. Please try again.');
+  }
+
+  if (!result.lat || !result.lon || !result.display_name) {
+    throw new Error('No address found for this point. Drag the pin or search for a place.');
+  }
+}
+
+/** Builds a minimal address when reverse geocoding is unavailable. */
+export function coordinatesToFallbackAddress(coords: GeoCoordinates): GeocodedAddress {
+  const label = `${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)}`;
+
+  return {
+    street: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+    latitude: coords.latitude,
+    longitude: coords.longitude,
+    displayName: label
+  };
+}
+
 /**
  * Reverse geocode coordinates into structured address fields via our Nominatim proxy.
  */
@@ -22,6 +48,7 @@ export async function reverseGeocode(coords: GeoCoordinates): Promise<GeocodedAd
   });
 
   const result = await fetchGeocoding<NominatimSearchResult>(params);
+  assertNominatimResult(result);
   return parseNominatimResult(result);
 }
 
@@ -38,19 +65,26 @@ export async function searchAddress(query: string): Promise<GeocodedAddress[]> {
   });
 
   const results = await fetchGeocoding<NominatimSearchResult[]>(params);
-  return results.map(parseNominatimResult);
+  return results
+    .filter((item) => item.lat && item.lon && item.display_name)
+    .map(parseNominatimResult);
 }
 
-/**
- * Reads the browser geolocation API and reverse geocodes the result.
- */
-export function getCurrentCoordinates(): Promise<GeoCoordinates> {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject(new Error('Geolocation is not supported on this device.'));
-      return;
-    }
+function mapGeolocationError(error: GeolocationPositionError | null): string {
+  switch (error?.code) {
+    case 1:
+      return 'Location permission was denied. Allow location access in your browser settings.';
+    case 2:
+      return 'Your device could not determine a location. Try again or pick a point on the map.';
+    case 3:
+      return 'Finding your location took too long. Try again or pick a point on the map.';
+    default:
+      return 'Unable to access your current location.';
+  }
+}
 
+function readCurrentPosition(options: PositionOptions): Promise<GeoCoordinates> {
+  return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         resolve({
@@ -58,10 +92,37 @@ export function getCurrentCoordinates(): Promise<GeoCoordinates> {
           longitude: position.coords.longitude
         });
       },
-      () => {
-        reject(new Error('Unable to access your current location.'));
-      },
-      { enableHighAccuracy: true, timeout: 10_000 }
+      (error) => reject(error),
+      options
     );
   });
+}
+
+/**
+ * Reads the browser geolocation API. Retries with lower accuracy when high accuracy times out.
+ */
+export async function getCurrentCoordinates(): Promise<GeoCoordinates> {
+  if (!navigator.geolocation) {
+    throw new Error('Geolocation is not supported on this device.');
+  }
+
+  const attempts: PositionOptions[] = [
+    { enableHighAccuracy: false, timeout: 12_000, maximumAge: 300_000 },
+    { enableHighAccuracy: true, timeout: 20_000, maximumAge: 60_000 }
+  ];
+
+  let lastError: GeolocationPositionError | null = null;
+
+  for (const options of attempts) {
+    try {
+      return await readCurrentPosition(options);
+    } catch (error) {
+      lastError = error as GeolocationPositionError;
+      if (lastError.code === 1) {
+        break;
+      }
+    }
+  }
+
+  throw new Error(mapGeolocationError(lastError));
 }

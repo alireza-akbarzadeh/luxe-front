@@ -102,7 +102,7 @@ function LocationMapPickerSession({
           value={draftCoordinates ?? initialCoordinates ?? null}
           initialAddress={draftAddress ?? initialAddress ?? null}
           initialSearchQuery={initialAddress?.displayName}
-          skipInitialReverseGeocode={Boolean(initialAddress || initialCoordinates)}
+          skipInitialReverseGeocode={true}
           mapClassName={MAP_PICKER_DIALOG_HEIGHT}
           onChange={setDraftCoordinates}
           onAddressResolved={setDraftAddress}

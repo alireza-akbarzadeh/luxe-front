@@ -37,7 +37,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(await response.json());
+    const payload = await response.json();
+    if (payload && typeof payload === 'object' && 'error' in payload) {
+      return NextResponse.json({ message: 'Reverse geocoding failed' }, { status: 422 });
+    }
+
+    return NextResponse.json(payload);
   }
 
   if (mode === 'search') {

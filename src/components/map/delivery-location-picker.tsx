@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
+  coordinatesToFallbackAddress,
   getCurrentCoordinates,
   reverseGeocode,
   searchAddress
@@ -94,11 +95,10 @@ function InitialGeocodeResolver({
   onResolvingChange: (resolving: boolean) => void;
 }) {
   const map = useMap();
-  const hasResolved = useRef(false);
+  const resolveIdRef = useRef(0);
 
   useEffect(() => {
-    if (hasResolved.current) return;
-
+    const resolveId = ++resolveIdRef.current;
     let cancelled = false;
 
     map.whenReady(() => {
@@ -106,16 +106,15 @@ function InitialGeocodeResolver({
         onResolvingChange(true);
         try {
           const address = await reverseGeocode(coords);
-          if (cancelled || hasResolved.current) return;
-          hasResolved.current = true;
+          if (cancelled || resolveId !== resolveIdRef.current) return;
           onResolved(address);
-        } catch (error) {
-          if (cancelled) return;
-          const message =
-            error instanceof Error ? error.message : 'Could not resolve this location';
-          toast.error(message);
+        } catch {
+          if (cancelled || resolveId !== resolveIdRef.current) return;
+          onResolved(coordinatesToFallbackAddress(coords));
         } finally {
-          if (!cancelled) onResolvingChange(false);
+          if (!cancelled && resolveId === resolveIdRef.current) {
+            onResolvingChange(false);
+          }
         }
       })();
     });
@@ -123,7 +122,7 @@ function InitialGeocodeResolver({
     return () => {
       cancelled = true;
     };
-  }, [coords, map, onResolved, onResolvingChange]);
+  }, [coords.latitude, coords.longitude, map, onResolved, onResolvingChange]);
 
   return null;
 }
@@ -157,6 +156,7 @@ export function DeliveryLocationPicker({
   const [flyTarget, setFlyTarget] = useState<GeoCoordinates | null>(value ?? null);
   const externalValueKey = value ? `${value.latitude},${value.longitude}` : null;
   const [syncedExternalValueKey, setSyncedExternalValueKey] = useState(externalValueKey);
+  const resolveIdRef = useRef(0);
 
   if (value && externalValueKey !== syncedExternalValueKey) {
     setSyncedExternalValueKey(externalValueKey);
@@ -170,16 +170,24 @@ export function DeliveryLocationPicker({
   );
 
   const resolveLocation = async (coords: GeoCoordinates) => {
+    const resolveId = ++resolveIdRef.current;
     setIsResolving(true);
     try {
       const address = await reverseGeocode(coords);
+      if (resolveId !== resolveIdRef.current) return;
       setResolvedAddress(address);
+      setSearchQuery(address.displayName);
       onAddressResolved?.(address);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Could not resolve this location';
-      toast.error(message);
+    } catch {
+      if (resolveId !== resolveIdRef.current) return;
+      const fallback = coordinatesToFallbackAddress(coords);
+      setResolvedAddress(fallback);
+      setSearchQuery(fallback.displayName);
+      onAddressResolved?.(fallback);
     } finally {
-      setIsResolving(false);
+      if (resolveId === resolveIdRef.current) {
+        setIsResolving(false);
+      }
     }
   };
 

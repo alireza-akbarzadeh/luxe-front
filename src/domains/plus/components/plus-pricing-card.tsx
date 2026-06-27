@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Text, Typography } from '@/components/ui/typography';
+import { formatWalletAmount, resolveWalletBalance } from '@/domains/account/lib/wallet-utils';
 import { PlusMembershipBadge } from '@/domains/plus/components/plus-membership-badge';
 import {
   usePlusMembershipQuery,
@@ -46,11 +47,18 @@ function getApiErrorMessage(error: unknown, fallback: string) {
 export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
   const t = useTranslations('plus.pricing');
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const { data: membershipData, isLoading: membershipLoading } = usePlusMembershipQuery();
-  const { data: walletData } = useGetWallet(undefined, {
-    query: { enabled: isAuthenticated, staleTime: 30_000 }
-  });
+  const {
+    data: walletData,
+    isLoading: isWalletLoading,
+    isFetching: isWalletFetching
+  } = useGetWallet(
+    { limit: 20, offset: 0 },
+    {
+      query: { enabled: isAuthenticated && !isAuthLoading, staleTime: 30_000 }
+    }
+  );
   const subscribe = useSubscribeToPlusMutation();
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
@@ -61,8 +69,11 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
   const isPlus = membershipData?.data?.is_plus_active === true;
   const expiresAt = membershipData?.data?.plus_expires_at;
   const annualPrice = benefits.annual_price ?? 0;
-  const walletBalance = walletData?.data?.balance ?? 0;
+  const wallet = walletData?.data;
+  const walletTransactions = wallet?.transactions ?? [];
+  const walletBalance = resolveWalletBalance(wallet?.balance, walletTransactions);
   const walletInsufficient = walletBalance < annualPrice;
+  const isWalletBalanceLoading = isAuthenticated && (isWalletLoading || isWalletFetching);
 
   const onSubscribe = async () => {
     if (!isAuthenticated) {
@@ -178,9 +189,9 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
                       >
                         <Text className='text-sm font-medium'>{t('payWallet')}</Text>
                         <Text variant='muted' className='text-xs'>
-                          {t('walletBalance', {
-                            amount: formatPrice(walletBalance, benefits.currency ?? 'USD')
-                          })}
+                          {isWalletBalanceLoading
+                            ? t('walletBalanceLoading')
+                            : t('walletBalance', { amount: formatWalletAmount(walletBalance) })}
                         </Text>
                       </Label>
                     </Flex>
@@ -241,7 +252,8 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
                 ) : null}
 
                 {paymentMethod === DtoSubscribePlusRequestPaymentMethod.wallet &&
-                walletInsufficient ? (
+                walletInsufficient &&
+                !isWalletBalanceLoading ? (
                   <Box className='rounded-xl border border-amber-500/30 bg-amber-500/10 p-3'>
                     <Text className='text-sm text-amber-900 dark:text-amber-200'>
                       {t('walletInsufficient')}

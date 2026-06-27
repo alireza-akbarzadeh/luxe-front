@@ -1570,6 +1570,7 @@
       "paymentMethod": "Payment method",
       "payWallet": "Luxe wallet",
       "walletBalance": "Balance: {amount}",
+      "walletBalanceLoading": "Balance: …",
       "walletInsufficient": "Your wallet balance is too low for this purchase.",
       "topUpWallet": "Top up wallet in account settings",
       "payGiftCard": "Gift card",

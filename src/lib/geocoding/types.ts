@@ -28,8 +28,9 @@ export interface NominatimAddressDetails {
 }
 
 export interface NominatimSearchResult {
-  display_name: string;
-  lat: string;
-  lon: string;
+  display_name?: string;
+  lat?: string;
+  lon?: string;
   address?: NominatimAddressDetails;
+  error?: string;
 }
