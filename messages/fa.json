@@ -2013,6 +2013,46 @@
     }
   },
   "checkout": {
+    "steps": {
+      "shipping": {
+        "title": "ارسال",
+        "description": "آدرس و روش تحویل"
+      },
+      "review": {
+        "title": "بازبینی",
+        "description": "تأیید و ثبت سفارش"
+      }
+    },
+    "navigation": {
+      "backToCart": "بازگشت به سبد",
+      "backToShipping": "بازگشت به ارسال",
+      "continueToReview": "ادامه به بازبینی",
+      "placeOrder": "ثبت سفارش – {total}",
+      "placingOrder": "در حال ثبت سفارش…",
+      "completeShipping": "لطفاً جزئیات ارسال را تکمیل کنید.",
+      "completePayment": "لطفاً جزئیات پرداخت را تکمیل کنید."
+    },
+    "summary": {
+      "title": "خلاصه سفارش",
+      "promotions": "تخفیف‌ها",
+      "offersAvailable": "{count, plural, one {# پیشنهاد} other {# پیشنهاد}}",
+      "couponPlaceholder": "کد تخفیف",
+      "apply": "اعمال",
+      "removeCoupon": "حذف کد تخفیف",
+      "saved": "صرفه‌جویی {amount}",
+      "browseOffers": "مشاهده پیشنهادها ({count})",
+      "minOrder": "حداقل سفارش ${amount}",
+      "subtotal": "جمع جزء",
+      "shipping": "ارسال",
+      "free": "رایگان",
+      "tax": "مالیات",
+      "estimatedTax": "مالیات تقریبی ({rate})",
+      "discount": "تخفیف",
+      "total": "مجموع",
+      "stripeNote": "پس از ثبت سفارش، پرداخت را به‌صورت امن در Stripe انجام می‌دهید.",
+      "secureCheckout": "پرداخت امن",
+      "encrypted": "رمزنگاری‌شده"
+    },
     "payment": {
       "title": "پرداخت",
       "secureNotice": "اطلاعات پرداخت شما رمزنگاری و امن است.",
@@ -2029,7 +2069,12 @@
     "review": {
       "title": "بازبینی سفارش",
       "subtitle": "لطفاً قبل از ثبت سفارش، همه چیز را تأیید کنید.",
-      "paymentMethod": "روش پرداخت",
+      "contact": "تماس",
+      "shippingAddress": "آدرس ارسال",
+      "shippingMethod": "روش ارسال",
+      "noShippingMethod": "روش ارسال انتخاب نشده است.",
+      "items": "اقلام ({count})",
+      "paymentMethod": "پرداخت",
       "stripeCheckout": "Stripe Checkout",
       "stripeCheckoutHint": "پس از ثبت سفارش، پرداخت را به‌صورت امن در Stripe تکمیل می‌کنید.",
       "termsPrefix": "با",

@@ -9,7 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { notFound, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { OrderNumber } from '@/components/order-number';
@@ -18,8 +18,9 @@ import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-uti
 import { cn } from '@/lib/utils';
 import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
-import { OrderTrackingSkeleton } from '../order-tracking/components/order-loading';
-import { OrderStripeReturnHandler } from './components/order-stripe-return-handler';
+import { OrderConfirmedNotFound } from './components/order-confirmed-not-found';
+import { OrderConfirmedResolving } from './components/order-confirmed-resolving';
+import { useOrderStripeConfirm } from './hooks/use-order-stripe-confirm';
 import { isOrderPaymentComplete, resolveOrderPaymentStatus } from './lib/order-payment-status';
 
 interface OrderConfirmedDomainProps {
@@ -28,14 +29,37 @@ interface OrderConfirmedDomainProps {
 
 export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
   const id = Number(orderId);
+  const validId = Number.isFinite(id) && id > 0;
   const searchParams = useSearchParams();
   const isFreshCheckout = searchParams.get('confirmed') === '1';
   const t = useTranslations('checkout.stripe');
-  const { data, isLoading, error, refetch } = useGetOrdersId(id);
+
+  const { isStripeReturn, isConfirming, confirmFailed } = useOrderStripeConfirm(orderId);
+
+  const { data, isLoading, isFetching, isError } = useGetOrdersId(id, {
+    query: {
+      enabled: validId,
+      retry: isStripeReturn ? 5 : 2,
+      retryDelay: (attempt) => Math.min(1000 * (attempt + 1), 3000)
+    }
+  });
+
   const order = data?.data;
 
-  if (isLoading) return <OrderTrackingSkeleton />;
-  if (error || !order) return notFound();
+  if (!validId) {
+    return <OrderConfirmedNotFound />;
+  }
+
+  const isResolving =
+    isConfirming || isLoading || (isStripeReturn && !order && (isFetching || !confirmFailed));
+
+  if (isResolving) {
+    return <OrderConfirmedResolving confirmingPayment={isConfirming} />;
+  }
+
+  if (!order) {
+    return <OrderConfirmedNotFound />;
+  }
 
   const itemCount = order.items?.reduce((sum, item) => sum + (item.quantity ?? 0), 0) ?? 0;
   const total = order.total_amount ?? 0;
@@ -46,8 +70,6 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
   return (
     <div className='pt-24 pb-16'>
       <div className='mx-auto max-w-2xl px-4 sm:px-6'>
-        <OrderStripeReturnHandler orderId={orderId} />
-
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -125,11 +147,17 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
               type='button'
               variant='outline'
               className='rounded-full'
-              onClick={() => refetch()}
+              onClick={() => window.location.reload()}
             >
               {t('refreshPaymentStatus')}
             </Button>
           </div>
+        ) : null}
+
+        {isError && confirmFailed ? (
+          <p className='text-muted-foreground mb-6 text-center text-sm'>
+            {t('paymentConfirmError')}
+          </p>
         ) : null}
 
         <motion.div

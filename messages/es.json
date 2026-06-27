@@ -2013,6 +2013,46 @@
     }
   },
   "checkout": {
+    "steps": {
+      "shipping": {
+        "title": "Envío",
+        "description": "Dirección y método de entrega"
+      },
+      "review": {
+        "title": "Revisar",
+        "description": "Confirmar y realizar pedido"
+      }
+    },
+    "navigation": {
+      "backToCart": "Volver al carrito",
+      "backToShipping": "Volver al envío",
+      "continueToReview": "Continuar a revisar",
+      "placeOrder": "Realizar pedido – {total}",
+      "placingOrder": "Realizando pedido…",
+      "completeShipping": "Completa los datos de envío.",
+      "completePayment": "Completa los datos de pago."
+    },
+    "summary": {
+      "title": "Resumen del pedido",
+      "promotions": "Promociones",
+      "offersAvailable": "{count, plural, one {# oferta} other {# ofertas}}",
+      "couponPlaceholder": "Código de cupón",
+      "apply": "Aplicar",
+      "removeCoupon": "Quitar cupón",
+      "saved": "Ahorras {amount}",
+      "browseOffers": "Ver ofertas disponibles ({count})",
+      "minOrder": "Pedido mín. ${amount}",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "free": "Gratis",
+      "tax": "Impuesto",
+      "estimatedTax": "Imp. est. ({rate})",
+      "discount": "Descuento",
+      "total": "Total",
+      "stripeNote": "Completarás el pago de forma segura en Stripe después de realizar el pedido.",
+      "secureCheckout": "Pago seguro",
+      "encrypted": "Cifrado"
+    },
     "payment": {
       "title": "Pago",
       "secureNotice": "Tu información de pago está cifrada y es segura.",
@@ -2029,7 +2069,12 @@
     "review": {
       "title": "Revisa tu pedido",
       "subtitle": "Confirma que todo esté correcto antes de realizar el pedido.",
-      "paymentMethod": "Método de pago",
+      "contact": "Contacto",
+      "shippingAddress": "Dirección de envío",
+      "shippingMethod": "Método de envío",
+      "noShippingMethod": "No se ha seleccionado método de envío.",
+      "items": "Artículos ({count})",
+      "paymentMethod": "Pago",
       "stripeCheckout": "Stripe Checkout",
       "stripeCheckoutHint": "Completarás el pago de forma segura en Stripe después de realizar el pedido.",
       "termsPrefix": "Acepto los",

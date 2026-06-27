@@ -2013,6 +2013,46 @@
     }
   },
   "checkout": {
+    "steps": {
+      "shipping": {
+        "title": "Shipping",
+        "description": "Delivery address & method"
+      },
+      "review": {
+        "title": "Review",
+        "description": "Confirm & place order"
+      }
+    },
+    "navigation": {
+      "backToCart": "Back to cart",
+      "backToShipping": "Back to shipping",
+      "continueToReview": "Continue to review",
+      "placeOrder": "Place order – {total}",
+      "placingOrder": "Placing order…",
+      "completeShipping": "Please complete your shipping details.",
+      "completePayment": "Please complete your payment details."
+    },
+    "summary": {
+      "title": "Order summary",
+      "promotions": "Promotions",
+      "offersAvailable": "{count, plural, one {# offer} other {# offers}}",
+      "couponPlaceholder": "Coupon code",
+      "apply": "Apply",
+      "removeCoupon": "Remove coupon",
+      "saved": "You save {amount}",
+      "browseOffers": "Browse available offers ({count})",
+      "minOrder": "Min. order ${amount}",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "tax": "Tax",
+      "estimatedTax": "Est. tax ({rate})",
+      "discount": "Discount",
+      "total": "Total",
+      "stripeNote": "You'll complete payment securely on Stripe after placing your order.",
+      "secureCheckout": "Secure checkout",
+      "encrypted": "Encrypted"
+    },
     "payment": {
       "title": "Payment",
       "secureNotice": "Your payment information is encrypted and secure.",
@@ -2029,7 +2069,12 @@
     "review": {
       "title": "Review your order",
       "subtitle": "Please confirm everything looks right before placing your order.",
-      "paymentMethod": "Payment method",
+      "contact": "Contact",
+      "shippingAddress": "Shipping address",
+      "shippingMethod": "Shipping method",
+      "noShippingMethod": "No shipping method selected.",
+      "items": "Items ({count})",
+      "paymentMethod": "Payment",
       "stripeCheckout": "Stripe Checkout",
       "stripeCheckoutHint": "You'll complete payment securely on Stripe after placing your order.",
       "termsPrefix": "I agree to the",

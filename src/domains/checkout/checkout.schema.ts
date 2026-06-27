@@ -113,10 +113,10 @@ export const checkoutDefaultValues: CheckoutFormValues = {
 
 // ─── Step navigation + per-step validation ──────────────────────────────────
 
-export const CHECKOUT_STEP_IDS = ['shipping', 'payment', 'review'] as const;
+export const CHECKOUT_STEP_IDS = ['shipping', 'review'] as const;
 export type CheckoutStepId = (typeof CHECKOUT_STEP_IDS)[number];
 
-/** Fields validated before a user can advance past each step. */
+/** Fields validated before advancing past each wizard step. */
 export const checkoutStepFields: Record<CheckoutStepId, (keyof CheckoutFormValues)[]> = {
   shipping: [
     'email',
@@ -130,17 +130,49 @@ export const checkoutStepFields: Record<CheckoutStepId, (keyof CheckoutFormValue
     'country',
     'shippingProviderId'
   ],
-  payment: ['paymentMethod', 'cardNumber', 'expiryMonth', 'expiryYear', 'cvv'],
   review: []
 };
+
+/** Card / payment-method fields — validated at place-order when not using Stripe Checkout. */
+export const CHECKOUT_PAYMENT_FIELD_KEYS = [
+  'paymentMethod',
+  'cardNumber',
+  'expiryMonth',
+  'expiryYear',
+  'cvv'
+] as const satisfies readonly (keyof CheckoutFormValues)[];
 
 /** Payment step has no required fields when Stripe Checkout handles card entry. */
 export function getCheckoutStepFields(
   stepId: CheckoutStepId,
-  stripeCheckout = false
+  _stripeCheckout = false
 ): (keyof CheckoutFormValues)[] {
-  if (stripeCheckout && stepId === 'payment') return [];
   return checkoutStepFields[stepId];
+}
+
+/** Collects schema errors for demo card entry (non-Stripe checkout). */
+export function getCheckoutPaymentErrors(
+  values: CheckoutFormValues,
+  stripeCheckout = false
+): Partial<Record<keyof CheckoutFormValues, string[]>> {
+  if (stripeCheckout) return {};
+
+  const parsed = createCheckoutSchema(false).safeParse(values);
+  if (parsed.success) return {};
+
+  const errors: Partial<Record<keyof CheckoutFormValues, string[]>> = {};
+  const fields = CHECKOUT_PAYMENT_FIELD_KEYS as readonly (keyof CheckoutFormValues)[];
+
+  for (const issue of parsed.error.issues) {
+    const fieldName = issue.path[0];
+    if (typeof fieldName !== 'string') continue;
+    if (!fields.includes(fieldName as keyof CheckoutFormValues)) continue;
+
+    const key = fieldName as keyof CheckoutFormValues;
+    errors[key] = [...(errors[key] ?? []), issue.message];
+  }
+
+  return errors;
 }
 
 /** Collects schema errors scoped to a single checkout step (includes superRefine rules). */

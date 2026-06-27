@@ -99,6 +99,7 @@ export function useCheckoutSubmit() {
         }
         setRedirectMode('payment');
         setIsRedirecting(true);
+        // Assign immediately — full-page overlay is already shown via isRedirecting.
         window.location.assign(stripeRedirect.checkoutUrl);
         return;
       }

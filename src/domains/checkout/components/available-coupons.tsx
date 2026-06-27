@@ -1,129 +1,115 @@
 'use client';
-import { IconCheck,IconDiscount2 } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
+
+import { IconCheck, IconTicket } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
-} from '~/src/components/ui/accordion';
-import type { ModelsCoupon } from '~/src/services/-coupons-get.schemas';
+} from '@/components/ui/accordion';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
+import type { ModelsCoupon } from '@/services/-coupons-get.schemas';
 
 interface AvailableCouponsProps {
   applicableCoupons: ModelsCoupon[];
   selectedCouponCode: string;
   isApplyingCoupon: boolean;
   onSelectCoupon: (code: string) => void;
+  variant?: 'default' | 'compact';
 }
 
-export function AvailableCoupons(props: AvailableCouponsProps) {
-  const { applicableCoupons, selectedCouponCode, isApplyingCoupon, onSelectCoupon } = props;
+function formatDiscountLabel(coupon: ModelsCoupon) {
+  if (coupon.discount_type === 'percentage') {
+    return `${coupon.discount_value}% off`;
+  }
+  return `$${coupon.discount_value} off`;
+}
+
+export function AvailableCoupons({
+  applicableCoupons,
+  selectedCouponCode,
+  isApplyingCoupon,
+  onSelectCoupon,
+  variant = 'default'
+}: AvailableCouponsProps) {
+  const t = useTranslations('checkout.summary');
 
   if (!applicableCoupons.length) return null;
 
-  const handleSelectCoupon = (code: string) => {
-    if (selectedCouponCode === code) return;
-    onSelectCoupon(code);
-  };
+  const isCompact = variant === 'compact';
 
   return (
-    <Accordion type='single' collapsible className='w-full pt-2'>
-      <AccordionItem value='coupons'>
-        <AccordionTrigger className='text-sm font-medium'>
-          <motion.span
-            className='bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent'
-            style={{ backgroundSize: '200% 100%' }}
-            animate={{
-              backgroundPosition: ['0% 0%', '200% 0%']
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear'
-            }}
-          >
-            View available Coupons ({applicableCoupons.length})
-          </motion.span>
+    <Accordion type='single' collapsible className='w-full'>
+      <AccordionItem value='coupons' className='border-none'>
+        <AccordionTrigger className='text-muted-foreground hover:text-foreground py-2 text-xs font-medium hover:no-underline'>
+          {t('browseOffers', { count: applicableCoupons.length })}
         </AccordionTrigger>
-        <AccordionContent>
-          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-            {applicableCoupons.map((coupon, index) => {
+        <AccordionContent className='pb-1'>
+          <Flex
+            direction='column'
+            spacing={2}
+            className={cn(!isCompact && 'sm:grid sm:grid-cols-2 sm:gap-2')}
+          >
+            {applicableCoupons.map((coupon) => {
               const isSelected = selectedCouponCode === coupon.code;
 
               return (
-                <motion.button
+                <button
                   key={coupon.id}
                   type='button'
-                  onClick={() => handleSelectCoupon(coupon.code)}
+                  onClick={() => {
+                    if (isSelected || isApplyingCoupon) return;
+                    onSelectCoupon(coupon.code ?? '');
+                  }}
                   disabled={isApplyingCoupon || isSelected}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`relative flex items-start gap-3 overflow-hidden rounded-xl border p-3 text-left transition-all ${
+                  className={cn(
+                    'flex w-full items-start gap-2.5 rounded-xl border p-2.5 text-left transition-colors',
                     isSelected
-                      ? 'bg-accent/10 border-accent ring-accent/20 ring-2'
-                      : 'bg-background border-border hover:border-accent/50'
-                  } ${isApplyingCoupon ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                      ? 'border-accent/40 bg-accent/8 ring-accent/15 ring-1'
+                      : 'border-border/70 bg-muted/30 hover:border-accent/30 hover:bg-muted/50',
+                    isApplyingCoupon && 'cursor-not-allowed opacity-60'
+                  )}
                 >
-                  {/* Icon */}
-                  <div
-                    className={`relative z-10 shrink-0 rounded-full p-1.5 ${
-                      isSelected ? 'bg-accent/20' : 'bg-green-100'
-                    }`}
+                  <span
+                    className={cn(
+                      'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg',
+                      isSelected
+                        ? 'bg-accent/15 text-accent'
+                        : 'bg-background text-muted-foreground'
+                    )}
                   >
                     {isSelected ? (
-                      <IconCheck className='text-accent h-4 w-4' />
+                      <IconCheck className='h-3.5 w-3.5' stroke={2.5} />
                     ) : (
-                      <motion.div
-                        animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                      >
-                        <IconDiscount2 className='h-4 w-4 text-green-600' />
-                      </motion.div>
+                      <IconTicket className='h-3.5 w-3.5' />
                     )}
-                  </div>
-
-                  {/* Content */}
-                  <div className='relative z-10 flex-1'>
-                    <div className='flex items-center justify-between gap-2'>
-                      <span className='font-mono text-sm font-semibold'>{coupon.code}</span>
-
-                      {/* Animated discount text */}
-                      <motion.span
-                        className='bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-sm font-bold text-transparent'
-                        style={{ backgroundSize: '200% 100%' }}
-                        animate={{
-                          backgroundPosition: ['0% 0%', '200% 0%']
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: 'linear'
-                        }}
+                  </span>
+                  <Flex direction='column' spacing={0.5} className='min-w-0 flex-1'>
+                    <Flex direction='row' align='center' justify='between' spacing={2}>
+                      <Typography.Text variant='small' className='font-mono'>
+                        {coupon.code}
+                      </Typography.Text>
+                      <Typography.Text
+                        variant='subtle'
+                        tone='success'
+                        className='shrink-0 font-medium'
                       >
-                        {coupon.discount_type === 'percentage'
-                          ? `${coupon.discount_value}% OFF`
-                          : `$${coupon.discount_value} OFF`}
-                      </motion.span>
-                    </div>
-                    <p className='text-muted-foreground mt-0.5 text-xs'>
-                      {coupon.description || `Min. order $${coupon.minimum_order_amount || 0}`}
-                    </p>
-                    {isSelected && (
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className='text-accent mt-1 text-xs font-medium'
-                      >
-                        ✓ Applied
-                      </motion.p>
-                    )}
-                  </div>
-                </motion.button>
+                        {formatDiscountLabel(coupon)}
+                      </Typography.Text>
+                    </Flex>
+                    <Typography.Text variant='subtle' className='line-clamp-2'>
+                      {coupon.description ||
+                        t('minOrder', { amount: coupon.minimum_order_amount ?? 0 })}
+                    </Typography.Text>
+                  </Flex>
+                </button>
               );
             })}
-          </div>
+          </Flex>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -1,7 +1,8 @@
 // hooks/useCheckoutSteps.tsx
 'use client';
 
-import { IconClipboardCheck, IconCreditCard, IconTruckDelivery } from '@tabler/icons-react';
+import { IconClipboardCheck, IconTruckDelivery } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 
 import type { StepDefinition } from '@/components/ui/stepper';
@@ -9,34 +10,29 @@ import type { StepDefinition } from '@/components/ui/stepper';
 import { CHECKOUT_STEP_IDS, type CheckoutStepId } from '../checkout.schema';
 import { useCheckoutStore } from '../store/checkout.store';
 
-const STEPS: StepDefinition[] = [
-  {
-    id: 'shipping',
-    title: 'Shipping',
-    description: 'Delivery address & method',
-    icon: <IconTruckDelivery />
-  },
-  {
-    id: 'payment',
-    title: 'Payment',
-    description: 'Billing details',
-    icon: <IconCreditCard />
-  },
-  {
-    id: 'review',
-    title: 'Review',
-    description: 'Confirm & place order',
-    icon: <IconClipboardCheck />
-  }
-];
-
 export type { CheckoutStepId };
 
 export function useCheckoutSteps() {
+  const t = useTranslations('checkout.steps');
   const currentStepId = useCheckoutStore((s) => s.currentStep);
   const completedSteps = useCheckoutStore((s) => s.completedSteps);
   const setCurrentStep = useCheckoutStore((s) => s.setCurrentStep);
   const markStepCompleted = useCheckoutStore((s) => s.markStepCompleted);
+
+  const steps: StepDefinition[] = [
+    {
+      id: 'shipping',
+      title: t('shipping.title'),
+      description: t('shipping.description'),
+      icon: <IconTruckDelivery />
+    },
+    {
+      id: 'review',
+      title: t('review.title'),
+      description: t('review.description'),
+      icon: <IconClipboardCheck />
+    }
+  ];
 
   const currentIndex = CHECKOUT_STEP_IDS.indexOf(currentStepId);
 
@@ -56,7 +52,7 @@ export function useCheckoutSteps() {
   }, [currentIndex, setCurrentStep]);
 
   return {
-    steps: STEPS,
+    steps,
     currentStepId,
     currentIndex,
     completedSteps,

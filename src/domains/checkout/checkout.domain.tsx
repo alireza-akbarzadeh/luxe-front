@@ -4,6 +4,7 @@
 import { IconCheck, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useStore } from '@tanstack/react-form';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -25,16 +26,16 @@ import {
   CHECKOUT_STEP_IDS,
   type CheckoutFormValues,
   type CheckoutStepId,
+  getCheckoutPaymentErrors,
   getCheckoutStepErrors,
-  getCheckoutStepFields} from './checkout.schema';
+  getCheckoutStepFields
+} from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutPaymentCancelledHandler } from './components/checkout-payment-cancelled-handler';
-import { CheckoutPlacingOrderOverlay } from './components/checkout-placing-order-overlay';
 import { CheckoutRedirectingScreen } from './components/checkout-redirecting';
 import { CheckoutSummary } from './components/checkout-summary';
 import { EmptyCart } from './components/empty-checkout';
-import { CheckoutPayment } from './containers/checkout-payment';
 import { CheckoutReview } from './containers/checkout-review';
 import { CheckoutShipping } from './containers/checkout-shipping';
 import { useCheckoutTotals } from './hooks/useCartTotal';
@@ -46,6 +47,7 @@ import { useCheckoutStore } from './store/checkout.store';
 
 export default function CheckoutDomain() {
   const router = useRouter();
+  const t = useTranslations('checkout.navigation');
   const { items, isLoading: isLoadingCart } = useCartController();
   const {
     steps,
@@ -80,6 +82,21 @@ export default function CheckoutDomain() {
     if (!isRedirecting) reset();
   }, []);
 
+  const applyFieldErrors = useCallback(
+    (fieldErrors: Partial<Record<keyof CheckoutFormValues, string[]>>) => {
+      for (const [fieldName, messages] of Object.entries(fieldErrors)) {
+        if (!messages?.length) continue;
+        form.setFieldMeta(fieldName as keyof CheckoutFormValues, (prev) => ({
+          ...prev,
+          errors: messages,
+          isTouched: true
+        }));
+      }
+      return Object.keys(fieldErrors).length === 0;
+    },
+    [form]
+  );
+
   const validateStep = useCallback(
     async (stepId: CheckoutStepId) => {
       const fields = getCheckoutStepFields(stepId, isStripeCheckout);
@@ -88,22 +105,25 @@ export default function CheckoutDomain() {
       const stepErrors = getCheckoutStepErrors(form.state.values, stepId, {
         stripeCheckout: isStripeCheckout
       });
-      for (const [fieldName, messages] of Object.entries(stepErrors)) {
-        if (!messages?.length) continue;
-        form.setFieldMeta(fieldName as keyof CheckoutFormValues, (prev) => ({
-          ...prev,
-          errors: messages,
-          isTouched: true
-        }));
-      }
 
-      if (Object.keys(stepErrors).length > 0) return false;
+      if (!applyFieldErrors(stepErrors)) return false;
 
       const meta = form.state.fieldMeta;
       return fields.every((field) => !meta[field]?.errors?.length);
     },
-    [form, isStripeCheckout]
+    [form, isStripeCheckout, applyFieldErrors]
   );
+
+  const validatePayment = useCallback(async () => {
+    if (isStripeCheckout) return true;
+
+    const paymentFields = getCheckoutPaymentErrors(form.state.values, false);
+    if (!applyFieldErrors(paymentFields)) return false;
+
+    const meta = form.state.fieldMeta;
+    const keys = Object.keys(paymentFields) as (keyof CheckoutFormValues)[];
+    return keys.every((field) => !meta[field]?.errors?.length);
+  }, [form, isStripeCheckout, applyFieldErrors]);
 
   const onNext = useCallback(async () => {
     const valid = await validateStep(currentStepId);
@@ -153,19 +173,18 @@ export default function CheckoutDomain() {
 
     setSubmitError(null);
 
-    for (const stepId of ['shipping', 'payment'] as CheckoutStepId[]) {
-      const valid = await validateStep(stepId);
-      if (!valid) {
-        toast.error(
-          stepId === 'shipping'
-            ? 'Please complete your shipping details.'
-            : isStripeCheckout
-              ? 'Please review your order details.'
-              : 'Please complete your payment details.'
-        );
-        goToStep(stepId);
-        return;
-      }
+    const shippingValid = await validateStep('shipping');
+    if (!shippingValid) {
+      toast.error(t('completeShipping'));
+      goToStep('shipping');
+      return;
+    }
+
+    const paymentValid = await validatePayment();
+    if (!paymentValid) {
+      toast.error(t('completePayment'));
+      goToStep('review');
+      return;
     }
 
     try {
@@ -179,15 +198,18 @@ export default function CheckoutDomain() {
     agreedToTerms,
     setSubmitError,
     validateStep,
+    validatePayment,
     goToStep,
     submitOrder,
     form,
-    isStripeCheckout
+    t
   ]);
 
   const isLoadingPage = isLoadingCart;
   if (isLoadingPage) return <CheckoutLoading />;
-  if (isRedirecting) return <CheckoutRedirectingScreen />;
+  if (isPending || isRedirecting) {
+    return <CheckoutRedirectingScreen isPlacing={isPending && !isRedirecting} />;
+  }
   if (items.length === 0) return <EmptyCart />;
 
   return (
@@ -244,13 +266,9 @@ export default function CheckoutDomain() {
                     <StepperContent value='shipping' forceMount>
                       {currentStepId === 'shipping' && <CheckoutShipping form={form} />}
                     </StepperContent>
-                    <StepperContent value='payment' forceMount>
-                      {currentStepId === 'payment' && <CheckoutPayment form={form} />}
-                    </StepperContent>
                     <StepperContent value='review' forceMount>
                       {currentStepId === 'review' && (
                         <div className='relative'>
-                          {isPending && <CheckoutPlacingOrderOverlay />}
                           <CheckoutReview form={form} />
                         </div>
                       )}
@@ -268,7 +286,7 @@ export default function CheckoutDomain() {
                             className='px-6 py-4.5'
                           >
                             <IconChevronLeft className='mr-2 h-4 w-4' />
-                            Back to payment
+                            {t('backToShipping')}
                           </Button>
                           <Button
                             type='button'
@@ -279,8 +297,8 @@ export default function CheckoutDomain() {
                             className='bg-accent text-accent-foreground w-56 rounded-full py-4.5 hover:text-white'
                           >
                             {isPending
-                              ? 'Placing order…'
-                              : `Place Order – ${formatCartMoney(total)}`}
+                              ? t('placingOrder')
+                              : t('placeOrder', { total: formatCartMoney(total) })}
                           </Button>
                         </>
                       ) : (
@@ -292,14 +310,14 @@ export default function CheckoutDomain() {
                             className='px-6 py-4.5'
                           >
                             <IconChevronLeft className='mr-2 h-4 w-4' />
-                            {currentStepId === 'shipping' ? 'Back to cart' : 'Back to shipping'}
+                            {currentStepId === 'shipping' ? t('backToCart') : t('backToShipping')}
                           </Button>
                           <Button
                             type='button'
                             onClick={onNext}
                             className='bg-accent text-accent-foreground rounded-full px-6 py-4.5'
                           >
-                            {currentStepId === 'shipping' ? 'Payment' : 'Review'}
+                            {t('continueToReview')}
                             <IconChevronRight className='ml-2 h-4 w-4' />
                           </Button>
                         </div>
