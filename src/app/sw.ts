@@ -21,6 +21,10 @@ function isSensitiveUrl(url: URL): boolean {
     return true;
   }
 
+  if (path === '/account' || path.startsWith('/account/')) {
+    return true;
+  }
+
   if (
     path.startsWith('/api/v1/auth') ||
     path.startsWith('/api/v1/cart') ||
@@ -52,7 +56,8 @@ const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
-  navigationPreload: true,
+  // Preload + Turbopack dev aborts navigations; disabled — NetworkOnly still handles sensitive routes.
+  navigationPreload: false,
   runtimeCaching: [sensitiveRoutesCache, ...defaultCache],
   fallbacks: {
     entries: [
