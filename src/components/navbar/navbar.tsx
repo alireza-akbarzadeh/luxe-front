@@ -10,7 +10,6 @@ import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { SearchMobileSheet } from '@/domains/search/components/search-mobile-sheet';
-import { useSearchStore } from '@/domains/search/search.store';
 import { cn } from '~/src/lib/utils';
 
 import { CartButton } from '../cart/cart-button';
@@ -30,7 +29,6 @@ export function Navbar() {
   const locale = useLocale();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const openSearchSheet = useSearchStore((state) => state.openSearchSheet);
   const { data: { data: navMenus } = {} } = useNavMenus();
   const sortedNavMenus = navMenus ? sortNavMenuItems(navMenus) : undefined;
 
@@ -70,14 +68,6 @@ export function Navbar() {
             </div>
 
             <div className='ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
-              <NavbarActionButton
-                className='lg:hidden'
-                aria-label={t('search')}
-                onClick={openSearchSheet}
-              >
-                <IconSearch className='size-5' stroke={1.75} />
-              </NavbarActionButton>
-
               <NavbarActionButton asChild className='hidden lg:inline-flex'>
                 <Link href='/search' aria-label={t('search')}>
                   <IconSearch
@@ -87,24 +77,19 @@ export function Navbar() {
                 </Link>
               </NavbarActionButton>
 
-              <DeliveryLocationButton />
-
-              <WishlistButton />
-
-              <AppsButton />
-
-              <NotificationButton />
-
-              <LanguageSwitcher />
-
-              <CartButton />
-
-              <span
-                className='bg-border/70 mx-1 hidden h-5 w-px sm:mx-1.5 md:inline-block'
-                aria-hidden
-              />
-
-              <UserProfile />
+              <div className='hidden lg:contents'>
+                <DeliveryLocationButton />
+                <WishlistButton />
+                <AppsButton />
+                <NotificationButton />
+                <LanguageSwitcher />
+                <CartButton />
+                <span
+                  className='bg-border/70 mx-1 hidden h-5 w-px sm:mx-1.5 md:inline-block'
+                  aria-hidden
+                />
+                <UserProfile />
+              </div>
 
               <NavbarActionButton
                 className='lg:hidden'

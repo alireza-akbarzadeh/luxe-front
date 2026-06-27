@@ -194,6 +194,14 @@
       "account": "Mi cuenta",
       "shopAllProducts": "Ver todos los productos"
     },
+    "bottomNav": {
+      "ariaLabel": "Navegación principal",
+      "home": "Inicio",
+      "search": "Buscar",
+      "cart": "Carrito",
+      "wishlist": "Favoritos",
+      "account": "Cuenta"
+    },
     "userProfile": {
       "accountMenu": "Menú de cuenta",
       "signedIn": "Sesión iniciada",

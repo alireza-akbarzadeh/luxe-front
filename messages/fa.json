@@ -194,6 +194,14 @@
       "account": "حساب من",
       "shopAllProducts": "مشاهده همه محصولات"
     },
+    "bottomNav": {
+      "ariaLabel": "ناوبری اصلی",
+      "home": "خانه",
+      "search": "جستجو",
+      "cart": "سبد",
+      "wishlist": "علاقه‌مندی",
+      "account": "حساب"
+    },
     "userProfile": {
       "accountMenu": "منوی حساب کاربری",
       "signedIn": "وارد شده",

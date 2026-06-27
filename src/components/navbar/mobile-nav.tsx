@@ -4,6 +4,7 @@ import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import {
   Accordion,
   AccordionContent,
@@ -122,6 +123,9 @@ export function MobileNav({ onNavigateAction, navMenus }: MobileNavProps) {
           {t('shopAllProducts')}
           <IconArrowRight className='cn-rtl-flip size-4' />
         </Link>
+        <div className='pt-4'>
+          <LanguageSwitcher variant='footer' />
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 'use client';
 
-import { IconBuildingStore, IconRobot, IconSend, IconSparkles, IconUser } from '@tabler/icons-react';
+import {
+  IconBuildingStore,
+  IconRobot,
+  IconSend,
+  IconSparkles,
+  IconUser
+} from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
@@ -176,11 +182,7 @@ function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
     <>
       <SheetHeader className='border-border border-b px-4 py-3'>
         <Flex direction='row' align='center' spacing={3}>
-          <Flex
-            align='center'
-            justify='center'
-            className='bg-gold/15 size-9 shrink-0 rounded-full'
-          >
+          <Flex align='center' justify='center' className='bg-gold/15 size-9 shrink-0 rounded-full'>
             <IconSparkles className='text-gold-strong size-[18px]' />
           </Flex>
           <Flex direction='column' spacing={0} className='min-w-0 flex-1'>
@@ -212,7 +214,9 @@ function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
         ) : null}
 
         <Flex direction='column' spacing={2} className='mt-4'>
-          <Typography.Overline className='text-muted-foreground'>{t('quickQuestions')}</Typography.Overline>
+          <Typography.Overline className='text-muted-foreground'>
+            {t('quickQuestions')}
+          </Typography.Overline>
           <Flex direction='row' wrap='wrap' spacing={2}>
             {QUICK_PROMPT_KEYS.map((key) => {
               const prompt = t(key);
@@ -257,7 +261,7 @@ function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
             onClick={() => void handleSend(draft)}
             aria-label={t('sendMessage')}
           >
-            <IconSend className='size-4 cn-rtl-flip' />
+            <IconSend className='cn-rtl-flip size-4' />
           </Button>
         </Flex>
         <Typography.Muted className='text-center text-xs'>{t('footer')}</Typography.Muted>
@@ -281,7 +285,7 @@ export function ProductChatFab({
       type='button'
       onClick={onClick}
       className={cn(
-        'bg-gold hover:bg-gold/90 fixed end-6 bottom-6 z-40 gap-2 rounded-full px-5 shadow-lg',
+        'bg-gold hover:bg-gold/90 fixed end-6 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 gap-2 rounded-full px-5 shadow-lg lg:bottom-6',
         className
       )}
     >

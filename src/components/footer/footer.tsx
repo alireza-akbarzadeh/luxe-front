@@ -48,7 +48,7 @@ export function Footer() {
   const footerBarCopy = getFooterBarCopyParams();
 
   return (
-    <footer className='border-border/60 bg-background relative mt-24 border-t'>
+    <footer className='border-border/60 bg-background relative mt-24 overflow-x-hidden border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
       <div
         aria-hidden
         className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent'

@@ -7,6 +7,13 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from '@/components/ui/carousel';
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -16,6 +23,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetProductsIdRelated } from '@/services/-products-{id}-related-get';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 const PREVIEW_LIMIT = 4;
 const SHEET_LIMIT = 10;
@@ -74,23 +82,15 @@ export function RelatedProductsSection({
               onClick={() => setSheetOpen(true)}
             >
               {t('viewAll')}
-              <IconArrowUpRight className='ms-1 h-4 w-4 cn-rtl-flip' />
+              <IconArrowUpRight className='cn-rtl-flip ms-1 h-4 w-4' />
             </Button>
           )}
         </div>
 
         {previewLoading ? (
-          <div className='grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4'>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className='aspect-4/5 w-full rounded-2xl' />
-            ))}
-          </div>
+          <RelatedProductsCarouselSkeleton />
         ) : (
-          <div className='grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4'>
-            {previewProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
+          <RelatedProductsCarousel products={previewProducts} />
         )}
       </section>
 
@@ -125,12 +125,44 @@ export function RelatedProductsSection({
             <Button asChild variant='outline' className='w-full rounded-full'>
               <Link href={categoryHref} onClick={() => setSheetOpen(false)}>
                 {t('browseAll', { category: categoryName ?? t('shopFallback') })}
-                <IconArrowUpRight className='ms-1 h-4 w-4 cn-rtl-flip' />
+                <IconArrowUpRight className='cn-rtl-flip ms-1 h-4 w-4' />
               </Link>
             </Button>
           </div>
         </SheetContent>
       </Sheet>
     </>
+  );
+}
+
+function RelatedProductsCarousel({ products }: { products: DtoProductWithLike[] }) {
+  if (!products?.length) return null;
+
+  return (
+    <Carousel opts={{ align: 'start', loop: false }} className='w-full'>
+      <CarouselContent className='-ms-4'>
+        {products.map((product, index) => (
+          <CarouselItem key={product.id} className='basis-full ps-4 md:basis-1/3 lg:basis-1/4'>
+            <ProductCard product={product} index={index} />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious className='hidden md:inline-flex' />
+      <CarouselNext className='hidden md:inline-flex' />
+    </Carousel>
+  );
+}
+
+function RelatedProductsCarouselSkeleton() {
+  return (
+    <Carousel opts={{ align: 'start' }} className='w-full'>
+      <CarouselContent className='-ms-4'>
+        {Array.from({ length: 4 }).map((_, index) => (
+          <CarouselItem key={index} className='basis-full ps-4 md:basis-1/3 lg:basis-1/4'>
+            <Skeleton className='aspect-4/5 w-full rounded-2xl' />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
   );
 }

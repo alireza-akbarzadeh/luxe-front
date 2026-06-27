@@ -32,14 +32,14 @@ export function Newsletter() {
   }
 
   return (
-    <div className='border-border/60 from-card via-card to-muted/40 relative overflow-hidden rounded-3xl border bg-linear-to-br p-8 md:p-12'>
+    <div className='border-border/60 from-card via-card to-muted/40 relative min-w-0 overflow-hidden rounded-2xl border bg-linear-to-br p-5 sm:rounded-3xl sm:p-8 md:p-12'>
       <div
         aria-hidden
-        className='bg-accent/20 absolute -top-24 -end-24 h-72 w-72 rounded-full blur-3xl'
+        className='bg-accent/20 absolute -end-24 -top-24 h-72 w-72 rounded-full blur-3xl'
       />
       <div
         aria-hidden
-        className='bg-accent/10 absolute -bottom-24 -start-24 h-72 w-72 rounded-full blur-3xl'
+        className='bg-accent/10 absolute -start-24 -bottom-24 h-72 w-72 rounded-full blur-3xl'
       />
       <div className='relative grid gap-8 md:grid-cols-2 md:items-center'>
         <div className='text-start'>
@@ -47,7 +47,7 @@ export function Newsletter() {
             <span className='bg-accent h-1.5 w-1.5 animate-pulse rounded-full' />
             {t('badge')}
           </div>
-          <h3 className='mt-4 text-3xl font-semibold tracking-tight md:text-4xl'>
+          <h3 className='mt-4 text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl'>
             {t.rich('title', {
               ...copy,
               highlight: (chunks) => <span className='text-accent'>{chunks}</span>
@@ -57,32 +57,34 @@ export function Newsletter() {
             {t('description', copy)}
           </p>
         </div>
-        <form onSubmit={handleSubmit} className='space-y-3'>
+        <form onSubmit={handleSubmit} className='min-w-0 space-y-3'>
           <div
             className={cn(
-              'group bg-background/70 relative flex items-center gap-2 rounded-2xl border p-2 backdrop-blur transition-all',
+              'group bg-background/70 relative flex min-w-0 flex-col gap-2 rounded-2xl border p-2 backdrop-blur transition-all sm:flex-row sm:items-center',
               status === 'error'
                 ? 'border-red-500/60 ring-2 ring-red-500/20'
                 : 'border-border/60 focus-within:border-accent/60 focus-within:ring-accent/20 focus-within:ring-2'
             )}
           >
-            <IconMail className='text-muted-foreground ms-3 size-5 shrink-0' />
-            <input
-              type='email'
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status === 'error') setStatus('idle');
-              }}
-              placeholder={t('emailPlaceholder')}
-              aria-label={t('emailAriaLabel')}
-              className='placeholder:text-muted-foreground flex-1 bg-transparent px-1 py-2 text-sm outline-none'
-              dir='ltr'
-            />
+            <div className='flex min-w-0 flex-1 items-center gap-2'>
+              <IconMail className='text-muted-foreground ms-3 size-5 shrink-0' />
+              <input
+                type='email'
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (status === 'error') setStatus('idle');
+                }}
+                placeholder={t('emailPlaceholder')}
+                aria-label={t('emailAriaLabel')}
+                className='placeholder:text-muted-foreground min-w-0 flex-1 bg-transparent px-1 py-2 text-sm outline-none'
+                dir='ltr'
+              />
+            </div>
             <button
               type='submit'
               disabled={status === 'loading' || status === 'success'}
-              className='bg-foreground text-background inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition hover:opacity-90 disabled:opacity-60'
+              className='bg-foreground text-background inline-flex w-full shrink-0 items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition hover:opacity-90 disabled:opacity-60 sm:w-auto'
             >
               {status === 'success' ? (
                 <>
@@ -103,7 +105,10 @@ export function Newsletter() {
             </button>
           </div>
           <p
-            className={cn('text-xs text-start', status === 'error' ? 'text-red-500' : 'text-muted-foreground')}
+            className={cn(
+              'text-start text-xs',
+              status === 'error' ? 'text-red-500' : 'text-muted-foreground'
+            )}
           >
             {status === 'error'
               ? t('errorInvalidEmail')

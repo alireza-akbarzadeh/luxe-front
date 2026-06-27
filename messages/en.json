@@ -194,6 +194,14 @@
       "account": "My Account",
       "shopAllProducts": "Shop all products"
     },
+    "bottomNav": {
+      "ariaLabel": "Primary navigation",
+      "home": "Home",
+      "search": "Search",
+      "cart": "Cart",
+      "wishlist": "Wishlist",
+      "account": "Account"
+    },
     "userProfile": {
       "accountMenu": "Account menu",
       "signedIn": "Signed in",
