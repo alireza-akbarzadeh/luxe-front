@@ -8,6 +8,7 @@ import {
   useGetPlusMembership
 } from '@/services/-plus-membership-get';
 import { usePostPlusSubscribe } from '@/services/-plus-subscribe-post';
+import { getGetWalletQueryKey } from '@/services/-wallet-get';
 
 /** Public Luxe Plus benefits catalog (landing page). */
 export function usePlusBenefitsQuery() {
@@ -33,6 +34,7 @@ export function useSubscribeToPlusMutation() {
         await queryClient.invalidateQueries({ queryKey: getGetPlusBenefitsQueryKey() });
         await queryClient.invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY });
         await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
+        await queryClient.invalidateQueries({ queryKey: getGetWalletQueryKey() });
       }
     }
   });

@@ -6,7 +6,9 @@ import type { ReactNode } from 'react';
 import { AccountHeader } from './components/account-header';
 import { AccountSidebar } from './components/account-sidebar';
 import { MobileAccountSidebar } from './components/mobile-account-sidebar';
+import { AccountActivity } from './containers/account-activity';
 import { AccountAddresses } from './containers/account-addresses';
+import { AccountGiftCards } from './containers/account-gift-cards';
 import { AccountNotifications } from './containers/account-notifications';
 import { AccountOrder } from './containers/account-order';
 import { AccountOverview } from './containers/account-overview';
@@ -36,6 +38,8 @@ export function AccountDomain() {
     overview: <AccountOverview />,
     orders: <AccountOrder />,
     wishlist: <AccountWishlist />,
+    activity: <AccountActivity />,
+    giftCards: <AccountGiftCards />,
     addresses: <AccountAddresses />,
     payment: <AccountPayment />,
     notifications: <AccountNotifications />,

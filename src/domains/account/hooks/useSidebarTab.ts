@@ -8,6 +8,8 @@ const tabs = [
   'overview',
   'orders',
   'wishlist',
+  'activity',
+  'giftCards',
   'addresses',
   'payment',
   'notifications',

@@ -3,6 +3,7 @@
 import { IconSparkles } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { Suspense } from 'react';
 
 import { Box } from '@/components/ui/box';
 import { Flex } from '@/components/ui/flex';
@@ -11,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Text, Typography } from '@/components/ui/typography';
 import { PlusBenefitsGrid } from '@/domains/plus/components/plus-benefits-grid';
 import { PlusPricingCard } from '@/domains/plus/components/plus-pricing-card';
+import { PlusSubscribeCallback } from '@/domains/plus/components/plus-subscribe-callback';
 import { usePlusBenefitsQuery } from '@/domains/plus/hooks/use-plus-membership';
 
 const fadeUp = {
@@ -29,6 +31,9 @@ export function PlusLandingDomain() {
 
   return (
     <Box className='bg-background relative min-h-svh overflow-hidden'>
+      <Suspense fallback={null}>
+        <PlusSubscribeCallback />
+      </Suspense>
       <Box
         aria-hidden
         className='pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.06]'
