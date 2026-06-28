@@ -8,14 +8,14 @@ import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { cn } from '@/lib/utils';
-import { useGetProducts } from '~/src/services/-products-get';
+import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { HERO_FALLBACK_IMAGE, HERO_TRUST_AVATARS } from '../lib/home-mock-data';
+import { HERO_TRUST_AVATARS } from '../lib/home-mock-data';
 import {
   formatPrice,
   fullBleedClass,
-  resolveProducts,
+  mapHomeProductItem,
   sectionContainerClass
 } from '../lib/home-utils';
 
@@ -33,16 +33,12 @@ const itemVariants = {
 
 export function HeroSection() {
   const { heroStats, marketingCopy, t } = useHomeContent();
-  const { data } = useGetProducts({
-    status: 'active',
-    limit: 3,
-    offset: 0,
-    sort: 'newest'
-  });
+  const { data, isLoading } = useGetHomeNewArrivals({ limit: 3 });
 
-  const spotlight = resolveProducts(data?.data?.products).slice(0, 3);
-  const heroImage = spotlight[0]?.images?.[0] ?? HERO_FALLBACK_IMAGE;
+  const spotlight = (data?.data?.products ?? []).slice(0, 3).map(mapHomeProductItem);
+  const heroImage = spotlight[0]?.images?.[0];
   const spotlightPrice = spotlight[0]?.price;
+  const showSpotlight = isLoading || spotlight.length > 0;
 
   return (
     <section className={`${fullBleedClass} relative overflow-hidden`}>
@@ -65,12 +61,17 @@ export function HeroSection() {
       <div
         className={`${sectionContainerClass} relative flex min-h-[calc(100svh-5rem)] flex-col justify-center pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24`}
       >
-        <div className='grid items-center gap-10 lg:grid-cols-12 lg:gap-14'>
+        <div
+          className={cn(
+            'grid items-center gap-10',
+            showSpotlight ? 'lg:grid-cols-12 lg:gap-14' : 'max-w-3xl'
+          )}
+        >
           <motion.div
             variants={containerVariants}
             initial='hidden'
             animate='show'
-            className='text-center lg:col-span-6 lg:text-start'
+            className={cn('text-center lg:text-start', showSpotlight ? 'lg:col-span-6' : 'mx-auto')}
           >
             <motion.div
               variants={itemVariants}
@@ -122,9 +123,13 @@ export function HeroSection() {
                       aria-hidden
                     />
                   ))}
-                  <span className='ms-1 text-sm font-semibold'>{t('hero.ratingValue', marketingCopy.hero)}</span>
+                  <span className='ms-1 text-sm font-semibold'>
+                    {t('hero.ratingValue', marketingCopy.hero)}
+                  </span>
                 </div>
-                <p className='text-muted-foreground text-xs sm:text-sm'>{t('hero.socialProof', marketingCopy.hero)}</p>
+                <p className='text-muted-foreground text-xs sm:text-sm'>
+                  {t('hero.socialProof', marketingCopy.hero)}
+                </p>
               </div>
             </motion.div>
 
@@ -173,97 +178,93 @@ export function HeroSection() {
             </motion.p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className='relative lg:col-span-6'
-          >
-            <div className='grid grid-cols-12 gap-3 sm:gap-4'>
-              <div className='border-gold/20 relative col-span-7 aspect-4/5 overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl'>
-                <Image
-                  src={heroImage}
-                  alt={t('common.featuredCollectionAlt')}
-                  fill
-                  priority
-                  sizes='(max-width: 1024px) 60vw, 35vw'
-                  className='object-cover'
-                />
-                <div className='from-foreground/70 absolute inset-0 bg-linear-to-t via-transparent to-transparent' />
-                <div className='absolute right-0 bottom-0 left-0 p-4 sm:p-5'>
-                  <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>
-                    {t('hero.editorsPick')}
-                  </p>
-                  <p className='text-primary-foreground font-display mt-1 text-lg font-medium sm:text-xl'>
-                    {spotlight[0]?.name ?? t('hero.signatureEditFallback')}
-                  </p>
-                  {spotlightPrice !== undefined && (
-                    <p className='text-primary-foreground/90 mt-1 text-sm'>
-                      {t('common.fromPrice', { price: formatPrice(spotlightPrice) })}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className='col-span-5 flex flex-col gap-3 sm:gap-4'>
-                {spotlight.slice(1, 3).map((product, index) => (
-                  <Link
-                    key={product?.id ?? index}
-                    href={product ? getProductPath(product) : '/shop'}
-                    className='group bg-card border-gold/15 hover:border-gold/40 relative aspect-square overflow-hidden rounded-2xl border shadow-lg transition-colors sm:rounded-3xl'
-                  >
-                    <Image
-                      src={product?.images?.[0] ?? HERO_FALLBACK_IMAGE}
-                      alt={product?.name ?? t('common.productAlt')}
-                      fill
-                      priority={index === 0}
-                      sizes='25vw'
-                      className='object-cover transition-transform duration-500 group-hover:scale-105'
-                    />
-                    <div className='from-foreground/60 absolute inset-0 bg-linear-to-t to-transparent opacity-80' />
-                    <p className='text-primary-foreground absolute right-3 bottom-3 left-3 line-clamp-2 text-xs font-medium sm:text-sm'>
-                      {product?.name}
-                    </p>
-                  </Link>
-                ))}
-
-                {spotlight.length < 3 &&
-                  [0, 1].slice(0, 3 - spotlight.length).map((i) => (
-                    <div
-                      key={`placeholder-${i}`}
-                      className='bg-muted border-gold/15 relative aspect-square overflow-hidden rounded-2xl border sm:rounded-3xl'
-                    >
-                      <Image
-                        src={HERO_FALLBACK_IMAGE}
-                        alt={t('common.collectionPreviewAlt')}
-                        fill
-                        className='object-cover opacity-60'
-                      />
-                    </div>
-                  ))}
-              </div>
-            </div>
-
+          {showSpotlight ? (
             <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.7, ease: 'backOut' }}
-              className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'
+              transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className='relative lg:col-span-6'
             >
-              <div className='relative'>
-                <span className='border-gold/50 absolute inset-0 animate-ping rounded-full border' />
-                <span className='bg-gold/30 absolute inset-0 animate-pulse rounded-full blur-md' />
-                <div className='bg-gold text-gold-foreground relative flex h-20 w-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:h-24 sm:w-24'>
-                  <span className='font-display text-base leading-none font-bold sm:text-lg'>
-                    {t('hero.newSeasonBadge')}
-                  </span>
-                  <span className='mt-0.5 text-[0.6rem] font-semibold tracking-[0.2em] uppercase'>
-                    {t('hero.seasonBadgeSub')}
-                  </span>
+              <div className='grid grid-cols-12 gap-3 sm:gap-4'>
+                {heroImage ? (
+                  <div className='border-gold/20 relative col-span-7 aspect-4/5 overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl'>
+                    <Image
+                      src={heroImage}
+                      alt={t('common.featuredCollectionAlt')}
+                      fill
+                      priority
+                      sizes='(max-width: 1024px) 60vw, 35vw'
+                      className='object-cover'
+                    />
+                    <div className='from-foreground/70 absolute inset-0 bg-linear-to-t via-transparent to-transparent' />
+                    <div className='absolute right-0 bottom-0 left-0 p-4 sm:p-5'>
+                      <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>
+                        {t('hero.editorsPick')}
+                      </p>
+                      <p className='text-primary-foreground font-display mt-1 text-lg font-medium sm:text-xl'>
+                        {spotlight[0]?.name ?? t('hero.signatureEditFallback')}
+                      </p>
+                      {spotlightPrice !== undefined && (
+                        <p className='text-primary-foreground/90 mt-1 text-sm'>
+                          {t('common.fromPrice', { price: formatPrice(spotlightPrice) })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className='bg-muted border-gold/15 col-span-7 aspect-4/5 animate-pulse rounded-2xl border sm:rounded-3xl' />
+                )}
+
+                <div className='col-span-5 flex flex-col gap-3 sm:gap-4'>
+                  {spotlight.slice(1, 3).map((product, index) => {
+                    const image = product.images?.[0];
+                    if (!image) return null;
+
+                    return (
+                      <Link
+                        key={product.id ?? index}
+                        href={getProductPath(product)}
+                        className='group bg-card border-gold/15 hover:border-gold/40 relative aspect-square overflow-hidden rounded-2xl border shadow-lg transition-colors sm:rounded-3xl'
+                      >
+                        <Image
+                          src={image}
+                          alt={product.name ?? t('common.productAlt')}
+                          fill
+                          priority={index === 0}
+                          sizes='25vw'
+                          className='object-cover transition-transform duration-500 group-hover:scale-105'
+                        />
+                        <div className='from-foreground/60 absolute inset-0 bg-linear-to-t to-transparent opacity-80' />
+                        <p className='text-primary-foreground absolute right-3 bottom-3 left-3 line-clamp-2 text-xs font-medium sm:text-sm'>
+                          {product.name}
+                        </p>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.7, ease: 'backOut' }}
+                className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'
+              >
+                <div className='relative'>
+                  <span className='border-gold/50 absolute inset-0 animate-ping rounded-full border' />
+                  <span className='bg-gold/30 absolute inset-0 animate-pulse rounded-full blur-md' />
+                  <div className='bg-gold text-gold-foreground relative flex h-20 w-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:h-24 sm:w-24'>
+                    <span className='font-display text-base leading-none font-bold sm:text-lg'>
+                      {t('hero.newSeasonBadge')}
+                    </span>
+                    <span className='mt-0.5 text-[0.6rem] font-semibold tracking-[0.2em] uppercase'>
+                      {t('hero.seasonBadgeSub')}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          ) : null}
         </div>
       </div>
     </section>

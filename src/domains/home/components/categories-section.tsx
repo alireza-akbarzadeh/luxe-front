@@ -3,24 +3,24 @@
 import { motion } from 'framer-motion';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetCategories } from '~/src/services/-categories-get';
+import { useGetHomeCategories } from '@/services/-home-categories-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { getCategoryImage, resolveCategories, sectionContainerClass } from '../lib/home-utils';
+import { getHomeCategoryImage, sectionContainerClass } from '../lib/home-utils';
 import { CategoryCard } from './category-card';
 import { SectionHeader } from './section-header';
 
-export function CategoriesSection() {
-  const { mockCategories, t } = useHomeContent();
-  const { data, isLoading, isError } = useGetCategories({
-    is_active: true,
-    limit: 8,
-    offset: 0
-  });
+const CATEGORY_LIMIT = 8;
 
-  const apiCategories = resolveCategories(data?.data?.categories);
-  const usingMock = isError || !apiCategories.length;
-  const categories = usingMock ? mockCategories : apiCategories;
+export function CategoriesSection() {
+  const { t } = useHomeContent();
+  const { data, isLoading, isError } = useGetHomeCategories({ limit: CATEGORY_LIMIT });
+
+  const categories = data?.data?.popular ?? [];
+
+  if (!isLoading && (isError || categories.length === 0)) {
+    return null;
+  }
 
   return (
     <section id='categories' className='bg-secondary/30 py-16 sm:py-20 lg:py-28'>
@@ -32,12 +32,6 @@ export function CategoriesSection() {
           href='/shop'
           align='left'
         />
-
-        {usingMock && !isLoading && (
-          <p className='text-muted-foreground -mt-6 mb-6 text-sm sm:mb-8'>
-            {t('common.categoriesMockNotice')}
-          </p>
-        )}
 
         {isLoading ? (
           <div className='grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4'>
@@ -54,7 +48,7 @@ export function CategoriesSection() {
                   name={category.name}
                   description={category.description}
                   categoryId={category.id}
-                  image={getCategoryImage(category, index)}
+                  image={getHomeCategoryImage(category, index)}
                   shopNowLabel={t('common.shopNow')}
                   categoryAlt={t('common.categoryAlt')}
                   className='min-w-[72vw] shrink-0'
@@ -75,7 +69,7 @@ export function CategoriesSection() {
                     name={category.name}
                     description={category.description}
                     categoryId={category.id}
-                    image={getCategoryImage(category, index)}
+                    image={getHomeCategoryImage(category, index)}
                     shopNowLabel={t('common.shopNow')}
                     categoryAlt={t('common.categoryAlt')}
                   />

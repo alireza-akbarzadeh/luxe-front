@@ -6,10 +6,13 @@ import { SiteJsonLd } from '@/components/seo/site-json-ld';
 import { HomeDomains } from '@/domains/home/home.domain';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
+import { getGetHomeFlashDealsQueryOptions } from '@/services/-home-flash-deals-get';
+import { getGetHomeNewArrivalsQueryOptions } from '@/services/-home-new-arrivals-get';
+import { getGetHomePopularCollectionsQueryOptions } from '@/services/-home-popular-collections-get';
+import { getGetHomeTopBrandsQueryOptions } from '@/services/-home-top-brands-get';
+import { getGetHomeTopProductsQueryOptions } from '@/services/-home-top-products-get';
+import { getGetHomeTrendingProductsQueryOptions } from '@/services/-home-trending-products-get';
 import { getQueryClient } from '~/src/lib/query-client';
-import { getGetCategoriesQueryOptions } from '~/src/services/-categories-get';
-import { getGetProductsQueryOptions } from '~/src/services/-products-get';
-import type { GetProductsParams } from '~/src/services/-products-get.schemas';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'Premium Fashion & Lifestyle',
@@ -23,36 +26,16 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function HomePage() {
   const queryClient = getQueryClient();
 
-  const featuredParams: GetProductsParams = {
-    status: 'active',
-    limit: 8,
-    offset: 0,
-    sort: 'rating_desc'
-  };
-
   await Promise.all([
-    queryClient.prefetchQuery(getGetProductsQueryOptions(featuredParams)),
-    queryClient.prefetchQuery(
-      getGetCategoriesQueryOptions({ is_active: true, limit: 8, offset: 0 })
-    ),
     queryClient.prefetchQuery(getGetHomeCategoriesQueryOptions({ limit: 8 })),
-    queryClient.prefetchQuery(
-      getGetProductsQueryOptions({
-        status: 'active',
-        limit: 6,
-        offset: 0,
-        is_new: true,
-        sort: 'newest'
-      })
-    ),
-    queryClient.prefetchQuery(
-      getGetProductsQueryOptions({
-        status: 'active',
-        limit: 3,
-        offset: 0,
-        sort: 'newest'
-      })
-    )
+    queryClient.prefetchQuery(getGetHomeTopProductsQueryOptions({ limit: 8 })),
+    queryClient.prefetchQuery(getGetHomeNewArrivalsQueryOptions({ limit: 8 })),
+    queryClient.prefetchQuery(getGetHomeTrendingProductsQueryOptions({ limit: 8 })),
+    queryClient.prefetchQuery(getGetHomeNewArrivalsQueryOptions({ limit: 3 })),
+    queryClient.prefetchQuery(getGetHomeNewArrivalsQueryOptions({ limit: 5 })),
+    queryClient.prefetchQuery(getGetHomeTopBrandsQueryOptions({ limit: 12 })),
+    queryClient.prefetchQuery(getGetHomePopularCollectionsQueryOptions({ limit: 2 })),
+    queryClient.prefetchQuery(getGetHomeFlashDealsQueryOptions({ limit: 1 }))
   ]);
 
   return (

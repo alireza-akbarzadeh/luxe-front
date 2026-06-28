@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 
-import { CURATED_COLLECTIONS } from '@/domains/collections/lib/collections.config';
 import type { Locale } from '@/i18n/config';
 import { formatLocaleCompact } from '@/lib/i18n/format-number';
 import { getHomeMarketingCopyParams } from '@/lib/i18n/marketing-copy-params';
@@ -15,7 +14,6 @@ import {
   HOME_STATS,
   MARKETPLACE_BENEFIT_KEYS,
   MARKETPLACE_TILE_KEYS,
-  MOCK_CATEGORY_KEYS,
   TESTIMONIAL_ITEMS,
   TRUST_ITEMS
 } from '../lib/home-mock-data';
@@ -101,22 +99,6 @@ export function useHomeContent() {
     content: t(`testimonials.items.${item.key}.content`)
   }));
 
-  const collectionBanners = CURATED_COLLECTIONS.slice(0, 2).map((banner) => ({
-    ...banner,
-    eyebrow: t(`collections.banners.${banner.id}.eyebrow`),
-    title: t(`collections.banners.${banner.id}.title`),
-    description: t(`collections.banners.${banner.id}.description`),
-    cta: t(`collections.banners.${banner.id}.cta`)
-  }));
-
-  const mockCategories = MOCK_CATEGORY_KEYS.map((key, index) => ({
-    id: index + 1,
-    name: t(`mockCategories.${key}.name`),
-    slug: key,
-    description: t(`mockCategories.${key}.description`),
-    is_active: true
-  }));
-
   return {
     heroStats,
     trustItems,
@@ -127,8 +109,6 @@ export function useHomeContent() {
     faqItems,
     platformStats,
     testimonialItems,
-    collectionBanners,
-    mockCategories,
     marketingCopy: copy,
     locale,
     t

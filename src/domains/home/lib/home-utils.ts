@@ -1,14 +1,11 @@
 import type { Locale } from '@/i18n/config';
 import { formatLocaleCurrency } from '@/lib/i18n/format-number';
 import type { DtoHomeCategoryItem } from '@/services/-home-categories-get.schemas';
+import type { DtoHomeProductItem } from '@/services/-home-top-products-get.schemas';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { ModelsCategory, ModelsProduct } from '~/src/services/-categories-get.schemas';
 
-import {
-  CATEGORY_IMAGES,
-  FALLBACK_CATEGORY_IMAGES,
-  MOCK_FEATURED_PRODUCTS
-} from './home-mock-data';
+import { CATEGORY_IMAGES, FALLBACK_CATEGORY_IMAGES } from './home-mock-data';
 
 export function getCategoryImage(category: ModelsCategory, index: number): string {
   const slug = category.slug?.toLowerCase() ?? '';
@@ -39,13 +36,6 @@ export function getHomeCategoryImage(item: DtoHomeCategoryItem, index: number): 
   );
 }
 
-export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCategory[] {
-  if (apiCategories && apiCategories.length > 0) {
-    return apiCategories.filter((c) => c.is_active !== false).slice(0, 8);
-  }
-  return [];
-}
-
 export function mapProductForCard(item: DtoProductWithLike) {
   const product = item;
   return {
@@ -65,14 +55,9 @@ export function mapProductForCard(item: DtoProductWithLike) {
   };
 }
 
-export function resolveProducts(
-  apiProducts?: DtoProductWithLike[],
-  fallback = MOCK_FEATURED_PRODUCTS
-): DtoProductWithLike[] {
-  if (apiProducts && apiProducts.length > 0) {
-    return apiProducts;
-  }
-  return fallback;
+/** Maps a homepage product DTO to the shape expected by `ProductCard`. */
+export function mapHomeProductItem(item: DtoHomeProductItem) {
+  return mapProductForCard({ ...item, is_liked: false });
 }
 
 export function formatPrice(value?: number, locale: Locale = 'en'): string {

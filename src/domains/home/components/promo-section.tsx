@@ -6,21 +6,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { getProductPath } from '@/domains/product/lib/product-routes';
 import { useCountdown } from '@/hooks/useCountdown';
 import { formatLocaleCountdownUnit } from '@/lib/i18n/format-number';
 import { cn } from '@/lib/utils';
+import { useGetHomeFlashDeals } from '@/services/-home-flash-deals-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { CATEGORY_IMAGES } from '../lib/home-mock-data';
 import { sectionContainerClass } from '../lib/home-utils';
-
-const PROMO_END = new Date('2026-06-30T23:59:59');
-const PROMO_IMAGE = CATEGORY_IMAGES.lifestyle;
 
 export function PromoSection() {
   const { locale, marketingCopy, t } = useHomeContent();
-  const { hours, minutes, seconds } = useCountdown(PROMO_END);
+  const { data, isLoading, isError } = useGetHomeFlashDeals({ limit: 1 });
+
+  const deal = data?.data?.deals?.[0];
+  const promoImage = deal?.product?.images?.[0];
+  const promoEnd = deal?.ends_at ? new Date(deal.ends_at) : null;
+  const { hours, minutes, seconds } = useCountdown(promoEnd ?? new Date(0));
   const promoCode = t('promo.code');
+
+  if (!isLoading && (isError || !deal || !promoEnd || !promoImage)) {
+    return null;
+  }
 
   const countdownItems = [
     { value: formatLocaleCountdownUnit(hours, locale), label: t('promo.countdown.hours') },
@@ -29,7 +36,7 @@ export function PromoSection() {
   ];
 
   return (
-    <section className='py-16 sm:py-20 lg:py-28'>
+    <section className='py-16 sm:py-20 lg:py-28' aria-busy={isLoading}>
       <div className={sectionContainerClass}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,13 +47,17 @@ export function PromoSection() {
         >
           <div className='relative grid min-h-[28rem] lg:min-h-[24rem] lg:grid-cols-2'>
             <div className='relative min-h-[14rem] lg:min-h-full'>
-              <Image
-                src={PROMO_IMAGE}
-                alt={t('common.promoImageAlt')}
-                fill
-                className='object-cover'
-                sizes='(max-width: 1024px) 100vw, 50vw'
-              />
+              {isLoading ? (
+                <div className='bg-muted absolute inset-0 animate-pulse' />
+              ) : promoImage ? (
+                <Image
+                  src={promoImage}
+                  alt={deal?.product?.name ?? t('common.promoImageAlt')}
+                  fill
+                  className='object-cover'
+                  sizes='(max-width: 1024px) 100vw, 50vw'
+                />
+              ) : null}
               <div className='from-background/80 via-background/30 absolute inset-0 bg-linear-to-r to-transparent lg:hidden' />
               <div className='from-card via-card/40 absolute inset-0 bg-linear-to-t to-transparent lg:hidden' />
               <div className='from-card/90 absolute inset-0 hidden bg-linear-to-l to-transparent lg:block' />
@@ -86,7 +97,7 @@ export function PromoSection() {
 
               <div className='mt-10 flex flex-col gap-3 sm:flex-row'>
                 <Link
-                  href='/shop'
+                  href={deal?.product ? getProductPath(deal.product) : '/shop'}
                   className={cn(
                     buttonVariants({ size: 'lg' }),
                     'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8 shadow-sm'

@@ -6,35 +6,51 @@ import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { useGetProducts } from '~/src/services/-products-get';
-import type { GetProductsParams } from '~/src/services/-products-get.schemas';
+import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
+import { useGetHomeTopProducts } from '@/services/-home-top-products-get';
+import { useGetHomeTrendingProducts } from '@/services/-home-trending-products-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { mapProductForCard, resolveProducts, sectionContainerClass } from '../lib/home-utils';
+import { mapHomeProductItem, sectionContainerClass } from '../lib/home-utils';
 import { ProductGridSkeleton } from './product-grid-skeleton';
 import { SectionHeader } from './section-header';
 
 type ProductTab = 'featured' | 'new' | 'trending';
 
-const TAB_PARAMS: Record<ProductTab, GetProductsParams> = {
-  featured: { status: 'active', limit: 8, offset: 0, sort: 'rating_desc' },
-  new: { status: 'active', limit: 8, offset: 0, is_new: true, sort: 'newest' },
-  trending: { status: 'active', limit: 8, offset: 0, sort: 'reviews_desc' }
-};
+const PRODUCT_LIMIT = 8;
 
 export function FeaturedProducts() {
   const { t } = useHomeContent();
   const [tab, setTab] = useState<ProductTab>('featured');
-  const params = TAB_PARAMS[tab];
 
-  const { data, isLoading, isError } = useGetProducts(params);
-
-  const products = useMemo(
-    () => resolveProducts(data?.data?.products).map(mapProductForCard),
-    [data?.data?.products]
+  const topProducts = useGetHomeTopProducts(
+    { limit: PRODUCT_LIMIT },
+    { query: { enabled: tab === 'featured' } }
+  );
+  const newArrivals = useGetHomeNewArrivals(
+    { limit: PRODUCT_LIMIT },
+    { query: { enabled: tab === 'new' } }
+  );
+  const trendingProducts = useGetHomeTrendingProducts(
+    { limit: PRODUCT_LIMIT },
+    { query: { enabled: tab === 'trending' } }
   );
 
-  const usingMock = isError || !data?.data?.products?.length;
+  const activeQuery =
+    tab === 'featured' ? topProducts : tab === 'new' ? newArrivals : trendingProducts;
+
+  const products = useMemo(() => {
+    const items =
+      tab === 'featured'
+        ? topProducts.data?.data?.products
+        : tab === 'new'
+          ? newArrivals.data?.data?.products
+          : trendingProducts.data?.data?.products;
+
+    return (items ?? []).map(mapHomeProductItem);
+  }, [tab, topProducts.data, newArrivals.data, trendingProducts.data]);
+
+  const { isLoading } = activeQuery;
 
   return (
     <section id='products' className='py-16 sm:py-20 lg:py-28'>
@@ -62,19 +78,15 @@ export function FeaturedProducts() {
           </TabsList>
         </Tabs>
 
-        {usingMock && !isLoading && (
-          <p className='text-muted-foreground mb-6 text-sm'>{t('common.featuredMockNotice')}</p>
-        )}
-
         {isLoading ? (
-          <ProductGridSkeleton count={8} />
-        ) : (
+          <ProductGridSkeleton count={PRODUCT_LIMIT} />
+        ) : products.length > 0 ? (
           <div className='grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4'>
             {products.map((product, index) => (
               <ProductCard key={product.id ?? index} product={product} index={index} />
             ))}
           </div>
-        )}
+        ) : null}
 
         <div className='flex-center mt-12 sm:mt-14'>
           <Button variant='outline' size='lg' className='rounded-full px-8' asChild>

@@ -1,6 +1,3 @@
-import { CURATED_COLLECTIONS } from '@/domains/collections/lib/collections.config';
-import type { DtoProductWithLike } from '@/services/-products-get.schemas';
-
 export const HOME_STATS = [
   { key: 'customers', value: 50_000, suffix: '+' },
   { key: 'products', value: 2_400, suffix: '+' },
@@ -51,17 +48,6 @@ export const TRUST_ITEMS = [
   { key: 'support', icon: 'headphones' }
 ] as const;
 
-export const BRAND_NAMES = [
-  'Maison',
-  'Atelier',
-  'Nordic',
-  'Forme',
-  'Lumière',
-  'Craft & Co',
-  'Studio 9',
-  'Velvet'
-] as const;
-
 export const CATEGORY_IMAGES = {
   accessories: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=900&h=1100&fit=crop',
   watches: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&h=1100&fit=crop',
@@ -81,11 +67,6 @@ export const FALLBACK_CATEGORY_IMAGES = [
   CATEGORY_IMAGES.fashion,
   CATEGORY_IMAGES.watches
 ] as const;
-
-export const MOCK_CATEGORY_KEYS = ['accessories', 'home', 'electronics', 'lifestyle'] as const;
-
-/** @deprecated Use CURATED_COLLECTIONS from collections domain */
-export const COLLECTION_BANNERS = CURATED_COLLECTIONS.slice(0, 2);
 
 export const TESTIMONIAL_ITEMS = [
   {
@@ -113,115 +94,3 @@ export const TESTIMONIAL_ITEMS = [
     rating: 5
   }
 ] as const;
-
-const mockProduct = (partial: NonNullable<DtoProductWithLike>): DtoProductWithLike => ({
-  is_liked: false,
-  status: 'active',
-  ...partial
-});
-
-export const MOCK_FEATURED_PRODUCTS: DtoProductWithLike[] = [
-  mockProduct({
-    id: 9001,
-    name: 'Heritage Leather Weekender',
-    slug: 'heritage-leather-weekender',
-    sku: 'LUXE-WKND-01',
-    price: 289,
-    compare_at_price: 349,
-    rating: 4.9,
-    reviews_count: 214,
-    is_new: true,
-    images: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&h=1000&fit=crop'],
-    category: { name: 'Accessories', slug: 'accessories' }
-  }),
-  mockProduct({
-    id: 9002,
-    name: 'Studio Wireless Headphones',
-    slug: 'studio-wireless-headphones',
-    sku: 'LUXE-AUD-02',
-    price: 249,
-    compare_at_price: 299,
-    rating: 4.8,
-    reviews_count: 189,
-    is_new: false,
-    images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=1000&fit=crop'],
-    category: { name: 'Electronics', slug: 'electronics' }
-  }),
-  mockProduct({
-    id: 9003,
-    name: 'Ceramic Pour-Over Set',
-    slug: 'ceramic-pour-over-set',
-    sku: 'LUXE-HOME-03',
-    price: 78,
-    rating: 4.7,
-    reviews_count: 96,
-    is_new: true,
-    images: ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=1000&fit=crop'],
-    category: { name: 'Home & Living', slug: 'home' }
-  }),
-  mockProduct({
-    id: 9004,
-    name: 'Chronograph Steel Watch',
-    slug: 'chronograph-steel-watch',
-    sku: 'LUXE-WATCH-04',
-    price: 420,
-    compare_at_price: 499,
-    rating: 4.9,
-    reviews_count: 312,
-    is_new: false,
-    images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=1000&fit=crop'],
-    category: { name: 'Accessories', slug: 'accessories' }
-  }),
-  mockProduct({
-    id: 9005,
-    name: 'Merino Lounge Set',
-    slug: 'merino-lounge-set',
-    sku: 'LUXE-APP-05',
-    price: 165,
-    rating: 4.6,
-    reviews_count: 74,
-    is_new: true,
-    images: ['https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop'],
-    category: { name: 'Lifestyle', slug: 'lifestyle' }
-  }),
-  mockProduct({
-    id: 9006,
-    name: 'Sculpt Table Lamp',
-    slug: 'sculpt-table-lamp',
-    sku: 'LUXE-LIGHT-06',
-    price: 195,
-    compare_at_price: 240,
-    rating: 4.8,
-    reviews_count: 58,
-    is_new: false,
-    images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=1000&fit=crop'],
-    category: { name: 'Home & Living', slug: 'home' }
-  }),
-  mockProduct({
-    id: 9007,
-    name: 'Polarized Aviator Frames',
-    slug: 'polarized-aviator-frames',
-    sku: 'LUXE-EYE-07',
-    price: 189,
-    rating: 4.7,
-    reviews_count: 143,
-    is_new: true,
-    images: ['https://images.unsplash.com/photo-1572635196233-14b40f21bd47?w=800&h=1000&fit=crop'],
-    category: { name: 'Accessories', slug: 'accessories' }
-  }),
-  mockProduct({
-    id: 9008,
-    name: 'Hand-Stitched Card Holder',
-    slug: 'hand-stitched-card-holder',
-    sku: 'LUXE-ACC-08',
-    price: 68,
-    rating: 4.9,
-    reviews_count: 201,
-    is_new: false,
-    images: ['https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&h=1000&fit=crop'],
-    category: { name: 'Accessories', slug: 'accessories' }
-  })
-];
-
-export const HERO_FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1600&h=2000&fit=crop';
