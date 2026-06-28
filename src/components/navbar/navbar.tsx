@@ -54,7 +54,7 @@ export function Navbar() {
       >
         <nav className='mx-auto max-w-7xl'>
           <div className='flex h-16 items-center gap-3 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-4 xl:gap-x-6'>
-            <Link href='/' className='relative z-20 flex shrink-0 items-center'>
+            <Link href='/' className='relative z-20 flex shrink-0 items-center pl-4 rtl:pr-4'>
               <motion.span
                 className='font-display text-2xl font-semibold tracking-tight'
                 whileHover={{ scale: 1.02 }}

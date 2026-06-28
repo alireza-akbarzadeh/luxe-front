@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { SiteJsonLd } from '@/components/seo/site-json-ld';
 import { HomeDomains } from '@/domains/home/home.domain';
 import { buildPageMetadata } from '@/lib/seo/metadata';
+import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
 import { getQueryClient } from '~/src/lib/query-client';
 import { getGetCategoriesQueryOptions } from '~/src/services/-categories-get';
 import { getGetProductsQueryOptions } from '~/src/services/-products-get';
@@ -34,6 +35,7 @@ export default async function HomePage() {
     queryClient.prefetchQuery(
       getGetCategoriesQueryOptions({ is_active: true, limit: 8, offset: 0 })
     ),
+    queryClient.prefetchQuery(getGetHomeCategoriesQueryOptions({ limit: 8 })),
     queryClient.prefetchQuery(
       getGetProductsQueryOptions({
         status: 'active',

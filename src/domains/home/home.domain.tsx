@@ -2,6 +2,7 @@ import { BrandsMarquee } from './components/brands-marquee';
 import { CategoriesSection } from './components/categories-section';
 import { CollectionBanner } from './components/collection-banner';
 import { FaqSection } from './components/faq-section';
+import { FavoriteCategoriesSection } from './components/favorite-categories-section';
 import { FeaturedProducts } from './components/featured-products';
 import { FeaturesSection } from './components/features-section';
 import { FinalCtaSection } from './components/final-cta-section';
@@ -24,6 +25,7 @@ export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
       <HeroSection />
+      <FavoriteCategoriesSection />
       <TrustBar />
       <BrandsMarquee />
       <MarketplaceShowcaseSection />

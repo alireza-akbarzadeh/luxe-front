@@ -1,5 +1,6 @@
 import type { Locale } from '@/i18n/config';
 import { formatLocaleCurrency } from '@/lib/i18n/format-number';
+import type { DtoHomeCategoryItem } from '@/services/-home-categories-get.schemas';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import type { ModelsCategory, ModelsProduct } from '~/src/services/-categories-get.schemas';
 
@@ -20,6 +21,22 @@ export function getCategoryImage(category: ModelsCategory, index: number): strin
   }
 
   return FALLBACK_CATEGORY_IMAGES[index % FALLBACK_CATEGORY_IMAGES.length]!;
+}
+
+/** Resolves display image for a homepage category card from API or fallback pool. */
+export function getHomeCategoryImage(item: DtoHomeCategoryItem, index: number): string {
+  if (item.image_url) {
+    return item.image_url;
+  }
+  return getCategoryImage(
+    {
+      id: item.id,
+      name: item.name ?? '',
+      slug: item.slug ?? '',
+      description: item.description
+    },
+    index
+  );
 }
 
 export function resolveCategories(apiCategories?: ModelsCategory[]): ModelsCategory[] {

@@ -1086,6 +1086,11 @@
       "title": "Compra las colecciones",
       "description": "Desde básicos de armario hasta piezas statement para el hogar — explora departamentos hechos para tu estilo de vida."
     },
+    "favoriteCategories": {
+      "eyebrow": "Elegido para ti",
+      "title": "Categorías para ti",
+      "description": "Acceso rápido a departamentos que te encantarán — según tendencias y tu actividad de compra."
+    },
     "featured": {
       "eyebrow": "Curado para ti",
       "title": "Productos destacados",

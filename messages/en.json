@@ -1086,6 +1086,11 @@
       "title": "Shop the collections",
       "description": "From wardrobe staples to statement home pieces — explore departments tailored to how you live."
     },
+    "favoriteCategories": {
+      "eyebrow": "Picked for you",
+      "title": "Categories for you",
+      "description": "Quick access to departments we think you'll love — based on trends and your shopping activity."
+    },
     "featured": {
       "eyebrow": "Curated for you",
       "title": "Featured products",
