@@ -2032,6 +2032,55 @@
       "completeShipping": "Please complete your shipping details.",
       "completePayment": "Please complete your payment details."
     },
+    "validation": {
+      "completeFields": "Please complete the highlighted fields before continuing.",
+      "acceptTerms": "Please accept the terms to place your order."
+    },
+    "mobileSummary": {
+      "showSummary": "Show order summary",
+      "hideSummary": "Hide order summary",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "totalLabel": "Order total"
+    },
+    "trust": {
+      "secure": "Secure checkout",
+      "shipping": "Tracked shipping",
+      "returns": "Easy returns"
+    },
+    "shipping": {
+      "title": "Delivery details",
+      "subtitle": "Where should we send your order?",
+      "contact": "Contact",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "newsletter": "Email me with news and offers",
+      "address": "Shipping address",
+      "firstName": "First name",
+      "firstNamePlaceholder": "Jane",
+      "lastName": "Last name",
+      "lastNamePlaceholder": "Doe",
+      "addressLine1": "Address",
+      "addressLine1Placeholder": "123 Main St",
+      "addressLine2": "Apartment, suite, etc. (optional)",
+      "addressLine2Placeholder": "Apt 4B",
+      "city": "City",
+      "cityPlaceholder": "New York",
+      "state": "State / Province",
+      "statePlaceholder": "NY",
+      "zip": "ZIP / Postal code",
+      "zipPlaceholder": "10001",
+      "country": "Country / Region",
+      "countryPlaceholder": "Select country",
+      "phone": "Phone",
+      "phonePlaceholder": "For delivery updates",
+      "saveInfo": "Save this address for next time",
+      "shippingMethod": "Shipping method",
+      "loadingShipping": "Loading shipping options…",
+      "noShipping": "No shipping options are available right now.",
+      "unnamedShipping": "Standard",
+      "free": "Free",
+      "selectShipping": "Select a shipping method"
+    },
     "summary": {
       "title": "Order summary",
       "promotions": "Promotions",

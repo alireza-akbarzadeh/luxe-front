@@ -2032,6 +2032,55 @@
       "completeShipping": "Completa los datos de envío.",
       "completePayment": "Completa los datos de pago."
     },
+    "validation": {
+      "completeFields": "Completa los campos resaltados antes de continuar.",
+      "acceptTerms": "Acepta los términos para realizar el pedido."
+    },
+    "mobileSummary": {
+      "showSummary": "Ver resumen del pedido",
+      "hideSummary": "Ocultar resumen del pedido",
+      "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+      "totalLabel": "Total del pedido"
+    },
+    "trust": {
+      "secure": "Pago seguro",
+      "shipping": "Envío con seguimiento",
+      "returns": "Devoluciones fáciles"
+    },
+    "shipping": {
+      "title": "Datos de entrega",
+      "subtitle": "¿A dónde enviamos tu pedido?",
+      "contact": "Contacto",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "newsletter": "Enviarme novedades y ofertas",
+      "address": "Dirección de envío",
+      "firstName": "Nombre",
+      "firstNamePlaceholder": "María",
+      "lastName": "Apellido",
+      "lastNamePlaceholder": "García",
+      "addressLine1": "Dirección",
+      "addressLine1Placeholder": "Calle Principal 123",
+      "addressLine2": "Apartamento, suite, etc. (opcional)",
+      "addressLine2Placeholder": "Apt 4B",
+      "city": "Ciudad",
+      "cityPlaceholder": "Madrid",
+      "state": "Provincia / Estado",
+      "statePlaceholder": "MD",
+      "zip": "Código postal",
+      "zipPlaceholder": "28001",
+      "country": "País / Región",
+      "countryPlaceholder": "Seleccionar país",
+      "phone": "Teléfono",
+      "phonePlaceholder": "Para actualizaciones de entrega",
+      "saveInfo": "Guardar esta dirección para la próxima vez",
+      "shippingMethod": "Método de envío",
+      "loadingShipping": "Cargando opciones de envío…",
+      "noShipping": "No hay opciones de envío disponibles.",
+      "unnamedShipping": "Estándar",
+      "free": "Gratis",
+      "selectShipping": "Selecciona un método de envío"
+    },
     "summary": {
       "title": "Resumen del pedido",
       "promotions": "Promociones",

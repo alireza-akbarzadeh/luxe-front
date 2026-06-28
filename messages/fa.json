@@ -2032,6 +2032,55 @@
       "completeShipping": "لطفاً جزئیات ارسال را تکمیل کنید.",
       "completePayment": "لطفاً جزئیات پرداخت را تکمیل کنید."
     },
+    "validation": {
+      "completeFields": "لطفاً فیلدهای مشخص‌شده را قبل از ادامه تکمیل کنید.",
+      "acceptTerms": "برای ثبت سفارش باید شرایط را بپذیرید."
+    },
+    "mobileSummary": {
+      "showSummary": "نمایش خلاصه سفارش",
+      "hideSummary": "پنهان کردن خلاصه سفارش",
+      "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
+      "totalLabel": "جمع سفارش"
+    },
+    "trust": {
+      "secure": "پرداخت امن",
+      "shipping": "ارسال با رهگیری",
+      "returns": "مرجوعی آسان"
+    },
+    "shipping": {
+      "title": "جزئیات تحویل",
+      "subtitle": "سفارش را به کجا ارسال کنیم؟",
+      "contact": "تماس",
+      "email": "ایمیل",
+      "emailPlaceholder": "you@example.com",
+      "newsletter": "خبرنامه و پیشنهادها را برایم ایمیل کنید",
+      "address": "آدرس ارسال",
+      "firstName": "نام",
+      "firstNamePlaceholder": "علی",
+      "lastName": "نام خانوادگی",
+      "lastNamePlaceholder": "احمدی",
+      "addressLine1": "آدرس",
+      "addressLine1Placeholder": "خیابان اصلی ۱۲۳",
+      "addressLine2": "واحد، پلاک و… (اختیاری)",
+      "addressLine2Placeholder": "واحد ۴",
+      "city": "شهر",
+      "cityPlaceholder": "تهران",
+      "state": "استان",
+      "statePlaceholder": "تهران",
+      "zip": "کد پستی",
+      "zipPlaceholder": "1234567890",
+      "country": "کشور / منطقه",
+      "countryPlaceholder": "انتخاب کشور",
+      "phone": "تلفن",
+      "phonePlaceholder": "برای به‌روزرسانی تحویل",
+      "saveInfo": "ذخیره این آدرس برای دفعات بعد",
+      "shippingMethod": "روش ارسال",
+      "loadingShipping": "در حال بارگذاری گزینه‌های ارسال…",
+      "noShipping": "در حال حاضر گزینه ارسالی موجود نیست.",
+      "unnamedShipping": "استاندارد",
+      "free": "رایگان",
+      "selectShipping": "یک روش ارسال انتخاب کنید"
+    },
     "summary": {
       "title": "خلاصه سفارش",
       "promotions": "تخفیف‌ها",
