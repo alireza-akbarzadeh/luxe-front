@@ -93,6 +93,8 @@ export function useCheckoutSubmit() {
       }
 
       const stripeRedirect = resolveCheckoutStripeRedirect(response);
+      const orderId = resolveCheckoutOrderId(response);
+
       if (stripeRedirect) {
         if (stripeRedirect.stripeSessionId) {
           persistStripeCheckoutSession(stripeRedirect.orderId, stripeRedirect.stripeSessionId);
@@ -104,7 +106,6 @@ export function useCheckoutSubmit() {
         return;
       }
 
-      const orderId = resolveCheckoutOrderId(response);
       if (!orderId) {
         const message = 'Order was created but no order ID was returned.';
         setSubmitError(message);

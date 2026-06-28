@@ -2394,7 +2394,17 @@
         "detailOrderTotal": "Order total:",
         "detailCustomer": "Customer",
         "detailShipping": "Shipping",
-        "detailLineItems": "Your line items"
+        "detailLineItems": "Your line items",
+        "fulfillmentTitle": "Fulfillment",
+        "fulfillmentDescription": "Move this order through preparation and shipping. Customers see updates in real time.",
+        "fulfillmentNoActions": "No actions available for this status.",
+        "fulfillmentTrackingLabel": "Tracking number",
+        "fulfillmentTrackingPlaceholder": "Carrier tracking ID (required to ship)",
+        "fulfillmentConfirm": "Confirm",
+        "fulfillmentCancel": "Cancel",
+        "fulfillmentApplying": "Applying…",
+        "fulfillmentSuccess": "Order updated",
+        "fulfillmentFailed": "Could not update order"
       }
     },
     "landing": {

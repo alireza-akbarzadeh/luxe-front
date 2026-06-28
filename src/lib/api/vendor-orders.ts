@@ -115,3 +115,53 @@ export async function getVendorStoreOrder(storeId: number, orderId: number) {
     method: 'GET'
   });
 }
+
+export interface VendorWorkflowStateView {
+  id?: number;
+  code?: string;
+  name?: string;
+  color?: string;
+}
+
+export interface VendorWorkflowTransitionView {
+  id?: number;
+  event?: string;
+  name?: string;
+  to_state?: VendorWorkflowStateView;
+  from_state?: VendorWorkflowStateView;
+}
+
+export interface VendorOrderTransitionsResponse {
+  data?: {
+    current_state?: VendorWorkflowStateView;
+    transitions?: VendorWorkflowTransitionView[];
+  };
+}
+
+export interface VendorOrderTransitionRequest {
+  event: string;
+  note?: string;
+  tracking_number?: string;
+}
+
+/** List workflow transitions a vendor may apply to an order. */
+export async function getVendorStoreOrderTransitions(storeId: number, orderId: number) {
+  return customInstance<VendorOrderTransitionsResponse>({
+    url: `/vendor/stores/${storeId}/orders/${orderId}/available-transitions`,
+    method: 'GET'
+  });
+}
+
+/** Apply a workflow transition to a vendor-scoped order. */
+export async function performVendorStoreOrderTransition(
+  storeId: number,
+  orderId: number,
+  body: VendorOrderTransitionRequest
+) {
+  return customInstance<VendorOrderDetailResponse>({
+    url: `/vendor/stores/${storeId}/orders/${orderId}/transition`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: body
+  });
+}

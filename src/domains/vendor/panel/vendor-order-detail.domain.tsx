@@ -13,6 +13,7 @@ import {
   ApiPaymentStatusBadge
 } from '@/domains/orders/components/order-api-badges';
 import { VendorModuleHeader } from '@/domains/vendor/panel/components/ui/vendor-module-header';
+import { VendorOrderFulfillmentPanel } from '@/domains/vendor/panel/components/vendor-order-fulfillment-panel';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import { getVendorStoreOrder } from '@/lib/api/vendor-orders';
 import { formatCurrency } from '@/lib/format';
@@ -96,6 +97,8 @@ export function VendorOrderDetailDomain({ orderId }: VendorOrderDetailDomainProp
           </CardContent>
         </Card>
       </Grid>
+
+      <VendorOrderFulfillmentPanel storeId={activeStoreId} orderId={orderId} />
 
       {order.tracking_number ? (
         <Card className='border-border/40 bg-card/50 rounded-2xl shadow-none'>

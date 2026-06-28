@@ -2394,7 +2394,17 @@
         "detailOrderTotal": "مجموع سفارش:",
         "detailCustomer": "مشتری",
         "detailShipping": "ارسال",
-        "detailLineItems": "اقلام فروشگاه شما"
+        "detailLineItems": "اقلام فروشگاه شما",
+        "fulfillmentTitle": "تکمیل سفارش",
+        "fulfillmentDescription": "سفارش را از آماده‌سازی تا ارسال پیش ببرید. مشتری به‌صورت زنده به‌روزرسانی می‌بیند.",
+        "fulfillmentNoActions": "برای این وضعیت اقدامی در دسترس نیست.",
+        "fulfillmentTrackingLabel": "شماره پیگیری",
+        "fulfillmentTrackingPlaceholder": "کد رهگیری پست (برای ارسال الزامی است)",
+        "fulfillmentConfirm": "تأیید",
+        "fulfillmentCancel": "انصراف",
+        "fulfillmentApplying": "در حال اعمال…",
+        "fulfillmentSuccess": "سفارش به‌روز شد",
+        "fulfillmentFailed": "به‌روزرسانی سفارش ممکن نشد"
       }
     },
     "landing": {
