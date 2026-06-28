@@ -2,16 +2,22 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
-import { useCartController } from '~/src/hooks/useCartController';
-import { useUser } from '~/src/hooks/useUser';
+import { Flex } from '@/components/ui/flex';
+import { Grid } from '@/components/ui/grid';
+import { GridItem } from '@/components/ui/grid-item';
+import { Typography } from '@/components/ui/typography';
+import { useCartController } from '@/hooks/useCartController';
+import { useUser } from '@/hooks/useUser';
 
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartEmptyState } from './components/cart-empty-state';
 import { CartGuestState } from './components/cart-guest-state';
 import { CartItem } from './components/cart-item';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
+import { CartMobileSummary } from './components/cart-mobile-summary';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
 import { CartVariantAlert } from './components/cart-variant-alert';
 import { OrderSummary } from './components/order-summary';
@@ -20,11 +26,12 @@ import { useCartCheckoutAction } from './hooks/use-cart-checkout-action';
 import { useCartOrderEstimate } from './hooks/use-cart-order-estimate';
 
 export default function CartPage() {
+  const t = useTranslations('cart.page');
   const { isAuthenticated } = useUser();
   const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
     useCartController();
   const { total } = useCartOrderEstimate(items, subtotal);
-  const { proceedToCheckout } = useCartCheckoutAction(items);
+  const { hasIncompleteVariants, proceedToCheckout } = useCartCheckoutAction(items);
 
   if (!isAuthenticated) {
     return <CartGuestState />;
@@ -36,58 +43,71 @@ export default function CartPage() {
 
   if (error) {
     return (
-      <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-lg px-4 text-center sm:px-6'>
-          <h1 className='font-display mb-2 text-2xl font-semibold'>Couldn&apos;t load your cart</h1>
-          <p className='text-muted-foreground mb-6 text-sm'>
-            Something went wrong while fetching your items. Please try again.
-          </p>
+      <Flex direction='column' className='pt-24 pb-16'>
+        <Flex
+          direction='column'
+          spacing={4}
+          align='center'
+          className='mx-auto max-w-lg px-4 text-center sm:px-6'
+        >
+          <Typography.H2>{t('errorTitle')}</Typography.H2>
+          <Typography.Text variant='muted'>{t('errorDescription')}</Typography.Text>
           <Button onClick={() => void refetch()} className='rounded-full'>
-            Retry
+            {t('retry')}
           </Button>
-        </div>
-      </main>
+        </Flex>
+      </Flex>
     );
   }
 
   if (items.length === 0) {
     return (
-      <main className='pt-24 pb-16'>
-        <div className='mx-auto max-w-3xl px-4 sm:px-6 lg:px-8'>
+      <Flex direction='column' className='pt-24 pb-16'>
+        <Flex direction='column' spacing={0} className='mx-auto max-w-3xl px-4 sm:px-6 lg:px-8'>
           <CartBreadcrumb />
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className='font-display mb-8 text-3xl font-semibold md:text-4xl'
-          >
-            Shopping Cart
-          </motion.h1>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+            <Typography.H1 className='font-display mb-8 text-3xl md:text-4xl'>
+              {t('title')}
+            </Typography.H1>
+          </motion.div>
           <CartEmptyState />
-        </div>
-      </main>
+        </Flex>
+      </Flex>
     );
   }
 
   return (
     <>
-      <main className='pt-24 pb-28 lg:pb-16'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <Flex direction='column' className='pt-20 pb-28 sm:pt-24 lg:pb-16'>
+        <Flex
+          direction='column'
+          spacing={0}
+          className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'
+        >
           <CartBreadcrumb />
 
-          <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
+          <Flex
+            direction='column'
+            spacing={4}
+            className='mb-6 sm:mb-8 sm:flex-row sm:items-end sm:justify-between'
+          >
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-              <h1 className='font-display text-3xl font-semibold md:text-4xl'>Shopping Cart</h1>
-              <p className='text-muted-foreground mt-2 text-sm'>
-                {itemCount} {itemCount === 1 ? 'item' : 'items'} · Review before checkout
-              </p>
+              <Typography.H1 className='font-display text-3xl md:text-4xl'>
+                {t('title')}
+              </Typography.H1>
+              <Typography.Text variant='muted' className='mt-2'>
+                {t('itemCount', { count: itemCount })} · {t('reviewHint')}
+              </Typography.Text>
             </motion.div>
-            <Button asChild variant='outline' className='rounded-full'>
-              <Link href='/shop'>Continue shopping</Link>
+            <Button asChild variant='outline' className='w-full rounded-full sm:w-auto'>
+              <Link href='/shop'>{t('continueShopping')}</Link>
             </Button>
-          </div>
+          </Flex>
 
-          <div className='grid gap-8 lg:grid-cols-3 lg:gap-12'>
-            <div className='space-y-4 lg:col-span-2'>
+          <CartMobileSummary />
+
+          <Grid gap={8} className='grid-cols-1 lg:grid-cols-3 lg:gap-12'>
+            <GridItem className='space-y-4 lg:col-span-2'>
               <CartVariantAlert items={items} />
 
               <AnimatePresence mode='popLayout'>
@@ -104,16 +124,19 @@ export default function CartPage() {
               </AnimatePresence>
 
               <ProductSuggestion />
-            </div>
+            </GridItem>
 
-            <OrderSummary />
-          </div>
-        </div>
-      </main>
+            <GridItem className='hidden lg:block'>
+              <OrderSummary />
+            </GridItem>
+          </Grid>
+        </Flex>
+      </Flex>
 
       <CartMobileCheckoutBar
         total={total}
         itemCount={itemCount}
+        hasIncompleteVariants={hasIncompleteVariants}
         onCheckout={() => proceedToCheckout()}
       />
     </>

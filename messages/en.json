@@ -695,7 +695,27 @@
     "titleWithCount": "Your cart · {count, number}",
     "subtotal": "Subtotal",
     "estimatedTotal": "Estimated total",
-    "taxNote": "Taxes and shipping calculated at checkout."
+    "taxNote": "Taxes and shipping calculated at checkout.",
+    "page": {
+      "title": "Shopping Cart",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "reviewHint": "Review before checkout",
+      "continueShopping": "Continue shopping",
+      "checkout": "Checkout",
+      "showSummary": "Show order summary",
+      "hideSummary": "Hide order summary",
+      "subtotal": "Subtotal",
+      "savings": "Savings",
+      "shipping": "Shipping",
+      "freeShipping": "Free",
+      "estimatedTax": "Est. tax ({rate})",
+      "estimatedTotal": "Estimated total",
+      "taxNote": "Taxes calculated at checkout.",
+      "variantWarning": "Select color or size for highlighted items before checkout.",
+      "errorTitle": "Couldn't load your cart",
+      "errorDescription": "Something went wrong while fetching your items. Please try again.",
+      "retry": "Retry"
+    }
   },
   "footer": {
     "tagline": "A curated multi-vendor marketplace for timeless design, premium craftsmanship, and independent luxury brands — all in one place.",
@@ -2148,6 +2168,25 @@
       "paymentPendingTitle": "Payment pending",
       "paymentPendingDescription": "We're waiting for payment confirmation. If you already paid, refresh in a moment.",
       "refreshPaymentStatus": "Refresh payment status"
+    }
+  },
+  "orderTracking": {
+    "summary": {
+      "show": "Show order summary",
+      "hide": "Hide order summary",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "tax": "Tax",
+      "total": "Total"
+    },
+    "mobile": {
+      "copyOrder": "Copy order #",
+      "copied": "Copied!",
+      "continueShopping": "Continue shopping",
+      "contactSupport": "Contact support",
+      "orderNumberLabel": "Order"
     }
   },
   "vendor": {

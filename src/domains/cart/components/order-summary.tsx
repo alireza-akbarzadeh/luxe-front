@@ -39,8 +39,7 @@ export function OrderSummary() {
   const checkoutDisabled = itemCount === 0;
 
   return (
-    <div className='lg:col-span-1'>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
@@ -176,6 +175,5 @@ export function OrderSummary() {
           </div>
         </div>
       </motion.div>
-    </div>
   );
 }

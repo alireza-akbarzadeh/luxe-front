@@ -695,7 +695,27 @@
     "titleWithCount": "Tu carrito · {count, number}",
     "subtotal": "Subtotal",
     "estimatedTotal": "Total estimado",
-    "taxNote": "Impuestos y envío calculados en el pago."
+    "taxNote": "Impuestos y envío calculados en el pago.",
+    "page": {
+      "title": "Carrito de compras",
+      "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+      "reviewHint": "Revisa antes de pagar",
+      "continueShopping": "Seguir comprando",
+      "checkout": "Pagar",
+      "showSummary": "Ver resumen del pedido",
+      "hideSummary": "Ocultar resumen",
+      "subtotal": "Subtotal",
+      "savings": "Ahorro",
+      "shipping": "Envío",
+      "freeShipping": "Gratis",
+      "estimatedTax": "Impuesto est. ({rate})",
+      "estimatedTotal": "Total estimado",
+      "taxNote": "Impuestos calculados en el pago.",
+      "variantWarning": "Selecciona color o talla de los artículos resaltados antes de pagar.",
+      "errorTitle": "No se pudo cargar el carrito",
+      "errorDescription": "Algo salió mal al obtener tus artículos. Inténtalo de nuevo.",
+      "retry": "Reintentar"
+    }
   },
   "footer": {
     "tagline": "Un marketplace multimarca curado para diseño atemporal, artesanía premium y marcas de lujo independientes — todo en un solo lugar.",
@@ -2148,6 +2168,25 @@
       "paymentPendingTitle": "Pago pendiente",
       "paymentPendingDescription": "Estamos esperando la confirmación del pago. Si ya pagaste, actualiza en un momento.",
       "refreshPaymentStatus": "Actualizar estado del pago"
+    }
+  },
+  "orderTracking": {
+    "summary": {
+      "show": "Ver resumen del pedido",
+      "hide": "Ocultar resumen",
+      "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "free": "Gratis",
+      "tax": "Impuesto",
+      "total": "Total"
+    },
+    "mobile": {
+      "copyOrder": "Copiar n.º de pedido",
+      "copied": "¡Copiado!",
+      "continueShopping": "Seguir comprando",
+      "contactSupport": "Contactar soporte",
+      "orderNumberLabel": "Pedido"
     }
   },
   "vendor": {

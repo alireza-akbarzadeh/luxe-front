@@ -18,7 +18,6 @@ export function OrderItemSummary({ orderItems }: OrderItemSummaryProps) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.3 }}
-      className='lg:col-span-2'
     >
       <div className='bg-card border-border/50 rounded-2xl border p-6'>
         <h2 className='mb-4 flex items-center gap-2 text-lg font-semibold'>

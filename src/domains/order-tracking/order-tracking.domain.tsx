@@ -3,14 +3,19 @@
 import { notFound, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
+import { Flex } from '@/components/ui/flex';
+import { Grid } from '@/components/ui/grid';
+import { GridItem } from '@/components/ui/grid-item';
 import { useCheckoutStore } from '@/domains/checkout/store/checkout.store';
 import { OrderStatus } from '@/lib/constants/enum-statuses';
-import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
+import { useGetOrdersId } from '@/services/-orders-{id}-get';
 
 import { OrderBoxNumber } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
 import { OrderTrackingActivityFeed } from './components/order-tracking-activity';
+import { OrderTrackingMobileActionBar } from './components/order-tracking-mobile-action-bar';
+import { OrderTrackingMobileSummary } from './components/order-tracking-mobile-summary';
 import { OrderTrackingProgress } from './components/order-tracking-progress';
 import { OrderTrackingStatusHero } from './components/order-tracking-status-hero';
 import { OrderTrackingSummary } from './components/order-tracking-summary';
@@ -50,8 +55,10 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
 
   const payment = order.payment;
   const shipment = order.shipment;
+  const orderItems = order.items ?? [];
+  const itemCount = orderItems.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
 
-  const subtotal = getOrderSubtotal(order.items);
+  const subtotal = getOrderSubtotal(orderItems);
   const shippingCost = shipment?.shipping_price ?? 0;
   const tax = getOrderTax(subtotal, shippingCost, order.total_amount);
   const total = order.total_amount ?? subtotal + shippingCost + tax;
@@ -61,8 +68,8 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
     liveState.pulsingStepKey === 'shipped' || liveState.pulsingStepKey === 'processing';
 
   return (
-    <div className='pt-24 pb-16'>
-      <div className='mx-auto max-w-5xl px-4 sm:px-6 lg:px-8'>
+    <Flex direction='column' className='pt-20 pb-36 sm:pt-24 lg:pb-16'>
+      <Flex direction='column' spacing={0} className='mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8'>
         <OrderTrackingStatusHero
           orderNumber={order.order_number ?? '—'}
           status={currentStatus}
@@ -79,29 +86,50 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
           onPulseComplete={clearPulsingStep}
         />
 
-        <div className='mb-12 grid gap-8 lg:grid-cols-3'>
-          <OrderItemSummary orderItems={order.items || []} />
-          <OrderTrackingSummary
-            currency={order.currency || ''}
-            shippingCost={shippingCost}
-            subtotal={subtotal}
-            tax={tax}
-            total={total}
-          />
-        </div>
+        <OrderTrackingMobileSummary
+          itemCount={itemCount}
+          subtotal={subtotal}
+          shippingCost={shippingCost}
+          tax={tax}
+          total={total}
+          currency={order.currency || ''}
+        />
 
-        <div className='mb-12 grid gap-6 lg:grid-cols-3'>
-          <PaymentDetails
-            currentStatus={currentStatus}
-            payment={payment}
-            highlight={highlightPayment}
-          />
-          <ShipmentTraking shipment={shipment} highlight={highlightShipment} />
-          <OrderTrackingActivityFeed activities={liveState.activities} className='lg:col-span-1' />
-        </div>
+        <Grid gap={8} className='mb-10 grid-cols-1 lg:grid-cols-3 lg:mb-12'>
+          <GridItem className='lg:col-span-2'>
+            <OrderItemSummary orderItems={orderItems} />
+          </GridItem>
+          <GridItem className='hidden lg:block'>
+            <OrderTrackingSummary
+              currency={order.currency || ''}
+              shippingCost={shippingCost}
+              subtotal={subtotal}
+              tax={tax}
+              total={total}
+            />
+          </GridItem>
+        </Grid>
+
+        <Grid gap={6} className='mb-10 grid-cols-1 lg:mb-12 lg:grid-cols-3'>
+          <GridItem>
+            <PaymentDetails
+              currentStatus={currentStatus}
+              payment={payment}
+              highlight={highlightPayment}
+            />
+          </GridItem>
+          <GridItem>
+            <ShipmentTraking shipment={shipment} highlight={highlightShipment} />
+          </GridItem>
+          <GridItem>
+            <OrderTrackingActivityFeed activities={liveState.activities} />
+          </GridItem>
+        </Grid>
 
         <TrakingFooter />
-      </div>
-    </div>
+      </Flex>
+
+      <OrderTrackingMobileActionBar orderNumber={order.order_number ?? ''} />
+    </Flex>
   );
 }

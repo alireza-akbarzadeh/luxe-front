@@ -695,7 +695,27 @@
     "titleWithCount": "سبد خرید · {count, number}",
     "subtotal": "جمع جزء",
     "estimatedTotal": "جمع تقریبی",
-    "taxNote": "مالیات و هزینه ارسال در مرحله پرداخت محاسبه می‌شود."
+    "taxNote": "مالیات و هزینه ارسال در مرحله پرداخت محاسبه می‌شود.",
+    "page": {
+      "title": "سبد خرید",
+      "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
+      "reviewHint": "قبل از پرداخت بررسی کنید",
+      "continueShopping": "ادامه خرید",
+      "checkout": "پرداخت",
+      "showSummary": "نمایش خلاصه سفارش",
+      "hideSummary": "پنهان کردن خلاصه",
+      "subtotal": "جمع جزء",
+      "savings": "تخفیف",
+      "shipping": "ارسال",
+      "freeShipping": "رایگان",
+      "estimatedTax": "مالیات تقریبی ({rate})",
+      "estimatedTotal": "جمع تقریبی",
+      "taxNote": "مالیات در مرحله پرداخت محاسبه می‌شود.",
+      "variantWarning": "قبل از پرداخت رنگ یا سایز موارد مشخص‌شده را انتخاب کنید.",
+      "errorTitle": "بارگذاری سبد ناموفق بود",
+      "errorDescription": "در دریافت کالاها خطایی رخ داد. دوباره تلاش کنید.",
+      "retry": "تلاش مجدد"
+    }
   },
   "footer": {
     "tagline": "بازارچه چندفروشنده‌ای منتخب برای طراحی ماندگار، کیفیت برتر و برندهای لوکس مستقل — همه در یک جا.",
@@ -2148,6 +2168,25 @@
       "paymentPendingTitle": "در انتظار پرداخت",
       "paymentPendingDescription": "در انتظار تأیید پرداخت هستیم. اگر پرداخت کرده‌اید، لحظه‌ای دیگر به‌روزرسانی کنید.",
       "refreshPaymentStatus": "به‌روزرسانی وضعیت پرداخت"
+    }
+  },
+  "orderTracking": {
+    "summary": {
+      "show": "نمایش خلاصه سفارش",
+      "hide": "پنهان کردن خلاصه",
+      "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
+      "subtotal": "جمع جزء",
+      "shipping": "ارسال",
+      "free": "رایگان",
+      "tax": "مالیات",
+      "total": "جمع"
+    },
+    "mobile": {
+      "copyOrder": "کپی شماره سفارش",
+      "copied": "کپی شد!",
+      "continueShopping": "ادامه خرید",
+      "contactSupport": "تماس با پشتیبانی",
+      "orderNumberLabel": "سفارش"
     }
   },
   "vendor": {

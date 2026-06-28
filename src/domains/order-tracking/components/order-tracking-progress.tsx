@@ -103,6 +103,9 @@ function StepNode({
       >
         {step.title}
       </motion.p>
+      <motion.p layout className='text-muted-foreground mt-1 px-1 text-xs sm:hidden'>
+        {step.status === 'active' || step.status === 'completed' ? step.description : null}
+      </motion.p>
       <motion.p layout className='text-muted-foreground mt-1 hidden px-1 text-xs sm:block'>
         {step.description}
       </motion.p>
