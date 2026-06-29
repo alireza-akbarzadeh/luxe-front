@@ -1,3 +1,6 @@
+import { BrandsSection } from '~/src/domains/home/components/brands-section';
+import { MostWhitelists } from '~/src/domains/home/components/most-whitelists';
+
 import { BrandsMarquee } from './components/brands-marquee';
 import { CategoriesSection } from './components/categories-section';
 import { CollectionBanner } from './components/collection-banner';
@@ -24,8 +27,10 @@ export function HomeDomains() {
       <FavoriteCategoriesSection />
       <PromoSection />
       <FeaturedProducts />
+      <MostWhitelists />
       <NewArrivalsSection />
       <BrandsMarquee />
+      <BrandsSection />
       <CategoriesSection />
       <CollectionBanner />
       <MarketplaceShowcaseSection />

@@ -132,17 +132,18 @@
   "playwright.showTrace": false,
 
   "cSpell.words": [
-    "Nuqs",
-    "nuqs",
-    "orval",
-    "shadcn",
-    "tabler",
-    "zustand",
-    "sonner",
-    "vaul",
     "cmdk",
     "embla",
-    "oklch"
+    "nuqs",
+    "Nuqs",
+    "oklch",
+    "orval",
+    "shadcn",
+    "sonner",
+    "tabler",
+    "vaul",
+    "wishlisted",
+    "zustand"
   ],
 
   "sqltools.connections": [

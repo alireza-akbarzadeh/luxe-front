@@ -1083,6 +1083,11 @@
         }
       }
     },
+    "wishlists": {
+      "eyebrow": "Most wishlisted",
+      "title": "Most wishlisted products",
+      "description": "Products that are most wishlisted by our shoppers."
+    },
     "categories": {
       "eyebrow": "Browse by category",
       "title": "Shop the collections",

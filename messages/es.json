@@ -1083,6 +1083,11 @@
         }
       }
     },
+    "wishlists": {
+      "eyebrow": "Productos más deseados",
+      "title": "Productos más deseados",
+      "description": "Productos que son más deseados por nuestros compradores."
+    },
     "categories": {
       "eyebrow": "Explorar por categoría",
       "title": "Compra las colecciones",
