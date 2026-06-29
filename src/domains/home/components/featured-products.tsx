@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
+import { SectionCarousel } from '@/components/section-carousel';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
@@ -11,9 +13,7 @@ import { useGetHomeTopProducts } from '@/services/-home-top-products-get';
 import { useGetHomeTrendingProducts } from '@/services/-home-trending-products-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { mapHomeProductItem, sectionContainerClass } from '../lib/home-utils';
-import { ProductGridSkeleton } from './product-grid-skeleton';
-import { SectionHeader } from './section-header';
+import { mapHomeProductItem } from '../lib/home-utils';
 
 type ProductTab = 'featured' | 'new' | 'trending';
 
@@ -46,54 +46,49 @@ export function FeaturedProducts() {
         : tab === 'new'
           ? newArrivals.data?.data?.products
           : trendingProducts.data?.data?.products;
-
     return (items ?? []).map(mapHomeProductItem);
   }, [tab, topProducts.data, newArrivals.data, trendingProducts.data]);
 
-  const { isLoading } = activeQuery;
+  // Tabs node passed as a header slot so SectionCarousel owns the full layout
+  const tabsNode = (
+    <Tabs value={tab} onValueChange={(v) => setTab(v as ProductTab)}>
+      <TabsList className='bg-muted/60 h-auto w-full justify-start gap-1 overflow-x-auto rounded-full p-1 sm:w-auto'>
+        <TabsTrigger value='featured' className='rounded-full px-4 py-2 text-sm'>
+          {t('featured.tabs.featured')}
+        </TabsTrigger>
+        <TabsTrigger value='new' className='rounded-full px-4 py-2 text-sm'>
+          {t('featured.tabs.new')}
+        </TabsTrigger>
+        <TabsTrigger value='trending' className='rounded-full px-4 py-2 text-sm'>
+          {t('featured.tabs.trending')}
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
+  );
 
   return (
-    <section id='products' className='py-16 sm:py-20 lg:py-28'>
-      <div className={sectionContainerClass}>
-        <SectionHeader
-          eyebrow={t('featured.eyebrow')}
-          title={t('featured.title')}
-          description={t('featured.description')}
-          href='/shop'
-          linkLabel={t('common.shopAll')}
-          align='left'
-        />
-
-        <Tabs value={tab} onValueChange={(v) => setTab(v as ProductTab)} className='mb-8 sm:mb-10'>
-          <TabsList className='bg-muted/60 h-auto w-full justify-start gap-1 overflow-x-auto rounded-full p-1 sm:w-auto'>
-            <TabsTrigger value='featured' className='rounded-full px-4 py-2 text-sm'>
-              {t('featured.tabs.featured')}
-            </TabsTrigger>
-            <TabsTrigger value='new' className='rounded-full px-4 py-2 text-sm'>
-              {t('featured.tabs.new')}
-            </TabsTrigger>
-            <TabsTrigger value='trending' className='rounded-full px-4 py-2 text-sm'>
-              {t('featured.tabs.trending')}
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-
-        {isLoading ? (
-          <ProductGridSkeleton count={PRODUCT_LIMIT} />
-        ) : products.length > 0 ? (
-          <div className='grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4'>
-            {products.map((product, index) => (
-              <ProductCard key={product.id ?? index} product={product} index={index} />
-            ))}
-          </div>
-        ) : null}
-
+    <SectionCarousel
+      sectionId='products'
+      eyebrow={t('featured.eyebrow')}
+      title={t('featured.title')}
+      description={t('featured.description')}
+      viewAllHref='/shop'
+      viewAllLabel={t('common.shopAll')}
+      items={products}
+      isLoading={activeQuery.isLoading}
+      columns={{ mobile: 1, tablet: 2, desktop: 4 }}
+      headerSlot={tabsNode}
+      renderItem={(product, index) => (
+        <ProductCard key={product.id ?? index} product={product} index={index} />
+      )}
+      renderSkeleton={() => <Skeleton className='aspect-4/5 w-full rounded-2xl' />}
+      footer={
         <div className='flex-center mt-12 sm:mt-14'>
           <Button variant='outline' size='lg' className='rounded-full px-8' asChild>
             <Link href='/shop'>{t('common.viewAllProducts')}</Link>
           </Button>
         </div>
-      </div>
-    </section>
+      }
+    />
   );
 }

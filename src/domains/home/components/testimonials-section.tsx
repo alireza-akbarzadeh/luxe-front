@@ -4,17 +4,14 @@ import { IconQuote, IconStar } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import { ChevronButton } from '~/src/components/section-carousel/chevron-button';
-import { DotIndicators } from '~/src/components/section-carousel/dot-Indicators';
+import { SectionCarousel } from '@/components/section-carousel';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { Testimonial } from '~/src/domains/home/lib/home-mock-data';
-import { useCarouselState } from '~/src/hooks/useCarouselState';
 
 import { useHomeContent } from '../hooks/use-home-content';
-import { sectionContainerClass } from '../lib/home-utils';
-import { SectionHeader } from './section-header';
 
-// ── Single card ───────────────────────────────────────────────────────────────
+// ── Card ──────────────────────────────────────────────────────────────────────
+
 function TestimonialCard({
   testimonial,
   index,
@@ -75,66 +72,26 @@ function TestimonialCard({
 }
 
 // ── Section ───────────────────────────────────────────────────────────────────
+
 export function TestimonialsSection() {
   const { testimonialItems, t } = useHomeContent();
-  const { setApi, current, count, scrollTo, scrollPrev, scrollNext, canScrollPrev, canScrollNext } =
-    useCarouselState();
 
   return (
-    <section id='testimonials' className='py-16 sm:py-20 lg:py-28'>
-      <div className={sectionContainerClass}>
-        {/* Header row — desktop chevrons sit flush right of the header */}
-        <div className='mb-8 flex items-end justify-between md:mb-10'>
-          <SectionHeader
-            eyebrow={t('testimonials.eyebrow')}
-            title={t('testimonials.title')}
-            description={t('testimonials.description')}
-            className='mb-0'
-          />
-          <div className='hidden shrink-0 items-center gap-2 pb-1 lg:flex'>
-            <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
-            <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
-          </div>
-        </div>
-
-        {/* Single carousel — basis changes per breakpoint */}
-        <Carousel
-          setApi={setApi}
-          opts={{ align: 'start', loop: true, skipSnaps: false }}
-          className='w-full'
-        >
-          <CarouselContent className='-ml-4'>
-            {testimonialItems.map((testimonial, index) => (
-              <CarouselItem
-                key={testimonial.id}
-                className='basis-[88%] pl-4 sm:basis-[70%] lg:basis-1/3'
-              >
-                <TestimonialCard
-                  testimonial={testimonial}
-                  index={index}
-                  starsLabel={t('common.starsRating', { rating: testimonial.rating })}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
-
-        {/* Bottom row: mobile chevrons (left) + dots (centre) + invisible spacer (right) */}
-        <div className='mt-6 flex items-center justify-between lg:justify-center'>
-          <div className='flex items-center gap-2 lg:hidden'>
-            <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
-            <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
-          </div>
-
-          <DotIndicators count={count} active={current} onDotClick={scrollTo} />
-
-          {/* Mirror spacer keeps dots visually centred on mobile */}
-          <div className='flex gap-2 opacity-0 lg:hidden' aria-hidden>
-            <div className='size-9' />
-            <div className='size-9' />
-          </div>
-        </div>
-      </div>
-    </section>
+    <SectionCarousel
+      sectionId='testimonials'
+      eyebrow={t('testimonials.eyebrow')}
+      title={t('testimonials.title')}
+      description={t('testimonials.description')}
+      items={testimonialItems}
+      columns={{ mobile: 1, tablet: 2, desktop: 3 }}
+      renderItem={(testimonial, index) => (
+        <TestimonialCard
+          testimonial={testimonial}
+          index={index}
+          starsLabel={t('common.starsRating', { rating: testimonial.rating })}
+        />
+      )}
+      renderSkeleton={() => <Skeleton className='h-64 w-full rounded-2xl' />}
+    />
   );
 }

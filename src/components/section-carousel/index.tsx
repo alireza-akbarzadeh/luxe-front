@@ -36,6 +36,7 @@ export type SectionCarouselProps<T> = {
   /** If provided, renders a "View all →" link */
   viewAllHref?: string;
   viewAllLabel?: string;
+  headerSlot?: ReactNode;
 
   // ── Data ──────────────────────────────────────────────────────────────────
   items: T[];
@@ -95,7 +96,8 @@ export function SectionCarousel<T>({
   columns = { mobile: 1, tablet: 2, desktop: 4 },
   className,
   sectionId,
-  loop = true
+  loop = true,
+  headerSlot
 }: SectionCarouselProps<T>) {
   const { setApi, current, count, scrollTo, scrollPrev, scrollNext, canScrollPrev, canScrollNext } =
     useCarouselState();
@@ -143,7 +145,8 @@ export function SectionCarousel<T>({
             )}
           </div>
         </div>
-
+        {/* ── Header slot (e.g. Tabs) ──────────────────────────────────────── */}
+        {headerSlot && <div className='mb-8 sm:mb-10'>{headerSlot}</div>}
         {/* ── Carousel ──────────────────────────────────────────────────── */}
         <Carousel
           setApi={setApi}
