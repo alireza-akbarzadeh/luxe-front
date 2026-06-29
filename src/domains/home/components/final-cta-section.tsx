@@ -41,7 +41,12 @@ export function FinalCtaSection() {
                   {t('finalCta.startShopping')}
                   <IconArrowRight className='cn-rtl-flip size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
                 </Link>
-                <Button variant='outline' size='lg' className='h-12 gap-2 rounded-full px-8 sm:h-14' asChild>
+                <Button
+                  variant='outline'
+                  size='lg'
+                  className='h-12 gap-2 rounded-full px-8 sm:h-14'
+                  asChild
+                >
                   <Link href='/vendor'>
                     <IconBuildingStore className='size-4' aria-hidden />
                     {t('finalCta.sellOnLuxe')}

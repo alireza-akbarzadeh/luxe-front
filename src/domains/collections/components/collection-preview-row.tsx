@@ -4,9 +4,9 @@ import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
+import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
 import { useGetProducts } from '@/services/-products-get';
 import type { GetProductsParams, GetProductsSort } from '@/services/-products-get.schemas';
-import type { DtoCollectionResponse } from '~/src/services/-collections-get.schemas';
 
 import { CollectionProductCard } from './collection-product-card';
 

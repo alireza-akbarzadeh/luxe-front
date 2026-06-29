@@ -1687,6 +1687,7 @@
       "signOut": "Cerrar sesión"
     },
     "common": {
+      "changeLanguage": "Cambiar idioma",
       "retry": "Reintentar",
       "cancel": "Cancelar",
       "edit": "Editar",

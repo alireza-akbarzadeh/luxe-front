@@ -18,7 +18,6 @@ import { sectionContainerClass } from '../lib/home-utils';
 export function PromoSection() {
   const { locale, marketingCopy, t } = useHomeContent();
   const { data, isLoading, isError } = useGetHomeFlashDeals({ limit: 1 });
-  console.log('Test');
 
   const deal = data?.data?.deals?.[0];
   const promoImage = deal?.product?.images?.[0];
