@@ -221,8 +221,8 @@ export function ProductCard({
 
           <div
             className={cn(
-              'pointer-events-none absolute top-2.5 start-2.5 flex flex-col gap-1.5',
-              isCompact && 'top-2 start-2 gap-1'
+              'pointer-events-none absolute start-2.5 top-2.5 flex flex-col gap-1.5',
+              isCompact && 'start-2 top-2 gap-1'
             )}
           >
             {product.is_new && (
@@ -256,7 +256,7 @@ export function ProductCard({
             productId={product.id as number}
             productName={product.name || ''}
             className={cn(
-              'bg-background/90 hover:bg-background absolute top-2.5 end-2.5 rounded-full shadow-sm backdrop-blur-sm transition-opacity',
+              'bg-background/90 hover:bg-background absolute end-2.5 top-2.5 rounded-full shadow-sm backdrop-blur-sm transition-opacity',
               'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
             )}
           />
@@ -320,7 +320,7 @@ export function ProductCard({
             <Link href={productHref} className='block'>
               <h3
                 className={cn(
-                  'font-display group-hover:text-accent line-clamp-2 leading-snug transition-colors',
+                  'font-display group-hover:text-accent line-clamp-2 truncate leading-snug transition-colors',
                   isCompact ? 'text-sm font-medium' : 'text-base font-medium sm:text-lg'
                 )}
               >
@@ -373,7 +373,7 @@ export function ProductCard({
               <>
                 <span
                   className={cn(
-                    'text-muted-foreground text-xs line-through tabular-nums sm:text-sm',
+                    'text-muted-foreground text-xs tabular-nums line-through sm:text-sm',
                     moneyClassName
                   )}
                 >

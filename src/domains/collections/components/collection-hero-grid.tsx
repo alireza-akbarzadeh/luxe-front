@@ -6,11 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
-
-import type { CuratedCollection } from '../lib/collections.config';
+import type { DtoCollectionResponse } from '~/src/services/-collections-get.schemas';
 
 interface CollectionHeroGridProps {
-  collections: CuratedCollection[];
+  collections: DtoCollectionResponse[];
 }
 
 export function CollectionHeroGrid({ collections }: CollectionHeroGridProps) {
@@ -32,17 +31,17 @@ export function CollectionHeroGrid({ collections }: CollectionHeroGridProps) {
               href={`#${collection.id}`}
               className={cn(
                 'group border-border/60 bg-card relative block overflow-hidden rounded-2xl border shadow-sm sm:rounded-3xl',
-                isFeatured ? 'aspect-[4/5] sm:aspect-[16/11] lg:aspect-auto lg:min-h-full' : 'aspect-[4/5]'
+                isFeatured
+                  ? 'aspect-[4/5] sm:aspect-[16/11] lg:aspect-auto lg:min-h-full'
+                  : 'aspect-[4/5]'
               )}
             >
               <Image
-                src={collection.image}
-                alt={collection.title}
+                src={collection.image_url ?? ''}
+                alt={collection.title ?? ''}
                 fill
                 sizes={
-                  isFeatured
-                    ? '(max-width: 1024px) 100vw, 50vw'
-                    : '(max-width: 640px) 50vw, 25vw'
+                  isFeatured ? '(max-width: 1024px) 100vw, 50vw' : '(max-width: 640px) 50vw, 25vw'
                 }
                 className='object-cover transition-transform duration-700 group-hover:scale-105'
               />

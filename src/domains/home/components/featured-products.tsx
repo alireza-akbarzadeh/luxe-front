@@ -1,10 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
 import { SectionCarousel } from '@/components/section-carousel';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductCard } from '@/domains/shop/components/product-card';

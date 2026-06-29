@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 import { SectionCarousel } from '@/components/section-carousel';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
@@ -47,14 +45,7 @@ export function NewArrivalsSection() {
       loop={false}
       renderSkeleton={() => <ProductGridSkeleton count={4} columns={4} />}
       renderItem={(product, index) => (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.45, delay: index * 0.05 }}
-        >
-          <ProductCard product={product} index={index} size='compact' />
-        </motion.div>
+        <ProductCard product={product} index={index} size='compact' />
       )}
     />
   );

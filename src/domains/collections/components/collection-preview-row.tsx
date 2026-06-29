@@ -5,13 +5,13 @@ import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import { useGetProducts } from '@/services/-products-get';
-import type { GetProductsParams } from '@/services/-products-get.schemas';
+import type { GetProductsParams, GetProductsSort } from '@/services/-products-get.schemas';
+import type { DtoCollectionResponse } from '~/src/services/-collections-get.schemas';
 
-import type { CuratedCollection } from '../lib/collections.config';
 import { CollectionProductCard } from './collection-product-card';
 
 interface CollectionPreviewRowProps {
-  collection: CuratedCollection;
+  collection: DtoCollectionResponse;
   className?: string;
 }
 
@@ -20,7 +20,9 @@ export function CollectionPreviewRow({ collection, className }: CollectionPrevie
     status: 'active',
     limit: 4,
     offset: 0,
-    ...collection.previewParams
+    sort: collection.preview_sort as GetProductsSort,
+    is_new: true,
+    category_id: collection.preview_category_id
   };
 
   const { data, isLoading } = useGetProducts(previewParams);
@@ -74,7 +76,7 @@ export function CollectionPreviewRow({ collection, className }: CollectionPrevie
           </p>
         </div>
         <Link
-          href={collection.href}
+          href={collection.href ?? ''}
           className='border-border/60 hover:border-accent/40 hover:bg-muted/40 inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors'
         >
           Shop collection

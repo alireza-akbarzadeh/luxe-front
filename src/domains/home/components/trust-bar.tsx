@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  IconHeadphones,
-  IconLock,
-  IconRefresh,
-  IconTruck
-} from '@tabler/icons-react';
+import { IconHeadphones, IconLock, IconRefresh, IconTruck } from '@tabler/icons-react';
 
 import { useHomeContent } from '../hooks/use-home-content';
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
@@ -19,6 +14,7 @@ const iconMap = {
 
 export function TrustBar() {
   const { trustItems } = useHomeContent();
+  console.log('Test');
 
   return (
     <section className={`${fullBleedClass} border-border/60 bg-secondary/40 border-y`}>

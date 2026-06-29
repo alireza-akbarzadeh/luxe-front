@@ -84,6 +84,7 @@ export function TestimonialsSection() {
       description={t('testimonials.description')}
       items={testimonialItems}
       columns={{ mobile: 1, tablet: 2, desktop: 3 }}
+      opts={{ align: 'start', loop: false, skipSnaps: false }}
       renderItem={(testimonial, index) => (
         <TestimonialCard
           testimonial={testimonial}

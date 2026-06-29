@@ -1,9 +1,11 @@
 'use client';
-
-import { IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { type ReactNode } from 'react';
 
+import { ChevronButton } from '@/components/section-carousel/chevron-button';
+import { DotIndicators } from '@/components/section-carousel/dot-Indicators';
 import {
   Carousel,
   CarouselContent,
@@ -11,10 +13,8 @@ import {
   type CarouselOptions
 } from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useCarouselState } from '@/hooks/useCarouselState';
 import { cn } from '@/lib/utils';
-import { ChevronButton } from '~/src/components/section-carousel/chevron-button';
-import { DotIndicators } from '~/src/components/section-carousel/dot-Indicators';
-import { useCarouselState } from '~/src/hooks/useCarouselState';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -174,7 +174,17 @@ export function SectionCarousel<T>({
                 ))
               : items.map((item, index) => (
                   <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
-                    {renderItem(item, index)}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{
+                        duration: 0.45,
+                        delay: index * 0.05
+                      }}
+                    >
+                      {renderItem(item, index)}
+                    </motion.div>
                   </CarouselItem>
                 ))}
           </CarouselContent>

@@ -13,7 +13,6 @@ import type { DtoCollectionListResponse } from '@/services/-collections-get.sche
 import { CollectionCard } from './components/collection-card';
 import { CollectionHeroGrid } from './components/collection-hero-grid';
 import { CollectionPreviewRow } from './components/collection-preview-row';
-import { mapApiCollectionToCurated } from './lib/collection-api-mapper';
 import { CURATED_COLLECTIONS } from './lib/collections.config';
 
 export function CollectionsDomain() {
@@ -25,7 +24,7 @@ export function CollectionsDomain() {
   const listData = listResponse as DtoCollectionListResponse | undefined;
 
   const collections = useMemo(() => {
-    const fromApi = (listData?.data?.collections ?? []).map(mapApiCollectionToCurated);
+    const fromApi = listData?.data?.collections ?? [];
     return fromApi.length > 0 ? fromApi : CURATED_COLLECTIONS;
   }, [listData]);
 

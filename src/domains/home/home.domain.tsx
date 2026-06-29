@@ -17,6 +17,8 @@ import { TestimonialsSection } from './components/testimonials-section';
 import { TrustBar } from './components/trust-bar';
 
 export function HomeDomains() {
+  console.log('Test');
+
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
       <HeroSection />
