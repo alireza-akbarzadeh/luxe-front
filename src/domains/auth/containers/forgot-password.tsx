@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  IconArrowLeft,
   IconArrowRight,
   IconCheckbox,
   IconKeyFilled,
@@ -9,7 +8,6 @@ import {
   IconMail
 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
@@ -18,8 +16,6 @@ import { forgotPasswordAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
-import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 
 export function ForgotPasswordDomain() {
   const t = useTranslations('auth');
@@ -61,22 +57,13 @@ export function ForgotPasswordDomain() {
   };
 
   return (
-    <div className='bg-background relative flex min-h-screen items-center justify-center p-6'>
-      <AuthLanguageSwitcher />
+    <div className='bg-background relative flex min-h-screen items-center justify-center p-6 pt-16 sm:pt-14'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className='w-full max-w-md'
       >
-        <Link
-          href='/login'
-          className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
-        >
-          <IconArrowLeft className='cn-rtl-flip h-4 w-4' />
-          {tForgot('backToSignIn')}
-        </Link>
-
         <AnimatePresence mode='wait'>
           {!isSubmitted ? (
             <motion.div
@@ -101,7 +88,7 @@ export function ForgotPasswordDomain() {
                 <div className='space-y-2'>
                   <Label htmlFor='email'>{t('fields.email')}</Label>
                   <div className='relative' dir='ltr'>
-                    <IconMail className='text-muted-foreground absolute top-1/2 start-3 h-5 w-5 -translate-y-1/2' />
+                    <IconMail className='text-muted-foreground absolute start-3 top-1/2 h-5 w-5 -translate-y-1/2' />
                     <Input
                       id='email'
                       type='email'

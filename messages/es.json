@@ -825,6 +825,7 @@
     }
   },
   "auth": {
+    "back": "Volver",
     "fields": {
       "email": "Correo electrónico",
       "emailPlaceholder": "nombre@ejemplo.com",

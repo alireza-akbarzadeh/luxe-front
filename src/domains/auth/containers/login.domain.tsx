@@ -13,7 +13,6 @@ import { getDirection, type Locale } from '@/i18n/config';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createLoginFormSchema } from '../auth.schema';
-import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 import { LegalDocumentLink } from '../components/legal-document-link';
 import { LoginSidebar } from '../components/login-sidebar';
 
@@ -69,8 +68,10 @@ export function LoginDomain() {
 
   return (
     <div className='bg-background flex min-h-screen' dir='ltr'>
-      <div className='relative flex flex-1 items-center justify-center p-6 sm:p-12' dir={pageDir}>
-        <AuthLanguageSwitcher />
+      <div
+        className='relative flex flex-1 items-center justify-center p-6 pt-16 sm:p-12 sm:pt-14'
+        dir={pageDir}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -126,10 +127,7 @@ export function LoginDomain() {
 
               <form.AppField name='rememberMe'>
                 {(field) => (
-                  <field.Checkbox
-                    label={tLogin('rememberMe')}
-                    data-testid='remember-me-checkbox'
-                  />
+                  <field.Checkbox label={tLogin('rememberMe')} data-testid='remember-me-checkbox' />
                 )}
               </form.AppField>
 

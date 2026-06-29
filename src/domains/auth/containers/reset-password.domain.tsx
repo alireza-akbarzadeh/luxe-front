@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  IconArrowLeft,
-  IconArrowRight,
-  IconCheckbox,
-  IconKeyFilled,
-  IconLoader2
-} from '@tabler/icons-react';
+import { IconArrowRight, IconCheckbox, IconKeyFilled, IconLoader2 } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -19,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createResetPasswordFormSchema } from '../auth.schema';
-import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -164,25 +157,14 @@ function ResetPasswordForm() {
 }
 
 export function ResetPasswordDomain() {
-  const tReset = useTranslations('auth.resetPassword');
-
   return (
-    <div className='bg-background relative flex min-h-screen items-center justify-center p-6'>
-      <AuthLanguageSwitcher />
+    <div className='bg-background relative flex min-h-screen items-center justify-center p-6 pt-16 sm:pt-14'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className='w-full max-w-md'
       >
-        <Link
-          href='/login'
-          className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
-        >
-          <IconArrowLeft className='cn-rtl-flip h-4 w-4' />
-          {tReset('backToSignIn')}
-        </Link>
-
         <Suspense
           fallback={
             <div className='flex items-center justify-center py-12'>

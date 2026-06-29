@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  IconArrowLeft,
-  IconArrowRight,
-  IconCheckbox,
-  IconLoader2,
-  IconMail
-} from '@tabler/icons-react';
+import { IconArrowRight, IconCheckbox, IconLoader2, IconMail } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -95,21 +89,13 @@ function VerifyEmailContent() {
 
 export function VerifyEmailDomain() {
   return (
-    <div className='bg-background flex min-h-screen items-center justify-center p-6'>
+    <div className='bg-background flex min-h-screen items-center justify-center p-6 pt-16 sm:pt-14'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className='w-full max-w-md'
       >
-        <Link
-          href='/account'
-          className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors'
-        >
-          <IconArrowLeft className='h-4 w-4' />
-          Back to account
-        </Link>
-
         <Suspense
           fallback={
             <div className='flex items-center justify-center py-12'>

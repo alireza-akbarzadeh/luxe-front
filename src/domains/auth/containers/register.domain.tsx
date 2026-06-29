@@ -15,7 +15,6 @@ import { registerAction } from '~/src/actions/auth.actions';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createRegisterFormSchema } from '../auth.schema';
-import { AuthLanguageSwitcher } from '../components/auth-language-switcher';
 import { LegalDocumentLink } from '../components/legal-document-link';
 import { RegisterSidebar } from '../components/register-sidebar';
 import { getPasswordStrength, passwordRequirementKeys } from '../utils.auth';
@@ -31,10 +30,7 @@ export function RegisterDomain() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const registerFormSchema = useMemo(
-    () => createRegisterFormSchema(tValidation),
-    [tValidation]
-  );
+  const registerFormSchema = useMemo(() => createRegisterFormSchema(tValidation), [tValidation]);
 
   const form = useAppForm({
     defaultValues: {
@@ -91,10 +87,9 @@ export function RegisterDomain() {
   return (
     <div className='bg-background flex min-h-screen' dir='ltr'>
       <div
-        className='relative flex flex-1 items-center justify-center overflow-y-auto p-6 sm:p-12'
+        className='relative flex flex-1 items-center justify-center overflow-y-auto p-6 pt-16 sm:p-12 sm:pt-14'
         dir={pageDir}
       >
-        <AuthLanguageSwitcher />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -273,7 +268,9 @@ export function RegisterDomain() {
                         {tRegister('termsPrefix')}{' '}
                         <LegalDocumentLink kind='terms'>{tRegister('termsLink')}</LegalDocumentLink>{' '}
                         {tRegister('termsAnd')}{' '}
-                        <LegalDocumentLink kind='privacy'>{tRegister('privacyLink')}</LegalDocumentLink>
+                        <LegalDocumentLink kind='privacy'>
+                          {tRegister('privacyLink')}
+                        </LegalDocumentLink>
                       </Label>
                     </div>
                   )}
