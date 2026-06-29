@@ -5,88 +5,15 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { Skeleton } from '@/components/ui/skeleton';
 import { useGetHomeCategories } from '@/services/-home-categories-get';
-import type { DtoHomeCategoryItem } from '@/services/-home-categories-get.schemas';
+import { FavoriteCategoriesSkeleton } from '~/src/domains/home/components/ui/favorite-Categories-Skeleton';
+import { FavoriteCategoryItem } from '~/src/domains/home/components/ui/favorite-category-Item';
 
-import { getHomeCategoryImage, sectionContainerClass } from '../lib/home-utils';
-import { CategoryCard } from './category-card';
+import { sectionContainerClass } from '../lib/home-utils';
 import { SectionHeader } from './section-header';
 import { HomeFadeIn } from './ui/home-fade-in';
 
 const HOME_CATEGORY_LIMIT = 8;
-
-// ── Skeleton ────────────────────────────────────────────────────────────────
-
-function FavoriteCategoriesSkeleton() {
-  return (
-    <>
-      {/* Mobile: horizontal strip */}
-      <div
-        className='flex gap-4 overflow-x-auto px-4 pb-3 lg:hidden'
-        style={{
-          marginLeft: '-1rem',
-          marginRight: '-1rem',
-          paddingLeft: '1rem',
-          paddingRight: '1rem'
-        }}
-      >
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className='flex w-[4.5rem] shrink-0 flex-col items-center gap-2.5 sm:w-24'>
-            <Skeleton className='size-[4.5rem] rounded-full sm:size-20' />
-            <Skeleton className='h-2.5 w-14 rounded-full' />
-          </div>
-        ))}
-      </div>
-
-      {/* Desktop: 4-col grid */}
-      <div className='hidden grid-cols-4 gap-6 lg:grid'>
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className='flex flex-col items-center gap-3'>
-            <Skeleton className='size-24 rounded-full' />
-            <Skeleton className='h-3 w-20 rounded-full' />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-}
-
-// ── Single item ──────────────────────────────────────────────────────────────
-
-function FavoriteCategoryItem({
-  category,
-  index,
-  shopNowLabel,
-  categoryAlt
-}: Readonly<{
-  category: DtoHomeCategoryItem;
-  index: number;
-  shopNowLabel: string;
-  categoryAlt: string;
-}>) {
-  return (
-    <motion.div
-      // Keep the item from shrinking — critical for horizontal scroll to work
-      className='shrink-0'
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, delay: index * 0.05 }}
-    >
-      <CategoryCard
-        variant='compact'
-        name={category.name}
-        categoryId={category.id}
-        image={getHomeCategoryImage(category, index)}
-        shopNowLabel={shopNowLabel}
-        categoryAlt={categoryAlt}
-      />
-    </motion.div>
-  );
-}
-
-// ── Section ──────────────────────────────────────────────────────────────────
 
 export function FavoriteCategoriesSection() {
   const t = useTranslations('home.favoriteCategories');

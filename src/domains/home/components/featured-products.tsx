@@ -78,17 +78,11 @@ export function FeaturedProducts() {
       isLoading={activeQuery.isLoading}
       columns={{ mobile: 1, tablet: 2, desktop: 4 }}
       headerSlot={tabsNode}
+      opts={{ align: 'start', loop: false, skipSnaps: false }}
       renderItem={(product, index) => (
         <ProductCard key={product.id ?? index} product={product} index={index} />
       )}
       renderSkeleton={() => <Skeleton className='aspect-4/5 w-full rounded-2xl' />}
-      footer={
-        <div className='flex-center mt-12 sm:mt-14'>
-          <Button variant='outline' size='lg' className='rounded-full px-8' asChild>
-            <Link href='/shop'>{t('common.viewAllProducts')}</Link>
-          </Button>
-        </div>
-      }
     />
   );
 }

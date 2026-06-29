@@ -4,7 +4,12 @@ import { IconArrowRight, IconChevronLeft, IconChevronRight } from '@tabler/icons
 import Link from 'next/link';
 import { type ReactNode } from 'react';
 
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselOptions
+} from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { ChevronButton } from '~/src/components/section-carousel/chevron-button';
@@ -37,7 +42,7 @@ export type SectionCarouselProps<T> = {
   viewAllHref?: string;
   viewAllLabel?: string;
   headerSlot?: ReactNode;
-
+  opts?: CarouselOptions;
   // ── Data ──────────────────────────────────────────────────────────────────
   items: T[];
   isLoading?: boolean;
@@ -51,6 +56,7 @@ export type SectionCarouselProps<T> = {
   renderItem: (item: T, index: number) => ReactNode;
 
   // ── Layout ────────────────────────────────────────────────────────────────
+  footerSlot?: ReactNode;
   columns?: SectionCarouselColumns;
   /** Extra classes on the outer <section> */
   className?: string;
@@ -97,7 +103,9 @@ export function SectionCarousel<T>({
   className,
   sectionId,
   loop = true,
-  headerSlot
+  headerSlot,
+  footerSlot,
+  opts
 }: SectionCarouselProps<T>) {
   const { setApi, current, count, scrollTo, scrollPrev, scrollNext, canScrollPrev, canScrollNext } =
     useCarouselState();
@@ -150,7 +158,7 @@ export function SectionCarousel<T>({
         {/* ── Carousel ──────────────────────────────────────────────────── */}
         <Carousel
           setApi={setApi}
-          opts={{ align: 'start', loop, skipSnaps: false }}
+          opts={opts ?? { align: 'start', loop, skipSnaps: false }}
           className='w-full'
         >
           <CarouselContent className='-ml-4'>
@@ -190,6 +198,7 @@ export function SectionCarousel<T>({
             </div>
           </div>
         )}
+        {footerSlot}
       </div>
     </section>
   );
