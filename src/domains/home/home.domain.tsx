@@ -16,17 +16,6 @@ import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 import { TrustBar } from './components/trust-bar';
 
-/**
- * Home landing narrative (top → bottom):
- *
- * 1. Hook — Hero + trust strip
- * 2. Personalize — Favorite categories (quick paths)
- * 3. Convert — Flash promo, featured grids, new arrivals
- * 4. Discover — Brands, category browse, editorial collections
- * 5. Explain — Marketplace story, how it works, feature benefits
- * 6. Validate — Testimonials + platform stats
- * 7. Close — FAQ, final CTA, newsletter
- */
 export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>

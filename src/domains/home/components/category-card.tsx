@@ -1,6 +1,7 @@
 'use client';
 
 import { IconArrowRight } from '@tabler/icons-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -19,6 +20,31 @@ export interface CategoryCardProps {
   categoryAlt: string;
   className?: string;
   variant?: CategoryCardVariant;
+}
+
+// Spinning conic-gradient border for the compact circle card.
+// Rendered as a pseudo-layer behind the image circle via an absolutely
+// positioned motion.div that rotates its background continuously.
+function AnimatedRingBorder() {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    // Outer ring — slightly larger than the image circle so it peeks out
+    <span className='pointer-events-none absolute inset-0 rounded-full' aria-hidden>
+      {/* Rotating gradient disc */}
+      <motion.span
+        className='absolute inset-[-2px] rounded-full'
+        style={{
+          background:
+            'conic-gradient(from 0deg, transparent 0%, #c9a96e 20%, #f0d9a8 35%, #ffffff30 50%, #c9a96e 65%, transparent 80%)'
+        }}
+        animate={reduceMotion ? {} : { rotate: 360 }}
+        transition={reduceMotion ? {} : { duration: 4, repeat: Infinity, ease: 'linear' }}
+      />
+      {/* Inner mask — matches the image circle exactly, hides centre of the disc */}
+      <span className='bg-background absolute inset-[2px] rounded-full' />
+    </span>
+  );
 }
 
 export function CategoryCard({
@@ -43,13 +69,32 @@ export function CategoryCard({
           className
         )}
       >
-        <Flex
-          align='center'
-          justify='center'
-          className='border-border/60 bg-secondary/40 relative size-[4.5rem] overflow-hidden rounded-full border shadow-sm transition-transform duration-300 group-hover:scale-105 sm:size-20'
-        >
-          <Image src={image} alt={name ?? categoryAlt} fill sizes='80px' className='object-cover' />
-        </Flex>
+        {/* Ring wrapper — relative so the AnimatedRingBorder can fill it */}
+        <div className='relative size-[4.5rem] sm:size-20'>
+          <AnimatedRingBorder />
+
+          {/* Image circle — sits above the ring mask */}
+          <motion.div
+            className='relative size-full overflow-hidden rounded-full'
+            whileHover={{ scale: 1.07 }}
+            transition={{ type: 'spring', stiffness: 340, damping: 24 }}
+          >
+            <Flex
+              align='center'
+              justify='center'
+              className='bg-secondary/40 absolute inset-0 overflow-hidden rounded-full'
+            >
+              <Image
+                src={image}
+                alt={name ?? categoryAlt}
+                fill
+                sizes='80px'
+                className='object-cover'
+              />
+            </Flex>
+          </motion.div>
+        </div>
+
         <Typography.Text
           variant='subtle'
           weight='medium'
@@ -62,6 +107,7 @@ export function CategoryCard({
     );
   }
 
+  // ── Grid variant (unchanged) ───────────────────────────────────────────────
   return (
     <Link
       href={href}

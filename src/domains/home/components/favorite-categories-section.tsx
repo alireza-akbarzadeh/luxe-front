@@ -1,10 +1,10 @@
 'use client';
 
+import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { Flex } from '@/components/ui/flex';
-import { Grid } from '@/components/ui/grid';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useGetHomeCategories } from '@/services/-home-categories-get';
 import type { DtoHomeCategoryItem } from '@/services/-home-categories-get.schemas';
@@ -16,28 +16,43 @@ import { HomeFadeIn } from './ui/home-fade-in';
 
 const HOME_CATEGORY_LIMIT = 8;
 
+// ── Skeleton ────────────────────────────────────────────────────────────────
+
 function FavoriteCategoriesSkeleton() {
   return (
     <>
-      <Flex className='custom-scrollbar -mx-4 gap-4 overflow-x-auto px-4 pb-2 lg:hidden'>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Flex key={index} align='center' className='w-[5.5rem] shrink-0 flex-col gap-2.5 sm:w-28'>
+      {/* Mobile: horizontal strip */}
+      <div
+        className='flex gap-4 overflow-x-auto px-4 pb-3 lg:hidden'
+        style={{
+          marginLeft: '-1rem',
+          marginRight: '-1rem',
+          paddingLeft: '1rem',
+          paddingRight: '1rem'
+        }}
+      >
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className='flex w-[4.5rem] shrink-0 flex-col items-center gap-2.5 sm:w-24'>
             <Skeleton className='size-[4.5rem] rounded-full sm:size-20' />
-            <Skeleton className='h-3 w-16 rounded-full' />
-          </Flex>
+            <Skeleton className='h-2.5 w-14 rounded-full' />
+          </div>
         ))}
-      </Flex>
-      <Grid className='hidden gap-5 sm:grid-cols-4 lg:grid lg:grid-cols-4'>
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Flex key={index} align='center' className='flex-col gap-3'>
-            <Skeleton className='size-20 rounded-full' />
+      </div>
+
+      {/* Desktop: 4-col grid */}
+      <div className='hidden grid-cols-4 gap-6 lg:grid'>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className='flex flex-col items-center gap-3'>
+            <Skeleton className='size-24 rounded-full' />
             <Skeleton className='h-3 w-20 rounded-full' />
-          </Flex>
+          </div>
         ))}
-      </Grid>
+      </div>
     </>
   );
 }
+
+// ── Single item ──────────────────────────────────────────────────────────────
 
 function FavoriteCategoryItem({
   category,
@@ -52,10 +67,12 @@ function FavoriteCategoryItem({
 }>) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      // Keep the item from shrinking — critical for horizontal scroll to work
+      className='shrink-0'
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: 0.35, delay: index * 0.05 }}
     >
       <CategoryCard
         variant='compact'
@@ -69,6 +86,8 @@ function FavoriteCategoryItem({
   );
 }
 
+// ── Section ──────────────────────────────────────────────────────────────────
+
 export function FavoriteCategoriesSection() {
   const t = useTranslations('home.favoriteCategories');
   const tCommon = useTranslations('home.common');
@@ -76,18 +95,17 @@ export function FavoriteCategoriesSection() {
 
   const forYou = data?.data?.for_you ?? [];
 
-  if (!isLoading && (isError || forYou.length === 0)) {
-    return null;
-  }
+  if (!isLoading && (isError || forYou.length === 0)) return null;
 
   return (
     <HomeFadeIn>
       <section
         id='favorite-categories'
-        className='border-border/40 border-b py-10 sm:py-12 lg:py-14'
+        className='border-border/40 border-b py-10 sm:py-12 lg:py-16'
         aria-busy={isLoading}
       >
         <div className={sectionContainerClass}>
+          {/* Header — sits inside the container with normal padding */}
           <SectionHeader
             eyebrow={t('eyebrow')}
             title={t('title')}
@@ -101,20 +119,63 @@ export function FavoriteCategoriesSection() {
             <FavoriteCategoriesSkeleton />
           ) : (
             <>
-              <Flex className='custom-scrollbar -mx-4 gap-4 overflow-x-auto px-4 pb-2 lg:hidden'>
-                {forYou.map((category, index) => (
-                  <FavoriteCategoryItem
-                    key={category.id ?? index}
-                    category={category}
-                    index={index}
-                    shopNowLabel={tCommon('shopNow')}
-                    categoryAlt={tCommon('categoryAlt')}
-                  />
-                ))}
-              </Flex>
+              {/* ── Mobile: full-bleed scrollable strip ─────────────────── */}
+              {/*
+                We break out of the container's horizontal padding so the
+                scroll strip touches the viewport edges, then restore left
+                padding so the first item aligns with the section text above.
+              */}
+              <div
+                className='lg:hidden'
+                style={{
+                  marginLeft: 'calc(var(--container-px, 1rem) * -1)',
+                  marginRight: 'calc(var(--container-px, 1rem) * -1)'
+                }}
+              >
+                <div
+                  className='custom-scrollbar flex gap-4 overflow-x-auto scroll-smooth pb-3'
+                  style={{
+                    paddingLeft: 'var(--container-px, 1rem)',
+                    paddingRight: 'var(--container-px, 1rem)'
+                  }}
+                >
+                  {forYou.map((category, index) => (
+                    <FavoriteCategoryItem
+                      key={category.id ?? index}
+                      category={category}
+                      index={index}
+                      shopNowLabel={tCommon('shopNow')}
+                      categoryAlt={tCommon('categoryAlt')}
+                    />
+                  ))}
 
-              <Grid className='hidden gap-6 sm:grid-cols-4 lg:grid lg:grid-cols-4 lg:gap-8'>
-                {forYou.map((category, index) => (
+                  {/* "View all" tile at the end of the strip */}
+                  <motion.div
+                    className='shrink-0'
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.35, delay: forYou.length * 0.05 }}
+                  >
+                    <Link
+                      href='/shop'
+                      className='group flex h-full w-[4.5rem] flex-col items-center justify-center gap-2 sm:w-24'
+                    >
+                      {/* Circle button */}
+                      <span className='bg-muted border-border group-hover:bg-muted/70 flex size-[4.5rem] items-center justify-center rounded-full border transition-colors sm:size-20'>
+                        <IconArrowRight className='text-foreground/70 size-5' stroke={1.5} />
+                      </span>
+                      <span className='text-muted-foreground text-center text-[11px] leading-tight font-medium sm:text-xs'>
+                        {tCommon('viewAll') ?? 'View all'}
+                      </span>
+                    </Link>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* ── Desktop: uniform grid ────────────────────────────────── */}
+              <div className='hidden grid-cols-4 gap-6 lg:grid xl:gap-8'>
+                {forYou.slice(0, 8).map((category, index) => (
                   <FavoriteCategoryItem
                     key={category.id ?? `desktop-${index}`}
                     category={category}
@@ -123,7 +184,7 @@ export function FavoriteCategoriesSection() {
                     categoryAlt={tCommon('categoryAlt')}
                   />
                 ))}
-              </Grid>
+              </div>
             </>
           )}
         </div>

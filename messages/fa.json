@@ -158,6 +158,7 @@
     "openMenu": "باز کردن منو",
     "closeMenu": "بستن منو",
     "apps": "دریافت اپ لوکس",
+    "mobileMenu": "منوی کاربری",
     "deliveryLocation": {
       "setLocation": "انتخاب موقعیت",
       "ariaSetLocation": "تعیین محل تحویل",
@@ -1686,6 +1687,7 @@
       "signOut": "خروج"
     },
     "common": {
+      "changeLanguage": "تغییر زبان",
       "retry": "تلاش مجدد",
       "cancel": "انصراف",
       "edit": "ویرایش",

@@ -9,20 +9,22 @@ import {
   IconPhone
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { LanguageSwitcher } from '@/components/i18n/language-switcher';
-import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
 import {
   footerSections,
   legalLinks,
   paymentMethods,
   socialLinks
-} from '~/src/components/footer/footer.data';
-import { FooterLinkColumn } from '~/src/components/footer/footer-link-column';
-import { Newsletter } from '~/src/components/footer/news-letter';
-import { TrustStrip } from '~/src/components/footer/trust-stripe';
+} from '@/components/footer/footer.data';
+import { FooterLinkColumn } from '@/components/footer/footer-link-column';
+import { Newsletter } from '@/components/footer/news-letter';
+import { TrustStrip } from '@/components/footer/trust-stripe';
+import { LanguageSwitcher } from '@/components/i18n/language-switcher';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 function BackToTop() {
   const t = useTranslations('common');
@@ -46,9 +48,10 @@ export function Footer() {
   const tSections = useTranslations('footer.sections');
   const tLegal = useTranslations('footer.legal');
   const footerBarCopy = getFooterBarCopyParams();
+  const tAccount = useTranslations('account.common');
 
   return (
-    <footer className='border-border/60 bg-background relative mt-24 overflow-x-hidden border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
+    <footer className='border-border/60 bg-background relative mt-24 border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
       <div
         aria-hidden
         className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent'
@@ -137,21 +140,48 @@ export function Footer() {
             </div>
           </div>
           <div className='flex flex-wrap gap-3'>
-            <Link
-              href='/apps'
-              className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
-            >
-              <span className='text-xs opacity-70'>{t('downloadOn')}</span>
-              <span className='font-semibold'>{t('appStore')}</span>
-            </Link>
-            <Link
-              href='/apps'
-              className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
-            >
-              <span className='text-xs opacity-70'>{t('getItOn')}</span>
-              <span className='font-semibold'>{t('googlePlay')}</span>
-            </Link>
-            <LanguageSwitcher variant='footer' />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href='/apps'
+                    className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
+                  >
+                    <Image
+                      src='/assets/app-store.png'
+                      alt='App Store'
+                      width={100}
+                      height={100}
+                      className='size-6'
+                    />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>{t('appStore')}</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href='/apps'
+                    className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
+                  >
+                    <Image
+                      src='/assets/play-store.png'
+                      alt='App Store'
+                      width={100}
+                      height={100}
+                      className='size-6'
+                    />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>{t('googlePlay')}</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <LanguageSwitcher variant='footer' />
+                </TooltipTrigger>
+                <TooltipContent>{tAccount('changeLanguage')}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
         <div className='via-border mt-12 h-px w-full bg-linear-to-r from-transparent to-transparent' />

@@ -41,21 +41,16 @@ export function LanguageSwitcher({ className, variant = 'icon' }: LanguageSwitch
   if (variant === 'footer') {
     return (
       <div className={cn('flex flex-col gap-2', className)}>
-        <span className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'>
-          {t('label')}
-        </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button
-              type='button'
-              disabled={isPending}
+            <div
+              aria-disabled={isPending}
               className='border-border/60 bg-background hover:bg-muted/60 inline-flex w-full max-w-xs items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium transition'
             >
               <span className='inline-flex items-center gap-2'>
-                <IconWorld className='size-4' stroke={1.75} />
-                {t(locale)}
+                <IconWorld className='size-6' stroke={1.75} />
               </span>
-            </button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='start' className='min-w-44'>
             <DropdownMenuLabel>{t('label')}</DropdownMenuLabel>

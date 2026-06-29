@@ -8,11 +8,10 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-import type { CuratedCollection } from '../lib/collections.config';
+import type { DtoHomeCollectionItem } from '~/src/services/-home-popular-collections-get.schemas';
 
 interface CollectionCardProps {
-  collection: CuratedCollection;
+  collection: DtoHomeCollectionItem;
   index: number;
 }
 
@@ -22,7 +21,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
 
   return (
     <motion.article
-      id={collection.id}
+      id={collection.id?.toString() ?? ''}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
@@ -37,8 +36,8 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
           )}
         >
           <Image
-            src={collection.image}
-            alt={collection.title}
+            src={collection.image_url ?? ''}
+            alt={collection.title ?? ''}
             fill
             sizes='(max-width: 1024px) 100vw, 50vw'
             className='object-cover transition-transform duration-700 group-hover/image:scale-[1.04]'
@@ -86,17 +85,17 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
 
             <div className='mt-8 flex flex-col gap-3 sm:flex-row sm:items-center'>
               <Link
-                href={collection.href}
+                href={collection.href ?? ''}
                 className={cn(
                   buttonVariants({ size: 'lg' }),
                   'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8 shadow-sm'
                 )}
               >
-                {collection.cta}
+                {collection.cta_label ?? 'Browse all pieces'}
                 <IconArrowRight className='ml-2 size-4' />
               </Link>
               <Link
-                href={collection.href}
+                href={collection.href ?? ''}
                 className='text-foreground hover:text-accent inline-flex items-center gap-1.5 text-sm font-medium transition-colors'
               >
                 Browse all pieces

@@ -68,13 +68,17 @@ export const FALLBACK_CATEGORY_IMAGES = [
   CATEGORY_IMAGES.watches
 ] as const;
 
+export type Testimonial = {
+  id: number;
+  key: string;
+  avatar: string;
+  rating: number;
+  name: string;
+  role: string;
+  content: string;
+};
+
 export const TESTIMONIAL_ITEMS = [
-  {
-    id: 1,
-    key: '1',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
-    rating: 5
-  },
   {
     id: 2,
     key: '2',
@@ -89,7 +93,19 @@ export const TESTIMONIAL_ITEMS = [
   },
   {
     id: 4,
-    key: '4',
+    key: '3',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
+    rating: 5
+  },
+  {
+    id: 5,
+    key: '3',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
+    rating: 5
+  },
+  {
+    id: 6,
+    key: '3',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
     rating: 5
   }

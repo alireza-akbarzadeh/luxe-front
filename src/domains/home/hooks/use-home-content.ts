@@ -14,6 +14,7 @@ import {
   HOME_STATS,
   MARKETPLACE_BENEFIT_KEYS,
   MARKETPLACE_TILE_KEYS,
+  type Testimonial,
   TESTIMONIAL_ITEMS,
   TRUST_ITEMS
 } from '../lib/home-mock-data';
@@ -90,8 +91,9 @@ export function useHomeContent() {
     label: t(`statsSection.items.${stat.key}`)
   }));
 
-  const testimonialItems = TESTIMONIAL_ITEMS.map((item) => ({
+  const testimonialItems: Testimonial[] = TESTIMONIAL_ITEMS.map((item) => ({
     id: item.id,
+    key: item.key,
     avatar: item.avatar,
     rating: item.rating,
     name: t(`testimonials.items.${item.key}.name`),

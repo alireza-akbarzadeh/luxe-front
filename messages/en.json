@@ -158,6 +158,7 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "apps": "Get Luxe app",
+    "mobileMenu": "Navigation menu",
     "deliveryLocation": {
       "setLocation": "Set location",
       "ariaSetLocation": "Set delivery location",
@@ -1686,6 +1687,7 @@
       "signOut": "Sign out"
     },
     "common": {
+      "changeLanguage": "Change language",
       "retry": "Retry",
       "cancel": "Cancel",
       "edit": "Edit",
