@@ -142,8 +142,9 @@ export function Footer() {
           <div className='flex flex-wrap gap-3'>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Link
+                    aria-label={t('appStore')}
                     href='/apps'
                     className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
                   >
@@ -159,9 +160,10 @@ export function Footer() {
                 <TooltipContent>{t('appStore')}</TooltipContent>
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Link
                     href='/apps'
+                    aria-label={t('googlePlay')}
                     className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
                   >
                     <Image
@@ -176,7 +178,7 @@ export function Footer() {
                 <TooltipContent>{t('googlePlay')}</TooltipContent>
               </Tooltip>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <LanguageSwitcher variant='footer' />
                 </TooltipTrigger>
                 <TooltipContent>{tAccount('changeLanguage')}</TooltipContent>

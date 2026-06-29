@@ -14,8 +14,7 @@ import { useHomeContent } from '../hooks/use-home-content';
 
 function TestimonialCard({
   testimonial,
-  index,
-  starsLabel
+  index
 }: {
   testimonial: Testimonial;
   index: number;
@@ -40,7 +39,7 @@ function TestimonialCard({
 
       <IconQuote className='text-accent/30 h-7 w-7 shrink-0' aria-hidden />
 
-      <div className='mt-4 flex gap-0.5' aria-label={starsLabel}>
+      <div className='mt-4 flex gap-0.5'>
         {Array.from({ length: testimonial.rating }).map((_, i) => (
           <motion.span
             key={i}

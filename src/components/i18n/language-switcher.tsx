@@ -45,6 +45,7 @@ export function LanguageSwitcher({ className, variant = 'icon' }: LanguageSwitch
           <DropdownMenuTrigger asChild>
             <div
               aria-disabled={isPending}
+              aria-label={t('label')}
               className='border-border/60 bg-background hover:bg-muted/60 inline-flex w-full max-w-xs items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium transition'
             >
               <span className='inline-flex items-center gap-2'>
