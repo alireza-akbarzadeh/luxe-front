@@ -1,5 +1,4 @@
 'use client';
-
 import { IconHeadphones, IconLock, IconRefresh, IconTruck } from '@tabler/icons-react';
 
 import { useHomeContent } from '../hooks/use-home-content';

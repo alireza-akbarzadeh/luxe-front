@@ -1,14 +1,16 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
-import { useGetHomeTopProducts } from '@/services/-home-top-products-get';
-import { useGetHomeTrendingProducts } from '@/services/-home-trending-products-get';
+import { toSuspenseOptions } from '@/lib/use-suspense-query';
+import { getGetHomeNewArrivalsQueryOptions } from '@/services/-home-new-arrivals-get';
+import { getGetHomeTopProductsQueryOptions } from '@/services/-home-top-products-get';
+import { getGetHomeTrendingProductsQueryOptions } from '@/services/-home-trending-products-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
 import { mapHomeProductItem } from '../lib/home-utils';
@@ -21,33 +23,34 @@ export function FeaturedProducts() {
   const { t } = useHomeContent();
   const [tab, setTab] = useState<ProductTab>('featured');
 
-  const topProducts = useGetHomeTopProducts(
-    { limit: PRODUCT_LIMIT },
-    { query: { enabled: tab === 'featured' } }
-  );
-  const newArrivals = useGetHomeNewArrivals(
-    { limit: PRODUCT_LIMIT },
-    { query: { enabled: tab === 'new' } }
-  );
-  const trendingProducts = useGetHomeTrendingProducts(
-    { limit: PRODUCT_LIMIT },
-    { query: { enabled: tab === 'trending' } }
+  const topProducts = useSuspenseQuery(
+    toSuspenseOptions(getGetHomeTopProductsQueryOptions({ limit: PRODUCT_LIMIT }))
   );
 
-  const activeQuery =
-    tab === 'featured' ? topProducts : tab === 'new' ? newArrivals : trendingProducts;
+  const newArrivals = useSuspenseQuery(
+    toSuspenseOptions(getGetHomeNewArrivalsQueryOptions({ limit: PRODUCT_LIMIT }))
+  );
+
+  const trendingProducts = useSuspenseQuery(
+    toSuspenseOptions(getGetHomeTrendingProductsQueryOptions({ limit: PRODUCT_LIMIT }))
+  );
 
   const products = useMemo(() => {
-    const items =
-      tab === 'featured'
-        ? topProducts.data?.data?.products
-        : tab === 'new'
-          ? newArrivals.data?.data?.products
-          : trendingProducts.data?.data?.products;
-    return (items ?? []).map(mapHomeProductItem);
+    switch (tab) {
+      case 'featured':
+        return (topProducts.data.data?.products ?? []).map(mapHomeProductItem);
+
+      case 'new':
+        return (newArrivals.data.data?.products ?? []).map(mapHomeProductItem);
+
+      case 'trending':
+        return (trendingProducts.data.data?.products ?? []).map(mapHomeProductItem);
+
+      default:
+        return [];
+    }
   }, [tab, topProducts.data, newArrivals.data, trendingProducts.data]);
 
-  // Tabs node passed as a header slot so SectionCarousel owns the full layout
   const tabsNode = (
     <Tabs value={tab} onValueChange={(v) => setTab(v as ProductTab)}>
       <TabsList className='bg-muted/60 h-auto w-full justify-start gap-1 overflow-x-auto rounded-full p-1 sm:w-auto'>
@@ -73,14 +76,15 @@ export function FeaturedProducts() {
       viewAllHref='/shop'
       viewAllLabel={t('common.shopAll')}
       items={products}
-      isLoading={activeQuery.isLoading}
+      isLoading={false}
       columns={{ mobile: 1, tablet: 2, desktop: 4 }}
       headerSlot={tabsNode}
       opts={{ align: 'start', loop: false, skipSnaps: false }}
+      skeletonCount={PRODUCT_LIMIT}
+      renderSkeleton={() => <Skeleton className='aspect-4/5 w-full rounded-2xl' />}
       renderItem={(product, index) => (
         <ProductCard key={product.id ?? index} product={product} index={index} />
       )}
-      renderSkeleton={() => <Skeleton className='aspect-4/5 w-full rounded-2xl' />}
     />
   );
 }

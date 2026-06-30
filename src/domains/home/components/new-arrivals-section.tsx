@@ -1,8 +1,11 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { SectionCarousel } from '@/components/section-carousel';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
+import { toSuspenseOptions } from '@/lib/use-suspense-query';
+import { getGetHomeNewArrivalsQueryOptions } from '@/services/-home-new-arrivals-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
 import { mapHomeProductItem } from '../lib/home-utils';
@@ -13,19 +16,23 @@ const NEW_ARRIVALS_LIMIT = 5;
 export function NewArrivalsSection() {
   const { t } = useHomeContent();
 
-  const { data, isLoading, isError } = useGetHomeNewArrivals(
-    { limit: NEW_ARRIVALS_LIMIT },
-    {
-      query: {
-        select: (response) =>
-          (response?.data?.products ?? []).slice(0, NEW_ARRIVALS_LIMIT).map(mapHomeProductItem)
-      }
-    }
+  const { data, isError } = useSuspenseQuery(
+    toSuspenseOptions(
+      getGetHomeNewArrivalsQueryOptions(
+        { limit: NEW_ARRIVALS_LIMIT },
+        {
+          query: {
+            select: (response) =>
+              (response?.data?.products ?? []).slice(0, NEW_ARRIVALS_LIMIT).map(mapHomeProductItem)
+          }
+        }
+      )
+    )
   );
 
   const products = data ?? [];
 
-  if (!isLoading && (isError || products.length === 0)) {
+  if (isError || products.length === 0) {
     return null;
   }
 
@@ -38,7 +45,7 @@ export function NewArrivalsSection() {
       viewAllHref='/shop?sortBy=newest'
       viewAllLabel={t('newArrivals.linkLabel')}
       items={products}
-      isLoading={isLoading}
+      isLoading={false}
       columns={{ mobile: 2, tablet: 3, desktop: 4 }}
       skeletonCount={NEW_ARRIVALS_LIMIT}
       opts={{ align: 'start', loop: false, skipSnaps: false }}

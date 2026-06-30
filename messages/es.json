@@ -19,7 +19,16 @@
       "logIn": "Iniciar sesión",
       "backToHome": "Volver al inicio",
       "continueShopping": "Seguir comprando",
-      "goShopping": "Ir a la tienda"
+      "goShopping": "Ir a la tienda",
+      "network": "Sin respuesta del servidor. Compruebe su conexión de red.",
+      "networkError": "Error de red: {detail}",
+      "sessionExpired": "Su sesión ha expirado. Inicie sesión de nuevo.",
+      "authFailed": "Error de autenticación. Inicie sesión de nuevo.",
+      "forbiddenFallback": "No tiene permiso para realizar esta acción.",
+      "serverUnavailable": "El servidor no está disponible temporalmente. Inténtelo de nuevo pronto.",
+      "unexpected": "Se produjo un error inesperado.",
+      "tooManyRequests": "Demasiadas solicitudes.",
+      "tryAgainIn": " Inténtelo de nuevo en {seconds}s."
     },
     "site": {
       "recovery": {
@@ -790,17 +799,6 @@
       "mailtoSubject": "Alta en el boletín Luxe Edit",
       "mailtoBody": "Por favor, añádeme al boletín Luxe Edit:\n\n{email}"
     }
-  },
-  "errors": {
-    "network": "Sin respuesta del servidor. Compruebe su conexión de red.",
-    "networkError": "Error de red: {detail}",
-    "sessionExpired": "Su sesión ha expirado. Inicie sesión de nuevo.",
-    "authFailed": "Error de autenticación. Inicie sesión de nuevo.",
-    "forbiddenFallback": "No tiene permiso para realizar esta acción.",
-    "serverUnavailable": "El servidor no está disponible temporalmente. Inténtelo de nuevo pronto.",
-    "unexpected": "Se produjo un error inesperado.",
-    "tooManyRequests": "Demasiadas solicitudes.",
-    "tryAgainIn": " Inténtelo de nuevo en {seconds}s."
   },
   "welcome": {
     "metaTitle": "Bienvenido a Luxe",

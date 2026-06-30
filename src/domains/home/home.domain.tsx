@@ -1,5 +1,11 @@
 import { BrandsSection } from '~/src/domains/home/components/brands-section';
 import { MostWhitelists } from '~/src/domains/home/components/most-whitelists';
+import {
+  CardGridSkeleton,
+  CarouselSkeleton,
+  MarqueeSkeleton
+} from '~/src/domains/home/components/ui/home-skeleton';
+import { SectionBoundary } from '~/src/domains/home/components/ui/section-boundary';
 
 import { BrandsMarquee } from './components/brands-marquee';
 import { CategoriesSection } from './components/categories-section';
@@ -23,16 +29,43 @@ export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
       <HeroSection />
+
       <TrustBar />
-      <FavoriteCategoriesSection />
+
+      <SectionBoundary fallback={<CarouselSkeleton count={8} />}>
+        <FavoriteCategoriesSection />
+      </SectionBoundary>
+
       <PromoSection />
-      <FeaturedProducts />
-      <MostWhitelists />
-      <NewArrivalsSection />
-      <BrandsMarquee />
-      <BrandsSection />
-      <CategoriesSection />
-      <CollectionBanner />
+
+      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <FeaturedProducts />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <MostWhitelists />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CarouselSkeleton count={8} />}>
+        <NewArrivalsSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<MarqueeSkeleton />}>
+        <BrandsMarquee />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+        <BrandsSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={6} />}>
+        <CategoriesSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+        <CollectionBanner />
+      </SectionBoundary>
+
       <MarketplaceShowcaseSection />
       <HowItWorksSection />
       <FeaturesSection />

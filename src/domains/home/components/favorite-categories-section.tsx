@@ -1,11 +1,12 @@
 'use client';
-
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetHomeCategories } from '@/services/-home-categories-get';
-import { FavoriteCategoryItem } from '~/src/domains/home/components/ui/favorite-category-Item';
+import { FavoriteCategoryItem } from '@/domains/home/components/ui/favorite-category-Item';
+import { toSuspenseOptions } from '@/lib/use-suspense-query';
+import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
 
 const HOME_CATEGORY_LIMIT = 8;
 
@@ -13,10 +14,9 @@ export function FavoriteCategoriesSection() {
   const t = useTranslations('home.favoriteCategories');
   const tCommon = useTranslations('home.common');
 
-  const { data, isLoading, isError } = useGetHomeCategories({
-    limit: HOME_CATEGORY_LIMIT
-  });
-
+  const { data, isLoading, isError } = useSuspenseQuery(
+    toSuspenseOptions(getGetHomeCategoriesQueryOptions({ limit: HOME_CATEGORY_LIMIT }))
+  );
   const categories = data?.data?.for_you ?? [];
 
   if (!isLoading && (isError || categories.length === 0)) {

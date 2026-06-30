@@ -1,52 +1,24 @@
-'use client';
-
 import { IconArrowRight, IconSparkles, IconStar } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
-import { getProductPath } from '@/domains/product/lib/product-routes';
 import { cn } from '@/lib/utils';
-import { useGetHomeNewArrivals } from '@/services/-home-new-arrivals-get';
+import { HeroSpotlight } from '~/src/domains/home/components/ui/hero-spotlight';
+import { CarouselSkeleton } from '~/src/domains/home/components/ui/home-skeleton';
 
-import { useHomeContent } from '../hooks/use-home-content';
 import { HERO_TRUST_AVATARS } from '../lib/home-mock-data';
-import {
-  formatPrice,
-  fullBleedClass,
-  mapHomeProductItem,
-  sectionContainerClass
-} from '../lib/home-utils';
+import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
 
-const containerVariants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.05 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } }
-};
-
-export function HeroSection() {
-  const { heroStats, marketingCopy, t } = useHomeContent();
-  const { data, isLoading } = useGetHomeNewArrivals({ limit: 3 });
-
-  const spotlight = (data?.data?.products ?? []).slice(0, 3).map(mapHomeProductItem);
-  const heroImage = spotlight[0]?.images?.[0];
-  const spotlightPrice = spotlight[0]?.price;
-  const showSpotlight = isLoading || spotlight.length > 0;
+export async function HeroSection() {
+  const t = await getTranslations('home');
 
   return (
     <section className={`${fullBleedClass} relative overflow-hidden`}>
       <div className='from-background via-background to-surface absolute inset-0 bg-linear-to-b' />
-
       <div className='bg-gold/10 dark:bg-gold/15 pointer-events-none absolute -top-32 right-0 h-112 w-md rounded-full blur-3xl' />
       <div className='bg-gold/8 pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full blur-3xl' />
-
       <div
         aria-hidden
         className='pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.06]'
@@ -61,48 +33,27 @@ export function HeroSection() {
       <div
         className={`${sectionContainerClass} relative flex min-h-[calc(100svh-5rem)] flex-col justify-center pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24`}
       >
-        <div
-          className={cn(
-            'grid items-center gap-10',
-            showSpotlight ? 'lg:grid-cols-12 lg:gap-14' : 'max-w-3xl'
-          )}
-        >
-          <motion.div
-            variants={containerVariants}
-            initial='hidden'
-            animate='show'
-            className={cn('text-center lg:text-start', showSpotlight ? 'lg:col-span-6' : 'mx-auto')}
-          >
-            <motion.div
-              variants={itemVariants}
-              className='border-gold/30 bg-card/80 text-foreground mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'
-            >
+        <div className='grid items-center gap-10 lg:grid-cols-12 lg:gap-14'>
+          <div className='hero-fade-in text-center lg:col-span-6 lg:text-start'>
+            <div className='border-gold/30 bg-card/80 text-foreground mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'>
               <IconSparkles className='text-gold h-4 w-4' />
               <span className='text-gold-strong dark:text-gold tracking-wide'>
-                {t('hero.seasonBadge', marketingCopy.hero)}
+                {t('hero.seasonBadge', { year: new Date().getFullYear() })}
               </span>
               <span className='text-muted-foreground'>— {t('hero.seasonLive')}</span>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              variants={itemVariants}
-              className='font-display text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl xl:text-[5.25rem]'
-            >
+            {/* LCP element — plain HTML, no JS gating it */}
+            <h1 className='font-display text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl xl:text-[5.25rem]'>
               {t('hero.titleLine1')}
               <span className='text-gold-gradient mt-1 block italic'>{t('hero.titleLine2')}</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              variants={itemVariants}
-              className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg lg:mx-0'
-            >
+            <p className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg lg:mx-0'>
               {t('hero.description')}
-            </motion.p>
+            </p>
 
-            <motion.div
-              variants={itemVariants}
-              className='mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start'
-            >
+            <div className='mt-6 flex flex-col items-center gap-3 sm:flex-row lg:items-start'>
               <div className='flex -space-x-2 rtl:space-x-reverse'>
                 {HERO_TRUST_AVATARS.map((src, i) => (
                   <div
@@ -110,7 +61,8 @@ export function HeroSection() {
                     className='border-background relative size-9 overflow-hidden rounded-full border-2 sm:size-10'
                     style={{ zIndex: HERO_TRUST_AVATARS.length - i }}
                   >
-                    <Image src={src} alt='' fill className='object-cover' sizes='40px' />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt='' className='size-full object-cover' />
                   </div>
                 ))}
               </div>
@@ -124,19 +76,16 @@ export function HeroSection() {
                     />
                   ))}
                   <span className='ms-1 text-sm font-semibold'>
-                    {t('hero.ratingValue', marketingCopy.hero)}
+                    {t('hero.ratingValue', { rating: 4.8 })}
                   </span>
                 </div>
                 <p className='text-muted-foreground text-xs sm:text-sm'>
-                  {t('hero.socialProof', marketingCopy.hero)}
+                  {t('hero.socialProof', { count: 1000 })}
                 </p>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              variants={itemVariants}
-              className='mt-8 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row lg:justify-start'
-            >
+            <div className='mt-8 flex flex-col justify-center gap-3 sm:mt-9 sm:flex-row lg:justify-start'>
               <Link
                 href='/shop'
                 className={cn(
@@ -155,13 +104,10 @@ export function HeroSection() {
               >
                 <Link href='/collection'>{t('hero.exploreCollections')}</Link>
               </Button>
-            </motion.div>
+            </div>
 
-            <motion.div
-              variants={itemVariants}
-              className='border-gold/15 mt-12 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4 lg:gap-6'
-            >
-              {heroStats.map((stat) => (
+            <div className='border-gold/15 mt-12 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4 lg:gap-6'>
+              {HERO_STATS.map((stat) => (
                 <dl key={stat.label} className='text-start'>
                   <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
                   <dd className='text-muted-foreground mt-1 text-xs tracking-wide sm:text-sm'>
@@ -169,104 +115,25 @@ export function HeroSection() {
                   </dd>
                 </dl>
               ))}
-            </motion.div>
-            <motion.p
-              variants={itemVariants}
-              className='text-muted-foreground/80 mt-3 text-[11px] tracking-wide'
-            >
+            </div>
+            <p className='text-muted-foreground/80 mt-3 text-[11px] tracking-wide'>
               {t('hero.statsFootnote')}
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
 
-          {showSpotlight ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className='relative lg:col-span-6'
-            >
-              <div className='grid grid-cols-12 gap-3 sm:gap-4'>
-                {heroImage ? (
-                  <div className='border-gold/20 relative col-span-7 aspect-4/5 overflow-hidden rounded-2xl border shadow-2xl sm:rounded-3xl'>
-                    <Image
-                      src={heroImage}
-                      alt={t('common.featuredCollectionAlt')}
-                      fill
-                      priority
-                      sizes='(max-width: 1024px) 60vw, 35vw'
-                      className='object-cover'
-                    />
-                    <div className='from-foreground/70 absolute inset-0 bg-linear-to-t via-transparent to-transparent' />
-                    <div className='absolute right-0 bottom-0 left-0 p-4 sm:p-5'>
-                      <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>
-                        {t('hero.editorsPick')}
-                      </p>
-                      <p className='text-primary-foreground font-display mt-1 text-lg font-medium sm:text-xl'>
-                        {spotlight[0]?.name ?? t('hero.signatureEditFallback')}
-                      </p>
-                      {spotlightPrice !== undefined && (
-                        <p className='text-primary-foreground/90 mt-1 text-sm'>
-                          {t('common.fromPrice', { price: formatPrice(spotlightPrice) })}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className='bg-muted border-gold/15 col-span-7 aspect-4/5 animate-pulse rounded-2xl border sm:rounded-3xl' />
-                )}
-
-                <div className='col-span-5 flex flex-col gap-3 sm:gap-4'>
-                  {spotlight.slice(1, 3).map((product, index) => {
-                    const image = product.images?.[0];
-                    if (!image) return null;
-
-                    return (
-                      <Link
-                        key={product.id ?? index}
-                        href={getProductPath(product)}
-                        className='group bg-card border-gold/15 hover:border-gold/40 relative aspect-square overflow-hidden rounded-2xl border shadow-lg transition-colors sm:rounded-3xl'
-                      >
-                        <Image
-                          src={image}
-                          alt={product.name ?? t('common.productAlt')}
-                          fill
-                          priority={index === 0}
-                          sizes='25vw'
-                          className='object-cover transition-transform duration-500 group-hover:scale-105'
-                        />
-                        <div className='from-foreground/60 absolute inset-0 bg-linear-to-t to-transparent opacity-80' />
-                        <p className='text-primary-foreground absolute right-3 bottom-3 left-3 line-clamp-2 text-xs font-medium sm:text-sm'>
-                          {product.name}
-                        </p>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.7, ease: 'backOut' }}
-                className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'
-              >
-                <div className='relative'>
-                  <span className='border-gold/50 absolute inset-0 animate-ping rounded-full border' />
-                  <span className='bg-gold/30 absolute inset-0 animate-pulse rounded-full blur-md' />
-                  <div className='bg-gold text-gold-foreground relative flex h-20 w-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:h-24 sm:w-24'>
-                    <span className='font-display text-base leading-none font-bold sm:text-lg'>
-                      {t('hero.newSeasonBadge')}
-                    </span>
-                    <span className='mt-0.5 text-[0.6rem] font-semibold tracking-[0.2em] uppercase'>
-                      {t('hero.seasonBadgeSub')}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          ) : null}
+          {/* Only this part needs data + JS */}
+          <Suspense fallback={<CarouselSkeleton count={8} />}>
+            <HeroSpotlight />
+          </Suspense>
         </div>
       </div>
     </section>
   );
 }
+
+const HERO_STATS = [
+  { label: 'Verified brands', value: '120+' },
+  { label: 'Independent makers', value: '850+' },
+  { label: 'Avg. store rating', value: '4.8' },
+  { label: 'Countries represented', value: '32' }
+] as const;

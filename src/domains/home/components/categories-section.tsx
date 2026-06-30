@@ -1,8 +1,11 @@
 'use client';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetHomeCategories } from '@/services/-home-categories-get';
+import { toSuspenseOptions } from '@/lib/use-suspense-query';
+import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
 
 import { useHomeContent } from '../hooks/use-home-content';
 import { getHomeCategoryImage } from '../lib/home-utils';
@@ -12,11 +15,16 @@ const CATEGORY_LIMIT = 8;
 
 export function CategoriesSection() {
   const { t } = useHomeContent();
-  const { data, isLoading, isError } = useGetHomeCategories({ limit: CATEGORY_LIMIT });
+
+  const { data, isError } = useSuspenseQuery(
+    toSuspenseOptions(getGetHomeCategoriesQueryOptions({ limit: CATEGORY_LIMIT }))
+  );
 
   const categories = data?.data?.popular ?? [];
 
-  if (!isLoading && (isError || categories.length === 0)) return null;
+  if (isError || categories.length === 0) {
+    return null;
+  }
 
   return (
     <SectionCarousel
@@ -27,8 +35,9 @@ export function CategoriesSection() {
       description={t('categories.description')}
       viewAllHref='/shop'
       items={categories}
-      isLoading={isLoading}
+      isLoading={false}
       columns={{ mobile: 1, tablet: 2, desktop: 4 }}
+      skeletonCount={CATEGORY_LIMIT}
       renderItem={(category, index) => (
         <CategoryCard
           name={category.name}

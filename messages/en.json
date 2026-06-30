@@ -11,6 +11,15 @@
     "backToTop": "Back to top"
   },
   "errors": {
+    "network": "No response from server. Check your network connection.",
+    "networkError": "Network error: {detail}",
+    "sessionExpired": "Your session has expired. Please log in again.",
+    "authFailed": "Authentication failed. Please log in again.",
+    "forbiddenFallback": "You do not have permission to perform this action.",
+    "serverUnavailable": "The server is temporarily unavailable. Please try again shortly.",
+    "unexpected": "An unexpected error occurred.",
+    "tooManyRequests": "Too many requests.",
+    "tryAgainIn": " Try again in {seconds}s.",
     "common": {
       "tryAgain": "Try again",
       "goHome": "Go home",
@@ -790,17 +799,6 @@
       "mailtoSubject": "Luxe Edit newsletter signup",
       "mailtoBody": "Please add me to the Luxe Edit newsletter:\n\n{email}"
     }
-  },
-  "errors": {
-    "network": "No response from server. Check your network connection.",
-    "networkError": "Network error: {detail}",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "authFailed": "Authentication failed. Please log in again.",
-    "forbiddenFallback": "You do not have permission to perform this action.",
-    "serverUnavailable": "The server is temporarily unavailable. Please try again shortly.",
-    "unexpected": "An unexpected error occurred.",
-    "tooManyRequests": "Too many requests.",
-    "tryAgainIn": " Try again in {seconds}s."
   },
   "welcome": {
     "metaTitle": "Welcome to Luxe",
