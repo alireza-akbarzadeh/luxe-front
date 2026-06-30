@@ -32,8 +32,6 @@ export const FEATURE_ITEMS = [
   { id: 4, key: 'support', icon: 'headphones' }
 ] as const;
 
-export const FAQ_KEYS = ['different', 'shipping', 'returns', 'payments', 'sell'] as const;
-
 export const HERO_TRUST_AVATARS = [
   'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop',
   'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',

@@ -1,26 +1,20 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
-import { getGetHomeTopBrandsQueryOptions } from '@/services/-home-top-brands-get';
+import { getHomeTopBrands } from '@/services/-home-top-brands-get';
 import { BrandCard } from '~/src/domains/home/components/ui/brand-card';
-import { useHomeContent } from '~/src/domains/home/hooks/use-home-content';
 
 const BRAND_LIMIT = 12;
 
-export function BrandsSection() {
-  const { t } = useHomeContent();
+export async function BrandsSection() {
+  const t = await getTranslations('home.brands');
 
-  const { data, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeTopBrandsQueryOptions({ limit: BRAND_LIMIT }))
-  );
+  const data = await getHomeTopBrands({ limit: BRAND_LIMIT });
 
   const brands = data?.data?.brands ?? [];
 
-  if (isError || brands.length === 0) {
+  if (brands.length === 0) {
     return null;
   }
 

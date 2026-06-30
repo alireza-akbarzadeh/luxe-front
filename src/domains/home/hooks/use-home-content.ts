@@ -7,7 +7,6 @@ import { formatLocaleCompact } from '@/lib/i18n/format-number';
 import { getHomeMarketingCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 import {
-  FAQ_KEYS,
   FEATURE_ITEMS,
   HOME_HOW_IT_WORKS,
   HOME_PLATFORM_STATS,
@@ -15,8 +14,7 @@ import {
   MARKETPLACE_BENEFIT_KEYS,
   MARKETPLACE_TILE_KEYS,
   type Testimonial,
-  TESTIMONIAL_ITEMS,
-  TRUST_ITEMS
+  TESTIMONIAL_ITEMS
 } from '../lib/home-mock-data';
 
 function formatHeroStatValue(value: number, suffix: string, locale: Locale) {
@@ -32,19 +30,6 @@ export function useHomeContent() {
   const heroStats = HOME_STATS.map((stat) => ({
     value: formatHeroStatValue(stat.value, stat.suffix, locale),
     label: t(`hero.stats.${stat.key}`)
-  }));
-
-  const trustItemParams = {
-    freeShipping: { amount: copy.trust.amount },
-    easyReturns: { days: copy.trust.days },
-    secureCheckout: { bits: copy.trust.bits },
-    support: { hours: copy.trust.hours, days: copy.trust.daysSupport }
-  } as const;
-
-  const trustItems = TRUST_ITEMS.map((item) => ({
-    icon: item.icon,
-    title: t(`trust.items.${item.key}.title`, trustItemParams[item.key]),
-    description: t(`trust.items.${item.key}.description`, trustItemParams[item.key])
   }));
 
   const howItWorks = HOME_HOW_IT_WORKS.map((step) => ({
@@ -74,16 +59,6 @@ export function useHomeContent() {
     description: t(`features.items.${item.key}.description`, featureItemParams[item.key])
   }));
 
-  const faqAnswerParams: Partial<Record<(typeof FAQ_KEYS)[number], Record<string, number>>> = {
-    shipping: copy.faq,
-    returns: { days: copy.faq.days }
-  };
-
-  const faqItems = FAQ_KEYS.map((key) => ({
-    question: t(`faq.items.${key}.question`),
-    answer: t(`faq.items.${key}.answer`, faqAnswerParams[key] ?? {})
-  }));
-
   const platformStats = HOME_PLATFORM_STATS.map((stat) => ({
     value: stat.value,
     suffix: stat.suffix,
@@ -103,12 +78,10 @@ export function useHomeContent() {
 
   return {
     heroStats,
-    trustItems,
     howItWorks,
     marketplaceBenefits,
     marketplaceTiles,
     features,
-    faqItems,
     platformStats,
     testimonialItems,
     marketingCopy: copy,

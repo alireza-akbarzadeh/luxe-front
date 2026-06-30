@@ -1,28 +1,22 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
-import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
+import { getHomeCategories } from '@/services/-home-categories-get';
 
-import { useHomeContent } from '../hooks/use-home-content';
 import { getHomeCategoryImage } from '../lib/home-utils';
 import { CategoryCard } from './category-card';
 
 const CATEGORY_LIMIT = 8;
 
-export function CategoriesSection() {
-  const { t } = useHomeContent();
+export async function CategoriesSection() {
+  const t = await getTranslations('home');
 
-  const { data, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeCategoriesQueryOptions({ limit: CATEGORY_LIMIT }))
-  );
+  const data = await getHomeCategories({ limit: CATEGORY_LIMIT });
 
   const categories = data?.data?.popular ?? [];
 
-  if (isError || categories.length === 0) {
+  if (categories.length === 0) {
     return null;
   }
 

@@ -1,7 +1,9 @@
-'use client';
 import { IconHeadphones, IconLock, IconRefresh, IconTruck } from '@tabler/icons-react';
+import { getTranslations } from 'next-intl/server';
 
-import { useHomeContent } from '../hooks/use-home-content';
+import { TRUST_ITEMS } from '~/src/domains/home/lib/home-mock-data';
+import { getHomeMarketingCopyParams } from '~/src/lib/i18n/marketing-copy-params';
+
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
 
 const iconMap = {
@@ -11,9 +13,21 @@ const iconMap = {
   headphones: IconHeadphones
 } as const;
 
-export function TrustBar() {
-  const { trustItems } = useHomeContent();
+export async function TrustBar() {
+  const t = await getTranslations('home');
+  const copy = getHomeMarketingCopyParams();
+  const trustItemParams = {
+    freeShipping: { amount: copy.trust.amount },
+    easyReturns: { days: copy.trust.days },
+    secureCheckout: { bits: copy.trust.bits },
+    support: { hours: copy.trust.hours, days: copy.trust.daysSupport }
+  } as const;
 
+  const trustItems = TRUST_ITEMS.map((item) => ({
+    icon: item.icon,
+    title: t(`trust.items.${item.key}.title`, trustItemParams[item.key]),
+    description: t(`trust.items.${item.key}.description`, trustItemParams[item.key])
+  }));
   return (
     <section className={`${fullBleedClass} border-border/60 bg-secondary/40 border-y`}>
       <div className={sectionContainerClass}>

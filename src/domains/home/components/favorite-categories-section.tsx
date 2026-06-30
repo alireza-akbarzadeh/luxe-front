@@ -1,27 +1,20 @@
-'use client';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
-import { Skeleton } from '@/components/ui/skeleton';
 import { FavoriteCategoryItem } from '@/domains/home/components/ui/favorite-category-Item';
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
-import { getGetHomeCategoriesQueryOptions } from '@/services/-home-categories-get';
+import { getHomeCategories } from '@/services/-home-categories-get';
 
 const HOME_CATEGORY_LIMIT = 8;
 
-export function FavoriteCategoriesSection() {
-  const t = useTranslations('home.favoriteCategories');
-  const tCommon = useTranslations('home.common');
+export async function FavoriteCategoriesSection() {
+  const [t, tCommon] = await Promise.all([
+    getTranslations('home.favoriteCategories'),
+    getTranslations('home.common')
+  ]);
 
-  const { data, isLoading, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeCategoriesQueryOptions({ limit: HOME_CATEGORY_LIMIT }))
-  );
+  const data = await getHomeCategories({ limit: HOME_CATEGORY_LIMIT });
   const categories = data?.data?.for_you ?? [];
-
-  if (!isLoading && (isError || categories.length === 0)) {
-    return null;
-  }
+  if (categories.length === 0) return null;
 
   return (
     <SectionCarousel
@@ -33,10 +26,7 @@ export function FavoriteCategoriesSection() {
       viewAllHref='/shop'
       viewAllLabel={tCommon('viewAll')}
       items={categories}
-      isLoading={isLoading}
       columns={{ mobile: 2, tablet: 3, desktop: 4 }}
-      skeletonCount={HOME_CATEGORY_LIMIT}
-      renderSkeleton={() => <Skeleton className='aspect-[0.78] w-full rounded-3xl' />}
       renderItem={(category, index) => (
         <FavoriteCategoryItem
           category={category}

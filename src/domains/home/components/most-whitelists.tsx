@@ -1,27 +1,19 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
-import { getGetHomeMostWishlistedQueryOptions } from '@/services/-home-most-wishlisted-get';
-
-import { useHomeContent } from '../hooks/use-home-content';
+import { getHomeMostWishlisted } from '~/src/services/-home-most-wishlisted-get';
 
 const PRODUCT_LIMIT = 12;
 
-export function MostWhitelists() {
-  const { t } = useHomeContent();
+export async function MostWhitelists() {
+  const t = await getTranslations('home');
 
-  const { data, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeMostWishlistedQueryOptions({ limit: PRODUCT_LIMIT }))
-  );
-
+  const data = await getHomeMostWishlisted({ limit: PRODUCT_LIMIT });
   const wishlists = data?.data?.products ?? [];
 
-  if (isError || wishlists.length === 0) {
+  if (wishlists.length === 0) {
     return null;
   }
 

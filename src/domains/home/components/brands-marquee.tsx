@@ -1,25 +1,19 @@
-'use client';
+import { getTranslations } from 'next-intl/server';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getHomeTopBrands } from '@/services/-home-top-brands-get';
 
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
-import { getGetHomeTopBrandsQueryOptions } from '@/services/-home-top-brands-get';
-
-import { useHomeContent } from '../hooks/use-home-content';
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
 
 const BRAND_LIMIT = 12;
 
-export function BrandsMarquee() {
-  const { t } = useHomeContent();
+export async function BrandsMarquee() {
+  const t = await getTranslations('home.brands');
 
-  const { data, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeTopBrandsQueryOptions({ limit: BRAND_LIMIT }))
-  );
+  const data = await getHomeTopBrands({ limit: BRAND_LIMIT });
 
   const brands = data?.data?.brands ?? [];
 
-  if (isError || brands.length === 0) {
+  if (brands.length === 0) {
     return null;
   }
 

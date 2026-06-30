@@ -1,28 +1,21 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { getTranslations } from 'next-intl/server';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { toSuspenseOptions } from '@/lib/use-suspense-query';
 import { SectionCarousel } from '~/src/components/section-carousel';
 import { CollectionCard } from '~/src/domains/collections/components/collection-card';
-import { getGetHomePopularCollectionsQueryOptions } from '~/src/services/-home-popular-collections-get';
+import { getHomePopularCollections } from '~/src/services/-home-popular-collections-get';
 import type { DtoHomeCollectionItem } from '~/src/services/-home-popular-collections-get.schemas';
-
-import { useHomeContent } from '../hooks/use-home-content';
 
 const COLLECTION_LIMIT = 4;
 
-export function CollectionBanner() {
-  const { t } = useHomeContent();
+export async function CollectionBanner() {
+  const t = await getTranslations('home.collections');
 
-  const { data, isError } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomePopularCollectionsQueryOptions({ limit: COLLECTION_LIMIT }))
-  );
+  const data = await getHomePopularCollections({ limit: COLLECTION_LIMIT });
 
   const collections = data?.data?.collections ?? [];
 
-  if (isError || collections.length === 0) {
+  if (collections.length === 0) {
     return null;
   }
 
