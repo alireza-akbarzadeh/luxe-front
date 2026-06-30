@@ -11,6 +11,15 @@
     "backToTop": "Volver arriba"
   },
   "errors": {
+    "network": "Sin respuesta del servidor. Compruebe su conexión de red.",
+    "networkError": "Error de red: {detail}",
+    "sessionExpired": "Su sesión ha expirado. Inicie sesión de nuevo.",
+    "authFailed": "Error de autenticación. Inicie sesión de nuevo.",
+    "forbiddenFallback": "No tiene permiso para realizar esta acción.",
+    "serverUnavailable": "El servidor no está disponible temporalmente. Inténtelo de nuevo pronto.",
+    "unexpected": "Se produjo un error inesperado.",
+    "tooManyRequests": "Demasiadas solicitudes.",
+    "tryAgainIn": " Inténtelo de nuevo en {seconds}s.",
     "common": {
       "tryAgain": "Intentar de nuevo",
       "goHome": "Ir al inicio",
@@ -19,16 +28,7 @@
       "logIn": "Iniciar sesión",
       "backToHome": "Volver al inicio",
       "continueShopping": "Seguir comprando",
-      "goShopping": "Ir a la tienda",
-      "network": "Sin respuesta del servidor. Compruebe su conexión de red.",
-      "networkError": "Error de red: {detail}",
-      "sessionExpired": "Su sesión ha expirado. Inicie sesión de nuevo.",
-      "authFailed": "Error de autenticación. Inicie sesión de nuevo.",
-      "forbiddenFallback": "No tiene permiso para realizar esta acción.",
-      "serverUnavailable": "El servidor no está disponible temporalmente. Inténtelo de nuevo pronto.",
-      "unexpected": "Se produjo un error inesperado.",
-      "tooManyRequests": "Demasiadas solicitudes.",
-      "tryAgainIn": " Inténtelo de nuevo en {seconds}s."
+      "goShopping": "Ir a la tienda"
     },
     "site": {
       "recovery": {
