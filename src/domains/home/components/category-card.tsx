@@ -22,16 +22,11 @@ export interface CategoryCardProps {
   variant?: CategoryCardVariant;
 }
 
-// Spinning conic-gradient border for the compact circle card.
-// Rendered as a pseudo-layer behind the image circle via an absolutely
-// positioned motion.div that rotates its background continuously.
 function AnimatedRingBorder() {
   const reduceMotion = useReducedMotion();
 
   return (
-    // Outer ring — slightly larger than the image circle so it peeks out
     <span className='pointer-events-none absolute inset-0 rounded-full' aria-hidden>
-      {/* Rotating gradient disc */}
       <motion.span
         className='absolute inset-[-2px] rounded-full'
         style={{
@@ -41,7 +36,6 @@ function AnimatedRingBorder() {
         animate={reduceMotion ? {} : { rotate: 360 }}
         transition={reduceMotion ? {} : { duration: 4, repeat: Infinity, ease: 'linear' }}
       />
-      {/* Inner mask — matches the image circle exactly, hides centre of the disc */}
       <span className='bg-background absolute inset-[2px] rounded-full' />
     </span>
   );
@@ -69,11 +63,9 @@ export function CategoryCard({
           className
         )}
       >
-        {/* Ring wrapper — relative so the AnimatedRingBorder can fill it */}
         <div className='relative size-[4.5rem] sm:size-20'>
           <AnimatedRingBorder />
 
-          {/* Image circle — sits above the ring mask */}
           <motion.div
             className='relative size-full overflow-hidden rounded-full'
             whileHover={{ scale: 1.07 }}
@@ -107,7 +99,6 @@ export function CategoryCard({
     );
   }
 
-  // ── Grid variant (unchanged) ───────────────────────────────────────────────
   return (
     <Link
       href={href}
