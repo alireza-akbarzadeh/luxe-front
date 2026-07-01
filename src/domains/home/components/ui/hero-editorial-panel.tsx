@@ -43,7 +43,7 @@ export function HeroEditorialPanel() {
     <div className='border-gold/25 bg-card/75 relative overflow-hidden rounded-3xl border p-6 shadow-2xl backdrop-blur-sm sm:p-8'>
       <div
         aria-hidden
-        className='from-gold/15 pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gradient-to-br to-transparent blur-2xl'
+        className='from-gold/15 pointer-events-none absolute -end-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br to-transparent blur-2xl'
       />
       <div
         aria-hidden

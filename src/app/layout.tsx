@@ -1,6 +1,5 @@
 import '../styles/globals.css';
 
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono, Playfair_Display, Vazirmatn } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
@@ -8,6 +7,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import type { PropsWithChildren } from 'react';
 
 import { siteMetadata } from '@/_config';
+import { SpeedInsightsClient } from '@/components/analytics/speed-insights-client';
 import RootProvider from '@/components/providers/root';
 import { LuxeSerwistProvider } from '@/components/providers/serwist-provider';
 import { getDirection, type Locale } from '@/i18n/config';
@@ -26,9 +26,10 @@ const geistMono = Geist_Mono({
 const playfairDisplay = Playfair_Display({
   variable: '--font-playfair',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '600', '700'],
   style: ['normal', 'italic'],
-  display: 'swap'
+  display: 'swap',
+  preload: true
 });
 
 const vazirmatn = Vazirmatn({
@@ -89,7 +90,7 @@ export default async function RootLayout({ children }: TRootLayout) {
             <RootProvider dir={dir}>{children}</RootProvider>
           </LuxeSerwistProvider>
         </NextIntlClientProvider>
-        <SpeedInsights />
+        <SpeedInsightsClient />
       </body>
     </html>
   );

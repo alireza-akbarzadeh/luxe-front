@@ -20,6 +20,9 @@ const config = {
   reactCompiler: true,
   reactStrictMode: true,
   serverExternalPackages: ['esbuild'],
+  experimental: {
+    optimizePackageImports: ['@tabler/icons-react', 'framer-motion', 'lucide-react']
+  },
   async rewrites() {
     return [
       {

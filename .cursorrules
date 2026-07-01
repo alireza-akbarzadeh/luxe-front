@@ -149,6 +149,23 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 
 ---
 
+## Images
+
+- **Remote/product photos** (API `images[]`, Unsplash, R2, store banners): use **`AppImage`** from `@/components/ui/app-image` — same props as `next/image` (`fill`, `sizes`, `priority`, etc.).
+- **Empty/missing src:** `IMAGE_FALLBACK` from `@/lib/images` (`/placeholder.svg`) — not `/placeholder.png`.
+- **Helpers:** `resolveImageSrc()`, `shouldBypassImageOptimizer()` in `@/lib/images` when mapping URLs outside JSX.
+- **`AppImage` is `"use client"`** — use in client components or small client islands; do not import raw `next/image` for catalog/product URLs in new code.
+- **Raw `next/image` OK** only for static local assets in Server Components (e.g. logos under `public/`) where no CDN fallback is needed.
+
+```ts
+import { AppImage } from '@/components/ui/app-image';
+import { IMAGE_FALLBACK } from '@/lib/images';
+
+<AppImage src={product.images?.[0] ?? IMAGE_FALLBACK} alt={product.name ?? ''} fill sizes="25vw" />
+```
+
+---
+
 ## Styling
 
 - Tailwind v4 utility-first; use `cn()` (clsx + tailwind-merge) for conditional classes
@@ -177,7 +194,8 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 - ❌ Hand-editing `src/services/` or `orval.config.js` (run `pnpm api:gen` instead; see `/api-gen`)
 - ❌ Running `pnpm api:gen` while backend is down (wipes services folder)
 - ❌ `useState` for server data (use TanStack Query)
-- ❌ Raw `fetch`/`axios` in components (use Orval-generated services)
+- ❌ Raw `next/image` for product/catalog/CDN URLs (use `AppImage` from `@/components/ui/app-image`; see Images section)
+- ❌ `/placeholder.png` for missing images (use `IMAGE_FALLBACK` from `@/lib/images`)
 - ❌ Hand-written domain API clients in `src/lib/api/` (e.g. `plus-membership.ts`) — add Swagger on handler → `make swagger` → restart API → `pnpm api:gen`; import `@/services/-<path>-<method>`
 - ❌ Raw `useReactTable` (use custom DataTable)
 - ❌ Raw `useForm` from TanStack Form (use `useAppForm`)

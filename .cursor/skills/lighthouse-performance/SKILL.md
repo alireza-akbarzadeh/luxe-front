@@ -32,9 +32,10 @@ paths:
 | Server Components + server `getTranslations` / Orval imperative fetch | Pass `renderItem` / functions from RSC → client |
 | `SectionCarousel` **children** for SSR lists | `renderItem={(item) => ...}` across RSC boundary |
 | `getHomeContent()` / `getTranslations` on server | Whole-page `'use client'` for static marketing |
-| CSS utilities (`luxe-rise`, `luxe-fade`) for motion | framer-motion on every section |
+| CSS utilities (`luxe-rise`, `luxe-fade`) for motion **below the fold** | `luxe-fade` / `luxe-delay-*` on hero h1 or lead paragraph (LCP — starts at `opacity: 0`) |
 | Small client islands (tabs, counters, forms) | `useHomeContent()` wrapping entire homepage |
 | `next/image` + `priority` on LCP hero | Client `useSuspenseQuery` for above-fold hero data |
+| `AppImage` for product/catalog CDN URLs | Raw `next/image` on Unsplash/API URLs (use `AppImage` + `IMAGE_FALLBACK`) |
 | `dynamic(..., { ssr: false })` for maps/charts/editors | Import heavy libs in layout/page shell |
 
 ## RSC / client boundary checklist
@@ -55,7 +56,7 @@ page.tsx (RSC)
 
 | Metric | High-impact fixes in this repo |
 |--------|------------------------------|
-| **LCP** | Hero image `priority` + `fetchPriority="high"`; server-fetch spotlight; reduce hero JS; preload critical font |
+| **LCP** | Hero h1 + lead copy with **no** `luxe-fade`/`luxe-delay`; logical `start`/`end` for RTL badge; preload critical font |
 | **FCP** | Less client JS on `/`; stream sections with `Suspense` + skeletons (`SectionBoundary`) |
 | **TBT / INP** | Shrink framer-motion surface; defer non-critical client bundles; avoid hydration mismatch work |
 | **CLS** | Explicit image `sizes`; skeleton dimensions match content; no late font swap without `next/font` |

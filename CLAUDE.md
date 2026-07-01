@@ -83,7 +83,8 @@ src/
 7. **No `any` types.** No unjustified `as` casts. Use `type-fest` for advanced type utilities.
 8. **No manual `useMemo`/`useCallback`** unless there's a measured perf problem — React Compiler handles this.
 9. **Styling**: Tailwind + `cn()` + `cva`; layout via `Flex`/`Grid`/`Typography`, not div flex/grid shells.
-10. **Imports**: Let `eslint-plugin-simple-import-sort` order imports — don't manually reorder.
+10. **Images**: Remote/product/CDN URLs → `AppImage` (`@/components/ui/app-image`); missing src → `IMAGE_FALLBACK` (`@/lib/images`). No raw `next/image` for catalog photos.
+11. **Imports**: Let `eslint-plugin-simple-import-sort` order imports — don't manually reorder.
 
 ---
 

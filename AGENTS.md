@@ -65,6 +65,7 @@ Route (App Router) → Domain component → Orval hook (TanStack Query) → cust
 - **Client UI state** → Zustand in `src/domains/<domain>/stores/` or `src/stores/`.
 - **Forms** → `useAppForm` (`src/components/forms/useAppForm.ts`) + Zod in domain `schemas/`.
 - **Tables** → `Table` from `src/components/table/data-table.tsx` (never raw `useReactTable`).
+- **Remote/product images** → `AppImage` from `@/components/ui/app-image`; empty src → `IMAGE_FALLBACK` from `@/lib/images` (not raw `next/image` or `/placeholder.png`).
 
 ## API layer — Orval (critical)
 
@@ -144,7 +145,7 @@ import { usePostAdminWorkflowsIdStates } from '@/services/-admin-workflows-{id}-
 3. Add route under `src/app/` (thin `page.tsx` delegating to domain) — see `/new-admin-domain`.
 4. Implement under `src/domains/<name>/` (`components/`, `containers/`, `sections/`, `schemas/`, `stores/`).
 5. Use Orval hooks for data; Zod + `useAppForm` for forms (`/admin-forms`); `Table` for lists.
-6. Use `Flex`/`Grid`/`Typography` for layout (`/layout-typography`).
+6. Use `Flex`/`Grid`/`Typography` for layout (`/layout-typography`); `AppImage` for remote/product photos.
 7. `pnpm check`.
 
 ## Key entry points
@@ -155,6 +156,8 @@ import { usePostAdminWorkflowsIdStates } from '@/services/-admin-workflows-{id}-
 | `src/domains/` | Feature/domain UI + logic |
 | `src/components/forms/useAppForm.ts` | All forms |
 | `src/components/table/data-table.tsx` | All data tables |
+| `src/components/ui/app-image.tsx` | Remote/product images (`AppImage`) |
+| `src/lib/images.ts` | `IMAGE_FALLBACK`, `resolveImageSrc` |
 | `src/lib/api/api-client.ts` | Axios `customInstance` (Orval mutator) |
 | `code-generator.js` | OpenAPI fetch + Orval config generation |
 | `.cursor/skills/` | Agent Skills — workflows (`/api-gen`, `/layout-typography`, etc.) |

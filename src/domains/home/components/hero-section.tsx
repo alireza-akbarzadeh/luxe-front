@@ -30,11 +30,11 @@ export async function HeroSection() {
       />
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute -top-40 right-0 h-[28rem] w-[28rem] rounded-full blur-3xl'
+        className='bg-gold/10 pointer-events-none absolute end-0 -top-40 h-[28rem] w-[28rem] rounded-full blur-3xl'
       />
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute bottom-0 left-0 h-72 w-72 rounded-full blur-3xl'
+        className='bg-gold/10 pointer-events-none absolute start-0 bottom-0 h-72 w-72 rounded-full blur-3xl'
       />
       <div
         aria-hidden
@@ -50,8 +50,8 @@ export async function HeroSection() {
 
       <div className='relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20'>
         <div className='grid items-center gap-12 lg:grid-cols-12 lg:gap-16'>
-          <div className='text-center lg:col-span-6 lg:text-left'>
-            <div className='luxe-rise border-gold/30 bg-card/70 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'>
+          <div className='text-center lg:col-span-6 lg:text-start'>
+            <div className='border-gold/30 bg-card/70 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'>
               <IconSparkles className='text-gold size-4' aria-hidden />
               <span className='text-foreground tracking-wide'>{`Fall ${year} Collection`}</span>
               <span className='text-muted-foreground'>— now live</span>
@@ -62,12 +62,12 @@ export async function HeroSection() {
               <span className='text-gold-gradient mt-1 block italic'>beautifully curated</span>
             </h1>
 
-            <p className='luxe-fade luxe-delay-2 text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed text-pretty sm:text-lg lg:mx-0'>
+            <p className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed text-pretty sm:text-lg lg:mx-0'>
               Luxe brings together the finest fashion houses and independent makers in one
               considered edit. Timeless pieces, exceptional craftsmanship, delivered to your door.
             </p>
 
-            <div className='luxe-fade luxe-delay-3 mt-7 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 lg:items-start'>
+            <div className='mt-7 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 lg:items-start'>
               <div className='flex items-center gap-1'>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <IconStar key={i} className='fill-gold text-gold size-4' aria-hidden />
@@ -79,7 +79,7 @@ export async function HeroSection() {
               </p>
             </div>
 
-            <div className='luxe-fade luxe-delay-4 mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'>
+            <div className='mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'>
               <Link
                 href='/shop'
                 className={cn(
@@ -88,7 +88,7 @@ export async function HeroSection() {
                 )}
               >
                 Shop new arrivals
-                <IconArrowRight className='ml-2 size-4 transition-transform group-hover:translate-x-0.5' />
+                <IconArrowRight className='cn-rtl-flip ms-2 size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
               </Link>
               <Link
                 href='/collections'
@@ -101,7 +101,7 @@ export async function HeroSection() {
               </Link>
             </div>
 
-            <div className='luxe-fade luxe-delay-5 text-muted-foreground mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start'>
+            <div className='text-muted-foreground mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start'>
               <span className='inline-flex items-center gap-2'>
                 <IconTruck className='text-gold size-4' aria-hidden />
                 Complimentary worldwide shipping
@@ -112,9 +112,9 @@ export async function HeroSection() {
               </span>
             </div>
 
-            <dl className='luxe-fade luxe-delay-5 border-gold/15 mt-10 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4'>
+            <dl className='border-gold/15 mt-10 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4'>
               {STATS.map((stat) => (
-                <div key={stat.label} className='text-center lg:text-left'>
+                <div key={stat.label} className='text-center lg:text-start'>
                   <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
                   <dd className='text-muted-foreground mt-1 text-xs tracking-wide sm:text-sm'>
                     {stat.label}
@@ -124,9 +124,9 @@ export async function HeroSection() {
             </dl>
           </div>
 
-          <div className='luxe-fade luxe-delay-1 relative lg:col-span-6'>
+          <div className='relative lg:col-span-6'>
             <HeroEditorialPanel />
-            <div className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'>
+            <div className='pointer-events-none absolute -end-3 -top-3 sm:-start-5 sm:-top-5'>
               <div className='bg-gold text-gold-foreground flex size-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:size-24'>
                 <span className='font-display text-base leading-none font-bold sm:text-lg'>
                   New

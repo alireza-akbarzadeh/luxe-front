@@ -348,6 +348,8 @@ html.locale-fa .font-display {
   animation: luxe-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Never apply luxe-rise / luxe-fade / luxe-delay-* to hero h1, lead copy, or other LCP candidates — opacity:0 delays LCP paint. */
+
 .luxe-delay-1 {
   animation-delay: 80ms;
 }
