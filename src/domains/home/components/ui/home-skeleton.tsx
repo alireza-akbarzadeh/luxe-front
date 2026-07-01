@@ -61,6 +61,16 @@ export function CardGridSkeleton({
   );
 }
 
+/** Placeholder for deferred hero editorial panel — reserves space to limit CLS. */
+export function HeroEditorialPanelSkeleton() {
+  return (
+    <div
+      aria-hidden
+      className='border-gold/25 bg-card/75 min-h-[22rem] rounded-3xl border p-6 sm:min-h-[24rem] sm:p-8'
+    />
+  );
+}
+
 export function MarqueeSkeleton({ className }: { className?: string }) {
   return (
     <div className={cn('flex items-center gap-8 overflow-hidden py-8', className)}>

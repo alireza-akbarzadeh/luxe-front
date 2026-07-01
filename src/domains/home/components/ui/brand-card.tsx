@@ -1,9 +1,9 @@
 'use client';
 
 import { IconPackage, IconStarFilled, IconTrendingUp } from '@tabler/icons-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import type { DtoHomeBrandItem } from '@/services/-home-top-brands-get.schemas';
 
 export function BrandCard({ brand }: { brand: DtoHomeBrandItem }) {
@@ -19,12 +19,13 @@ export function BrandCard({ brand }: { brand: DtoHomeBrandItem }) {
       {/* ── Banner ──────────────────────────────────────────────────────── */}
       <div className='bg-muted relative h-24 w-full overflow-hidden sm:h-28'>
         {brand.banner_url ? (
-          <Image
+          <AppImage
             src={brand.banner_url}
             alt=''
             aria-hidden
             fill
             sizes='(max-width: 640px) 90vw, 25vw'
+            loading='lazy'
             className='object-cover transition-transform duration-700 group-hover:scale-105'
           />
         ) : (
@@ -51,11 +52,12 @@ export function BrandCard({ brand }: { brand: DtoHomeBrandItem }) {
       <div className='-mt-8 flex justify-center'>
         <div className='border-border/60 bg-background flex size-16 items-center justify-center overflow-hidden rounded-2xl border-4 shadow-md sm:size-[4.5rem]'>
           {brand.logo_url ? (
-            <Image
+            <AppImage
               src={brand.logo_url}
               alt={brand.name ?? 'Brand logo'}
               width={64}
               height={64}
+              loading='lazy'
               className='size-full object-contain p-2'
             />
           ) : (

@@ -3,12 +3,8 @@
 import { useLocale } from 'next-intl';
 
 import type { Locale } from '@/i18n/config';
-import { getGetNavMenusQueryKey, useGetNavMenus } from '@/services/-nav-menus-get';
-
-/** TanStack Query key scoped by locale so nav refetches after language switch. */
-export function getNavMenusQueryKey(locale: Locale) {
-  return [...getGetNavMenusQueryKey(), locale] as const;
-}
+import { getNavMenusQueryKey } from '@/domains/menus/lib/nav-menus-query-key';
+import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 /** Storefront nav menus — labels resolved server-side via Accept-Language. */
 export function useNavMenus() {
@@ -16,7 +12,8 @@ export function useNavMenus() {
 
   return useGetNavMenus({
     query: {
-      queryKey: getNavMenusQueryKey(locale)
+      queryKey: getNavMenusQueryKey(locale),
+      staleTime: 5 * 60 * 1000
     }
   });
 }

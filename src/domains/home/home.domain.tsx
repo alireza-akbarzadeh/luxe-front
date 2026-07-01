@@ -4,7 +4,6 @@ import { CardGridSkeleton, CarouselSkeleton } from '@/domains/home/components/ui
 
 import { HeroSection } from './components/hero-section';
 import { TrustBar } from './components/trust-bar';
-import { HomeBelowFold } from './home-below-fold.domain';
 
 function HomeBelowFoldFallback() {
   return (
@@ -15,6 +14,11 @@ function HomeBelowFoldFallback() {
   );
 }
 
+async function HomeBelowFoldDeferred() {
+  const { HomeBelowFold } = await import('./home-below-fold.domain');
+  return <HomeBelowFold />;
+}
+
 export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
@@ -23,7 +27,7 @@ export function HomeDomains() {
         <TrustBar />
       </Suspense>
       <Suspense fallback={<HomeBelowFoldFallback />}>
-        <HomeBelowFold />
+        <HomeBelowFoldDeferred />
       </Suspense>
     </div>
   );

@@ -1,10 +1,8 @@
 'use client';
 
-import { IconArrowRight } from '@tabler/icons-react';
-import { motion, useReducedMotion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
@@ -22,20 +20,10 @@ export interface CategoryCardProps {
   variant?: CategoryCardVariant;
 }
 
-function AnimatedRingBorder() {
-  const reduceMotion = useReducedMotion();
-
+function CompactRingBorder() {
   return (
     <span className='pointer-events-none absolute inset-0 rounded-full' aria-hidden>
-      <motion.span
-        className='absolute inset-[-2px] rounded-full'
-        style={{
-          background:
-            'conic-gradient(from 0deg, transparent 0%, #c9a96e 20%, #f0d9a8 35%, #ffffff30 50%, #c9a96e 65%, transparent 80%)'
-        }}
-        animate={reduceMotion ? {} : { rotate: 360 }}
-        transition={reduceMotion ? {} : { duration: 4, repeat: Infinity, ease: 'linear' }}
-      />
+      <span className='category-ring-border absolute inset-[-2px] rounded-full' />
       <span className='bg-background absolute inset-[2px] rounded-full' />
     </span>
   );
@@ -63,29 +51,24 @@ export function CategoryCard({
           className
         )}
       >
-        <div className='relative size-[4.5rem] sm:size-20'>
-          <AnimatedRingBorder />
+        <div className='relative size-[4.5rem] transition-transform duration-200 group-hover:scale-105 sm:size-20'>
+          <CompactRingBorder />
 
-          <motion.div
-            className='relative size-full overflow-hidden rounded-full'
-            whileHover={{ scale: 1.07 }}
-            transition={{ type: 'spring', stiffness: 340, damping: 24 }}
+          <Flex
+            align='center'
+            justify='center'
+            className='bg-secondary/40 relative size-full overflow-hidden rounded-full'
           >
-            <Flex
-              align='center'
-              justify='center'
-              className='bg-secondary/40 absolute inset-0 overflow-hidden rounded-full'
-            >
-              <Image
-                src={image}
-                alt=''
-                aria-hidden
-                fill
-                sizes='80px'
-                className='object-cover'
-              />
-            </Flex>
-          </motion.div>
+            <AppImage
+              src={image}
+              alt=''
+              aria-hidden
+              fill
+              sizes='80px'
+              loading='lazy'
+              className='object-cover'
+            />
+          </Flex>
         </div>
 
         <Typography.Text
@@ -108,11 +91,12 @@ export function CategoryCard({
         className
       )}
     >
-      <Image
+      <AppImage
         src={image}
         alt={name ?? categoryAlt}
         fill
         sizes='(max-width: 640px) 75vw, 25vw'
+        loading='lazy'
         className='object-cover transition-transform duration-700 group-hover:scale-105'
       />
       <div className='from-foreground/85 via-foreground/25 absolute inset-0 bg-gradient-to-t to-transparent' />
@@ -125,10 +109,19 @@ export function CategoryCard({
             {description}
           </Typography.Text>
         )}
-        <span className='text-primary-foreground mt-4 inline-flex items-center gap-2 text-sm font-medium'>
+        <Typography.Text
+          variant='small'
+          weight='medium'
+          className='text-primary-foreground mt-4 inline-flex items-center gap-2'
+        >
           {shopNowLabel}
-          <IconArrowRight className='cn-rtl-flip h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
-        </span>
+          <span
+            className='cn-rtl-flip inline-block h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
+            aria-hidden
+          >
+            →
+          </span>
+        </Typography.Text>
       </div>
     </Link>
   );

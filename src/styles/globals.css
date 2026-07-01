@@ -371,4 +371,27 @@ html.locale-fa .font-display {
   .luxe-fade {
     animation: none;
   }
+
+  .category-ring-border {
+    animation: none;
+  }
+}
+
+@keyframes category-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.category-ring-border {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    #c9a96e 20%,
+    #f0d9a8 35%,
+    rgb(255 255 255 / 0.19) 50%,
+    #c9a96e 65%,
+    transparent 80%
+  );
+  animation: category-ring-spin 4s linear infinite;
 }

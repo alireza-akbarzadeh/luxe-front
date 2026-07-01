@@ -1,16 +1,16 @@
-import {
-  IconArrowRight,
-  IconShieldCheck,
-  IconSparkles,
-  IconStar,
-  IconTruck
-} from '@tabler/icons-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { HeroEditorialPanel } from './ui/hero-editorial-panel';
+import {
+  HeroIconArrowRight,
+  HeroIconShieldCheck,
+  HeroIconSparkles,
+  HeroIconStar,
+  HeroIconTruck
+} from './ui/hero-icons';
+import { HeroEditorialPanelSkeleton } from './ui/home-skeleton';
 
 const STATS = [
   { value: '120+', label: 'Maisons & makers' },
@@ -18,6 +18,22 @@ const STATS = [
   { value: '4.9', label: 'Average rating' },
   { value: '32', label: 'Countries shipped' }
 ] as const;
+
+const primaryCtaClass = cn(
+  'group relative inline-flex h-13 shrink-0 items-center justify-center gap-2 rounded-full px-8 text-base font-medium tracking-wide',
+  'bg-primary text-primary-foreground shadow-lg transition-[color,background-color,transform] duration-200',
+  'hover:bg-primary/92 active:scale-[0.98]'
+);
+
+const secondaryCtaClass = cn(
+  'inline-flex h-13 shrink-0 items-center justify-center rounded-full border px-8 text-base font-medium tracking-wide transition-colors',
+  'border-gold/40 bg-card/80 text-foreground hover:border-gold hover:text-gold'
+);
+
+async function HeroEditorialPanelDeferred() {
+  const { HeroEditorialPanel } = await import('./ui/hero-editorial-panel');
+  return <HeroEditorialPanel />;
+}
 
 export function HeroSection() {
   const year = new Date().getFullYear();
@@ -30,29 +46,18 @@ export function HeroSection() {
       />
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute end-0 -top-40 h-[28rem] w-[28rem] rounded-full blur-3xl'
+        className='bg-gold/8 pointer-events-none absolute end-0 -top-40 h-64 w-64 rounded-full'
       />
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute start-0 bottom-0 h-72 w-72 rounded-full blur-3xl'
-      />
-      <div
-        aria-hidden
-        className='pointer-events-none absolute inset-0 opacity-[0.05]'
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, var(--gold) 1px, transparent 1px), linear-gradient(to bottom, var(--gold) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 28%, black, transparent)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 28%, black, transparent)'
-        }}
+        className='bg-gold/8 pointer-events-none absolute start-0 bottom-0 h-56 w-56 rounded-full'
       />
 
       <div className='relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20'>
         <div className='grid items-center gap-12 lg:grid-cols-12 lg:gap-16'>
           <div className='text-center lg:col-span-6 lg:text-start'>
-            <div className='border-gold/30 bg-card/70 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'>
-              <IconSparkles className='text-gold size-4' aria-hidden />
+            <div className='border-gold/30 bg-card/90 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm sm:text-sm'>
+              <HeroIconSparkles className='text-gold size-4' />
               <span className='text-foreground tracking-wide'>{`Fall ${year} Collection`}</span>
               <span className='text-muted-foreground'>— now live</span>
             </div>
@@ -70,7 +75,7 @@ export function HeroSection() {
             <div className='mt-7 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 lg:items-start'>
               <div className='flex items-center gap-1'>
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <IconStar key={i} className='fill-gold text-gold size-4' aria-hidden />
+                  <HeroIconStar key={i} className='text-gold size-4' />
                 ))}
               </div>
               <p className='text-muted-foreground text-sm'>
@@ -80,34 +85,22 @@ export function HeroSection() {
             </div>
 
             <div className='mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'>
-              <Link
-                href='/shop'
-                className={cn(
-                  buttonVariants({ size: 'lg' }),
-                  'group h-13 rounded-full px-8 text-base shadow-lg'
-                )}
-              >
+              <Link href='/shop' className={primaryCtaClass}>
                 Shop new arrivals
-                <IconArrowRight className='cn-rtl-flip ms-2 size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
+                <HeroIconArrowRight className='cn-rtl-flip ms-2 size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
               </Link>
-              <Link
-                href='/collections'
-                className={cn(
-                  buttonVariants({ variant: 'outline', size: 'lg' }),
-                  'border-gold/40 bg-card/50 hover:border-gold hover:text-gold h-13 rounded-full px-8 text-base backdrop-blur-sm transition-colors'
-                )}
-              >
+              <Link href='/collections' className={secondaryCtaClass}>
                 Explore collections
               </Link>
             </div>
 
             <div className='text-muted-foreground mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start'>
               <span className='inline-flex items-center gap-2'>
-                <IconTruck className='text-gold size-4' aria-hidden />
+                <HeroIconTruck className='text-gold size-4' />
                 Complimentary worldwide shipping
               </span>
               <span className='inline-flex items-center gap-2'>
-                <IconShieldCheck className='text-gold size-4' aria-hidden />
+                <HeroIconShieldCheck className='text-gold size-4' />
                 Authenticity guaranteed
               </span>
             </div>
@@ -125,17 +118,9 @@ export function HeroSection() {
           </div>
 
           <div className='relative lg:col-span-6'>
-            <HeroEditorialPanel />
-            {/* <div className='pointer-events-none absolute -end-3 -top-3 sm:-start-5 sm:-top-5'>
-              <div className='bg-gold text-gold-foreground flex size-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:size-24'>
-                <span className='font-display text-base leading-none font-bold sm:text-lg'>
-                  New
-                </span>
-                <span className='mt-0.5 text-[0.6rem] font-semibold tracking-[0.2em] uppercase'>
-                  Season
-                </span>
-              </div>
-            </div> */}
+            <Suspense fallback={<HeroEditorialPanelSkeleton />}>
+              <HeroEditorialPanelDeferred />
+            </Suspense>
           </div>
         </div>
       </div>

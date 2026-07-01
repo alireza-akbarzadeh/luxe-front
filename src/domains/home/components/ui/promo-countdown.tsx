@@ -1,11 +1,10 @@
 'use client';
 
 import { IconArrowRight, IconTag } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { useCountdown } from '@/hooks/useCountdown';
@@ -48,21 +47,15 @@ export function PromoCountdown({ promoEnd, promoImage, deal, t, common }: PromoC
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55 }}
-      className='border-border/60 bg-card dark:border-border/40 relative overflow-hidden rounded-2xl border shadow-sm sm:rounded-3xl dark:shadow-none'
-    >
+    <div className='border-border/60 bg-card dark:border-border/40 relative overflow-hidden rounded-2xl border shadow-sm sm:rounded-3xl dark:shadow-none'>
       <div className='relative grid min-h-[28rem] lg:min-h-[24rem] lg:grid-cols-2'>
-        {/* Image column */}
         <div className='relative min-h-[14rem] lg:min-h-full'>
           {promoImage ? (
-            <Image
+            <AppImage
               src={promoImage}
               alt={deal?.product?.name ?? common.promoImageAlt}
               fill
+              loading='lazy'
               className='object-cover'
               sizes='(max-width: 1024px) 100vw, 50vw'
             />
@@ -127,6 +120,6 @@ export function PromoCountdown({ promoEnd, promoImage, deal, t, common }: PromoC
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
