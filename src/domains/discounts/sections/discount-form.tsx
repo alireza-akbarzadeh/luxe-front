@@ -3,7 +3,7 @@
 import { IconLoader2 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
@@ -32,7 +32,6 @@ interface DiscountFormProps {
 export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) {
   const { push } = useRouter();
   const queryClient = useQueryClient();
-  const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
 
   const { data: couponResponse, isLoading: isLoadingCoupon } = useGetCouponsId(Number(discountId), {
     query: { enabled: isEdit && Boolean(discountId) }
@@ -76,8 +75,6 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
         if (code && formApi.getFieldMeta('code')?.isDirty) {
           formApi.setFieldValue('code', code.toUpperCase());
         }
-        const currentDiscountType = formApi.getFieldValue('discount_type');
-        setDiscountType(currentDiscountType);
       }
     },
     onSubmit: async ({ value }) => {
@@ -119,7 +116,6 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
     if (isEdit && coupon?.id) {
       const values = mapCouponToFormValues(coupon);
       form.reset(values);
-      setDiscountType(values.discount_type);
     }
   }, [isEdit, coupon, form]);
 
@@ -228,66 +224,92 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
                     </GridItem>
                   </Grid>
 
-                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
-                    <GridItem>
-                      <form.AppField
-                        name='discount_value'
-                        children={(field) => (
-                          <field.NumberField
-                            label={
-                              discountType === 'percentage'
-                                ? 'Discount percentage'
-                                : 'Discount amount'
-                            }
-                            placeholder={discountType === 'percentage' ? 'e.g. 20' : 'e.g. 10.00'}
-                            required
-                            detail={
-                              discountType === 'percentage'
-                                ? 'Percentage off (0-100)'
-                                : 'Fixed amount off in your store currency'
-                            }
-                          />
-                        )}
-                      />
-                    </GridItem>
-
-                    <GridItem>
-                      <form.AppField
-                        name='description'
-                        children={(field) => (
-                          <Flex direction='column' spacing={2}>
-                            <field.TextField
-                              label='Description (optional)'
-                              placeholder='e.g. Summer sale discount'
-                              detail='Internal note or customer-facing description'
-                            />
-                            <form.Subscribe
-                              selector={(state) => state.values}
-                              children={(values) => (
-                                <AiGenerateButton
-                                  label='Generate copy'
-                                  task={AI_TASKS.couponCopy}
-                                  buildContext={() => ({
-                                    discount_type: values.discount_type,
-                                    value: String(values.discount_value ?? ''),
-                                    min_order: values.minimum_order_amount
-                                      ? String(values.minimum_order_amount)
-                                      : 'none'
-                                  })}
-                                  onResult={(result) => {
-                                    if (result.text) {
-                                      field.handleChange(result.text);
-                                    }
-                                  }}
-                                  disabled={!values.discount_value}
+                  <form.Subscribe
+                    selector={(state) => state.values.discount_type}
+                    children={(discountType) => (
+                      <>
+                        <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                          <GridItem>
+                            <form.AppField
+                              name='discount_value'
+                              children={(field) => (
+                                <field.NumberField
+                                  label={
+                                    discountType === 'percentage'
+                                      ? 'Discount percentage'
+                                      : 'Discount amount'
+                                  }
+                                  placeholder={
+                                    discountType === 'percentage' ? 'e.g. 20' : 'e.g. 10.00'
+                                  }
+                                  required
+                                  detail={
+                                    discountType === 'percentage'
+                                      ? 'Percentage off (0-100)'
+                                      : 'Fixed amount off in your store currency'
+                                  }
                                 />
                               )}
                             />
-                          </Flex>
-                        )}
-                      />
-                    </GridItem>
-                  </Grid>
+                          </GridItem>
+
+                          <GridItem>
+                            <form.AppField
+                              name='description'
+                              children={(field) => (
+                                <Flex direction='column' spacing={2}>
+                                  <field.TextField
+                                    label='Description (optional)'
+                                    placeholder='e.g. Summer sale discount'
+                                    detail='Internal note or customer-facing description'
+                                  />
+                                  <form.Subscribe
+                                    selector={(state) => state.values}
+                                    children={(values) => (
+                                      <AiGenerateButton
+                                        label='Generate copy'
+                                        task={AI_TASKS.couponCopy}
+                                        buildContext={() => ({
+                                          discount_type: values.discount_type,
+                                          value: String(values.discount_value ?? ''),
+                                          min_order: values.minimum_order_amount
+                                            ? String(values.minimum_order_amount)
+                                            : 'none'
+                                        })}
+                                        onResult={(result) => {
+                                          if (result.text) {
+                                            field.handleChange(result.text);
+                                          }
+                                        }}
+                                        disabled={!values.discount_value}
+                                      />
+                                    )}
+                                  />
+                                </Flex>
+                              )}
+                            />
+                          </GridItem>
+                        </Grid>
+
+                        {discountType === 'percentage' ? (
+                          <Grid cols={1} gap={4}>
+                            <GridItem>
+                              <form.AppField
+                                name='max_discount_amount'
+                                children={(field) => (
+                                  <field.NumberField
+                                    label='Maximum discount amount'
+                                    placeholder='No maximum'
+                                    detail='Upper limit for percentage discounts (e.g., max $20 off)'
+                                  />
+                                )}
+                              />
+                            </GridItem>
+                          </Grid>
+                        ) : null}
+                      </>
+                    )}
+                  />
                 </Flex>
 
                 <Separator />
@@ -348,23 +370,6 @@ export function DiscountForm({ isEdit = false, discountId }: DiscountFormProps) 
                       />
                     </GridItem>
                   </Grid>
-
-                  {discountType === 'percentage' ? (
-                    <Grid cols={1} gap={4}>
-                      <GridItem>
-                        <form.AppField
-                          name='max_discount_amount'
-                          children={(field) => (
-                            <field.NumberField
-                              label='Maximum discount amount'
-                              placeholder='No maximum'
-                              detail='Upper limit for percentage discounts (e.g., max $20 off)'
-                            />
-                          )}
-                        />
-                      </GridItem>
-                    </Grid>
-                  ) : null}
                 </Flex>
 
                 <Separator />

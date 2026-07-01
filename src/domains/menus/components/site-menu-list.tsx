@@ -1,8 +1,14 @@
 'use client';
 
-import { IconDotsVertical, IconGripVertical, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import {
+  IconDotsVertical,
+  IconGripVertical,
+  IconPencil,
+  IconPlus,
+  IconTrash
+} from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -43,22 +49,29 @@ export function SiteMenuList() {
   const queryClient = useQueryClient();
   const { openDialog } = useSiteMenuManagerStore();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [orderedItems, setOrderedItems] = useState<DtoNavItemResponse[]>([]);
+  const [reorderedItems, setReorderedItems] = useState<DtoNavItemResponse[] | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [isSavingOrder, setIsSavingOrder] = useState(false);
-  const serverSnapshotRef = useRef<DtoNavItemResponse[]>([]);
 
   const { data: response, isLoading } = useGetNavMenus();
+
+  const menuData = response?.data;
+  const sortedFromServer = useMemo(() => {
+    if (!menuData) return [];
+    return sortNavMenuItems(menuData);
+  }, [menuData]);
+
+  const serverKey = sortedFromServer.map((item) => `${item.id}-${item.order}`).join('|');
+  const [lastServerKey, setLastServerKey] = useState(serverKey);
+  if (serverKey !== lastServerKey) {
+    setLastServerKey(serverKey);
+    setReorderedItems(null);
+  }
+
+  const orderedItems = reorderedItems ?? sortedFromServer;
   const canReorder = orderedItems.length > 0 && orderedItems.every((item) => item.id != null);
 
   const { mutateAsync: deleteNav, isPending: isDeleting } = useDeleteNavMenusId();
-
-  useEffect(() => {
-    if (!response?.data) return;
-    const sorted = sortNavMenuItems(response.data);
-    setOrderedItems(sorted);
-    serverSnapshotRef.current = sorted;
-  }, [response?.data]);
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -83,7 +96,7 @@ export function SiteMenuList() {
     if (payload.items.length === 0) return;
 
     const hasChanges = payload.items.some(({ id, order }) => {
-      const previous = serverSnapshotRef.current.find((item) => item.id === id);
+      const previous = sortedFromServer.find((item) => item.id === id);
       return (previous?.order ?? 0) !== order;
     });
 
@@ -92,7 +105,7 @@ export function SiteMenuList() {
     setIsSavingOrder(true);
     try {
       await reorderNavMenus(payload);
-      serverSnapshotRef.current = items.map((item, index) => ({ ...item, order: index + 1 }));
+      setReorderedItems(null);
       await queryClient.invalidateQueries({ queryKey: getGetNavMenusQueryKey() });
       toast.success('Menu order saved');
     } catch {
@@ -112,15 +125,16 @@ export function SiteMenuList() {
     event.preventDefault();
     if (dragIndex === null || dragIndex === targetIndex || isSavingOrder) return;
 
-    setOrderedItems((current) => reorderList(current, dragIndex, targetIndex));
+    setReorderedItems((current) => reorderList(current ?? orderedItems, dragIndex, targetIndex));
     setDragIndex(targetIndex);
   };
 
   const handleDragEnd = () => {
     setDragIndex(null);
-    setOrderedItems((current) => {
-      void persistOrder(current);
-      return current;
+    setReorderedItems((current) => {
+      const next = current ?? orderedItems;
+      void persistOrder(next);
+      return next;
     });
   };
 
@@ -235,7 +249,7 @@ function SiteMenuCard({
       onDragEnd={onDragEnd}
       className={cn(
         'border-border/60 bg-card/50 group rounded-2xl border p-4 transition-shadow',
-        isDragging && 'border-primary/40 shadow-md ring-2 ring-primary/20',
+        isDragging && 'border-primary/40 ring-primary/20 shadow-md ring-2',
         canDrag && 'cursor-grab active:cursor-grabbing'
       )}
     >

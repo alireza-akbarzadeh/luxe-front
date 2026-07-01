@@ -1,25 +1,27 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   getActivePushSubscription,
   getPushSupportStatus,
   type PushSupportStatus,
   subscribeToWebPush,
-  unsubscribeFromWebPush} from '@/lib/pwa/push-subscription';
+  unsubscribeFromWebPush
+} from '@/lib/pwa/push-subscription';
 import { postAccountPushTest } from '@/services/-account-push-test-post';
 
 export const PUSH_SUBSCRIPTION_QUERY_KEY = ['push-subscription'] as const;
 
+function readPushSupportStatus(): PushSupportStatus {
+  if (typeof window === 'undefined') return 'unsupported';
+  return getPushSupportStatus();
+}
+
 export function usePushNotifications() {
   const queryClient = useQueryClient();
-  const [supportStatus, setSupportStatus] = useState<PushSupportStatus>('unsupported');
-
-  useEffect(() => {
-    setSupportStatus(getPushSupportStatus());
-  }, []);
+  const [supportStatus, setSupportStatus] = useState<PushSupportStatus>(readPushSupportStatus);
 
   const subscriptionQuery = useQuery({
     queryKey: PUSH_SUBSCRIPTION_QUERY_KEY,
@@ -47,25 +49,29 @@ export function usePushNotifications() {
     mutationFn: () => postAccountPushTest()
   });
 
+  const { mutateAsync: subscribeAsync } = subscribeMutation;
+  const { mutateAsync: unsubscribeAsync } = unsubscribeMutation;
+  const { mutateAsync: sendTestAsync, isPending: isTesting } = testMutation;
+
   const isSubscribed = Boolean(subscriptionQuery.data);
 
   const toggle = useCallback(async () => {
     if (isSubscribed) {
-      await unsubscribeMutation.mutateAsync();
+      await unsubscribeAsync();
       return;
     }
 
-    await subscribeMutation.mutateAsync();
-  }, [isSubscribed, subscribeMutation, unsubscribeMutation]);
+    await subscribeAsync();
+  }, [isSubscribed, subscribeAsync, unsubscribeAsync]);
 
   return {
     supportStatus,
     isSubscribed,
     isLoading: subscriptionQuery.isLoading,
     isPending: subscribeMutation.isPending || unsubscribeMutation.isPending,
-    isTesting: testMutation.isPending,
+    isTesting,
     toggle,
-    sendTest: testMutation.mutateAsync,
+    sendTest: sendTestAsync,
     refetch: subscriptionQuery.refetch
   };
 }

@@ -37,21 +37,24 @@ export function useAdminNotificationActions() {
     }
   });
 
+  const { mutateAsync: markOneAsync, isPending: isMarkingRead } = markOneMutation;
+  const { mutateAsync: markAllAsync, isPending: isMarkingAllRead } = markAllMutation;
+
   const markAsRead = useCallback(
     async (id: number) => {
-      await markOneMutation.mutateAsync(id);
+      await markOneAsync(id);
     },
-    [markOneMutation]
+    [markOneAsync]
   );
 
   const markAllRead = useCallback(async () => {
-    await markAllMutation.mutateAsync();
-  }, [markAllMutation]);
+    await markAllAsync();
+  }, [markAllAsync]);
 
   return {
     markAsRead,
     markAllRead,
-    isMarkingRead: markOneMutation.isPending,
-    isMarkingAllRead: markAllMutation.isPending
+    isMarkingRead,
+    isMarkingAllRead
   };
 }

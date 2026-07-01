@@ -1,7 +1,7 @@
 'use client';
 
 import { IconDeviceFloppy } from '@tabler/icons-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
@@ -18,11 +18,16 @@ export function RolePermissionsPanel() {
   const { data: role, isLoading: isRoleLoading } = useRole(selectedRoleId);
   const { data: permissions = [], isLoading: isPermissionsLoading } = usePermissions();
   const { setRolePermissions, isSavingPermissions } = useRoleMutations();
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  useEffect(() => {
-    setSelectedIds(role?.permission_ids ?? []);
-  }, [role?.permission_ids, selectedRoleId]);
+  const serverIds = role?.permission_ids ?? [];
+  const syncKey = `${selectedRoleId ?? 'none'}:${serverIds.join(',')}`;
+  const [selectedIds, setSelectedIds] = useState<number[]>(serverIds);
+  const [lastSyncKey, setLastSyncKey] = useState(syncKey);
+
+  if (syncKey !== lastSyncKey) {
+    setLastSyncKey(syncKey);
+    setSelectedIds(serverIds);
+  }
 
   const grouped = useMemo(() => {
     const map = new Map<string, typeof permissions>();
@@ -106,68 +111,71 @@ export function RolePermissionsPanel() {
           <div className='border-border/60 flex min-h-48 flex-col items-center justify-center rounded-2xl border border-dashed p-8 text-center'>
             <p className='text-sm font-semibold'>No permissions defined yet</p>
             <p className='text-muted-foreground mt-2 max-w-md text-xs leading-relaxed'>
-              Permissions are seeded in the database (e.g. <code className='text-xs'>users.read</code>,{' '}
+              Permissions are seeded in the database (e.g.{' '}
+              <code className='text-xs'>users.read</code>,{' '}
               <code className='text-xs'>products.write</code>). Run{' '}
               <code className='text-xs'>make seed-dev</code> in the backend, then click Refresh.
             </p>
           </div>
         ) : (
-        <div className='space-y-5'>
-          {grouped.map(([module, modulePermissions]) => {
-            const moduleIds = modulePermissions.map((item) => item.id);
-            const allSelected = moduleIds.every((id) => selectedIds.includes(id));
-            const someSelected = moduleIds.some((id) => selectedIds.includes(id));
+          <div className='space-y-5'>
+            {grouped.map(([module, modulePermissions]) => {
+              const moduleIds = modulePermissions.map((item) => item.id);
+              const allSelected = moduleIds.every((id) => selectedIds.includes(id));
+              const someSelected = moduleIds.some((id) => selectedIds.includes(id));
 
-            return (
-              <section key={module} className='border-border/60 rounded-2xl border p-4'>
-                <div className='mb-3 flex items-center justify-between gap-3'>
-                  <div>
-                    <p className='text-sm font-bold capitalize'>{module}</p>
-                    <p className='text-muted-foreground text-[11px]'>
-                      {modulePermissions.length} permission
-                      {modulePermissions.length === 1 ? '' : 's'}
-                    </p>
-                  </div>
-                  <label className='flex items-center gap-2 text-xs font-medium'>
-                    <Checkbox
-                      checked={allSelected ? true : someSelected ? 'indeterminate' : false}
-                      onCheckedChange={(checked) =>
-                        toggleModule(modulePermissions, checked === true)
-                      }
-                    />
-                    Select all
-                  </label>
-                </div>
-
-                <div className='space-y-2'>
-                  {modulePermissions.map((permission) => (
-                    <label
-                      key={permission.id}
-                      className={cn(
-                        'hover:bg-muted/30 flex cursor-pointer items-start gap-3 rounded-xl border border-transparent px-3 py-2 transition-colors',
-                        selectedIds.includes(permission.id) && 'bg-primary/5 border-primary/20'
-                      )}
-                    >
+              return (
+                <section key={module} className='border-border/60 rounded-2xl border p-4'>
+                  <div className='mb-3 flex items-center justify-between gap-3'>
+                    <div>
+                      <p className='text-sm font-bold capitalize'>{module}</p>
+                      <p className='text-muted-foreground text-[11px]'>
+                        {modulePermissions.length} permission
+                        {modulePermissions.length === 1 ? '' : 's'}
+                      </p>
+                    </div>
+                    <label className='flex items-center gap-2 text-xs font-medium'>
                       <Checkbox
-                        checked={selectedIds.includes(permission.id)}
+                        checked={allSelected ? true : someSelected ? 'indeterminate' : false}
                         onCheckedChange={(checked) =>
-                          togglePermission(permission.id, checked === true)
+                          toggleModule(modulePermissions, checked === true)
                         }
-                        className='mt-0.5'
                       />
-                      <div className='min-w-0'>
-                        <p className='text-sm font-medium'>{permission.key}</p>
-                        {permission.description ? (
-                          <p className='text-muted-foreground text-xs'>{permission.description}</p>
-                        ) : null}
-                      </div>
+                      Select all
                     </label>
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </div>
+                  </div>
+
+                  <div className='space-y-2'>
+                    {modulePermissions.map((permission) => (
+                      <label
+                        key={permission.id}
+                        className={cn(
+                          'hover:bg-muted/30 flex cursor-pointer items-start gap-3 rounded-xl border border-transparent px-3 py-2 transition-colors',
+                          selectedIds.includes(permission.id) && 'bg-primary/5 border-primary/20'
+                        )}
+                      >
+                        <Checkbox
+                          checked={selectedIds.includes(permission.id)}
+                          onCheckedChange={(checked) =>
+                            togglePermission(permission.id, checked === true)
+                          }
+                          className='mt-0.5'
+                        />
+                        <div className='min-w-0'>
+                          <p className='text-sm font-medium'>{permission.key}</p>
+                          {permission.description ? (
+                            <p className='text-muted-foreground text-xs'>
+                              {permission.description}
+                            </p>
+                          ) : null}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
         )}
       </ScrollArea>
     </div>

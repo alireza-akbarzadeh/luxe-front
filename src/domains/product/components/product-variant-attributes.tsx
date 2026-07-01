@@ -20,6 +20,19 @@ interface ProductVariantAttributesProps {
   onSelectionChange?: (selections: Record<string, string>) => void;
 }
 
+function buildDefaultSelections(
+  variantAttributes: DtoProductAttributeResponse[]
+): Record<string, string> {
+  const defaults: Record<string, string> = {};
+  for (const attribute of variantAttributes) {
+    const key = attribute.name ?? '';
+    if (key && attribute.values?.[0]) {
+      defaults[key] = attribute.values[0];
+    }
+  }
+  return defaults;
+}
+
 /** Color and size pickers driven by product.attributes (not legacy colors/sizes columns). */
 export function ProductVariantAttributes({
   attributes = [],
@@ -35,18 +48,24 @@ export function ProductVariantAttributes({
     });
   }, [attributes, colors, sizes]);
 
-  const [selections, setSelections] = useState<Record<string, string>>({});
+  const variantKey = variantAttributes.map((attribute) => attribute.name ?? '').join('|');
+  const defaultSelections = useMemo(
+    () => buildDefaultSelections(variantAttributes),
+    [variantAttributes]
+  );
 
-  useEffect(() => {
-    const defaults: Record<string, string> = {};
-    for (const attribute of variantAttributes) {
-      const key = attribute.name ?? '';
-      if (key && attribute.values?.[0]) {
-        defaults[key] = attribute.values[0];
-      }
-    }
-    setSelections(defaults);
-  }, [variantAttributes]);
+  const [userOverrides, setUserOverrides] = useState<Record<string, string>>({});
+  const [lastVariantKey, setLastVariantKey] = useState(variantKey);
+
+  if (variantKey !== lastVariantKey) {
+    setLastVariantKey(variantKey);
+    setUserOverrides({});
+  }
+
+  const selections = useMemo(
+    () => ({ ...defaultSelections, ...userOverrides }),
+    [defaultSelections, userOverrides]
+  );
 
   useEffect(() => {
     onSelectionChange?.(selections);
@@ -62,8 +81,7 @@ export function ProductVariantAttributes({
         const values = attribute.values ?? [];
         const selected = selections[key] ?? values[0] ?? '';
         const label = formatAttributeLabel(attribute.name);
-        const selectedLabel =
-          kind === 'color' ? resolveColorToken(selected).label : selected;
+        const selectedLabel = kind === 'color' ? resolveColorToken(selected).label : selected;
 
         if (kind === 'color') {
           return (
@@ -81,7 +99,7 @@ export function ProductVariantAttributes({
                     <button
                       key={value}
                       type='button'
-                      onClick={() => setSelections((prev) => ({ ...prev, [key]: value }))}
+                      onClick={() => setUserOverrides((prev) => ({ ...prev, [key]: value }))}
                       aria-pressed={isSelected}
                       className={cn(
                         'inline-flex items-center gap-2.5 rounded-full border px-3 py-2 transition-all',
@@ -118,14 +136,14 @@ export function ProductVariantAttributes({
           <div key={key}>
             <div className='mb-3 flex items-center justify-between gap-3'>
               <p className='text-sm font-medium'>{label}</p>
-              {selected && <p className='text-muted-foreground text-sm'>{selected}</p>}
+              {selected ? <p className='text-muted-foreground text-sm'>{selected}</p> : null}
             </div>
             <div className='flex flex-wrap gap-2'>
               {values.map((value) => (
                 <button
                   key={value}
                   type='button'
-                  onClick={() => setSelections((prev) => ({ ...prev, [key]: value }))}
+                  onClick={() => setUserOverrides((prev) => ({ ...prev, [key]: value }))}
                   aria-pressed={selected === value}
                   className={cn(
                     'h-11 min-w-11 rounded-full border px-4 text-sm font-medium transition-all',

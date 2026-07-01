@@ -2,7 +2,7 @@
 
 import { IconDownload, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
@@ -11,35 +11,28 @@ import { usePwaInstall } from '@/lib/pwa/use-pwa-install';
 
 const DISMISS_KEY = 'luxe-pwa-install-dismissed';
 
+function readDismissed(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.localStorage.getItem(DISMISS_KEY) === '1';
+}
+
 /** Storefront-only install banner — listens for `beforeinstallprompt`. */
 export function PwaInstallPrompt() {
   const t = useTranslations('pwa.install');
   const { canInstall, promptInstall } = usePwaInstall();
-  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(readDismissed);
 
-  useEffect(() => {
-    if (!canInstall) {
-      setVisible(false);
-      return;
-    }
-
-    if (window.localStorage.getItem(DISMISS_KEY) === '1') {
-      setVisible(false);
-      return;
-    }
-
-    setVisible(true);
-  }, [canInstall]);
+  const visible = canInstall && !dismissed;
 
   const onInstall = async () => {
     if (!canInstall) return;
     await promptInstall();
-    setVisible(false);
+    setDismissed(true);
   };
 
   const onDismiss = () => {
     window.localStorage.setItem(DISMISS_KEY, '1');
-    setVisible(false);
+    setDismissed(true);
   };
 
   if (!visible) return null;
@@ -49,7 +42,7 @@ export function PwaInstallPrompt() {
       align='center'
       justify='between'
       gap={3}
-      className='border-border/80 bg-card/95 fixed inset-x-4 bottom-4 z-50 rounded-2xl border p-4 shadow-lg backdrop-blur-sm sm:inset-x-auto sm:end-6 sm:start-auto sm:max-w-sm'
+      className='border-border/80 bg-card/95 fixed inset-x-4 bottom-4 z-50 rounded-2xl border p-4 shadow-lg backdrop-blur-sm sm:inset-x-auto sm:start-auto sm:end-6 sm:max-w-sm'
       role='region'
       aria-label={t('ariaLabel')}
     >
