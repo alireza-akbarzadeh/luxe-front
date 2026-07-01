@@ -1,4 +1,5 @@
 import { formatCurrency } from '@/lib/format';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
 
 import type { CartCommerceSettings } from './cart-commerce-settings';
@@ -20,7 +21,7 @@ export function formatCartMoney(value?: number | null): string {
 export function getCartItemImage(item: DtoCartItemDetail): string {
   if (typeof item.image === 'string' && item.image.length > 0) return item.image;
   if (Array.isArray(item.image) && item.image[0]) return String(item.image[0]);
-  return '/placeholder.png';
+  return IMAGE_FALLBACK;
 }
 
 export function getCartItemName(item: DtoCartItemDetail): string {

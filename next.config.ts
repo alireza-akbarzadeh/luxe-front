@@ -54,6 +54,7 @@ const config = {
   },
   images: {
     dangerouslyAllowLocalIP: true,
+    minimumCacheTTL: 60 * 60 * 24,
     remotePatterns: [
       {
         protocol: 'https',

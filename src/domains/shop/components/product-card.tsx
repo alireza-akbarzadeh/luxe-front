@@ -8,17 +8,18 @@ import {
   IconStarFilled
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -114,7 +115,7 @@ export function ProductCard({
   const { increment, isLoading, items: cartItems } = useCartController();
 
   const productHref = getProductPath(product);
-  const primaryImage = product.images?.[0] || '/placeholder.png';
+  const primaryImage = product.images?.[0] || IMAGE_FALLBACK;
   const secondaryImage = product.images?.[1];
   const stockStatus = getStockStatus(product.stock);
   const isOutOfStock = stockStatus === 'out';
@@ -180,7 +181,7 @@ export function ProductCard({
             )}
             aria-label={t('viewProduct', { name: product.name ?? '' })}
           >
-            <Image
+            <AppImage
               src={primaryImage}
               alt={product.name ?? 'Product'}
               fill
@@ -195,7 +196,7 @@ export function ProductCard({
             />
 
             {secondaryImage && (
-              <Image
+              <AppImage
                 src={secondaryImage}
                 alt=''
                 aria-hidden

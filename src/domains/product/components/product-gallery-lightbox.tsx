@@ -1,10 +1,10 @@
 'use client';
 
 import { IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
-import Image from 'next/image';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 import { useCallback, useEffect, useRef } from 'react';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
@@ -118,7 +118,7 @@ export function ProductGalleryLightbox({
               )}
             >
               <div className='relative h-full w-full max-w-6xl'>
-                <Image
+                <AppImage
                   key={currentImage}
                   src={currentImage}
                   alt={
@@ -180,7 +180,7 @@ export function ProductGalleryLightbox({
                     aria-label={`View image ${index + 1}`}
                     aria-current={selectedIndex === index}
                   >
-                    <Image src={image} alt='' fill sizes='64px' className='object-cover' />
+                    <AppImage src={image} alt='' fill sizes='64px' className='object-cover' />
                   </button>
                 ))}
               </div>

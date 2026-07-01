@@ -1,11 +1,11 @@
 'use client';
 
 import { IconZoomIn } from '@tabler/icons-react';
-import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { AppImage } from '@/components/ui/app-image';
+import { IMAGE_FALLBACK, resolveImageSrc } from '@/lib/images';
 import { cn } from '@/lib/utils';
-
 const ZOOM_SCALE = 2.2;
 const LENS_SIZE = 120;
 
@@ -28,6 +28,8 @@ export function ProductImageMagnifier({
   className
 }: ProductImageMagnifierProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const resolvedSrc = failedSrc === src ? IMAGE_FALLBACK : resolveImageSrc(src);
   const [canHoverMagnify, setCanHoverMagnify] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [lens, setLens] = useState({ x: 0, y: 0, relX: 50, relY: 50 });
@@ -111,14 +113,19 @@ export function ProductImageMagnifier({
       tabIndex={onOpenLightbox ? 0 : undefined}
       aria-label={onOpenLightbox ? `Zoom ${alt}` : undefined}
     >
-      <Image
-        src={src}
+      <AppImage
+        src={resolvedSrc}
         alt={alt}
         fill
         priority={priority}
         sizes='(max-width: 1024px) 100vw, 50vw'
         className='object-cover'
         draggable={false}
+        onError={() => {
+          if (failedSrc !== src) {
+            setFailedSrc(src);
+          }
+        }}
       />
 
       {showZoom && (
@@ -127,7 +134,7 @@ export function ProductImageMagnifier({
             aria-hidden
             className='pointer-events-none absolute inset-0 z-10'
             style={{
-              backgroundImage: `url(${src})`,
+              backgroundImage: `url(${resolvedSrc})`,
               backgroundSize: `${ZOOM_SCALE * 100}%`,
               backgroundPosition: `${lens.relX}% ${lens.relY}%`,
               backgroundRepeat: 'no-repeat'

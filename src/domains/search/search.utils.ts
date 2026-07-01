@@ -1,3 +1,4 @@
+import { IMAGE_FALLBACK } from '@/lib/images';
 import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.schemas';
 
 import type { SearchParams } from './hooks/useSearchParams';
@@ -168,7 +169,7 @@ export function buildSearchQueryParams(
 /** Safe product image for search result cards — avoids empty Next.js `src`. */
 export function getSearchProductImage(images?: Array<string | null> | null): string {
   const first = images?.find((image) => typeof image === 'string' && image.length > 0);
-  return first ?? '/placeholder.png';
+  return first ?? IMAGE_FALLBACK;
 }
 
 /** Human-readable pagination range, e.g. 1–12 of 240. */

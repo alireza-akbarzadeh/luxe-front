@@ -1,8 +1,8 @@
 'use client';
 import { IconPlus } from '@tabler/icons-react';
-import Image from 'next/image';
 import { useState } from 'react';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import useCompareController from '~/src/domains/compare/hooks/useCompareController';
 import { useGetProducts } from '~/src/services/-products-get';
 
@@ -72,8 +73,8 @@ export function CompareDialogContent() {
                 }}
               >
                 <div className='bg-secondary relative h-12 w-12 overflow-hidden rounded-md'>
-                  <Image
-                    src={product.images?.[0] || '/placeholder.png'}
+                  <AppImage
+                    src={product.images?.[0] || IMAGE_FALLBACK}
                     alt={product.name!}
                     fill
                     className='object-cover'

@@ -1,13 +1,14 @@
 'use client';
 
 import { IconAlertCircle, IconPlus } from '@tabler/icons-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo } from 'react';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { type CartItemPayload, useCartController } from '~/src/hooks/useCartController';
 import { usePostProductsSuggestions } from '~/src/services/-products-suggestions-post';
 
@@ -96,8 +97,8 @@ export function ProductSuggestion() {
             <div key={product.id} className='group relative'>
               <Link href={`/product/${product.id}`} className='block'>
                 <div className='bg-muted relative mb-2 aspect-square overflow-hidden rounded-xl'>
-                  <Image
-                    src={product.images?.[0] || '/placeholder.png'}
+                  <AppImage
+                    src={product.images?.[0] || IMAGE_FALLBACK}
                     alt={product.name as string}
                     fill
                     className='object-cover transition-transform duration-300 group-hover:scale-105'

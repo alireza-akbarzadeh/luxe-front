@@ -1,10 +1,10 @@
 'use client';
 
 import { IconMaximize, IconPhoto, IconVideo } from '@tabler/icons-react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +16,7 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -34,7 +35,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
   const t = useTranslations('pdp.gallery');
   const tBreadcrumb = useTranslations('pdp.breadcrumb');
   const { moneyClassName } = useLocaleFormatters();
-  const images = product.images?.length ? product.images : ['/placeholder.png'];
+  const images = product.images?.length ? product.images : [IMAGE_FALLBACK];
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [mediaMode, setMediaMode] = useState<MediaMode>('photos');
@@ -207,7 +208,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                     aria-label={t('viewImage', { index: index + 1 })}
                     aria-current={selectedImage === index}
                   >
-                    <Image src={image} alt='' fill sizes='72px' className='object-cover' />
+                    <AppImage src={image} alt='' fill sizes='72px' className='object-cover' />
                   </button>
                 ))}
               </div>

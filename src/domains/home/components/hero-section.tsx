@@ -9,10 +9,8 @@ import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getHomeNewArrivals } from '@/services/-home-new-arrivals-get';
 
-import { mapHomeProductItem } from '../lib/home-utils';
-import { HeroSpotlight } from './ui/hero-spotlight';
+import { HeroEditorialPanel } from './ui/hero-editorial-panel';
 
 const STATS = [
   { value: '120+', label: 'Maisons & makers' },
@@ -23,8 +21,6 @@ const STATS = [
 
 export async function HeroSection() {
   const year = new Date().getFullYear();
-  const data = await getHomeNewArrivals({ limit: 3 });
-  const spotlightProducts = (data?.data?.products ?? []).slice(0, 3).map(mapHomeProductItem);
 
   return (
     <section className='bg-background relative overflow-hidden'>
@@ -54,7 +50,6 @@ export async function HeroSection() {
 
       <div className='relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20'>
         <div className='grid items-center gap-12 lg:grid-cols-12 lg:gap-16'>
-          {/* Copy column */}
           <div className='text-center lg:col-span-6 lg:text-left'>
             <div className='luxe-rise border-gold/30 bg-card/70 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm sm:text-sm'>
               <IconSparkles className='text-gold size-4' aria-hidden />
@@ -62,7 +57,6 @@ export async function HeroSection() {
               <span className='text-muted-foreground'>— now live</span>
             </div>
 
-            {/* LCP element: rendered immediately, no opacity gating */}
             <h1 className='font-display text-4xl leading-[1.03] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl xl:text-[3.5rem]'>
               Modern luxury,
               <span className='text-gold-gradient mt-1 block italic'>beautifully curated</span>
@@ -73,7 +67,6 @@ export async function HeroSection() {
               considered edit. Timeless pieces, exceptional craftsmanship, delivered to your door.
             </p>
 
-            {/* Social proof */}
             <div className='luxe-fade luxe-delay-3 mt-7 flex flex-col items-center gap-2 sm:flex-row sm:gap-3 lg:items-start'>
               <div className='flex items-center gap-1'>
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -86,7 +79,6 @@ export async function HeroSection() {
               </p>
             </div>
 
-            {/* CTAs */}
             <div className='luxe-fade luxe-delay-4 mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start'>
               <Link
                 href='/shop'
@@ -109,7 +101,6 @@ export async function HeroSection() {
               </Link>
             </div>
 
-            {/* Trust badges */}
             <div className='luxe-fade luxe-delay-5 text-muted-foreground mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start'>
               <span className='inline-flex items-center gap-2'>
                 <IconTruck className='text-gold size-4' aria-hidden />
@@ -121,7 +112,6 @@ export async function HeroSection() {
               </span>
             </div>
 
-            {/* Stats */}
             <dl className='luxe-fade luxe-delay-5 border-gold/15 mt-10 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4'>
               {STATS.map((stat) => (
                 <div key={stat.label} className='text-center lg:text-left'>
@@ -134,10 +124,8 @@ export async function HeroSection() {
             </dl>
           </div>
 
-          {/* Visual column */}
           <div className='luxe-fade luxe-delay-1 relative lg:col-span-6'>
-            <HeroSpotlight products={spotlightProducts} />
-            {/* Floating badge */}
+            <HeroEditorialPanel />
             <div className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'>
               <div className='bg-gold text-gold-foreground flex size-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:size-24'>
                 <span className='font-display text-base leading-none font-bold sm:text-lg'>

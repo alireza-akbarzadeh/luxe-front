@@ -1,14 +1,15 @@
 'use client';
 
 import { IconDiscount2, IconStar, IconTrophy } from '@tabler/icons-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { getCompareWinners } from '@/domains/compare/lib/compare-utils';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import type { DtoCompareProductResponse } from '@/services/-compare-post.schemas';
 
 interface CompareSummaryProps {
@@ -51,8 +52,8 @@ function SummaryCard({
 
       <Link href={getProductPath(product)} className='group flex items-center gap-3'>
         <div className='bg-secondary relative h-14 w-14 shrink-0 overflow-hidden rounded-xl'>
-          <Image
-            src={product.images?.[0] || '/placeholder.png'}
+          <AppImage
+            src={product.images?.[0] || IMAGE_FALLBACK}
             alt={product.name ?? ''}
             fill
             className='object-cover transition-transform duration-300 group-hover:scale-105'

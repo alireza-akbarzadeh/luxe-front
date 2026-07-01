@@ -1,14 +1,15 @@
 'use client';
 
 import { IconShoppingCart, IconX } from '@tabler/icons-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoCompareProductResponse } from '@/services/-compare-post.schemas';
 
@@ -54,8 +55,8 @@ export function CompareProductCard({ product, onRemove, compact = false }: Compa
             compact ? 'aspect-[4/5] max-h-[180px] w-full' : 'mb-4 aspect-[4/5]'
           )}
         >
-          <Image
-            src={product.images?.[0] || '/placeholder.png'}
+          <AppImage
+            src={product.images?.[0] || IMAGE_FALLBACK}
             alt={product.name ?? ''}
             fill
             className='object-cover transition-transform duration-300 group-hover:scale-105'

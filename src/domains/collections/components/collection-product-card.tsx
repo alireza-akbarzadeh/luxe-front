@@ -6,16 +6,17 @@ import {
   IconStarFilled
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import type { MouseEvent } from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -41,7 +42,7 @@ export function CollectionProductCard({ product, index = 0 }: CollectionProductC
   const { increment, isLoading, items: cartItems } = useCartController();
 
   const productHref = getProductPath(product);
-  const primaryImage = product.images?.[0] || '/placeholder.png';
+  const primaryImage = product.images?.[0] || IMAGE_FALLBACK;
   const secondaryImage = product.images?.[1];
   const isOutOfStock = (product.stock ?? 0) <= 0;
 
@@ -74,7 +75,7 @@ export function CollectionProductCard({ product, index = 0 }: CollectionProductC
           className='bg-muted/40 relative block aspect-[4/5] overflow-hidden rounded-[1.1rem]'
           aria-label={`View ${product.name}`}
         >
-          <Image
+          <AppImage
             src={primaryImage}
             alt={product.name ?? 'Product'}
             fill
@@ -88,7 +89,7 @@ export function CollectionProductCard({ product, index = 0 }: CollectionProductC
           />
 
           {secondaryImage ? (
-            <Image
+            <AppImage
               src={secondaryImage}
               alt=''
               aria-hidden

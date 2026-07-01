@@ -2,17 +2,18 @@
 
 import { IconBasketCheck, IconShoppingBag, IconStarFilled } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { MouseEvent } from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
@@ -41,7 +42,7 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
   const { increment, isLoading, items: cartItems } = useCartController();
 
   const productHref = getProductPath(product);
-  const primaryImage = product.images?.[0] || '/placeholder.png';
+  const primaryImage = product.images?.[0] || IMAGE_FALLBACK;
   const isOutOfStock = (product.stock ?? 0) <= 0;
   const cartItem = cartItems?.find((item) => item.product_id === product.id);
   const cartQuantity = cartItem?.quantity ?? 0;
@@ -73,7 +74,7 @@ export function ProductListRow({ product, index = 0 }: ProductListRowProps) {
         className='bg-secondary relative h-32 w-32 shrink-0 overflow-hidden rounded-lg'
         aria-label={t('viewProduct', { name: product.name ?? '' })}
       >
-        <Image
+        <AppImage
           src={primaryImage}
           alt={product.name ?? 'Product'}
           fill
