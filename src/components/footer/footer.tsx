@@ -23,7 +23,6 @@ import { FooterLinkColumn } from '@/components/footer/footer-link-column';
 import { Newsletter } from '@/components/footer/news-letter';
 import { TrustStrip } from '@/components/footer/trust-stripe';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 function BackToTop() {
@@ -48,7 +47,6 @@ export function Footer() {
   const tSections = useTranslations('footer.sections');
   const tLegal = useTranslations('footer.legal');
   const footerBarCopy = getFooterBarCopyParams();
-  const tAccount = useTranslations('account.common');
 
   return (
     <footer className='border-border/60 bg-background relative mt-24 border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
@@ -140,50 +138,35 @@ export function Footer() {
             </div>
           </div>
           <div className='flex flex-wrap gap-3'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    aria-label={t('appStore')}
-                    href='/apps'
-                    className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
-                  >
-                    <Image
-                      src='/assets/app-store.png'
-                      alt='App Store'
-                      width={100}
-                      height={100}
-                      className='size-6'
-                    />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>{t('appStore')}</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href='/apps'
-                    aria-label={t('googlePlay')}
-                    className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
-                  >
-                    <Image
-                      src='/assets/play-store.png'
-                      alt='App Store'
-                      width={100}
-                      height={100}
-                      className='size-6'
-                    />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>{t('googlePlay')}</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <LanguageSwitcher variant='footer' />
-                </TooltipTrigger>
-                <TooltipContent>{tAccount('changeLanguage')}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Link
+              aria-label={t('appStore')}
+              href='/apps'
+              className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
+            >
+              <Image
+                src='/assets/app-store.png'
+                alt=''
+                aria-hidden
+                width={24}
+                height={24}
+                className='size-6'
+              />
+            </Link>
+            <Link
+              href='/apps'
+              aria-label={t('googlePlay')}
+              className='border-border/60 bg-background hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition'
+            >
+              <Image
+                src='/assets/play-store.png'
+                alt=''
+                aria-hidden
+                width={24}
+                height={24}
+                className='size-6'
+              />
+            </Link>
+            <LanguageSwitcher variant='footer' />
           </div>
         </div>
         <div className='via-border mt-12 h-px w-full bg-linear-to-r from-transparent to-transparent' />

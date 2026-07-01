@@ -58,9 +58,9 @@ export function HeroEditorialPanel() {
       <Flex direction='column' gap={6} className='relative'>
         <Flex direction='column' gap={2}>
           <Typography.Overline tone='accent'>The curated edit</Typography.Overline>
-          <Typography.H3 family='display' className='text-balance'>
+          <Typography.H2 family='display' className='text-balance text-2xl font-normal tracking-tight'>
             Discover what matters this season
-          </Typography.H3>
+          </Typography.H2>
           <Typography.Muted className='max-w-sm text-pretty'>
             Handpicked categories to start browsing — no loading, no waiting.
           </Typography.Muted>

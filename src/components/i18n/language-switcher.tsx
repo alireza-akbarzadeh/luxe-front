@@ -40,31 +40,31 @@ export function LanguageSwitcher({ className, variant = 'icon' }: LanguageSwitch
 
   if (variant === 'footer') {
     return (
-      <div className={cn('flex flex-col gap-2', className)}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div
-              aria-disabled={isPending}
-              aria-label={t('label')}
-              className='border-border/60 bg-background hover:bg-muted/60 inline-flex w-full max-w-xs items-center justify-between rounded-xl border px-4 py-2.5 text-sm font-medium transition'
-            >
-              <span className='inline-flex items-center gap-2'>
-                <IconWorld className='size-6' stroke={1.75} />
-              </span>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='start' className='min-w-44'>
-            <DropdownMenuLabel>{t('label')}</DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={locale} onValueChange={onLocaleChange}>
-              {locales.map((code) => (
-                <DropdownMenuRadioItem key={code} value={code}>
-                  {t(code)}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type='button'
+            disabled={isPending}
+            aria-label={t('label')}
+            className={cn(
+              'border-border/60 bg-background hover:bg-muted/60 inline-flex items-center justify-center rounded-xl border px-4 py-2.5 text-sm font-medium transition',
+              className
+            )}
+          >
+            <IconWorld className='size-6' stroke={1.75} aria-hidden />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='start' className='min-w-44'>
+          <DropdownMenuLabel>{t('label')}</DropdownMenuLabel>
+          <DropdownMenuRadioGroup value={locale} onValueChange={onLocaleChange}>
+            {locales.map((code) => (
+              <DropdownMenuRadioItem key={code} value={code}>
+                {t(code)}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   }
 

@@ -14,7 +14,7 @@ export default function TanstackQueryProvider({ children }: TTanstackQueryProvid
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <DevTools />
+      {process.env.NODE_ENV === 'development' ? <DevTools /> : null}
     </QueryClientProvider>
   );
 }

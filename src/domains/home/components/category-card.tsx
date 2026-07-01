@@ -78,7 +78,8 @@ export function CategoryCard({
             >
               <Image
                 src={image}
-                alt={name ?? categoryAlt}
+                alt=''
+                aria-hidden
                 fill
                 sizes='80px'
                 className='object-cover'

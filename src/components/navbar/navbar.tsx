@@ -57,10 +57,7 @@ export function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+      <header
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-all duration-500',
           isScrolled
@@ -77,12 +74,7 @@ export function Navbar() {
               aria-label='LUXE Home'
               className='relative z-20 inline-flex min-h-11 items-center px-4 rtl:flex-row-reverse'
             >
-              <motion.span
-                whileHover={{ scale: 1.02 }}
-                className='font-display text-2xl font-semibold tracking-tight'
-              >
-                LUXE
-              </motion.span>
+              <span className='font-display text-2xl font-semibold tracking-tight'>LUXE</span>
             </Link>
 
             {/* Desktop nav */}
@@ -149,7 +141,7 @@ export function Navbar() {
             </div>
           </div>
         </nav>
-      </motion.header>
+      </header>
 
       {/* ── Mobile drawer + backdrop ─────────────────────────── */}
       {/*

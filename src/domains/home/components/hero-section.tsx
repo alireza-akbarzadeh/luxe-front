@@ -19,7 +19,7 @@ const STATS = [
   { value: '32', label: 'Countries shipped' }
 ] as const;
 
-export async function HeroSection() {
+export function HeroSection() {
   const year = new Date().getFullYear();
 
   return (
@@ -126,7 +126,7 @@ export async function HeroSection() {
 
           <div className='relative lg:col-span-6'>
             <HeroEditorialPanel />
-            <div className='pointer-events-none absolute -end-3 -top-3 sm:-start-5 sm:-top-5'>
+            {/* <div className='pointer-events-none absolute -end-3 -top-3 sm:-start-5 sm:-top-5'>
               <div className='bg-gold text-gold-foreground flex size-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:size-24'>
                 <span className='font-display text-base leading-none font-bold sm:text-lg'>
                   New
@@ -135,7 +135,7 @@ export async function HeroSection() {
                   Season
                 </span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

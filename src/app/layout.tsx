@@ -15,12 +15,17 @@ import { cn } from '@/lib/utils';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
-  subsets: ['latin']
+  subsets: ['latin'],
+  display: 'swap',
+  adjustFontFallback: true,
+  preload: true
 });
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
-  subsets: ['latin']
+  subsets: ['latin'],
+  display: 'swap',
+  preload: false
 });
 
 const playfairDisplay = Playfair_Display({
@@ -29,6 +34,7 @@ const playfairDisplay = Playfair_Display({
   weight: ['400', '600', '700'],
   style: ['normal', 'italic'],
   display: 'swap',
+  adjustFontFallback: true,
   preload: true
 });
 
@@ -36,7 +42,9 @@ const vazirmatn = Vazirmatn({
   variable: '--font-vazirmatn',
   subsets: ['arabic', 'latin'],
   weight: ['400', '500', '600', '700'],
-  display: 'swap'
+  display: 'swap',
+  adjustFontFallback: true,
+  preload: false
 });
 
 export const metadata: Metadata = {
@@ -75,7 +83,7 @@ export default async function RootLayout({ children }: TRootLayout) {
         playfairDisplay.variable,
         geistSans.variable,
         geistMono.variable,
-        vazirmatn.variable,
+        locale === 'fa' && vazirmatn.variable,
         locale === 'fa' && 'locale-fa'
       )}
       suppressHydrationWarning

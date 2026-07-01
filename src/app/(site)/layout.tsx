@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 
-import { Footer } from '@/components/footer/footer';
+import { FooterClient } from '@/components/footer/footer-client';
 import { MobileBottomNavClient } from '@/components/navbar/mobile-bottom-nav-client';
 import { Navbar } from '@/components/navbar/navbar';
 import { PwaInstallPromptClient } from '@/components/pwa/pwa-install-prompt-client';
@@ -19,7 +19,7 @@ export default function SiteLayout({ children }: TRootLayout) {
         <MobileBottomNavClient />
         <PwaInstallPromptClient />
       </SiteRealtimeProvider>
-      <Footer />
+      <FooterClient />
     </div>
   );
 }

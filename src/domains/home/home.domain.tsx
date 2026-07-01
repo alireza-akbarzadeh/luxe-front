@@ -19,7 +19,9 @@ export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
       <HeroSection />
-      <TrustBar />
+      <Suspense fallback={null}>
+        <TrustBar />
+      </Suspense>
       <Suspense fallback={<HomeBelowFoldFallback />}>
         <HomeBelowFold />
       </Suspense>
