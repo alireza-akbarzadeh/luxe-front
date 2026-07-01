@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { ProductCard } from '@/domains/shop/components/product-card';
-import { getHomeMostWishlisted } from '~/src/services/-home-most-wishlisted-get';
+import { getHomeMostWishlisted } from '@/services/-home-most-wishlisted-get';
 import type { DtoProductWithLike } from '~/src/services/-products-get.schemas';
 
 const PRODUCT_LIMIT = 12;

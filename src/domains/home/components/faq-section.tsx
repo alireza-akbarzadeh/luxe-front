@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/accordion';
 
 import { sectionContainerClass } from '../lib/home-utils';
-import { SectionHeader } from './section-header';
+import { SectionHeaderStatic } from './section-header-static';
 
 const FAQ_KEYS = ['different', 'shipping', 'returns', 'payments', 'sell'] as const;
 
@@ -31,7 +31,7 @@ export async function FaqSection() {
     <section id='faq' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
         <div className='luxe-rise'>
-          <SectionHeader eyebrow={t('eyebrow')} title={t('title')} description={t('description')} />
+          <SectionHeaderStatic eyebrow={t('eyebrow')} title={t('title')} description={t('description')} />
         </div>
 
         <div className='luxe-rise luxe-delay-1'>

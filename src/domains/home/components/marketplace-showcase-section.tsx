@@ -1,28 +1,23 @@
-'use client';
-
 import { IconStar } from '@tabler/icons-react';
 
-import { useHomeContent } from '../hooks/use-home-content';
+import { getHomeContent } from '../lib/get-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
-import { SectionHeader } from './section-header';
-import { HomeFadeIn } from './ui/home-fade-in';
+import { SectionHeaderStatic } from './section-header-static';
 
-export function MarketplaceShowcaseSection() {
-  const { marketplaceBenefits, marketplaceTiles, marketingCopy, t } = useHomeContent();
+export async function MarketplaceShowcaseSection() {
+  const { marketplaceBenefits, marketplaceTiles, marketingCopy, t } = await getHomeContent();
 
   return (
     <section id='marketplace' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
-        <HomeFadeIn>
-          <SectionHeader
-            eyebrow={t('marketplace.eyebrow')}
-            title={t('marketplace.title')}
-            description={t('marketplace.description')}
-          />
-        </HomeFadeIn>
+        <SectionHeaderStatic
+          eyebrow={t('marketplace.eyebrow')}
+          title={t('marketplace.title')}
+          description={t('marketplace.description')}
+        />
 
         <div className='grid items-center gap-10 lg:grid-cols-2 lg:gap-16'>
-          <HomeFadeIn delay={0.05}>
+          <div className='luxe-fade luxe-delay-1'>
             <div className='border-border/50 from-gold/8 via-card/80 to-card/40 relative overflow-hidden rounded-3xl border bg-gradient-to-br p-8 shadow-lg sm:p-10'>
               <div
                 aria-hidden
@@ -60,24 +55,28 @@ export function MarketplaceShowcaseSection() {
                     <IconStar className='size-5 fill-current' />
                   </div>
                   <div>
-                    <p className='text-sm font-semibold'>{t('marketplace.ratingTitle', marketingCopy.marketplace)}</p>
+                    <p className='text-sm font-semibold'>
+                      {t('marketplace.ratingTitle', marketingCopy.marketplace)}
+                    </p>
                     <p className='text-muted-foreground text-xs'>{t('marketplace.ratingSubtext')}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </HomeFadeIn>
+          </div>
 
           <div className='grid gap-4 sm:grid-cols-2'>
             {marketplaceBenefits.map((benefit, index) => (
-              <HomeFadeIn key={benefit.title} delay={0.08 + index * 0.05}>
-                <article className='border-border/50 bg-card/50 hover:border-border h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg'>
-                  <h3 className='font-display text-lg font-semibold'>{benefit.title}</h3>
-                  <p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
-                    {benefit.description}
-                  </p>
-                </article>
-              </HomeFadeIn>
+              <article
+                key={benefit.title}
+                className='luxe-fade border-border/50 bg-card/50 hover:border-border h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg'
+                style={{ animationDelay: `${80 + index * 50}ms` }}
+              >
+                <h3 className='font-display text-lg font-semibold'>{benefit.title}</h3>
+                <p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
+                  {benefit.description}
+                </p>
+              </article>
             ))}
           </div>
         </div>

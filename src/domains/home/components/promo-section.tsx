@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
+import { PromoCountdown } from '@/domains/home/components/ui/promo-countdown';
 import { getHomeFlashDeals } from '@/services/-home-flash-deals-get';
-import { PromoCountdown } from '~/src/domains/home/components/ui/promo-countdown';
 
 import { sectionContainerClass } from '../lib/home-utils';
 

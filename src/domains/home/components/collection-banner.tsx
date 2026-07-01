@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
-import { SectionCarousel } from '~/src/components/section-carousel';
-import { CollectionCard } from '~/src/domains/collections/components/collection-card';
-import { getHomePopularCollections } from '~/src/services/-home-popular-collections-get';
-import type { DtoHomeCollectionItem } from '~/src/services/-home-popular-collections-get.schemas';
+import { SectionCarousel } from '@/components/section-carousel';
+import { CollectionCard } from '@/domains/collections/components/collection-card';
+import { getHomePopularCollections } from '@/services/-home-popular-collections-get';
 
 const COLLECTION_LIMIT = 4;
 
@@ -19,7 +18,7 @@ export async function CollectionBanner() {
   }
 
   return (
-    <SectionCarousel<DtoHomeCollectionItem>
+    <SectionCarousel
       sectionId='collections'
       eyebrow={t('collections.eyebrow')}
       title={t('collections.title')}

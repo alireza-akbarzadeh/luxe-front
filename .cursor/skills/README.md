@@ -30,6 +30,7 @@ Each skill has:
 | `new-admin-domain` | New `/dashboard/*` feature scaffold |
 | `layout-typography` | Flex/Grid/Typography instead of raw div + Tailwind layout/text |
 | `luxe-react-performance` | React/Next perf — Query, Recharts, bundle, re-renders |
+| `lighthouse-performance` | Lighthouse 90+ audits — LCP, TBT, RSC boundaries, CWV fix ranking |
 | `shadcn` | Add/fix/compose shadcn/ui components via CLI |
 | `framer-motion` | Storefront/marketing motion — `motion/react`, transform/opacity |
 | `frontend-design` | Distinctive visual direction for new/redesigned marketing UI |

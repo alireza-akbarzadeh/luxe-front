@@ -1,8 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
+import { BrandCard } from '@/domains/home/components/ui/brand-card';
 import { getHomeTopBrands } from '@/services/-home-top-brands-get';
-import { BrandCard } from '~/src/domains/home/components/ui/brand-card';
 
 const BRAND_LIMIT = 12;
 

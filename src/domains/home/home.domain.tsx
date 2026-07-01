@@ -1,11 +1,11 @@
-import { BrandsSection } from '~/src/domains/home/components/brands-section';
-import { MostWhitelists } from '~/src/domains/home/components/most-whitelists';
+import { BrandsSection } from '@/domains/home/components/brands-section';
+import { MostWhitelists } from '@/domains/home/components/most-whitelists';
 import {
   CardGridSkeleton,
   CarouselSkeleton,
   MarqueeSkeleton
-} from '~/src/domains/home/components/ui/home-skeleton';
-import { SectionBoundary } from '~/src/domains/home/components/ui/section-boundary';
+} from '@/domains/home/components/ui/home-skeleton';
+import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
 
 import { BrandsMarquee } from './components/brands-marquee';
 import { CategoriesSection } from './components/categories-section';

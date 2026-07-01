@@ -1,22 +1,19 @@
-'use client';
-
 import { IconArrowRight, IconBuildingStore, IconShoppingBag } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { useHomeContent } from '../hooks/use-home-content';
+import { getHomeContent } from '../lib/get-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
-import { HomeFadeIn } from './ui/home-fade-in';
 
-export function FinalCtaSection() {
-  const { t } = useHomeContent();
+export async function FinalCtaSection() {
+  const { t } = await getHomeContent();
 
   return (
     <section className='pb-8 sm:pb-12'>
       <div className={sectionContainerClass}>
-        <HomeFadeIn>
+        <div className='luxe-rise'>
           <div className='border-border/50 from-gold/12 via-card/80 to-accent/5 relative overflow-hidden rounded-[2rem] border bg-gradient-to-br px-6 py-14 text-center sm:px-12 sm:py-16'>
             <div
               aria-hidden
@@ -55,7 +52,7 @@ export function FinalCtaSection() {
               </div>
             </div>
           </div>
-        </HomeFadeIn>
+        </div>
       </div>
     </section>
   );

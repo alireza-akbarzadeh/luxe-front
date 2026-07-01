@@ -9,7 +9,10 @@ import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { HeroSpotlight } from '~/src/domains/home/components/ui/hero-spotlight';
+import { getHomeNewArrivals } from '@/services/-home-new-arrivals-get';
+
+import { mapHomeProductItem } from '../lib/home-utils';
+import { HeroSpotlight } from './ui/hero-spotlight';
 
 const STATS = [
   { value: '120+', label: 'Maisons & makers' },
@@ -18,8 +21,10 @@ const STATS = [
   { value: '32', label: 'Countries shipped' }
 ] as const;
 
-export function HeroSection() {
+export async function HeroSection() {
   const year = new Date().getFullYear();
+  const data = await getHomeNewArrivals({ limit: 3 });
+  const spotlightProducts = (data?.data?.products ?? []).slice(0, 3).map(mapHomeProductItem);
 
   return (
     <section className='bg-background relative overflow-hidden'>
@@ -131,7 +136,7 @@ export function HeroSection() {
 
           {/* Visual column */}
           <div className='luxe-fade luxe-delay-1 relative lg:col-span-6'>
-            <HeroSpotlight />
+            <HeroSpotlight products={spotlightProducts} />
             {/* Floating badge */}
             <div className='absolute -top-3 -left-3 sm:-top-5 sm:-left-5'>
               <div className='bg-gold text-gold-foreground flex size-20 flex-col items-center justify-center rounded-full text-center shadow-xl sm:size-24'>

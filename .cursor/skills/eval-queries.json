@@ -339,5 +339,24 @@
     "should_trigger": false,
     "split": "train",
     "note": "api-gen directly"
+  },
+  {
+    "skill": "lighthouse-performance",
+    "query": "homepage Lighthouse score is 66 — fix renderItem RSC error and get Performance to 90+",
+    "should_trigger": true,
+    "split": "train"
+  },
+  {
+    "skill": "lighthouse-performance",
+    "query": "audit LCP and TBT on the storefront home page — convert client sections to server components",
+    "should_trigger": true,
+    "split": "validation"
+  },
+  {
+    "skill": "lighthouse-performance",
+    "query": "run pnpm api:gen after backend OpenAPI update",
+    "should_trigger": false,
+    "split": "train",
+    "note": "api-gen"
   }
 ]

@@ -318,16 +318,55 @@ html.locale-fa .font-display {
   font-feature-settings: normal;
 }
 
-@keyframes hero-fade-in {
+@keyframes luxe-rise-in {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.hero-fade-in {
-  animation: hero-fade-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+@keyframes luxe-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.luxe-rise {
+  animation: luxe-rise-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.luxe-fade {
+  animation: luxe-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.luxe-delay-1 {
+  animation-delay: 80ms;
+}
+.luxe-delay-2 {
+  animation-delay: 160ms;
+}
+.luxe-delay-3 {
+  animation-delay: 240ms;
+}
+.luxe-delay-4 {
+  animation-delay: 320ms;
+}
+.luxe-delay-5 {
+  animation-delay: 400ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luxe-rise,
+  .luxe-fade {
+    animation: none;
+  }
 }

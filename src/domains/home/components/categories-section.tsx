@@ -30,6 +30,7 @@ export async function CategoriesSection() {
     >
       {categories.map((category, index) => (
         <CategoryCard
+          key={category.id ?? index}
           name={category.name}
           description={category.description}
           categoryId={category.id}

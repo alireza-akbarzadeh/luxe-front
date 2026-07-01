@@ -20,6 +20,16 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 const subjects = ['Order help', 'Returns', 'Vendor inquiry', 'Press', 'Partnerships', 'Other'];
 
+/** Opens the system mail client without assigning to `window.location` (React Compiler). */
+function openMailto(href: string) {
+  const link = document.createElement('a');
+  link.href = href;
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
 export function SupportContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const reduce = useReducedMotion();
@@ -45,7 +55,7 @@ export function SupportContactForm() {
         `Name: ${value.name || 'Not provided'}\nEmail: ${value.email}\n\n${value.message}`
       );
 
-      window.location.href = `mailto:concierge@luxe.com?subject=${subject}&body=${body}`;
+      openMailto(`mailto:concierge@luxe.com?subject=${subject}&body=${body}`);
 
       setStatus('success');
       form.reset();

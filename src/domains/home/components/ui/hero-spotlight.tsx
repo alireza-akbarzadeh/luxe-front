@@ -1,19 +1,14 @@
-'use client';
-
-import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getGetHomeNewArrivalsQueryOptions } from '@/services/-home-new-arrivals-get';
-import { mapHomeProductItem } from '~/src/domains/home/lib/home-utils';
-import { toSuspenseOptions } from '~/src/lib/use-suspense-query';
+import { mapHomeProductItem } from '@/domains/home/lib/home-utils';
 
-export function HeroSpotlight() {
-  const { data } = useSuspenseQuery(
-    toSuspenseOptions(getGetHomeNewArrivalsQueryOptions({ limit: 3 }))
-  );
+interface HeroSpotlightProps {
+  products: ReturnType<typeof mapHomeProductItem>[];
+}
 
-  const products = (data?.data?.products ?? []).slice(0, 3).map(mapHomeProductItem);
+/** Server-rendered hero product grid — no client fetch (improves LCP / TBT). */
+export function HeroSpotlight({ products }: HeroSpotlightProps) {
   if (products.length === 0) return null;
 
   const [heroProduct, ...tileProducts] = products;
@@ -24,7 +19,6 @@ export function HeroSpotlight() {
 
   return (
     <div className='grid grid-cols-12 gap-3 sm:gap-4'>
-      {/* Featured image (hero) */}
       <div className='border-gold/20 relative col-span-7 aspect-[4/5] overflow-hidden rounded-3xl border shadow-2xl'>
         <Image
           src={heroImage}
@@ -40,7 +34,7 @@ export function HeroSpotlight() {
           className='from-foreground/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent'
         />
         <div className='absolute inset-x-0 bottom-0 p-4 sm:p-5'>
-          <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>Editor's pick</p>
+          <p className='text-gold text-[0.7rem] tracking-[0.25em] uppercase'>Editor&apos;s pick</p>
           <p className='font-display text-primary-foreground mt-1 text-lg font-medium sm:text-xl'>
             {heroName}
           </p>
@@ -48,7 +42,6 @@ export function HeroSpotlight() {
         </div>
       </div>
 
-      {/* Secondary tiles */}
       <div className='col-span-5 flex flex-col gap-3 sm:gap-4'>
         {tileProducts.map((product) => (
           <Link

@@ -1,7 +1,7 @@
 import { IconHeadphones, IconLock, IconRefresh, IconTruck } from '@tabler/icons-react';
 import { getTranslations } from 'next-intl/server';
 
-import { TRUST_ITEMS } from '~/src/domains/home/lib/home-mock-data';
+import { TRUST_ITEMS } from '@/domains/home/lib/home-mock-data';
 import { getHomeMarketingCopyParams } from '~/src/lib/i18n/marketing-copy-params';
 
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';

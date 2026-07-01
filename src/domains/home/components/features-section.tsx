@@ -1,16 +1,15 @@
-'use client';
-
 import {
   IconDiamond,
   IconHeadphones,
   IconShield,
   IconTruck
 } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
 
-import { useHomeContent } from '../hooks/use-home-content';
+import { cn } from '@/lib/utils';
+
+import { getHomeContent } from '../lib/get-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
-import { SectionHeader } from './section-header';
+import { SectionHeaderStatic } from './section-header-static';
 
 const iconMap = {
   truck: IconTruck,
@@ -19,13 +18,13 @@ const iconMap = {
   headphones: IconHeadphones
 } as const;
 
-export function FeaturesSection() {
-  const { features, t } = useHomeContent();
+export async function FeaturesSection() {
+  const { features, t } = await getHomeContent();
 
   return (
     <section id='features' className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
-        <SectionHeader
+        <SectionHeaderStatic
           eyebrow={t('features.eyebrow')}
           title={t('features.title')}
           description={t('features.description')}
@@ -35,16 +34,16 @@ export function FeaturesSection() {
           {features.map((feature, index) => {
             const Icon = iconMap[feature.icon];
             return (
-              <motion.div
+              <div
                 key={feature.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                whileHover={{ y: -4 }}
-                className='group'
+                className={cn(
+                  'luxe-fade group',
+                  index === 1 && 'luxe-delay-1',
+                  index === 2 && 'luxe-delay-2',
+                  index === 3 && 'luxe-delay-3'
+                )}
               >
-                <div className='bg-card border-border/60 hover:border-border h-full rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:shadow-lg sm:rounded-3xl sm:p-8'>
+                <div className='bg-card border-border/60 hover:border-border h-full rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:rounded-3xl sm:p-8'>
                   <div className='bg-secondary text-accent group-hover:bg-accent group-hover:text-accent-foreground mb-5 flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-300'>
                     <Icon className='h-6 w-6' stroke={1.5} />
                   </div>
@@ -53,7 +52,7 @@ export function FeaturesSection() {
                     {feature.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

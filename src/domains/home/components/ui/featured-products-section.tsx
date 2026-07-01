@@ -4,7 +4,6 @@
 import { useState } from 'react';
 
 import { SectionCarousel } from '@/components/section-carousel';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import type { DtoHomeProductItem } from '~/src/services/-home-categories-get.schemas';
@@ -66,16 +65,13 @@ export function FeaturedProductsSection({
       description={t.description}
       viewAllHref='/shop'
       viewAllLabel={t.shopAll}
-      items={products}
-      isLoading={false}
       columns={{ mobile: 1, tablet: 2, desktop: 4 }}
       headerSlot={tabsNode}
       opts={{ align: 'start', loop: false, skipSnaps: false }}
-      skeletonCount={8}
-      renderSkeleton={() => <Skeleton className='aspect-4/5 w-full rounded-2xl' />}
-      renderItem={(product, index) => (
+    >
+      {products.map((product, index) => (
         <ProductCard key={product.id ?? index} product={product} index={index} />
-      )}
-    />
+      ))}
+    </SectionCarousel>
   );
 }

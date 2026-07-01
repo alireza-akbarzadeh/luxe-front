@@ -85,9 +85,7 @@ export function WalletUserPicker({ value, onChange, label, detail, error }: Wall
               onValueChange={setSearch}
             />
             <CommandList>
-              <CommandEmpty>
-                {isFetching ? 'Searching…' : 'No customers found'}
-              </CommandEmpty>
+              <CommandEmpty>{isFetching ? 'Searching…' : 'No customers found'}</CommandEmpty>
               <CommandGroup>
                 {users.map((user) => {
                   if (!user.id) return null;
