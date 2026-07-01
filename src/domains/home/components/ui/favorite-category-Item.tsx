@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 
 import { CategoryCard } from '@/domains/home/components/category-card';

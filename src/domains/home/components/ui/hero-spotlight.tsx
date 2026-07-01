@@ -3,14 +3,12 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
 
 import { getGetHomeNewArrivalsQueryOptions } from '@/services/-home-new-arrivals-get';
 import { mapHomeProductItem } from '~/src/domains/home/lib/home-utils';
 import { toSuspenseOptions } from '~/src/lib/use-suspense-query';
 
 export function HeroSpotlight() {
-  const t = useTranslations('home');
   const { data } = useSuspenseQuery(
     toSuspenseOptions(getGetHomeNewArrivalsQueryOptions({ limit: 3 }))
   );

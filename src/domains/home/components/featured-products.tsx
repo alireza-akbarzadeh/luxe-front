@@ -1,4 +1,3 @@
-// src/domains/home/components/featured-products.tsx (server)
 import { getTranslations } from 'next-intl/server';
 
 import { FeaturedProductsSection } from '@/domains/home/components/ui/featured-products-section';

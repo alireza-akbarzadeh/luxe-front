@@ -29,19 +29,45 @@ export function HomeDomains() {
   return (
     <div className='-mt-2 flex flex-col overflow-x-hidden sm:-mt-4'>
       <HeroSection />
+
       <TrustBar />
-      <FavoriteCategoriesSection />
-      <PromoSection />
-      <FeaturedProducts />
-      <MostWhitelists />
-      <NewArrivalsSection />
-      <BrandsMarquee />
 
-      <BrandsSection />
-      <CategoriesSection />
-      <CollectionBanner />
+      <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+        <FavoriteCategoriesSection />
+      </SectionBoundary>
 
-      {/* from here we need to make them async and server */}
+      <SectionBoundary fallback={null}>
+        <PromoSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <FeaturedProducts />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+        <MostWhitelists />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+        <NewArrivalsSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<MarqueeSkeleton />}>
+        <BrandsMarquee />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+        <BrandsSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <CategoriesSection />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+        <CollectionBanner />
+      </SectionBoundary>
+
       <MarketplaceShowcaseSection />
       <HowItWorksSection />
       <FeaturesSection />

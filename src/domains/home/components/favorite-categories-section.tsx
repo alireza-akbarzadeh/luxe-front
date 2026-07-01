@@ -25,16 +25,17 @@ export async function FavoriteCategoriesSection() {
       description={t('description')}
       viewAllHref='/shop'
       viewAllLabel={tCommon('viewAll')}
-      items={categories}
       columns={{ mobile: 2, tablet: 3, desktop: 4 }}
-      renderItem={(category, index) => (
+    >
+      {categories.map((category, index) => (
         <FavoriteCategoryItem
+          key={category.id}
           category={category}
           index={index}
           shopNowLabel={tCommon('shopNow')}
           categoryAlt={tCommon('categoryAlt')}
         />
-      )}
-    />
+      ))}
+    </SectionCarousel>
   );
 }

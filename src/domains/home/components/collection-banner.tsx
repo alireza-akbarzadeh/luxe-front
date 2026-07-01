@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import { Skeleton } from '@/components/ui/skeleton';
 import { SectionCarousel } from '~/src/components/section-carousel';
 import { CollectionCard } from '~/src/domains/collections/components/collection-card';
 import { getHomePopularCollections } from '~/src/services/-home-popular-collections-get';
@@ -26,14 +25,10 @@ export async function CollectionBanner() {
       title={t('collections.title')}
       viewAllHref='/collections'
       viewAllLabel={t('collections.viewAll')}
-      items={collections}
-      isLoading={false}
-      columns={{ mobile: 1, tablet: 1, desktop: 2 }}
-      skeletonCount={COLLECTION_LIMIT}
-      renderItem={(banner, index) => <CollectionCard collection={banner} index={index} />}
-      renderSkeleton={() => (
-        <Skeleton className='min-h-[22rem] w-full rounded-2xl sm:min-h-[26rem] sm:rounded-3xl lg:min-h-[32rem]' />
-      )}
-    />
+    >
+      {collections.map((collection, index) => (
+        <CollectionCard key={collection.id ?? index} collection={collection} index={index} />
+      ))}
+    </SectionCarousel>
   );
 }

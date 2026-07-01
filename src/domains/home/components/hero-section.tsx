@@ -5,7 +5,6 @@ import {
   IconStar,
   IconTruck
 } from '@tabler/icons-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
@@ -17,11 +16,6 @@ const STATS = [
   { value: '25k+', label: 'Members worldwide' },
   { value: '4.9', label: 'Average rating' },
   { value: '32', label: 'Countries shipped' }
-] as const;
-
-const SPOTLIGHT = [
-  { name: 'Verdant Leather Tote', price: '$1,290', image: '/hero/leather-bag.png' },
-  { name: 'Aurelia Gold Edit', price: '$640', image: '/hero/gold-jewelry.png' }
 ] as const;
 
 export function HeroSection() {

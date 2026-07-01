@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getHomeCategories } from '@/services/-home-categories-get';
 
 import { getHomeCategoryImage } from '../lib/home-utils';
@@ -28,11 +27,8 @@ export async function CategoriesSection() {
       title={t('categories.title')}
       description={t('categories.description')}
       viewAllHref='/shop'
-      items={categories}
-      isLoading={false}
-      columns={{ mobile: 1, tablet: 2, desktop: 4 }}
-      skeletonCount={CATEGORY_LIMIT}
-      renderItem={(category, index) => (
+    >
+      {categories.map((category, index) => (
         <CategoryCard
           name={category.name}
           description={category.description}
@@ -41,8 +37,7 @@ export async function CategoriesSection() {
           shopNowLabel={t('common.shopNow')}
           categoryAlt={t('common.categoryAlt')}
         />
-      )}
-      renderSkeleton={() => <Skeleton className='aspect-3/4 w-full rounded-2xl sm:rounded-3xl' />}
-    />
+      ))}
+    </SectionCarousel>
   );
 }

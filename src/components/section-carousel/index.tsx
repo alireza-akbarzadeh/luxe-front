@@ -2,7 +2,7 @@
 import { IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { type ReactNode } from 'react';
+import { Children, isValidElement, type ReactNode } from 'react';
 
 import { ChevronButton } from '@/components/section-carousel/chevron-button';
 import { DotIndicators } from '@/components/section-carousel/dot-Indicators';
@@ -44,7 +44,8 @@ export type SectionCarouselProps<T> = {
   headerSlot?: ReactNode;
   opts?: CarouselOptions;
   // ── Data ──────────────────────────────────────────────────────────────────
-  items: T[];
+  /** Items to render. Required when using renderItem. Optional when using children. */
+  items?: T[];
   isLoading?: boolean;
   /** Number of skeleton placeholders shown while loading (default: columns.desktop) */
   skeletonCount?: number;
@@ -52,8 +53,10 @@ export type SectionCarouselProps<T> = {
   renderSkeleton?: () => ReactNode;
 
   // ── Card renderer ─────────────────────────────────────────────────────────
-  /** Receives the item + its index, must return a card element */
-  renderItem: (item: T, index: number) => ReactNode;
+  /** Function to render each item. Called on client side. Used when children are not provided. */
+  renderItem?: (item: T, index: number) => ReactNode;
+  /** When provided, rendered directly instead of using renderItem. Each child wrapped in CarouselItem. */
+  children?: ReactNode;
 
   // ── Layout ────────────────────────────────────────────────────────────────
   footerSlot?: ReactNode;
@@ -99,6 +102,7 @@ export function SectionCarousel<T>({
   skeletonCount,
   renderSkeleton,
   renderItem,
+  children,
   columns = { mobile: 1, tablet: 2, desktop: 4 },
   className,
   sectionId,
@@ -113,6 +117,9 @@ export function SectionCarousel<T>({
   const { mobile = 1, tablet = 2, desktop = 4 } = columns;
   const itemBasis = cn(mobileBasis[mobile], tabletBasis[tablet], desktopBasis[desktop]);
   const placeholderCount = skeletonCount ?? desktop;
+  const itemsToRender = items ?? [];
+  const hasChildren = !!children;
+  const shouldRenderItems = !hasChildren && itemsToRender.length > 0;
 
   return (
     <section id={sectionId} className={cn('py-16 sm:py-20 lg:py-28', className)}>
@@ -172,21 +179,41 @@ export function SectionCarousel<T>({
                     )}
                   </CarouselItem>
                 ))
-              : items.map((item, index) => (
-                  <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-40px' }}
-                      transition={{
-                        duration: 0.45,
-                        delay: index * 0.05
-                      }}
-                    >
-                      {renderItem(item, index)}
-                    </motion.div>
-                  </CarouselItem>
-                ))}
+              : hasChildren
+                ? Children.toArray(children)
+                    .filter(isValidElement)
+                    .map((child: React.ReactElement, index: number) => (
+                      <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: '-40px' }}
+                          transition={{
+                            duration: 0.45,
+                            delay: index * 0.05
+                          }}
+                        >
+                          {child}
+                        </motion.div>
+                      </CarouselItem>
+                    ))
+                : shouldRenderItems
+                  ? itemsToRender.map((item, index) => (
+                      <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: '-40px' }}
+                          transition={{
+                            duration: 0.45,
+                            delay: index * 0.05
+                          }}
+                        >
+                          {renderItem?.(item, index)}
+                        </motion.div>
+                      </CarouselItem>
+                    ))
+                  : null}
           </CarouselContent>
         </Carousel>
 
