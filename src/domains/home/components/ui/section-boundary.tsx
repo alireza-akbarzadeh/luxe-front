@@ -1,9 +1,6 @@
-// components/section-boundary.tsx
-'use client';
-
 import { type ReactNode, Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
+/** Per-section RSC streaming — must be a Server Component (not client Suspense). */
 export function SectionBoundary({
   children,
   fallback
@@ -11,9 +8,5 @@ export function SectionBoundary({
   children: ReactNode;
   fallback: ReactNode;
 }) {
-  return (
-    <ErrorBoundary fallback={null}>
-      <Suspense fallback={fallback}>{children}</Suspense>
-    </ErrorBoundary>
-  );
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 }

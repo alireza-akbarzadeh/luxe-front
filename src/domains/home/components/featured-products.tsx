@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { FeaturedProductsSection } from '@/domains/home/components/ui/featured-products-section';
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeNewArrivals } from '@/services/-home-new-arrivals-get';
 import { getHomeTopProducts } from '@/services/-home-top-products-get';
 import { getHomeTrendingProducts } from '@/services/-home-trending-products-get';
@@ -17,14 +18,14 @@ export async function FeaturedProducts() {
 
   // Fetch all three in parallel
   const [topData, newData, trendingData] = await Promise.all([
-    getHomeTopProducts({ limit: PRODUCT_LIMIT }),
-    getHomeNewArrivals({ limit: PRODUCT_LIMIT }),
-    getHomeTrendingProducts({ limit: PRODUCT_LIMIT })
+    safeHomeFetch(() => getHomeTopProducts({ limit: PRODUCT_LIMIT })),
+    safeHomeFetch(() => getHomeNewArrivals({ limit: PRODUCT_LIMIT })),
+    safeHomeFetch(() => getHomeTrendingProducts({ limit: PRODUCT_LIMIT }))
   ]);
 
-  const featuredProducts = (topData.data?.products ?? []).map(mapHomeProductItem);
-  const newProducts = (newData.data?.products ?? []).map(mapHomeProductItem);
-  const trendingProducts = (trendingData.data?.products ?? []).map(mapHomeProductItem);
+  const featuredProducts = (topData?.data?.products ?? []).map(mapHomeProductItem);
+  const newProducts = (newData?.data?.products ?? []).map(mapHomeProductItem);
+  const trendingProducts = (trendingData?.data?.products ?? []).map(mapHomeProductItem);
 
   if (featuredProducts.length === 0 && newProducts.length === 0 && trendingProducts.length === 0) {
     return null;

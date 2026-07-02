@@ -1,6 +1,5 @@
 'use client';
 import { IconArrowRight } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Children, isValidElement, type ReactNode } from 'react';
 
@@ -184,33 +183,13 @@ export function SectionCarousel<T>({
                     .filter(isValidElement)
                     .map((child: React.ReactElement, index: number) => (
                       <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true, margin: '-40px' }}
-                          transition={{
-                            duration: 0.45,
-                            delay: index * 0.05
-                          }}
-                        >
-                          {child}
-                        </motion.div>
+                        {child}
                       </CarouselItem>
                     ))
                 : shouldRenderItems
                   ? itemsToRender.map((item, index) => (
                       <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true, margin: '-40px' }}
-                          transition={{
-                            duration: 0.45,
-                            delay: index * 0.05
-                          }}
-                        >
-                          {renderItem?.(item, index)}
-                        </motion.div>
+                        {renderItem?.(item, index)}
                       </CarouselItem>
                     ))
                   : null}

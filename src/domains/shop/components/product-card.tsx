@@ -7,7 +7,6 @@ import {
   IconStar,
   IconStarFilled
 } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import React from 'react';
@@ -105,7 +104,7 @@ function ColorSwatches({
 
 export function ProductCard({
   product,
-  index = 0,
+  index: _index = 0,
   size = 'default',
   priority = false
 }: ProductCardProps) {
@@ -158,13 +157,7 @@ export function ProductCard({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.05 }}
-      className='h-full'
-    >
+    <div className='h-full'>
       <article
         className={cn(
           'group bg-card flex h-full flex-col overflow-hidden rounded-2xl border shadow-sm transition-all duration-300',
@@ -390,6 +383,6 @@ export function ProductCard({
           </div>
         </div>
       </article>
-    </motion.div>
+    </div>
   );
 }

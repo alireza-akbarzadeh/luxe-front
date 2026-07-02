@@ -4,20 +4,7 @@ import { CardGridSkeleton, CarouselSkeleton } from '@/domains/home/components/ui
 
 import { HeroSection } from './components/hero-section';
 import { TrustBar } from './components/trust-bar';
-
-function HomeBelowFoldFallback() {
-  return (
-    <>
-      <CarouselSkeleton count={4} />
-      <CardGridSkeleton count={8} />
-    </>
-  );
-}
-
-async function HomeSections() {
-  const { HomeSections } = await import('./home-sections');
-  return <HomeSections />;
-}
+import { HomeSections } from './home-sections';
 
 export function HomeDomains() {
   return (
@@ -26,9 +13,17 @@ export function HomeDomains() {
       <Suspense fallback={null}>
         <TrustBar />
       </Suspense>
-      <Suspense fallback={<HomeBelowFoldFallback />}>
-        <HomeSections />
-      </Suspense>
+      <HomeSections />
     </div>
+  );
+}
+
+/** Reserved for a future route-level `loading.tsx` export if needed. */
+export function HomeBelowFoldFallback() {
+  return (
+    <>
+      <CarouselSkeleton count={4} />
+      <CardGridSkeleton count={8} />
+    </>
   );
 }
