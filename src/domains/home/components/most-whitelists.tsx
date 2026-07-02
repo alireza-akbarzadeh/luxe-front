@@ -1,16 +1,17 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { getHomeMostWishlisted } from '@/services/-home-most-wishlisted-get';
-import type { DtoProductWithLike } from '~/src/services/-products-get.schemas';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 const PRODUCT_LIMIT = 12;
 
 export async function MostWhitelists() {
   const t = await getTranslations('home');
 
-  const data = await getHomeMostWishlisted({ limit: PRODUCT_LIMIT });
+  const data = await safeHomeFetch(() => getHomeMostWishlisted({ limit: PRODUCT_LIMIT }));
   const wishlists = data?.data?.products ?? [];
 
   if (wishlists.length === 0) {

@@ -1,15 +1,20 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
-import { CollectionCard } from '@/domains/collections/components/collection-card';
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomePopularCollections } from '@/services/-home-popular-collections-get';
+
+import { HomeCollectionCard } from './ui/collection-card';
 
 const COLLECTION_LIMIT = 4;
 
 export async function CollectionBanner() {
-  const t = await getTranslations('home.collections');
+  const [t, tCommon] = await Promise.all([
+    getTranslations('home.collections'),
+    getTranslations('home.common')
+  ]);
 
-  const data = await getHomePopularCollections({ limit: COLLECTION_LIMIT });
+  const data = await safeHomeFetch(() => getHomePopularCollections({ limit: COLLECTION_LIMIT }));
 
   const collections = data?.data?.collections ?? [];
 
@@ -20,13 +25,20 @@ export async function CollectionBanner() {
   return (
     <SectionCarousel
       sectionId='collections'
-      eyebrow={t('collections.eyebrow')}
-      title={t('collections.title')}
+      eyebrow={t('eyebrow')}
+      title={t('title')}
       viewAllHref='/collections'
-      viewAllLabel={t('collections.viewAll')}
+      viewAllLabel={t('viewAll')}
+      columns={{ mobile: 1, tablet: 1, desktop: 2 }}
+      loop={false}
     >
       {collections.map((collection, index) => (
-        <CollectionCard key={collection.id ?? index} collection={collection} index={index} />
+        <HomeCollectionCard
+          key={collection.id ?? index}
+          banner={collection}
+          index={index}
+          fallbackLabel={tCommon('shopNow')}
+        />
       ))}
     </SectionCarousel>
   );

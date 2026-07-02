@@ -1045,7 +1045,9 @@
       }
     },
     "brands": {
-      "title": "Con la confianza de marcas independientes líderes"
+      "eyebrow": "Marcas destacadas",
+      "title": "Con la confianza de marcas independientes líderes",
+      "description": "Descubre casas y creadores a los que nuestros compradores vuelven temporada tras temporada."
     },
     "marketplace": {
       "eyebrow": "El marketplace",

@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { PromoCountdown } from '@/domains/home/components/ui/promo-countdown';
+import { marketingNumbers } from '@/lib/i18n/marketing-numbers';
 import { getHomeFlashDeals } from '@/services/-home-flash-deals-get';
 
 import { sectionContainerClass } from '../lib/home-utils';
@@ -23,6 +24,16 @@ export async function PromoSection() {
 
   const promoCode = t('code') || 'LUXE20';
 
+  const product = deal.product;
+  const discount =
+    product?.discount_percent != null && product.discount_percent > 0
+      ? product.discount_percent / 100
+      : product?.compare_at_price != null &&
+          product.price != null &&
+          product.compare_at_price > product.price
+        ? (product.compare_at_price - product.price) / product.compare_at_price
+        : marketingNumbers.promoDiscountPercent;
+
   return (
     <section className='py-16 sm:py-20 lg:py-28'>
       <div className={sectionContainerClass}>
@@ -33,7 +44,7 @@ export async function PromoSection() {
           promoCode={promoCode}
           t={{
             badge: t('badge'),
-            title: t('title'),
+            title: t('title', { discount }),
             description: t('description', { code: promoCode }),
             shopSale: t('shopSale'),
             createAccount: t('createAccount'),

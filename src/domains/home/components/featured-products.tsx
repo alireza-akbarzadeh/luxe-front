@@ -26,6 +26,10 @@ export async function FeaturedProducts() {
   const newProducts = (newData.data?.products ?? []).map(mapHomeProductItem);
   const trendingProducts = (trendingData.data?.products ?? []).map(mapHomeProductItem);
 
+  if (featuredProducts.length === 0 && newProducts.length === 0 && trendingProducts.length === 0) {
+    return null;
+  }
+
   return (
     <FeaturedProductsSection
       featuredProducts={featuredProducts}

@@ -14,9 +14,9 @@ function HomeBelowFoldFallback() {
   );
 }
 
-async function HomeBelowFoldDeferred() {
-  const { HomeBelowFold } = await import('./home-below-fold.domain');
-  return <HomeBelowFold />;
+async function HomeSections() {
+  const { HomeSections } = await import('./home-sections');
+  return <HomeSections />;
 }
 
 export function HomeDomains() {
@@ -27,7 +27,7 @@ export function HomeDomains() {
         <TrustBar />
       </Suspense>
       <Suspense fallback={<HomeBelowFoldFallback />}>
-        <HomeBelowFoldDeferred />
+        <HomeSections />
       </Suspense>
     </div>
   );

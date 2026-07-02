@@ -232,7 +232,9 @@ export const customInstance = async <T>(
       return axiosError.response.data as unknown as T;
     }
 
-    console.warn('Received error response but no data:', axiosError.response);
+    if (process.env['NODE_ENV'] !== 'production') {
+      logger.warn('Received error response but no data:', axiosError.response);
+    }
     throw axiosError;
   }
 };

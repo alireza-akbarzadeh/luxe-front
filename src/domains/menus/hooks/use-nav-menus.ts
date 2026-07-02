@@ -2,8 +2,8 @@
 
 import { useLocale } from 'next-intl';
 
-import type { Locale } from '@/i18n/config';
 import { getNavMenusQueryKey } from '@/domains/menus/lib/nav-menus-query-key';
+import type { Locale } from '@/i18n/config';
 import { useGetNavMenus } from '@/services/-nav-menus-get';
 
 /** Storefront nav menus — labels resolved server-side via Accept-Language. */

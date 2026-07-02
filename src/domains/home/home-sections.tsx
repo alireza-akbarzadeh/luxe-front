@@ -23,8 +23,7 @@ import { PromoSection } from './components/promo-section';
 import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 
-/** Below-fold homepage sections — separate chunk so hero LCP is not blocked by full home bundle. */
-export function HomeBelowFold() {
+export function HomeSections() {
   return (
     <>
       <SectionBoundary fallback={<CarouselSkeleton count={4} />}>

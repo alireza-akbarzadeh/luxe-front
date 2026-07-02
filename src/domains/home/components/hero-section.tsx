@@ -46,11 +46,11 @@ export function HeroSection() {
       />
       <div
         aria-hidden
-        className='bg-gold/8 pointer-events-none absolute end-0 -top-40 h-64 w-64 rounded-full'
+        className='bg-gold/15 pointer-events-none absolute -end-24 -top-32 h-72 w-72 rounded-full blur-3xl'
       />
       <div
         aria-hidden
-        className='bg-gold/8 pointer-events-none absolute start-0 bottom-0 h-56 w-56 rounded-full'
+        className='bg-gold/10 pointer-events-none absolute -start-24 bottom-8 h-64 w-64 rounded-full blur-3xl'
       />
 
       <div className='relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20'>

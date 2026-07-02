@@ -1045,7 +1045,9 @@
       }
     },
     "brands": {
-      "title": "Trusted by leading independent brands"
+      "eyebrow": "Featured brands",
+      "title": "Trusted by leading independent brands",
+      "description": "Discover maisons and makers our shoppers return to season after season."
     },
     "marketplace": {
       "eyebrow": "The marketplace",

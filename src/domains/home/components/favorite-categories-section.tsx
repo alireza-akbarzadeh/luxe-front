@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { FavoriteCategoryItem } from '@/domains/home/components/ui/favorite-category-Item';
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeCategories } from '@/services/-home-categories-get';
 
 const HOME_CATEGORY_LIMIT = 8;
@@ -12,7 +13,7 @@ export async function FavoriteCategoriesSection() {
     getTranslations('home.common')
   ]);
 
-  const data = await getHomeCategories({ limit: HOME_CATEGORY_LIMIT });
+  const data = await safeHomeFetch(() => getHomeCategories({ limit: HOME_CATEGORY_LIMIT }));
   const categories = data?.data?.for_you ?? [];
   if (categories.length === 0) return null;
 

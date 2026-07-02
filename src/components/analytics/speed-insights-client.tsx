@@ -9,5 +9,9 @@ const SpeedInsights = dynamic(
 
 /** Client-only wrapper — `ssr: false` dynamic imports must live in Client Components. */
 export function SpeedInsightsClient() {
+  if (process.env['NEXT_PUBLIC_VERCEL_ENV'] === undefined) {
+    return null;
+  }
+
   return <SpeedInsights />;
 }

@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { AppImage } from '@/components/ui/app-image';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { DtoHomeCollectionItem } from '~/src/services/-home-popular-collections-get.schemas';
+import type { DtoHomeCollectionItem } from '@/services/-home-popular-collections-get.schemas';
 
-export function CollectionCard({
+export function HomeCollectionCard({
   banner,
   fallbackLabel
 }: Readonly<{
@@ -52,8 +52,8 @@ export function CollectionCard({
         <Link
           href={href}
           className={cn(
-            buttonVariants({ variant: 'secondary', size: 'lg' }),
-            'text-foreground mt-6 w-fit rounded-full bg-white/95 hover:bg-white'
+            buttonVariants({ size: 'lg' }),
+            'text-gold-foreground [&_svg]:text-gold-foreground mt-6 w-fit border-0 bg-white shadow-md hover:bg-white/90'
           )}
         >
           {banner.cta_label ?? fallbackLabel}

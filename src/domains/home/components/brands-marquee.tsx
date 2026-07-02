@@ -1,15 +1,20 @@
 import { getTranslations } from 'next-intl/server';
 
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeTopBrands } from '@/services/-home-top-brands-get';
 
 import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
+import { BrandsMarqueeTrack } from './ui/brands-marquee-track';
 
 const BRAND_LIMIT = 12;
 
 export async function BrandsMarquee() {
-  const t = await getTranslations('home.brands');
+  const [t, tCommon] = await Promise.all([
+    getTranslations('home.brands'),
+    getTranslations('home.common')
+  ]);
 
-  const data = await getHomeTopBrands({ limit: BRAND_LIMIT });
+  const data = await safeHomeFetch(() => getHomeTopBrands({ limit: BRAND_LIMIT }));
 
   const brands = data?.data?.brands ?? [];
 
@@ -17,31 +22,23 @@ export async function BrandsMarquee() {
     return null;
   }
 
-  const items = [...brands, ...brands];
+  const items = brands.map((brand, index) => ({
+    key: String(brand.id ?? brand.slug ?? index),
+    name: brand.name ?? ''
+  }));
 
   return (
     <section
       className={`${fullBleedClass} border-border/50 bg-muted/30 border-y py-10 sm:py-12`}
-      aria-label={t('common.partnerBrandsAria')}
+      aria-label={tCommon('partnerBrandsAria')}
       aria-busy={false}
     >
       <div className={sectionContainerClass}>
         <p className='text-muted-foreground mb-8 text-center text-xs font-medium tracking-[0.22em] uppercase'>
-          {t('brands.title')}
+          {t('title')}
         </p>
 
-        <div className='relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]'>
-          <div className='animate-marquee flex w-max gap-12 sm:gap-16'>
-            {items.map((brand, index) => (
-              <span
-                key={`${brand.id ?? brand.slug}-${index}`}
-                className='text-muted-foreground/80 font-display shrink-0 text-lg font-medium tracking-wide whitespace-nowrap sm:text-xl'
-              >
-                {brand.name}
-              </span>
-            ))}
-          </div>
-        </div>
+        <BrandsMarqueeTrack items={items} />
       </div>
     </section>
   );
