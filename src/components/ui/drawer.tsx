@@ -51,13 +51,13 @@ function DrawerContent({
 }: DrawerContentProps) {
   return (
     <DrawerPortal>
-      <DrawerOverlay className='fixed inset-0 z-50 bg-black/40 backdrop-blur-sm' />
+      <DrawerOverlay className='fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm' />
 
       <DrawerPrimitive.Content
         aria-describedby={undefined}
         className={cn(
-          // base
-          'bg-background fixed inset-x-0 bottom-0 z-50 flex h-auto flex-col border-t shadow-2xl',
+          // base — z-[60] stacks above mobile bottom nav (z-50)
+          'bg-background fixed inset-x-0 bottom-0 z-[60] flex h-auto flex-col border-t shadow-2xl',
 
           // animation-safe padding
           'animate-in slide-in-from-bottom duration-300',

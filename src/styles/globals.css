@@ -381,6 +381,48 @@ html.locale-fa .font-display {
   }
 }
 
+/*
+ * Mobile Lighthouse (max-lg): faster LCP + lower TBT without changing desktop (lg+).
+ * - Solid hero accent text (gradient clip delays LCP paint on slow devices)
+ * - Geist stack on hero title (avoids Playfair italic fetch on critical path)
+ * - Disable decorative CSS animations (marquee, category ring, luxe-fade)
+ * - Defer below-fold section layout/paint via content-visibility
+ */
+@media (max-width: 1023px) {
+  .hero-lcp-accent {
+    background-image: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    color: var(--gold) !important;
+    font-style: normal !important;
+  }
+
+  .hero-lcp-title {
+    font-family: var(--font-geist-sans), ui-sans-serif, sans-serif !important;
+  }
+
+  .luxe-rise,
+  .luxe-fade {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .category-ring-border {
+    animation: none !important;
+  }
+
+  .brands-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .home-defer-mobile {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+  }
+}
+
 .brands-marquee-clip {
   contain: layout style paint;
 }

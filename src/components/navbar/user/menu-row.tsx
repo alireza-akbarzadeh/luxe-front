@@ -4,6 +4,7 @@ import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
+import { useProfileDrawerStore } from '@/stores/profile-drawer-store';
 
 type MenuRowProps = {
   icon: React.ReactNode;
@@ -14,6 +15,8 @@ type MenuRowProps = {
 };
 
 export function MenuRow({ icon, title, subtitle, onClickAction, href }: MenuRowProps) {
+  const closeProfileDrawer = useProfileDrawerStore((state) => state.closeProfileDrawer);
+
   const content = (
     <>
       <div className='text-muted-foreground'>{icon}</div>
@@ -36,14 +39,27 @@ export function MenuRow({ icon, title, subtitle, onClickAction, href }: MenuRowP
 
   if (href) {
     return (
-      <Link href={href} className={className}>
+      <Link
+        href={href}
+        className={className}
+        onClick={() => {
+          closeProfileDrawer();
+        }}
+      >
         {content}
       </Link>
     );
   }
 
   return (
-    <button onClick={onClickAction} className={className}>
+    <button
+      type='button'
+      onClick={() => {
+        onClickAction?.();
+        closeProfileDrawer();
+      }}
+      className={className}
+    >
       {content}
     </button>
   );

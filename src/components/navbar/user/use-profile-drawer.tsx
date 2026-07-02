@@ -1,19 +1,11 @@
-import { UserProfileContent } from '@/components/navbar/user/user-profile-content';
-import { UserProfileHeader } from '@/components/navbar/user/user-profile-header';
+'use client';
+
 import { UserProfileTrigger } from '@/components/navbar/user/user-profile-trigger';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { useProfileDrawerStore } from '@/stores/profile-drawer-store';
 
+/** Navbar profile button — opens the shared bottom-sheet account menu on mobile. */
 export function UserProfileDrawer() {
-  return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <UserProfileTrigger />
-      </DrawerTrigger>
+  const openProfileDrawer = useProfileDrawerStore((state) => state.openProfileDrawer);
 
-      <DrawerContent variant='ios' radius='full' showHandle>
-        <UserProfileHeader />
-        <UserProfileContent />
-      </DrawerContent>
-    </Drawer>
-  );
+  return <UserProfileTrigger onClick={openProfileDrawer} />;
 }

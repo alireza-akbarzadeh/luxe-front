@@ -2,26 +2,23 @@
 
 import { IconChevronRight } from '@tabler/icons-react';
 
+import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
-import { AccountWishlistItemCard } from '~/src/domains/account/components/account-wishlist-item-card';
-import { formatOrderAmount } from '~/src/domains/account/lib/order-utils';
-import { useWishlistActions } from '~/src/domains/wishlist/hooks/use-wishlist-actions';
-import { type SortOption, useWishlistStore } from '~/src/domains/wishlist/wishlist.store';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
+import { AccountWishlistItemCard } from '@/domains/account/components/account-wishlist-item-card';
 
 import { WishlistEmptyState } from './components/wishlist-empty-state';
 import { WishlistFooter } from './components/wishlist-footer';
 import { WishlistGuestState } from './components/wishlist-guest-state';
 import { WishlistHeader } from './components/wishlist-header';
+import { WishlistItemRow } from './components/wishlist-item-row';
 import { WishlistPageSkeleton } from './components/wishlist-page-skeleton';
+import { useWishlistActions } from './hooks/use-wishlist-actions';
+import { useWishlistStore } from './wishlist.store';
+
+const wishlistMainClass = 'app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16';
 
 export function WishlistDomain() {
   const { isAuthenticated } = useAuth();
@@ -59,35 +56,40 @@ export function WishlistDomain() {
 
   if (isError) {
     return (
-      <main className='app-container pt-24 pb-16'>
+      <main className={wishlistMainClass}>
         <DynamicBreadcrumb
           items={[{ label: 'My Wishlist' }]}
           direction='column'
           separator={<IconChevronRight className='h-3 w-3' />}
-          className='text-muted-foreground text-xs'
+          className='text-muted-foreground hidden text-xs sm:flex'
           breadcrumbClassName='flex items-center gap-1.5'
         />
-        <div className='mx-auto mt-16 max-w-lg text-center'>
-          <h1 className='font-display mb-2 text-2xl font-semibold'>Couldn&apos;t load your wishlist</h1>
-          <p className='text-muted-foreground mb-6 text-sm'>
+        <Flex direction='column' align='center' className='mx-auto mt-12 max-w-lg text-center'>
+          <Typography.H2 family='display' className='text-2xl font-semibold'>
+            Couldn&apos;t load your wishlist
+          </Typography.H2>
+          <Typography.Muted className='mt-2 mb-6 text-sm'>
             Something went wrong while fetching your saved items. Please try again.
-          </p>
+          </Typography.Muted>
           <Button onClick={() => void refetch()} className='rounded-full'>
             Retry
           </Button>
-        </div>
+        </Flex>
       </main>
     );
   }
 
   if (total === 0) {
     return (
-      <main className='app-container pt-24 pb-16'>
+      <main className={wishlistMainClass}>
         <WishlistHeader
           itemLength={0}
           productIds={[]}
           isClearing={false}
+          sortBy={sortBy}
+          totalSavings={0}
           onClearAll={() => {}}
+          onSortChange={setSortBy}
         />
         <WishlistEmptyState />
       </main>
@@ -95,45 +97,31 @@ export function WishlistDomain() {
   }
 
   return (
-    <main className='app-container pt-24 pb-16'>
+    <main className={wishlistMainClass}>
       <WishlistHeader
         itemLength={total}
         productIds={productIds}
         isClearing={isClearing}
+        sortBy={sortBy}
+        totalSavings={totalSavings}
         onClearAll={() => void clearAll(productIds)}
+        onSortChange={setSortBy}
       />
 
-      <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
-        <p className='text-muted-foreground text-sm'>
-          {total} saved {total === 1 ? 'item' : 'items'}
-          {totalSavings > 0 ? (
-            <>
-              {' '}
-              · save up to{' '}
-              <span className='text-accent font-medium'>{formatOrderAmount(totalSavings)}</span>{' '}
-              on current prices
-            </>
-          ) : null}
-        </p>
+      <ul className='flex flex-col gap-3 lg:hidden'>
+        {items.map((item) =>
+          item.product_id ? (
+            <WishlistItemRow
+              key={item.product_id}
+              item={item}
+              isRemoving={removingProductId === item.product_id}
+              onRemove={(productId) => void removeItem(productId)}
+            />
+          ) : null
+        )}
+      </ul>
 
-        <Select
-          value={sortBy}
-          onValueChange={(value) => {
-            setSortBy(value as SortOption);
-          }}
-        >
-          <SelectTrigger className='w-[180px] rounded-full'>
-            <SelectValue placeholder='Sort by' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='name'>Name (A–Z)</SelectItem>
-            <SelectItem value='price-asc'>Price: low to high</SelectItem>
-            <SelectItem value='price-desc'>Price: high to low</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+      <div className='hidden grid-cols-2 gap-4 md:grid-cols-3 lg:grid lg:grid-cols-4'>
         {items.map((item) =>
           item.product_id ? (
             <AccountWishlistItemCard

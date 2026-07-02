@@ -1,9 +1,9 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 
+import { ClientSiteLayout } from '@/components/layout/client-site-layout';
 import { Navbar } from '@/components/navbar/navbar';
 import { prefetchSiteNavMenus } from '@/domains/menus/lib/prefetch-site-nav-menus';
-import { ClientSiteLayout } from '~/src/components/layout/client-site-layout';
 
 type TRootLayout = Readonly<PropsWithChildren>;
 

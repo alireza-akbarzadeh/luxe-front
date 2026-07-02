@@ -4,15 +4,25 @@ import { IconLogout, IconUserCircle } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { cn } from '@/lib/utils';
+import { useProfileDrawerStore } from '@/stores/profile-drawer-store';
 import { useNavbarProfile } from '~/src/components/navbar/user/useNavbarProfile';
 
 export function AuthMenuItem() {
   const t = useTranslations('nav.userProfile.auth');
   const { isLoggedIn, handleLogout } = useNavbarProfile();
+  const closeProfileDrawer = useProfileDrawerStore((state) => state.closeProfileDrawer);
 
   return (
     <button
-      onClick={isLoggedIn ? handleLogout : () => (window.location.href = '/login')}
+      type='button'
+      onClick={() => {
+        closeProfileDrawer();
+        if (isLoggedIn) {
+          void handleLogout();
+        } else {
+          globalThis.location.href = '/login';
+        }
+      }}
       className={cn(
         'group hover:bg-accent/60 flex w-full cursor-pointer items-center gap-3 rounded-2xl p-3 transition-all',
         isLoggedIn && 'hover:bg-destructive/10'

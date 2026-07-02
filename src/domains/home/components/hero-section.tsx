@@ -10,7 +10,6 @@ import {
   HeroIconStar,
   HeroIconTruck
 } from './ui/hero-icons';
-import { HeroEditorialPanelSkeleton } from './ui/home-skeleton';
 
 const STATS = [
   { value: '120+', label: 'Maisons & makers' },
@@ -39,21 +38,21 @@ export function HeroSection() {
   const year = new Date().getFullYear();
 
   return (
-    <section className='bg-background relative overflow-hidden'>
+    <section className='hero-mobile-perf bg-background relative overflow-hidden'>
       <div
         aria-hidden
         className='from-background via-background to-surface pointer-events-none absolute inset-0 bg-gradient-to-b'
       />
       <div
         aria-hidden
-        className='bg-gold/15 pointer-events-none absolute -end-24 -top-32 h-72 w-72 rounded-full blur-3xl'
+        className='bg-gold/15 pointer-events-none absolute -end-24 -top-32 hidden h-72 w-72 rounded-full blur-3xl lg:block'
       />
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute -start-24 bottom-8 h-64 w-64 rounded-full blur-3xl'
+        className='bg-gold/10 pointer-events-none absolute -start-24 bottom-8 hidden h-64 w-64 rounded-full blur-3xl lg:block'
       />
 
-      <div className='relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:py-20'>
+      <div className='relative mx-auto flex w-full max-w-7xl flex-col justify-center px-5 py-12 sm:px-8 sm:py-16 lg:min-h-[calc(100svh-2rem)] lg:py-20'>
         <div className='grid items-center gap-12 lg:grid-cols-12 lg:gap-16'>
           <div className='text-center lg:col-span-6 lg:text-start'>
             <div className='border-gold/30 bg-card/90 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm sm:text-sm'>
@@ -62,9 +61,11 @@ export function HeroSection() {
               <span className='text-muted-foreground'>— now live</span>
             </div>
 
-            <h1 className='font-display text-4xl leading-[1.03] font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl xl:text-[3.5rem]'>
+            <h1 className='hero-lcp-title font-display text-4xl leading-[1.03] font-semibold tracking-tight text-balance max-lg:font-sans sm:text-5xl lg:text-6xl xl:text-[3.5rem]'>
               Modern luxury,
-              <span className='text-gold-gradient mt-1 block italic'>beautifully curated</span>
+              <span className='hero-lcp-accent text-gold-gradient mt-1 block italic lg:font-display'>
+                beautifully curated
+              </span>
             </h1>
 
             <p className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed text-pretty sm:text-lg lg:mx-0'>
@@ -105,7 +106,7 @@ export function HeroSection() {
               </span>
             </div>
 
-            <dl className='border-gold/15 mt-10 grid grid-cols-2 gap-y-6 border-t pt-8 sm:grid-cols-4'>
+            <dl className='border-gold/15 mt-10 hidden grid-cols-2 gap-y-6 border-t pt-8 sm:grid sm:grid-cols-4'>
               {STATS.map((stat) => (
                 <div key={stat.label} className='text-center lg:text-start'>
                   <dt className='font-display text-2xl font-semibold sm:text-3xl'>{stat.value}</dt>
@@ -117,8 +118,8 @@ export function HeroSection() {
             </dl>
           </div>
 
-          <div className='relative lg:col-span-6'>
-            <Suspense fallback={<HeroEditorialPanelSkeleton />}>
+          <div className='relative hidden lg:col-span-6 lg:block'>
+            <Suspense fallback={null}>
               <HeroEditorialPanelDeferred />
             </Suspense>
           </div>

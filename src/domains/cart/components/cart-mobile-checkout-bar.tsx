@@ -16,6 +16,7 @@ interface CartMobileCheckoutBarProps {
   onCheckout: () => void;
 }
 
+/** Sticky checkout CTA above the mobile bottom tab bar. */
 export function CartMobileCheckoutBar({
   total,
   itemCount,
@@ -28,34 +29,44 @@ export function CartMobileCheckoutBar({
   return (
     <Flex
       direction='column'
-      spacing={2}
-      className='bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t p-4 backdrop-blur-md lg:hidden'
+      gap={2}
+      className={cn(
+        'bg-background/95 fixed inset-x-0 z-[55] border-t p-4 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl',
+        'bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:hidden'
+      )}
     >
       {hasIncompleteVariants ? (
-        <Typography.Text variant='subtle' tone='warning' className='text-center text-xs'>
+        <Typography.Text
+          variant='subtle'
+          tone='warning'
+          className='text-center text-xs leading-relaxed'
+        >
           {t('variantWarning')}
         </Typography.Text>
       ) : null}
-      <Flex direction='row' align='center' spacing={3} className='mx-auto w-full max-w-7xl'>
-        <Flex direction='column' spacing={0.5} className='min-w-0 flex-1'>
-          <Typography.Text variant='subtle'>
-            {t('itemCount', { count: itemCount })}
-          </Typography.Text>
-          <Typography.Text variant='large' className={cn(cartMoneyClassName, 'font-semibold')}>
+
+      <Flex align='center' justify='between' gap={3} className='w-full'>
+        <Flex direction='column' gap={0.5} className='min-w-0 shrink-0'>
+          <Typography.Muted className='text-xs'>{t('estimatedTotal')}</Typography.Muted>
+          <Typography.Text className={cn(cartMoneyClassName, 'text-xl font-semibold')}>
             {formatCartMoney(total)}
           </Typography.Text>
+          <Typography.Muted className='text-[11px]'>
+            {t('itemCount', { count: itemCount })}
+          </Typography.Muted>
         </Flex>
-        <Button
-          type='button'
-          className='h-11 min-w-0 flex-1 rounded-full px-4 sm:flex-none sm:px-6'
-          size='lg'
-          disabled={disabled}
-          onClick={onCheckout}
-        >
-          {t('checkout')}
-          <IconArrowRight className='ml-2 h-4 w-4' />
-        </Button>
       </Flex>
+
+      <Button
+        type='button'
+        className='h-12 w-full rounded-full text-base font-semibold'
+        size='lg'
+        disabled={disabled}
+        onClick={onCheckout}
+      >
+        {t('proceedToCheckout')}
+        <IconArrowRight className='ms-2 size-5' />
+      </Button>
     </Flex>
   );
 }

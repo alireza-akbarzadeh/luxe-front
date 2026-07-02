@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
+import type { DtoCartItemDetail } from '@/services/-cart-get.schemas';
 
 import {
   buildVariantCheckoutMessage,

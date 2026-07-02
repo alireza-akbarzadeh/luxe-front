@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import type { PropsWithChildren } from 'react';
 
+import { ProfileDrawerSheet } from '@/components/navbar/user/profile-drawer-sheet';
 import { SiteRealtimeProvider } from '@/lib/realtime/site-realtime-provider';
 
 const FooterClient = dynamic(
@@ -30,6 +31,7 @@ export function ClientSiteLayout({ children }: PropsWithChildren) {
         </main>
         <MobileBottomNavClient />
         <PwaInstallPromptClient />
+        <ProfileDrawerSheet />
       </SiteRealtimeProvider>
       <FooterClient />
     </>

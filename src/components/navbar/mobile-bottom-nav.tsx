@@ -12,10 +12,11 @@ import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 import { useGetAccountSummary } from '@/services/-account-summary-get';
 import { useCartStore } from '@/store/card.store';
+import { useProfileDrawerStore } from '@/stores/profile-drawer-store';
 
 type TabId = 'home' | 'search' | 'cart' | 'wishlist' | 'account';
 
-function isTabActive(pathname: string, tab: TabId) {
+function isTabActive(pathname: string, tab: TabId, isProfileDrawerOpen: boolean) {
   switch (tab) {
     case 'home':
       return pathname === '/';
@@ -26,7 +27,7 @@ function isTabActive(pathname: string, tab: TabId) {
     case 'wishlist':
       return pathname.startsWith('/wishlist');
     case 'account':
-      return pathname.startsWith('/account') || pathname.startsWith('/auth');
+      return isProfileDrawerOpen || pathname.startsWith('/account') || pathname.startsWith('/auth');
     default:
       return false;
   }
@@ -44,6 +45,8 @@ export function MobileBottomNav() {
     query: { enabled: isAuthenticated }
   });
   const wishlistCount = summaryResponse?.data?.liked_products_count ?? 0;
+  const openProfileDrawer = useProfileDrawerStore((state) => state.openProfileDrawer);
+  const isProfileDrawerOpen = useProfileDrawerStore((state) => state.isOpen);
 
   const tabs: Array<{
     id: TabId;
@@ -69,7 +72,7 @@ export function MobileBottomNav() {
       badge: isAuthenticated ? wishlistCount : 0,
       icon: IconHeart
     },
-    { id: 'account', label: t('account'), href: '/account', icon: IconUser }
+    { id: 'account', label: t('account'), onClick: openProfileDrawer, icon: IconUser }
   ];
 
   return (
@@ -80,7 +83,7 @@ export function MobileBottomNav() {
     >
       <div className='mx-auto flex h-16 max-w-lg items-stretch justify-around px-1'>
         {tabs.map(({ id, label, href, onClick, badge, icon: Icon }) => {
-          const active = isTabActive(pathname, id);
+          const active = isTabActive(pathname, id, isProfileDrawerOpen);
           const content = (
             <>
               <span className='relative flex h-6 w-6 items-center justify-center'>

@@ -35,7 +35,7 @@ export function SelectController({
         value={field.state.value}
         onValueChange={(value) => field.handleChange(value)}
       >
-        <SelectTrigger className='w-full rounded-xs'>
+        <SelectTrigger className='w-full rounded-xl'>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
 

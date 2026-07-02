@@ -1,6 +1,6 @@
 import { formatCurrency } from '@/lib/format';
 import { IMAGE_FALLBACK } from '@/lib/images';
-import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
+import type { DtoCartItemDetail } from '@/services/-cart-get.schemas';
 
 import type { CartCommerceSettings } from './cart-commerce-settings';
 import { DEFAULT_CART_COMMERCE_SETTINGS } from './cart-commerce-settings';

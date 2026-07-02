@@ -24,7 +24,7 @@ interface CheckoutMobileActionBarProps {
   onPlaceOrder: () => void;
 }
 
-/** Sticky primary actions on mobile — keeps checkout one-thumb friendly. */
+/** Sticky checkout actions above the mobile bottom tab bar. */
 export function CheckoutMobileActionBar({
   total,
   itemCount,
@@ -43,36 +43,41 @@ export function CheckoutMobileActionBar({
   return (
     <Flex
       direction='column'
-      spacing={0}
-      className='bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t p-4 backdrop-blur-md lg:hidden'
+      gap={3}
+      className={cn(
+        'bg-background/95 fixed inset-x-0 z-[55] border-t p-4 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur-xl',
+        'bottom-[calc(4rem+env(safe-area-inset-bottom))] lg:hidden'
+      )}
     >
-      <Flex direction='row' align='center' justify='between' className='mb-3'>
-        <Typography.Text variant='subtle'>
-          {tMobile('itemCount', { count: itemCount })}
-        </Typography.Text>
-        <Typography.Text variant='large' className={cn(cartMoneyClassName, 'font-semibold')}>
-          {formatCartMoney(total)}
-        </Typography.Text>
+      <Flex align='center' justify='between' className='w-full'>
+        <Flex direction='column' gap={0.5}>
+          <Typography.Muted className='text-xs'>
+            {tMobile('itemCount', { count: itemCount })}
+          </Typography.Muted>
+          <Typography.Text className={cn(cartMoneyClassName, 'text-xl font-semibold')}>
+            {formatCartMoney(total)}
+          </Typography.Text>
+        </Flex>
       </Flex>
 
-      <Flex direction='row' align='center' spacing={2}>
+      <Flex align='center' gap={2} className='w-full'>
         <Button
           type='button'
           variant='outline'
           size='lg'
-          className='h-11 shrink-0 rounded-full px-4'
+          className='size-12 shrink-0 rounded-full px-0'
           onClick={onBack}
           disabled={isPending}
+          aria-label={isFirst ? t('backToCart') : t('backToShipping')}
         >
-          <IconChevronLeft className='h-4 w-4' />
-          <span className='sr-only'>{isFirst ? t('backToCart') : t('backToShipping')}</span>
+          <IconChevronLeft className='size-5' />
         </Button>
 
         {isLast ? (
           <Button
             type='button'
             size='lg'
-            className='bg-accent text-accent-foreground h-11 min-w-0 flex-1 rounded-full'
+            className='bg-accent text-accent-foreground h-12 min-w-0 flex-1 rounded-full text-base font-semibold'
             loading={isPending}
             disabled={!agreedToTerms || isPending}
             onClick={onPlaceOrder}
@@ -83,12 +88,12 @@ export function CheckoutMobileActionBar({
           <Button
             type='button'
             size='lg'
-            className='bg-accent text-accent-foreground h-11 min-w-0 flex-1 rounded-full'
+            className='bg-accent text-accent-foreground h-12 min-w-0 flex-1 rounded-full text-base font-semibold'
             onClick={onNext}
             disabled={isPending}
           >
             {currentStepId === 'shipping' ? t('continueToReview') : t('continueToReview')}
-            <IconChevronRight className='ml-2 h-4 w-4' />
+            <IconChevronRight className='ms-2 size-5' />
           </Button>
         )}
       </Flex>

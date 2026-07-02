@@ -1,31 +1,37 @@
 'use client';
 
 import { IconArrowRight, IconShoppingBag } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
 
 export function CartEmptyState() {
+  const t = useTranslations('cart');
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className='rounded-3xl border border-dashed bg-muted/20 px-6 py-16 text-center'
+    <Flex
+      direction='column'
+      align='center'
+      className='bg-card border-border/60 mx-auto max-w-lg rounded-3xl border p-8 text-center shadow-sm sm:p-10'
     >
-      <div className='bg-secondary mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full'>
-        <IconShoppingBag className='text-muted-foreground h-8 w-8' />
-      </div>
-      <h2 className='font-display mb-2 text-xl font-semibold'>Your cart is empty</h2>
-      <p className='text-muted-foreground mx-auto mb-6 max-w-sm text-sm'>
-        Discover curated pieces designed to last — start building your collection.
-      </p>
-      <Button asChild className='rounded-full' size='lg'>
+      <span className='bg-muted mb-5 flex size-16 items-center justify-center rounded-full'>
+        <IconShoppingBag className='text-muted-foreground size-8' />
+      </span>
+      <Typography.H2 family='display' className='text-2xl font-semibold'>
+        {t('emptyTitle')}
+      </Typography.H2>
+      <Typography.Muted className='mt-3 mb-8 max-w-sm text-sm leading-relaxed'>
+        {t('emptyDescriptionAlt')}
+      </Typography.Muted>
+      <Button asChild className='h-12 w-full rounded-full sm:w-auto' size='lg'>
         <Link href='/shop'>
           Explore the shop
-          <IconArrowRight className='ml-2 h-4 w-4' />
+          <IconArrowRight className='ms-2 size-4' />
         </Link>
       </Button>
-    </motion.div>
+    </Flex>
   );
 }

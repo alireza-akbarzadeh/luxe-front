@@ -2,39 +2,47 @@ import { IconArrowRight, IconGift, IconHeart, IconLayersLinked } from '@tabler/i
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
 
 export function WishlistEmptyState() {
   return (
-    <div className='bg-card border-border mx-auto max-w-xl rounded-3xl border p-10 text-center sm:p-14'>
-      <div className='bg-muted/60 mx-auto mb-5 flex size-16 items-center justify-center rounded-full'>
+    <Flex
+      direction='column'
+      align='center'
+      className='bg-card border-border/60 mx-auto max-w-xl rounded-3xl border p-8 text-center sm:p-12'
+    >
+      <span className='bg-muted/60 mb-5 flex size-16 items-center justify-center rounded-full'>
         <IconHeart className='text-muted-foreground size-8' />
-      </div>
-      <h2 className='font-display text-2xl font-semibold'>Your wishlist is empty</h2>
-      <p className='text-muted-foreground mx-auto mt-3 max-w-md text-sm leading-relaxed'>
-        Tap the heart on any product to save it here. This is your personal list — separate from
-        our curated collections.
-      </p>
-      <div className='mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center'>
-        <Button asChild className='rounded-full' size='lg'>
+      </span>
+      <Typography.H2 family='display' className='text-2xl font-semibold'>
+        Your wishlist is empty
+      </Typography.H2>
+      <Typography.Muted className='mx-auto mt-3 max-w-md text-sm leading-relaxed'>
+        Tap the heart on any product to save it here. This is your personal list — separate from our
+        curated collections.
+      </Typography.Muted>
+      <Flex direction='column' gap={3} className='mt-8 w-full sm:w-auto sm:flex-row'>
+        <Button asChild className='h-12 w-full rounded-full sm:w-auto' size='lg'>
           <Link href='/shop'>
             Browse shop
-            <IconArrowRight className='ml-2 size-4' />
+            <IconArrowRight className='ms-2 size-4' />
           </Link>
         </Button>
-        <Button asChild variant='outline' className='rounded-full' size='lg'>
+        <Button asChild variant='outline' className='h-12 w-full rounded-full sm:w-auto' size='lg'>
           <Link href='/collections'>
-            <IconLayersLinked className='mr-2 size-4' />
+            <IconLayersLinked className='me-2 size-4' />
             Explore collections
           </Link>
         </Button>
-      </div>
-      <p className='text-muted-foreground mt-6 text-xs'>
+      </Flex>
+      <Typography.Muted className='mt-6 text-xs'>
         Shopping for someone else?{' '}
         <Link href='/gift-cards' className='text-accent inline-flex items-center gap-1 font-medium'>
           <IconGift className='size-3.5' />
           Buy a gift card
         </Link>
-      </p>
-    </div>
+      </Typography.Muted>
+    </Flex>
   );
 }

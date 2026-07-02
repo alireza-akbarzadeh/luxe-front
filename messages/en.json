@@ -712,6 +712,7 @@
       "reviewHint": "Review before checkout",
       "continueShopping": "Continue shopping",
       "checkout": "Checkout",
+      "proceedToCheckout": "Proceed to checkout",
       "showSummary": "Show order summary",
       "hideSummary": "Hide order summary",
       "subtotal": "Subtotal",

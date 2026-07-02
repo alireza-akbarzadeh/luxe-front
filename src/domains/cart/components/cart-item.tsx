@@ -1,13 +1,13 @@
 import { IconMinus, IconPlus, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
-import { useCartController } from '~/src/hooks/useCartController';
-import type { DtoCartItemDetail } from '~/src/services/-cart-get.schemas';
+import type { DtoCartItemDetail } from '@/services/-cart-get.schemas';
 
 import {
   cartMoneyClassName,
@@ -72,7 +72,7 @@ export function CartItem({ cart, index, cartItemId, isUpdating, isRemoving }: Ca
     >
       <Link href={`/product/${cart.product_id}`} className='shrink-0'>
         <div className='bg-muted relative h-24 w-24 overflow-hidden rounded-xl sm:h-32 sm:w-32'>
-          <Image
+          <AppImage
             src={getCartItemImage(cart)}
             alt={name}
             fill

@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { BrandsSection } from '@/domains/home/components/brands-section';
 import { MostWhitelists } from '@/domains/home/components/most-whitelists';
 import {
@@ -22,50 +24,87 @@ import { PromoSection } from './components/promo-section';
 import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 
+/** Wraps below-fold blocks — `content-visibility: auto` applies on mobile only (see globals.css). */
+function MobileDeferredSection({ children }: { children: ReactNode }) {
+  return <div className='home-defer-mobile'>{children}</div>;
+}
+
 /** Commerce-first section order — shop intent before long marketing scroll. */
 export function HomeSections() {
   return (
     <>
-      <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
-        <FavoriteCategoriesSection />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+          <FavoriteCategoriesSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
-        <FeaturedProducts />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+          <FeaturedProducts />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={null}>
-        <PromoSection />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={null}>
+          <PromoSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
-        <NewArrivalsSection />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+          <NewArrivalsSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
-        <MostWhitelists />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+          <MostWhitelists />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
-        <CollectionBanner />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+          <CollectionBanner />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<MarqueeSkeleton />}>
-        <BrandsSection />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<MarqueeSkeleton />}>
+          <BrandsSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
-        <CategoriesSection />
-      </SectionBoundary>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+          <CategoriesSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
 
-      <MarketplaceShowcaseSection />
-      <TestimonialsSection />
-      <FinalCtaSection />
-      <HowItWorksSection />
-      <FeaturesSection />
-      <StatsSection />
-      <FaqSection />
-      <NewsletterSection />
+      <MobileDeferredSection>
+        <MarketplaceShowcaseSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <TestimonialsSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <FinalCtaSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <HowItWorksSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <FeaturesSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <StatsSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <FaqSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <NewsletterSection />
+      </MobileDeferredSection>
     </>
   );
 }

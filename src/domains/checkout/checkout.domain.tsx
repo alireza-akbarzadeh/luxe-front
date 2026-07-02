@@ -8,11 +8,7 @@ import { toast } from 'sonner';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
-import {
-  Stepper,
-  StepperContent,
-  StepperPanel
-} from '@/components/ui/stepper';
+import { Stepper, StepperContent, StepperPanel } from '@/components/ui/stepper';
 import { useCartController } from '@/hooks/useCartController';
 
 import type { CheckoutStepId } from './checkout.schema';
@@ -170,9 +166,12 @@ export default function CheckoutDomain() {
   if (items.length === 0) return <EmptyCart />;
 
   return (
-    <Flex direction='column' className='pt-20 pb-28 sm:pt-24 lg:pb-16'>
+    <Flex
+      direction='column'
+      className='app-container pt-2 pb-[calc(10.5rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16'
+    >
       <CheckoutPaymentCancelledHandler />
-      <Flex direction='column' spacing={0} className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <Flex direction='column' spacing={0} className='w-full'>
         <CheckoutBreadcrumb />
 
         <CheckoutMobileSummary form={form} />
