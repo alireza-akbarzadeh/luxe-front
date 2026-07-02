@@ -7,7 +7,6 @@ import {
 } from '@/domains/home/components/ui/home-skeleton';
 import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
 
-import { BrandsMarquee } from './components/brands-marquee';
 import { CategoriesSection } from './components/categories-section';
 import { CollectionBanner } from './components/collection-banner';
 import { FaqSection } from './components/faq-section';
@@ -23,6 +22,7 @@ import { PromoSection } from './components/promo-section';
 import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 
+/** Commerce-first section order — shop intent before long marketing scroll. */
 export function HomeSections() {
   return (
     <>
@@ -30,27 +30,27 @@ export function HomeSections() {
         <FavoriteCategoriesSection />
       </SectionBoundary>
 
-      <SectionBoundary fallback={null}>
-        <PromoSection />
-      </SectionBoundary>
-
       <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
         <FeaturedProducts />
       </SectionBoundary>
 
-      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
-        <MostWhitelists />
+      <SectionBoundary fallback={null}>
+        <PromoSection />
       </SectionBoundary>
 
       <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
         <NewArrivalsSection />
       </SectionBoundary>
 
-      <SectionBoundary fallback={<MarqueeSkeleton />}>
-        <BrandsMarquee />
+      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+        <MostWhitelists />
       </SectionBoundary>
 
-      <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+      <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+        <CollectionBanner />
+      </SectionBoundary>
+
+      <SectionBoundary fallback={<MarqueeSkeleton />}>
         <BrandsSection />
       </SectionBoundary>
 
@@ -58,17 +58,13 @@ export function HomeSections() {
         <CategoriesSection />
       </SectionBoundary>
 
-      <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
-        <CollectionBanner />
-      </SectionBoundary>
-
       <MarketplaceShowcaseSection />
+      <TestimonialsSection />
+      <FinalCtaSection />
       <HowItWorksSection />
       <FeaturesSection />
-      <TestimonialsSection />
       <StatsSection />
       <FaqSection />
-      <FinalCtaSection />
       <NewsletterSection />
     </>
   );

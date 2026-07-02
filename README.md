@@ -114,8 +114,8 @@ Update the configuration [here][browserslist] and check in real-time the **globa
 
 ## :busts_in_silhouette: Contribute
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create.  
-Any contribution is greatly appreciated: big or small, it can be documentation updates, adding new features or something bigger.  
+Contributions are what make the open source community such an amazing place to learn, inspire, and create.
+Any contribution is greatly appreciated: big or small, it can be documentation updates, adding new features or something bigger.
 Please check the [**contributing guide**][code-of-conduct] for details on how to help out and keep in mind that all commits must follow the **[conventional commit format][commitlint]**.
 
 ### How to contribute:
@@ -139,8 +139,8 @@ Please check the [**contributing guide**][code-of-conduct] for details on how to
 
 ## :bookmark_tabs: License
 
-All logos and trademarks are the property of their respective owners.  
-Everything else is distributed under the **MIT License** .  
+All logos and trademarks are the property of their respective owners.
+Everything else is distributed under the **MIT License** .
 See the [LICENSE][license] file for more informations.
 
 [Back to :arrow_up:](#nextjs-16-typescript--shadcnui--template "Back to 'Table of contents' section")
@@ -156,8 +156,6 @@ Special thanks to:
 
 [Back to :arrow_up:](#nextjs-16-typescript--shadcnui--template "Back to 'Table of contents' section")
 
-
-
 | `wishlist` | High | Saved/favorite products
 | `/orders` | High | Order history with tracking
 | `/orders/[id]` | High | Individual order details
@@ -171,3 +169,6 @@ Special thanks to:
 | `/terms` | Low | Legal - Terms of service
 | `/compare` | Low | Compare products side-by-side
 | `/track-order` | Low | Track order by number (guest)
+
+NEXT_PUBLIC_API_URL="http://localhost:8080/api/v1" pnpm build
+NEXT_PUBLIC_API_URL="http://localhost:8080/api/v1" pnpm start

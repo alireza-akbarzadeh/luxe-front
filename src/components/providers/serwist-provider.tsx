@@ -4,11 +4,13 @@ import { SerwistProvider } from '@serwist/turbopack/react';
 import { type PropsWithChildren, useEffect } from 'react';
 
 const isDev = process.env.NODE_ENV === 'development';
+/** Local `pnpm start` has no Vercel env — Serwist NetworkFirst breaks Lighthouse and offline audits. */
+const disableSw = isDev || process.env['NEXT_PUBLIC_VERCEL_ENV'] === undefined;
 
-/** Unregister a stale SW left over from a prior session (common after toggling dev disable). */
-function useDevServiceWorkerCleanup() {
+/** Unregister stale SW when disabled (dev or local `pnpm start` without Vercel env). */
+function useServiceWorkerCleanupWhenDisabled() {
   useEffect(() => {
-    if (!isDev || !('serviceWorker' in navigator)) {
+    if (!disableSw || !('serviceWorker' in navigator)) {
       return;
     }
 
@@ -25,10 +27,10 @@ function useDevServiceWorkerCleanup() {
  * Serwist + Turbopack dev can abort navigations (NetworkOnly / preload warnings on /account, etc.).
  */
 export function LuxeSerwistProvider({ children }: PropsWithChildren) {
-  useDevServiceWorkerCleanup();
+  useServiceWorkerCleanupWhenDisabled();
 
   return (
-    <SerwistProvider swUrl='/serwist/sw.js' disable={isDev}>
+    <SerwistProvider swUrl='/serwist/sw.js' disable={disableSw}>
       {children}
     </SerwistProvider>
   );

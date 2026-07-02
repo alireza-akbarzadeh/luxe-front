@@ -1,59 +1,32 @@
-'use client';
-
-import { motion, useReducedMotion } from 'framer-motion';
-import { useLocale } from 'next-intl';
-
-import { getDirection, type Locale } from '@/i18n/config';
-
 export type BrandsMarqueeItem = {
   key: string;
   name: string;
 };
 
-const MARQUEE_DURATION_SECONDS = 36;
+/** Two identical sequences for a seamless -50% CSS translate loop. */
+function buildMarqueeLoop(items: BrandsMarqueeItem[]): BrandsMarqueeItem[] {
+  return [...items, ...items];
+}
 
-const brandLabelClass =
-  'text-muted-foreground/80 font-display shrink-0 text-lg font-medium tracking-wide whitespace-nowrap sm:text-xl';
-
-/** Infinite horizontal brand marquee — GPU-friendly translateX loop. */
+/** Decorative single-row brand marquee — GPU translate only, hidden from assistive tech. */
 export function BrandsMarqueeTrack({ items }: { items: BrandsMarqueeItem[] }) {
-  const prefersReducedMotion = useReducedMotion();
-  const locale = useLocale() as Locale;
-  const isRtl = getDirection(locale) === 'rtl';
-  const loop = [...items, ...items];
+  const visibleItems = items.filter((item) => item.name.trim().length > 0);
 
-  if (prefersReducedMotion) {
-    return (
-      <div className='flex flex-wrap items-center justify-center gap-x-12 gap-y-3 sm:gap-x-16'>
-        {items.map((brand) => (
-          <span key={brand.key} className={brandLabelClass}>
+  if (visibleItems.length === 0) {
+    return null;
+  }
+
+  const loop = buildMarqueeLoop(visibleItems);
+
+  return (
+    <div className='brands-marquee-clip w-full overflow-hidden' aria-hidden>
+      <div className='brands-marquee-track'>
+        {loop.map((brand, index) => (
+          <span key={`${brand.key}-${index}`} className='brands-marquee-item'>
             {brand.name}
           </span>
         ))}
       </div>
-    );
-  }
-
-  return (
-    <div className='relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]'>
-      <motion.div
-        className='flex w-max gap-12 will-change-transform sm:gap-16'
-        animate={{ x: isRtl ? ['0%', '50%'] : ['0%', '-50%'] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: 'loop',
-            duration: MARQUEE_DURATION_SECONDS,
-            ease: 'linear'
-          }
-        }}
-      >
-        {loop.map((brand, index) => (
-          <span key={`${brand.key}-${index}`} className={brandLabelClass}>
-            {brand.name}
-          </span>
-        ))}
-      </motion.div>
     </div>
   );
 }
