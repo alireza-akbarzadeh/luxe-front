@@ -12,6 +12,8 @@ const checkoutBaseSchema = z.object({
   saveInfo: z.boolean().default(false),
 
   // --- Shipping address ---
+  /** Saved address id when selected from account; null when entering manually. Not sent to API. */
+  shippingAddressId: z.number().int().positive().nullable().default(null),
   addressLine1: z.string().min(1, 'Address is required'),
   addressLine2: z.string().optional().default(''),
   city: z.string().min(1, 'City is required'),
@@ -96,6 +98,7 @@ export const checkoutDefaultValues: CheckoutFormValues = {
   phone: '',
   newsletter: false,
   saveInfo: false,
+  shippingAddressId: null,
   addressLine1: '',
   addressLine2: '',
   city: '',

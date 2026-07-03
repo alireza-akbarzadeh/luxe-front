@@ -38,6 +38,7 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
     phone: normalizePhoneForInput(userPhone) ?? userPhone ?? '',
     newsletter: false,
     saveInfo: false,
+    shippingAddressId: defaultAddress?.id ?? null,
 
     addressLine1: defaultAddress?.address_line1 || '',
     addressLine2: defaultAddress?.address_line2 || '',
@@ -89,7 +90,8 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
       state: defaultAddress?.state || '',
       zip: defaultAddress?.postal_code || '',
       country: defaultAddress?.country || 'United States',
-      phone: normalizePhoneForInput(userPhone) ?? userPhone ?? ''
+      phone: normalizePhoneForInput(userPhone) ?? userPhone ?? '',
+      shippingAddressId: defaultAddress?.id ?? null
     };
 
     Object.entries(updates).forEach(([key, value]) => {

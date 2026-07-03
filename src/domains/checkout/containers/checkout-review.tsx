@@ -12,15 +12,20 @@ import {
 } from '@tabler/icons-react';
 import { useStore } from '@tanstack/react-form';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
 import { withForm } from '@/components/forms/useAppForm';
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
-import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
+import {
+  cartMoneyClassName,
+  formatCartMoney,
+  getCartItemImage,
+  getCartItemName
+} from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues, type CheckoutStepId } from '@/domains/checkout/checkout.schema';
 import { CheckoutInlinePayment } from '@/domains/checkout/components/checkout-inline-payment';
 import { CheckoutTermsConsent } from '@/domains/checkout/components/checkout-terms-consent';
@@ -218,16 +223,20 @@ export const CheckoutReview = withForm({
               <li key={`${item.id}-${item.color}-${item.size}`}>
                 <Flex direction='row' align='center' spacing={3}>
                   <div className='bg-muted relative h-12 w-12 shrink-0 overflow-hidden rounded-lg'>
-                    {item.image ? (
-                      <Image src={item.image} alt={item.name || ''} fill className='object-cover' />
-                    ) : null}
+                    <AppImage
+                      src={getCartItemImage(item)}
+                      alt={getCartItemName(item)}
+                      fill
+                      sizes='48px'
+                      className='object-cover'
+                    />
                     <span className='bg-accent text-accent-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
                       {item.quantity}
                     </span>
                   </div>
                   <Flex direction='column' className='min-w-0 flex-1'>
                     <Typography.Text variant='small' className='truncate font-medium'>
-                      {item.name}
+                      {getCartItemName(item)}
                     </Typography.Text>
                     {(item.color || item.size) && (
                       <Typography.Text variant='subtle'>
