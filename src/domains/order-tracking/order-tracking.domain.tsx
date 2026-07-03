@@ -14,7 +14,7 @@ import { OrderBoxNumber } from './components/order-box-number';
 import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
 import { OrderTrackingActivityFeed } from './components/order-tracking-activity';
-import { OrderTrackingMobileActionBar } from './components/order-tracking-mobile-action-bar';
+import { OrderTrackingMobileActions } from './components/order-tracking-mobile-action-bar';
 import { OrderTrackingMobileSummary } from './components/order-tracking-mobile-summary';
 import { OrderTrackingProgress } from './components/order-tracking-progress';
 import { OrderTrackingStatusHero } from './components/order-tracking-status-hero';
@@ -68,7 +68,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
     liveState.pulsingStepKey === 'shipped' || liveState.pulsingStepKey === 'processing';
 
   return (
-    <Flex direction='column' className='pt-20 pb-36 sm:pt-24 lg:pb-16'>
+    <Flex direction='column' className='pt-20 pb-24 sm:pt-24 lg:pb-16'>
       <Flex direction='column' spacing={0} className='app-container max-w-5xl'>
         <OrderTrackingStatusHero
           orderNumber={order.order_number ?? '—'}
@@ -85,6 +85,8 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
           pulsingStepKey={liveState.pulsingStepKey}
           onPulseComplete={clearPulsingStep}
         />
+
+        <OrderTrackingMobileActions orderNumber={order.order_number ?? ''} />
 
         <OrderTrackingMobileSummary
           itemCount={itemCount}
@@ -128,8 +130,6 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
 
         <TrakingFooter />
       </Flex>
-
-      <OrderTrackingMobileActionBar orderNumber={order.order_number ?? ''} />
     </Flex>
   );
 }

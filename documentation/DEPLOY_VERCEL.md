@@ -108,4 +108,5 @@ BACKEND_API_URL=http://localhost:8080/api/v1
 | `Can't resolve '@/services/-…'` | Stale `openapi3.json` — missing routes (e.g. gift-finder, smart-bundles). Run `pnpm openapi:sync` from a deployed API, commit `openapi3.json`, redeploy Vercel |
 | API calls go to `localhost:8080` in production | Remove `NEXT_PUBLIC_API_URL` / `BACKEND_API_URL` if set to localhost on Vercel; redeploy. Server code now ignores localhost in production and uses Render. |
 | `https://localhost:8080/...` in logs | Wrong Vercel env or stale build — set both API vars to `https://luxe-3pvz.onrender.com/api/v1` and redeploy |
-| Login redirect blocked | Set `NEXT_PUBLIC_APP_DOMAIN` / `NEXT_PUBLIC_APP_ORIGIN` to Vercel domain |
+| Checkout shows “payment could not be started” / no Stripe redirect | On **Render**: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` (required in production), and `FRONTEND_URL=https://your-project.vercel.app`. Redeploy API after env changes. Confirm `GET /api/v1/payments/stripe-config` returns `"enabled": true`. |
+| Vercel **Deployment Protection** (302 to Vercel login) | Disable protection for production, or use a public custom domain — protected previews block `/api/v1/*` rewrites for unauthenticated clients |

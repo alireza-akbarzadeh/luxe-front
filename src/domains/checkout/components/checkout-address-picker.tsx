@@ -48,7 +48,7 @@ export function CheckoutAddressPicker({
           const address = addresses.find((item) => String(item.id) === value);
           if (address) onSelectAddress(address);
         }}
-        className='space-y-3'
+        className='w-full min-w-0 space-y-3'
       >
         {addresses.map((address) => {
           const isSelected = selectedId === address.id;
@@ -59,19 +59,19 @@ export function CheckoutAddressPicker({
               key={address.id}
               htmlFor={`checkout-address-${address.id}`}
               className={cn(
-                'flex cursor-pointer gap-3 rounded-xl border p-4 transition-colors',
+                'flex w-full min-w-0 cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors sm:p-4',
                 isSelected ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/50'
               )}
             >
               <RadioGroupItem
                 value={String(address.id)}
                 id={`checkout-address-${address.id}`}
-                className='mt-1 shrink-0'
+                className='mt-0.5 shrink-0'
               />
               <Flex direction='column' spacing={1} className='min-w-0 flex-1 text-left'>
-                <Flex direction='row' align='center' spacing={2} className='min-w-0'>
+                <Flex direction='row' align='center' spacing={2} wrap='wrap' className='min-w-0'>
                   <IconMapPin className='text-muted-foreground h-4 w-4 shrink-0' />
-                  <Typography.Text variant='small' className='truncate font-medium'>
+                  <Typography.Text variant='small' className='min-w-0 font-medium break-words'>
                     {title}
                   </Typography.Text>
                   {address.is_default ? (
@@ -81,7 +81,7 @@ export function CheckoutAddressPicker({
                     </span>
                   ) : null}
                 </Flex>
-                <Typography.Text variant='subtle' className='line-clamp-2'>
+                <Typography.Text variant='subtle' className='line-clamp-3 text-start break-words'>
                   {subtitle}
                 </Typography.Text>
               </Flex>
@@ -92,7 +92,7 @@ export function CheckoutAddressPicker({
         <Label
           htmlFor='checkout-address-new'
           className={cn(
-            'flex cursor-pointer gap-3 rounded-xl border p-4 transition-colors',
+            'flex w-full min-w-0 cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors sm:p-4',
             selectedId == null
               ? 'border-accent bg-accent/5'
               : 'border-border hover:border-accent/50'
@@ -101,7 +101,7 @@ export function CheckoutAddressPicker({
           <RadioGroupItem
             value={NEW_ADDRESS_VALUE}
             id='checkout-address-new'
-            className='mt-1 shrink-0'
+            className='mt-0.5 shrink-0'
           />
           <Flex direction='row' align='center' spacing={2} className='min-w-0 flex-1'>
             <IconPlus className='text-muted-foreground h-4 w-4 shrink-0' />

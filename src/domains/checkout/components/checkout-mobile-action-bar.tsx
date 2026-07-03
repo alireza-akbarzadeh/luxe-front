@@ -10,7 +10,6 @@ import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
-import { CheckoutTermsConsent } from '@/domains/checkout/components/checkout-terms-consent';
 import { cn } from '@/lib/utils';
 
 import type { CheckoutStepId } from '../checkout.schema';
@@ -75,7 +74,7 @@ export function CheckoutMobileActionBar({
               {tMobile('itemCount', { count: itemCount })}
             </Typography.Muted>
           </Flex>
-          <Flex align='center' gap={1.5} className='shrink-0'>
+          <Flex direction='row' align='center' gap={1.5} className='shrink-0'>
             <Link
               href='/shop'
               className={cn(
@@ -112,13 +111,8 @@ export function CheckoutMobileActionBar({
 
           {isLast ? (
             <>
-              <CheckoutTermsConsent
-                id='checkout-agree-terms-mobile'
-                compact
-                className='lg:hidden'
-              />
               {!agreedToTerms ? (
-                <Typography.Muted className='text-destructive text-xs leading-snug'>
+                <Typography.Muted className='text-destructive px-0.5 text-xs leading-relaxed'>
                   {tValidation('acceptTerms')}
                 </Typography.Muted>
               ) : null}

@@ -2354,6 +2354,12 @@
       "completeFields": "Completa los campos resaltados antes de continuar.",
       "acceptTerms": "Acepta los términos para realizar el pedido."
     },
+    "submit": {
+      "success": "¡Pedido realizado con éxito!",
+      "failed": "No se pudo realizar el pedido. Inténtalo de nuevo.",
+      "invalidResponse": "No pudimos leer la respuesta del servidor. Comprueba que la API esté accesible y vuelve a desplegar el backend.",
+      "stripeMissingCheckoutUrl": "No se pudo iniciar el pago. En Render configura STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET y FRONTEND_URL con tu URL de Vercel, y vuelve a desplegar la API."
+    },
     "mobileSummary": {
       "showSummary": "Ver resumen del pedido",
       "hideSummary": "Ocultar resumen del pedido",

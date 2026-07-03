@@ -87,9 +87,10 @@ export const CheckoutShipping = withForm({
     return (
       <motion.div
         key='shipping'
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        className='min-w-0 overflow-x-hidden'
       >
         <Flex direction='column' spacing={6}>
           <Flex direction='column' spacing={1}>
@@ -137,7 +138,7 @@ export const CheckoutShipping = withForm({
               />
             ) : null}
 
-            <Grid template='form' gap={4}>
+            <Grid template='form' gap={4} className='min-w-0'>
               <GridItem>
                 <form.AppField name='firstName'>
                   {(field) => (
@@ -179,7 +180,7 @@ export const CheckoutShipping = withForm({
                 />
               )}
             </form.AppField>
-            <Grid gap={4} className='grid-cols-1 sm:grid-cols-3'>
+            <Grid gap={4} className='min-w-0 grid-cols-1 sm:grid-cols-3'>
               <GridItem>
                 <form.AppField name='city'>
                   {(field) => (
@@ -279,7 +280,7 @@ export const CheckoutShipping = withForm({
                               key={provider.id}
                               htmlFor={`shipping-${provider.id}`}
                               className={cn(
-                                'flex cursor-pointer flex-col gap-3 rounded-xl border p-4 transition-colors sm:flex-row sm:items-center sm:justify-between',
+                                'flex w-full min-w-0 cursor-pointer flex-col gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
                                 isSelected
                                   ? 'border-accent bg-accent/5'
                                   : 'border-border hover:border-accent/50',

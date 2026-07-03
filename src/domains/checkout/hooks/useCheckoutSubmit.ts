@@ -2,6 +2,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useRef } from 'react';
 import { toast } from 'sonner';
 
@@ -23,12 +24,17 @@ import {
 } from '../lib/checkout-utils';
 import { persistStripeCheckoutSession } from '../lib/stripe-checkout-session-storage';
 import { useCheckoutStore } from '../store/checkout.store';
+import { useStripeCheckoutEnabled } from './useStripeCheckoutEnabled';
 
 /** Maps storefront payment UI values to API payment_method enum. */
 function mapCheckoutPaymentMethod(
-  method: CheckoutFormValues['paymentMethod']
+  method: CheckoutFormValues['paymentMethod'],
+  isStripeCheckout: boolean
 ): DtoCheckoutRequestPaymentMethod {
-  if (method === 'credit_card' || method === 'debit_card' || method === 'paypal') {
+  if (
+    isStripeCheckout &&
+    (method === 'credit_card' || method === 'debit_card' || method === 'paypal')
+  ) {
     return 'stripe';
   }
   if (method === 'gift_card' || method === 'store_credit') {
@@ -38,6 +44,7 @@ function mapCheckoutPaymentMethod(
 }
 
 export function useCheckoutSubmit() {
+  const t = useTranslations('checkout.submit');
   const router = useRouter();
   const queryClient = useQueryClient();
   const { clearCart } = useCartController();
@@ -46,6 +53,7 @@ export function useCheckoutSubmit() {
   const setRedirectMode = useCheckoutStore((s) => s.setRedirectMode);
   const { data: providersResponse } = useGetShippingProviders();
   const providers = providersResponse?.data ?? [];
+  const { isStripeCheckout } = useStripeCheckoutEnabled();
   const submitLockRef = useRef(false);
 
   const { mutateAsync, isPending } = usePostCheckout();
@@ -75,7 +83,7 @@ export function useCheckoutSubmit() {
           country: values.country,
           phone: values.phone || '',
           shipping_provider_id: Number(values.shippingProviderId),
-          payment_method: mapCheckoutPaymentMethod(values.paymentMethod),
+          payment_method: mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout),
           save_info: values.saveInfo,
           newsletter: values.newsletter,
           coupon_code: values.couponCode || undefined,
@@ -89,7 +97,7 @@ export function useCheckoutSubmit() {
       });
 
       if (response?.success === false) {
-        const message = response.message || 'Failed to place order';
+        const message = response.message || t('failed');
         setSubmitError(message);
         toast.error(message);
         throw new Error(message);
@@ -109,8 +117,15 @@ export function useCheckoutSubmit() {
         return;
       }
 
+      if (isStripeCheckout) {
+        const message = orderId ? t('stripeMissingCheckoutUrl') : t('invalidResponse');
+        setSubmitError(message);
+        toast.error(message);
+        throw new Error(message);
+      }
+
       if (!orderId) {
-        const message = 'Order was created but no order ID was returned.';
+        const message = t('invalidResponse');
         setSubmitError(message);
         toast.error(message);
         throw new Error(message);
@@ -118,7 +133,7 @@ export function useCheckoutSubmit() {
 
       setRedirectMode('confirmed');
       setIsRedirecting(true);
-      toast.success('Order placed successfully!');
+      toast.success(t('success'));
 
       router.replace(`/order-confirmed/${orderId}?confirmed=1`);
 
@@ -135,7 +150,7 @@ export function useCheckoutSubmit() {
         ? extractErrorMessage(error as AxiosError<ApiErrorResponse>)
         : error instanceof Error
           ? error.message
-          : 'Failed to place order. Please try again.';
+          : t('failed');
       setSubmitError(message);
       if (!isAxiosError) {
         toast.error(message);

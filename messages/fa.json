@@ -2355,6 +2355,12 @@
       "completeFields": "لطفاً فیلدهای مشخص‌شده را قبل از ادامه تکمیل کنید.",
       "acceptTerms": "برای ثبت سفارش باید شرایط را بپذیرید."
     },
+    "submit": {
+      "success": "سفارش با موفقیت ثبت شد!",
+      "failed": "ثبت سفارش ناموفق بود. دوباره تلاش کنید.",
+      "invalidResponse": "پاسخ سرور checkout قابل خواندن نیست. اتصال API را بررسی کنید و آخرین نسخه backend را deploy کنید.",
+      "stripeMissingCheckoutUrl": "پرداخت شروع نشد. در Render متغیرهای STRIPE_SECRET_KEY، STRIPE_WEBHOOK_SECRET و FRONTEND_URL (آدرس Vercel) را تنظیم و API را دوباره deploy کنید."
+    },
     "mobileSummary": {
       "showSummary": "نمایش خلاصه سفارش",
       "hideSummary": "پنهان کردن خلاصه سفارش",

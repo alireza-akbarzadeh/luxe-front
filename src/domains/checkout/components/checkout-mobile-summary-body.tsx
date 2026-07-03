@@ -81,18 +81,18 @@ export const CheckoutMobileSummaryBody = withForm({
         </div>
 
         <Flex direction='column' gap={2.5} className='bg-muted/40 mt-4 rounded-2xl p-4'>
-          <Flex justify='between' align='center'>
+          <Flex direction='row' justify='between' align='center' className='min-w-0 gap-3'>
             <Typography.Muted className='text-sm'>{tSummary('subtotal')}</Typography.Muted>
             <Typography.Small className={cartMoneyClassName}>
               {formatCartMoney(subtotal)}
             </Typography.Small>
           </Flex>
-          <Flex justify='between' align='center'>
+          <Flex direction='row' justify='between' align='center' className='min-w-0 gap-3'>
             <Typography.Muted className='text-sm'>{tSummary('shipping')}</Typography.Muted>
             <Typography.Small className={cartMoneyClassName}>
               {shippingPrice === 0 ? (
                 hasFreeShipping && providerRate > 0 ? (
-                  <Flex align='center' gap={2}>
+                  <Flex direction='row' align='center' gap={2}>
                     <span className='text-muted-foreground text-xs line-through'>
                       {formatCartMoney(providerRate)}
                     </span>
@@ -110,7 +110,7 @@ export const CheckoutMobileSummaryBody = withForm({
               )}
             </Typography.Small>
           </Flex>
-          <Flex justify='between' align='center'>
+          <Flex direction='row' justify='between' align='center' className='min-w-0 gap-3'>
             <Typography.Muted className='text-sm'>
               {settings.estimatedTaxEnabled
                 ? tSummary('estimatedTax', {
@@ -123,7 +123,7 @@ export const CheckoutMobileSummaryBody = withForm({
             </Typography.Small>
           </Flex>
           {couponDiscount > 0 ? (
-            <Flex justify='between' align='center'>
+            <Flex direction='row' justify='between' align='center' className='min-w-0 gap-3'>
               <Typography.Small className='text-emerald-600 dark:text-emerald-400'>
                 {tSummary('discount')}
                 {appliedCouponCode ? ` (${appliedCouponCode})` : ''}
@@ -136,7 +136,12 @@ export const CheckoutMobileSummaryBody = withForm({
             </Flex>
           ) : null}
 
-          <Flex justify='between' align='center' className='border-border/60 mt-1 border-t pt-2.5'>
+          <Flex
+            direction='row'
+            justify='between'
+            align='center'
+            className='border-border/60 mt-1 min-w-0 gap-3 border-t pt-2.5'
+          >
             <Typography.Text weight='semibold'>{tSummary('total')}</Typography.Text>
             <Typography.Text className={cn(cartMoneyClassName, 'text-xl font-bold')}>
               {formatCartMoney(total)}

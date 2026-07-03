@@ -2355,6 +2355,12 @@
       "completeFields": "Please complete the highlighted fields before continuing.",
       "acceptTerms": "Please accept the terms to place your order."
     },
+    "submit": {
+      "success": "Order placed successfully!",
+      "failed": "Failed to place order. Please try again.",
+      "invalidResponse": "We could not read the checkout response from the server. Check that the API is reachable and redeploy the latest backend.",
+      "stripeMissingCheckoutUrl": "Payment could not be started. On Render, set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and FRONTEND_URL to your Vercel URL, then redeploy the API."
+    },
     "mobileSummary": {
       "showSummary": "Show order summary",
       "hideSummary": "Hide order summary",

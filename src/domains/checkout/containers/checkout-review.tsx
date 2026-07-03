@@ -103,10 +103,10 @@ export const CheckoutReview = withForm({
     return (
       <motion.div
         key='review'
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        className='space-y-5'
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        className='min-w-0 space-y-5 overflow-x-hidden'
       >
         <Flex direction='column' spacing={1}>
           <Typography.H3 className='text-2xl font-bold'>{t('title')}</Typography.H3>
@@ -264,7 +264,7 @@ export const CheckoutReview = withForm({
           </Typography.Text>
         ) : null}
 
-        <CheckoutTermsConsent className='hidden lg:flex' />
+        <CheckoutTermsConsent className='mt-1' />
 
         <Typography.Text
           variant='subtle'

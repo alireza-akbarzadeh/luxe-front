@@ -23,7 +23,7 @@ export function CheckoutTrustBadges() {
       justify='between'
       wrap='wrap'
       spacing={2}
-      className='bg-muted/30 border-border/50 mb-6 rounded-xl border px-3 py-3 sm:px-4'
+      className='bg-muted/30 border-border/50 mb-4 rounded-xl border px-3 py-3 sm:mb-6 sm:px-4'
     >
       {badges.map(({ icon: Icon, label }) => (
         <Flex key={label} direction='row' align='center' spacing={1.5} className='min-w-0 flex-1'>

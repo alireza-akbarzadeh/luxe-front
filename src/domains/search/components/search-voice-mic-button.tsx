@@ -4,7 +4,6 @@ import { IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
-import { VoiceWaveform } from '@/domains/shopping-assistant/components/voice-waveform';
 import { cn } from '@/lib/utils';
 
 type SearchVoiceMicButtonProps = {
@@ -15,7 +14,7 @@ type SearchVoiceMicButtonProps = {
   className?: string;
 };
 
-/** Inline mic for search — shows waveform while listening. */
+/** Inline mic for search — accent highlight while listening. */
 export function SearchVoiceMicButton({
   isSupported,
   isListening,
@@ -34,11 +33,7 @@ export function SearchVoiceMicButton({
       type='button'
       variant='ghost'
       size='icon'
-      className={cn(
-        'h-8 w-8 shrink-0 rounded-full',
-        isListening && 'ring-accent ring-2',
-        className
-      )}
+      className={cn('h-8 w-8 shrink-0 rounded-full', isListening && 'bg-accent/10', className)}
       aria-label={isListening ? t('stopListening') : t('startListening')}
       aria-pressed={isListening}
       onClick={onToggle}
@@ -46,7 +41,7 @@ export function SearchVoiceMicButton({
       {permissionDenied ? (
         <IconMicrophoneOff className='size-4' />
       ) : isListening ? (
-        <VoiceWaveform active compact barClassName='bg-accent' className='h-4' />
+        <IconMicrophone className='text-accent size-4' />
       ) : (
         <IconMicrophone className='size-4' />
       )}

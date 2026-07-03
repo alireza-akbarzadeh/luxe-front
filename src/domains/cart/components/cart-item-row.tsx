@@ -51,7 +51,7 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
         needsAttention && 'border-warning/50 ring-warning/15 ring-1'
       )}
     >
-      <Flex gap={3}>
+      <Flex direction='row' gap={3}>
         <Link
           href={productHref}
           className='bg-muted relative size-[4.75rem] shrink-0 overflow-hidden rounded-xl'
@@ -68,7 +68,7 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
         </Link>
 
         <Flex direction='column' gap={2} className='min-w-0 flex-1'>
-          <Flex align='start' justify='between' gap={2}>
+          <Flex direction='row' align='start' justify='between' gap={2}>
             <Link href={productHref} className='min-w-0 flex-1'>
               <Typography.Small weight='medium' className='line-clamp-2 leading-snug'>
                 {name}
@@ -88,7 +88,7 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
             </button>
           </Flex>
 
-          <Flex align='center' gap={1.5} wrap='wrap'>
+          <Flex direction='row' align='center' gap={1.5} wrap='wrap'>
             {cart.selected_color ? (
               <Badge variant='muted' size='sm'>
                 {cart.selected_color}
@@ -121,7 +121,7 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
               <Typography.Muted className='text-[10px] font-medium tracking-wide uppercase'>
                 Color
               </Typography.Muted>
-              <Flex gap={1.5} wrap='wrap'>
+              <Flex direction='row' gap={1.5} wrap='wrap'>
                 {cart.color?.map((color) => (
                   <Button
                     key={color}
@@ -146,7 +146,7 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
               <Typography.Muted className='text-[10px] font-medium tracking-wide uppercase'>
                 Size
               </Typography.Muted>
-              <Flex gap={1.5} wrap='wrap'>
+              <Flex direction='row' gap={1.5} wrap='wrap'>
                 {cart.size?.map((size) => (
                   <Button
                     key={size}
@@ -166,8 +166,9 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
             </Flex>
           ) : null}
 
-          <Flex align='center' justify='between' gap={3}>
+          <Flex direction='row' align='center' justify='between' gap={3}>
             <Flex
+              direction='row'
               align='center'
               justify='between'
               className='bg-muted/80 h-10 min-w-[7.5rem] rounded-full border px-1'
@@ -176,21 +177,21 @@ export function CartItemRow({ cart, cartItemId, isUpdating, isRemoving }: CartIt
                 type='button'
                 variant='ghost'
                 size='icon-sm'
-                className='rounded-full'
+                className='size-8 shrink-0 rounded-full'
                 onClick={() => updateCartItemQuantity(cartItemId, (cart.quantity ?? 0) - 1)}
                 disabled={isUpdating || (cart.quantity ?? 0) <= 1}
                 aria-label='Decrease quantity'
               >
                 <IconMinus className='size-4' />
               </Button>
-              <Typography.Small weight='semibold' className='tabular-nums'>
+              <Typography.Small weight='semibold' className='min-w-6 text-center tabular-nums'>
                 {cart.quantity}
               </Typography.Small>
               <Button
                 type='button'
                 variant='ghost'
                 size='icon-sm'
-                className='rounded-full'
+                className='size-8 shrink-0 rounded-full'
                 onClick={() => updateCartItemQuantity(cartItemId, (cart.quantity ?? 0) + 1)}
                 disabled={isUpdating || (cart.quantity ?? 0) >= (cart.stock ?? 99)}
                 aria-label='Increase quantity'

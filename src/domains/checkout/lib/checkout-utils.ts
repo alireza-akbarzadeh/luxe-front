@@ -74,57 +74,74 @@ export function paymentMethodRequiresCard(method: string): boolean {
   return (CARD_PAYMENT_METHODS as readonly string[]).includes(method);
 }
 
-/** Extracts the created order id from a checkout API envelope or bare order object. */
-export function resolveCheckoutOrderId(response: unknown): number | null {
+function pickPositiveId(value: unknown): number | null {
+  if (typeof value === 'number' && value > 0) return value;
+  if (typeof value === 'string' && value.trim() !== '') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+  }
+  return null;
+}
+
+/** Normalizes checkout POST payload: envelope `data`, bare order, or nested `data.data`. */
+export function normalizeCheckoutResponsePayload(
+  response: unknown
+): Record<string, unknown> | null {
   if (!response || typeof response !== 'object') return null;
 
   const record = response as Record<string, unknown>;
 
-  const pickId = (value: unknown): number | null => {
-    if (typeof value === 'number' && value > 0) return value;
-    if (typeof value === 'string' && value.trim() !== '') {
-      const parsed = Number(value);
-      return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
-    }
-    return null;
-  };
-
-  // Bare order: { id: 19, ... }
-  const directId = pickId(record['id']);
-  if (directId) return directId;
-
-  // Envelope: { success, data: { id: 19, ... } }
-  const data = record['data'];
-  if (data && typeof data === 'object') {
-    const nested = data as Record<string, unknown>;
-    return pickId(nested['id']) ?? pickId(nested['order_id']);
+  if (typeof record['id'] === 'number' || typeof record['order_number'] === 'string') {
+    return record;
   }
 
-  return null;
+  const data = record['data'];
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return null;
+
+  const nested = data as Record<string, unknown>;
+  if (typeof nested['id'] === 'number' || typeof nested['order_number'] === 'string') {
+    return nested;
+  }
+
+  const inner = nested['data'];
+  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+    return inner as Record<string, unknown>;
+  }
+
+  return nested;
+}
+
+function pickCheckoutUrl(payload: Record<string, unknown> | null): string | null {
+  if (!payload) return null;
+  const checkoutUrl = payload['checkout_url'];
+  return typeof checkoutUrl === 'string' && checkoutUrl.trim() !== '' ? checkoutUrl.trim() : null;
+}
+
+/** Extracts the created order id from a checkout API envelope or bare order object. */
+export function resolveCheckoutOrderId(response: unknown): number | null {
+  const payload = normalizeCheckoutResponsePayload(response);
+  if (!payload) return null;
+  return pickPositiveId(payload['id']) ?? pickPositiveId(payload['order_id']);
 }
 
 /** Stripe Checkout redirect URL + order id when checkout requires external payment. */
 export function resolveCheckoutStripeRedirect(
   response: unknown
 ): { orderId: number; checkoutUrl: string; stripeSessionId?: string } | null {
+  const payload = normalizeCheckoutResponsePayload(response);
   const orderId = resolveCheckoutOrderId(response);
-  if (!orderId || !response || typeof response !== 'object') return null;
+  const checkoutUrl = pickCheckoutUrl(payload);
 
-  const data = (response as Record<string, unknown>)['data'];
-  if (!data || typeof data !== 'object') return null;
-
-  const nested = data as Record<string, unknown>;
-  const checkoutUrl = nested['checkout_url'];
-  if (typeof checkoutUrl !== 'string' || checkoutUrl.trim() === '') return null;
+  if (!orderId || !checkoutUrl) return null;
 
   const stripeSessionId =
-    typeof nested['stripe_session_id'] === 'string'
-      ? nested['stripe_session_id'].trim()
+    typeof payload?.['stripe_session_id'] === 'string'
+      ? payload['stripe_session_id'].trim()
       : undefined;
 
   return {
     orderId,
-    checkoutUrl: checkoutUrl.trim(),
+    checkoutUrl,
     stripeSessionId: stripeSessionId || undefined
   };
 }

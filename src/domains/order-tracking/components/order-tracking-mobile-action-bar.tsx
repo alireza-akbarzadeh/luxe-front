@@ -8,15 +8,14 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
-import { Typography } from '@/components/ui/typography';
 import { copyToClipboard } from '@/lib/utils';
 
-interface OrderTrackingMobileActionBarProps {
+interface OrderTrackingMobileActionsProps {
   orderNumber: string;
 }
 
-/** Sticky actions on mobile — shop again, copy order #, get help. */
-export function OrderTrackingMobileActionBar({ orderNumber }: OrderTrackingMobileActionBarProps) {
+/** Inline quick actions on mobile — flows with page content (no fixed overlap with bottom nav). */
+export function OrderTrackingMobileActions({ orderNumber }: OrderTrackingMobileActionsProps) {
   const t = useTranslations('orderTracking.mobile');
   const [copied, setCopied] = useState(false);
 
@@ -31,25 +30,25 @@ export function OrderTrackingMobileActionBar({ orderNumber }: OrderTrackingMobil
   return (
     <Flex
       direction='column'
-      spacing={2}
-      className='bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t p-4 backdrop-blur-md lg:hidden'
+      spacing={3}
+      className='bg-card border-border/60 mb-8 rounded-2xl border p-4 shadow-sm lg:hidden'
     >
-      <Flex direction='row' align='center' spacing={2}>
+      <Flex direction='row' align='center' spacing={2} className='w-full'>
         <Button
           type='button'
           variant='outline'
           size='lg'
-          className='h-11 flex-1 rounded-full'
+          className='h-11 min-w-0 flex-1 rounded-full'
           onClick={() => void handleCopy()}
           disabled={!orderNumber}
         >
-          <IconCopy className='mr-2 h-4 w-4' />
-          {copied ? t('copied') : t('copyOrder')}
+          <IconCopy className='mr-2 h-4 w-4 shrink-0' />
+          <span className='truncate'>{copied ? t('copied') : t('copyOrder')}</span>
         </Button>
-        <Button asChild size='lg' className='h-11 flex-1 rounded-full'>
+        <Button asChild size='lg' className='h-11 min-w-0 flex-1 rounded-full'>
           <Link href='/shop'>
-            {t('continueShopping')}
-            <IconArrowRight className='ml-2 h-4 w-4' />
+            <span className='truncate'>{t('continueShopping')}</span>
+            <IconArrowRight className='ml-2 h-4 w-4 shrink-0' />
           </Link>
         </Button>
       </Flex>
@@ -59,11 +58,6 @@ export function OrderTrackingMobileActionBar({ orderNumber }: OrderTrackingMobil
           {t('contactSupport')}
         </Link>
       </Button>
-      {orderNumber ? (
-        <Typography.Text variant='subtle' className='text-center text-[11px]'>
-          {t('orderNumberLabel')}: <span className='font-mono'>{orderNumber}</span>
-        </Typography.Text>
-      ) : null}
     </Flex>
   );
 }

@@ -174,12 +174,12 @@ export default function CheckoutDomain() {
     <Flex
       direction='column'
       className={cn(
-        'app-container pt-2 pb-[calc(13rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16',
-        isLast && 'pb-[calc(18rem+env(safe-area-inset-bottom))] lg:pb-16'
+        'app-container max-w-full min-w-0 overflow-x-clip pt-2 pb-[calc(13rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16',
+        isLast && 'pb-[calc(14rem+env(safe-area-inset-bottom))] lg:pb-16'
       )}
     >
       <CheckoutPaymentCancelledHandler />
-      <Flex direction='column' spacing={0} className='w-full'>
+      <Flex direction='column' spacing={0} className='w-full max-w-full min-w-0'>
         <CheckoutBreadcrumb />
 
         <Stepper
@@ -194,7 +194,7 @@ export default function CheckoutDomain() {
 
           <StepperPanel>
             <Grid gap={8} className='grid-cols-1 lg:grid-cols-5 lg:gap-12'>
-              <GridItem className='lg:col-span-3'>
+              <GridItem className='min-w-0 lg:col-span-3'>
                 <form.AppForm>
                   <form.Root>
                     <StepperContent value='shipping' forceMount>

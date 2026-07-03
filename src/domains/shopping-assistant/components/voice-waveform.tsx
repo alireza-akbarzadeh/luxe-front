@@ -28,6 +28,7 @@ export function VoiceWaveform({
 
   return (
     <Flex
+      direction='row'
       align='end'
       justify='center'
       spacing={0.5}
@@ -38,7 +39,8 @@ export function VoiceWaveform({
         <span
           key={index}
           className={cn(
-            'w-0.5 shrink-0 rounded-full',
+            'w-1 shrink-0 rounded-full',
+            compact && 'w-0.5',
             barClassName,
             active ? 'voice-wave-bar' : 'opacity-40'
           )}

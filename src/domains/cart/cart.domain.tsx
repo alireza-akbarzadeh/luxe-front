@@ -83,7 +83,7 @@ export default function CartPage() {
         <CartBreadcrumb />
 
         <header className='mb-4 space-y-3 lg:mb-8'>
-          <Flex align='start' justify='between' gap={3}>
+          <Flex direction='row' align='start' justify='between' gap={3}>
             <div className='min-w-0'>
               <Typography.H1
                 family='display'
