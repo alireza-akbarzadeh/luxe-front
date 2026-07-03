@@ -1,6 +1,7 @@
 import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { Fragment } from 'react';
 
 import {
   Breadcrumb,
@@ -39,18 +40,20 @@ export async function ProductDetailBreadcrumb({ items }: ProductDetailBreadcrumb
           const isLast = index === items.length - 1;
 
           return (
-            <BreadcrumbItem key={`${item.label}-${index}`} className='flex items-center gap-1.5'>
+            <Fragment key={`${item.label}-${index}`}>
               <BreadcrumbSeparator>
                 <IconChevronRight className={cn('h-3 w-3', 'cn-rtl-flip')} />
               </BreadcrumbSeparator>
-              {isLast || !item.href ? (
-                <BreadcrumbPage>{item.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link href={item.href}>{item.label}</Link>
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
+              <BreadcrumbItem>
+                {isLast || !item.href ? (
+                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link href={item.href}>{item.label}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </Fragment>
           );
         })}
       </BreadcrumbList>

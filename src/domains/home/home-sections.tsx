@@ -8,6 +8,8 @@ import {
   MarqueeSkeleton
 } from '@/domains/home/components/ui/home-skeleton';
 import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
+import { LifestyleCollectionsSection } from '@/domains/lifestyle-collections/components/lifestyle-collections-section';
+import { ShopTheLookSection } from '@/domains/shop-the-look/components/shop-the-look-section';
 
 import { CategoriesSection } from './components/categories-section';
 import { CollectionBanner } from './components/collection-banner';
@@ -66,6 +68,18 @@ export function HomeSections() {
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
           <CollectionBanner />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+          <ShopTheLookSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={3} />}>
+          <LifestyleCollectionsSection />
         </SectionBoundary>
       </MobileDeferredSection>
 

@@ -20,6 +20,12 @@ const ProductAlternativesSection = dynamic(() =>
   }))
 );
 
+const ProductSmartBundlesSection = dynamic(() =>
+  import('@/domains/smart-bundles/components/product-smart-bundles-section').then((module) => ({
+    default: module.ProductSmartBundlesSection
+  }))
+);
+
 const ProductDetailTabs = dynamic(() =>
   import('./components/product-detail-tabs').then((module) => ({
     default: module.ProductDetailTabs
@@ -88,6 +94,10 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
 
       <div className='pdp-defer-mobile'>
         <ProductAlternativesSection productId={productSlug} productName={product.name} />
+      </div>
+
+      <div className='pdp-defer-mobile'>
+        <ProductSmartBundlesSection productId={numericProductId} />
       </div>
 
       <div className='pdp-defer-mobile'>

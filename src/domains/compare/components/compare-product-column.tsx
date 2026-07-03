@@ -40,7 +40,7 @@ export function CompareProductColumn({
   return (
     <div
       className={cn(
-        'border-border/60 flex h-full min-w-0 flex-col border-r last:border-r-0',
+        'border-border/60 flex h-full min-w-0 flex-1 flex-col border-r last:border-r-0',
         isFixed && 'shrink-0'
       )}
       style={isFixed ? { width: COMPARE_PRODUCT_SLIDE_WIDTH } : undefined}

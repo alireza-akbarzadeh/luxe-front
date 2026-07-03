@@ -450,6 +450,18 @@
       "description": "Compare {name} from other verified sellers on Luxe.",
       "viewListing": "View listing"
     },
+    "smartBundles": {
+      "title": "Smart bundles",
+      "description": "Curated pairings based on compatibility and how you plan to use this piece.",
+      "addAll": "Add bundle",
+      "compatibility": "{score}% match",
+      "intents": {
+        "everyday": "Everyday",
+        "workspace": "Workspace",
+        "travel": "Travel",
+        "gift": "Gift"
+      }
+    },
     "description": {
       "empty": "A detailed description has not been added for this product yet.",
       "highlights": "Highlights"
@@ -737,6 +749,13 @@
       "errorTitle": "Couldn't load your cart",
       "errorDescription": "Something went wrong while fetching your items. Please try again.",
       "retry": "Retry"
+    },
+    "smartBundles": {
+      "eyebrow": "Smart bundles",
+      "title": "Complete your cart",
+      "description": "Compatibility-ranked sets based on what you already added.",
+      "addAll": "Add bundle",
+      "compatibility": "{score}% match"
     }
   },
   "footer": {
@@ -1162,6 +1181,21 @@
         }
       }
     },
+    "shopTheLook": {
+      "eyebrow": "Shop the look",
+      "title": "Tap to shop every piece",
+      "description": "Interactive lifestyle scenes — every tagged item links straight to the product page.",
+      "viewAll": "View all looks",
+      "shopLabel": "Shop this look",
+      "shoppablePieces": "{count, plural, one {# shoppable piece} other {# shoppable pieces}}"
+    },
+    "lifestyleCollections": {
+      "eyebrow": "Lifestyle",
+      "title": "Curated for how you live",
+      "description": "Room-by-room edits — workspace calm, travel-ready carry, and first-apartment essentials.",
+      "viewAll": "All lifestyle collections",
+      "shopLabel": "Shop collection"
+    },
     "newArrivals": {
       "eyebrow": "Just dropped",
       "title": "New arrivals",
@@ -1451,6 +1485,34 @@
         "category": "Category"
       }
     }
+  },
+  "comparePage": {
+    "ai": {
+      "title": "AI comparison insight",
+      "loading": "Analyzing differences…",
+      "summary": "Overview",
+      "recommendation": "Our pick",
+      "bestFor": "Best for each goal",
+      "tradeoffs": "Key trade-offs",
+      "footer": "Based on listing facts only — use the spec table for full details"
+    }
+  },
+  "shopTheLookPage": {
+    "breadcrumb": "Shop the look",
+    "eyebrow": "Interactive edits",
+    "title": "Shop the look",
+    "description": "Tap hotspots on each scene to discover and shop every tagged piece — no guesswork, just shoppable inspiration.",
+    "viewAll": "View all looks",
+    "shopLabel": "Shop piece",
+    "shoppablePieces": "{count, plural, one {# shoppable piece} other {# shoppable pieces}}",
+    "closeLabel": "Close",
+    "tapHint": "Tap a pin to preview and shop each piece",
+    "taggedItems": "{count, plural, one {# item tagged} other {# items tagged}}",
+    "shopAllPieces": "Shop all pieces in this look",
+    "empty": "No shop-the-look scenes are live yet — check back soon.",
+    "notFoundTitle": "Look not found",
+    "notFoundBody": "This scene may have been removed or is not published yet.",
+    "backToList": "Browse all looks"
   },
   "shoppingAssistant": {
     "title": "Shopping assistant",

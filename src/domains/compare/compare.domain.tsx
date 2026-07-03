@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Button } from '@/components/ui/button';
 import { CompareSkeleton } from '@/domains/compare/components/compare-skeleton';
+import { CompareAiInsight } from '@/domains/compare/sections/compare-ai-insight';
 import { CompareEmptyState } from '@/domains/compare/sections/compare-empty-state';
 import { CompareHeader } from '@/domains/compare/sections/compare-header';
 import { CompareSummary } from '@/domains/compare/sections/compare-summary';
@@ -88,6 +89,7 @@ export function CompareDomain() {
             highlightDiffs={highlightDiffs}
             removeItem={removeItem}
           />
+          {items.length >= 2 ? <CompareAiInsight productIds={items} /> : null}
           {items.length >= 2 && <CompareSummary products={compareProducts} />}
         </>
       )}

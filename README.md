@@ -172,3 +172,6 @@ Special thanks to:
 
 NEXT_PUBLIC_API_URL="http://localhost:8080/api/v1" pnpm build
 NEXT_PUBLIC_API_URL="http://localhost:8080/api/v1" pnpm start
+
+curl -sf http://localhost:8080/openapi -o openapi3.json
+OPENAPI_SPEC_FILE=openapi3.json pnpm api:gen

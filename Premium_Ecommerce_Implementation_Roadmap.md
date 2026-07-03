@@ -34,19 +34,19 @@ Allow users to upload an image to find visually similar products.
 
 Generate concise "Should I buy this?" summaries with pros, cons, ideal buyer, and alternatives.
 
-## Task 005 — Smart Product Comparison
+## Task 005 — Smart Product Comparison ✅
 
 Compare products using AI explanations instead of only specifications.
 
-## Task 006 — Shop the Look
+## Task 006 — Shop the Look ✅
 
 Enable interactive images where every tagged item is directly shoppable.
 
-## Task 007 — Lifestyle Collections
+## Task 007 — Lifestyle Collections ✅
 
 Introduce curated collections such as "Minimal Workspace", "Travel Essentials", and "First Apartment".
 
-## Task 008 — Smart Bundles
+## Task 008 — Smart Bundles ✅
 
 Generate dynamic bundles based on compatibility and user intent.
 

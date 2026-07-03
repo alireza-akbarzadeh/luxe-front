@@ -77,7 +77,12 @@ function CompareLabelsPanel({
   );
 }
 
-export function CompareTable({ products, canAddMore, highlightDiffs, removeItem }: CompareTableProps) {
+export function CompareTable({
+  products,
+  canAddMore,
+  highlightDiffs,
+  removeItem
+}: CompareTableProps) {
   const rows = buildCompareRows(products);
   const sections = groupCompareRows(rows);
 
@@ -96,7 +101,9 @@ export function CompareTable({ products, canAddMore, highlightDiffs, removeItem 
           <CompareLabelsPanel sections={sections} canAddMore={canAddMore} />
           <div
             className='grid min-w-0 flex-1'
-            style={{ gridTemplateColumns: `repeat(${Math.max(products.length, 1)}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateColumns: `repeat(${Math.max(products.length, 1)}, minmax(0, 1fr))`
+            }}
           >
             {products.map((product) => (
               <CompareProductColumn

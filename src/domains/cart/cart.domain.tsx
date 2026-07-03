@@ -9,6 +9,7 @@ import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Typography } from '@/components/ui/typography';
+import { CartSmartBundles } from '@/domains/smart-bundles/components/cart-smart-bundles';
 import { useCartController } from '@/hooks/useCartController';
 import { useUser } from '@/hooks/useUser';
 
@@ -138,6 +139,7 @@ export default function CartPage() {
             </div>
 
             <div className='mt-6'>
+              <CartSmartBundles />
               <ProductSuggestion />
             </div>
           </GridItem>

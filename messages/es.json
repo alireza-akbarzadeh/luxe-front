@@ -450,6 +450,18 @@
       "description": "Compara {name} de otros vendedores verificados en Luxe.",
       "viewListing": "Ver anuncio"
     },
+    "smartBundles": {
+      "title": "Paquetes inteligentes",
+      "description": "Combinaciones compatibles según cómo planeas usar este artículo.",
+      "addAll": "Añadir paquete",
+      "compatibility": "{score}% de compatibilidad",
+      "intents": {
+        "everyday": "Diario",
+        "workspace": "Escritorio",
+        "travel": "Viaje",
+        "gift": "Regalo"
+      }
+    },
     "description": {
       "empty": "Aún no se ha añadido una descripción detallada para este producto.",
       "highlights": "Destacados"
@@ -736,6 +748,13 @@
       "errorTitle": "No se pudo cargar el carrito",
       "errorDescription": "Algo salió mal al obtener tus artículos. Inténtalo de nuevo.",
       "retry": "Reintentar"
+    },
+    "smartBundles": {
+      "eyebrow": "Paquetes inteligentes",
+      "title": "Completa tu carrito",
+      "description": "Conjuntos compatibles según lo que ya añadiste.",
+      "addAll": "Añadir paquete",
+      "compatibility": "{score}% de compatibilidad"
     }
   },
   "footer": {
@@ -1161,6 +1180,21 @@
         }
       }
     },
+    "shopTheLook": {
+      "eyebrow": "Compra el look",
+      "title": "Toca para comprar cada pieza",
+      "description": "Escenas interactivas — cada etiqueta enlaza directo al producto.",
+      "viewAll": "Ver todos los looks",
+      "shopLabel": "Comprar este look",
+      "shoppablePieces": "{count, plural, one {# pieza comprable} other {# piezas comprables}}"
+    },
+    "lifestyleCollections": {
+      "eyebrow": "Estilo de vida",
+      "title": "Curado para cómo vives",
+      "description": "Ediciones por habitación — escritorio minimal, esenciales de viaje y primer apartamento.",
+      "viewAll": "Todas las colecciones lifestyle",
+      "shopLabel": "Ver colección"
+    },
     "newArrivals": {
       "eyebrow": "Recién llegados",
       "title": "Novedades",
@@ -1450,6 +1484,34 @@
         "category": "Categoría"
       }
     }
+  },
+  "comparePage": {
+    "ai": {
+      "title": "Análisis IA de comparación",
+      "loading": "Analizando diferencias…",
+      "summary": "Resumen",
+      "recommendation": "Nuestra elección",
+      "bestFor": "Mejor para cada objetivo",
+      "tradeoffs": "Compensaciones clave",
+      "footer": "Basado solo en datos del listado — consulta la tabla de especificaciones"
+    }
+  },
+  "shopTheLookPage": {
+    "breadcrumb": "Compra el look",
+    "eyebrow": "Ediciones interactivas",
+    "title": "Compra el look",
+    "description": "Toca los puntos en cada escena para descubrir y comprar cada pieza etiquetada.",
+    "viewAll": "Ver todos los looks",
+    "shopLabel": "Comprar pieza",
+    "shoppablePieces": "{count, plural, one {# pieza comprable} other {# piezas comprables}}",
+    "closeLabel": "Cerrar",
+    "tapHint": "Toca un pin para previsualizar y comprar cada pieza",
+    "taggedItems": "{count, plural, one {# pieza etiquetada} other {# piezas etiquetadas}}",
+    "shopAllPieces": "Comprar todas las piezas de este look",
+    "empty": "Aún no hay escenas publicadas — vuelve pronto.",
+    "notFoundTitle": "Look no encontrado",
+    "notFoundBody": "Esta escena puede haber sido eliminada o aún no está publicada.",
+    "backToList": "Ver todos los looks"
   },
   "shoppingAssistant": {
     "title": "Asistente de compras",

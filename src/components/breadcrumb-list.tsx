@@ -3,6 +3,7 @@
 import { IconArrowLeft } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Fragment } from 'react';
 
 import {
   Breadcrumb,
@@ -95,18 +96,26 @@ export function DynamicBreadcrumb({
             const isLast = idx === breadcrumbItems.length - 1;
 
             return (
-              <BreadcrumbItem key={`${item.label}-${idx}`}>
-                {item.href && !isLast ? (
-                  <BreadcrumbLink asChild>
-                    <Link href={item.href}>{item.label}</Link>
-                  </BreadcrumbLink>
-                ) : (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                )}
-
-                {!isLast &&
-                  (separator ? <span className='mx-1'>{separator}</span> : <BreadcrumbSeparator />)}
-              </BreadcrumbItem>
+              <Fragment key={`${item.label}-${idx}`}>
+                {idx > 0 ? (
+                  separator ? (
+                    <BreadcrumbSeparator>
+                      <span className='mx-1'>{separator}</span>
+                    </BreadcrumbSeparator>
+                  ) : (
+                    <BreadcrumbSeparator />
+                  )
+                ) : null}
+                <BreadcrumbItem>
+                  {item.href && !isLast ? (
+                    <BreadcrumbLink asChild>
+                      <Link href={item.href}>{item.label}</Link>
+                    </BreadcrumbLink>
+                  ) : (
+                    <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                  )}
+                </BreadcrumbItem>
+              </Fragment>
             );
           })}
         </BreadcrumbList>
