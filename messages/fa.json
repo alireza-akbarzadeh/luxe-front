@@ -1346,6 +1346,26 @@
       "original": "پرسیدید: «{query}»",
       "dismiss": "بستن تفسیر هوش مصنوعی"
     },
+    "visual": {
+      "openCamera": "جستجو با عکس",
+      "dialogTitle": "جستجوی تصویری",
+      "dialogDescription": "عکسی آپلود کنید تا محصولات مشابه در فروشگاه پیدا شوند.",
+      "dropzoneTitle": "عکس محصول را اینجا رها کنید",
+      "dropzoneHint": "JPG، PNG یا WebP · حداکثر ۵ مگابایت",
+      "upload": "انتخاب عکس",
+      "changePhoto": "تغییر عکس",
+      "findSimilar": "یافتن مشابه",
+      "searching": "در حال تحلیل…",
+      "bannerTitle": "نتایج از عکس شما",
+      "dismiss": "بستن جستجوی تصویری",
+      "fallbackInterpretation": "در حال یافتن محصولات مشابه عکس شما.",
+      "errors": {
+        "tooLarge": "حجم تصویر باید حداکثر ۵ مگابایت باشد.",
+        "unsupportedType": "از JPG، PNG، WebP یا GIF استفاده کنید.",
+        "readFailed": "خواندن تصویر ممکن نشد. فایل دیگری امتحان کنید.",
+        "analyzeFailed": "تحلیل تصویر ممکن نشد. عکس دیگری بزنید یا جستجوی متنی استفاده کنید."
+      }
+    },
     "error": {
       "loadFailed": "بارگذاری نتایج جستجو ناموفق بود. دوباره تلاش کنید.",
       "retry": "تلاش مجدد"

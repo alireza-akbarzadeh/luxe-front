@@ -1,5 +1,6 @@
 import { IMAGE_FALLBACK } from '@/lib/images';
 import type { DtoAiSearchIntentResponse } from '@/services/-ai-search-intent-post.schemas';
+import type { DtoAiVisualSearchResponse } from '@/services/-ai-visual-search-post.schemas';
 import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.schemas';
 
 import type { SearchParams } from './hooks/useSearchParams';
@@ -237,6 +238,32 @@ export function buildIntentSearchUrl(
   if (intent.is_digital) params.set('isDigital', 'true');
 
   const sortBy = mapApiSortToClient(intent.sort);
+  if (sortBy && sortBy !== 'relevance') {
+    params.set('sortBy', sortBy);
+  }
+
+  return `/search?${params.toString()}`;
+}
+
+/** Build /search URL with visual-search derived filters for cross-page navigation. */
+export function buildVisualSearchUrl(result: DtoAiVisualSearchResponse): string {
+  const params = new URLSearchParams();
+  const keyword = result.search_query?.trim() ?? '';
+  if (keyword) {
+    params.set('q', keyword);
+  }
+
+  if (result.min_price && result.min_price > 0) {
+    params.set('priceMin', String(Math.floor(result.min_price)));
+  }
+  if (result.max_price && result.max_price > 0) {
+    params.set('priceMax', String(Math.ceil(result.max_price)));
+  }
+  if (result.min_rating && result.min_rating > 0) {
+    params.set('minRating', String(Math.floor(result.min_rating)));
+  }
+
+  const sortBy = mapApiSortToClient(result.sort);
   if (sortBy && sortBy !== 'relevance') {
     params.set('sortBy', sortBy);
   }

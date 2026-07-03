@@ -19,6 +19,7 @@ import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
 import { SearchIntentBanner } from './components/search-intent-banner';
 import { SearchPageSkeleton } from './components/search-page-skeleton';
+import { SearchVisualBanner } from './components/search-visual-banner';
 import { ProductGridList } from './containers/product-grid-list';
 import { ResultHeader } from './containers/result-header';
 import { SearchHero } from './containers/search-hero';
@@ -163,6 +164,7 @@ export default function SearchDomain() {
 
           <div className='flex-1'>
             <SearchIntentBanner />
+            <SearchVisualBanner />
             <ResultHeader
               productCount={products.length}
               total={total}

@@ -1,6 +1,6 @@
 'use client';
 
-import { IconLoader2, IconSearch, IconX } from '@tabler/icons-react';
+import { IconCamera, IconLoader2, IconSearch, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -34,6 +34,8 @@ export function SearchMobileSheet() {
 function SearchMobileSheetContent() {
   const t = useTranslations('search');
   const closeSearchSheet = useSearchStore((state) => state.closeSearchSheet);
+  const openVisualSearch = useSearchStore((state) => state.openVisualSearch);
+  const tVisual = useTranslations('search.visual');
   const {
     isSearching,
     handleSearch,
@@ -80,7 +82,7 @@ function SearchMobileSheetContent() {
 
       <div className='border-border shrink-0 border-b px-6 py-4'>
         <div className='relative'>
-          <div className='absolute top-1/2 start-3 flex -translate-y-1/2 items-center'>
+          <div className='absolute start-3 top-1/2 flex -translate-y-1/2 items-center'>
             {isSearching || suggestionsLoading ? (
               <IconLoader2 className='text-muted-foreground h-5 w-5 animate-spin' />
             ) : (
@@ -102,9 +104,22 @@ function SearchMobileSheetContent() {
               setFocusedSuggestion(-1);
             }}
             onKeyDown={handleKeyDown}
-            className='focus:border-primary bg-background h-12 rounded-full pe-20 ps-11'
+            className='focus:border-primary bg-background h-12 rounded-full ps-11 pe-28'
           />
-          <div className='absolute top-1/2 end-2 flex -translate-y-1/2 items-center gap-1'>
+          <div className='absolute end-2 top-1/2 flex -translate-y-1/2 items-center gap-1'>
+            <Button
+              type='button'
+              variant='ghost'
+              size='icon'
+              className='h-8 w-8 rounded-full'
+              aria-label={tVisual('openCamera')}
+              onClick={() => {
+                closeSearchSheet();
+                openVisualSearch();
+              }}
+            >
+              <IconCamera className='h-4 w-4' />
+            </Button>
             {inputValue ? (
               <Button
                 type='button'

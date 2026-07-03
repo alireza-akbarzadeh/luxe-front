@@ -13,7 +13,11 @@
  */
 import { spawn } from 'node:child_process';
 
-const SKIP = process.env['PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD'] === '1';
+const SKIP =
+  process.env['PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD'] === '1' ||
+  process.env['CI'] === 'true' ||
+  process.env['CI'] === '1' ||
+  Boolean(process.env['VERCEL']);
 
 const MIRROR_PRESETS = [
   {
@@ -62,9 +66,14 @@ function runPlaywrightInstall(extraEnv) {
 
 async function main() {
   if (SKIP) {
+    const reason = process.env['VERCEL']
+      ? 'Vercel build'
+      : process.env['CI']
+        ? 'CI'
+        : 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1';
     console.log(
-      '⏭️  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 — skipping browser download.\n' +
-        '   Set PLAYWRIGHT_USE_SYSTEM_CHROME=1 and install Google Chrome locally.'
+      `⏭️  Skipping Playwright browser download (${reason}).\n` +
+        '   Run pnpm run test:install locally before E2E tests.'
     );
     return;
   }

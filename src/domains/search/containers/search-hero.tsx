@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  IconCommand,
-  IconLoader2,
-  IconSearch,
-  IconX
-} from '@tabler/icons-react';
+import { IconCamera, IconCommand, IconLoader2, IconSearch, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
@@ -38,9 +33,7 @@ function SearchHeroMobileBar() {
           <IconSearch className='text-muted-foreground h-5 w-5 shrink-0' />
           <span
             className={
-              searchParams.query
-                ? 'truncate text-sm'
-                : 'text-muted-foreground truncate text-sm'
+              searchParams.query ? 'truncate text-sm' : 'text-muted-foreground truncate text-sm'
             }
           >
             {searchParams.query || t('placeholder')}
@@ -73,6 +66,8 @@ function SearchHeroDesktop() {
     focusedSuggestion
   } = useSearchHeroController();
   const searchParams = useSearchParams();
+  const openVisualSearch = useSearchStore((state) => state.openVisualSearch);
+  const tVisual = useTranslations('search.visual');
 
   return (
     <section className='from-secondary/50 to-background relative hidden border-b bg-linear-to-b pt-20 lg:block'>
@@ -93,7 +88,7 @@ function SearchHeroDesktop() {
           className='relative mx-auto max-w-2xl'
         >
           <div className='relative'>
-            <div className='absolute top-1/2 start-4 flex -translate-y-1/2 items-center gap-2'>
+            <div className='absolute start-4 top-1/2 flex -translate-y-1/2 items-center gap-2'>
               {isSearching || suggestionsLoading ? (
                 <IconLoader2 className='text-muted-foreground h-5 w-5 animate-spin' />
               ) : (
@@ -113,9 +108,19 @@ function SearchHeroDesktop() {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onKeyDown={handleKeyDown}
-              className='focus:border-primary bg-background h-14 w-full rounded-2xl border-2 pe-24 ps-12 text-lg shadow-lg'
+              className='focus:border-primary bg-background h-14 w-full rounded-2xl border-2 ps-12 pe-32 text-lg shadow-lg'
             />
-            <div className='absolute top-1/2 end-2 flex -translate-y-1/2 items-center gap-1'>
+            <div className='absolute end-2 top-1/2 flex -translate-y-1/2 items-center gap-1'>
+              <Button
+                type='button'
+                variant='ghost'
+                size='icon'
+                className='h-8 w-8'
+                aria-label={tVisual('openCamera')}
+                onClick={openVisualSearch}
+              >
+                <IconCamera className='h-4 w-4' />
+              </Button>
               {inputValue ? (
                 <Button
                   variant='ghost'
@@ -140,7 +145,7 @@ function SearchHeroDesktop() {
             </div>
           </div>
 
-          <div className='text-muted-foreground absolute -bottom-6 start-0 flex items-center gap-1 text-xs'>
+          <div className='text-muted-foreground absolute start-0 -bottom-6 flex items-center gap-1 text-xs'>
             <kbd className='bg-muted rounded px-1.5 py-0.5 font-mono text-[10px]'>
               <IconCommand className='inline h-2.5 w-2.5' />K
             </kbd>
@@ -154,7 +159,7 @@ function SearchHeroDesktop() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className='bg-card absolute top-full end-0 start-0 z-50 mt-2 overflow-hidden rounded-2xl border shadow-xl'
+                className='bg-card absolute start-0 end-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border shadow-xl'
               >
                 <div className='custom-scrollbar max-h-100 overflow-y-auto'>
                   <SearchSuggestionsPanel

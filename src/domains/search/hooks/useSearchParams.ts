@@ -11,6 +11,7 @@ import {
 import { useMemo } from 'react';
 
 import type { DtoAiSearchIntentResponse } from '@/services/-ai-search-intent-post.schemas';
+import type { DtoAiVisualSearchResponse } from '@/services/-ai-visual-search-post.schemas';
 
 import {
   mapApiSortToClient,
@@ -164,6 +165,26 @@ export function useSearchParams() {
     });
   };
 
+  const applyVisualSearch = (result: DtoAiVisualSearchResponse) => {
+    const keyword = result.search_query?.trim() ?? '';
+    const sortBy = mapApiSortToClient(result.sort) ?? 'relevance';
+
+    setParams({
+      q: keyword,
+      priceMin:
+        result.min_price && result.min_price > 0
+          ? Math.floor(result.min_price)
+          : SEARCH_DEFAULT_PRICE_MIN,
+      priceMax:
+        result.max_price && result.max_price > 0
+          ? Math.ceil(result.max_price)
+          : SEARCH_DEFAULT_PRICE_MAX,
+      minRating: result.min_rating && result.min_rating > 0 ? Math.floor(result.min_rating) : 0,
+      sortBy,
+      page: 1
+    });
+  };
+
   const hasActiveFilters = useMemo(() => {
     return (
       categories.length > 0 ||
@@ -226,6 +247,7 @@ export function useSearchParams() {
     clearFilters,
     clearAll,
     applyIntentSearch,
+    applyVisualSearch,
     // Helpers
     hasActiveFilters,
     activeFilterCount

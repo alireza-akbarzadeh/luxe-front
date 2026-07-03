@@ -26,7 +26,7 @@ Implement a conversational shopping assistant that understands natural language,
 
 Replace keyword-only search with intent-aware search while preserving existing search.
 
-## Task 003 — Visual Search
+## Task 003 — Visual Search ✅
 
 Allow users to upload an image to find visually similar products.
 

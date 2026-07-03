@@ -28,6 +28,11 @@ const SearchMobileSheet = dynamic(
   () => import('@/domains/search/components/search-mobile-sheet').then((m) => m.SearchMobileSheet),
   { ssr: false }
 );
+const VisualSearchDialog = dynamic(
+  () =>
+    import('@/domains/search/components/visual-search-dialog').then((m) => m.VisualSearchDialog),
+  { ssr: false }
+);
 
 const NavbarMobileDrawer = dynamic(
   () => import('./navbar-mobile-drawer').then((m) => m.NavbarMobileDrawer),
@@ -117,12 +122,18 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen((prev) => !prev)}
               >
                 <IconMenu
-                  className={cn('size-5 transition-opacity duration-150', isMobileMenuOpen && 'hidden')}
+                  className={cn(
+                    'size-5 transition-opacity duration-150',
+                    isMobileMenuOpen && 'hidden'
+                  )}
                   stroke={1.75}
                   aria-hidden
                 />
                 <IconX
-                  className={cn('size-5 transition-opacity duration-150', !isMobileMenuOpen && 'hidden')}
+                  className={cn(
+                    'size-5 transition-opacity duration-150',
+                    !isMobileMenuOpen && 'hidden'
+                  )}
                   stroke={1.75}
                   aria-hidden
                 />
@@ -138,6 +149,7 @@ export function Navbar() {
 
       <CartSheet />
       <SearchMobileSheet />
+      <VisualSearchDialog />
     </>
   );
 }

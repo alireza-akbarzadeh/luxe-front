@@ -1346,6 +1346,26 @@
       "original": "You asked: “{query}”",
       "dismiss": "Dismiss AI interpretation"
     },
+    "visual": {
+      "openCamera": "Search by photo",
+      "dialogTitle": "Visual search",
+      "dialogDescription": "Upload a photo to find similar products in our catalog.",
+      "dropzoneTitle": "Drop a product photo here",
+      "dropzoneHint": "JPG, PNG, or WebP · up to 5 MB",
+      "upload": "Choose photo",
+      "changePhoto": "Change photo",
+      "findSimilar": "Find similar",
+      "searching": "Analyzing…",
+      "bannerTitle": "Matches from your photo",
+      "dismiss": "Dismiss visual search",
+      "fallbackInterpretation": "Finding products similar to your photo.",
+      "errors": {
+        "tooLarge": "Image must be 5 MB or smaller.",
+        "unsupportedType": "Use JPG, PNG, WebP, or GIF.",
+        "readFailed": "Could not read this image. Try another file.",
+        "analyzeFailed": "Could not analyze this image. Try another photo or use text search."
+      }
+    },
     "error": {
       "loadFailed": "Failed to load search results. Please try again.",
       "retry": "Retry"

@@ -1345,6 +1345,26 @@
       "original": "Preguntaste: “{query}”",
       "dismiss": "Cerrar interpretación de la IA"
     },
+    "visual": {
+      "openCamera": "Buscar por foto",
+      "dialogTitle": "Búsqueda visual",
+      "dialogDescription": "Sube una foto para encontrar productos similares en el catálogo.",
+      "dropzoneTitle": "Suelta una foto del producto aquí",
+      "dropzoneHint": "JPG, PNG o WebP · hasta 5 MB",
+      "upload": "Elegir foto",
+      "changePhoto": "Cambiar foto",
+      "findSimilar": "Buscar similares",
+      "searching": "Analizando…",
+      "bannerTitle": "Coincidencias de tu foto",
+      "dismiss": "Cerrar búsqueda visual",
+      "fallbackInterpretation": "Buscando productos similares a tu foto.",
+      "errors": {
+        "tooLarge": "La imagen debe pesar 5 MB o menos.",
+        "unsupportedType": "Usa JPG, PNG, WebP o GIF.",
+        "readFailed": "No se pudo leer la imagen. Prueba otro archivo.",
+        "analyzeFailed": "No se pudo analizar la imagen. Prueba otra foto o usa búsqueda por texto."
+      }
+    },
     "error": {
       "loadFailed": "No se pudieron cargar los resultados. Inténtalo de nuevo.",
       "retry": "Reintentar"

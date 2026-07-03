@@ -17,6 +17,10 @@ interface SearchStoreState {
   /** AI interpretation of the last natural-language search (session only). */
   intentInterpretation: string | null;
   naturalQuery: string | null;
+  /** Visual search context (session only). */
+  visualInterpretation: string | null;
+  visualImagePreview: string | null;
+  isVisualSearchOpen: boolean;
 }
 
 interface SearchStoreActions {
@@ -34,6 +38,10 @@ interface SearchStoreActions {
   closeFilterSheet: () => void;
   setIntentContext: (naturalQuery: string, interpretation: string) => void;
   clearIntentContext: () => void;
+  setVisualContext: (imagePreview: string, interpretation: string) => void;
+  clearVisualContext: () => void;
+  setVisualSearchOpen: (open: boolean) => void;
+  openVisualSearch: () => void;
   reset: () => void;
 }
 
@@ -49,6 +57,9 @@ export const useSearchStore = create<SearchStore>()(
       isFilterSheetOpen: false,
       intentInterpretation: null,
       naturalQuery: null,
+      visualInterpretation: null,
+      visualImagePreview: null,
+      isVisualSearchOpen: false,
 
       setSearchSheetOpen: (open) => set({ isSearchSheetOpen: open }),
       openSearchSheet: () => set({ isSearchSheetOpen: true }),
@@ -94,9 +105,27 @@ export const useSearchStore = create<SearchStore>()(
       incrementSearchCount: () => set((state) => ({ searchCount: state.searchCount + 1 })),
 
       setIntentContext: (naturalQuery, interpretation) =>
-        set({ naturalQuery, intentInterpretation: interpretation }),
+        set({
+          naturalQuery,
+          intentInterpretation: interpretation,
+          visualInterpretation: null,
+          visualImagePreview: null
+        }),
 
       clearIntentContext: () => set({ naturalQuery: null, intentInterpretation: null }),
+
+      setVisualContext: (imagePreview, interpretation) =>
+        set({
+          visualImagePreview: imagePreview,
+          visualInterpretation: interpretation,
+          naturalQuery: null,
+          intentInterpretation: null
+        }),
+
+      clearVisualContext: () => set({ visualImagePreview: null, visualInterpretation: null }),
+
+      setVisualSearchOpen: (open) => set({ isVisualSearchOpen: open }),
+      openVisualSearch: () => set({ isVisualSearchOpen: true }),
 
       reset: () =>
         set({
@@ -106,7 +135,10 @@ export const useSearchStore = create<SearchStore>()(
           isSearchSheetOpen: false,
           isFilterSheetOpen: false,
           intentInterpretation: null,
-          naturalQuery: null
+          naturalQuery: null,
+          visualInterpretation: null,
+          visualImagePreview: null,
+          isVisualSearchOpen: false
         })
     }),
     {

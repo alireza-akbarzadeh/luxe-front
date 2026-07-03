@@ -39,8 +39,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-openapi3.json
-
 .env
 
 # CLI skill installs (ephemeral); team skills live in .cursor/skills/
