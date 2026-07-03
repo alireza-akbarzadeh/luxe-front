@@ -1,7 +1,7 @@
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { differenceInCalendarDays } from 'date-fns';
 import type { ComponentProps, Dispatch, SetStateAction } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CustomComponents, DayPickerProps } from 'react-day-picker';
 import { DayPicker, labelNext, labelPrevious, useDayPicker } from 'react-day-picker';
 import type { Except } from 'type-fest';
@@ -75,14 +75,14 @@ function Calendar({
       <DayPicker
         numberOfMonths={columnsDisplayed}
         showOutsideDays={showOutsideDays}
-        className={cn('overflow-visible p-2', className)}
-        style={{ width: `${252 * (columnsDisplayed ?? 1)}px` }}
+        className={cn('w-fit p-2 [--cell-size:2.25rem]', className)}
         classNames={{
           months: 'flex flex-col relative sm:flex-row gap-4',
           month_caption: 'flex justify-center h-8 mx-10 relative items-center',
-          weekdays: 'flex flex-row',
-          weekday: 'text-muted-foreground w-9 font-medium text-[0.72rem] uppercase tracking-wide',
-          month: 'gap-y-1 overflow-x-hidden w-full',
+          weekdays: 'flex',
+          weekday:
+            'text-muted-foreground flex-1 text-center text-[0.72rem] font-medium uppercase tracking-wide select-none',
+          month: 'flex w-full flex-col gap-y-1',
           caption: 'flex justify-center pt-1 relative items-center',
           caption_label: 'text-sm font-semibold font-display truncate',
           button_next: cn(
@@ -100,25 +100,17 @@ function Calendar({
             })
           ),
           nav: 'flex items-start',
-          month_grid: 'mt-2 mb-0.5 mx-auto border-collapse',
-          week: 'flex w-full mt-1',
-          day: 'p-0.5 size-9 text-sm flex-1 flex items-center justify-center not-aria-selected:[&_button:hover]:bg-accent/15',
-          day_button: cn(
-            'relative size-9 select-none rounded-full p-0 text-sm font-normal text-foreground',
-            'transition-all duration-150',
-            'focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background'
-          ),
-          range_start: 'day-range-start rounded-s-full [&_button]:rounded-s-full',
-          range_end: 'day-range-end rounded-e-full [&_button]:rounded-e-full',
-          selected:
-            '[&_button]:bg-primary [&_button]:font-semibold [&_button]:text-primary-foreground [&_button]:shadow-sm [&_button]:ring-0',
-          today:
-            '[&_button]:font-semibold [&_button]:ring-1 [&_button]:ring-accent [&_button]:ring-inset',
-          outside: 'text-muted-foreground/60 [&_button]:text-muted-foreground/60',
-          disabled:
-            '[&_button]:text-muted-foreground/40 [&_button]:line-through [&_button]:hover:bg-transparent',
-          range_middle:
-            '[&_button]:rounded-none [&_button]:bg-accent/20 [&_button]:text-foreground [&_button]:hover:bg-accent/25',
+          month_grid: 'w-full border-collapse',
+          week: 'mt-1 flex w-full',
+          day: 'group/day relative flex aspect-square flex-1 items-center justify-center p-0 text-center text-sm',
+          day_button: '',
+          range_start: 'day-range-start',
+          range_end: 'day-range-end',
+          selected: '',
+          today: '',
+          outside: '',
+          disabled: '',
+          range_middle: '',
           hidden: 'invisible',
           ...classNames
         }}
@@ -126,7 +118,8 @@ function Calendar({
           Chevron,
           Nav,
           CaptionLabel,
-          MonthGrid
+          MonthGrid,
+          DayButton: CalendarDayButton
         }}
         {...props}
       />
@@ -137,6 +130,49 @@ function Calendar({
 function Chevron({ orientation }: ComponentProps<CustomComponents['Chevron']>) {
   const Icon = orientation === 'left' ? IconChevronLeft : IconChevronRight;
   return <Icon className='size-4' />;
+}
+
+function CalendarDayButton({
+  day,
+  modifiers,
+  className,
+  ...props
+}: ComponentProps<CustomComponents['DayButton']>) {
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (modifiers['focused']) {
+      ref.current?.focus();
+    }
+  }, [modifiers]);
+
+  const isSingleSelected =
+    modifiers['selected'] &&
+    !modifiers['range_start'] &&
+    !modifiers['range_end'] &&
+    !modifiers['range_middle'];
+
+  return (
+    <button
+      ref={ref}
+      type='button'
+      className={cn(
+        'text-foreground size-(--cell-size) rounded-full p-0 text-sm font-normal select-none',
+        'transition-all duration-150',
+        'hover:bg-accent/15',
+        'focus-visible:ring-accent/60 focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-1',
+        modifiers['outside'] && 'text-muted-foreground/60',
+        modifiers['disabled'] && 'text-muted-foreground/40 line-through hover:bg-transparent',
+        modifiers['today'] && !isSingleSelected && 'ring-accent font-semibold ring-1 ring-inset',
+        isSingleSelected && 'bg-primary text-primary-foreground font-semibold shadow-sm ring-0',
+        modifiers['range_middle'] && 'bg-accent/20 text-foreground hover:bg-accent/25 rounded-none',
+        modifiers['range_start'] && 'bg-primary text-primary-foreground rounded-s-full',
+        modifiers['range_end'] && 'bg-primary text-primary-foreground rounded-e-full',
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 function Nav({ className }: ComponentProps<CustomComponents['Nav']>) {
