@@ -583,6 +583,17 @@
       "welcomeAssistant": "Hi! I'm your Luxe shopping assistant. Ask me anything about {name} — sizing, materials, shipping, or alternatives.",
       "welcomeStore": "You're viewing a listing from {store}. I can help you decide if this is the right pick for you."
     },
+    "brief": {
+      "button": "Explain this product in 30 seconds",
+      "title": "30-second summary",
+      "loading": "Preparing your quick take…",
+      "pros": "Pros",
+      "cons": "Cons",
+      "whoShouldBuy": "Who should buy",
+      "whoShouldNot": "Who shouldn't",
+      "alternatives": "Alternatives",
+      "footer": "Based on listing facts only — not a substitute for seller Q&A"
+    },
     "badges": {
       "freeShipping": "Free shipping",
       "warranty": "2-year warranty",
@@ -1415,6 +1426,24 @@
         "category": "Category"
       }
     }
+  },
+  "shoppingAssistant": {
+    "title": "Shopping assistant",
+    "subtitle": "Describe what you need — I'll find picks from our catalog",
+    "assistant": "Luxe Assistant",
+    "welcome": "Hi! Tell me what you're shopping for — occasion, style, budget, or a gift recipient — and I'll suggest products from our catalog.",
+    "thinking": "Finding ideas for you…",
+    "quickPrompts": "Try asking",
+    "followUpQuestions": "A few quick questions",
+    "placeholder": "e.g. waterproof jacket under $200 for hiking…",
+    "sendMessage": "Send message",
+    "footer": "Recommendations use live catalog search — availability may change",
+    "fab": "Shop with AI",
+    "picksForYou": "Picks for you",
+    "viewProduct": "View product",
+    "promptGift": "Gift ideas under $100",
+    "promptHome": "Minimalist home decor",
+    "promptTrending": "What's trending right now?"
   },
   "pwa": {
     "install": {

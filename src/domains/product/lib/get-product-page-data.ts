@@ -5,16 +5,27 @@ import { cache } from 'react';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { getProductsId } from '~/src/services/-products-{id}-get';
 
+export interface ProductPagePayload {
+  product: DtoProductWithLike;
+  isLiked: boolean;
+}
+
 /** Server-side product fetch for PDP route + metadata (deduped per request). */
 export const getProductPageData = cache(
-  async (param: string): Promise<DtoProductWithLike | null> => {
+  async (param: string): Promise<ProductPagePayload | null> => {
     const cookieStore = await cookies();
 
     try {
       const response = await getProductsId(param, {
         headers: { Cookie: cookieStore.toString() }
       });
-      return response.data?.product ?? null;
+      const product = response.data?.product;
+      if (!product) return null;
+
+      return {
+        product,
+        isLiked: response.data?.is_liked ?? false
+      };
     } catch {
       return null;
     }

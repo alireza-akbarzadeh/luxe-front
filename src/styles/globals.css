@@ -421,6 +421,11 @@ html.locale-fa .font-display {
     content-visibility: auto;
     contain-intrinsic-size: auto 520px;
   }
+
+  .pdp-defer-mobile {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 480px;
+  }
 }
 
 .brands-marquee-clip {

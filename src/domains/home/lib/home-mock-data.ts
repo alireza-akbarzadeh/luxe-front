@@ -39,6 +39,10 @@ export const HERO_TRUST_AVATARS = [
   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop'
 ] as const;
 
+/** Mobile hero editorial spotlight — luxury boutique editorial (static, LCP-safe below fold). */
+export const HERO_EDITORIAL_SPOTLIGHT_IMAGE =
+  'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1200&h=900&fit=crop';
+
 export const TRUST_ITEMS = [
   { key: 'freeShipping', icon: 'truck' },
   { key: 'easyReturns', icon: 'return' },

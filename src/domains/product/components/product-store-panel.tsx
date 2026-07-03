@@ -54,7 +54,7 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
             )}
           </div>
           <div className='mt-1 flex flex-wrap items-center gap-x-3 gap-y-1'>
-            <h3 className='font-display text-base font-semibold sm:text-lg'>{store.name}</h3>
+            <h2 className='font-display text-base font-semibold sm:text-lg'>{store.name}</h2>
             <div className='flex items-center gap-1.5'>
               <div className='flex'>
                 {Array.from({ length: 5 }).map((_, i) => {
@@ -64,7 +64,9 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
                       key={i}
                       className={cn(
                         'h-3 w-3',
-                        i < Math.round(rating) ? 'fill-accent text-accent' : 'text-muted-foreground/30'
+                        i < Math.round(rating)
+                          ? 'fill-accent text-accent'
+                          : 'text-muted-foreground/30'
                       )}
                     />
                   );
@@ -91,7 +93,7 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
           className='text-foreground hover:bg-background hidden shrink-0 items-center gap-1 rounded-full border px-4 py-2 text-sm font-medium transition sm:inline-flex'
         >
           {t('visit')}
-          <IconArrowUpRight className='h-4 w-4 cn-rtl-flip' />
+          <IconArrowUpRight className='cn-rtl-flip h-4 w-4' />
         </Link>
       </div>
 
@@ -103,7 +105,9 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
               {store.shipping_info}
             </p>
           )}
-          {store.return_policy && <p className='text-muted-foreground ps-6'>{store.return_policy}</p>}
+          {store.return_policy && (
+            <p className='text-muted-foreground ps-6'>{store.return_policy}</p>
+          )}
         </div>
       )}
 
@@ -112,7 +116,7 @@ export function ProductStorePanel({ store }: ProductStorePanelProps) {
         className='text-foreground mt-4 inline-flex w-full items-center justify-center gap-1 rounded-full border py-2.5 text-sm font-medium sm:hidden'
       >
         {t('visitStore')}
-        <IconArrowUpRight className='h-4 w-4 cn-rtl-flip' />
+        <IconArrowUpRight className='cn-rtl-flip h-4 w-4' />
       </Link>
     </section>
   );

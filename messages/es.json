@@ -583,6 +583,17 @@
       "welcomeAssistant": "¡Hola! Soy tu asistente de compras Luxe. Pregúntame lo que quieras sobre {name}: tallas, materiales, envío o alternativas.",
       "welcomeStore": "Estás viendo un anuncio de {store}. Puedo ayudarte a decidir si es la elección correcta."
     },
+    "brief": {
+      "button": "Explica este producto en 30 segundos",
+      "title": "Resumen en 30 segundos",
+      "loading": "Preparando tu resumen rápido…",
+      "pros": "Ventajas",
+      "cons": "Desventajas",
+      "whoShouldBuy": "Para quién es ideal",
+      "whoShouldNot": "Para quién no",
+      "alternatives": "Alternativas",
+      "footer": "Basado solo en datos del anuncio — no sustituye las preguntas al vendedor"
+    },
     "badges": {
       "freeShipping": "Envío gratis",
       "warranty": "Garantía de 2 años",
@@ -1414,6 +1425,24 @@
         "category": "Categoría"
       }
     }
+  },
+  "shoppingAssistant": {
+    "title": "Asistente de compras",
+    "subtitle": "Describe lo que buscas — encontraré opciones en el catálogo",
+    "assistant": "Asistente Luxe",
+    "welcome": "¡Hola! Cuéntame qué buscas — ocasión, estilo, presupuesto o destinatario del regalo — y te sugeriré productos del catálogo.",
+    "thinking": "Buscando ideas para ti…",
+    "quickPrompts": "Prueba preguntar",
+    "followUpQuestions": "Unas preguntas rápidas",
+    "placeholder": "p. ej. chaqueta impermeable por menos de $200 para senderismo…",
+    "sendMessage": "Enviar mensaje",
+    "footer": "Las recomendaciones usan búsqueda en vivo — la disponibilidad puede cambiar",
+    "fab": "Comprar con IA",
+    "picksForYou": "Selección para ti",
+    "viewProduct": "Ver producto",
+    "promptGift": "Ideas de regalo por menos de $100",
+    "promptHome": "Decoración minimalista",
+    "promptTrending": "¿Qué está de moda ahora?"
   },
   "pwa": {
     "install": {

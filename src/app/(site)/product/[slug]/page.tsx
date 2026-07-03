@@ -18,34 +18,41 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug: param } = await params;
-  const product = await getProductPageData(param);
+  const pageData = await getProductPageData(param);
 
-  if (!product?.slug) {
+  if (!pageData?.product.slug) {
     return { title: 'Product Not Found' };
   }
 
-  return buildProductMetadata(product, product.slug);
+  return buildProductMetadata(pageData.product, pageData.product.slug);
 }
 
 export default async function ProductDetailsPage({ params }: ProductPageProps) {
   const { slug: param } = await params;
-  const product = await getProductPageData(param);
+  const pageData = await getProductPageData(param);
 
-  if (!product?.slug) {
+  if (!pageData?.product.slug) {
     notFound();
   }
 
-  if (NUMERIC_PRODUCT_ID.test(param) && product.slug !== param) {
-    permanentRedirect(`/product/${product.slug}`);
+  const { product, isLiked } = pageData;
+  const slug = product.slug;
+
+  if (!slug) {
+    notFound();
   }
 
-  const queryClient = await prefetchWithAuth(getGetProductsIdQueryOptions, product.slug);
+  if (NUMERIC_PRODUCT_ID.test(param) && slug !== param) {
+    permanentRedirect(`/product/${slug}`);
+  }
+
+  const queryClient = await prefetchWithAuth(getGetProductsIdQueryOptions, slug);
 
   return (
     <>
-      <ProductJsonLd product={product} slug={product.slug} />
+      <ProductJsonLd product={product} slug={slug} />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProductDetailDomain productId={product.slug} />
+        <ProductDetailDomain product={product} isLiked={isLiked} />
       </HydrationBoundary>
     </>
   );

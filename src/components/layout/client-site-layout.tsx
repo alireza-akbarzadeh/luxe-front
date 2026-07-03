@@ -21,6 +21,14 @@ const PwaInstallPromptClient = dynamic(
   { ssr: false }
 );
 
+const ShoppingAssistantRoot = dynamic(
+  () =>
+    import('@/domains/shopping-assistant/components/shopping-assistant-root').then(
+      (m) => m.ShoppingAssistantRoot
+    ),
+  { ssr: false }
+);
+
 /** Below-fold storefront chrome — deferred client bundles for faster initial hydration. */
 export function ClientSiteLayout({ children }: PropsWithChildren) {
   return (
@@ -32,6 +40,7 @@ export function ClientSiteLayout({ children }: PropsWithChildren) {
         <MobileBottomNavClient />
         <PwaInstallPromptClient />
         <ProfileDrawerSheet />
+        <ShoppingAssistantRoot />
       </SiteRealtimeProvider>
       <FooterClient />
     </>

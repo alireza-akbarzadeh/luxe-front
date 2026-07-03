@@ -4,6 +4,7 @@ export const AI_TASKS = {
   seoMeta: 'seo_meta',
   couponCopy: 'coupon_copy',
   productChat: 'product_chat',
+  productBrief: 'product_brief',
   qaReply: 'qa_reply'
 } as const;
 

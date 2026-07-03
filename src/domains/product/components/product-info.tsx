@@ -21,12 +21,7 @@ import { LikeButton } from '@/components/buttons/like-button';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import useCompareController from '@/domains/compare/hooks/useCompareController';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
@@ -34,6 +29,7 @@ import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { useCartStore } from '~/src/store/card.store';
 
+import { ProductAiBriefButton } from './product-ai-brief-sheet';
 import { ProductFeatureHighlights } from './product-feature-highlights';
 import ProductQuantity from './product-quantity';
 import { ProductStockNotify } from './product-stock-notify';
@@ -133,8 +129,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
     { icon: IconShieldCheck, label: t('returns') }
   ] as const;
 
-  const cartBadgeLabel =
-    itemCount > 99 ? t('cartBadgeMax') : formatInteger(itemCount);
+  const cartBadgeLabel = itemCount > 99 ? t('cartBadgeMax') : formatInteger(itemCount);
 
   return (
     <div className='flex flex-col gap-7'>
@@ -176,9 +171,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
               <span className={cn('text-foreground font-medium', moneyClassName)}>
                 {formatDecimal(product.rating ?? 0)}
               </span>
-              {product.reviews_count
-                ? t('ratingReviews', { count: product.reviews_count })
-                : null}
+              {product.reviews_count ? t('ratingReviews', { count: product.reviews_count }) : null}
             </p>
           </div>
         </div>
@@ -190,10 +183,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
           {product.compare_at_price && product.compare_at_price > Number(product.price ?? 0) && (
             <>
               <span
-                className={cn(
-                  'text-muted-foreground pb-1 text-lg line-through',
-                  moneyClassName
-                )}
+                className={cn('text-muted-foreground pb-1 text-lg line-through', moneyClassName)}
               >
                 {formatPrice(product.compare_at_price)}
               </span>
@@ -236,6 +226,10 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
             {product.description}
           </p>
         )}
+
+        {product.id ? (
+          <ProductAiBriefButton productId={product.id} productName={product.name} />
+        ) : null}
       </div>
 
       <ProductVariantAttributes
@@ -263,11 +257,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
               className='bg-accent text-accent-foreground hover:bg-accent/90 h-14 min-w-0 flex-1 basis-[12rem] rounded-full text-base font-medium shadow-none'
               disabled={isLoading || isOutOfStock}
             >
-              {isLoading
-                ? tCard('adding')
-                : isOutOfStock
-                  ? tCard('soldOut')
-                  : tCard('addToCart')}
+              {isLoading ? tCard('adding') : isOutOfStock ? tCard('soldOut') : tCard('addToCart')}
             </Button>
 
             <div className='flex shrink-0 items-center gap-1.5'>
@@ -318,9 +308,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                     className={cn(iconActionClassName, 'relative')}
                     onClick={openCart}
                     aria-label={
-                      itemCount > 0
-                        ? t('viewCartWithCount', { count: itemCount })
-                        : t('viewCart')
+                      itemCount > 0 ? t('viewCartWithCount', { count: itemCount }) : t('viewCart')
                     }
                   >
                     <IconBasket className='h-4 w-4' />
@@ -332,9 +320,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side='top'>
-                  {itemCount > 0
-                    ? t('viewCartWithCount', { count: itemCount })
-                    : t('viewCart')}
+                  {itemCount > 0 ? t('viewCartWithCount', { count: itemCount }) : t('viewCart')}
                 </TooltipContent>
               </Tooltip>
 
