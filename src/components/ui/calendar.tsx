@@ -102,25 +102,23 @@ function Calendar({
           nav: 'flex items-start',
           month_grid: 'mt-2 mb-0.5 mx-auto border-collapse',
           week: 'flex w-full mt-1',
-          day: 'p-0.5 size-9 text-sm flex-1 flex items-center justify-center',
+          day: 'p-0.5 size-9 text-sm flex-1 flex items-center justify-center not-aria-selected:[&_button:hover]:bg-accent/15',
           day_button: cn(
             'relative size-9 select-none rounded-full p-0 text-sm font-normal text-foreground',
             'transition-all duration-150',
-            'not-aria-selected:hover:bg-accent/15 not-aria-selected:hover:text-foreground',
-            'focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-            'aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:font-semibold aria-selected:shadow-sm',
-            'data-[today=true]:font-semibold data-[today=true]:ring-1 data-[today=true]:ring-accent data-[today=true]:ring-inset',
-            'data-[today=true]:aria-selected:ring-0'
+            'focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background'
           ),
-          range_start: 'day-range-start rounded-s-full',
-          range_end: 'day-range-end rounded-e-full',
-          selected: '',
-          today: '',
-          outside:
-            'day-outside text-muted-foreground/60 aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:opacity-100',
-          disabled: 'text-muted-foreground/40 line-through not-aria-selected:hover:bg-transparent',
+          range_start: 'day-range-start rounded-s-full [&_button]:rounded-s-full',
+          range_end: 'day-range-end rounded-e-full [&_button]:rounded-e-full',
+          selected:
+            '[&_button]:bg-primary [&_button]:font-semibold [&_button]:text-primary-foreground [&_button]:shadow-sm [&_button]:ring-0',
+          today:
+            '[&_button]:font-semibold [&_button]:ring-1 [&_button]:ring-accent [&_button]:ring-inset',
+          outside: 'text-muted-foreground/60 [&_button]:text-muted-foreground/60',
+          disabled:
+            '[&_button]:text-muted-foreground/40 [&_button]:line-through [&_button]:hover:bg-transparent',
           range_middle:
-            'aria-selected:bg-accent/20 aria-selected:hover:bg-accent/25 rounded-none aria-selected:text-foreground',
+            '[&_button]:rounded-none [&_button]:bg-accent/20 [&_button]:text-foreground [&_button]:hover:bg-accent/25',
           hidden: 'invisible',
           ...classNames
         }}

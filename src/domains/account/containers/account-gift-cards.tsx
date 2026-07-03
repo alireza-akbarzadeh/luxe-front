@@ -25,8 +25,8 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text, Typography } from '@/components/ui/typography';
-import { GIFT_CARD_AMOUNTS, giftCardPurchaseSchema } from '@/domains/gift-cards/gift-cards.schema';
 import { GiftCardTransferDialog } from '@/domains/gift-cards/components/gift-card-transfer-dialog';
+import { GIFT_CARD_AMOUNTS, giftCardPurchaseSchema } from '@/domains/gift-cards/gift-cards.schema';
 import {
   formatGiftCardDeliveryDate,
   redirectToGiftCardCheckout

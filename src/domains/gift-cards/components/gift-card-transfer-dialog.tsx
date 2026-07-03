@@ -29,8 +29,8 @@ import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import { getGetGiftCardsReceivedQueryKey } from '@/services/-gift-cards-received-get';
 import { getGetGiftCardsSentQueryKey } from '@/services/-gift-cards-sent-get';
 
-import { GiftCardRecipientPicker } from './gift-card-recipient-picker';
 import { type GiftRecipientLookup, postGiftCardTransfer } from '../lib/gift-card-transfer-api';
+import { GiftCardRecipientPicker } from './gift-card-recipient-picker';
 
 type GiftCardTransferDialogProps = {
   card: DtoGiftCardResponse | null;
