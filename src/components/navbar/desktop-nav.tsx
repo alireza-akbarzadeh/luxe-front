@@ -16,7 +16,7 @@ import type { DtoNavItemResponse } from '@/services/-nav-menus-get.schemas';
 import { GlowBadge } from '~/src/components/badges/glow-badge';
 
 const triggerClassName = cn(
-  'bg-transparent h-auto px-0 py-0 text-[13px] font-medium xl:text-sm',
+  'bg-transparent h-auto px-0 py-0 text-xs font-medium lg:text-[13px] xl:text-sm',
   'text-muted-foreground hover:text-foreground hover:bg-transparent',
   'focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-foreground'
 );
@@ -30,7 +30,7 @@ export function DesktopNav(props: DesktopNavProps) {
 
   return (
     <NavigationMenu className='relative z-10 w-full max-w-full min-w-0 justify-center'>
-      <NavigationMenuList className='w-full min-w-0 flex-nowrap justify-center gap-3 space-x-0 xl:gap-4 2xl:gap-5'>
+      <NavigationMenuList className='w-full min-w-0 flex-nowrap justify-center gap-2 space-x-0 lg:gap-2.5 xl:gap-3.5 2xl:gap-4'>
         {navMenus?.map((item) =>
           item.type === 'link' ? (
             <NavigationMenuItem key={item.label} className='shrink-0'>

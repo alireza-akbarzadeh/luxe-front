@@ -24,14 +24,11 @@ export type DatePickerProps = ComponentPropsWithRef<typeof Button> & {
 };
 
 function DatePicker({ calendar, className, ...props }: DatePickerProps) {
-  // Determine if we're in controlled mode
   const isControlled = calendar?.selected !== undefined;
-  // Internal state for uncontrolled mode
   const [internalDate, setInternalDate] = useState<Date | undefined>(
     calendar?.defaultSelected ?? new Date()
   );
 
-  // Sync internal state when defaultSelected changes (uncontrolled)
   useEffect(() => {
     if (!isControlled && calendar?.defaultSelected) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -39,17 +36,14 @@ function DatePicker({ calendar, className, ...props }: DatePickerProps) {
     }
   }, [isControlled, calendar?.defaultSelected]);
 
-  // The actual date to display
   const date = isControlled ? calendar.selected : internalDate;
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     if (!selectedDate) return;
 
     if (isControlled) {
-      // Controlled mode: just call onSelect
       calendar.onSelect?.(selectedDate);
     } else {
-      // Uncontrolled mode: update internal state and call onSelect if provided
       setInternalDate(selectedDate);
       calendar?.onSelect?.(selectedDate);
     }
@@ -61,22 +55,34 @@ function DatePicker({ calendar, className, ...props }: DatePickerProps) {
         <Button
           variant='outline'
           className={cn(
-            'w-full justify-start gap-2 text-left font-normal',
+            'border-border/80 bg-background/90 w-full justify-start gap-2 rounded-xl text-left font-normal shadow-sm transition-colors',
+            'hover:border-accent/45 hover:bg-muted/50',
+            date && 'text-foreground',
             !date && 'text-muted-foreground',
             className
           )}
           {...props}
         >
-          <IconCalendar className='size-4' />
+          <IconCalendar
+            className={cn('size-4 shrink-0', date ? 'text-accent' : 'text-muted-foreground')}
+          />
           <span>{date ? format(date, 'PPP') : 'Pick a date'}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0'>
+      <PopoverContent
+        align='start'
+        className='border-border/80 bg-popover dark:border-border/60 w-auto overflow-hidden rounded-2xl border p-0 shadow-xl dark:shadow-black/40'
+      >
+        <div
+          aria-hidden
+          className='via-accent/50 pointer-events-none h-px bg-gradient-to-r from-transparent to-transparent'
+        />
         <Calendar
           mode='single'
           selected={date}
           onSelect={handleDateSelect}
           autoFocus
+          className='p-3'
           {...calendar}
         />
       </PopoverContent>

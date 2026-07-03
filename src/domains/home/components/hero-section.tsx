@@ -52,7 +52,7 @@ export function HeroSection() {
         className='bg-gold/10 pointer-events-none absolute -start-24 bottom-8 hidden h-64 w-64 rounded-full blur-3xl lg:block'
       />
 
-      <div className='relative mx-auto flex w-full max-w-7xl flex-col justify-center px-5 py-12 sm:px-8 sm:py-16 lg:min-h-[calc(100svh-2rem)] lg:py-20'>
+      <div className='app-container relative flex w-full flex-col justify-center py-12 sm:py-16 lg:min-h-[calc(100svh-2rem)] lg:py-20'>
         <div className='grid items-center gap-12 lg:grid-cols-12 lg:gap-16'>
           <div className='text-center lg:col-span-6 lg:text-start'>
             <div className='border-gold/30 bg-card/90 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium shadow-sm sm:text-sm'>

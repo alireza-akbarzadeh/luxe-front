@@ -1399,6 +1399,14 @@
         "analyzeFailed": "No se pudo analizar la imagen. Prueba otra foto o usa búsqueda por texto."
       }
     },
+    "voice": {
+      "startListening": "Buscar por voz",
+      "stopListening": "Detener búsqueda por voz",
+      "listening": "Escuchando… di tu búsqueda",
+      "inputLabel": "Consulta de búsqueda",
+      "permissionDenied": "Se denegó el acceso al micrófono. Permítelo en la configuración del navegador para buscar por voz.",
+      "unsupported": "La búsqueda por voz no es compatible con este navegador. Prueba Chrome o Safari."
+    },
     "error": {
       "loadFailed": "No se pudieron cargar los resultados. Inténtalo de nuevo.",
       "retry": "Reintentar"
@@ -1512,6 +1520,149 @@
     "notFoundTitle": "Look no encontrado",
     "notFoundBody": "Esta escena puede haber sido eliminada o aún no está publicada.",
     "backToList": "Ver todos los looks"
+  },
+  "giftFinder": {
+    "parentBreadcrumb": "Tarjetas regalo",
+    "breadcrumb": "Buscador de regalos",
+    "eyebrow": "Guía de regalos con IA",
+    "title": "Encuentra el regalo perfecto",
+    "subtitle": "Responde unas preguntas rápidas y te sugeriremos ideas del catálogo, adaptadas a quién compras.",
+    "progress": "Paso {current} de {total}",
+    "badge": "Guía de regalos",
+    "steps": {
+      "recipient": {
+        "title": "¿Para quién es el regalo?",
+        "description": "Elige a la persona para personalizar las ideas."
+      },
+      "occasion": {
+        "title": "¿Cuál es la ocasión?",
+        "description": "Ajustamos el tono y estilo al momento."
+      },
+      "budget": {
+        "title": "¿Cuál es tu presupuesto?",
+        "description": "Priorizamos opciones que encajen cómodamente."
+      },
+      "interests": {
+        "title": "Cuéntanos sobre esa persona",
+        "description": "Aficiones, estilo y detalles que ayuden a personalizar.",
+        "styleLabel": "Su estilo (opcional)",
+        "placeholder": "p. ej. le gusta cocinar, novelas de misterio, correr…",
+        "notesPlaceholder": "¿Algo más que debamos saber? (opcional)"
+      },
+      "followUp": {
+        "title": "Unas aclaraciones rápidas",
+        "description": "Respuestas breves nos ayudan a afinar las ideas."
+      }
+    },
+    "actions": {
+      "back": "Atrás",
+      "continue": "Continuar",
+      "findGifts": "Buscar regalos",
+      "finding": "Buscando regalos…"
+    },
+    "options": {
+      "recipients": {
+        "partner": "Pareja",
+        "parent": "Padre / madre",
+        "friend": "Amigo/a",
+        "sibling": "Hermano/a",
+        "coworker": "Compañero de trabajo",
+        "child": "Hijo/a",
+        "other": "Otra persona"
+      },
+      "occasions": {
+        "birthday": "Cumpleaños",
+        "anniversary": "Aniversario",
+        "wedding": "Boda",
+        "holiday": "Festividad",
+        "graduation": "Graduación",
+        "thankYou": "Agradecimiento",
+        "housewarming": "Estrena de casa",
+        "justBecause": "Sin motivo especial",
+        "other": "Otra"
+      },
+      "budgets": {
+        "under50": "Menos de $50",
+        "50to100": "$50 – $100",
+        "100to200": "$100 – $200",
+        "200to500": "$200 – $500",
+        "over500": "Más de $500",
+        "flexible": "Flexible"
+      },
+      "styles": {
+        "minimalist": "Minimalista",
+        "luxury": "Lujo",
+        "sporty": "Deportivo",
+        "tech": "Tecnología",
+        "cozy": "Acogedor",
+        "classic": "Clásico",
+        "eco": "Ecológico"
+      }
+    },
+    "results": {
+      "title": "Ideas de regalo para ti",
+      "messageIdeas": "Ideas para la tarjeta",
+      "picks": "Regalos recomendados",
+      "empty": "Aún no hay coincidencias en el catálogo — prueba otro presupuesto o intereses.",
+      "startOver": "Empezar de nuevo"
+    },
+    "errors": {
+      "unavailable": "El buscador de regalos no está disponible. Prueba la búsqueda o el catálogo."
+    },
+    "giftCardLink": "¿Prefieres una tarjeta regalo? Envía crédito digital"
+  },
+  "giftCardsPage": {
+    "eyebrow": "Tarjetas regalo",
+    "title": "Regala libertad de elección",
+    "description": "Envía una tarjeta regalo digital Luxe por correo. El destinatario la usa al pagar cualquier compra.",
+    "breadcrumbHome": "Inicio",
+    "breadcrumb": "Tarjetas regalo",
+    "tabs": {
+      "purchase": "Comprar",
+      "redeem": "Canjear"
+    },
+    "finderPromo": {
+      "title": "¿No sabes qué regalar?",
+      "description": "Nuestro buscador con IA sugiere ideas del catálogo según destinatario, ocasión y presupuesto.",
+      "cta": "Probar el buscador de regalos"
+    },
+    "purchase": {
+      "intro": "Elige el importe y el destinatario. Pagarás de forma segura en Stripe — no guardamos tu número de tarjeta completo.",
+      "signInTitle": "Inicia sesión para comprar",
+      "signInDescription": "Entra en tu cuenta Luxe para el recibo y el seguimiento de tarjetas enviadas.",
+      "signInCta": "Iniciar sesión",
+      "selectAmount": "Seleccionar importe",
+      "senderName": "Tu nombre",
+      "senderNamePlaceholder": "Alex Morgan",
+      "recipientName": "Nombre del destinatario",
+      "recipientNamePlaceholder": "Jordan Lee",
+      "recipientEmail": "Correo del destinatario",
+      "recipientEmailPlaceholder": "recipient@email.com",
+      "deliveryDate": "Enviar el (opcional)",
+      "message": "Mensaje personal (opcional)",
+      "messagePlaceholder": "¡Disfrútalo!",
+      "stripeNote": "Serás redirigido a Stripe para pagar. La tarjeta se envía al correo del destinatario tras el pago.",
+      "submit": "Continuar para pagar {amount}",
+      "success": "Tarjeta creada — {amount} enviado al destinatario.",
+      "paymentRequired": "No se pudo iniciar el pago. Activa Stripe e inténtalo de nuevo.",
+      "error": "No se pudo iniciar la compra. Inténtalo de nuevo."
+    },
+    "redeem": {
+      "intro": "Introduce el código al pagar en el checkout o gestiona tarjetas en tu cuenta.",
+      "codeLabel": "Código de tarjeta",
+      "codePlaceholder": "LUXE-XXXX-XXXX",
+      "checkCode": "Cómo canjear",
+      "shopNow": "Comprar ahora",
+      "manageCards": "Mis tarjetas",
+      "toastTitle": "Canjear en el checkout",
+      "toastDescription": "Aplica el código {code} en el paso de pago al hacer un pedido."
+    },
+    "stripe": {
+      "confirming": "Confirmando tu pago…",
+      "success": "¡Tarjeta regalo comprada con éxito!",
+      "cancelled": "Pago cancelado — no se ha cobrado nada.",
+      "confirmError": "No pudimos confirmar el pago. Revisa tu cuenta o inténtalo de nuevo."
+    }
   },
   "shoppingAssistant": {
     "title": "Asistente de compras",
@@ -1935,8 +2086,9 @@
       "deliveryDate": "Enviar el (opcional)",
       "message": "Mensaje personal (opcional)",
       "messagePlaceholder": "¡Disfrútalo!",
-      "createSubmit": "Crear tarjeta de {amount}",
+      "createSubmit": "Continuar para pagar {amount}",
       "createSuccess": "Tarjeta regalo creada",
+      "paymentRequired": "No se pudo iniciar el pago. Activa Stripe e inténtalo de nuevo.",
       "createFailed": "No se pudo crear la tarjeta",
       "toRecipient": "Para {name}",
       "createdOn": "Creada {date}",
@@ -1945,7 +2097,24 @@
       "claimCard": "Vincular a la cuenta",
       "claiming": "Vinculando…",
       "claimSuccess": "Tarjeta vinculada a tu cuenta",
-      "claimFailed": "No se pudo vincular la tarjeta"
+      "claimFailed": "No se pudo vincular la tarjeta",
+      "transfer": {
+        "giveToMember": "Regalar a miembro Luxe",
+        "title": "Regalar tarjeta a un miembro",
+        "description": "Busca por correo o teléfono y confirma la transferencia.",
+        "searchLabel": "Buscar destinatario",
+        "searchPlaceholder": "Correo o teléfono…",
+        "searchEmpty": "No se encontraron miembros",
+        "searching": "Buscando…",
+        "continue": "Continuar",
+        "confirmTitle": "Confirmar transferencia",
+        "confirmDescription": "¿Enviar esta tarjeta de {amount} a {name}? Recibirá un correo y una notificación en la app.",
+        "confirm": "Sí, enviar tarjeta",
+        "cancel": "Cancelar",
+        "submitting": "Enviando…",
+        "success": "Tarjeta enviada a {name}",
+        "error": "No se pudo transferir la tarjeta"
+      }
     },
     "addresses": {
       "title": "Direcciones guardadas",

@@ -1,6 +1,7 @@
 'use client';
 
 import { IconRobot, IconSend, IconSparkles, IconUser } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
@@ -13,6 +14,7 @@ import { cn } from '@/lib/utils';
 import type { DtoAiRecommendedProduct } from '@/services/-ai-shopping-assistant-post.schemas';
 
 import { useShoppingAssistant } from '../hooks/use-shopping-assistant';
+import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
 import { ShoppingAssistantRecommendationCard } from './shopping-assistant-recommendation-card';
 
 type ChatRole = 'assistant' | 'user';
@@ -122,6 +124,8 @@ export function ShoppingAssistantSheet({ open, onOpenChange }: ShoppingAssistant
 
 function ShoppingAssistantPanel() {
   const t = useTranslations('shoppingAssistant');
+  const router = useRouter();
+  const closeAssistant = useShoppingAssistantStore((s) => s.close);
   const { sendTurn, isPending, offlineReply } = useShoppingAssistant();
   const messageIdRef = useRef(0);
 
@@ -189,6 +193,15 @@ function ShoppingAssistantPanel() {
     setActiveFollowUps(result.follow_up_questions ?? []);
   };
 
+  const handleQuickPrompt = (promptKey: (typeof QUICK_PROMPT_KEYS)[number], label: string) => {
+    if (promptKey === 'promptGift') {
+      closeAssistant();
+      router.push('/gift-cards/finder');
+      return;
+    }
+    void handleSend(label);
+  };
+
   return (
     <>
       <SheetHeader className='border-border border-b px-4 py-3'>
@@ -227,7 +240,14 @@ function ShoppingAssistantPanel() {
                 variant='outline'
                 size='sm'
                 className='h-auto rounded-full px-3 py-2 text-xs'
-                onClick={() => void handleSend(prompt)}
+                onClick={() => {
+                  const key = QUICK_PROMPT_KEYS.find((k) => t(k) === prompt);
+                  if (key) {
+                    handleQuickPrompt(key, prompt);
+                    return;
+                  }
+                  void handleSend(prompt);
+                }}
                 disabled={isPending}
               >
                 {prompt}

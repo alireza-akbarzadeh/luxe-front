@@ -77,8 +77,8 @@ export function Navbar() {
             : 'bg-transparent'
         )}
       >
-        <nav className='mx-auto max-w-7xl'>
-          <div className='flex h-16 items-center gap-3 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-4 xl:gap-x-6'>
+        <nav className='app-container'>
+          <div className='flex h-16 items-center gap-2 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-3 xl:gap-x-5'>
             <Link
               href='/'
               aria-label='LUXE Home'
@@ -101,7 +101,7 @@ export function Navbar() {
                 </Link>
               </NavbarActionButton>
 
-              <div className='hidden lg:contents'>
+              <div className='hidden xl:contents'>
                 <DeliveryLocationButton />
                 <WishlistButton />
                 <AppsButton />
@@ -112,6 +112,14 @@ export function Navbar() {
                   className='bg-border/70 mx-1 hidden h-5 w-px sm:mx-1.5 md:inline-block'
                   aria-hidden
                 />
+                <UserProfile />
+              </div>
+
+              <div className='hidden lg:contents xl:hidden'>
+                <WishlistButton />
+                <NotificationButton />
+                <CartButton />
+                <span className='bg-border/70 mx-1 hidden h-5 w-px md:inline-block' aria-hidden />
                 <UserProfile />
               </div>
 

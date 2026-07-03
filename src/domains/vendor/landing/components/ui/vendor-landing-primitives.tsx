@@ -294,7 +294,7 @@ export function LandingContainer({
   id?: string;
 }) {
   return (
-    <section id={id} className={cn('mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8', className)}>
+    <section id={id} className={cn('app-container', className)}>
       {children}
     </section>
   );

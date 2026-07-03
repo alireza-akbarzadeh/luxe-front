@@ -243,14 +243,9 @@
   color: transparent;
 }
 
-/** Standard page content width + horizontal padding (use on pages, not site layout). */
+/** Storefront content width — navbar, footer, and page bodies share this shell. */
 @utility app-container {
-  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
-}
-
-/** Full-width navbar shell — minimal edge padding for max nav room. */
-@utility navbar-container {
-  @apply mx-auto w-full px-2 sm:px-3 lg:px-4;
+  @apply mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8;
 }
 
 /* Delivery map picker — custom pin + selection cursor */
@@ -489,4 +484,27 @@ html[dir='rtl'] .brands-marquee-track {
     transparent 80%
   );
   animation: category-ring-spin 4s linear infinite;
+}
+
+@keyframes voice-wave-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.voice-wave-bar {
+  transform-origin: bottom center;
+  animation: voice-wave-pulse 0.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-wave-bar {
+    animation: none;
+  }
 }

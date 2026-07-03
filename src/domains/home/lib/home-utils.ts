@@ -71,4 +71,4 @@ export function formatPrice(value?: number, locale: Locale = 'en'): string {
 export const fullBleedClass = 'relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2';
 
 /** Aligned content width for home sections and other full-width bands. */
-export const sectionContainerClass = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8';
+export const sectionContainerClass = 'app-container';

@@ -5,7 +5,7 @@ export function StoresPageSkeleton() {
   return (
     <main className='pb-20'>
       <section className='border-border relative isolate overflow-hidden border-b'>
-        <div className='mx-auto flex max-w-screen-2xl flex-col items-center px-4 py-20 text-center lg:py-28'>
+        <div className='app-container flex flex-col items-center py-20 text-center lg:py-28'>
           <Skeleton className='mb-4 h-7 w-40 rounded-full' />
           <Skeleton className='mb-3 h-12 w-full max-w-2xl' />
           <Skeleton className='mb-8 h-5 w-full max-w-xl' />
@@ -18,7 +18,7 @@ export function StoresPageSkeleton() {
         </div>
       </section>
 
-      <div className='mx-auto max-w-screen-2xl px-4 lg:px-8'>
+      <div className='app-container'>
         <div className='grid gap-8 py-8 lg:grid-cols-[280px_1fr]'>
           <aside className='hidden space-y-4 lg:block'>
             <Skeleton className='h-6 w-24' />

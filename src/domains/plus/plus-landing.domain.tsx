@@ -20,7 +20,7 @@ import { usePlusBenefitsQuery } from '@/domains/plus/hooks/use-plus-membership';
 
 function PlusLandingSkeleton() {
   return (
-    <Box className='mx-auto max-w-7xl space-y-8 px-4 py-16 sm:px-6'>
+    <Box className='app-container space-y-8 py-16'>
       <Skeleton className='h-12 w-2/3 max-w-lg rounded-xl' />
       <Skeleton className='h-6 w-full max-w-xl rounded-lg' />
       <Skeleton className='h-80 rounded-3xl' />
@@ -40,7 +40,7 @@ function PlusLandingContent() {
 
   if (isError || !benefits) {
     return (
-      <Box className='mx-auto max-w-7xl px-4 py-24 text-center sm:px-6'>
+      <Box className='app-container py-24 text-center'>
         <Text className='text-destructive'>{t('loadError')}</Text>
       </Box>
     );

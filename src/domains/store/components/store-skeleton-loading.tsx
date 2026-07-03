@@ -4,7 +4,7 @@ export function StoreHeaderSkeleton() {
   return (
     <section className='relative pt-20'>
       <Skeleton className='h-48 w-full md:h-64' />
-      <div className='relative mx-auto -mt-16 max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container relative -mt-16'>
         <div className='flex flex-col items-start gap-4 md:flex-row md:items-end md:gap-6'>
           <Skeleton className='h-24 w-24 rounded-2xl md:h-32 md:w-32' />
           <div className='flex-1 space-y-3'>
@@ -41,7 +41,7 @@ export function StoreSkeleton() {
     <>
       <StoreHeaderSkeleton />
       <section className='py-8'>
-        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='app-container'>
           <div className='mb-6 flex justify-between'>
             <Skeleton className='h-10 w-80' />
             <div className='flex gap-3'>

@@ -1,5 +1,3 @@
-// https://date-picker.luca-felix.com/
-
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { differenceInCalendarDays } from 'date-fns';
 import type { ComponentProps, Dispatch, SetStateAction } from 'react';
@@ -78,49 +76,51 @@ function Calendar({
         numberOfMonths={columnsDisplayed}
         showOutsideDays={showOutsideDays}
         className={cn('overflow-visible p-2', className)}
-        style={{ width: `${248.8 * (columnsDisplayed ?? 1)}px` }}
+        style={{ width: `${252 * (columnsDisplayed ?? 1)}px` }}
         classNames={{
-          months: 'flex flex-col relative sm:flex-row',
-          month_caption: 'flex justify-center h-7 mx-10 relative items-center pt-1',
+          months: 'flex flex-col relative sm:flex-row gap-4',
+          month_caption: 'flex justify-center h-8 mx-10 relative items-center',
           weekdays: 'flex flex-row',
-          weekday: 'text-muted-foreground w-8 font-normal text-[0.8rem]',
-          month: 'gap-y-4 overflow-x-hidden w-full',
+          weekday: 'text-muted-foreground w-9 font-medium text-[0.72rem] uppercase tracking-wide',
+          month: 'gap-y-1 overflow-x-hidden w-full',
           caption: 'flex justify-center pt-1 relative items-center',
-          caption_label: 'text-sm font-medium truncate',
+          caption_label: 'text-sm font-semibold font-display truncate',
           button_next: cn(
             buttonVariants({
               variant: 'outline',
-              className: 'absolute right-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+              className:
+                'absolute right-0 h-7 w-7 rounded-lg border-border/70 bg-background/80 p-0 opacity-80 transition-colors hover:border-accent/50 hover:bg-accent/10 hover:opacity-100'
             })
           ),
           button_previous: cn(
             buttonVariants({
               variant: 'outline',
-              className: 'absolute left-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+              className:
+                'absolute left-0 h-7 w-7 rounded-lg border-border/70 bg-background/80 p-0 opacity-80 transition-colors hover:border-accent/50 hover:bg-accent/10 hover:opacity-100'
             })
           ),
-          // chevron: buttonVariants({
-          //   variant: 'outline',
-          //   className: 'absolute left-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
-          // }),
           nav: 'flex items-start',
-          month_grid: 'mt-2 mb-0.5 mx-auto',
-          week: 'flex w-full mt-2',
-          day: 'p-0 size-8 text-sm flex-1 flex items-center justify-center has-[button]:hover:!bg-accent rounded-md has-[button]:hover:aria-selected:!bg-primary has-[button]:hover:text-accent-foreground has-[button]:hover:aria-selected:text-primary-foreground',
+          month_grid: 'mt-2 mb-0.5 mx-auto border-collapse',
+          week: 'flex w-full mt-1',
+          day: 'p-0.5 size-9 text-sm flex-1 flex items-center justify-center',
           day_button: cn(
-            buttonVariants({ variant: 'ghost' }),
-            'size-8 select-none p-0 font-normal hover:bg-transparent hover:text-inherit focus-visible:ring-offset-0 aria-selected:opacity-100'
+            'relative size-9 select-none rounded-full p-0 text-sm font-normal text-foreground',
+            'transition-all duration-150',
+            'not-aria-selected:hover:bg-accent/15 not-aria-selected:hover:text-foreground',
+            'focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-1 focus-visible:ring-offset-background',
+            'aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:font-semibold aria-selected:shadow-sm',
+            'data-[today=true]:font-semibold data-[today=true]:ring-1 data-[today=true]:ring-accent data-[today=true]:ring-inset',
+            'data-[today=true]:aria-selected:ring-0'
           ),
-          range_start: 'day-range-start rounded-s-md',
-          range_end: 'day-range-end rounded-e-md',
-          selected:
-            'bg-primary text-primary-foreground hover:!bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
-          today: 'bg-accent text-accent-foreground',
+          range_start: 'day-range-start rounded-s-full',
+          range_end: 'day-range-end rounded-e-full',
+          selected: '',
+          today: '',
           outside:
-            'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
-          disabled: 'text-muted-foreground opacity-50',
+            'day-outside text-muted-foreground/60 aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:opacity-100',
+          disabled: 'text-muted-foreground/40 line-through not-aria-selected:hover:bg-transparent',
           range_middle:
-            'aria-selected:bg-accent hover:aria-selected:!bg-accent rounded-none aria-selected:text-accent-foreground hover:aria-selected:text-accent-foreground',
+            'aria-selected:bg-accent/20 aria-selected:hover:bg-accent/25 rounded-none aria-selected:text-foreground',
           hidden: 'invisible',
           ...classNames
         }}
@@ -211,7 +211,7 @@ function Nav({ className }: ComponentProps<CustomComponents['Nav']>) {
     <nav className={cn('flex items-center', className)}>
       <Button
         variant='outline'
-        className='absolute left-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
+        className='border-border/70 bg-background/80 hover:border-accent/50 hover:bg-accent/10 absolute left-0 size-7 rounded-lg p-0 opacity-80 transition-colors hover:opacity-100'
         type='button'
         tabIndex={isPreviousDisabled ? undefined : -1}
         disabled={isPreviousDisabled}
@@ -227,7 +227,7 @@ function Nav({ className }: ComponentProps<CustomComponents['Nav']>) {
 
       <Button
         variant='outline'
-        className='absolute right-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100'
+        className='border-border/70 bg-background/80 hover:border-accent/50 hover:bg-accent/10 absolute right-0 size-7 rounded-lg p-0 opacity-80 transition-colors hover:opacity-100'
         type='button'
         tabIndex={isNextDisabled ? undefined : -1}
         disabled={isNextDisabled}
@@ -252,7 +252,7 @@ function CaptionLabel({ children }: ComponentProps<CustomComponents['CaptionLabe
       size='sm'
       variant='ghost'
       onClick={() => setNavView((prev) => (prev === 'days' ? 'years' : 'days'))}
-      className='h-7 w-full truncate text-sm font-medium select-none focus-visible:ring-offset-0'
+      className='hover:bg-accent/10 hover:text-accent-foreground focus-visible:ring-accent/50 h-7 w-full truncate text-sm font-semibold select-none focus-visible:ring-2 focus-visible:ring-offset-0'
     >
       {navView === 'days' ? children : `${displayYears.from} - ${displayYears.to}`}
     </Button>
@@ -287,12 +287,13 @@ function MonthGrid({
           differenceInCalendarDays(new Date(year, 0, 0), dayPickerProps.endMonth) > 0;
 
         const isDisabled = isBefore || isAfter;
+        const isCurrentYear = year === new Date().getFullYear();
         return (
           <Button
             key={year}
             className={cn(
-              'text-foreground h-7 w-full text-sm font-normal',
-              year === new Date().getFullYear() && 'bg-accent text-accent-foreground font-medium'
+              'text-foreground hover:bg-accent/15 h-7 w-full rounded-lg text-sm font-normal',
+              isCurrentYear && 'ring-accent/70 bg-accent/10 font-semibold ring-1 ring-inset'
             )}
             variant='ghost'
             onClick={() => {

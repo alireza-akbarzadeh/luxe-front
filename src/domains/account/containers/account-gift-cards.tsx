@@ -8,6 +8,7 @@ import {
   IconSend
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { startOfToday } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -25,6 +26,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text, Typography } from '@/components/ui/typography';
 import { GIFT_CARD_AMOUNTS, giftCardPurchaseSchema } from '@/domains/gift-cards/gift-cards.schema';
+import { GiftCardTransferDialog } from '@/domains/gift-cards/components/gift-card-transfer-dialog';
+import {
+  formatGiftCardDeliveryDate,
+  redirectToGiftCardCheckout
+} from '@/domains/gift-cards/lib/gift-card-checkout';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import { usePostGiftCardsCodeClaim } from '@/services/-gift-cards-{code}-claim-post';
@@ -34,7 +40,7 @@ import {
   getGetGiftCardsReceivedQueryKey,
   useGetGiftCardsReceived
 } from '@/services/-gift-cards-received-get';
-import { getGetGiftCardsSentQueryKey, useGetGiftCardsSent } from '@/services/-gift-cards-sent-get';
+import { useGetGiftCardsSent } from '@/services/-gift-cards-sent-get';
 
 import { type PaginatedGiftCardsData, readPaginatedData } from '../lib/account-list-data';
 
@@ -54,6 +60,7 @@ export function AccountGiftCards() {
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number>(100);
   const [claimingCode, setClaimingCode] = useState<string | null>(null);
+  const [transferCard, setTransferCard] = useState<DtoGiftCardResponse | null>(null);
   const queryClient = useQueryClient();
   const t = useTranslations('account.giftCards');
   const tCommon = useTranslations('account.common');
@@ -96,23 +103,22 @@ export function AccountGiftCards() {
     validators: zodFormValidators(giftCardPurchaseSchema),
     onSubmit: async ({ value }) => {
       try {
-        await createGiftCard({
+        const result = await createGiftCard({
           data: {
             amount: value.amount,
             recipient_email: value.recipientEmail,
             recipient_name: value.recipientName,
             sender_name: value.senderName,
             message: value.message || undefined,
-            delivery_date: value.deliveryDate || undefined
+            delivery_date: formatGiftCardDeliveryDate(value.deliveryDate)
           }
         });
-        await queryClient.invalidateQueries({ queryKey: getGetGiftCardsSentQueryKey() });
-        toast.success(t('createSuccess'));
-        setCreateOpen(false);
-        createForm.reset();
-        setSelectedAmount(100);
-        setSection('sent');
-        setSentPage(0);
+
+        if (redirectToGiftCardCheckout(result.data)) {
+          return;
+        }
+
+        toast.error(t('paymentRequired'));
       } catch (error) {
         toast.error(
           (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
@@ -186,6 +192,7 @@ export function AccountGiftCards() {
             onEmptyAction={() => setCreateOpen(true)}
             onRetry={() => void sentQuery.refetch()}
             variant='sent'
+            onTransfer={(card) => setTransferCard(card)}
             t={t}
             tCommon={tCommon}
           />
@@ -202,6 +209,7 @@ export function AccountGiftCards() {
             variant='received'
             claimingCode={claimingCode}
             onClaim={handleClaim}
+            onTransfer={(card) => setTransferCard(card)}
             t={t}
             tCommon={tCommon}
           />
@@ -305,7 +313,12 @@ export function AccountGiftCards() {
             <div className='grid gap-4 sm:grid-cols-2'>
               <createForm.AppField
                 name='deliveryDate'
-                children={(field) => <field.TextField label={t('deliveryDate')} type='date' />}
+                children={(field) => (
+                  <field.DatePicker
+                    label={t('deliveryDate')}
+                    calendar={{ disabled: { before: startOfToday() } }}
+                  />
+                )}
               />
               <createForm.AppField
                 name='message'
@@ -326,6 +339,14 @@ export function AccountGiftCards() {
           </createForm.Root>
         </DialogContent>
       </Dialog>
+
+      <GiftCardTransferDialog
+        card={transferCard}
+        open={transferCard != null}
+        onOpenChange={(open) => {
+          if (!open) setTransferCard(null);
+        }}
+      />
     </div>
   );
 }
@@ -342,6 +363,7 @@ function GiftCardList({
   variant,
   claimingCode,
   onClaim,
+  onTransfer,
   t,
   tCommon
 }: {
@@ -356,6 +378,7 @@ function GiftCardList({
   variant: 'sent' | 'received';
   claimingCode?: string | null;
   onClaim?: (card: DtoGiftCardResponse) => void;
+  onTransfer?: (card: DtoGiftCardResponse) => void;
   t: ReturnType<typeof useTranslations<'account.giftCards'>>;
   tCommon: ReturnType<typeof useTranslations<'account.common'>>;
 }) {
@@ -465,6 +488,12 @@ function GiftCardList({
               onClick={() => void onClaim(card)}
             >
               {claimingCode === card.code ? t('claiming') : t('claimCard')}
+            </Button>
+          ) : null}
+
+          {card.status === 'active' && (card.balance ?? 0) > 0 && card.code && onTransfer ? (
+            <Button variant='secondary' size='sm' className='mt-4' onClick={() => onTransfer(card)}>
+              {t('transfer.giveToMember')}
             </Button>
           ) : null}
         </article>

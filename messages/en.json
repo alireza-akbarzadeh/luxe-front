@@ -1400,6 +1400,14 @@
         "analyzeFailed": "Could not analyze this image. Try another photo or use text search."
       }
     },
+    "voice": {
+      "startListening": "Search by voice",
+      "stopListening": "Stop voice search",
+      "listening": "Listening… speak your search",
+      "inputLabel": "Search query",
+      "permissionDenied": "Microphone access was denied. Allow it in browser settings to search by voice.",
+      "unsupported": "Voice search is not supported in this browser. Try Chrome or Safari."
+    },
     "error": {
       "loadFailed": "Failed to load search results. Please try again.",
       "retry": "Retry"
@@ -1513,6 +1521,149 @@
     "notFoundTitle": "Look not found",
     "notFoundBody": "This scene may have been removed or is not published yet.",
     "backToList": "Browse all looks"
+  },
+  "giftFinder": {
+    "parentBreadcrumb": "Gift cards",
+    "breadcrumb": "Gift finder",
+    "eyebrow": "AI gift guide",
+    "title": "Find the perfect gift",
+    "subtitle": "Answer a few quick questions and we'll suggest thoughtful picks from our catalog — tailored to who you're shopping for.",
+    "progress": "Step {current} of {total}",
+    "badge": "Gift guide",
+    "steps": {
+      "recipient": {
+        "title": "Who is the gift for?",
+        "description": "Choose who you're shopping for so we can tailor ideas."
+      },
+      "occasion": {
+        "title": "What's the occasion?",
+        "description": "We'll match the tone and style to the moment."
+      },
+      "budget": {
+        "title": "What's your budget?",
+        "description": "We'll prioritize picks that fit comfortably."
+      },
+      "interests": {
+        "title": "Tell us about them",
+        "description": "Hobbies, style, and anything that helps us personalize recommendations.",
+        "styleLabel": "Their style (optional)",
+        "placeholder": "e.g. loves cooking, reads mystery novels, into running…",
+        "notesPlaceholder": "Anything else we should know? (optional)"
+      },
+      "followUp": {
+        "title": "A few quick clarifications",
+        "description": "Short answers help us narrow down better gift ideas."
+      }
+    },
+    "actions": {
+      "back": "Back",
+      "continue": "Continue",
+      "findGifts": "Find gifts",
+      "finding": "Finding gifts…"
+    },
+    "options": {
+      "recipients": {
+        "partner": "Partner",
+        "parent": "Parent",
+        "friend": "Friend",
+        "sibling": "Sibling",
+        "coworker": "Coworker",
+        "child": "Child",
+        "other": "Someone else"
+      },
+      "occasions": {
+        "birthday": "Birthday",
+        "anniversary": "Anniversary",
+        "wedding": "Wedding",
+        "holiday": "Holiday",
+        "graduation": "Graduation",
+        "thankYou": "Thank you",
+        "housewarming": "Housewarming",
+        "justBecause": "Just because",
+        "other": "Other"
+      },
+      "budgets": {
+        "under50": "Under $50",
+        "50to100": "$50 – $100",
+        "100to200": "$100 – $200",
+        "200to500": "$200 – $500",
+        "over500": "$500+",
+        "flexible": "Flexible"
+      },
+      "styles": {
+        "minimalist": "Minimalist",
+        "luxury": "Luxury",
+        "sporty": "Sporty",
+        "tech": "Tech",
+        "cozy": "Cozy",
+        "classic": "Classic",
+        "eco": "Eco-friendly"
+      }
+    },
+    "results": {
+      "title": "Gift ideas for you",
+      "messageIdeas": "Card message ideas",
+      "picks": "Recommended gifts",
+      "empty": "We couldn't find catalog matches yet — try adjusting budget or interests.",
+      "startOver": "Start over"
+    },
+    "errors": {
+      "unavailable": "Our gift finder is temporarily unavailable. Try search or browse the catalog."
+    },
+    "giftCardLink": "Prefer a gift card? Send digital credit instead"
+  },
+  "giftCardsPage": {
+    "eyebrow": "Gift cards",
+    "title": "Give the gift of choice",
+    "description": "Send a digital Luxe gift card by email. Recipients redeem at checkout on any marketplace purchase.",
+    "breadcrumbHome": "Home",
+    "breadcrumb": "Gift cards",
+    "tabs": {
+      "purchase": "Purchase",
+      "redeem": "Redeem"
+    },
+    "finderPromo": {
+      "title": "Not sure what to buy?",
+      "description": "Our AI gift finder suggests thoughtful picks from our catalog — by recipient, occasion, and budget.",
+      "cta": "Try the gift finder"
+    },
+    "purchase": {
+      "intro": "Choose an amount and who it's for. You'll complete payment securely on Stripe — we never store your full card number.",
+      "signInTitle": "Sign in to purchase",
+      "signInDescription": "Create or sign in to your Luxe account so we can send your receipt and track sent gift cards.",
+      "signInCta": "Sign in to continue",
+      "selectAmount": "Select amount",
+      "senderName": "Your name",
+      "senderNamePlaceholder": "Alex Morgan",
+      "recipientName": "Recipient name",
+      "recipientNamePlaceholder": "Jordan Lee",
+      "recipientEmail": "Recipient email",
+      "recipientEmailPlaceholder": "recipient@email.com",
+      "deliveryDate": "Send on (optional)",
+      "message": "Personal message (optional)",
+      "messagePlaceholder": "Enjoy!",
+      "stripeNote": "You'll be redirected to Stripe to pay. The gift card is delivered to the recipient email after payment succeeds.",
+      "submit": "Continue to pay {amount}",
+      "success": "Gift card created — {amount} sent to your recipient.",
+      "paymentRequired": "Payment checkout could not be started. Ensure Stripe is enabled and try again.",
+      "error": "Could not start gift card purchase. Please try again."
+    },
+    "redeem": {
+      "intro": "Enter your gift card code at checkout in the payment step, or manage cards in your account.",
+      "codeLabel": "Gift card code",
+      "codePlaceholder": "LUXE-XXXX-XXXX",
+      "checkCode": "How to redeem",
+      "shopNow": "Shop now",
+      "manageCards": "My gift cards",
+      "toastTitle": "Redeem at checkout",
+      "toastDescription": "Apply code {code} on the payment step when you place an order."
+    },
+    "stripe": {
+      "confirming": "Confirming your payment…",
+      "success": "Gift card purchased successfully!",
+      "cancelled": "Payment cancelled — your gift card was not charged.",
+      "confirmError": "We couldn't confirm payment yet. Check your account or try again."
+    }
   },
   "shoppingAssistant": {
     "title": "Shopping assistant",
@@ -1936,8 +2087,9 @@
       "deliveryDate": "Send on (optional)",
       "message": "Personal message (optional)",
       "messagePlaceholder": "Enjoy!",
-      "createSubmit": "Create {amount} gift card",
+      "createSubmit": "Continue to pay {amount}",
       "createSuccess": "Gift card created",
+      "paymentRequired": "Payment checkout could not be started. Ensure Stripe is enabled and try again.",
       "createFailed": "Failed to create gift card",
       "toRecipient": "To {name}",
       "createdOn": "Created {date}",
@@ -1946,7 +2098,24 @@
       "claimCard": "Claim to account",
       "claiming": "Claiming…",
       "claimSuccess": "Gift card linked to your account",
-      "claimFailed": "Failed to claim gift card"
+      "claimFailed": "Failed to claim gift card",
+      "transfer": {
+        "giveToMember": "Give to Luxe member",
+        "title": "Give gift card to a member",
+        "description": "Search by email or phone, then confirm to transfer this card.",
+        "searchLabel": "Find recipient",
+        "searchPlaceholder": "Email or phone number…",
+        "searchEmpty": "No members found",
+        "searching": "Searching…",
+        "continue": "Continue",
+        "confirmTitle": "Confirm transfer",
+        "confirmDescription": "Send this {amount} gift card to {name}? They will receive an email and in-app notification.",
+        "confirm": "Yes, send gift card",
+        "cancel": "Cancel",
+        "submitting": "Sending…",
+        "success": "Gift card sent to {name}",
+        "error": "Could not transfer gift card"
+      }
     },
     "addresses": {
       "title": "Saved Addresses",

@@ -122,7 +122,7 @@ export function SectionCarousel<T>({
 
   return (
     <section id={sectionId} className={cn('py-16 sm:py-20 lg:py-28', className)}>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container'>
         {/* ── Header ────────────────────────────────────────────────────── */}
         <div className='mb-8 flex items-end justify-between gap-4 md:mb-10'>
           <div className='min-w-0'>

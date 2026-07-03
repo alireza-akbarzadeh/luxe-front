@@ -54,7 +54,7 @@ export function AccountDomain() {
 
   return (
     <div className='pt-20 pb-12 sm:pt-24 sm:pb-16'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container'>
         <Suspense fallback={null}>
           <PlusStripeReturnHandler />
           <WalletStripeReturnHandler />

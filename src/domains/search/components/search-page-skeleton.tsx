@@ -9,7 +9,7 @@ export function SearchPageSkeleton({ productCount = 12 }: SearchPageSkeletonProp
   return (
     <>
       <section className='from-secondary/50 to-background relative border-b bg-linear-to-b pt-20'>
-        <div className='mx-auto max-w-5xl px-4 py-12 md:py-16'>
+        <div className='app-container max-w-5xl py-12 md:py-16'>
           <div className='mb-8 space-y-3 text-center'>
             <Skeleton className='mx-auto h-10 w-full max-w-md md:h-12' />
             <Skeleton className='mx-auto h-5 w-full max-w-sm' />

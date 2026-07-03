@@ -54,7 +54,7 @@ export function StoresDomain() {
   return (
     <div className='pb-20'>
       <StoreHeroSection />
-      <div className='mx-auto max-w-screen-2xl px-4 lg:px-8'>
+      <div className='app-container'>
         <div className='grid gap-8 py-8 lg:grid-cols-[280px_1fr]'>
           <FilterSidebar />
           <div className='min-w-0 space-y-8'>

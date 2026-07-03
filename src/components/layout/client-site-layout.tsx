@@ -34,6 +34,11 @@ export function ClientSiteLayout({ children }: PropsWithChildren) {
   return (
     <>
       <SiteRealtimeProvider>
+        {/*
+          Page bodies use `app-container` (see globals.css) for the same max-width
+          and horizontal padding as the navbar and footer. Full-bleed sections keep
+          edge-to-edge backgrounds and nest `app-container` for inner content.
+        */}
         <main className='bg-background flex min-h-screen flex-col pt-16 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pt-20 lg:pb-0'>
           {children}
         </main>

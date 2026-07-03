@@ -46,7 +46,7 @@ export function VendorLandingNav({ hasVendorStore }: VendorLandingNavProps) {
     >
       <nav
         aria-label={t('landingAria')}
-        className='mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:h-[4.5rem] lg:px-8'
+        className='app-container flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]'
       >
         <Link href='/vendor' className='flex items-center gap-2'>
           <span className='text-xl font-bold tracking-tight'>{t('brand')}</span>

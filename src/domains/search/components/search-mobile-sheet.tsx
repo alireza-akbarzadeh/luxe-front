@@ -1,6 +1,6 @@
 'use client';
 
-import { IconCamera, IconLoader2, IconSearch, IconX } from '@tabler/icons-react';
+import { IconCamera, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -12,10 +12,14 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
+import { Typography } from '@/components/ui/typography';
 import { useSearchHeroController } from '@/domains/search/hooks/useSearchHeroController';
 import { useSearchStore } from '@/domains/search/search.store';
 
+import { useSearchVoiceInput } from '../hooks/use-search-voice-input';
+import { SearchInputLeadingIcon } from './search-input-leading-icon';
 import { SearchSuggestionsPanel } from './search-suggestions-panel';
+import { SearchVoiceMicButton } from './search-voice-mic-button';
 
 const sheetCloseButtonClass = '[&>button.absolute]:hidden';
 
@@ -35,7 +39,10 @@ function SearchMobileSheetContent() {
   const t = useTranslations('search');
   const closeSearchSheet = useSearchStore((state) => state.closeSearchSheet);
   const openVisualSearch = useSearchStore((state) => state.openVisualSearch);
+  const voiceOnOpen = useSearchStore((state) => state.voiceOnOpen);
+  const clearVoiceOnOpen = useSearchStore((state) => state.clearVoiceOnOpen);
   const tVisual = useTranslations('search.visual');
+  const tVoice = useTranslations('search.voice');
   const {
     isSearching,
     handleSearch,
@@ -52,6 +59,12 @@ function SearchMobileSheetContent() {
     focusedSuggestion,
     trendingSearches
   } = useSearchHeroController({ autoFocus: true, closeOnNavigate: true });
+
+  const voice = useSearchVoiceInput(inputValue, setInputValue, {
+    autoStart: voiceOnOpen,
+    onAutoStartConsumed: clearVoiceOnOpen
+  });
+  const isLoading = isSearching || suggestionsLoading;
 
   return (
     <SheetContent
@@ -83,11 +96,7 @@ function SearchMobileSheetContent() {
       <div className='border-border shrink-0 border-b px-6 py-4'>
         <div className='relative'>
           <div className='absolute start-3 top-1/2 flex -translate-y-1/2 items-center'>
-            {isSearching || suggestionsLoading ? (
-              <IconLoader2 className='text-muted-foreground h-5 w-5 animate-spin' />
-            ) : (
-              <IconSearch className='text-muted-foreground h-5 w-5' />
-            )}
+            <SearchInputLeadingIcon isLoading={isLoading} isListening={voice.isListening} />
           </div>
           <Input
             ref={inputRef}
@@ -104,9 +113,16 @@ function SearchMobileSheetContent() {
               setFocusedSuggestion(-1);
             }}
             onKeyDown={handleKeyDown}
-            className='focus:border-primary bg-background h-12 rounded-full ps-11 pe-28'
+            className='focus:border-primary bg-background h-12 rounded-full ps-11 pe-32'
+            aria-label={tVoice('inputLabel')}
           />
           <div className='absolute end-2 top-1/2 flex -translate-y-1/2 items-center gap-1'>
+            <SearchVoiceMicButton
+              isSupported={voice.isSupported}
+              isListening={voice.isListening}
+              permissionDenied={voice.permissionDenied}
+              onToggle={voice.toggleVoiceSearch}
+            />
             <Button
               type='button'
               variant='ghost'
@@ -145,6 +161,11 @@ function SearchMobileSheetContent() {
             </Button>
           </div>
         </div>
+        {voice.isListening ? (
+          <Typography.Muted className='text-accent mt-2 text-xs' role='status' aria-live='polite'>
+            {tVoice('listening')}
+          </Typography.Muted>
+        ) : null}
       </div>
 
       <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-2 pb-[max(1rem,env(safe-area-inset-bottom))]'>

@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export function AccountPageSkeleton() {
   return (
     <div className='pt-24 pb-16'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container'>
         <div className='mb-8 space-y-2'>
           <Skeleton className='h-9 w-48' />
           <Skeleton className='h-5 w-full max-w-md' />

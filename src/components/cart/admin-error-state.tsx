@@ -87,7 +87,7 @@ export function AdminErrorState({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className='mx-auto w-full max-w-5xl px-4 py-8 md:py-12'
+      className='app-container max-w-5xl py-8 md:py-12'
     >
       <motion.div
         variants={gridVariants}

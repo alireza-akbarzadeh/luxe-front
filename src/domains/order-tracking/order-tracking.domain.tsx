@@ -69,7 +69,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
 
   return (
     <Flex direction='column' className='pt-20 pb-36 sm:pt-24 lg:pb-16'>
-      <Flex direction='column' spacing={0} className='mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8'>
+      <Flex direction='column' spacing={0} className='app-container max-w-5xl'>
         <OrderTrackingStatusHero
           orderNumber={order.order_number ?? '—'}
           status={currentStatus}
@@ -95,7 +95,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
           currency={order.currency || ''}
         />
 
-        <Grid gap={8} className='mb-10 grid-cols-1 lg:grid-cols-3 lg:mb-12'>
+        <Grid gap={8} className='mb-10 grid-cols-1 lg:mb-12 lg:grid-cols-3'>
           <GridItem className='lg:col-span-2'>
             <OrderItemSummary orderItems={orderItems} />
           </GridItem>

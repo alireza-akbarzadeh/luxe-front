@@ -43,7 +43,7 @@ export function VendorHeroSection({ hasVendorStore }: VendorHeroSectionProps) {
         className='bg-gold/8 pointer-events-none absolute bottom-0 -left-16 h-64 w-64 rounded-full blur-3xl'
       />
 
-      <div className='relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8'>
+      <div className='app-container relative grid items-center gap-12 lg:grid-cols-2 lg:gap-16'>
         <FadeInView>
           <div className='border-border/60 bg-card/50 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium tracking-wide uppercase backdrop-blur'>
             <IconSparkles className='text-gold size-3.5' aria-hidden />

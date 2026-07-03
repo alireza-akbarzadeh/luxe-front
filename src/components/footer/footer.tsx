@@ -54,7 +54,7 @@ export function Footer() {
         aria-hidden
         className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent'
       />
-      <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container'>
         <div className='-mt-16'>
           <Newsletter />
         </div>

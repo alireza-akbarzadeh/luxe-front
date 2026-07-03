@@ -37,7 +37,7 @@ export async function BrandsSection() {
         className={`${fullBleedClass} border-border/50 bg-muted/30 border-y py-8 sm:py-10`}
         aria-label={tCommon('partnerBrandsAria')}
       >
-        <p className='text-foreground/90 mx-auto mb-6 max-w-7xl px-4 text-center text-xs font-medium tracking-[0.22em] uppercase sm:px-6 lg:px-8'>
+        <p className='text-foreground/90 app-container mb-6 text-center text-xs font-medium tracking-[0.22em] uppercase'>
           {t('title')}
         </p>
         <BrandsMarqueeTrack items={toMarqueeItems(brands)} />

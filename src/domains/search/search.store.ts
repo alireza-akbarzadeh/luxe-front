@@ -21,6 +21,8 @@ interface SearchStoreState {
   visualInterpretation: string | null;
   visualImagePreview: string | null;
   isVisualSearchOpen: boolean;
+  /** Mobile search sheet: auto-start mic when opened from voice button. */
+  voiceOnOpen: boolean;
 }
 
 interface SearchStoreActions {
@@ -42,6 +44,8 @@ interface SearchStoreActions {
   clearVisualContext: () => void;
   setVisualSearchOpen: (open: boolean) => void;
   openVisualSearch: () => void;
+  openSearchSheetWithVoice: () => void;
+  clearVoiceOnOpen: () => void;
   reset: () => void;
 }
 
@@ -60,10 +64,17 @@ export const useSearchStore = create<SearchStore>()(
       visualInterpretation: null,
       visualImagePreview: null,
       isVisualSearchOpen: false,
+      voiceOnOpen: false,
 
-      setSearchSheetOpen: (open) => set({ isSearchSheetOpen: open }),
-      openSearchSheet: () => set({ isSearchSheetOpen: true }),
-      closeSearchSheet: () => set({ isSearchSheetOpen: false }),
+      setSearchSheetOpen: (open) =>
+        set((state) => ({
+          isSearchSheetOpen: open,
+          voiceOnOpen: open ? state.voiceOnOpen : false
+        })),
+      openSearchSheet: () => set({ isSearchSheetOpen: true, voiceOnOpen: false }),
+      closeSearchSheet: () => set({ isSearchSheetOpen: false, voiceOnOpen: false }),
+      openSearchSheetWithVoice: () => set({ isSearchSheetOpen: true, voiceOnOpen: true }),
+      clearVoiceOnOpen: () => set({ voiceOnOpen: false }),
       setFilterSheetOpen: (open) => set({ isFilterSheetOpen: open }),
       openFilterSheet: () => set({ isFilterSheetOpen: true }),
       closeFilterSheet: () => set({ isFilterSheetOpen: false }),
@@ -138,7 +149,8 @@ export const useSearchStore = create<SearchStore>()(
           naturalQuery: null,
           visualInterpretation: null,
           visualImagePreview: null,
-          isVisualSearchOpen: false
+          isVisualSearchOpen: false,
+          voiceOnOpen: false
         })
     }),
     {

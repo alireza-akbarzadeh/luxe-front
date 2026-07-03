@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export function CartPageSkeleton() {
   return (
     <main className='pt-24 pb-16'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='app-container'>
         <Skeleton className='mb-8 h-4 w-48' />
         <Skeleton className='mb-8 h-10 w-64' />
 

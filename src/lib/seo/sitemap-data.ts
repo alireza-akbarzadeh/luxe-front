@@ -26,6 +26,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: absoluteUrl('/legal/cookies'), changeFrequency: 'yearly', priority: 0.3 },
   { url: absoluteUrl('/legal/accessibility'), changeFrequency: 'yearly', priority: 0.3 },
   { url: absoluteUrl('/gift-cards'), changeFrequency: 'monthly', priority: 0.5 },
+  { url: absoluteUrl('/gift-cards/finder'), changeFrequency: 'monthly', priority: 0.5 },
   { url: absoluteUrl('/apps'), changeFrequency: 'monthly', priority: 0.4 }
 ];
 
