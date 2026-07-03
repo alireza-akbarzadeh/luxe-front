@@ -2,29 +2,16 @@
 
 import { IconBrandAndroid, IconBrandApple, IconBrowser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import { useSyncExternalStore } from 'react';
 
 import { Grid } from '@/components/ui/grid';
-import { getPlatformInfo } from '@/lib/pwa/detect-platform';
+import { usePlatformInfo } from '@/lib/pwa/use-platform-info';
 
 import { PlatformCard } from './platform-card';
 import { PwaInstallCard } from './pwa-install-button';
 
-const emptyPlatform = { isIos: false, isAndroid: false, isSafari: false };
-
-function subscribePlatform() {
-  return () => {};
-}
-
-function getClientPlatform() {
-  if (typeof navigator === 'undefined') return emptyPlatform;
-  return getPlatformInfo(navigator.userAgent);
-}
-
 export function PlatformCardsGrid() {
   const t = useTranslations('platforms.cards');
-  const platform = useSyncExternalStore(subscribePlatform, getClientPlatform, () => emptyPlatform);
-  const { isIos, isAndroid } = platform;
+  const { isIos, isAndroid } = usePlatformInfo();
 
   return (
     <Grid className='grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4'>
@@ -58,7 +45,7 @@ export function PlatformCardsGrid() {
         disabled
       />
 
-      <PwaInstallCard recommended={isIos || isAndroid} />
+      <PwaInstallCard />
     </Grid>
   );
 }

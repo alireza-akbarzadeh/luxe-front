@@ -4,21 +4,20 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { usePlatformInfo } from '@/lib/pwa/use-platform-info';
 import { usePwaInstall } from '@/lib/pwa/use-pwa-install';
 
 import { IosInstallGuide } from './ios-install-guide';
 import { PlatformCard } from './platform-card';
 
-export function PwaInstallCard({ recommended }: { recommended: boolean }) {
+export function PwaInstallCard() {
   const t = useTranslations('platforms.cards.pwa');
-  const {
-    canInstall,
-    isInstalled,
-    needsManualInstall,
-    promptInstall,
-    installError
-  } = usePwaInstall();
+  const { isIos, isAndroid } = usePlatformInfo();
+  const { canInstall, isInstalled, needsManualInstall, promptInstall, installError } =
+    usePwaInstall();
   const [iosGuideOpen, setIosGuideOpen] = useState(false);
+
+  const recommended = isIos || isAndroid || canInstall || needsManualInstall;
 
   const onInstall = async () => {
     if (needsManualInstall) {
@@ -57,7 +56,9 @@ export function PwaInstallCard({ recommended }: { recommended: boolean }) {
         actionLabel={isInstalled ? t('openWeb') : t('install')}
         href={isInstalled ? '/shop' : undefined}
         onAction={isInstalled ? undefined : () => void onInstall()}
-        helperText={installError ?? (canInstall || needsManualInstall ? undefined : t('unsupported'))}
+        helperText={
+          installError ?? (canInstall || needsManualInstall ? undefined : t('unsupported'))
+        }
       />
       <IosInstallGuide
         open={iosGuideOpen}
