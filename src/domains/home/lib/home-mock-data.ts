@@ -41,7 +41,7 @@ export const HERO_TRUST_AVATARS = [
 
 /** Mobile hero editorial spotlight — luxury boutique editorial (static, LCP-safe below fold). */
 export const HERO_EDITORIAL_SPOTLIGHT_IMAGE =
-  'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=1200&h=900&fit=crop';
+  'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=900&fit=crop';
 
 export const TRUST_ITEMS = [
   { key: 'freeShipping', icon: 'truck' },
@@ -57,8 +57,8 @@ export const CATEGORY_IMAGES = {
   electronics: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=900&h=1100&fit=crop',
   home: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&h=1100&fit=crop',
   lifestyle: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&h=1100&fit=crop',
-  fashion: 'https://images.unsplash.com/photo-1483985988355-763728e6155d?w=900&h=1100&fit=crop',
-  default: 'https://images.unsplash.com/photo-1441984904996-e0b495a6de39?w=900&h=1100&fit=crop'
+  fashion: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&h=1100&fit=crop',
+  default: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&h=1100&fit=crop'
 } as const;
 
 export const FALLBACK_CATEGORY_IMAGES = [

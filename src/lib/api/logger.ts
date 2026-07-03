@@ -4,7 +4,7 @@ type Method = 'info' | 'warn' | 'error' | 'success' | 'loading';
 
 const DISABLE_IN_PRODUCTION = false;
 
-const APP_NAME = c.cyan.bold(` [COMMENTO] `);
+const APP_NAME = c.cyan.bold(` [LUXE] `);
 
 const prefixes: Record<Method, string> = {
   info: c.white('[INFO]'),

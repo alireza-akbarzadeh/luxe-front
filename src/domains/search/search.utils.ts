@@ -1,4 +1,5 @@
 import { IMAGE_FALLBACK } from '@/lib/images';
+import type { DtoAiSearchIntentResponse } from '@/services/-ai-search-intent-post.schemas';
 import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.schemas';
 
 import type { SearchParams } from './hooks/useSearchParams';
@@ -75,7 +76,10 @@ export function countSearchFilterDraft(draft: SearchFilterDraft): number {
   let count = 0;
   if (draft.categories.length > 0) count += draft.categories.length;
   if (draft.stores.length > 0) count += draft.stores.length;
-  if (draft.priceRange[0] > SEARCH_DEFAULT_PRICE_MIN || draft.priceRange[1] < SEARCH_DEFAULT_PRICE_MAX) {
+  if (
+    draft.priceRange[0] > SEARCH_DEFAULT_PRICE_MIN ||
+    draft.priceRange[1] < SEARCH_DEFAULT_PRICE_MAX
+  ) {
     count++;
   }
   if (draft.minRating > 0) count++;
@@ -87,9 +91,7 @@ export function countSearchFilterDraft(draft: SearchFilterDraft): number {
 }
 
 export function isSearchPriceFilterActive(priceRange: [number, number]): boolean {
-  return (
-    priceRange[0] > SEARCH_DEFAULT_PRICE_MIN || priceRange[1] < SEARCH_DEFAULT_PRICE_MAX
-  );
+  return priceRange[0] > SEARCH_DEFAULT_PRICE_MIN || priceRange[1] < SEARCH_DEFAULT_PRICE_MAX;
 }
 
 type CategoryLookup = {
@@ -105,6 +107,25 @@ export function mapSortToAPI(sortBy: string): string | undefined {
       return 'price_desc';
     case 'rating':
       return 'rating_desc';
+    case 'newest':
+      return 'newest';
+    case 'popular':
+      return 'popular';
+    default:
+      return undefined;
+  }
+}
+
+export function mapApiSortToClient(
+  sort?: string
+): import('./hooks/useSearchParams').SortBy | undefined {
+  switch (sort) {
+    case 'price_asc':
+      return 'price-asc';
+    case 'price_desc':
+      return 'price-desc';
+    case 'rating_desc':
+      return 'rating';
     case 'newest':
       return 'newest';
     case 'popular':
@@ -190,6 +211,37 @@ export function groupSuggestionsByType(suggestions: DtoSuggestionItem[]) {
     stores: suggestions.filter((item) => item.type === 'store'),
     categories: suggestions.filter((item) => item.type === 'category')
   };
+}
+
+/** Build /search URL with intent-derived filters for cross-page navigation. */
+export function buildIntentSearchUrl(
+  intent: DtoAiSearchIntentResponse,
+  originalQuery: string
+): string {
+  const params = new URLSearchParams();
+  const keyword = intent.search_query?.trim() || originalQuery.trim();
+  params.set('q', keyword);
+
+  if (intent.min_price && intent.min_price > 0) {
+    params.set('priceMin', String(Math.floor(intent.min_price)));
+  }
+  if (intent.max_price && intent.max_price > 0) {
+    params.set('priceMax', String(Math.ceil(intent.max_price)));
+  }
+  if (intent.min_rating && intent.min_rating > 0) {
+    params.set('minRating', String(Math.floor(intent.min_rating)));
+  }
+  if (intent.in_stock) params.set('inStock', 'true');
+  if (intent.on_sale) params.set('onSale', 'true');
+  if (intent.is_new) params.set('isNew', 'true');
+  if (intent.is_digital) params.set('isDigital', 'true');
+
+  const sortBy = mapApiSortToClient(intent.sort);
+  if (sortBy && sortBy !== 'relevance') {
+    params.set('sortBy', sortBy);
+  }
+
+  return `/search?${params.toString()}`;
 }
 
 export function getSuggestionImage(suggestion: DtoSuggestionItem): string | undefined {

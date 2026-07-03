@@ -1,6 +1,6 @@
 'use client';
 import { create } from 'zustand';
-import { createJSONStorage,persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export interface SearchHistoryItem {
   query: string;
@@ -14,6 +14,9 @@ interface SearchStoreState {
   searchCount: number;
   isSearchSheetOpen: boolean;
   isFilterSheetOpen: boolean;
+  /** AI interpretation of the last natural-language search (session only). */
+  intentInterpretation: string | null;
+  naturalQuery: string | null;
 }
 
 interface SearchStoreActions {
@@ -29,6 +32,9 @@ interface SearchStoreActions {
   setFilterSheetOpen: (open: boolean) => void;
   openFilterSheet: () => void;
   closeFilterSheet: () => void;
+  setIntentContext: (naturalQuery: string, interpretation: string) => void;
+  clearIntentContext: () => void;
+  reset: () => void;
 }
 
 type SearchStore = SearchStoreState & SearchStoreActions;
@@ -41,6 +47,8 @@ export const useSearchStore = create<SearchStore>()(
       searchCount: 0,
       isSearchSheetOpen: false,
       isFilterSheetOpen: false,
+      intentInterpretation: null,
+      naturalQuery: null,
 
       setSearchSheetOpen: (open) => set({ isSearchSheetOpen: open }),
       openSearchSheet: () => set({ isSearchSheetOpen: true }),
@@ -83,7 +91,23 @@ export const useSearchStore = create<SearchStore>()(
 
       clearRecentlyViewedProducts: () => set({ recentlyViewedProducts: [] }),
 
-      incrementSearchCount: () => set((state) => ({ searchCount: state.searchCount + 1 }))
+      incrementSearchCount: () => set((state) => ({ searchCount: state.searchCount + 1 })),
+
+      setIntentContext: (naturalQuery, interpretation) =>
+        set({ naturalQuery, intentInterpretation: interpretation }),
+
+      clearIntentContext: () => set({ naturalQuery: null, intentInterpretation: null }),
+
+      reset: () =>
+        set({
+          recentSearches: [],
+          recentlyViewedProducts: [],
+          searchCount: 0,
+          isSearchSheetOpen: false,
+          isFilterSheetOpen: false,
+          intentInterpretation: null,
+          naturalQuery: null
+        })
     }),
     {
       name: 'luxe-search-storage',

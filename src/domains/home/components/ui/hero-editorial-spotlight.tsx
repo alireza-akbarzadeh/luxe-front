@@ -20,45 +20,43 @@ export function HeroEditorialSpotlight({ className }: { className?: string }) {
         className
       )}
     >
-      <Flex
-        direction='column'
-        justify='end'
-        className='relative aspect-[5/4] min-h-[13.5rem] w-full sm:aspect-[16/10]'
-      >
+      <div className='relative aspect-[5/4] min-h-[13.5rem] w-full sm:aspect-[16/10]'>
         <AppImage
           src={HERO_EDITORIAL_SPOTLIGHT_IMAGE}
           alt='Curated luxury edit in a considered boutique setting'
           fill
           sizes='100vw'
           loading='lazy'
-          className='object-cover transition-transform duration-700 group-hover:scale-[1.03]'
+          className='z-0 object-cover transition-transform duration-700 group-hover:scale-[1.03]'
         />
 
         <span
           aria-hidden
-          className='from-foreground/92 via-foreground/45 to-foreground/15 pointer-events-none absolute inset-0 bg-gradient-to-t'
+          className='pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/90 via-black/45 to-black/10'
         />
         <span
           aria-hidden
-          className='bg-gold/15 pointer-events-none absolute -end-8 top-6 size-28 rounded-full blur-2xl'
+          className='bg-gold/15 pointer-events-none absolute -end-8 top-6 z-[1] size-28 rounded-full blur-2xl'
         />
 
-        <Flex direction='column' spacing={2} className='relative px-5 py-4'>
-          <Typography.Overline tone='accent' className='text-primary-foreground/80'>
-            Editorial spotlight
-          </Typography.Overline>
+        <Flex
+          direction='column'
+          spacing={2}
+          className='absolute inset-0 z-[2] justify-end px-5 py-4'
+        >
+          <Typography.Overline className='text-white/75'>Editorial spotlight</Typography.Overline>
           <Typography.Small
             weight='semibold'
-            className='text-primary-foreground max-w-[16rem] text-base leading-snug text-pretty'
+            className='max-w-[16rem] text-base leading-snug text-pretty text-white'
           >
             Craftsmanship, curation, and delivery — considered end to end.
           </Typography.Small>
-          <span className='text-primary-foreground/90 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide'>
+          <span className='inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/90'>
             Explore collections
             <HeroIconArrowRight className='cn-rtl-flip size-3.5 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
           </span>
         </Flex>
-      </Flex>
+      </div>
     </Link>
   );
 }

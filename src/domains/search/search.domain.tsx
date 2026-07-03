@@ -1,7 +1,7 @@
 'use client';
 
 import { IconClock, IconFilter2 } from '@tabler/icons-react';
-import { useQueries } from '@tanstack/react-query';
+import { keepPreviousData, useQueries } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo } from 'react';
 
@@ -17,6 +17,7 @@ import { useGetSearch } from '@/services/-search-get';
 
 import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
+import { SearchIntentBanner } from './components/search-intent-banner';
 import { SearchPageSkeleton } from './components/search-page-skeleton';
 import { ProductGridList } from './containers/product-grid-list';
 import { ResultHeader } from './containers/result-header';
@@ -98,7 +99,9 @@ export default function SearchDomain() {
     isFetching,
     error,
     refetch
-  } = useGetSearch(searchQueryParams);
+  } = useGetSearch(searchQueryParams, {
+    query: { placeholderData: keepPreviousData }
+  });
 
   const products = searchData?.data?.products || [];
   const total = searchData?.data?.total || 0;
@@ -114,7 +117,7 @@ export default function SearchDomain() {
     .filter((product): product is NonNullable<typeof product> => Boolean(product));
 
   const isInitialLoading = isLoading && !searchData;
-  const isPageLoading = isFetching && !isInitialLoading;
+  const isPageLoading = isFetching && Boolean(searchData);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -159,6 +162,7 @@ export default function SearchDomain() {
           </aside>
 
           <div className='flex-1'>
+            <SearchIntentBanner />
             <ResultHeader
               productCount={products.length}
               total={total}

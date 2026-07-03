@@ -10,7 +10,10 @@ import {
 } from 'nuqs';
 import { useMemo } from 'react';
 
+import type { DtoAiSearchIntentResponse } from '@/services/-ai-search-intent-post.schemas';
+
 import {
+  mapApiSortToClient,
   SEARCH_DEFAULT_PRICE_MAX,
   SEARCH_DEFAULT_PRICE_MIN,
   type SearchFilterDraft
@@ -86,8 +89,7 @@ export function useSearchParams() {
   const setIsNew = (value: boolean) => setParams({ isNew: value, page: 1 });
   const setIsDigital = (value: boolean) => setParams({ isDigital: value, page: 1 });
   const setView = (value: ViewMode) => setParams({ view: value });
-  const setPage = (value: number) =>
-    setParams({ page: value }, { scroll: true, history: 'push' });
+  const setPage = (value: number) => setParams({ page: value }, { scroll: true, history: 'push' });
   const setPerPage = (value: number) => setParams({ perPage: value, page: 1 });
 
   const applyFilters = (draft: SearchFilterDraft) => {
@@ -134,6 +136,30 @@ export function useSearchParams() {
       isNew: false,
       isDigital: false,
       sortBy: 'relevance',
+      page: 1
+    });
+  };
+
+  const applyIntentSearch = (intent: DtoAiSearchIntentResponse, originalQuery: string) => {
+    const keyword = intent.search_query?.trim() || originalQuery.trim();
+    const sortBy = mapApiSortToClient(intent.sort) ?? 'relevance';
+
+    setParams({
+      q: keyword,
+      priceMin:
+        intent.min_price && intent.min_price > 0
+          ? Math.floor(intent.min_price)
+          : SEARCH_DEFAULT_PRICE_MIN,
+      priceMax:
+        intent.max_price && intent.max_price > 0
+          ? Math.ceil(intent.max_price)
+          : SEARCH_DEFAULT_PRICE_MAX,
+      minRating: intent.min_rating && intent.min_rating > 0 ? Math.floor(intent.min_rating) : 0,
+      inStock: intent.in_stock ?? false,
+      onSale: intent.on_sale ?? false,
+      isNew: intent.is_new ?? false,
+      isDigital: intent.is_digital ?? false,
+      sortBy,
       page: 1
     });
   };
@@ -199,6 +225,7 @@ export function useSearchParams() {
     applyFilters,
     clearFilters,
     clearAll,
+    applyIntentSearch,
     // Helpers
     hasActiveFilters,
     activeFilterCount

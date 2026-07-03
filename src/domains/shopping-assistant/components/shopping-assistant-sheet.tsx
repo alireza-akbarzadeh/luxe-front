@@ -288,7 +288,7 @@ export function ShoppingAssistantFab({
         className
       )}
     >
-      <IconSparkles className='size-4' />
+      <IconSparkles className='size-5' />
       <span className='hidden sm:inline'>{t('fab')}</span>
       <span className='sr-only sm:hidden'>{t('fab')}</span>
     </Button>

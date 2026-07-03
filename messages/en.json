@@ -1329,8 +1329,8 @@
   "search": {
     "hero": {
       "title": "Discover Your Next Favorite",
-      "subtitle": "Search across thousands of products, stores, and categories",
-      "placeholder": "Search products, stores, categories…",
+      "subtitle": "Search in plain language or keywords — try “waterproof jacket under $200”",
+      "placeholder": "Search products, or describe what you need…",
       "searchButton": "Search",
       "keyboardHint": "to search anywhere"
     },
@@ -1340,6 +1340,11 @@
       "close": "Close",
       "clearSearch": "Clear search",
       "go": "Go"
+    },
+    "intent": {
+      "title": "AI understood your search",
+      "original": "You asked: “{query}”",
+      "dismiss": "Dismiss AI interpretation"
     },
     "error": {
       "loadFailed": "Failed to load search results. Please try again.",

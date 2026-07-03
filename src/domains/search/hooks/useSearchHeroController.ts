@@ -10,8 +10,11 @@ import { useGetSearchSuggestions } from '@/services/-search-suggestions-get';
 import type { DtoSuggestionItem } from '@/services/-search-suggestions-get.schemas';
 import { useGetSearchTrending } from '@/services/-search-trending-get';
 
+import { parseSearchIntent } from '../hooks/use-search-intent';
 import { useSearchParams } from '../hooks/useSearchParams';
+import { isNaturalLanguageSearchQuery } from '../lib/is-natural-language-search';
 import { useSearchStore } from '../search.store';
+import { buildIntentSearchUrl } from '../search.utils';
 
 interface UseSearchHeroControllerOptions {
   autoFocus?: boolean;
@@ -82,8 +85,9 @@ export function useSearchHeroController(options: UseSearchHeroControllerOptions 
 
   const { data: trendingData } = useGetSearchTrending({ limit: 6 });
   const trendingSearches =
-    trendingData?.data?.trending?.map((t) => t.query).filter((query): query is string => Boolean(query)) ||
-    [];
+    trendingData?.data?.trending
+      ?.map((t) => t.query)
+      .filter((query): query is string => Boolean(query)) || [];
 
   const { data: categoriesData } = useGetCategories({ limit: 6, sort: 'popular' });
   const popularCategories = categoriesData?.data?.categories?.map((c) => c.name) || [];
@@ -107,15 +111,55 @@ export function useSearchHeroController(options: UseSearchHeroControllerOptions 
   );
 
   const handleSearch = useCallback(
-    (query: string) => {
+    async (query: string) => {
+      const trimmed = query.trim();
+      if (!trimmed) return;
+
       setShowSuggestions(false);
       setIsSearching(true);
-      navigateToSearch(query);
-      searchStore.addRecentSearch(query, 0);
-      searchStore.incrementSearchCount();
-      setTimeout(() => setIsSearching(false), 300);
+
+      try {
+        if (isNaturalLanguageSearchQuery(trimmed)) {
+          const intent = await parseSearchIntent(trimmed);
+          if (intent?.is_intent_query && intent.search_query) {
+            searchStore.clearIntentContext();
+
+            if (pathname === '/search') {
+              searchParams.applyIntentSearch(intent, trimmed);
+            } else {
+              router.push(buildIntentSearchUrl(intent, trimmed));
+            }
+
+            if (intent.interpretation) {
+              searchStore.setIntentContext(trimmed, intent.interpretation);
+            }
+
+            searchStore.addRecentSearch(trimmed, 0);
+            searchStore.incrementSearchCount();
+            if (closeOnNavigate) {
+              closeSearchSheet();
+            }
+            return;
+          }
+        }
+
+        searchStore.clearIntentContext();
+        navigateToSearch(trimmed);
+        searchStore.addRecentSearch(trimmed, 0);
+        searchStore.incrementSearchCount();
+      } finally {
+        setTimeout(() => setIsSearching(false), 300);
+      }
     },
-    [navigateToSearch, searchStore]
+    [
+      closeOnNavigate,
+      closeSearchSheet,
+      navigateToSearch,
+      pathname,
+      router,
+      searchParams,
+      searchStore
+    ]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

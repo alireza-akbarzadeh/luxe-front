@@ -22,7 +22,7 @@ For **every task** below, use the following workflow:
 
 Implement a conversational shopping assistant that understands natural language, asks follow-up questions, remembers context, and recommends products.
 
-## Task 002 — Intent-Based Search
+## Task 002 — Intent-Based Search ✅
 
 Replace keyword-only search with intent-aware search while preserving existing search.
 

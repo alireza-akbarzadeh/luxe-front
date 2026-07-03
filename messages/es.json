@@ -1328,8 +1328,8 @@
   "search": {
     "hero": {
       "title": "Descubre tu próximo favorito",
-      "subtitle": "Busca entre miles de productos, tiendas y categorías",
-      "placeholder": "Buscar productos, tiendas, categorías…",
+      "subtitle": "Busca en lenguaje natural o con palabras clave — prueba “chaqueta impermeable por menos de $200”",
+      "placeholder": "Busca productos o describe lo que necesitas…",
       "searchButton": "Buscar",
       "keyboardHint": "para buscar en cualquier lugar"
     },
@@ -1339,6 +1339,11 @@
       "close": "Cerrar",
       "clearSearch": "Borrar búsqueda",
       "go": "Ir"
+    },
+    "intent": {
+      "title": "La IA entendió tu búsqueda",
+      "original": "Preguntaste: “{query}”",
+      "dismiss": "Cerrar interpretación de la IA"
     },
     "error": {
       "loadFailed": "No se pudieron cargar los resultados. Inténtalo de nuevo.",

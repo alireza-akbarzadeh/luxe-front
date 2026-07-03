@@ -289,7 +289,7 @@ export function ProductChatFab({
         className
       )}
     >
-      <IconSparkles className='size-4' />
+      <IconSparkles className='size-5' />
       {t('fab')}
     </Button>
   );
