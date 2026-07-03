@@ -22,6 +22,7 @@
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm lint:fix",
     "api:gen": "node ./code-generator.js && npx orval --config ./src/services/orval.config.js",
+    "openapi:sync": "node scripts/openapi-sync.mjs",
     "lint:fix": "eslint --fix",
     "format": "prettier --write --no-error-on-unmatched-pattern \"**/**/*.{html,css,scss,js,jsx,cjs,mjs,ts,tsx,mdx}\" --cache",
     "test": "playwright test",

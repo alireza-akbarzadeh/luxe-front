@@ -2,6 +2,7 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import swagger2openapi from 'swagger2openapi';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,31 +27,54 @@ const removeDir = (dirPath) => {
   fs.rmdirSync(dirPath, { recursive: true, force: true });
 };
 
-const extractSchemaReferences = (obj, schemas, refs = new Set()) => {
+const COMPONENT_REF_PREFIX = '#/components/';
+
+/** Collect component refs (schemas, requestBodies, responses, parameters, …). */
+const extractComponentReferences = (obj, components, refs = new Set()) => {
   const findRefs = (value) => {
     if (typeof value !== 'object' || value === null) return;
-    if (value.$ref) {
-      const refName = value.$ref.replace('#/components/schemas/', '');
-      if (!refs.has(refName)) {
-        refs.add(refName);
-        if (schemas[refName]) findRefs(schemas[refName]);
+
+    if (typeof value.$ref === 'string' && value.$ref.startsWith(COMPONENT_REF_PREFIX)) {
+      const refPath = value.$ref.slice(COMPONENT_REF_PREFIX.length);
+      const [componentType, ...nameParts] = refPath.split('/');
+      const name = nameParts.join('/');
+      const key = `${componentType}:${name}`;
+
+      if (!refs.has(key)) {
+        refs.add(key);
+        const bucket = components?.[componentType];
+        if (bucket?.[name]) findRefs(bucket[name]);
       }
     }
+
     for (const key in value) {
-      if (value.hasOwnProperty(key)) findRefs(value[key]);
+      if (Object.prototype.hasOwnProperty.call(value, key)) findRefs(value[key]);
     }
   };
+
   findRefs(obj);
   return refs;
 };
 
-const filterSchemas = (schemas, refs) => {
+const filterComponents = (components, refs) => {
   const filtered = {};
-  refs.forEach((ref) => {
-    if (schemas[ref]) filtered[ref] = schemas[ref];
+  refs.forEach((key) => {
+    const [componentType, name] = key.split(':');
+    if (!filtered[componentType]) filtered[componentType] = {};
+    if (components?.[componentType]?.[name]) {
+      filtered[componentType][name] = components[componentType][name];
+    }
   });
   return filtered;
 };
+
+const convertSwagger2ToOpenApi3 = (swagger2) =>
+  new Promise((resolve, reject) => {
+    swagger2openapi.convert(swagger2, {}, (err, options) => {
+      if (err) reject(err);
+      else resolve(options.openapi);
+    });
+  });
 
 const fsPromises = fs.promises;
 
@@ -64,6 +88,19 @@ function resolveOpenApiBaseUrl() {
   }
 
   return 'http://localhost:8080';
+}
+
+async function fetchOpenApiFromUrl(baseURL) {
+  try {
+    const response = await axios.get(`${baseURL}/openapi`, { timeout: 30_000 });
+    log('OpenAPI spec fetched from /openapi:', response.statusText);
+    return response.data;
+  } catch (openApiErr) {
+    log(`GET /openapi failed (${openApiErr.message}); trying /swagger/doc.json`);
+    const swaggerResponse = await axios.get(`${baseURL}/swagger/doc.json`, { timeout: 30_000 });
+    log('Swagger 2 spec fetched from /swagger/doc.json:', swaggerResponse.statusText);
+    return convertSwagger2ToOpenApi3(swaggerResponse.data);
+  }
 }
 
 async function loadOpenApiSpec(baseURL) {
@@ -80,9 +117,7 @@ async function loadOpenApiSpec(baseURL) {
   }
 
   try {
-    const response = await axios.get(`${baseURL}/openapi`, { timeout: 30_000 });
-    log('OpenAPI spec fetched:', response.statusText);
-    return response.data;
+    return await fetchOpenApiFromUrl(baseURL);
   } catch (fetchErr) {
     if (fs.existsSync(bundledSpec)) {
       log(`Fetch failed (${fetchErr.message}); using bundled ${bundledSpec}`);
@@ -114,15 +149,15 @@ const codeGenerator = async (baseURL, destination) => {
   const { paths, components } = spec;
   for (const [endpointPath, methods] of Object.entries(paths)) {
     for (const [method, methodDetails] of Object.entries(methods)) {
-      const refs = extractSchemaReferences(methodDetails, components?.schemas || {});
-      const filteredSchemas = filterSchemas(components?.schemas || {}, refs);
+      const refs = extractComponentReferences(methodDetails, components);
+      const filteredComponents = filterComponents(components || {}, refs);
 
       const singleEndpointData = {
         openapi: spec.openapi,
         info: spec.info,
         servers: spec.servers,
         paths: { [endpointPath]: { [method]: methodDetails } },
-        components: { schemas: filteredSchemas }
+        components: filteredComponents
       };
 
       const adjustedPath = endpointPath.split('/').join('-');

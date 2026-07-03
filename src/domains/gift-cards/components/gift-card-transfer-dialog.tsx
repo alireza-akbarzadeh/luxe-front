@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/dialog';
 import { Text } from '@/components/ui/typography';
 import { formatPrice } from '@/domains/home/lib/home-utils';
-import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
+import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import { getGetGiftCardsReceivedQueryKey } from '@/services/-gift-cards-received-get';
 import { getGetGiftCardsSentQueryKey } from '@/services/-gift-cards-sent-get';
 
@@ -33,7 +33,7 @@ import { type GiftRecipientLookup, postGiftCardTransfer } from '../lib/gift-card
 import { GiftCardRecipientPicker } from './gift-card-recipient-picker';
 
 type GiftCardTransferDialogProps = {
-  card: DtoGiftCardResponse | null;
+  card: DtoCreateGiftCardResponse | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };

@@ -1,5 +1,5 @@
 import { customInstance } from '@/lib/api/api-client';
-import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
+import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import type { UtilsResponse } from '@/services/-wallet-deposit-post.schemas';
 
 export type GiftRecipientLookup = {
@@ -14,7 +14,7 @@ export type GetGiftCardRecipientLookup200 = UtilsResponse & {
 };
 
 export type PostGiftCardTransfer200 = UtilsResponse & {
-  data?: DtoGiftCardResponse;
+  data?: DtoCreateGiftCardResponse;
 };
 
 /** Search Luxe members by email or phone for gift card transfer. */

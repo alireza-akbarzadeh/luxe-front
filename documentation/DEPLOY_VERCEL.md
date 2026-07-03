@@ -104,5 +104,8 @@ BACKEND_API_URL=http://localhost:8080/api/v1
 |-------|-----|
 | CORS error in browser | `CORS_ALLOW_ORIGINS` on Render must match exact Vercel origin |
 | API 502 / slow first load | Render free tier cold start — wait or upgrade plan |
-| Build fails on Orval | Ensure `openapi3.json` is committed; build uses it when API is unreachable |
+| Build fails on Orval | Ensure `openapi3.json` is committed and current. After backend Swagger changes: `OPENAPI_BASE_URL=https://luxe-3pvz.onrender.com pnpm openapi:sync` then commit `openapi3.json`. Live API Swagger UI: [luxe-3pvz.onrender.com/swagger](https://luxe-3pvz.onrender.com/swagger/index.html) |
+| `Can't resolve '@/services/-…'` | Stale `openapi3.json` — missing routes (e.g. gift-finder, smart-bundles). Run `pnpm openapi:sync` from a deployed API, commit `openapi3.json`, redeploy Vercel |
+| API calls go to `localhost:8080` in production | Remove `NEXT_PUBLIC_API_URL` / `BACKEND_API_URL` if set to localhost on Vercel; redeploy. Server code now ignores localhost in production and uses Render. |
+| `https://localhost:8080/...` in logs | Wrong Vercel env or stale build — set both API vars to `https://luxe-3pvz.onrender.com/api/v1` and redeploy |
 | Login redirect blocked | Set `NEXT_PUBLIC_APP_DOMAIN` / `NEXT_PUBLIC_APP_ORIGIN` to Vercel domain |

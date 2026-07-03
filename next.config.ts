@@ -8,13 +8,11 @@ import { withSerwist } from '@serwist/turbopack';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
+import { resolveApiBaseUrl } from './src/lib/api/api-base-url';
+
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
-const backendApiUrl = (
-  process.env['BACKEND_API_URL'] ??
-  process.env['NEXT_PUBLIC_API_URL'] ??
-  'http://localhost:8080/api/v1'
-).replace(/\/$/, '');
+const backendApiUrl = resolveApiBaseUrl();
 
 const config = {
   reactCompiler: true,

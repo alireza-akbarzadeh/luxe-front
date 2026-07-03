@@ -1,4 +1,4 @@
-import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
+import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import type { DtoProductQuestionResponse } from '@/services/-products-{id}-questions-get.schemas';
 import type { DtoReviewResponse } from '@/services/-reviews-post.schemas';
 
@@ -22,7 +22,7 @@ export type PaginatedQuestionsData = {
 };
 
 export type PaginatedGiftCardsData = {
-  gift_cards?: DtoGiftCardResponse[];
+  gift_cards?: DtoCreateGiftCardResponse[];
   total?: number;
   limit?: number;
   offset?: number;

@@ -1,9 +1,9 @@
 import { customInstance } from '@/lib/api/api-client';
-import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
+import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import type { UtilsResponse } from '@/services/-wallet-deposit-post.schemas';
 
 export type PostGiftCardsConfirmStripe200 = UtilsResponse & {
-  data?: DtoGiftCardResponse;
+  data?: DtoCreateGiftCardResponse;
 };
 
 /** Confirms gift card purchase after Stripe redirect (idempotent; also works if webhook already ran). */

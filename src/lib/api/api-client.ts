@@ -22,13 +22,14 @@ import {
   getRequestLocale,
   localeToAcceptLanguage
 } from '../i18n/request-locale';
+import { resolveApiBaseUrl } from './api-base-url';
 import { isRequestCancelled } from './api-utils';
 import { handleApiError } from './handle-api-error';
 import { logger } from './logger';
 import type { ApiClientOptions, ApiErrorResponse } from './type';
 
 /** Direct Go API URL for server-side calls (Server Actions, route handlers). */
-export const BASE_URL = process.env['NEXT_PUBLIC_API_URL'] ?? 'http://localhost:8080/api/v1';
+export const BASE_URL = resolveApiBaseUrl();
 
 /** Same-origin path proxied to BASE_URL via next.config rewrites (browser only). */
 const BROWSER_API_BASE_URL = '/api/v1';

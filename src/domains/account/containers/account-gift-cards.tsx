@@ -35,7 +35,7 @@ import { formatPrice } from '@/domains/home/lib/home-utils';
 import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
 import { usePostGiftCardsCodeClaim } from '@/services/-gift-cards-{code}-claim-post';
 import { usePostGiftCards } from '@/services/-gift-cards-post';
-import type { DtoGiftCardResponse } from '@/services/-gift-cards-post.schemas';
+import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import {
   getGetGiftCardsReceivedQueryKey,
   useGetGiftCardsReceived
@@ -60,7 +60,7 @@ export function AccountGiftCards() {
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number>(100);
   const [claimingCode, setClaimingCode] = useState<string | null>(null);
-  const [transferCard, setTransferCard] = useState<DtoGiftCardResponse | null>(null);
+  const [transferCard, setTransferCard] = useState<DtoCreateGiftCardResponse | null>(null);
   const queryClient = useQueryClient();
   const t = useTranslations('account.giftCards');
   const tCommon = useTranslations('account.common');
@@ -128,7 +128,7 @@ export function AccountGiftCards() {
     }
   });
 
-  const handleClaim = async (card: DtoGiftCardResponse) => {
+  const handleClaim = async (card: DtoCreateGiftCardResponse) => {
     if (!card.code) return;
     setClaimingCode(card.code);
     try {
@@ -367,7 +367,7 @@ function GiftCardList({
   t,
   tCommon
 }: {
-  cards: DtoGiftCardResponse[];
+  cards: DtoCreateGiftCardResponse[];
   isLoading: boolean;
   isError: boolean;
   emptyTitle: string;
@@ -377,8 +377,8 @@ function GiftCardList({
   onRetry: () => void;
   variant: 'sent' | 'received';
   claimingCode?: string | null;
-  onClaim?: (card: DtoGiftCardResponse) => void;
-  onTransfer?: (card: DtoGiftCardResponse) => void;
+  onClaim?: (card: DtoCreateGiftCardResponse) => void;
+  onTransfer?: (card: DtoCreateGiftCardResponse) => void;
   t: ReturnType<typeof useTranslations<'account.giftCards'>>;
   tCommon: ReturnType<typeof useTranslations<'account.common'>>;
 }) {
