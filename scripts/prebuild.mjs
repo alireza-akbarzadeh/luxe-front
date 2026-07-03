@@ -14,7 +14,7 @@ const onCi =
   process.env['CI'] === 'true' || process.env['CI'] === '1' || Boolean(process.env['VERCEL']);
 if (onCi && !process.env['OPENAPI_BASE_URL']) {
   process.env['OPENAPI_SPEC_FILE'] ??= 'openapi3.json';
-  console.log(`CI/Vercel build — using OpenAPI spec file: ${process.env['OPENAPI_SPEC_FILE']}`);
+  console.log(`Vercel/CI build — using OpenAPI spec file: ${process.env['OPENAPI_SPEC_FILE']}`);
 }
 
 const result = spawnSync('pnpm', ['api:gen'], {
