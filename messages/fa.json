@@ -2073,8 +2073,14 @@
     "mobileSummary": {
       "showSummary": "نمایش خلاصه سفارش",
       "hideSummary": "پنهان کردن خلاصه سفارش",
+      "viewSummary": "خلاصه سفارش",
+      "dragForSummary": "برای خلاصه سفارش به بالا بکشید",
       "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
-      "totalLabel": "جمع سفارش"
+      "totalLabel": "جمع سفارش",
+      "decreaseQuantity": "کاهش تعداد",
+      "increaseQuantity": "افزایش تعداد",
+      "removeItem": "حذف {name}",
+      "addItems": "افزودن کالا"
     },
     "trust": {
       "secure": "پرداخت امن",

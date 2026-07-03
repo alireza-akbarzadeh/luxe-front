@@ -10,13 +10,13 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Stepper, StepperContent, StepperPanel } from '@/components/ui/stepper';
 import { useCartController } from '@/hooks/useCartController';
+import { cn } from '@/lib/utils';
 
 import type { CheckoutStepId } from './checkout.schema';
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutFormNav } from './components/checkout-form-nav';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutMobileActionBar } from './components/checkout-mobile-action-bar';
-import { CheckoutMobileSummary } from './components/checkout-mobile-summary';
 import { CheckoutPaymentCancelledHandler } from './components/checkout-payment-cancelled-handler';
 import { CheckoutRedirectingScreen } from './components/checkout-redirecting';
 import { CheckoutStepperNav } from './components/checkout-stepper-nav';
@@ -31,6 +31,7 @@ import { useCheckoutSteps } from './hooks/useCheckoutSteps';
 import { useCheckoutSubmit } from './hooks/useCheckoutSubmit';
 import { useCheckoutValidation } from './hooks/useCheckoutValidation';
 import { useStripeCheckoutEnabled } from './hooks/useStripeCheckoutEnabled';
+import { scrollToCheckoutTerms } from './lib/scroll-to-checkout-terms';
 import { useCheckoutStore } from './store/checkout.store';
 
 export default function CheckoutDomain() {
@@ -56,6 +57,7 @@ export default function CheckoutDomain() {
   const { validateStep, validatePayment } = useCheckoutValidation(form, isStripeCheckout);
 
   const agreedToTerms = useCheckoutStore((s) => s.agreedToTerms);
+  const setTermsAttention = useCheckoutStore((s) => s.setTermsAttention);
   const isRedirecting = useCheckoutStore((s) => s.isRedirecting);
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
   const shippingProviderId = form.state.values.shippingProviderId;
@@ -113,6 +115,8 @@ export default function CheckoutDomain() {
     if (isPending || isRedirecting) return;
 
     if (!agreedToTerms) {
+      setTermsAttention(true);
+      scrollToCheckoutTerms();
       toast.error(t('validation.acceptTerms'));
       return;
     }
@@ -142,6 +146,7 @@ export default function CheckoutDomain() {
     isPending,
     isRedirecting,
     agreedToTerms,
+    setTermsAttention,
     setSubmitError,
     validateStep,
     validatePayment,
@@ -168,13 +173,14 @@ export default function CheckoutDomain() {
   return (
     <Flex
       direction='column'
-      className='app-container pt-2 pb-[calc(10.5rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16'
+      className={cn(
+        'app-container pt-2 pb-[calc(13rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16',
+        isLast && 'pb-[calc(18rem+env(safe-area-inset-bottom))] lg:pb-16'
+      )}
     >
       <CheckoutPaymentCancelledHandler />
       <Flex direction='column' spacing={0} className='w-full'>
         <CheckoutBreadcrumb />
-
-        <CheckoutMobileSummary form={form} />
 
         <Stepper
           steps={steps}
@@ -222,6 +228,7 @@ export default function CheckoutDomain() {
       </Flex>
 
       <CheckoutMobileActionBar
+        form={form}
         total={total}
         itemCount={itemCount}
         currentStepId={currentStepId}

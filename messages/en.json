@@ -2073,8 +2073,14 @@
     "mobileSummary": {
       "showSummary": "Show order summary",
       "hideSummary": "Hide order summary",
+      "viewSummary": "Order summary",
+      "dragForSummary": "Swipe up for order summary",
       "itemCount": "{count, plural, one {# item} other {# items}}",
-      "totalLabel": "Order total"
+      "totalLabel": "Order total",
+      "decreaseQuantity": "Decrease quantity",
+      "increaseQuantity": "Increase quantity",
+      "removeItem": "Remove {name}",
+      "addItems": "Add items"
     },
     "trust": {
       "secure": "Secure checkout",

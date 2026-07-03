@@ -16,7 +16,18 @@ export function OrderTrackingSkeleton() {
         </div>
         <div className='mb-12'>
           <Skeleton className='mx-auto mb-6 h-6 w-40' />
-          <div className='grid grid-cols-4 gap-2'>
+          <div className='flex flex-col gap-6 sm:hidden'>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className='flex items-start gap-4'>
+                <Skeleton className='h-12 w-12 shrink-0 rounded-full' />
+                <div className='flex-1 space-y-2 pt-2'>
+                  <Skeleton className='h-4 w-28' />
+                  <Skeleton className='h-3 w-40' />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className='hidden grid-cols-4 gap-2 sm:grid'>
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className='flex flex-col items-center'>
                 <Skeleton className='mb-3 h-12 w-12 rounded-full' />

@@ -63,7 +63,7 @@ export function HeroSection() {
 
             <h1 className='hero-lcp-title font-display text-4xl leading-[1.03] font-semibold tracking-tight text-balance max-lg:font-sans sm:text-5xl lg:text-6xl xl:text-[3.5rem]'>
               Modern luxury,
-              <span className='hero-lcp-accent text-gold-gradient mt-1 block italic lg:font-display'>
+              <span className='hero-lcp-accent text-gold-gradient lg:font-display mt-1 block italic'>
                 beautifully curated
               </span>
             </h1>

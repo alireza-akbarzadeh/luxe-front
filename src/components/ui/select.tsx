@@ -3,7 +3,7 @@
 import { IconCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { Select as SelectPrimitive } from 'radix-ui';
 import * as React from 'react';
-import { Children, isValidElement, type ReactNode, use } from 'react';
+import { Children, isValidElement, type ReactElement, type ReactNode, use } from 'react';
 
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 import { useControllableState } from '@/hooks/useControllableState';
@@ -16,7 +16,8 @@ type SelectItemRegistration = {
   disabled?: boolean;
 };
 
-type MobileSelectCollector = {
+type ParsedMobileSelect = {
+  trigger: ReactNode;
   items: SelectItemRegistration[];
   placeholder?: ReactNode;
   groupLabel?: string;
@@ -28,10 +29,9 @@ type MobileSelectContextValue = {
   open: boolean;
   setOpen: (open: boolean) => void;
   disabled?: boolean;
-  collector: MobileSelectCollector;
-  appendItem: (item: SelectItemRegistration) => void;
-  registerPlaceholder: (placeholder: ReactNode | undefined) => void;
-  registerGroupLabel: (label: string | undefined) => void;
+  items: SelectItemRegistration[];
+  placeholder?: ReactNode;
+  groupLabel?: string;
 };
 
 const MobileSelectContext = React.createContext<MobileSelectContextValue | null>(null);
@@ -43,19 +43,64 @@ function useMobileSelectContext() {
 const triggerClassName =
   "border-input [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-full items-center justify-between gap-2 rounded-xl border bg-background px-3.5 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-11 data-[size=sm]:h-9 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
-function partitionSelectChildren(children: ReactNode) {
-  const rest: ReactNode[] = [];
-  let content: ReactNode = null;
+function isComponentType(type: unknown, target: { displayName?: string; name?: string }): boolean {
+  if (type === target) return true;
+  if (typeof type !== 'function' && typeof type !== 'object') return false;
+  const typed = type as { displayName?: string; name?: string };
+  return typed.displayName === target.displayName || typed.name === target.name;
+}
 
-  Children.forEach(children, (child) => {
-    if (isValidElement(child) && child.type === SelectContent) {
-      content = child;
+function walkSelectTree(node: ReactNode, parsed: ParsedMobileSelect) {
+  Children.forEach(node, (child) => {
+    if (!isValidElement(child)) return;
+
+    const element = child as ReactElement<{
+      children?: ReactNode;
+      value?: string;
+      disabled?: boolean;
+      placeholder?: ReactNode;
+    }>;
+
+    if (isComponentType(element.type, SelectTrigger)) {
+      parsed.trigger = element;
       return;
     }
-    rest.push(child);
-  });
 
-  return { content, rest };
+    if (isComponentType(element.type, SelectValue)) {
+      parsed.placeholder = element.props.placeholder;
+      return;
+    }
+
+    if (isComponentType(element.type, SelectLabel)) {
+      const label = element.props.children;
+      if (typeof label === 'string') parsed.groupLabel = label;
+      return;
+    }
+
+    if (isComponentType(element.type, SelectItem)) {
+      const { value, disabled, children: label } = element.props;
+      if (value && !parsed.items.some((item) => item.value === value)) {
+        parsed.items.push({ value, label, disabled });
+      }
+      return;
+    }
+
+    if (element.props.children) {
+      walkSelectTree(element.props.children, parsed);
+    }
+  });
+}
+
+function parseMobileSelectChildren(children: ReactNode): ParsedMobileSelect {
+  const parsed: ParsedMobileSelect = {
+    trigger: null,
+    items: [],
+    placeholder: undefined,
+    groupLabel: undefined
+  };
+
+  walkSelectTree(children, parsed);
+  return parsed;
 }
 
 function MobileSelectRoot({
@@ -69,11 +114,7 @@ function MobileSelectRoot({
   name,
   children
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
-  const collector: MobileSelectCollector = {
-    items: [],
-    placeholder: undefined,
-    groupLabel: undefined
-  };
+  const parsed = parseMobileSelectChildren(children);
 
   const [value, setValue] = useControllableState({
     prop: valueProp,
@@ -92,25 +133,15 @@ function MobileSelectRoot({
     open,
     setOpen,
     disabled,
-    collector,
-    appendItem: (item) => {
-      collector.items.push(item);
-    },
-    registerPlaceholder: (placeholder) => {
-      collector.placeholder = placeholder;
-    },
-    registerGroupLabel: (label) => {
-      collector.groupLabel = label;
-    }
+    items: parsed.items,
+    placeholder: parsed.placeholder,
+    groupLabel: parsed.groupLabel
   };
-
-  const { content, rest } = partitionSelectChildren(children);
 
   return (
     <MobileSelectContext value={context}>
       {name ? <input type='hidden' name={name} value={value ?? ''} /> : null}
-      {content}
-      {rest}
+      {parsed.trigger}
     </MobileSelectContext>
   );
 }
@@ -131,9 +162,7 @@ function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>)
 
 function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
   const mobile = useMobileSelectContext();
-  if (mobile) {
-    return <div data-slot='select-group' {...props} />;
-  }
+  if (mobile) return null;
   return <SelectPrimitive.Group data-slot='select-group' {...props} />;
 }
 
@@ -142,11 +171,7 @@ function SelectValue({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Value>) {
   const mobile = useMobileSelectContext();
-
-  if (mobile) {
-    mobile.registerPlaceholder(placeholder);
-    return null;
-  }
+  if (mobile) return null;
 
   return <SelectPrimitive.Value data-slot='select-value' placeholder={placeholder} {...props} />;
 }
@@ -162,10 +187,9 @@ function SelectTrigger({
   const mobile = useMobileSelectContext();
 
   if (mobile) {
-    const { items, placeholder, groupLabel } = mobile.collector;
-    const selected = items.find((item) => item.value === mobile.value);
+    const selected = mobile.items.find((item) => item.value === mobile.value);
     const hasValue = Boolean(selected);
-    const display = selected?.label ?? placeholder ?? 'Choose an option';
+    const display = selected?.label ?? mobile.placeholder ?? 'Choose an option';
 
     return (
       <Drawer open={mobile.open} onOpenChange={mobile.setOpen}>
@@ -190,14 +214,14 @@ function SelectTrigger({
         </DrawerTrigger>
         <DrawerContent variant='ios' radius='full' showHandle className='max-h-[min(72dvh,560px)]'>
           <DrawerTitle className='px-4 pt-1 text-center text-base font-semibold'>
-            {groupLabel ?? 'Select an option'}
+            {mobile.groupLabel ?? 'Select an option'}
           </DrawerTitle>
           <div className='mt-2 max-h-[min(56dvh,480px)] overflow-y-auto px-2 pb-[max(1rem,env(safe-area-inset-bottom))]'>
-            {items.map((item) => {
+            {mobile.items.map((item, index) => {
               const isSelected = mobile.value === item.value;
               return (
                 <button
-                  key={item.value}
+                  key={`${item.value}-${index}`}
                   type='button'
                   disabled={item.disabled}
                   onClick={() => {
@@ -248,14 +272,7 @@ function SelectContent({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
   const mobile = useMobileSelectContext();
-
-  if (mobile) {
-    return (
-      <div className='hidden' aria-hidden inert>
-        {children}
-      </div>
-    );
-  }
+  if (mobile) return null;
 
   return (
     <SelectPrimitive.Portal>
@@ -292,11 +309,7 @@ function SelectLabel({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Label>) {
   const mobile = useMobileSelectContext();
-
-  if (mobile) {
-    mobile.registerGroupLabel(typeof children === 'string' ? children : undefined);
-    return null;
-  }
+  if (mobile) return null;
 
   return (
     <SelectPrimitive.Label
@@ -317,11 +330,7 @@ function SelectItem({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item>) {
   const mobile = useMobileSelectContext();
-
-  if (mobile && value) {
-    mobile.appendItem({ value, label: children, disabled });
-    return null;
-  }
+  if (mobile) return null;
 
   return (
     <SelectPrimitive.Item
@@ -389,6 +398,13 @@ function SelectScrollDownButton({
     </SelectPrimitive.ScrollDownButton>
   );
 }
+
+SelectTrigger.displayName = 'SelectTrigger';
+SelectContent.displayName = 'SelectContent';
+SelectValue.displayName = 'SelectValue';
+SelectLabel.displayName = 'SelectLabel';
+SelectItem.displayName = 'SelectItem';
+SelectGroup.displayName = 'SelectGroup';
 
 export {
   Select,

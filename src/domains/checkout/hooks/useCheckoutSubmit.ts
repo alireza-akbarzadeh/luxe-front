@@ -1,4 +1,5 @@
 // app/checkout/hooks/useCheckoutSubmit.ts
+import { useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -8,6 +9,7 @@ import { useCartController } from '@/hooks/useCartController';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
 import { ShippingProviders } from '@/lib/constants/enum-statuses';
+import { getGetCartQueryKey } from '@/services/-cart-get';
 import { usePostCheckout } from '@/services/-checkout-post';
 import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
 import type { DtoCheckoutRequestPaymentMethod } from '@/services/-checkout-post.schemas';
@@ -37,6 +39,7 @@ function mapCheckoutPaymentMethod(
 
 export function useCheckoutSubmit() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { clearCart } = useCartController();
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
   const setIsRedirecting = useCheckoutStore((s) => s.setIsRedirecting);
@@ -101,7 +104,7 @@ export function useCheckoutSubmit() {
         }
         setRedirectMode('payment');
         setIsRedirecting(true);
-        // Assign immediately — full-page overlay is already shown via isRedirecting.
+        queryClient.removeQueries({ queryKey: getGetCartQueryKey() });
         window.location.assign(stripeRedirect.checkoutUrl);
         return;
       }

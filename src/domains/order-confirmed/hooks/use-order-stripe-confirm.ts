@@ -53,13 +53,6 @@ export function useOrderStripeConfirm(orderId: string): OrderStripeConfirmState 
 
         queryClient.setQueryData(getGetOrdersIdQueryKey(confirmedOrderId), result);
 
-        await Promise.all([
-          queryClient.invalidateQueries({
-            queryKey: getGetOrdersIdQueryKey(confirmedOrderId)
-          }),
-          clearCart().catch(() => undefined)
-        ]);
-
         clearStripeCheckoutSession(orderId);
         toast.success(result.message ?? t('paymentConfirmed'));
 
@@ -68,6 +61,11 @@ export function useOrderStripeConfirm(orderId: string): OrderStripeConfirmState 
         url.searchParams.delete('session_id');
         url.searchParams.set('confirmed', '1');
         window.history.replaceState(null, '', url.toString());
+
+        void queryClient.invalidateQueries({
+          queryKey: getGetOrdersIdQueryKey(confirmedOrderId)
+        });
+        void clearCart().catch(() => undefined);
       } catch (error: unknown) {
         setConfirmFailed(true);
         const message =

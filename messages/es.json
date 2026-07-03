@@ -2072,8 +2072,14 @@
     "mobileSummary": {
       "showSummary": "Ver resumen del pedido",
       "hideSummary": "Ocultar resumen del pedido",
+      "viewSummary": "Resumen del pedido",
+      "dragForSummary": "Desliza hacia arriba para ver el resumen",
       "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
-      "totalLabel": "Total del pedido"
+      "totalLabel": "Total del pedido",
+      "decreaseQuantity": "Disminuir cantidad",
+      "increaseQuantity": "Aumentar cantidad",
+      "removeItem": "Eliminar {name}",
+      "addItems": "Añadir artículos"
     },
     "trust": {
       "secure": "Pago seguro",

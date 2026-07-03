@@ -4,6 +4,7 @@ import { IconCheckbox, IconMail, IconPackage, IconTruck, IconX } from '@tabler/i
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect } from 'react';
 
+import { Flex } from '@/components/ui/flex';
 import { cn } from '@/lib/utils';
 
 import type { OrderProgressState, OrderProgressStep } from '../lib/order-tracking-utils';
@@ -21,78 +22,81 @@ interface OrderTrackingProgressProps {
   onPulseComplete?: () => void;
 }
 
-function StepNode({
-  step,
-  index,
-  isPulsing
-}: {
-  step: OrderProgressStep;
-  index: number;
-  isPulsing: boolean;
-}) {
+function StepIndicator({ step, isPulsing }: { step: OrderProgressStep; isPulsing: boolean }) {
   const Icon = STEP_ICONS[step.key as keyof typeof STEP_ICONS] ?? IconPackage;
   const isCompleted = step.status === 'completed';
   const isActive = step.status === 'active';
   const isCancelled = step.status === 'cancelled';
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 + index * 0.08, type: 'spring', stiffness: 240, damping: 22 }}
-      className='relative flex flex-col items-center text-center'
-    >
-      <div className='relative mb-3'>
-        <AnimatePresence>
-          {isPulsing && (
-            <motion.span
-              key='pulse-ring'
-              initial={{ scale: 0.8, opacity: 0.7 }}
-              animate={{ scale: 1.8, opacity: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.1, repeat: 2, ease: 'easeOut' }}
-              className={cn(
-                'absolute inset-0 rounded-full',
-                isCancelled ? 'bg-red-500/30' : 'bg-green-500/30'
-              )}
-            />
-          )}
-        </AnimatePresence>
+    <div className='relative shrink-0'>
+      <AnimatePresence>
+        {isPulsing && (
+          <motion.span
+            key='pulse-ring'
+            initial={{ scale: 0.8, opacity: 0.7 }}
+            animate={{ scale: 1.8, opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.1, repeat: 2, ease: 'easeOut' }}
+            className={cn(
+              'absolute inset-0 rounded-full',
+              isCancelled ? 'bg-red-500/30' : 'bg-green-500/30'
+            )}
+          />
+        )}
+      </AnimatePresence>
 
-        <motion.div
-          layout
-          animate={
-            isActive && !isCancelled
-              ? {
-                  scale: [1, 1.06, 1],
-                  boxShadow: [
-                    '0 0 0 0 rgba(34,197,94,0)',
-                    '0 0 0 8px rgba(34,197,94,0.15)',
-                    '0 0 0 0 rgba(34,197,94,0)'
-                  ]
-                }
-              : isPulsing
-                ? { scale: [1, 1.12, 1] }
-                : { scale: 1 }
-          }
-          transition={
-            isActive
-              ? { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }
-              : { duration: 0.45, type: 'spring', stiffness: 280 }
-          }
-          className={cn(
-            'relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 transition-colors',
-            isCompleted && 'border-green-500 bg-green-500 text-white',
-            isActive && !isCancelled && 'border-green-500 bg-green-500/15 text-green-600',
-            step.status === 'upcoming' && 'border-muted bg-muted text-muted-foreground',
-            isCancelled && 'border-red-500/40 bg-red-500/10 text-red-600'
-          )}
-        >
-          {isCancelled ? <IconX className='h-5 w-5' /> : <Icon className='h-5 w-5' />}
-        </motion.div>
-      </div>
+      <motion.div
+        layout
+        animate={
+          isActive && !isCancelled
+            ? {
+                scale: [1, 1.06, 1],
+                boxShadow: [
+                  '0 0 0 0 rgba(34,197,94,0)',
+                  '0 0 0 8px rgba(34,197,94,0.15)',
+                  '0 0 0 0 rgba(34,197,94,0)'
+                ]
+              }
+            : isPulsing
+              ? { scale: [1, 1.12, 1] }
+              : { scale: 1 }
+        }
+        transition={
+          isActive
+            ? { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }
+            : { duration: 0.45, type: 'spring', stiffness: 280 }
+        }
+        className={cn(
+          'relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 transition-colors',
+          isCompleted && 'border-green-500 bg-green-500 text-white',
+          isActive && !isCancelled && 'border-green-500 bg-green-500/15 text-green-600',
+          step.status === 'upcoming' && 'border-muted bg-muted text-muted-foreground',
+          isCancelled && 'border-red-500/40 bg-red-500/10 text-red-600'
+        )}
+      >
+        {isCancelled ? <IconX className='h-5 w-5' /> : <Icon className='h-5 w-5' />}
+      </motion.div>
+    </div>
+  );
+}
 
+function StepLabels({
+  step,
+  showDescription = 'active-or-completed'
+}: {
+  step: OrderProgressStep;
+  showDescription?: 'active-or-completed' | 'always';
+}) {
+  const isCompleted = step.status === 'completed';
+  const isActive = step.status === 'active';
+  const isCancelled = step.status === 'cancelled';
+  const showDesc =
+    showDescription === 'always' ||
+    (showDescription === 'active-or-completed' && (isActive || isCompleted));
+
+  return (
+    <>
       <motion.p
         layout
         className={cn(
@@ -103,12 +107,61 @@ function StepNode({
       >
         {step.title}
       </motion.p>
-      <motion.p layout className='text-muted-foreground mt-1 px-1 text-xs sm:hidden'>
-        {step.status === 'active' || step.status === 'completed' ? step.description : null}
-      </motion.p>
-      <motion.p layout className='text-muted-foreground mt-1 hidden px-1 text-xs sm:block'>
-        {step.description}
-      </motion.p>
+      {step.description && showDesc ? (
+        <motion.p layout className='text-muted-foreground mt-1 text-xs'>
+          {step.description}
+        </motion.p>
+      ) : null}
+    </>
+  );
+}
+
+function HorizontalStepNode({
+  step,
+  index,
+  isPulsing
+}: {
+  step: OrderProgressStep;
+  index: number;
+  isPulsing: boolean;
+}) {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 + index * 0.08, type: 'spring', stiffness: 240, damping: 22 }}
+      className='relative flex flex-col items-center text-center'
+    >
+      <div className='relative mb-3'>
+        <StepIndicator step={step} isPulsing={isPulsing} />
+      </div>
+      <StepLabels step={step} showDescription='always' />
+    </motion.div>
+  );
+}
+
+function VerticalStepRow({
+  step,
+  index,
+  isPulsing
+}: {
+  step: OrderProgressStep;
+  index: number;
+  isPulsing: boolean;
+}) {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.1 + index * 0.06, type: 'spring', stiffness: 240, damping: 22 }}
+      className='relative flex gap-4'
+    >
+      <StepIndicator step={step} isPulsing={isPulsing} />
+      <Flex direction='column' className='min-w-0 flex-1 pt-2.5 pb-8 text-left'>
+        <StepLabels step={step} />
+      </Flex>
     </motion.div>
   );
 }
@@ -145,8 +198,36 @@ export function OrderTrackingProgress({
         )}
       </div>
 
-      <div className='relative px-1 sm:px-4'>
-        <div className='bg-border absolute top-6 right-4 left-4 h-1 overflow-hidden rounded-full sm:right-8 sm:left-8'>
+      {/* Mobile: single-column vertical timeline */}
+      <div className='relative sm:hidden'>
+        <div className='bg-border absolute top-6 bottom-8 left-6 w-0.5 overflow-hidden rounded-full'>
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: `${progressPercent}%` }}
+            transition={{ type: 'spring', stiffness: 90, damping: 18, mass: 0.8 }}
+            className={cn(
+              'w-full rounded-full',
+              isTerminal
+                ? 'bg-red-500/60'
+                : 'bg-gradient-to-b from-green-500 via-emerald-500 to-green-400'
+            )}
+          />
+        </div>
+        <Flex direction='column'>
+          {steps.map((step, index) => (
+            <VerticalStepRow
+              key={step.key}
+              step={step}
+              index={index}
+              isPulsing={pulsingStepKey === step.key}
+            />
+          ))}
+        </Flex>
+      </div>
+
+      {/* Desktop: horizontal stepper */}
+      <div className='relative hidden px-4 sm:block'>
+        <div className='bg-border absolute top-6 right-8 left-8 h-1 overflow-hidden rounded-full'>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
@@ -168,9 +249,9 @@ export function OrderTrackingProgress({
           )}
         </div>
 
-        <div className='relative grid grid-cols-2 gap-y-8 sm:grid-cols-4 sm:gap-y-0'>
+        <div className='relative grid grid-cols-4'>
           {steps.map((step, index) => (
-            <StepNode
+            <HorizontalStepNode
               key={step.key}
               step={step}
               index={index}

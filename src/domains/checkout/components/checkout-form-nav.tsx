@@ -6,7 +6,9 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
 import { formatCartMoney } from '@/domains/cart/lib/cart-utils';
+import { cn } from '@/lib/utils';
 
 import type { CheckoutStepId } from '../checkout.schema';
 
@@ -36,6 +38,7 @@ export function CheckoutFormNav({
 }: CheckoutFormNavProps) {
   const router = useRouter();
   const t = useTranslations('checkout.navigation');
+  const tValidation = useTranslations('checkout.validation');
 
   return (
     <Flex direction='row' align='center' justify='between' className='hidden pt-6 lg:flex'>
@@ -51,16 +54,26 @@ export function CheckoutFormNav({
             <IconChevronLeft className='mr-2 h-4 w-4' />
             {t('backToShipping')}
           </Button>
-          <Button
-            type='button'
-            onClick={onPlaceOrder}
-            loading={isPending}
-            disabled={!agreedToTerms || isPending}
-            aria-busy={isPending}
-            className='bg-accent text-accent-foreground w-56 rounded-full py-4.5 hover:text-white'
-          >
-            {isPending ? t('placingOrder') : t('placeOrder', { total: formatCartMoney(total) })}
-          </Button>
+          <Flex direction='column' align='end' gap={1.5}>
+            {!agreedToTerms ? (
+              <Typography.Muted className='text-destructive max-w-xs text-end text-xs leading-snug'>
+                {tValidation('acceptTerms')}
+              </Typography.Muted>
+            ) : null}
+            <Button
+              type='button'
+              onClick={onPlaceOrder}
+              loading={isPending}
+              disabled={isPending}
+              aria-busy={isPending}
+              className={cn(
+                'bg-accent text-accent-foreground w-56 rounded-full py-4.5 hover:text-white',
+                !agreedToTerms && !isPending && 'opacity-70'
+              )}
+            >
+              {isPending ? t('placingOrder') : t('placeOrder', { total: formatCartMoney(total) })}
+            </Button>
+          </Flex>
         </>
       ) : (
         <>

@@ -18,14 +18,12 @@ import type { ReactNode } from 'react';
 
 import { withForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Flex } from '@/components/ui/flex';
-import { Label } from '@/components/ui/label';
 import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues, type CheckoutStepId } from '@/domains/checkout/checkout.schema';
 import { CheckoutInlinePayment } from '@/domains/checkout/components/checkout-inline-payment';
-import { CheckoutLegalDialog } from '@/domains/checkout/components/checkout-legal-dialog';
+import { CheckoutTermsConsent } from '@/domains/checkout/components/checkout-terms-consent';
 import { useStripeCheckoutEnabled } from '@/domains/checkout/hooks/useStripeCheckoutEnabled';
 import {
   detectCardBrand,
@@ -84,8 +82,6 @@ export const CheckoutReview = withForm({
     const { isStripeCheckout } = useStripeCheckoutEnabled();
     const { items } = useCartController();
     const setCurrentStep = useCheckoutStore((s) => s.setCurrentStep);
-    const agreedToTerms = useCheckoutStore((s) => s.agreedToTerms);
-    const setAgreedToTerms = useCheckoutStore((s) => s.setAgreedToTerms);
     const submitError = useCheckoutStore((s) => s.submitError);
 
     const formValues = form.state.values;
@@ -259,29 +255,7 @@ export const CheckoutReview = withForm({
           </Typography.Text>
         ) : null}
 
-        <div className='bg-muted/40 border-border/60 flex items-start gap-3 rounded-xl border p-4'>
-          <Checkbox
-            id='agree-terms'
-            checked={agreedToTerms}
-            onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
-            className='mt-0.5'
-          />
-          <Label htmlFor='agree-terms' className='text-muted-foreground text-sm leading-relaxed'>
-            {t('termsPrefix')}{' '}
-            <CheckoutLegalDialog type='terms'>
-              <button type='button' className='text-accent underline'>
-                {t('termsLink')}
-              </button>
-            </CheckoutLegalDialog>{' '}
-            {t('termsAnd')}{' '}
-            <CheckoutLegalDialog type='privacy'>
-              <button type='button' className='text-accent underline'>
-                {t('privacyLink')}
-              </button>
-            </CheckoutLegalDialog>
-            {t('termsSuffix')}
-          </Label>
-        </div>
+        <CheckoutTermsConsent className='hidden lg:flex' />
 
         <Typography.Text
           variant='subtle'

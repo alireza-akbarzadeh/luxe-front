@@ -14,6 +14,8 @@ interface CheckoutState {
 
   // Legal
   agreedToTerms: boolean;
+  /** Pulse terms consent when user tries to place order without accepting. */
+  termsAttention: boolean;
 
   // Submit
   submitError: string | null;
@@ -32,6 +34,7 @@ interface CheckoutActions {
   resetCoupon: () => void;
 
   setAgreedToTerms: (value: boolean) => void;
+  setTermsAttention: (value: boolean) => void;
   setSubmitError: (value: string | null) => void;
   setIsRedirecting: (value: boolean) => void;
   setRedirectMode: (mode: CheckoutState['redirectMode']) => void;
@@ -48,6 +51,7 @@ const initialState: CheckoutState = {
   couponDiscount: 0,
   appliedCouponCode: '',
   agreedToTerms: false,
+  termsAttention: false,
   submitError: null,
   isRedirecting: false,
   redirectMode: null
@@ -68,7 +72,12 @@ export const useCheckoutStore = create<CheckoutStore>((set) => ({
   setAppliedCouponCode: (value) => set({ appliedCouponCode: value }),
   resetCoupon: () => set({ couponDiscount: 0, appliedCouponCode: '' }),
 
-  setAgreedToTerms: (value) => set({ agreedToTerms: value }),
+  setAgreedToTerms: (value) =>
+    set((state) => ({
+      agreedToTerms: value,
+      termsAttention: value ? false : state.termsAttention
+    })),
+  setTermsAttention: (value) => set({ termsAttention: value }),
   setSubmitError: (value) => set({ submitError: value }),
   setIsRedirecting: (value) => set({ isRedirecting: value }),
   setRedirectMode: (mode) => set({ redirectMode: mode }),
