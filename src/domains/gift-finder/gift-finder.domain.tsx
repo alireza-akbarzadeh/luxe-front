@@ -3,16 +3,22 @@
 import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 
 import { GiftFinderWizard } from './components/gift-finder-wizard';
+import { useGiftFinderStore } from './stores/gift-finder-store';
 
 /** Guided AI gift recommendation experience — recipient, occasion, budget, and style. */
 export function GiftFinderDomain() {
   const t = useTranslations('giftFinder');
+
+  useEffect(() => {
+    useGiftFinderStore.getState().reset();
+  }, []);
 
   return (
     <main className='pb-24'>

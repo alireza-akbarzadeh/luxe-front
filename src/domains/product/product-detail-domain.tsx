@@ -7,6 +7,7 @@ import { ProductDetailBreadcrumb } from './components/product-detail-breadcrumb'
 import { ProductGallery } from './components/product-gallery';
 import { ProductInfo } from './components/product-info';
 import { ProductStorePanel } from './components/product-store-panel';
+import { ProductViewTracker } from './components/product-view-tracker';
 
 const ProductInsightsSection = dynamic(() =>
   import('./components/product-insights-section').then((module) => ({
@@ -77,6 +78,7 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
 
   return (
     <div className='app-container mt-20 pb-16'>
+      <ProductViewTracker productId={numericProductId} />
       <ProductDetailBreadcrumb items={breadcrumbItems} />
 
       <div className='mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-14 xl:gap-20'>

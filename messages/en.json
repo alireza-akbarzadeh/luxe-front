@@ -1129,6 +1129,16 @@
       "title": "Categories for you",
       "description": "Quick access to departments we think you'll love — based on trends and your shopping activity."
     },
+    "recommended": {
+      "eyebrow": "Personalized",
+      "title": "Recommended for you",
+      "description": "Pieces picked from your browsing, wishlist, and purchase history."
+    },
+    "recentlyViewed": {
+      "eyebrow": "Pick up where you left off",
+      "title": "Recently viewed",
+      "description": "Products you explored recently — ready when you are."
+    },
     "featured": {
       "eyebrow": "Curated for you",
       "title": "Featured products",

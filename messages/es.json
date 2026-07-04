@@ -1128,6 +1128,16 @@
       "title": "Categorías para ti",
       "description": "Acceso rápido a departamentos que te encantarán — según tendencias y tu actividad de compra."
     },
+    "recommended": {
+      "eyebrow": "Personalizado",
+      "title": "Recomendado para ti",
+      "description": "Piezas elegidas según tu navegación, lista de deseos e historial de compras."
+    },
+    "recentlyViewed": {
+      "eyebrow": "Continúa donde lo dejaste",
+      "title": "Vistos recientemente",
+      "description": "Productos que exploraste hace poco — listos cuando tú lo estés."
+    },
     "featured": {
       "eyebrow": "Curado para ti",
       "title": "Productos destacados",

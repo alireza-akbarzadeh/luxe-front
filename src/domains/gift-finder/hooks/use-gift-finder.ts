@@ -22,10 +22,7 @@ export function useGiftFinder() {
   ): Promise<DtoAiGiftFinderResponse | null> => {
     try {
       const response = await postAiGiftFinder(payload, { timeout: GIFT_FINDER_TIMEOUT_MS });
-      if (!response.success || !response.data) {
-        return null;
-      }
-      return response.data;
+      return response.data ?? null;
     } catch {
       return null;
     }

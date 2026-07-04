@@ -23,6 +23,8 @@ import { MarketplaceShowcaseSection } from './components/marketplace-showcase-se
 import { NewArrivalsSection } from './components/new-arrivals-section';
 import { NewsletterSection } from './components/newsletter-section';
 import { PromoSection } from './components/promo-section';
+import { RecentlyViewedHomeSection } from './components/recently-viewed-home-section';
+import { RecommendedForYouSection } from './components/recommended-for-you-section';
 import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 
@@ -35,6 +37,18 @@ function MobileDeferredSection({ children }: { children: ReactNode }) {
 export function HomeSections() {
   return (
     <>
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+          <RecommendedForYouSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+          <RecentlyViewedHomeSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
           <FavoriteCategoriesSection />

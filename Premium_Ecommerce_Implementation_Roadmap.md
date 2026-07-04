@@ -50,11 +50,11 @@ Introduce curated collections such as "Minimal Workspace", "Travel Essentials", 
 
 Generate dynamic bundles based on compatibility and user intent.
 
-## Task 009 — Personalized Homepage
+## Task 009 — Personalized Homepage ✅
 
 Create an adaptive homepage based on browsing, purchases, and interests.
 
-## Task 010 — AI Gift Finder
+## Task 010 — AI Gift Finder ✅
 
 Build a guided gift recommendation experience based on recipient, occasion, and budget.
 
