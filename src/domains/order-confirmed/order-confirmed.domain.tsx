@@ -9,18 +9,16 @@ import {
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { OrderNumber } from '@/components/order-number';
 import { Button } from '@/components/ui/button';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { cn } from '@/lib/utils';
-import { useGetOrdersId } from '~/src/services/-orders-{id}-get';
 
 import { OrderConfirmedNotFound } from './components/order-confirmed-not-found';
 import { OrderConfirmedResolving } from './components/order-confirmed-resolving';
-import { useOrderStripeConfirm } from './hooks/use-order-stripe-confirm';
+import { useOrderConfirmedPage } from './hooks/use-order-confirmed-page';
 import { isOrderPaymentComplete, resolveOrderPaymentStatus } from './lib/order-payment-status';
 
 interface OrderConfirmedDomainProps {
@@ -28,33 +26,23 @@ interface OrderConfirmedDomainProps {
 }
 
 export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
-  const id = Number(orderId);
-  const validId = Number.isFinite(id) && id > 0;
-  const searchParams = useSearchParams();
-  const isFreshCheckout = searchParams.get('confirmed') === '1';
   const t = useTranslations('checkout.stripe');
-
-  const { isStripeReturn, isConfirming, confirmFailed } = useOrderStripeConfirm(orderId);
-
-  const { data, isLoading, isFetching, isError } = useGetOrdersId(id, {
-    query: {
-      enabled: validId,
-      retry: isStripeReturn ? 5 : 2,
-      retryDelay: (attempt) => Math.min(1000 * (attempt + 1), 3000)
-    }
-  });
-
-  const order = data?.data;
+  const {
+    validId,
+    isFreshCheckout,
+    order,
+    isResolving,
+    confirmingPayment,
+    confirmFailed,
+    isQueryError
+  } = useOrderConfirmedPage(orderId);
 
   if (!validId) {
     return <OrderConfirmedNotFound />;
   }
 
-  const isResolving =
-    isConfirming || isLoading || (isStripeReturn && !order && (isFetching || !confirmFailed));
-
   if (isResolving) {
-    return <OrderConfirmedResolving confirmingPayment={isConfirming} />;
+    return <OrderConfirmedResolving confirmingPayment={confirmingPayment} />;
   }
 
   if (!order) {
@@ -105,7 +93,6 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
           className='bg-card border-border/60 mb-8 rounded-2xl border p-6'
         >
           <dl className='space-y-4 text-sm'>
@@ -154,7 +141,7 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
           </div>
         ) : null}
 
-        {isError && confirmFailed ? (
+        {isQueryError && confirmFailed ? (
           <p className='text-muted-foreground mb-6 text-center text-sm'>
             {t('paymentConfirmError')}
           </p>
@@ -163,7 +150,6 @@ export function OrderConfirmedDomain({ orderId }: OrderConfirmedDomainProps) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
           className='flex flex-col gap-3 sm:flex-row sm:justify-center'
         >
           <Button asChild className='rounded-full'>

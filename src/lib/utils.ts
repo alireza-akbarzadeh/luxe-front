@@ -291,17 +291,25 @@ export const getCurrentUrl = () => {
 export function getCallbackUrl(callbackUrl?: string | null): string {
   if (!callbackUrl) return '/account';
 
-  try {
-    const url = new URL(
-      callbackUrl,
-      `http://${process.env['NEXT_PUBLIC_APP_DOMAIN'] || 'localhost'}`
-    );
-    const allowed =
-      url.origin === (process.env['NEXT_PUBLIC_APP_ORIGIN'] || 'http://localhost:4000');
-    if (allowed) return url.pathname + url.search;
-  } catch {
-    if (callbackUrl.startsWith('/')) return callbackUrl;
+  // Same-site relative paths are safe and must not depend on APP_ORIGIN env alignment.
+  if (callbackUrl.startsWith('/') && !callbackUrl.startsWith('//')) {
+    return callbackUrl;
   }
+
+  const appOrigin = process.env['NEXT_PUBLIC_APP_ORIGIN'];
+  if (!appOrigin) {
+    return '/account';
+  }
+
+  try {
+    const url = new URL(callbackUrl);
+    if (url.origin === appOrigin) {
+      return url.pathname + url.search;
+    }
+  } catch {
+    // fall through
+  }
+
   return '/account';
 }
 

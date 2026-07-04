@@ -1,8 +1,9 @@
 'use client';
 
-import { IconCheck, IconMapPin, IconPlus } from '@tabler/icons-react';
+import { IconCheck, IconEdit, IconMapPin, IconPlus } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -12,25 +13,28 @@ import type { ModelsAddress } from '@/services/-addresses-get.schemas';
 
 import { formatCheckoutAddressLabel } from '../lib/checkout-address';
 
-const NEW_ADDRESS_VALUE = 'new';
-
 interface CheckoutAddressPickerProps {
   addresses: ModelsAddress[];
   selectedId: number | null;
+  isManualSelected: boolean;
   onSelectAddress: (address: ModelsAddress) => void;
-  onSelectNew: () => void;
+  onPickDifferentAddress: () => void;
+  onEditAddress: (address: ModelsAddress) => void;
 }
 
-/** Lets shoppers pick a saved shipping address or enter a new one. */
+/** Lets shoppers pick a saved shipping address, quick-edit, or pick a new one on the map. */
 export function CheckoutAddressPicker({
   addresses,
   selectedId,
+  isManualSelected,
   onSelectAddress,
-  onSelectNew
+  onPickDifferentAddress,
+  onEditAddress
 }: CheckoutAddressPickerProps) {
   const t = useTranslations('checkout.shipping');
+  const tCommon = useTranslations('account.common');
 
-  const radioValue = selectedId != null ? String(selectedId) : NEW_ADDRESS_VALUE;
+  const radioValue = selectedId != null ? String(selectedId) : '';
 
   return (
     <Flex direction='column' spacing={3}>
@@ -41,17 +45,13 @@ export function CheckoutAddressPicker({
       <RadioGroup
         value={radioValue}
         onValueChange={(value) => {
-          if (value === NEW_ADDRESS_VALUE) {
-            onSelectNew();
-            return;
-          }
           const address = addresses.find((item) => String(item.id) === value);
           if (address) onSelectAddress(address);
         }}
         className='w-full min-w-0 space-y-3'
       >
         {addresses.map((address) => {
-          const isSelected = selectedId === address.id;
+          const isSelected = selectedId != null && Number(selectedId) === Number(address.id);
           const { title, subtitle } = formatCheckoutAddressLabel(address);
 
           return (
@@ -85,34 +85,42 @@ export function CheckoutAddressPicker({
                   {subtitle}
                 </Typography.Text>
               </Flex>
+              <Button
+                type='button'
+                variant='ghost'
+                size='icon'
+                className='text-muted-foreground hover:text-foreground h-8 w-8 shrink-0'
+                aria-label={tCommon('edit')}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onEditAddress(address);
+                }}
+              >
+                <IconEdit className='h-4 w-4' />
+              </Button>
             </Label>
           );
         })}
-
-        <Label
-          htmlFor='checkout-address-new'
-          className={cn(
-            'flex w-full min-w-0 cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors sm:p-4',
-            selectedId == null
-              ? 'border-accent bg-accent/5'
-              : 'border-border hover:border-accent/50'
-          )}
-        >
-          <RadioGroupItem
-            value={NEW_ADDRESS_VALUE}
-            id='checkout-address-new'
-            className='mt-0.5 shrink-0'
-          />
-          <Flex direction='row' align='center' spacing={2} className='min-w-0 flex-1'>
-            <IconPlus className='text-muted-foreground h-4 w-4 shrink-0' />
-            <Typography.Text variant='small' className='font-medium'>
-              {t('useDifferentAddress')}
-            </Typography.Text>
-          </Flex>
-        </Label>
       </RadioGroup>
 
-      <Typography.Text variant='subtle'>{t('addressEditableHint')}</Typography.Text>
+      <button
+        type='button'
+        onClick={onPickDifferentAddress}
+        className={cn(
+          'flex w-full min-w-0 cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors sm:p-4',
+          isManualSelected ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/50'
+        )}
+      >
+        <IconPlus className='text-muted-foreground h-4 w-4 shrink-0' />
+        <Flex direction='column' spacing={0.5} className='min-w-0 flex-1'>
+          <Typography.Text variant='small' className='font-medium'>
+            {t('useDifferentAddress')}
+          </Typography.Text>
+          <Typography.Text variant='subtle'>{t('useDifferentAddressHint')}</Typography.Text>
+        </Flex>
+        <IconMapPin className='text-muted-foreground h-4 w-4 shrink-0' />
+      </button>
     </Flex>
   );
 }

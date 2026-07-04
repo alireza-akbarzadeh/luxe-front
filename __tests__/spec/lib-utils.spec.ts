@@ -23,26 +23,26 @@ describe('getCallbackUrl', () => {
     expect(getCallbackUrl(null)).toBe('/account');
   });
 
-  it('allows relative paths when app domain matches origin', () => {
-    vi.stubEnv('NEXT_PUBLIC_APP_DOMAIN', 'localhost:4000');
-    vi.stubEnv('NEXT_PUBLIC_APP_ORIGIN', 'http://localhost:4000');
+  it('allows relative paths without requiring APP_ORIGIN', () => {
     expect(getCallbackUrl('/checkout?step=shipping')).toBe('/checkout?step=shipping');
+    expect(getCallbackUrl('/cart')).toBe('/cart');
+  });
+
+  it('rejects protocol-relative paths', () => {
+    expect(getCallbackUrl('//evil.example/phish')).toBe('/account');
   });
 
   it('allows absolute URLs on the app origin', () => {
-    vi.stubEnv('NEXT_PUBLIC_APP_DOMAIN', 'localhost:4000');
     vi.stubEnv('NEXT_PUBLIC_APP_ORIGIN', 'http://localhost:4000');
     expect(getCallbackUrl('http://localhost:4000/wishlist')).toBe('/wishlist');
   });
 
   it('rejects external origins and falls back to /account', () => {
-    vi.stubEnv('NEXT_PUBLIC_APP_DOMAIN', 'localhost:4000');
     vi.stubEnv('NEXT_PUBLIC_APP_ORIGIN', 'http://localhost:4000');
     expect(getCallbackUrl('https://evil.example/phish')).toBe('/account');
   });
 
-  it('rejects relative paths when domain and origin do not match', () => {
-    vi.stubEnv('NEXT_PUBLIC_APP_ORIGIN', 'http://localhost:4000');
-    expect(getCallbackUrl('/orders/123')).toBe('/account');
+  it('rejects absolute URLs when APP_ORIGIN is unset', () => {
+    expect(getCallbackUrl('http://localhost:3000/cart')).toBe('/account');
   });
 });

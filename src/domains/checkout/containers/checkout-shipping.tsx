@@ -2,18 +2,14 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useRef } from 'react';
 
 import { getFieldErrorMessage } from '@/components/forms/form';
 import { withForm } from '@/components/forms/useAppForm';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Flex } from '@/components/ui/flex';
-import { Grid } from '@/components/ui/grid';
-import { GridItem } from '@/components/ui/grid-item';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Typography } from '@/components/ui/typography';
-import { isShippingDefaultAddress } from '@/domains/account/address-form-utils';
 import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
 import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
 import {
@@ -23,15 +19,9 @@ import {
   qualifiesForFreeShipping
 } from '@/domains/cart/lib/cart-utils';
 import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
-import { CheckoutAddressPicker } from '@/domains/checkout/components/checkout-address-picker';
-import {
-  applyAddressToCheckoutForm,
-  isCheckoutShippingAddress
-} from '@/domains/checkout/lib/checkout-address';
-import { CHECKOUT_COUNTRY_OPTIONS } from '@/domains/checkout/lib/checkout-countries';
+import { CheckoutShippingAddressBlock } from '@/domains/checkout/components/checkout-shipping-address-block';
 import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
-import { useGetAddresses } from '@/services/-addresses-get';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
 
@@ -44,45 +34,8 @@ export const CheckoutShipping = withForm({
     const { subtotal } = useCartController();
     const { settings } = useCartCommerceSettings();
     const { data: providersData, isLoading: isLoadingShipping } = useGetShippingProviders();
-    const { data: addressesResponse, isLoading: isLoadingAddresses } = useGetAddresses({
-      query: { enabled: isAuthenticated }
-    });
     const shippingProviders: ModelsShippingProviders[] = providersData?.data || [];
     const hasFreeShipping = qualifiesForFreeShipping(subtotal, settings.freeShippingThreshold);
-    const addressesHydratedRef = useRef(false);
-
-    const savedAddresses = useMemo(
-      () => (addressesResponse?.data?.addresses ?? []).filter(isCheckoutShippingAddress),
-      [addressesResponse?.data?.addresses]
-    );
-
-    const selectedAddressId = form.state.values.shippingAddressId;
-
-    useEffect(() => {
-      if (!isAuthenticated || isLoadingAddresses || addressesHydratedRef.current) return;
-      if (savedAddresses.length === 0) {
-        addressesHydratedRef.current = true;
-        return;
-      }
-
-      const currentId = form.state.values.shippingAddressId;
-      if (currentId != null && savedAddresses.some((address) => address.id === currentId)) {
-        addressesHydratedRef.current = true;
-        return;
-      }
-
-      const preferred =
-        savedAddresses.find((address) => isShippingDefaultAddress(address)) ?? savedAddresses[0];
-
-      if (preferred) {
-        applyAddressToCheckoutForm(
-          form as { setFieldValue: (name: string, value: unknown) => void },
-          preferred
-        );
-      }
-
-      addressesHydratedRef.current = true;
-    }, [form, isAuthenticated, isLoadingAddresses, savedAddresses]);
 
     return (
       <motion.div
@@ -117,126 +70,7 @@ export const CheckoutShipping = withForm({
             </form.AppField>
           </Flex>
 
-          <Flex direction='column' spacing={4}>
-            <Typography.Text variant='small' className='font-semibold'>
-              {t('address')}
-            </Typography.Text>
-
-            {isAuthenticated && isLoadingAddresses ? (
-              <Typography.Text variant='muted'>{t('loadingAddresses')}</Typography.Text>
-            ) : savedAddresses.length > 0 ? (
-              <CheckoutAddressPicker
-                addresses={savedAddresses}
-                selectedId={selectedAddressId}
-                onSelectAddress={(address) =>
-                  applyAddressToCheckoutForm(
-                    form as { setFieldValue: (name: string, value: unknown) => void },
-                    address
-                  )
-                }
-                onSelectNew={() => form.setFieldValue('shippingAddressId', null)}
-              />
-            ) : null}
-
-            <Grid template='form' gap={4} className='min-w-0'>
-              <GridItem>
-                <form.AppField name='firstName'>
-                  {(field) => (
-                    <field.TextField
-                      label={t('firstName')}
-                      placeholder={t('firstNamePlaceholder')}
-                      autoComplete='given-name'
-                    />
-                  )}
-                </form.AppField>
-              </GridItem>
-              <GridItem>
-                <form.AppField name='lastName'>
-                  {(field) => (
-                    <field.TextField
-                      label={t('lastName')}
-                      placeholder={t('lastNamePlaceholder')}
-                      autoComplete='family-name'
-                    />
-                  )}
-                </form.AppField>
-              </GridItem>
-            </Grid>
-            <form.AppField name='addressLine1'>
-              {(field) => (
-                <field.TextField
-                  label={t('addressLine1')}
-                  placeholder={t('addressLine1Placeholder')}
-                  autoComplete='address-line1'
-                />
-              )}
-            </form.AppField>
-            <form.AppField name='addressLine2'>
-              {(field) => (
-                <field.TextField
-                  label={t('addressLine2')}
-                  placeholder={t('addressLine2Placeholder')}
-                  autoComplete='address-line2'
-                />
-              )}
-            </form.AppField>
-            <Grid gap={4} className='min-w-0 grid-cols-1 sm:grid-cols-3'>
-              <GridItem>
-                <form.AppField name='city'>
-                  {(field) => (
-                    <field.TextField
-                      label={t('city')}
-                      placeholder={t('cityPlaceholder')}
-                      autoComplete='address-level2'
-                    />
-                  )}
-                </form.AppField>
-              </GridItem>
-              <GridItem>
-                <form.AppField name='state'>
-                  {(field) => (
-                    <field.TextField
-                      label={t('state')}
-                      placeholder={t('statePlaceholder')}
-                      autoComplete='address-level1'
-                    />
-                  )}
-                </form.AppField>
-              </GridItem>
-              <GridItem>
-                <form.AppField name='zip'>
-                  {(field) => (
-                    <field.TextField
-                      label={t('zip')}
-                      placeholder={t('zipPlaceholder')}
-                      autoComplete='postal-code'
-                    />
-                  )}
-                </form.AppField>
-              </GridItem>
-            </Grid>
-            <form.AppField name='country'>
-              {(field) => (
-                <field.Select
-                  label={t('country')}
-                  options={[...CHECKOUT_COUNTRY_OPTIONS]}
-                  placeholder={t('countryPlaceholder')}
-                />
-              )}
-            </form.AppField>
-            <form.AppField name='phone'>
-              {(field) => (
-                <field.InputPhone
-                  label={t('phone')}
-                  placeholder={t('phonePlaceholder')}
-                  autoComplete='tel'
-                />
-              )}
-            </form.AppField>
-            <form.AppField name='saveInfo'>
-              {(field) => <field.Checkbox label={t('saveInfo')} id='checkout-save-info' />}
-            </form.AppField>
-          </Flex>
+          <CheckoutShippingAddressBlock form={form} isAuthenticated={isAuthenticated} />
 
           <Flex direction='column' spacing={4}>
             <Typography.Text variant='small' className='font-semibold'>

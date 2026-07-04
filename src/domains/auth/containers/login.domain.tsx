@@ -3,6 +3,7 @@
 import { IconMail } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState, useTransition } from 'react';
 import { toast } from 'sonner';
@@ -10,6 +11,7 @@ import { toast } from 'sonner';
 import { loginAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
 import { getDirection, type Locale } from '@/i18n/config';
+import { getCallbackUrl } from '@/lib/utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createLoginFormSchema } from '../auth.schema';
@@ -19,6 +21,8 @@ import { LoginSidebar } from '../components/login-sidebar';
 export function LoginDomain() {
   const locale = useLocale() as Locale;
   const pageDir = getDirection(locale);
+  const searchParams = useSearchParams();
+  const callbackUrl = getCallbackUrl(searchParams.get('callbackUrl'));
   const t = useTranslations('auth');
   const tLogin = useTranslations('auth.login');
   const tRegister = useTranslations('auth.register');
@@ -44,6 +48,7 @@ export function LoginDomain() {
         formData.append('email', value.email);
         formData.append('password', value.password);
         formData.append('rememberMe', String(value.rememberMe ?? false));
+        formData.append('callbackUrl', callbackUrl);
 
         const result = await loginAction(formData);
         setError(result?.error as string);
@@ -173,7 +178,10 @@ export function LoginDomain() {
 
           <p className='text-muted-foreground mt-8 text-center text-sm'>
             {tLogin('noAccount')}{' '}
-            <Link href='/register' className='text-accent font-medium hover:underline'>
+            <Link
+              href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              className='text-accent font-medium hover:underline'
+            >
               {tLogin('createAccount')}
             </Link>
           </p>

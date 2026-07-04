@@ -80,6 +80,9 @@ export function useCheckoutSubmit() {
 
       const paymentMethod = mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout);
 
+      setRedirectMode(paymentMethod === 'stripe' ? 'payment' : 'confirmed');
+      setIsRedirecting(true);
+
       const response: PostCheckout201 = await mutateAsync({
         data: {
           email: values.email || '',
@@ -128,8 +131,6 @@ export function useCheckoutSubmit() {
         if (stripeRedirect.stripeSessionId) {
           persistStripeCheckoutSession(stripeRedirect.orderId, stripeRedirect.stripeSessionId);
         }
-        setRedirectMode('payment');
-        setIsRedirecting(true);
         queryClient.removeQueries({ queryKey: getGetCartQueryKey() });
         window.location.assign(stripeRedirect.checkoutUrl);
         return;
@@ -150,7 +151,6 @@ export function useCheckoutSubmit() {
       }
 
       setRedirectMode('confirmed');
-      setIsRedirecting(true);
       toast.success(t('success'));
 
       router.replace(`/order-confirmed/${orderId}?confirmed=1`);
