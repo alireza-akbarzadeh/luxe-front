@@ -1,14 +1,23 @@
 'use client';
 
-import { IconRobot, IconSend, IconSparkles, IconUser } from '@tabler/icons-react';
+import { IconRobot, IconSparkles, IconUser } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
+import { AiChatComposer } from '@/components/ai/ai-chat-composer';
+import { AiThinkingRow } from '@/components/ai/ai-thinking-row';
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton
+} from '@/components/ai/conversation';
+import { Message, MessageContent, MessageLabel, MessageResponse } from '@/components/ai/message';
+import { type PromptInputMessage } from '@/components/ai/prompt-input';
+import { Suggestion, Suggestions } from '@/components/ai/suggestion';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Textarea } from '@/components/ui/textarea';
 import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 import type { DtoAiRecommendedProduct } from '@/services/-ai-shopping-assistant-post.schemas';
@@ -34,6 +43,22 @@ interface ShoppingAssistantSheetProps {
   onOpenChange: (open: boolean) => void;
 }
 
+function AssistantAvatar() {
+  return (
+    <Flex align='center' justify='center' className='bg-gold/15 mt-1 size-8 shrink-0 rounded-full'>
+      <IconRobot className='text-gold-strong size-4' />
+    </Flex>
+  );
+}
+
+function UserAvatar() {
+  return (
+    <Flex align='center' justify='center' className='bg-muted mt-1 size-8 shrink-0 rounded-full'>
+      <IconUser className='size-4' />
+    </Flex>
+  );
+}
+
 function ChatBubble({ message }: { message: ChatMessage }) {
   const t = useTranslations('shoppingAssistant');
   const isUser = message.role === 'user';
@@ -42,7 +67,7 @@ function ChatBubble({ message }: { message: ChatMessage }) {
     <Flex
       direction='column'
       spacing={2}
-      className={cn('mb-3', isUser ? 'items-end' : 'items-start')}
+      className={cn('mb-3 w-full', isUser ? 'items-end' : 'items-start')}
     >
       <Flex
         direction='row'
@@ -50,49 +75,16 @@ function ChatBubble({ message }: { message: ChatMessage }) {
         spacing={2}
         className={cn('w-full', isUser ? 'justify-end' : 'justify-start')}
       >
-        {!isUser ? (
-          <Flex
-            align='center'
-            justify='center'
-            className='bg-gold/15 mt-1 size-8 shrink-0 rounded-full'
-          >
-            <IconRobot className='text-gold-strong size-4' />
-          </Flex>
-        ) : null}
+        {!isUser ? <AssistantAvatar /> : null}
 
-        <Flex
-          direction='column'
-          spacing={1}
-          className={cn(
-            'max-w-[82%] rounded-2xl px-4 py-3',
-            isUser ? 'bg-gold rounded-br-md' : 'bg-card border-border rounded-bl-md border'
-          )}
-        >
-          {!isUser ? (
-            <Typography.Overline className='text-muted-foreground mb-1 block'>
-              {t('assistant')}
-            </Typography.Overline>
-          ) : null}
-          <Typography.Text
-            variant='small'
-            className={cn(
-              'leading-relaxed',
-              isUser ? 'text-primary-foreground' : 'text-foreground'
-            )}
-          >
-            {message.content}
-          </Typography.Text>
-        </Flex>
+        <Message from={message.role} className='max-w-[82%]'>
+          <MessageContent>
+            {!isUser ? <MessageLabel>{t('assistant')}</MessageLabel> : null}
+            <MessageResponse>{message.content}</MessageResponse>
+          </MessageContent>
+        </Message>
 
-        {isUser ? (
-          <Flex
-            align='center'
-            justify='center'
-            className='bg-muted mt-1 size-8 shrink-0 rounded-full'
-          >
-            <IconUser className='size-4' />
-          </Flex>
-        ) : null}
+        {isUser ? <UserAvatar /> : null}
       </Flex>
 
       {!isUser && message.recommendations && message.recommendations.length > 0 ? (
@@ -141,7 +133,6 @@ function ShoppingAssistantPanel() {
       content: t('welcome')
     }
   ]);
-  const [draft, setDraft] = useState('');
   const [activeFollowUps, setActiveFollowUps] = useState<string[]>([]);
 
   const chipPrompts =
@@ -168,7 +159,6 @@ function ShoppingAssistantPanel() {
     };
     const nextMessages = [...messages, userMessage];
     setMessages(nextMessages);
-    setDraft('');
     setActiveFollowUps([]);
 
     const apiMessages = nextMessages
@@ -193,6 +183,14 @@ function ShoppingAssistantPanel() {
     setActiveFollowUps(result.follow_up_questions ?? []);
   };
 
+  const handlePromptSubmit = async ({ text }: PromptInputMessage) => {
+    const trimmed = text.trim();
+    if (!trimmed || isPending) {
+      throw new Error('empty');
+    }
+    await handleSend(trimmed);
+  };
+
   const handleQuickPrompt = (promptKey: (typeof QUICK_PROMPT_KEYS)[number], label: string) => {
     if (promptKey === 'promptGift') {
       closeAssistant();
@@ -200,6 +198,15 @@ function ShoppingAssistantPanel() {
       return;
     }
     void handleSend(label);
+  };
+
+  const handleSuggestionClick = (prompt: string) => {
+    const key = QUICK_PROMPT_KEYS.find((k) => t(k) === prompt);
+    if (key) {
+      handleQuickPrompt(key, prompt);
+      return;
+    }
+    void handleSend(prompt);
   };
 
   return (
@@ -216,73 +223,36 @@ function ShoppingAssistantPanel() {
         </Flex>
       </SheetHeader>
 
-      <Flex direction='column' className='min-h-0 flex-1 overflow-y-auto px-4 py-4'>
-        {messages.map((message) => (
-          <ChatBubble key={message.id} message={message} />
-        ))}
-        {isPending ? (
-          <ChatBubble
-            message={{
-              id: 'assistant-loading',
-              role: 'assistant',
-              content: t('thinking')
-            }}
-          />
-        ) : null}
+      <Conversation className='min-h-0 flex-1'>
+        <ConversationContent className='gap-0 px-4 py-4'>
+          {messages.map((message) => (
+            <ChatBubble key={message.id} message={message} />
+          ))}
+          {isPending ? <AiThinkingRow avatar={<AssistantAvatar />} label={t('thinking')} /> : null}
 
-        <Flex direction='column' spacing={2} className='mt-2'>
-          <Typography.Overline className='text-muted-foreground'>{chipLabel}</Typography.Overline>
-          <Flex direction='row' wrap='wrap' spacing={2}>
-            {chipPrompts.map((prompt) => (
-              <Button
-                key={prompt}
-                type='button'
-                variant='outline'
-                size='sm'
-                className='h-auto rounded-full px-3 py-2 text-xs'
-                onClick={() => {
-                  const key = QUICK_PROMPT_KEYS.find((k) => t(k) === prompt);
-                  if (key) {
-                    handleQuickPrompt(key, prompt);
-                    return;
-                  }
-                  void handleSend(prompt);
-                }}
-                disabled={isPending}
-              >
-                {prompt}
-              </Button>
-            ))}
+          <Flex direction='column' spacing={2} className='mt-2'>
+            <Typography.Overline className='text-muted-foreground'>{chipLabel}</Typography.Overline>
+            <Suggestions>
+              {chipPrompts.map((prompt) => (
+                <Suggestion
+                  key={prompt}
+                  disabled={isPending}
+                  onClick={handleSuggestionClick}
+                  suggestion={prompt}
+                />
+              ))}
+            </Suggestions>
           </Flex>
-        </Flex>
-      </Flex>
+        </ConversationContent>
+        <ConversationScrollButton />
+      </Conversation>
 
       <Flex direction='column' spacing={2} className='border-border border-t px-4 py-3'>
-        <Flex direction='row' align='end' spacing={2}>
-          <Textarea
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            placeholder={t('placeholder')}
-            rows={2}
-            className='max-h-28 min-h-12 flex-1 resize-none rounded-2xl'
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                void handleSend(draft);
-              }
-            }}
-          />
-          <Button
-            type='button'
-            size='icon'
-            className='size-12 shrink-0 rounded-2xl'
-            disabled={!draft.trim() || isPending}
-            onClick={() => void handleSend(draft)}
-            aria-label={t('sendMessage')}
-          >
-            <IconSend className='cn-rtl-flip size-4' />
-          </Button>
-        </Flex>
+        <AiChatComposer
+          isPending={isPending}
+          onSubmit={handlePromptSubmit}
+          placeholder={t('placeholder')}
+        />
         <Typography.Muted className='text-center text-xs'>{t('footer')}</Typography.Muted>
       </Flex>
     </>
