@@ -2359,7 +2359,8 @@
       "success": "سفارش با موفقیت ثبت شد!",
       "failed": "ثبت سفارش ناموفق بود. دوباره تلاش کنید.",
       "invalidResponse": "پاسخ سرور checkout قابل خواندن نیست. اتصال API را بررسی کنید و آخرین نسخه backend را deploy کنید.",
-      "stripeMissingCheckoutUrl": "پرداخت شروع نشد. در Render متغیرهای STRIPE_SECRET_KEY، STRIPE_WEBHOOK_SECRET و FRONTEND_URL (آدرس Vercel) را تنظیم و API را دوباره deploy کنید."
+      "stripeMissingCheckoutUrl": "پرداخت شروع نشد. در Render متغیرهای STRIPE_SECRET_KEY، STRIPE_WEBHOOK_SECRET و FRONTEND_URL (آدرس Vercel) را تنظیم و API را دوباره deploy کنید.",
+      "cartEmpty": "سبد خرید شما دیگر فعال نیست (احتمالاً در تلاش قبلی checkout استفاده شده). به سبد برگردید، دوباره کالا اضافه کنید و تکرار کنید."
     },
     "mobileSummary": {
       "showSummary": "نمایش خلاصه سفارش",

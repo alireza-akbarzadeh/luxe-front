@@ -2358,7 +2358,8 @@
       "success": "¡Pedido realizado con éxito!",
       "failed": "No se pudo realizar el pedido. Inténtalo de nuevo.",
       "invalidResponse": "No pudimos leer la respuesta del servidor. Comprueba que la API esté accesible y vuelve a desplegar el backend.",
-      "stripeMissingCheckoutUrl": "No se pudo iniciar el pago. En Render configura STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET y FRONTEND_URL con tu URL de Vercel, y vuelve a desplegar la API."
+      "stripeMissingCheckoutUrl": "No se pudo iniciar el pago. En Render configura STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET y FRONTEND_URL con tu URL de Vercel, y vuelve a desplegar la API.",
+      "cartEmpty": "Tu carrito ya no está activo (puede haberse usado en un intento de pago anterior). Vuelve al carrito, añade los productos de nuevo e inténtalo otra vez."
     },
     "mobileSummary": {
       "showSummary": "Ver resumen del pedido",

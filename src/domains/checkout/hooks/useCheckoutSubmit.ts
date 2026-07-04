@@ -47,7 +47,7 @@ export function useCheckoutSubmit() {
   const t = useTranslations('checkout.submit');
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { clearCart } = useCartController();
+  const { clearCart, items: cartItems } = useCartController();
   const setSubmitError = useCheckoutStore((s) => s.setSubmitError);
   const setIsRedirecting = useCheckoutStore((s) => s.setIsRedirecting);
   const setRedirectMode = useCheckoutStore((s) => s.setRedirectMode);
@@ -70,6 +70,16 @@ export function useCheckoutSubmit() {
     const cardDigits = (values.cardNumber ?? '').replace(/\D/g, '');
 
     try {
+      if (cartItems.length === 0) {
+        const message = t('cartEmpty');
+        void queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+        setSubmitError(message);
+        toast.error(message);
+        throw new Error(message);
+      }
+
+      const paymentMethod = mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout);
+
       const response: PostCheckout201 = await mutateAsync({
         data: {
           email: values.email || '',
@@ -83,21 +93,29 @@ export function useCheckoutSubmit() {
           country: values.country,
           phone: values.phone || '',
           shipping_provider_id: Number(values.shippingProviderId),
-          payment_method: mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout),
+          payment_method: paymentMethod,
           save_info: values.saveInfo,
           newsletter: values.newsletter,
           coupon_code: values.couponCode || undefined,
           shipping_method: selectedProvider?.name || ShippingProviders.Standard,
-          card_number: requiresCard ? cardDigits : '',
-          expiry_month: requiresCard ? Number(values.expiryMonth) : 0,
-          expiry_year: requiresCard ? Number(values.expiryYear) : 0,
-          cvv: requiresCard ? (values.cvv ?? '') : '',
-          card_last4: requiresCard ? cardDigits.slice(-4) : ''
+          ...(paymentMethod === 'mock' && requiresCard
+            ? {
+                card_number: cardDigits,
+                expiry_month: Number(values.expiryMonth),
+                expiry_year: Number(values.expiryYear),
+                cvv: values.cvv ?? '',
+                card_last4: cardDigits.slice(-4)
+              }
+            : {})
         }
       });
 
       if (response?.success === false) {
-        const message = response.message || t('failed');
+        let message = response.message || t('failed');
+        if (/cart is empty/i.test(message)) {
+          message = t('cartEmpty');
+        }
+        void queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
         setSubmitError(message);
         toast.error(message);
         throw new Error(message);
@@ -145,12 +163,19 @@ export function useCheckoutSubmit() {
       setRedirectMode(null);
       submitLockRef.current = false;
 
+      void queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+
       const isAxiosError = error instanceof Error && 'isAxiosError' in error;
-      const message = isAxiosError
+      let message = isAxiosError
         ? extractErrorMessage(error as AxiosError<ApiErrorResponse>)
         : error instanceof Error
           ? error.message
           : t('failed');
+
+      if (/cart is empty/i.test(message)) {
+        message = t('cartEmpty');
+      }
+
       setSubmitError(message);
       if (!isAxiosError) {
         toast.error(message);

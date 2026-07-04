@@ -37,7 +37,7 @@ import { useCheckoutStore } from './store/checkout.store';
 export default function CheckoutDomain() {
   const router = useRouter();
   const t = useTranslations('checkout');
-  const { items, isLoading: isLoadingCart } = useCartController();
+  const { items, isLoading: isLoadingCart, refetch: refetchCart } = useCartController();
   const {
     steps,
     currentStepId,
@@ -72,6 +72,10 @@ export default function CheckoutDomain() {
     const { isRedirecting: redirecting, reset } = useCheckoutStore.getState();
     if (!redirecting) reset();
   }, []);
+
+  useEffect(() => {
+    void refetchCart();
+  }, [refetchCart]);
 
   const handleStepperClick = useCallback(
     async (stepId: CheckoutStepId) => {

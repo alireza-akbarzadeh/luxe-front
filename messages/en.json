@@ -2359,7 +2359,8 @@
       "success": "Order placed successfully!",
       "failed": "Failed to place order. Please try again.",
       "invalidResponse": "We could not read the checkout response from the server. Check that the API is reachable and redeploy the latest backend.",
-      "stripeMissingCheckoutUrl": "Payment could not be started. On Render, set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and FRONTEND_URL to your Vercel URL, then redeploy the API."
+      "stripeMissingCheckoutUrl": "Payment could not be started. On Render, set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and FRONTEND_URL to your Vercel URL, then redeploy the API.",
+      "cartEmpty": "Your cart is no longer active (it may have been used by a previous checkout attempt). Go back to the cart, add your items again, then retry."
     },
     "mobileSummary": {
       "showSummary": "Show order summary",
