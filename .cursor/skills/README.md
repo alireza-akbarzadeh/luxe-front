@@ -36,6 +36,7 @@ Each skill has:
 | `frontend-design` | Distinctive visual direction for new/redesigned marketing UI |
 | `design-taste-frontend` | Anti-slop landing/portfolio redesigns (not admin dashboards) |
 | `vercel-composition-patterns` | Compound components, boolean prop refactors (see `Table`) |
+| `checkout-domain` | Storefront checkout — thin components, hooks, form context, Zustand |
 
 ---
 

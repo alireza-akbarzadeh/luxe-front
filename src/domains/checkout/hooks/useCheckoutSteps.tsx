@@ -7,8 +7,8 @@ import { useCallback } from 'react';
 
 import type { StepDefinition } from '@/components/ui/stepper';
 
-import { CHECKOUT_STEP_IDS, type CheckoutStepId } from '../checkout.schema';
 import { useCheckoutStore } from '../store/checkout.store';
+import { CHECKOUT_STEP_IDS, type CheckoutStepId } from '../types/checkout.types';
 
 export type { CheckoutStepId };
 

@@ -16,7 +16,6 @@ import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
 import type { DtoCheckoutRequestPaymentMethod } from '@/services/-checkout-post.schemas';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
-import type { CheckoutFormValues } from '../checkout.schema';
 import {
   paymentMethodRequiresCard,
   resolveCheckoutOrderId,
@@ -24,6 +23,7 @@ import {
 } from '../lib/checkout-utils';
 import { persistStripeCheckoutSession } from '../lib/stripe-checkout-session-storage';
 import { useCheckoutStore } from '../store/checkout.store';
+import type { CheckoutFormValues } from '../types/checkout.types';
 import { useStripeCheckoutEnabled } from './useStripeCheckoutEnabled';
 
 /** Maps storefront payment UI values to API payment_method enum. */

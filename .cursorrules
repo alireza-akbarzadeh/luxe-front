@@ -136,7 +136,7 @@ Use `get*QueryKey()` for `queryClient.invalidateQueries`. If a hook is missing, 
 ## Component Architecture (Senior-Level Guidelines)
 
 - **Server Components by default.** Only add `"use client"` when the component needs hooks, event handlers, browser APIs, or third-party client libs (Zustand, TanStack Query hooks, etc.)
-- **Co-location**: feature code lives under `src/domains/<domain>/` with `components/`, `containers/`, `sections/`, `schemas/`, `stores/`, `lib/` subfolders. Shared UI primitives stay in `src/components/ui/` (shadcn)
+- **Co-location**: feature code lives under `src/domains/<domain>/` with `components/`, `containers/`, `sections/`, `schemas/`, `types/`, `stores/`, `lib/` subfolders. Shared UI primitives stay in `src/components/ui/` (shadcn). See `.cursor/rules/domain-organization.mdc`.
 - **No prop drilling beyond 2 levels** — lift to Zustand (client state) or Context only when truly cross-cutting
 - **Composition over configuration** — prefer compound components (e.g., `<Card><Card.Header/><Card.Body/></Card>`) over components with 15 boolean props
 - **Strict typing**: no `any`, no `as` casts unless justified with a comment; use `type-fest` utilities for advanced type transforms

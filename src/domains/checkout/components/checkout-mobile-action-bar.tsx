@@ -3,7 +3,7 @@
 import { IconChevronLeft, IconChevronRight, IconChevronUp, IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { type ComponentProps, useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
@@ -12,26 +12,11 @@ import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import { cn } from '@/lib/utils';
 
-import type { CheckoutStepId } from '../checkout.schema';
+import type { CheckoutMobileActionBarProps } from '../types/checkout.types';
 import { CheckoutMobileSummaryBody } from './checkout-mobile-summary-body';
-
-interface CheckoutMobileActionBarProps {
-  form: ComponentProps<typeof CheckoutMobileSummaryBody>['form'];
-  total: number;
-  itemCount: number;
-  currentStepId: CheckoutStepId;
-  isFirst: boolean;
-  isLast: boolean;
-  isPending: boolean;
-  agreedToTerms: boolean;
-  onBack: () => void;
-  onNext: () => void;
-  onPlaceOrder: () => void;
-}
 
 /** Sticky checkout bar above tab nav — tap total row to open order summary drawer. */
 export function CheckoutMobileActionBar({
-  form,
   total,
   itemCount,
   isFirst,
@@ -171,7 +156,7 @@ export function CheckoutMobileActionBar({
             </Typography.Muted>
           </Flex>
           <div className='max-h-[min(68dvh,600px)] overflow-y-auto px-4'>
-            <CheckoutMobileSummaryBody form={form} />
+            <CheckoutMobileSummaryBody />
           </div>
         </DrawerContent>
       </Drawer>

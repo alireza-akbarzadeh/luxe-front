@@ -10,7 +10,8 @@ Next.js 16 admin + storefront: **React 19**, **TypeScript**, **Tailwind v4**, **
 
 1. **`.cursorrules`** — full stack conventions (forms, tables, state, styling).
 2. **`.cursor/rules/luxe-front.mdc`** — short always-on summary (Cursor Rules).
-3. **`documentation/architecture.md`** — app structure, Orval pipeline, domain layout.
+3. **`.cursor/rules/domain-organization.mdc`** — domain folder layout (`types/`, `schemas/`, `lib/`, `hooks/`, thin components).
+4. **`documentation/architecture.md`** — app structure, Orval pipeline, domain layout.
 4. **`.cursor/skills/`** — on-demand workflow skills (see below); invoke with `/skill-name` or let Agent auto-load.
 5. **`CLAUDE.md`** — duplicate quick reference for Claude Code.
 

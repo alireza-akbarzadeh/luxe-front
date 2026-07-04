@@ -91,9 +91,7 @@ export function ShipmentDetailDomain({ shipmentId }: ShipmentDetailDomainProps) 
     notFound();
   }
 
-  return (
-    <ShipmentDetailView shipment={shipment} onWorkflowChange={invalidateShipmentQueries} />
-  );
+  return <ShipmentDetailView shipment={shipment} onWorkflowChange={invalidateShipmentQueries} />;
 }
 
 function ShipmentDetailView({
@@ -165,9 +163,6 @@ function ShipmentDetailView({
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
           <div className='space-y-6 lg:col-span-2'>
             <div className='bg-card border-border/40 rounded-2xl border p-6 shadow-sm'>
-              <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
-                Shipping address
-              </h2>
               <p className='text-foreground mt-3 text-sm leading-relaxed whitespace-pre-line'>
                 {formatAddress(shipment)}
               </p>
@@ -226,7 +221,9 @@ function ShipmentDetailView({
               </div>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Est. delivery</span>
-                <span className='text-xs tabular-nums'>{formatDate(shipment.estimated_delivery)}</span>
+                <span className='text-xs tabular-nums'>
+                  {formatDate(shipment.estimated_delivery)}
+                </span>
               </div>
               <div className='flex justify-between gap-4'>
                 <span className='text-muted-foreground'>Created</span>

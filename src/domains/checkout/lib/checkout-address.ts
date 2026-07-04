@@ -2,8 +2,10 @@ import type { GeocodedAddress } from '@/lib/geocoding/types';
 import { normalizePhoneForInput } from '@/lib/phone-utils';
 import type { DtoUpdateAddressRequest } from '@/services/-addresses-{id}-put.schemas';
 import type { ModelsAddress } from '@/services/-addresses-get.schemas';
+import type { DtoCreateAddressRequest } from '@/services/-addresses-post.schemas';
 
-import type { CheckoutFormValues } from '../checkout.schema';
+import type { CheckoutFormValues } from '../types/checkout.types';
+import type { CheckoutAddressFormApi } from '../types/checkout.types';
 
 type CheckoutAddressFields = Pick<
   CheckoutFormValues,
@@ -44,10 +46,7 @@ export function addressToCheckoutFields(address: ModelsAddress): CheckoutAddress
 }
 
 /** Applies a saved address to the checkout form in one update. */
-export function applyAddressToCheckoutForm(
-  form: { setFieldValue: (name: string, value: unknown) => void },
-  address: ModelsAddress
-) {
+export function applyAddressToCheckoutForm(form: CheckoutAddressFormApi, address: ModelsAddress) {
   const fields = addressToCheckoutFields(address);
   (Object.keys(fields) as (keyof CheckoutAddressFields)[]).forEach((key) => {
     form.setFieldValue(key, fields[key]);
@@ -56,7 +55,7 @@ export function applyAddressToCheckoutForm(
 
 /** Applies geocoded map data to checkout shipping fields (manual entry). */
 export function applyGeocodedToCheckoutForm(
-  form: { setFieldValue: (name: string, value: unknown) => void },
+  form: CheckoutAddressFormApi,
   geocoded: GeocodedAddress
 ) {
   const line1 = geocoded.street?.trim() || geocoded.displayName.split(',')[0]?.trim() || '';
@@ -72,7 +71,15 @@ export function applyGeocodedToCheckoutForm(
 /** Builds a PUT payload by merging quick-edit fields into an existing saved row. */
 export function buildAddressUpdatePayload(
   address: ModelsAddress,
-  edits: { addressLine1: string; addressLine2?: string; label?: string }
+  edits: {
+    addressLine1: string;
+    addressLine2?: string;
+    label?: string;
+    city?: string;
+    state?: string;
+    postal_code?: string;
+    country?: string;
+  }
 ): DtoUpdateAddressRequest {
   const addressType = address.address_type;
   const normalizedType =
@@ -86,12 +93,61 @@ export function buildAddressUpdatePayload(
     phone: address.phone ?? '',
     address_line1: edits.addressLine1.trim(),
     address_line2: (edits.addressLine2 ?? address.address_line2 ?? '').trim(),
-    city: address.city ?? '',
-    state: address.state ?? '',
-    postal_code: address.postal_code ?? '',
-    country: address.country ?? '',
+    city: (edits.city ?? address.city ?? '').trim(),
+    state: (edits.state ?? address.state ?? '').trim(),
+    postal_code: (edits.postal_code ?? address.postal_code ?? '').trim(),
+    country: (edits.country ?? address.country ?? '').trim(),
     is_default: address.is_default ?? false,
     instructions: (edits.label ?? address.instructions ?? '').trim()
+  };
+}
+
+/** Maps geocoded map result into checkout address edit form fields. */
+export function geocodedToAddressEditFields(geocoded: GeocodedAddress): {
+  addressLine1: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+} {
+  const line1 = geocoded.street?.trim() || geocoded.displayName.split(',')[0]?.trim() || '';
+
+  return {
+    addressLine1: line1,
+    city: geocoded.city?.trim() ?? '',
+    state: geocoded.state?.trim() ?? '',
+    zip: geocoded.zipCode?.trim() ?? '',
+    country: geocoded.country?.trim() ?? ''
+  };
+}
+
+/** Builds POST /addresses payload from a map pick during checkout. Returns null when phone is missing. */
+export function buildCheckoutCreateAddressPayload(
+  geocoded: GeocodedAddress,
+  ctx: {
+    recipientName: string;
+    phone: string;
+    addressLine2?: string;
+    label?: string;
+  }
+): DtoCreateAddressRequest | null {
+  const phone = normalizePhoneForInput(ctx.phone);
+  if (!phone) return null;
+
+  const mapped = geocodedToAddressEditFields(geocoded);
+
+  return {
+    address_type: 'shipping',
+    is_default: false,
+    recipient_name: ctx.recipientName.trim() || 'Customer',
+    phone,
+    address_line1: mapped.addressLine1,
+    address_line2: (ctx.addressLine2 ?? '').trim(),
+    city: mapped.city || 'Unknown',
+    state: mapped.state || '',
+    postal_code: mapped.zip || '00000',
+    country: mapped.country || 'United States',
+    instructions: (ctx.label ?? 'Delivery location').trim() || 'Delivery location'
   };
 }
 

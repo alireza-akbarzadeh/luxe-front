@@ -11,23 +11,9 @@ import {
 } from '@/components/ui/accordion';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
+import type { AvailableCouponsProps } from '@/domains/checkout/types/checkout.types';
+import { formatDiscountLabel } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import type { ModelsCoupon } from '@/services/-coupons-get.schemas';
-
-interface AvailableCouponsProps {
-  applicableCoupons: ModelsCoupon[];
-  selectedCouponCode: string;
-  isApplyingCoupon: boolean;
-  onSelectCoupon: (code: string) => void;
-  variant?: 'default' | 'compact';
-}
-
-function formatDiscountLabel(coupon: ModelsCoupon) {
-  if (coupon.discount_type === 'percentage') {
-    return `${coupon.discount_value}% off`;
-  }
-  return `$${coupon.discount_value} off`;
-}
 
 export function AvailableCoupons({
   applicableCoupons,

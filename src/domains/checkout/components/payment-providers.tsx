@@ -1,9 +1,10 @@
-// components/checkout/PaymentMethodSelector.tsx
+'use client';
+
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useGetPaymentProviders } from '@/services/-payment-providers-get';
 
-import type { CheckoutFormValues } from '../checkout.schema';
+import { usePaymentProviders } from '../hooks/use-payment-providers';
+import type { CheckoutFormValues } from '../types/checkout.types';
 
 interface PaymentMethodSelectorProps {
   value: CheckoutFormValues['paymentMethod'];
@@ -11,8 +12,7 @@ interface PaymentMethodSelectorProps {
 }
 
 export function PaymentMethodSelector({ value, onChange }: PaymentMethodSelectorProps) {
-  const { data: response, isLoading, error } = useGetPaymentProviders();
-  const providers = response?.data ?? [];
+  const { providers, isLoading, error } = usePaymentProviders();
 
   if (isLoading) {
     return <div className='mb-6'>Loading payment methods...</div>;
@@ -42,9 +42,9 @@ export function PaymentMethodSelector({ value, onChange }: PaymentMethodSelector
           >
             <RadioGroupItem value={provider.name as string} id={`payment-${provider.name}`} />
             <span>{provider.display_name}</span>
-            {provider.requires_card && (
+            {provider.requires_card ? (
               <span className='text-muted-foreground ml-1 text-xs'>(Card required)</span>
-            )}
+            ) : null}
           </Label>
         ))}
       </RadioGroup>

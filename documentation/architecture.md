@@ -27,8 +27,10 @@ src/
     containers/
     sections/             # columns, forms, table sections
     schemas/              # Zod (forms); NOT API types
+    types/                # domain TypeScript types and props interfaces
     stores/               # Zustand (UI state only)
     lib/                  # domain helpers
+    hooks/                # form/query orchestration
   components/
     ui/                   # shadcn — avoid hand-editing
     forms/                # useAppForm + field components

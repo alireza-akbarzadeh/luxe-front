@@ -4,188 +4,178 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
 import { getFieldErrorMessage } from '@/components/forms/form';
-import { withForm } from '@/components/forms/useAppForm';
+import { useTypedAppFormContext } from '@/components/forms/useAppForm';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Flex } from '@/components/ui/flex';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Typography } from '@/components/ui/typography';
 import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
-import { useCartCommerceSettings } from '@/domains/cart/hooks/use-cart-commerce-settings';
 import {
   cartMoneyClassName,
   formatCartMoney,
-  getEffectiveShippingPrice,
-  qualifiesForFreeShipping
+  getEffectiveShippingPrice
 } from '@/domains/cart/lib/cart-utils';
-import { checkoutDefaultValues } from '@/domains/checkout/checkout.schema';
 import { CheckoutShippingAddressBlock } from '@/domains/checkout/components/checkout-shipping-address-block';
-import { useCartController } from '@/hooks/useCartController';
+import { useCheckoutShippingProviders } from '@/domains/checkout/hooks/use-checkout-shipping-providers';
+import { checkoutDefaultValues } from '@/domains/checkout/schemas/checkout.schema';
 import { cn } from '@/lib/utils';
-import { useGetShippingProviders } from '@/services/-shipping-providers-get';
-import type { ModelsShippingProviders } from '@/services/-shipping-providers-get.schemas';
 
-export const CheckoutShipping = withForm({
-  defaultValues: checkoutDefaultValues,
+export function CheckoutShipping() {
+  const t = useTranslations('checkout.shipping');
+  const form = useTypedAppFormContext({ defaultValues: checkoutDefaultValues });
+  const { isAuthenticated } = useAuth();
+  const { providers, isLoading, subtotal, settings, hasFreeShipping } =
+    useCheckoutShippingProviders();
 
-  render: function ShippingRender({ form }) {
-    const t = useTranslations('checkout.shipping');
-    const { isAuthenticated } = useAuth();
-    const { subtotal } = useCartController();
-    const { settings } = useCartCommerceSettings();
-    const { data: providersData, isLoading: isLoadingShipping } = useGetShippingProviders();
-    const shippingProviders: ModelsShippingProviders[] = providersData?.data || [];
-    const hasFreeShipping = qualifiesForFreeShipping(subtotal, settings.freeShippingThreshold);
+  return (
+    <motion.div
+      key='shipping'
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      className='min-w-0 overflow-x-hidden'
+    >
+      <Flex direction='column' spacing={6}>
+        <Flex direction='column' spacing={1}>
+          <Typography.H3>{t('title')}</Typography.H3>
+          <Typography.Text variant='muted'>{t('subtitle')}</Typography.Text>
+        </Flex>
 
-    return (
-      <motion.div
-        key='shipping'
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        className='min-w-0 overflow-x-hidden'
-      >
-        <Flex direction='column' spacing={6}>
-          <Flex direction='column' spacing={1}>
-            <Typography.H3>{t('title')}</Typography.H3>
-            <Typography.Text variant='muted'>{t('subtitle')}</Typography.Text>
-          </Flex>
+        <Flex direction='column' spacing={4}>
+          <Typography.Text variant='small' className='font-semibold'>
+            {t('contact')}
+          </Typography.Text>
+          <form.AppField name='email'>
+            {(field) => (
+              <field.TextField
+                label={t('email')}
+                type='email'
+                placeholder={t('emailPlaceholder')}
+                autoComplete='email'
+              />
+            )}
+          </form.AppField>
+          <form.AppField name='newsletter'>
+            {(field) => <field.Checkbox label={t('newsletter')} id='checkout-newsletter' />}
+          </form.AppField>
+        </Flex>
 
-          <Flex direction='column' spacing={4}>
-            <Typography.Text variant='small' className='font-semibold'>
-              {t('contact')}
+        <CheckoutShippingAddressBlock isAuthenticated={isAuthenticated} />
+
+        <Flex direction='column' spacing={4}>
+          <Typography.Text variant='small' className='font-semibold'>
+            {t('shippingMethod')}
+          </Typography.Text>
+
+          <FreeShippingProgress subtotal={subtotal} />
+
+          {isLoading ? (
+            <Typography.Text variant='muted'>{t('loadingShipping')}</Typography.Text>
+          ) : providers.length === 0 ? (
+            <Typography.Text variant='small' tone='destructive'>
+              {t('noShipping')}
             </Typography.Text>
-            <form.AppField name='email'>
-              {(field) => (
-                <field.TextField
-                  label={t('email')}
-                  type='email'
-                  placeholder={t('emailPlaceholder')}
-                  autoComplete='email'
-                />
-              )}
-            </form.AppField>
-            <form.AppField name='newsletter'>
-              {(field) => <field.Checkbox label={t('newsletter')} id='checkout-newsletter' />}
-            </form.AppField>
-          </Flex>
+          ) : (
+            <form.AppField name='shippingProviderId'>
+              {(field) => {
+                const showError = field.state.meta.errors.length > 0;
 
-          <CheckoutShippingAddressBlock form={form} isAuthenticated={isAuthenticated} />
+                return (
+                  <>
+                    <RadioGroup
+                      value={field.state.value ? String(field.state.value) : ''}
+                      onValueChange={(val) => {
+                        field.handleChange(Number(val));
+                        field.handleBlur();
+                      }}
+                      className='space-y-3'
+                    >
+                      {providers.map((provider) => {
+                        const isSelected = field.state.value === provider.id;
+                        const providerRate = provider.price ?? 0;
+                        const effectivePrice = getEffectiveShippingPrice(
+                          providerRate,
+                          subtotal,
+                          settings
+                        );
 
-          <Flex direction='column' spacing={4}>
-            <Typography.Text variant='small' className='font-semibold'>
-              {t('shippingMethod')}
-            </Typography.Text>
-
-            <FreeShippingProgress subtotal={subtotal} />
-
-            {isLoadingShipping ? (
-              <Typography.Text variant='muted'>{t('loadingShipping')}</Typography.Text>
-            ) : shippingProviders.length === 0 ? (
-              <Typography.Text variant='small' tone='destructive'>
-                {t('noShipping')}
-              </Typography.Text>
-            ) : (
-              <form.AppField name='shippingProviderId'>
-                {(field) => {
-                  const showError = field.state.meta.errors.length > 0;
-
-                  return (
-                    <>
-                      <RadioGroup
-                        value={field.state.value ? String(field.state.value) : ''}
-                        onValueChange={(val) => {
-                          field.handleChange(Number(val));
-                          field.handleBlur();
-                        }}
-                        className='space-y-3'
-                      >
-                        {shippingProviders.map((provider) => {
-                          const isSelected = field.state.value === provider.id;
-                          const providerRate = provider.price ?? 0;
-                          const effectivePrice = getEffectiveShippingPrice(
-                            providerRate,
-                            subtotal,
-                            settings
-                          );
-
-                          return (
-                            <Label
-                              key={provider.id}
-                              htmlFor={`shipping-${provider.id}`}
+                        return (
+                          <Label
+                            key={provider.id}
+                            htmlFor={`shipping-${provider.id}`}
+                            className={cn(
+                              'flex w-full min-w-0 cursor-pointer flex-col gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
+                              isSelected
+                                ? 'border-accent bg-accent/5'
+                                : 'border-border hover:border-accent/50',
+                              showError && !field.state.value && 'border-destructive/40'
+                            )}
+                          >
+                            <Flex
+                              direction='row'
+                              align='start'
+                              spacing={3}
+                              className='min-w-0 flex-1'
+                            >
+                              <RadioGroupItem
+                                value={String(provider.id)}
+                                id={`shipping-${provider.id}`}
+                                className='mt-1 sm:mt-0'
+                              />
+                              <Flex direction='column' spacing={0.5} className='min-w-0'>
+                                <Typography.Text variant='small' className='font-medium'>
+                                  {provider.name || t('unnamedShipping')}
+                                </Typography.Text>
+                                {provider.description ? (
+                                  <Typography.Text variant='subtle'>
+                                    {provider.description}
+                                  </Typography.Text>
+                                ) : null}
+                              </Flex>
+                            </Flex>
+                            <Typography.Text
+                              variant='small'
                               className={cn(
-                                'flex w-full min-w-0 cursor-pointer flex-col gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
-                                isSelected
-                                  ? 'border-accent bg-accent/5'
-                                  : 'border-border hover:border-accent/50',
-                                showError && !field.state.value && 'border-destructive/40'
+                                cartMoneyClassName,
+                                'shrink-0 font-medium sm:text-right'
                               )}
                             >
-                              <Flex
-                                direction='row'
-                                align='start'
-                                spacing={3}
-                                className='min-w-0 flex-1'
-                              >
-                                <RadioGroupItem
-                                  value={String(provider.id)}
-                                  id={`shipping-${provider.id}`}
-                                  className='mt-1 sm:mt-0'
-                                />
-                                <Flex direction='column' spacing={0.5} className='min-w-0'>
-                                  <Typography.Text variant='small' className='font-medium'>
-                                    {provider.name || t('unnamedShipping')}
-                                  </Typography.Text>
-                                  {provider.description ? (
-                                    <Typography.Text variant='subtle'>
-                                      {provider.description}
-                                    </Typography.Text>
-                                  ) : null}
-                                </Flex>
-                              </Flex>
-                              <Typography.Text
-                                variant='small'
-                                className={cn(
-                                  cartMoneyClassName,
-                                  'shrink-0 font-medium sm:text-right'
-                                )}
-                              >
-                                {effectivePrice === 0 ? (
-                                  hasFreeShipping && providerRate > 0 ? (
-                                    <Flex direction='column' align='end' spacing={0.5}>
-                                      <span className='text-muted-foreground text-xs line-through'>
-                                        {formatCartMoney(providerRate)}
-                                      </span>
-                                      <Typography.Text variant='small' tone='success'>
-                                        {t('free')}
-                                      </Typography.Text>
-                                    </Flex>
-                                  ) : (
+                              {effectivePrice === 0 ? (
+                                hasFreeShipping && providerRate > 0 ? (
+                                  <Flex direction='column' align='end' spacing={0.5}>
+                                    <span className='text-muted-foreground text-xs line-through'>
+                                      {formatCartMoney(providerRate)}
+                                    </span>
                                     <Typography.Text variant='small' tone='success'>
                                       {t('free')}
                                     </Typography.Text>
-                                  )
+                                  </Flex>
                                 ) : (
-                                  formatCartMoney(effectivePrice)
-                                )}
-                              </Typography.Text>
-                            </Label>
-                          );
-                        })}
-                      </RadioGroup>
-                      {showError ? (
-                        <Typography.Text variant='subtle' tone='destructive' className='mt-2'>
-                          {getFieldErrorMessage(field.state.meta.errors[0]) ?? t('selectShipping')}
-                        </Typography.Text>
-                      ) : null}
-                    </>
-                  );
-                }}
-              </form.AppField>
-            )}
-          </Flex>
+                                  <Typography.Text variant='small' tone='success'>
+                                    {t('free')}
+                                  </Typography.Text>
+                                )
+                              ) : (
+                                formatCartMoney(effectivePrice)
+                              )}
+                            </Typography.Text>
+                          </Label>
+                        );
+                      })}
+                    </RadioGroup>
+                    {showError ? (
+                      <Typography.Text variant='subtle' tone='destructive' className='mt-2'>
+                        {getFieldErrorMessage(field.state.meta.errors[0]) ?? t('selectShipping')}
+                      </Typography.Text>
+                    ) : null}
+                  </>
+                );
+              }}
+            </form.AppField>
+          )}
         </Flex>
-      </motion.div>
-    );
-  }
-});
+      </Flex>
+    </motion.div>
+  );
+}

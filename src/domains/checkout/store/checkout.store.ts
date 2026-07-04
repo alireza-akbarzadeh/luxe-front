@@ -1,7 +1,7 @@
 // app/checkout/store/checkout.store.ts
 import { create } from 'zustand';
 
-import type { CheckoutStepId } from '../checkout.schema';
+import type { CheckoutStepId } from '../types/checkout.types';
 
 interface CheckoutState {
   // Wizard

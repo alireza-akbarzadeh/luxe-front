@@ -19,6 +19,7 @@ Next.js 16 · React 19 · TS strict · Tailwind v4 · shadcn · TanStack Query/F
 | `/luxe-react-performance` | React/Next perf — Query, Recharts, Zustand, bundle, re-renders |
 | `/api-gen` | Regenerate `src/services/` after backend OpenAPI changes |
 | `/layout-typography` | `Flex`/`Grid`/`Typography` instead of div + Tailwind layout/text |
+| `/checkout-domain` | Storefront checkout refactor — thin components, hooks, form context |
 | `/new-admin-domain` | New `/dashboard/*` feature scaffold |
 | `/admin-forms` | `useAppForm`, Zod, mutations, mappers |
 
@@ -46,7 +47,7 @@ Invalidate with generated `get*QueryKey()` — not string literals.
 page.tsx → domains/<name>/*.domain.tsx → Orval hooks → API
 ```
 
-- **Domains** live in `src/domains/` (not `features/`).
+- **Domains** live in `src/domains/` (not `features/`). Layout: `types/`, `schemas/`, `lib/`, `hooks/`, `sections/`, `components/` — see `.cursor/rules/domain-organization.mdc`.
 - **Forms** → `useAppForm` (`src/components/forms/useAppForm.ts`) — skill `/admin-forms`.
 - **Tables** → `Table` from `src/components/table/data-table.tsx`.
 - **Layout/text** → `Flex`, `Grid`, `Typography` from `@/components/ui/` — skill `/layout-typography`.

@@ -1,0 +1,64 @@
+---
+description: Domain folder layout — types, schemas, lib, hooks; keep components thin
+alwaysApply: true
+---
+
+# Domain organization (luxe-front)
+
+Feature code lives under `src/domains/<domain>/`. **Do not mix types, Zod schemas, business logic, and large JSX in one file.**
+
+## Folder roles
+
+| Folder | Purpose | Examples |
+|--------|---------|----------|
+| `types/` | **One** `*.types.ts` per domain — props, step ids, local interfaces | `checkout.types.ts` |
+| `schemas/` | Zod validation for forms (not API DTOs) | `checkout.schema.ts`, `checkout-address-edit.schema.ts` |
+| `lib/` | Pure helpers, mappers, validation (no React hooks) | `checkout-validation.ts`, `checkout-address.ts` |
+| `hooks/` | Stateful logic, TanStack Query, form orchestration | `use-checkout-wizard-actions.ts` |
+| `sections/` | Form field groups, step panels | `checkout-address-edit-form.tsx` |
+| `components/` | Presentational UI; compose hooks + sections | `checkout-address-edit-dialog.tsx` |
+| `containers/` | Route-level segments wiring data + layout | `checkout-shipping.tsx`, `checkout-review.tsx` |
+| `store/` or `stores/` | Zustand UI state only (not server lists) | `checkout.store.ts` |
+
+## Placement rules
+
+1. **Types** — one `types/<domain>.types.ts` per domain. Cross-domain → `src/lib/` or shared types.
+2. **Schemas** — under `schemas/`; main wizard schema + sub-form schemas. Step validation helpers → `lib/`.
+3. **Logic** — pure functions in `lib/`; React + Query + submit flow in `hooks/`.
+4. **Components** — target **≤ ~200 lines**. Split: hook → `hooks/`, fields → `sections/`, mappers → `lib/`.
+5. **API types** — Orval `src/services/*.schemas.ts` only.
+
+## Forms & state
+
+- **Forms:** `useAppForm` at domain entry; children use `useTypedAppFormContext({ defaultValues })` inside `form.AppForm` — **no `form` prop drilling**.
+- **Avoid `withForm`** in storefront domains — use context instead.
+- **Zustand** for wizard UI (steps, modals, terms, selections) — not fetched lists or table URL state.
+- **TanStack Query** for server data; cache updates via `setQueryData` when appropriate.
+
+## Anti-patterns
+
+- ❌ Inline `z.object` + mapper + API hook + 150 lines JSX in one component
+- ❌ `useGet*` Orval hooks inside `components/` (belongs in `hooks/`)
+- ❌ Prop-drilling `form` when `useTypedAppFormContext` works inside `AppForm`
+- ❌ Multiple type files per domain (`checkout-address.types.ts` + `checkout-payment.types.ts`)
+
+## Skills
+
+- Checkout storefront: `/checkout-domain` (`.cursor/skills/checkout-domain/SKILL.md`)
+- Admin forms: `/admin-forms`
+- Zustand: `/zustand`
+- Layout: `/layout-typography`
+
+## Example (checkout)
+
+```
+domains/checkout/
+  types/checkout.types.ts
+  schemas/checkout.schema.ts
+  lib/checkout-validation.ts
+  hooks/use-checkout-wizard-actions.ts
+  sections/checkout-address-edit-form.tsx
+  components/checkout-address-edit-dialog.tsx
+  containers/checkout-shipping.tsx
+  checkout.domain.tsx
+```

@@ -2,12 +2,12 @@
 
 import { useCallback } from 'react';
 
-import type { CheckoutFormValues, CheckoutStepId } from '../checkout.schema';
 import {
   getCheckoutPaymentErrors,
   getCheckoutStepErrors,
   getCheckoutStepFields
-} from '../checkout.schema';
+} from '../lib/checkout-validation';
+import type { CheckoutFormValues, CheckoutStepId } from '../types/checkout.types';
 import type { CheckoutFormApi } from './useCheckoutForm';
 
 /** Step-scoped and payment validation for the checkout wizard. */

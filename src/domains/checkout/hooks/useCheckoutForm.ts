@@ -6,8 +6,8 @@ import { normalizePhoneForInput } from '@/lib/phone-utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 
-import type { CheckoutFormValues } from '../checkout.schema';
-import { createCheckoutSchema } from '../checkout.schema';
+import { createCheckoutSchema } from '../schemas/checkout.schema';
+import type { CheckoutFormValues } from '../types/checkout.types';
 import { useStripeCheckoutEnabled } from './useStripeCheckoutEnabled';
 
 interface UseCheckoutFormArgs {
