@@ -1,10 +1,17 @@
 'use client';
 
-import { IconBrain, IconMoodSmile, IconTargetArrow } from '@tabler/icons-react';
+import {
+  IconBrain,
+  IconHomeHeart,
+  IconMoodSmile,
+  IconRefresh,
+  IconTargetArrow
+} from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { Grid } from '@/components/ui/grid';
 import { Typography } from '@/components/ui/typography';
+import { PERSONALIZATION_ROUTES } from '@/domains/personalization/lib/personalization-routes';
 import { SectionShell } from '@/domains/support/components/section-shell';
 
 import { PlatformCard } from './platform-card';
@@ -30,7 +37,7 @@ export function PersonalizationFeaturesSection() {
           badge={t('memory.badge')}
           recommended
           actionLabel={t('memory.action')}
-          href='/shopping-memory'
+          href={PERSONALIZATION_ROUTES.memory}
         />
         <PlatformCard
           icon={<IconTargetArrow className='size-5' />}
@@ -38,7 +45,7 @@ export function PersonalizationFeaturesSection() {
           description={t('goal.description')}
           badge={t('goal.badge')}
           actionLabel={t('goal.action')}
-          href='/goal-shopping'
+          href={PERSONALIZATION_ROUTES.goal}
         />
         <PlatformCard
           icon={<IconMoodSmile className='size-5' />}
@@ -46,7 +53,23 @@ export function PersonalizationFeaturesSection() {
           description={t('mood.description')}
           badge={t('mood.badge')}
           actionLabel={t('mood.action')}
-          href='/mood-shopping'
+          href={PERSONALIZATION_ROUTES.mood}
+        />
+        <PlatformCard
+          icon={<IconRefresh className='size-5' />}
+          title={t('replenishment.title')}
+          description={t('replenishment.description')}
+          badge={t('replenishment.badge')}
+          actionLabel={t('replenishment.action')}
+          href={PERSONALIZATION_ROUTES.replenishment}
+        />
+        <PlatformCard
+          icon={<IconHomeHeart className='size-5' />}
+          title={t('household.title')}
+          description={t('household.description')}
+          badge={t('household.badge')}
+          actionLabel={t('household.action')}
+          href={PERSONALIZATION_ROUTES.household}
         />
       </Grid>
     </SectionShell>

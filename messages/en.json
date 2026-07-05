@@ -1808,6 +1808,60 @@
       "moodRequired": "Pick a mood to continue"
     }
   },
+  "replenishmentReminders": {
+    "title": "Replenishment reminders",
+    "subtitle": "Luxe reviews your order history and estimates when consumables and repeat buys may need a refill.",
+    "guestTitle": "Sign in for replenishment reminders",
+    "guestDescription": "We need your purchase history to suggest reorder timing.",
+    "signIn": "Sign in",
+    "loading": "Checking your purchase history…",
+    "reminders": "Reorder soon",
+    "picks": "Suggested refills",
+    "daysSince": "{count, plural, one {# day since last order} other {# days since last order}}",
+    "urgency": {
+      "watch": "Watch",
+      "due": "Due",
+      "soon": "Soon",
+      "overdue": "Overdue"
+    },
+    "footer": "AI estimates from your orders — adjust timing to your real usage."
+  },
+  "householdProfiles": {
+    "title": "Household profiles",
+    "subtitle": "Save sizes and preferences for everyone you shop for, then get personalized picks per person.",
+    "guestTitle": "Sign in to manage household profiles",
+    "guestDescription": "Profiles stay on your device and power personalized recommendations when you are signed in.",
+    "signIn": "Sign in",
+    "membersTitle": "Your household",
+    "membersEmpty": "Add a partner, child, or roommate to start personalizing picks.",
+    "addMember": "Add someone",
+    "addMemberAction": "Save profile",
+    "memberAdded": "Household member saved",
+    "removeMember": "Remove {name}",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "e.g. Sam",
+      "relationship": "Relationship",
+      "relationshipPlaceholder": "e.g. partner, child, parent",
+      "sizes": "Sizes",
+      "sizesPlaceholder": "e.g. shoe 9, shirt M",
+      "preferences": "Preferences",
+      "preferencesPlaceholder": "e.g. neutral colors, no wool",
+      "interests": "Interests",
+      "interestsPlaceholder": "e.g. running, skincare, gaming",
+      "context": "Shopping context (optional)",
+      "contextPlaceholder": "e.g. back-to-school, holiday gifts",
+      "budgetMin": "Min budget",
+      "budgetMax": "Max budget"
+    },
+    "submit": "Get household picks",
+    "submitting": "Personalizing…",
+    "footer": "Profiles are stored locally in your browser. Picks come from catalog search.",
+    "errors": {
+      "nameTooShort": "Enter a name with at least 2 characters",
+      "noMembers": "Add at least one household member first"
+    }
+  },
   "personalizationDiscovery": {
     "eyebrow": "Shop your way",
     "title": "Personalized ways to discover",
@@ -1832,6 +1886,19 @@
         "description": "Pick a vibe and discover products styled for how you want to feel.",
         "badge": "New",
         "action": "Shop by mood"
+      },
+      "replenishment": {
+        "title": "Replenishment reminders",
+        "description": "See when repeat buys from your orders may need a refill.",
+        "badge": "For you",
+        "action": "View reminders",
+        "signInHint": "Sign in to analyze your order history."
+      },
+      "household": {
+        "title": "Household profiles",
+        "description": "Save preferences for family members and shop with picks for each person.",
+        "badge": "New",
+        "action": "Manage household"
       }
     },
     "promo": {
@@ -2578,6 +2645,18 @@
         "description": "Pick how you feel today and discover products that match your vibe.",
         "badge": "New",
         "action": "Shop by mood"
+      },
+      "replenishment": {
+        "title": "Replenishment reminders",
+        "description": "AI estimates when items you have ordered before may need a reorder.",
+        "badge": "New",
+        "action": "View reminders"
+      },
+      "household": {
+        "title": "Household profiles",
+        "description": "Profiles for everyone you shop for — with picks tailored to each person.",
+        "badge": "Beta",
+        "action": "Open profiles"
       }
     },
     "cards": {

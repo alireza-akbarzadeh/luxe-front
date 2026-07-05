@@ -3,7 +3,9 @@
 import {
   IconApps,
   IconBrain,
+  IconHomeHeart,
   IconMoodSmile,
+  IconRefresh,
   IconSparkles,
   IconTargetArrow
 } from '@tabler/icons-react';
@@ -25,7 +27,9 @@ import {
 const FEATURE_ICONS = {
   memory: <IconBrain className='size-5' />,
   goal: <IconTargetArrow className='size-5' />,
-  mood: <IconMoodSmile className='size-5' />
+  mood: <IconMoodSmile className='size-5' />,
+  replenishment: <IconRefresh className='size-5' />,
+  household: <IconHomeHeart className='size-5' />
 };
 
 /** Homepage band — introduces mood, goal, and memory shopping before shoppers reach /apps. */
@@ -65,7 +69,7 @@ export function PersonalizationDiscoverySection() {
           </Flex>
         </Flex>
 
-        <Grid className='grid-cols-1 gap-4 md:grid-cols-3'>
+        <Grid className='grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
           {PERSONALIZATION_FEATURE_KEYS.map((key) => (
             <PlatformCard
               key={key}
@@ -73,11 +77,13 @@ export function PersonalizationDiscoverySection() {
               title={t(`cards.${key}.title`)}
               description={t(`cards.${key}.description`)}
               badge={t(`cards.${key}.badge`)}
-              recommended={key === 'memory' && isAuthenticated}
+              recommended={(key === 'memory' || key === 'replenishment') && isAuthenticated}
               actionLabel={t(`cards.${key}.action`)}
               href={PERSONALIZATION_ROUTES[key]}
               helperText={
-                key === 'memory' && !isAuthenticated ? t('cards.memory.signInHint') : undefined
+                (key === 'memory' || key === 'replenishment') && !isAuthenticated
+                  ? t(`cards.${key}.signInHint`)
+                  : undefined
               }
             />
           ))}

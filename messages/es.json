@@ -1807,6 +1807,60 @@
       "moodRequired": "Elige un mood para continuar"
     }
   },
+  "replenishmentReminders": {
+    "title": "Recordatorios de reposición",
+    "subtitle": "Luxe revisa tu historial de pedidos y estima cuándo conviene reponer consumibles y compras recurrentes.",
+    "guestTitle": "Inicia sesión para recordatorios",
+    "guestDescription": "Necesitamos tu historial de compras para sugerir cuándo reordenar.",
+    "signIn": "Iniciar sesión",
+    "loading": "Revisando tu historial de compras…",
+    "reminders": "Reponer pronto",
+    "picks": "Reposiciones sugeridas",
+    "daysSince": "{count, plural, one {Hace # día desde el último pedido} other {Hace # días desde el último pedido}}",
+    "urgency": {
+      "watch": "Vigilar",
+      "due": "Pendiente",
+      "soon": "Pronto",
+      "overdue": "Atrasado"
+    },
+    "footer": "Estimaciones de IA según tus pedidos — ajusta según tu uso real."
+  },
+  "householdProfiles": {
+    "title": "Perfiles del hogar",
+    "subtitle": "Guarda tallas y preferencias de quienes compras y obtén picks personalizados por persona.",
+    "guestTitle": "Inicia sesión para perfiles del hogar",
+    "guestDescription": "Los perfiles se guardan en tu dispositivo y alimentan recomendaciones cuando inicias sesión.",
+    "signIn": "Iniciar sesión",
+    "membersTitle": "Tu hogar",
+    "membersEmpty": "Añade pareja, hijo o compañero para personalizar picks.",
+    "addMember": "Añadir persona",
+    "addMemberAction": "Guardar perfil",
+    "memberAdded": "Miembro guardado",
+    "removeMember": "Eliminar {name}",
+    "fields": {
+      "name": "Nombre",
+      "namePlaceholder": "p. ej. Sam",
+      "relationship": "Relación",
+      "relationshipPlaceholder": "p. ej. pareja, hijo",
+      "sizes": "Tallas",
+      "sizesPlaceholder": "p. ej. zapato 42, camisa M",
+      "preferences": "Preferencias",
+      "preferencesPlaceholder": "p. ej. colores neutros",
+      "interests": "Intereses",
+      "interestsPlaceholder": "p. ej. running, skincare",
+      "context": "Contexto (opcional)",
+      "contextPlaceholder": "p. ej. vuelta al cole, regalos",
+      "budgetMin": "Presupuesto mín.",
+      "budgetMax": "Presupuesto máx."
+    },
+    "submit": "Obtener picks del hogar",
+    "submitting": "Personalizando…",
+    "footer": "Perfiles en tu navegador. Los picks vienen del catálogo.",
+    "errors": {
+      "nameTooShort": "Introduce un nombre de al menos 2 caracteres",
+      "noMembers": "Añade al menos un miembro del hogar"
+    }
+  },
   "personalizationDiscovery": {
     "eyebrow": "Compra a tu manera",
     "title": "Formas personalizadas de descubrir",
@@ -1831,6 +1885,19 @@
         "description": "Elige un vibe y descubre productos que encajan con cómo quieres sentirte.",
         "badge": "Nuevo",
         "action": "Comprar por mood"
+      },
+      "replenishment": {
+        "title": "Recordatorios de reposición",
+        "description": "Mira cuándo las compras repetidas pueden necesitar reponerse.",
+        "badge": "Para ti",
+        "action": "Ver recordatorios",
+        "signInHint": "Inicia sesión para analizar tu historial."
+      },
+      "household": {
+        "title": "Perfiles del hogar",
+        "description": "Guarda preferencias familiares y compra con picks por persona.",
+        "badge": "Nuevo",
+        "action": "Gestionar hogar"
       }
     },
     "promo": {
@@ -2577,6 +2644,18 @@
         "description": "Elige cómo te sientes y descubre productos que encajan con tu vibe.",
         "badge": "Nuevo",
         "action": "Comprar por mood"
+      },
+      "replenishment": {
+        "title": "Recordatorios de reposición",
+        "description": "La IA estima cuándo reponer artículos que ya compraste.",
+        "badge": "Nuevo",
+        "action": "Ver recordatorios"
+      },
+      "household": {
+        "title": "Perfiles del hogar",
+        "description": "Perfiles para quien compras, con picks para cada persona.",
+        "badge": "Beta",
+        "action": "Abrir perfiles"
       }
     },
     "cards": {

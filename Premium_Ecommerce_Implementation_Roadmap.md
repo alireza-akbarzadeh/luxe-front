@@ -114,9 +114,9 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 027 — Personalized Notifications ✅
 
-## Task 028 — Replenishment Reminders
+## Task 028 — Replenishment Reminders ✅
 
-## Task 029 — Household Profiles
+## Task 029 — Household Profiles ✅
 
 ## Task 030 — Private Shopping Mode
 
