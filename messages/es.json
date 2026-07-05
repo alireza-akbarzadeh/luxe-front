@@ -779,6 +779,25 @@
         "loadFailed": "El visor interactivo no está disponible ahora. Inténtalo de nuevo."
       }
     },
+    "configurator": {
+      "button": "Configurador con IA",
+      "title": "Configurador de producto",
+      "description": "Describe cómo usarás este artículo y recibe variantes recomendadas.",
+      "descriptionNamed": "Arma la configuración ideal de {name} para tus necesidades.",
+      "contextPlaceholder": "p. ej. oficina diaria, salón minimalista, regalo para alguien que tiene frío…",
+      "contextHint": "Menciona habitación, ocasión, estilo o preferencias de ajuste. Las variantes actuales se envían como pistas.",
+      "configure": "Recomendar configuración",
+      "configuring": "Creando tu configuración…",
+      "recommendedOptions": "Opciones recomendadas",
+      "tips": "Consejos de estilo",
+      "addOns": "Combina bien con",
+      "applyConfiguration": "Aplicar al producto",
+      "startOver": "Empezar de nuevo",
+      "applied": "Configuración aplicada a los selectores de variantes.",
+      "errors": {
+        "configureFailed": "El configurador no está disponible ahora. Inténtalo de nuevo."
+      }
+    },
     "badges": {
       "freeShipping": "Envío gratis",
       "warranty": "Garantía de 2 años",

@@ -14,6 +14,7 @@ import { useMoodShopping } from '@/domains/mood-shopping/hooks/use-mood-shopping
 import { MOOD_SHOPPING_KEYS } from '@/domains/mood-shopping/lib/mood-shopping-options';
 import { ShoppingAssistantRecommendationCard } from '@/domains/shopping-assistant/components/shopping-assistant-recommendation-card';
 import type { DtoAiMoodShoppingResponse } from '@/services/-ai-mood-shopping-post.schemas';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 /** Mood-based discovery — pick a vibe, get style cues and catalog picks. */
 export function MoodShoppingDomain() {
@@ -47,7 +48,11 @@ export function MoodShoppingDomain() {
 
   return (
     <main className='app-container py-12 pb-24'>
-      <Flex direction='column' spacing={3} className='mb-8 max-w-2xl'>
+      <DynamicBreadcrumb
+        showBackButton={false}
+        items={[{ label: t('title'), href: '/mood-shopping' }]}
+      />
+      <Flex direction='column' spacing={3} className='mt-6 mb-8 max-w-2xl'>
         <Flex direction='row' align='center' spacing={2}>
           <IconMoodSmile className='text-gold-strong size-6' />
           <Typography.H1 className='font-display text-3xl font-semibold tracking-tight lg:text-4xl'>

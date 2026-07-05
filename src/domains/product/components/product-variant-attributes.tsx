@@ -17,6 +17,7 @@ interface ProductVariantAttributesProps {
   attributes?: DtoProductAttributeResponse[];
   colors?: string[];
   sizes?: string[];
+  presetSelections?: Record<string, string>;
   onSelectionChange?: (selections: Record<string, string>) => void;
 }
 
@@ -38,6 +39,7 @@ export function ProductVariantAttributes({
   attributes = [],
   colors,
   sizes,
+  presetSelections,
   onSelectionChange
 }: ProductVariantAttributesProps) {
   const variantAttributes = useMemo(() => {
@@ -56,10 +58,17 @@ export function ProductVariantAttributes({
 
   const [userOverrides, setUserOverrides] = useState<Record<string, string>>({});
   const [lastVariantKey, setLastVariantKey] = useState(variantKey);
+  const presetKey = JSON.stringify(presetSelections ?? {});
+  const [lastPresetKey, setLastPresetKey] = useState(presetKey);
 
   if (variantKey !== lastVariantKey) {
     setLastVariantKey(variantKey);
     setUserOverrides({});
+  }
+
+  if (presetKey !== lastPresetKey && presetSelections && Object.keys(presetSelections).length > 0) {
+    setLastPresetKey(presetKey);
+    setUserOverrides((prev) => ({ ...prev, ...presetSelections }));
   }
 
   const selections = useMemo(

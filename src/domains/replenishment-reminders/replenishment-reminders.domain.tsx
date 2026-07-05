@@ -16,6 +16,7 @@ import { useReplenishmentReminders } from '@/domains/replenishment-reminders/hoo
 import { ShoppingAssistantRecommendationCard } from '@/domains/shopping-assistant/components/shopping-assistant-recommendation-card';
 import { cn } from '@/lib/utils';
 import type { DtoAiReplenishmentRemindersResponse } from '@/services/-ai-replenishment-reminders-post.schemas';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 function urgencyBadgeClass(urgency?: string) {
   switch (urgency) {
@@ -86,7 +87,11 @@ export function ReplenishmentRemindersDomain() {
 
   return (
     <main className='app-container py-12 pb-24'>
-      <Flex direction='column' spacing={3} className='mb-8 max-w-2xl'>
+      <DynamicBreadcrumb
+        showBackButton={false}
+        items={[{ label: t('title'), href: '/replenishment-reminders' }]}
+      />
+      <Flex direction='column' spacing={3} className='mt-6 mb-8 max-w-2xl'>
         <Flex direction='row' align='center' spacing={2}>
           <IconRefresh className='text-gold-strong size-6' />
           <Typography.H1 className='font-display text-3xl font-semibold tracking-tight lg:text-4xl'>

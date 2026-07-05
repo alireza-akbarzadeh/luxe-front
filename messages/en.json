@@ -779,6 +779,25 @@
         "loadFailed": "Interactive viewer is unavailable right now. Try again shortly."
       }
     },
+    "configurator": {
+      "button": "AI configurator",
+      "title": "Product configurator",
+      "description": "Describe how you will use this item and get guided variant picks.",
+      "descriptionNamed": "Build the right {name} setup for your needs.",
+      "contextPlaceholder": "e.g. daily office wear, minimalist living room, gift for someone who runs cold…",
+      "contextHint": "Mention room, occasion, style, or fit preferences. Current variant picks are sent as hints.",
+      "configure": "Recommend configuration",
+      "configuring": "Building your setup…",
+      "recommendedOptions": "Recommended options",
+      "tips": "Styling tips",
+      "addOns": "Pairs well with",
+      "applyConfiguration": "Apply to product",
+      "startOver": "Start over",
+      "applied": "Configuration applied to variant pickers.",
+      "errors": {
+        "configureFailed": "Configurator is unavailable right now. Try again shortly."
+      }
+    },
     "badges": {
       "freeShipping": "Free shipping",
       "warranty": "2-year warranty",

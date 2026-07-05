@@ -14,6 +14,7 @@ import { Typography } from '@/components/ui/typography';
 import { ShoppingAssistantRecommendationCard } from '@/domains/shopping-assistant/components/shopping-assistant-recommendation-card';
 import { useShoppingMemory } from '@/domains/shopping-memory/hooks/use-shopping-memory';
 import type { DtoAiShoppingMemoryResponse } from '@/services/-ai-shopping-memory-post.schemas';
+import { DynamicBreadcrumb } from '~/src/components/breadcrumb-list';
 
 /** AI summary of browsing taste and matching product picks. */
 export function ShoppingMemoryDomain() {
@@ -71,7 +72,11 @@ export function ShoppingMemoryDomain() {
 
   return (
     <main className='app-container py-12 pb-24'>
-      <Flex direction='column' spacing={3} className='mb-8 max-w-2xl'>
+      <DynamicBreadcrumb
+        showBackButton={false}
+        items={[{ label: t('title'), href: '/shopping-memory' }]}
+      />
+      <Flex direction='column' spacing={3} className='mt-6 mb-8 max-w-2xl'>
         <Flex direction='row' align='center' spacing={2}>
           <IconBrain className='text-gold-strong size-6' />
           <Typography.H1 className='font-display text-3xl font-semibold tracking-tight lg:text-4xl'>

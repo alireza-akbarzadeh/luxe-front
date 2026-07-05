@@ -33,6 +33,7 @@ import {
   getVariantPickerAttributes,
   resolveProductAttributeKind
 } from '../lib/product-attribute.utils';
+import { ProductConfiguratorTrigger } from './configurator/product-configurator-trigger';
 import { ProductAiBriefButton } from './product-ai-brief-sheet';
 import { ProductFeatureHighlights } from './product-feature-highlights';
 import ProductQuantity from './product-quantity';
@@ -61,6 +62,7 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
   const { addItem, isInCompare, canAddMore } = useCompareController();
 
   const [variantSelections, setVariantSelections] = useState<Record<string, string>>({});
+  const [configuratorPreset, setConfiguratorPreset] = useState<Record<string, string>>({});
 
   const cartItem = items.find((item) => item.product_id === product.id);
   const stock = product.stock ?? 0;
@@ -250,8 +252,21 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         attributes={product.attributes}
         colors={product.colors}
         sizes={product.sizes}
+        presetSelections={configuratorPreset}
         onSelectionChange={setVariantSelections}
       />
+
+      {product.id ? (
+        <ProductConfiguratorTrigger
+          productId={product.id}
+          productName={product.name}
+          attributes={product.attributes}
+          colors={product.colors}
+          sizes={product.sizes}
+          currentPreferences={variantSelections}
+          onApplySelections={setConfiguratorPreset}
+        />
+      ) : null}
 
       {hasSizeVariants && product.id ? <ProductSizeRecommendation productId={product.id} /> : null}
 
