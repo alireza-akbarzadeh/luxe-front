@@ -20,7 +20,6 @@ import { CartGuestState } from './components/cart-guest-state';
 import { CartItem } from './components/cart-item';
 import { CartItemRow } from './components/cart-item-row';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
-import { CartMobileSummary } from './components/cart-mobile-summary';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
 import { CartSmartInsights } from './components/cart-smart-insights';
 import { CartVariantAlert } from './components/cart-variant-alert';
@@ -30,7 +29,7 @@ import { useCartCheckoutAction } from './hooks/use-cart-checkout-action';
 import { useCartOrderEstimate } from './hooks/use-cart-order-estimate';
 
 const cartMainClass =
-  'app-container pt-2 pb-[calc(10.5rem+env(safe-area-inset-bottom))] sm:pt-6 sm:pb-[calc(11rem+env(safe-area-inset-bottom))] lg:pt-8 lg:pb-16';
+  'app-container pt-2 pb-[calc(11.5rem+env(safe-area-inset-bottom))] sm:pt-6 sm:pb-[calc(12rem+env(safe-area-inset-bottom))] lg:pt-8 lg:pb-16';
 
 export default function CartPage() {
   const t = useTranslations('cart.page');
@@ -85,9 +84,12 @@ export default function CartPage() {
       <main className={cartMainClass}>
         <CartBreadcrumb />
 
-        <header className='mb-4 space-y-3 lg:mb-8'>
+        <header className='mb-5 lg:mb-8'>
           <Flex direction='row' align='start' justify='between' gap={3}>
             <div className='min-w-0'>
+              <Typography.Overline className='text-gold lg:hidden'>
+                {t('mobileEyebrow')}
+              </Typography.Overline>
               <Typography.H1
                 family='display'
                 className='text-2xl font-semibold sm:text-3xl lg:text-4xl'
@@ -108,13 +110,11 @@ export default function CartPage() {
           </Flex>
         </header>
 
-        <CartMobileSummary />
-
         <Grid gap={8} className='grid-cols-1 lg:grid-cols-3 lg:gap-12'>
           <GridItem className='lg:col-span-2'>
             <CartVariantAlert items={items} />
 
-            <ul className='flex flex-col gap-3 lg:hidden'>
+            <ul className='bg-muted/25 flex flex-col gap-2.5 rounded-3xl p-2 lg:hidden lg:bg-transparent lg:p-0'>
               {items.map((item) => (
                 <CartItemRow
                   key={item.id}

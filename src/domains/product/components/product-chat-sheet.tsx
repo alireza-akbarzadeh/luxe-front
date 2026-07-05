@@ -258,7 +258,7 @@ export function ProductChatFab({
       type='button'
       onClick={onClick}
       className={cn(
-        'bg-gold hover:bg-gold/90 fixed end-6 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 gap-2 rounded-full px-5 shadow-lg lg:bottom-6',
+        'bg-gold hover:bg-gold/90 hidden gap-2 rounded-full px-5 shadow-lg lg:fixed lg:end-6 lg:bottom-6 lg:inline-flex',
         className
       )}
     >

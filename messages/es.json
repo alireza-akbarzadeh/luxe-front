@@ -506,6 +506,7 @@
       "imageCounter": "{current, number}/{total, number}",
       "imageAlt": "{name} — imagen {index, number}",
       "openFullscreen": "Abrir galería a pantalla completa",
+      "hoverToMagnify": "Pasa el cursor para ampliar",
       "viewImage": "Ver imagen {index, number}"
     },
     "store": {
@@ -798,6 +799,26 @@
         "configureFailed": "El configurador no está disponible ahora. Inténtalo de nuevo."
       }
     },
+    "outfitBuilder": {
+      "button": "Armar el look",
+      "title": "Constructor de outfit",
+      "description": "Planifica un outfit completo o look coordinado a partir de este producto.",
+      "descriptionNamed": "Estiliza un look completo con {name}.",
+      "occasionPlaceholder": "Ocasión (p. ej. cita, oficina, brunch de fin de semana)",
+      "contextPlaceholder": "Opcional: estilo, colores a evitar, clima, código de vestimenta…",
+      "budgetPlaceholder": "Presupuesto máx. opcional por pieza adicional",
+      "contextHint": "Este producto es tu pieza ancla. Luxe completa los demás huecos del catálogo.",
+      "buildOutfit": "Armar outfit",
+      "building": "Creando tu look…",
+      "piecesTitle": "Tu look",
+      "anchorBadge": "Este artículo",
+      "noMatch": "Sin coincidencia en catálogo — prueba otra ocasión o presupuesto.",
+      "tips": "Consejos de estilo",
+      "startOver": "Empezar de nuevo",
+      "errors": {
+        "buildFailed": "El constructor de outfit no está disponible ahora. Inténtalo de nuevo."
+      }
+    },
     "badges": {
       "freeShipping": "Envío gratis",
       "warranty": "Garantía de 2 años",
@@ -923,10 +944,12 @@
     "taxNote": "Impuestos y envío calculados en el pago.",
     "page": {
       "title": "Carrito de compras",
+      "mobileEyebrow": "Tu bolsa",
       "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
       "reviewHint": "Revisa antes de pagar",
       "continueShopping": "Seguir comprando",
       "checkout": "Pagar",
+      "proceedToCheckout": "Continuar al pago",
       "showSummary": "Ver resumen del pedido",
       "hideSummary": "Ocultar resumen",
       "subtotal": "Subtotal",
@@ -940,6 +963,15 @@
       "errorTitle": "No se pudo cargar el carrito",
       "errorDescription": "Algo salió mal al obtener tus artículos. Inténtalo de nuevo.",
       "retry": "Reintentar"
+    },
+    "mobileSummary": {
+      "showSummary": "Ver resumen del pedido",
+      "viewSummary": "Resumen del pedido",
+      "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+      "decreaseQuantity": "Disminuir cantidad",
+      "increaseQuantity": "Aumentar cantidad",
+      "removeItem": "Eliminar {name}",
+      "addItems": "Añadir artículos"
     },
     "smartBundles": {
       "eyebrow": "Paquetes inteligentes",
@@ -1714,6 +1746,21 @@
       "tradeoffs": "Compensaciones clave",
       "footer": "Basado solo en datos del listado — consulta la tabla de especificaciones"
     }
+  },
+  "creatorsPage": {
+    "breadcrumb": "Creadores",
+    "eyebrow": "Ediciones de la comunidad",
+    "title": "Tiendas de creadores",
+    "description": "Compra selecciones curadas de estilistas y referentes — cada edición es una cápsula elegida a mano.",
+    "shopLabel": "Ver edición",
+    "curatedPicks": "{count, plural, one {# selección} other {# selecciones}}",
+    "curatedEdit": "Edición curada",
+    "follow": "Seguir",
+    "empty": "Aún no hay tiendas de creadores — vuelve pronto.",
+    "noPicks": "Este creador aún no ha publicado selecciones.",
+    "notFoundTitle": "Creador no encontrado",
+    "notFoundBody": "Este perfil puede haber sido eliminado o aún no está publicado.",
+    "backToList": "Ver todos los creadores"
   },
   "shopTheLookPage": {
     "breadcrumb": "Compra el look",

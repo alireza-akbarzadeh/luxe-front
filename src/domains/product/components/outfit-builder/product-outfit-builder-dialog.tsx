@@ -8,38 +8,39 @@ import { toast } from 'sonner';
 import { AppDialog } from '@/components/app-dialog';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Typography } from '@/components/ui/typography';
-import type { DtoAiProductConfiguratorResponse } from '@/services/-ai-product-configurator-post.schemas';
+import type { DtoAiOutfitBuilderResponse } from '@/services/-ai-outfit-builder-post.schemas';
 
-import { useProductConfigurator } from '../../hooks/use-product-configurator';
-import { ConfiguratorResults } from './configurator-results';
+import { useOutfitBuilder } from '../../hooks/use-outfit-builder';
+import { OutfitBuilderResults } from './outfit-builder-results';
 
-interface ProductConfiguratorDialogProps {
+interface ProductOutfitBuilderDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   productId: number;
   productName?: string;
-  currentPreferences?: Record<string, string>;
-  onApplyConfiguration: (result: DtoAiProductConfiguratorResponse) => void;
 }
 
-/** Dialog for AI-guided variant configuration from shopper context. */
-export function ProductConfiguratorDialog({
+/** Dialog for building a complete look around the current product. */
+export function ProductOutfitBuilderDialog({
   open,
   onOpenChange,
   productId,
-  productName,
-  currentPreferences,
-  onApplyConfiguration
-}: ProductConfiguratorDialogProps) {
-  const t = useTranslations('pdp.configurator');
-  const { configure, isPending } = useProductConfigurator(productId);
+  productName
+}: ProductOutfitBuilderDialogProps) {
+  const t = useTranslations('pdp.outfitBuilder');
+  const { buildOutfit, isPending } = useOutfitBuilder(productId);
+  const [occasion, setOccasion] = useState('');
   const [context, setContext] = useState('');
-  const [result, setResult] = useState<DtoAiProductConfiguratorResponse | null>(null);
+  const [budgetMax, setBudgetMax] = useState('');
+  const [result, setResult] = useState<DtoAiOutfitBuilderResponse | null>(null);
 
   const reset = () => {
+    setOccasion('');
     setContext('');
+    setBudgetMax('');
     setResult(null);
   };
 
@@ -50,41 +51,49 @@ export function ProductConfiguratorDialog({
     }
   };
 
-  const handleConfigure = async () => {
+  const handleBuild = async () => {
     if (isPending) return;
-    const data = await configure(context, currentPreferences);
+    const parsedBudget = budgetMax.trim() ? Number.parseFloat(budgetMax) : undefined;
+    const data = await buildOutfit(occasion, context, parsedBudget);
     if (!data) {
-      toast.error(t('errors.configureFailed'));
+      toast.error(t('errors.buildFailed'));
       return;
     }
     setResult(data);
-  };
-
-  const handleApply = () => {
-    if (!result) return;
-    onApplyConfiguration(result);
-    toast.success(t('applied'));
-    handleClose(false);
   };
 
   return (
     <AppDialog
       open={open}
       onOpenChange={handleClose}
+      size='lg'
       title={t('title')}
       description={productName ? t('descriptionNamed', { name: productName }) : t('description')}
     >
       <div className='pb-2'>
         {result ? (
-          <ConfiguratorResults result={result} onApply={handleApply} onStartOver={reset} />
+          <OutfitBuilderResults result={result} onStartOver={reset} />
         ) : (
           <>
+            <Input
+              value={occasion}
+              onChange={(event) => setOccasion(event.target.value)}
+              placeholder={t('occasionPlaceholder')}
+              className='mb-3 rounded-full'
+            />
             <Textarea
               value={context}
               onChange={(event) => setContext(event.target.value)}
               placeholder={t('contextPlaceholder')}
-              rows={4}
-              className='mb-4 min-h-28 resize-none rounded-2xl'
+              rows={3}
+              className='mb-3 min-h-24 resize-none rounded-2xl'
+            />
+            <Input
+              value={budgetMax}
+              onChange={(event) => setBudgetMax(event.target.value)}
+              placeholder={t('budgetPlaceholder')}
+              inputMode='decimal'
+              className='mb-3 rounded-full'
             />
             <Typography.Muted className='text-xs leading-relaxed'>
               {t('contextHint')}
@@ -98,15 +107,15 @@ export function ProductConfiguratorDialog({
               type='button'
               className='flex-1'
               disabled={isPending}
-              onClick={() => void handleConfigure()}
+              onClick={() => void handleBuild()}
             >
               {isPending ? (
                 <>
                   <IconLoader2 className='me-2 size-4 animate-spin' />
-                  {t('configuring')}
+                  {t('building')}
                 </>
               ) : (
-                t('configure')
+                t('buildOutfit')
               )}
             </Button>
           </Flex>

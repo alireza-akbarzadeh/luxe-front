@@ -506,6 +506,7 @@
       "imageCounter": "{current, number}/{total, number}",
       "imageAlt": "{name} — تصویر {index, number}",
       "openFullscreen": "باز کردن گالری تمام‌صفحه",
+      "hoverToMagnify": "برای بزرگ‌نمایی ماوس را نگه دارید",
       "viewImage": "مشاهده تصویر {index, number}"
     },
     "store": {
@@ -798,6 +799,26 @@
         "configureFailed": "پیکربند الان در دسترس نیست. کمی بعد دوباره تلاش کنید."
       }
     },
+    "outfitBuilder": {
+      "button": "ست کامل بساز",
+      "title": "سازنده ست و استایل",
+      "description": "یک ست کامل یا look هماهنگ از این محصول برنامه‌ریزی کنید.",
+      "descriptionNamed": "یک look کامل با {name} بسازید.",
+      "occasionPlaceholder": "مناسبت (مثلاً قرار، اداره، بریکفست آخر هفته)",
+      "contextPlaceholder": "اختیاری: سبک، رنگ‌های ممنوع، آب‌وهوا، dress code…",
+      "budgetPlaceholder": "حداکثر بودجه اختیاری برای هر قطعه اضافه",
+      "contextHint": "این محصول قطعه اصلی شماست. لوکس بقیه جایگاه‌ها را از کاتالوگ پر می‌کند.",
+      "buildOutfit": "ساخت ست",
+      "building": "در حال استایل‌دهی…",
+      "piecesTitle": "ست شما",
+      "anchorBadge": "این کالا",
+      "noMatch": "هنوز مورد مناسبی در کاتالوگ نیست — مناسبت یا بودجه را تغییر دهید.",
+      "tips": "نکات استایل",
+      "startOver": "شروع دوباره",
+      "errors": {
+        "buildFailed": "سازنده ست الان در دسترس نیست. کمی بعد دوباره تلاش کنید."
+      }
+    },
     "badges": {
       "freeShipping": "ارسال رایگان",
       "warranty": "گارانتی ۲ ساله",
@@ -923,6 +944,7 @@
     "taxNote": "مالیات و هزینه ارسال در مرحله پرداخت محاسبه می‌شود.",
     "page": {
       "title": "سبد خرید",
+      "mobileEyebrow": "سبد شما",
       "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
       "reviewHint": "قبل از پرداخت بررسی کنید",
       "continueShopping": "ادامه خرید",
@@ -941,6 +963,15 @@
       "errorTitle": "بارگذاری سبد ناموفق بود",
       "errorDescription": "در دریافت کالاها خطایی رخ داد. دوباره تلاش کنید.",
       "retry": "تلاش مجدد"
+    },
+    "mobileSummary": {
+      "showSummary": "نمایش خلاصه سفارش",
+      "viewSummary": "خلاصه سفارش",
+      "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
+      "decreaseQuantity": "کاهش تعداد",
+      "increaseQuantity": "افزایش تعداد",
+      "removeItem": "حذف {name}",
+      "addItems": "افزودن کالا"
     },
     "smartBundles": {
       "eyebrow": "بسته‌های هوشمند",
@@ -1715,6 +1746,21 @@
       "tradeoffs": "نکات مهم",
       "footer": "بر اساس اطلاعات فهرست — جزئیات کامل را در جدول مشخصات ببینید"
     }
+  },
+  "creatorsPage": {
+    "breadcrumb": "خالقان",
+    "eyebrow": "انتخاب‌های جامعه",
+    "title": "فروشگاه خالقان",
+    "description": "انتخاب‌های دست‌چین استایلیست‌ها و سلیقه‌سازان را بخرید — هر ویرایش یک کپسول منتخب است.",
+    "shopLabel": "مشاهده ویرایش",
+    "curatedPicks": "{count, plural, one {# انتخاب} other {# انتخاب}}",
+    "curatedEdit": "ویرایش منتخب",
+    "follow": "دنبال کردن",
+    "empty": "هنوز فروشگاه خالقی فعال نیست — به‌زودی سر بزنید.",
+    "noPicks": "این خالق هنوز انتخابی منتشر نکرده است.",
+    "notFoundTitle": "خالق پیدا نشد",
+    "notFoundBody": "این پروفایل حذف شده یا هنوز منتشر نشده است.",
+    "backToList": "همه خالقان"
   },
   "shopTheLookPage": {
     "breadcrumb": "خرید از روی استایل",

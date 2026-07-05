@@ -506,6 +506,7 @@
       "imageCounter": "{current, number}/{total, number}",
       "imageAlt": "{name} — image {index, number}",
       "openFullscreen": "Open fullscreen gallery",
+      "hoverToMagnify": "Hover to magnify",
       "viewImage": "View image {index, number}"
     },
     "store": {
@@ -798,6 +799,26 @@
         "configureFailed": "Configurator is unavailable right now. Try again shortly."
       }
     },
+    "outfitBuilder": {
+      "button": "Build the look",
+      "title": "Outfit builder",
+      "description": "Plan a complete outfit or coordinated look starting from this product.",
+      "descriptionNamed": "Style a full look around {name}.",
+      "occasionPlaceholder": "Occasion (e.g. date night, office, weekend brunch)",
+      "contextPlaceholder": "Optional: style vibe, colors you avoid, weather, dress code…",
+      "budgetPlaceholder": "Optional max budget per additional piece",
+      "contextHint": "The current product is your anchor piece. Luxe fills complementary slots from the catalog.",
+      "buildOutfit": "Build outfit",
+      "building": "Styling your look…",
+      "piecesTitle": "Your look",
+      "anchorBadge": "This item",
+      "noMatch": "No catalog match yet — try adjusting occasion or budget.",
+      "tips": "Styling tips",
+      "startOver": "Start over",
+      "errors": {
+        "buildFailed": "Outfit builder is unavailable right now. Try again shortly."
+      }
+    },
     "badges": {
       "freeShipping": "Free shipping",
       "warranty": "2-year warranty",
@@ -923,6 +944,7 @@
     "taxNote": "Taxes and shipping calculated at checkout.",
     "page": {
       "title": "Shopping Cart",
+      "mobileEyebrow": "Your bag",
       "itemCount": "{count, plural, one {# item} other {# items}}",
       "reviewHint": "Review before checkout",
       "continueShopping": "Continue shopping",
@@ -941,6 +963,15 @@
       "errorTitle": "Couldn't load your cart",
       "errorDescription": "Something went wrong while fetching your items. Please try again.",
       "retry": "Retry"
+    },
+    "mobileSummary": {
+      "showSummary": "Show order summary",
+      "viewSummary": "Order summary",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "decreaseQuantity": "Decrease quantity",
+      "increaseQuantity": "Increase quantity",
+      "removeItem": "Remove {name}",
+      "addItems": "Add items"
     },
     "smartBundles": {
       "eyebrow": "Smart bundles",
@@ -1715,6 +1746,21 @@
       "tradeoffs": "Key trade-offs",
       "footer": "Based on listing facts only — use the spec table for full details"
     }
+  },
+  "creatorsPage": {
+    "breadcrumb": "Creators",
+    "eyebrow": "Community edits",
+    "title": "Creator storefronts",
+    "description": "Shop curated picks from stylists and tastemakers — each edit is a hand-selected capsule you can add to cart in one tap.",
+    "shopLabel": "View edit",
+    "curatedPicks": "{count, plural, one {# curated pick} other {# curated picks}}",
+    "curatedEdit": "Curated edit",
+    "follow": "Follow",
+    "empty": "No creator storefronts are live yet — check back soon.",
+    "noPicks": "This creator has not published picks yet.",
+    "notFoundTitle": "Creator not found",
+    "notFoundBody": "This profile may have been removed or is not published yet.",
+    "backToList": "Browse all creators"
   },
   "shopTheLookPage": {
     "breadcrumb": "Shop the look",

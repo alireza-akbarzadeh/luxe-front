@@ -27,6 +27,9 @@ import {
   SheetTrigger
 } from './ui/sheet';
 
+/** Match sticky PDP/checkout bars — drawer below this width, dialog above. */
+const DRAWER_MAX_WIDTH = 1024;
+
 interface AppDialogProps {
   trigger?: React.ReactNode;
   children: React.ReactNode;
@@ -56,26 +59,35 @@ export function AppDialog(props: AppDialogProps) {
     size = 'md',
     side = 'left'
   } = props;
-  const { isMobile } = useMediaDevices();
+  const { width } = useMediaDevices();
+  const useDrawerShell = width == null ? true : width <= DRAWER_MAX_WIDTH;
   const sizeClasses = getAppDialogClasses(size, className);
 
-  if (isMobile) {
+  if (useDrawerShell) {
     return (
-      <Drawer open={open} onOpenChange={onOpenChange}>
-        {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-        <DrawerContent className={sizeClasses.drawer}>
-          <div className='mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-white/20' />
-
+      <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
+        {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
+        <DrawerContent
+          showHandle
+          radius='xl'
+          className={cn(
+            'border-border pb-[calc(5rem+env(safe-area-inset-bottom))]',
+            sizeClasses.drawer
+          )}
+        >
           {(title || description) && (
-            <DrawerHeader className='mt-2 shrink-0 text-center sm:text-start'>
-              {title && (
-                <DrawerTitle className='text-lg font-semibold'>{title}</DrawerTitle>
-              )}
-              {description && <DrawerDescription>{description}</DrawerDescription>}
+            <DrawerHeader className='shrink-0 px-4 pt-1 pb-2 text-center sm:text-start'>
+              {title ? <DrawerTitle className='text-lg font-semibold'>{title}</DrawerTitle> : null}
+              {description ? <DrawerDescription>{description}</DrawerDescription> : null}
             </DrawerHeader>
           )}
 
-          <div className={cn('mt-2 flex min-h-0 flex-1 flex-col px-4 pb-8', contentClassName)}>
+          <div
+            className={cn(
+              'flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-6',
+              contentClassName
+            )}
+          >
             {children}
           </div>
         </DrawerContent>

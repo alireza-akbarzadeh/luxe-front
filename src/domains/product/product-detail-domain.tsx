@@ -45,11 +45,11 @@ interface ProductDetailDomainProps {
 }
 
 function computeDiscount(product: DtoProductWithLike): number {
-  if (!product.compare_at_price) return 0;
+  const compare = product.compare_at_price;
+  const price = Number(product.price ?? 0);
+  if (!compare || compare <= price) return 0;
 
-  return Math.round(
-    ((product.compare_at_price - Number(product.price)) / product.compare_at_price) * 100
-  );
+  return Math.min(99, Math.round(((compare - price) / compare) * 100));
 }
 
 /** Server PDP shell — product data from RSC; interactivity in client islands only. */
@@ -77,20 +77,26 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
   ];
 
   return (
-    <div className='app-container mt-20 pb-16'>
+    <div className='pb-28 lg:pb-16'>
       <ProductViewTracker productId={numericProductId} />
-      <ProductDetailBreadcrumb items={breadcrumbItems} />
+      <div className='mx-auto w-full max-w-screen-2xl'>
+        <ProductDetailBreadcrumb
+          items={breadcrumbItems}
+          className='mt-6 hidden px-4 sm:px-6 lg:block lg:mt-10 lg:px-8'
+        />
 
-      <div className='mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-14 xl:gap-20'>
-        <ProductGallery discount={discount} product={product} />
-
-        <div className='flex flex-col gap-6 lg:sticky lg:top-28 lg:z-10 lg:self-start'>
-          <ProductInfo is_liked={isLiked} product={product} />
-          <ProductStorePanel store={product.store} />
+        <div className='mt-0 grid items-start gap-0 lg:mt-14 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-14 lg:px-8 xl:gap-20'>
+          <div className='min-w-0'>
+            <ProductGallery discount={discount} product={product} />
+          </div>
+          <div className='border-border/40 bg-background relative z-10 flex flex-col gap-6 rounded-t-[1.75rem] border-t px-4 pt-7 shadow-[0_-12px_40px_rgba(0,0,0,0.06)] sm:px-6 max-lg:-mt-6 lg:sticky lg:top-28 lg:z-10 lg:mt-0 lg:self-start lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:pt-0 lg:shadow-none'>
+            <ProductInfo is_liked={isLiked} product={product} />
+            <ProductStorePanel store={product.store} />
+          </div>
         </div>
       </div>
 
-      <div className='pdp-defer-mobile'>
+      <div className='app-container pdp-defer-mobile'>
         <ProductInsightsSection
           productId={productSlug}
           numericProductId={numericProductId}
@@ -98,15 +104,15 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
         />
       </div>
 
-      <div className='pdp-defer-mobile'>
+      <div className='app-container pdp-defer-mobile'>
         <ProductAlternativesSection productId={productSlug} productName={product.name} />
       </div>
 
-      <div className='pdp-defer-mobile'>
+      <div className='app-container pdp-defer-mobile'>
         <ProductSmartBundlesSection productId={numericProductId} />
       </div>
 
-      <div className='pdp-defer-mobile'>
+      <div className='app-container pdp-defer-mobile'>
         <ProductDetailTabs
           product={product}
           numericProductId={numericProductId}
@@ -114,7 +120,7 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
         />
       </div>
 
-      <div className='pdp-defer-mobile'>
+      <div className='app-container pdp-defer-mobile'>
         <RelatedProductsSection
           productId={numericProductId}
           categoryId={product.category?.id}

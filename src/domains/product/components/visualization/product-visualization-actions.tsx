@@ -1,16 +1,17 @@
 'use client';
 
-import { IconArmchair, IconHanger } from '@tabler/icons-react';
+import { IconArmchair, IconHanger, IconShirt } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 
+import { ProductOutfitBuilderDialog } from '../outfit-builder/product-outfit-builder-dialog';
 import { ProductRoomPreviewDialog } from './product-room-preview-dialog';
 import { ProductVirtualTryOnDialog } from './product-virtual-try-on-dialog';
 
-/** PDP triggers for AI room preview and virtual try-on. */
+/** PDP triggers for AI room preview, virtual try-on, and outfit builder. */
 export function ProductVisualizationActions({
   productId,
   productName
@@ -20,8 +21,10 @@ export function ProductVisualizationActions({
 }) {
   const tRoom = useTranslations('pdp.roomPreview');
   const tTryOn = useTranslations('pdp.virtualTryOn');
+  const tOutfit = useTranslations('pdp.outfitBuilder');
   const [roomOpen, setRoomOpen] = useState(false);
   const [tryOnOpen, setTryOnOpen] = useState(false);
+  const [outfitOpen, setOutfitOpen] = useState(false);
 
   if (!productId) {
     return null;
@@ -29,6 +32,15 @@ export function ProductVisualizationActions({
 
   return (
     <Flex direction='column' spacing={2}>
+      <Button
+        type='button'
+        variant='outline'
+        className='border-gold/30 bg-gold/5 hover:bg-gold/10 h-11 w-full justify-start gap-2 rounded-full px-4 text-sm font-medium'
+        onClick={() => setOutfitOpen(true)}
+      >
+        <IconShirt className='text-gold-strong size-4 shrink-0' />
+        {tOutfit('button')}
+      </Button>
       <Button
         type='button'
         variant='outline'
@@ -47,6 +59,12 @@ export function ProductVisualizationActions({
         <IconHanger className='text-gold-strong size-4 shrink-0' />
         {tTryOn('button')}
       </Button>
+      <ProductOutfitBuilderDialog
+        open={outfitOpen}
+        onOpenChange={setOutfitOpen}
+        productId={productId}
+        productName={productName}
+      />
       <ProductRoomPreviewDialog
         open={roomOpen}
         onOpenChange={setRoomOpen}

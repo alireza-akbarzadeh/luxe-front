@@ -132,13 +132,13 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 034 — Product Configurator ✅
 
-## Task 035 — Outfit Builder
+## Task 035 — Outfit Builder ✅
 
 ---
 
 # Phase 5 — Community
 
-## Task 036 — Creator Storefronts
+## Task 036 — Creator Storefronts ✅
 
 ## Task 037 — Community Shopping Lists
 

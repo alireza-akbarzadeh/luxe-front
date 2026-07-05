@@ -4,7 +4,7 @@ import { Drawer as DrawerPrimitive } from 'vaul';
 import { cn } from '@/lib/utils';
 
 function Drawer({
-  shouldScaleBackground = true,
+  shouldScaleBackground = false,
   ...props
 }: ComponentProps<typeof DrawerPrimitive.Root>) {
   return <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />;
@@ -15,6 +15,8 @@ const DrawerTrigger = DrawerPrimitive.Trigger;
 const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose = DrawerPrimitive.Close;
+
+const DrawerHandle = DrawerPrimitive.Handle;
 
 function DrawerOverlay({ className, ...props }: ComponentProps<typeof DrawerPrimitive.Overlay>) {
   return (
@@ -51,33 +53,24 @@ function DrawerContent({
 }: DrawerContentProps) {
   return (
     <DrawerPortal>
-      <DrawerOverlay className='fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm' />
+      <DrawerOverlay className='fixed inset-0 z-[100] bg-black/50' />
 
       <DrawerPrimitive.Content
         aria-describedby={undefined}
         className={cn(
-          // base — z-[60] stacks above mobile bottom nav (z-50)
-          'bg-background fixed inset-x-0 bottom-0 z-[60] flex h-auto flex-col border-t shadow-2xl',
-
-          // animation-safe padding
-          'animate-in slide-in-from-bottom duration-300',
-
-          // radius control
+          'bg-background fixed inset-x-0 bottom-0 z-[100] flex h-auto flex-col border-t shadow-2xl',
+          'outline-none',
           radiusMap[radius],
-
-          // iOS style variant
           variant === 'ios' && 'px-4 pt-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.25)]',
-
           className
         )}
         {...props}
       >
-        {/* iOS drag handle */}
-        {showHandle && (
-          <div className='flex justify-center py-2'>
-            <div className='bg-muted-foreground/30 h-1.5 w-12 rounded-full' />
+        {showHandle ? (
+          <div className='border-border/70 flex shrink-0 justify-center border-b px-4 pt-3 pb-2.5'>
+            <DrawerHandle className='bg-muted-foreground/50 hover:bg-muted-foreground/65 h-1.5 w-14 rounded-full transition-colors' />
           </div>
-        )}
+        ) : null}
 
         {props.children}
       </DrawerPrimitive.Content>
@@ -120,6 +113,7 @@ export {
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
+  DrawerHandle,
   DrawerHeader,
   DrawerOverlay,
   DrawerPortal,

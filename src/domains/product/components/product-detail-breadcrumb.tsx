@@ -20,16 +20,17 @@ export interface ProductBreadcrumbItem {
 
 interface ProductDetailBreadcrumbProps {
   items: ProductBreadcrumbItem[];
+  className?: string;
 }
 
 /** Server-rendered PDP breadcrumb — no client router hook. */
-export async function ProductDetailBreadcrumb({ items }: ProductDetailBreadcrumbProps) {
+export async function ProductDetailBreadcrumb({ items, className }: ProductDetailBreadcrumbProps) {
   const t = await getTranslations('pdp');
   const homeLabel = t('breadcrumb.home');
 
   return (
-    <Breadcrumb className='text-muted-foreground text-xs'>
-      <BreadcrumbList className='flex flex-col items-start gap-1.5 sm:flex-row sm:items-center'>
+    <Breadcrumb className={cn('text-muted-foreground text-xs', className)}>
+      <BreadcrumbList className='flex items-center gap-1.5'>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
             <Link href='/'>{homeLabel}</Link>

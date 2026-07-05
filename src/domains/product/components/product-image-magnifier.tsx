@@ -1,6 +1,7 @@
 'use client';
 
 import { IconZoomIn } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { AppImage } from '@/components/ui/app-image';
@@ -27,6 +28,7 @@ export function ProductImageMagnifier({
   onOpenLightbox,
   className
 }: ProductImageMagnifierProps) {
+  const t = useTranslations('pdp.gallery');
   const containerRef = useRef<HTMLDivElement>(null);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const resolvedSrc = failedSrc === src ? IMAGE_FALLBACK : resolveImageSrc(src);
@@ -93,7 +95,7 @@ export function ProductImageMagnifier({
     <div
       ref={containerRef}
       className={cn(
-        'bg-muted relative aspect-[4/5] w-full max-h-[min(620px,68vh)] overflow-hidden rounded-2xl',
+        'bg-neutral-100 relative aspect-[3/4] w-full max-h-[min(85svh,820px)] overflow-hidden rounded-none lg:aspect-[4/5] lg:max-h-[min(620px,68vh)] lg:rounded-2xl dark:bg-neutral-900/40',
         !canHoverMagnify && onOpenLightbox && 'cursor-zoom-in',
         canHoverMagnify && 'cursor-crosshair',
         className
@@ -152,19 +154,10 @@ export function ProductImageMagnifier({
         </>
       )}
 
-      {!canHoverMagnify && (
-        <div className='from-foreground/40 pointer-events-none absolute inset-x-0 bottom-0 flex justify-center bg-linear-to-t to-transparent p-4'>
-          <span className='text-primary-foreground bg-foreground/30 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm'>
-            <IconZoomIn className='h-3.5 w-3.5' />
-            Tap to zoom
-          </span>
-        </div>
-      )}
-
       {canHoverMagnify && !showZoom && (
         <div className='text-muted-foreground bg-background/80 pointer-events-none absolute right-4 bottom-4 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-sm'>
           <IconZoomIn className='h-3.5 w-3.5' />
-          Hover to magnify
+          {t('hoverToMagnify')}
         </div>
       )}
     </div>

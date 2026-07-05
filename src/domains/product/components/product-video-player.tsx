@@ -22,7 +22,7 @@ export function ProductVideoPlayer({ product, className }: ProductVideoPlayerPro
 
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      <div className='bg-foreground/95 relative aspect-[4/3] max-h-[min(480px,50vh)] overflow-hidden rounded-2xl'>
+      <div className='bg-foreground/95 relative aspect-[4/5] max-h-[min(78vh,720px)] overflow-hidden rounded-none lg:aspect-[4/3] lg:max-h-[min(480px,50vh)] lg:rounded-2xl'>
         {!isPlaying ? (
           <button
             type='button'
