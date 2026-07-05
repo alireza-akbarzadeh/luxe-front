@@ -5,13 +5,19 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 
+import {
+  acknowledgeRemoteBuild,
+  applyAppUpdate,
+  getAcknowledgedBuildId,
+  LOADED_BUILD_STORAGE_KEY
+} from '@/lib/app-update';
 import { APP_BUILD_ID } from '@/lib/app-version';
 
 const POLL_MS = 5 * 60 * 1000;
-const LOADED_BUILD_STORAGE_KEY = 'luxe:loaded-build-id';
 
 type VersionManifest = {
   buildId?: string;
+  version?: string;
 };
 
 /**
@@ -21,28 +27,37 @@ export function AppUpdateNotifier() {
   const t = useTranslations('common');
   const { serwist } = useSerwist();
   const notifiedRef = useRef(false);
+  const remoteBuildIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     try {
-      sessionStorage.setItem(LOADED_BUILD_STORAGE_KEY, APP_BUILD_ID);
+      if (!sessionStorage.getItem(LOADED_BUILD_STORAGE_KEY)) {
+        sessionStorage.setItem(LOADED_BUILD_STORAGE_KEY, APP_BUILD_ID);
+      }
     } catch {
       // Private browsing — polling still works for this session.
     }
   }, []);
 
   useEffect(() => {
-    const notifyUpdate = () => {
+    const showUpdateToast = (remoteBuildId: string) => {
       if (notifiedRef.current) {
         return;
       }
+      if (remoteBuildId === getAcknowledgedBuildId()) {
+        return;
+      }
+
       notifiedRef.current = true;
+      remoteBuildIdRef.current = remoteBuildId;
 
       toast.info(t('updateAvailable.title'), {
+        id: 'app-update',
         description: t('updateAvailable.description'),
         duration: Number.POSITIVE_INFINITY,
         action: {
           label: t('updateAvailable.reload'),
-          onClick: () => window.location.reload()
+          onClick: () => applyAppUpdate(remoteBuildIdRef.current ?? remoteBuildId)
         }
       });
     };
@@ -55,10 +70,11 @@ export function AppUpdateNotifier() {
         }
 
         const manifest = (await response.json()) as VersionManifest;
-        const loadedBuildId = sessionStorage.getItem(LOADED_BUILD_STORAGE_KEY) ?? APP_BUILD_ID;
-
-        if (manifest.buildId && manifest.buildId !== loadedBuildId) {
-          notifyUpdate();
+        if (manifest.buildId && manifest.buildId !== getAcknowledgedBuildId()) {
+          showUpdateToast(manifest.buildId);
+        } else {
+          toast.dismiss('app-update');
+          notifiedRef.current = false;
         }
       } catch {
         // Offline or blocked — skip until next poll.
@@ -76,26 +92,25 @@ export function AppUpdateNotifier() {
       return;
     }
 
-    const notifyUpdate = () => {
-      if (notifiedRef.current) {
+    const onControlling = (event: { isUpdate?: boolean }) => {
+      if (!event.isUpdate) {
         return;
       }
-      notifiedRef.current = true;
+
+      const remoteBuildId = remoteBuildIdRef.current;
+      if (remoteBuildId) {
+        acknowledgeRemoteBuild(remoteBuildId);
+      }
 
       toast.info(t('updateAvailable.title'), {
+        id: 'app-update',
         description: t('updateAvailable.description'),
         duration: Number.POSITIVE_INFINITY,
         action: {
           label: t('updateAvailable.reload'),
-          onClick: () => window.location.reload()
+          onClick: () => applyAppUpdate(remoteBuildId ?? undefined)
         }
       });
-    };
-
-    const onControlling = (event: { isUpdate?: boolean }) => {
-      if (event.isUpdate) {
-        notifyUpdate();
-      }
     };
 
     serwist.addEventListener('controlling', onControlling);

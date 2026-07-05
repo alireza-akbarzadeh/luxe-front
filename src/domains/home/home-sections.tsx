@@ -9,6 +9,7 @@ import {
 } from '@/domains/home/components/ui/home-skeleton';
 import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
 import { LifestyleCollectionsSection } from '@/domains/lifestyle-collections/components/lifestyle-collections-section';
+import { PersonalizationDiscoverySection } from '@/domains/personalization/components/personalization-discovery-section';
 import { ShopTheLookSection } from '@/domains/shop-the-look/components/shop-the-look-section';
 
 import { CategoriesSection } from './components/categories-section';
@@ -40,6 +41,12 @@ export function HomeSections() {
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
           <RecommendedForYouSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={null}>
+          <PersonalizationDiscoverySection />
         </SectionBoundary>
       </MobileDeferredSection>
 

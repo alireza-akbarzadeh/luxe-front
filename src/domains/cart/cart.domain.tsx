@@ -9,6 +9,7 @@ import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Typography } from '@/components/ui/typography';
+import { PersonalizationJourneyPromo } from '@/domains/personalization/components/personalization-journey-promo';
 import { CartSmartBundles } from '@/domains/smart-bundles/components/cart-smart-bundles';
 import { useCartController } from '@/hooks/useCartController';
 import { useUser } from '@/hooks/useUser';
@@ -21,6 +22,7 @@ import { CartItemRow } from './components/cart-item-row';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
 import { CartMobileSummary } from './components/cart-mobile-summary';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
+import { CartSmartInsights } from './components/cart-smart-insights';
 import { CartVariantAlert } from './components/cart-variant-alert';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestion';
@@ -73,6 +75,7 @@ export default function CartPage() {
           {t('title')}
         </Typography.H1>
         <CartEmptyState />
+        <PersonalizationJourneyPromo variant='empty-cart' className='mx-auto mt-8 max-w-lg' />
       </main>
     );
   }
@@ -138,7 +141,8 @@ export default function CartPage() {
               </AnimatePresence>
             </div>
 
-            <div className='mt-6'>
+            <div className='mt-6 space-y-8'>
+              <CartSmartInsights />
               <CartSmartBundles />
               <ProductSuggestion />
             </div>

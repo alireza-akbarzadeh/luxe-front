@@ -17,6 +17,7 @@ import { useRealtime } from '@/lib/realtime/realtime-provider';
 
 import { AccountNotificationRow } from '../components/account-notification-row';
 import { AccountNotificationsSkeleton } from '../components/account-notifications-skeleton';
+import { PersonalizedNotificationsPanel } from '../components/personalized-notifications-panel';
 import { PushNotificationPanel } from '../components/push-notification-panel';
 import { useAccountNotifications } from '../hooks/use-account-notifications';
 
@@ -83,6 +84,7 @@ export function AccountNotifications() {
   return (
     <div className='space-y-6'>
       <PushNotificationPanel />
+      <PersonalizedNotificationsPanel />
 
       <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
         <div>
@@ -151,7 +153,9 @@ export function AccountNotifications() {
             <IconBell className='text-muted-foreground size-8' />
           </div>
           <h3 className='font-display text-xl font-semibold'>{t('emptyTitle')}</h3>
-          <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>{t('emptyDescription')}</p>
+          <p className='text-muted-foreground mx-auto mt-2 max-w-sm text-sm'>
+            {t('emptyDescription')}
+          </p>
         </div>
       ) : (
         <div className='space-y-3'>

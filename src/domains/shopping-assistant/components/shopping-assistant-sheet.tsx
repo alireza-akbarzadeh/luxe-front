@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Typography } from '@/components/ui/typography';
+import { PERSONALIZATION_ROUTES } from '@/domains/personalization/lib/personalization-routes';
 import { cn } from '@/lib/utils';
 import type { DtoAiRecommendedProduct } from '@/services/-ai-shopping-assistant-post.schemas';
 
@@ -36,7 +37,14 @@ interface ChatMessage {
   followUpQuestions?: string[];
 }
 
-const QUICK_PROMPT_KEYS = ['promptGift', 'promptHome', 'promptTrending'] as const;
+const QUICK_SEND_KEYS = ['promptHome', 'promptTrending'] as const;
+
+const QUICK_ROUTE_ACTIONS = [
+  { key: 'promptGift', href: '/gift-cards/finder' },
+  { key: 'promptGoal', href: PERSONALIZATION_ROUTES.goal },
+  { key: 'promptMood', href: PERSONALIZATION_ROUTES.mood },
+  { key: 'promptMemory', href: PERSONALIZATION_ROUTES.memory }
+] as const;
 
 interface ShoppingAssistantSheetProps {
   open: boolean;
@@ -136,7 +144,12 @@ function ShoppingAssistantPanel() {
   const [activeFollowUps, setActiveFollowUps] = useState<string[]>([]);
 
   const chipPrompts =
-    activeFollowUps.length > 0 ? activeFollowUps : QUICK_PROMPT_KEYS.map((key) => t(key));
+    activeFollowUps.length > 0
+      ? activeFollowUps
+      : [
+          ...QUICK_ROUTE_ACTIONS.map((action) => t(action.key)),
+          ...QUICK_SEND_KEYS.map((key) => t(key))
+        ];
   const chipLabel = activeFollowUps.length > 0 ? t('followUpQuestions') : t('quickPrompts');
 
   const appendMessage = (message: Omit<ChatMessage, 'id'> & { id?: string }) => {
@@ -191,22 +204,27 @@ function ShoppingAssistantPanel() {
     await handleSend(trimmed);
   };
 
-  const handleQuickPrompt = (promptKey: (typeof QUICK_PROMPT_KEYS)[number], label: string) => {
-    if (promptKey === 'promptGift') {
+  const handleQuickPrompt = (label: string) => {
+    const routeAction = QUICK_ROUTE_ACTIONS.find((action) => t(action.key) === label);
+    if (routeAction) {
       closeAssistant();
-      router.push('/gift-cards/finder');
+      router.push(routeAction.href);
       return;
     }
-    void handleSend(label);
+
+    const sendKey = QUICK_SEND_KEYS.find((key) => t(key) === label);
+    if (sendKey) {
+      void handleSend(label);
+    }
   };
 
   const handleSuggestionClick = (prompt: string) => {
-    const key = QUICK_PROMPT_KEYS.find((k) => t(k) === prompt);
-    if (key) {
-      handleQuickPrompt(key, prompt);
+    if (activeFollowUps.length > 0) {
+      void handleSend(prompt);
       return;
     }
-    void handleSend(prompt);
+
+    handleQuickPrompt(prompt);
   };
 
   return (

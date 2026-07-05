@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { AccountWishlistItemCard } from '@/domains/account/components/account-wishlist-item-card';
+import { PersonalizationJourneyPromo } from '@/domains/personalization/components/personalization-journey-promo';
 
 import { WishlistEmptyState } from './components/wishlist-empty-state';
 import { WishlistFooter } from './components/wishlist-footer';
@@ -110,6 +111,7 @@ export function WishlistDomain() {
       />
 
       <WishlistIntelligencePanel itemCount={total} />
+      <PersonalizationJourneyPromo variant='wishlist' className='mb-6' />
 
       <ul className='flex flex-col gap-3 lg:hidden'>
         {items.map((item) =>

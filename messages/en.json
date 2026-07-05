@@ -871,6 +871,15 @@
       "description": "Compatibility-ranked sets based on what you already added.",
       "addAll": "Add bundle",
       "compatibility": "{score}% match"
+    },
+    "smartCart": {
+      "title": "Smart cart",
+      "loading": "Reviewing your cart…",
+      "tips": "Checkout tips",
+      "warnings": "Watch out for",
+      "gaps": "You might still need",
+      "picks": "Worth adding",
+      "footer": "AI guidance from your cart contents — verify variants and stock before checkout."
     }
   },
   "footer": {
@@ -1737,6 +1746,102 @@
     },
     "giftCardLink": "Prefer a gift card? Send digital credit instead"
   },
+  "shoppingMemory": {
+    "title": "Shopping memory",
+    "subtitle": "Luxe summarizes your recent views, wishlist, and favorite categories into a taste profile and matching picks.",
+    "guestTitle": "Sign in to see your shopping memory",
+    "guestDescription": "We need your browsing history and saved items to build a personalized memory.",
+    "signIn": "Sign in",
+    "loading": "Reading your shopping signals…",
+    "styleNotes": "Your style",
+    "signals": "What we remember",
+    "picks": "Picks for you",
+    "footer": "AI guidance from your activity on Luxe — not stored outside your account signals."
+  },
+  "goalShopping": {
+    "title": "Goal-based shopping",
+    "subtitle": "Describe what you want to achieve — we'll suggest steps and products from the catalog.",
+    "fields": {
+      "goal": "Your goal",
+      "goalPlaceholder": "e.g. Build a minimalist home office under $2,000",
+      "timeline": "Timeline (optional)",
+      "timelinePlaceholder": "e.g. Before next month",
+      "preferences": "Preferences (optional)",
+      "preferencesPlaceholder": "e.g. neutral colors, sustainable materials",
+      "budgetMin": "Min budget",
+      "budgetMax": "Max budget"
+    },
+    "submit": "Get my plan",
+    "submitting": "Planning…",
+    "steps": "Suggested steps",
+    "picks": "Product picks",
+    "footer": "AI guidance from catalog search — verify fit and stock before checkout.",
+    "errors": {
+      "goalTooShort": "Describe your shopping goal in at least 3 characters"
+    }
+  },
+  "moodShopping": {
+    "title": "Mood shopping",
+    "subtitle": "Choose a mood and optional context — we'll suggest style cues and products from the catalog.",
+    "fields": {
+      "mood": "How are you feeling?",
+      "context": "Anything else? (optional)",
+      "contextPlaceholder": "e.g. weekend brunch, first apartment, treating myself"
+    },
+    "moods": {
+      "cozy": "Cozy",
+      "bold": "Bold",
+      "minimal": "Minimal",
+      "romantic": "Romantic",
+      "professional": "Professional",
+      "playful": "Playful",
+      "luxurious": "Luxurious",
+      "calm": "Calm"
+    },
+    "submit": "Find my vibe",
+    "submitting": "Curating…",
+    "moodTags": "Your vibe",
+    "styleCues": "Style cues",
+    "picks": "Picks for you",
+    "footer": "AI guidance from catalog search — moods are inspiration, not guarantees.",
+    "errors": {
+      "moodRequired": "Pick a mood to continue"
+    }
+  },
+  "personalizationDiscovery": {
+    "eyebrow": "Shop your way",
+    "title": "Personalized ways to discover",
+    "description": "Not sure where to start? Luxe learns your taste, plans around your goals, and matches products to how you feel today.",
+    "allApps": "All Luxe apps",
+    "cards": {
+      "memory": {
+        "title": "Shopping memory",
+        "description": "See what Luxe remembers from your views and wishlist — then get matching picks.",
+        "badge": "For you",
+        "action": "View memory",
+        "signInHint": "Sign in to build your memory from browsing activity."
+      },
+      "goal": {
+        "title": "Goal-based shopping",
+        "description": "Describe an outcome — outfit refresh, home project, gift list — and get a short plan.",
+        "badge": "Beta",
+        "action": "Set a goal"
+      },
+      "mood": {
+        "title": "Mood shopping",
+        "description": "Pick a vibe and discover products styled for how you want to feel.",
+        "badge": "New",
+        "action": "Shop by mood"
+      }
+    },
+    "promo": {
+      "title": "Try personalized shopping",
+      "description": "Explore AI-guided paths beyond search — built for how you shop.",
+      "goal": "Shop by goal",
+      "mood": "Shop by mood",
+      "memory": "Shopping memory"
+    }
+  },
   "giftCardsPage": {
     "eyebrow": "Gift cards",
     "title": "Give the gift of choice",
@@ -1805,6 +1910,9 @@
     "picksForYou": "Picks for you",
     "viewProduct": "View product",
     "promptGift": "Gift ideas under $100",
+    "promptGoal": "Shop toward a goal",
+    "promptMood": "Match my mood",
+    "promptMemory": "What do you remember?",
     "promptHome": "Minimalist home decor",
     "promptTrending": "What's trending right now?"
   },
@@ -2379,6 +2487,17 @@
         "shipment_update": "Shipment Update",
         "membership_activated": "Luxe Plus",
         "wallet_deposit": "Wallet Deposit"
+      },
+      "personalized": {
+        "title": "Alerts we recommend for you",
+        "loading": "Learning what matters to you…",
+        "recommended": "Suggested",
+        "footer": "AI guidance from your Luxe activity — enable push below to stay updated.",
+        "priority": {
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        }
       }
     },
     "settings": {
@@ -2435,6 +2554,32 @@
       "current": "Apps"
     },
     "footnote": "Native iPhone and Android apps are in progress. Install the Luxe PWA today for app-like experience.",
+    "versionBanner": {
+      "message": "You're on {current}. {available} is now available.",
+      "action": "Update now"
+    },
+    "personalization": {
+      "title": "Personalized shopping",
+      "subtitle": "AI features that learn your taste and help you shop with a goal in mind.",
+      "memory": {
+        "title": "Shopping memory",
+        "description": "See what Luxe remembers from your browsing and saved items.",
+        "badge": "New",
+        "action": "View memory"
+      },
+      "goal": {
+        "title": "Goal-based shopping",
+        "description": "Describe an outcome — outfit, room refresh, gift list — and get a plan.",
+        "badge": "Beta",
+        "action": "Set a goal"
+      },
+      "mood": {
+        "title": "Mood shopping",
+        "description": "Pick how you feel today and discover products that match your vibe.",
+        "badge": "New",
+        "action": "Shop by mood"
+      }
+    },
     "cards": {
       "comingSoon": "Coming soon",
       "web": {

@@ -870,6 +870,15 @@
       "description": "Conjuntos compatibles según lo que ya añadiste.",
       "addAll": "Añadir paquete",
       "compatibility": "{score}% de compatibilidad"
+    },
+    "smartCart": {
+      "title": "Carrito inteligente",
+      "loading": "Revisando tu carrito…",
+      "tips": "Consejos de pago",
+      "warnings": "Ten en cuenta",
+      "gaps": "Podrías necesitar",
+      "picks": "Vale la pena añadir",
+      "footer": "Guía de IA según tu carrito — verifica variantes y stock antes de pagar."
     }
   },
   "footer": {
@@ -1736,6 +1745,102 @@
     },
     "giftCardLink": "¿Prefieres una tarjeta regalo? Envía crédito digital"
   },
+  "shoppingMemory": {
+    "title": "Memoria de compras",
+    "subtitle": "Luxe resume tus vistas recientes, lista de deseos y categorías favoritas en un perfil de gusto y recomendaciones.",
+    "guestTitle": "Inicia sesión para ver tu memoria de compras",
+    "guestDescription": "Necesitamos tu historial de navegación y artículos guardados para crear una memoria personalizada.",
+    "signIn": "Iniciar sesión",
+    "loading": "Leyendo tus señales de compra…",
+    "styleNotes": "Tu estilo",
+    "signals": "Lo que recordamos",
+    "picks": "Selecciones para ti",
+    "footer": "Guía de IA basada en tu actividad en Luxe — no se almacena fuera de las señales de tu cuenta."
+  },
+  "goalShopping": {
+    "title": "Compras por objetivo",
+    "subtitle": "Describe lo que quieres lograr — sugeriremos pasos y productos del catálogo.",
+    "fields": {
+      "goal": "Tu objetivo",
+      "goalPlaceholder": "p. ej. Montar una oficina minimalista por menos de 2.000 $",
+      "timeline": "Plazo (opcional)",
+      "timelinePlaceholder": "p. ej. Antes del próximo mes",
+      "preferences": "Preferencias (opcional)",
+      "preferencesPlaceholder": "p. ej. colores neutros, materiales sostenibles",
+      "budgetMin": "Presupuesto mín.",
+      "budgetMax": "Presupuesto máx."
+    },
+    "submit": "Obtener mi plan",
+    "submitting": "Planificando…",
+    "steps": "Pasos sugeridos",
+    "picks": "Productos recomendados",
+    "footer": "Guía de IA del catálogo — verifica disponibilidad antes de comprar.",
+    "errors": {
+      "goalTooShort": "Describe tu objetivo de compra con al menos 3 caracteres"
+    }
+  },
+  "moodShopping": {
+    "title": "Compras por estado de ánimo",
+    "subtitle": "Elige un mood y contexto opcional — sugeriremos estilo y productos del catálogo.",
+    "fields": {
+      "mood": "¿Cómo te sientes?",
+      "context": "¿Algo más? (opcional)",
+      "contextPlaceholder": "p. ej. brunch de fin de semana, primer piso, capricho"
+    },
+    "moods": {
+      "cozy": "Acogedor",
+      "bold": "Audaz",
+      "minimal": "Minimalista",
+      "romantic": "Romántico",
+      "professional": "Profesional",
+      "playful": "Divertido",
+      "luxurious": "Lujoso",
+      "calm": "Tranquilo"
+    },
+    "submit": "Encontrar mi vibe",
+    "submitting": "Curando…",
+    "moodTags": "Tu vibe",
+    "styleCues": "Pistas de estilo",
+    "picks": "Selecciones para ti",
+    "footer": "Guía de IA del catálogo — el mood es inspiración, no una garantía.",
+    "errors": {
+      "moodRequired": "Elige un mood para continuar"
+    }
+  },
+  "personalizationDiscovery": {
+    "eyebrow": "Compra a tu manera",
+    "title": "Formas personalizadas de descubrir",
+    "description": "¿No sabes por dónde empezar? Luxe aprende tu gusto, planifica tus metas y encuentra productos según cómo te sientes hoy.",
+    "allApps": "Todas las apps Luxe",
+    "cards": {
+      "memory": {
+        "title": "Memoria de compras",
+        "description": "Mira lo que Luxe recuerda de tus vistas y lista de deseos — y recibe selecciones.",
+        "badge": "Para ti",
+        "action": "Ver memoria",
+        "signInHint": "Inicia sesión para crear tu memoria con tu actividad."
+      },
+      "goal": {
+        "title": "Compras por objetivo",
+        "description": "Describe un resultado — look, hogar, regalos — y obtén un plan breve.",
+        "badge": "Beta",
+        "action": "Definir objetivo"
+      },
+      "mood": {
+        "title": "Compras por mood",
+        "description": "Elige un vibe y descubre productos que encajan con cómo quieres sentirte.",
+        "badge": "Nuevo",
+        "action": "Comprar por mood"
+      }
+    },
+    "promo": {
+      "title": "Prueba compras personalizadas",
+      "description": "Explora rutas con IA más allá de la búsqueda — pensadas para cómo compras.",
+      "goal": "Comprar por objetivo",
+      "mood": "Comprar por mood",
+      "memory": "Memoria de compras"
+    }
+  },
   "giftCardsPage": {
     "eyebrow": "Tarjetas regalo",
     "title": "Regala libertad de elección",
@@ -1804,6 +1909,9 @@
     "picksForYou": "Selección para ti",
     "viewProduct": "Ver producto",
     "promptGift": "Ideas de regalo por menos de $100",
+    "promptGoal": "Comprar con un objetivo",
+    "promptMood": "Según mi mood",
+    "promptMemory": "¿Qué recuerdas de mí?",
     "promptHome": "Decoración minimalista",
     "promptTrending": "¿Qué está de moda ahora?"
   },
@@ -2378,6 +2486,17 @@
         "shipment_update": "Actualización de envío",
         "membership_activated": "Luxe Plus",
         "wallet_deposit": "Depósito en billetera"
+      },
+      "personalized": {
+        "title": "Alertas que recomendamos para ti",
+        "loading": "Aprendiendo qué te importa…",
+        "recommended": "Sugerido",
+        "footer": "Guía de IA según tu actividad en Luxe — activa push abajo para estar al día.",
+        "priority": {
+          "high": "Alta",
+          "medium": "Media",
+          "low": "Baja"
+        }
       }
     },
     "settings": {
@@ -2434,6 +2553,32 @@
       "current": "Apps"
     },
     "footnote": "Las apps nativas de iPhone y Android están en desarrollo. Mientras tanto instala la PWA de Luxe.",
+    "versionBanner": {
+      "message": "Estás en {current}. {available} ya está disponible.",
+      "action": "Actualizar"
+    },
+    "personalization": {
+      "title": "Compras personalizadas",
+      "subtitle": "Funciones de IA que aprenden tu gusto y te ayudan a comprar con un objetivo.",
+      "memory": {
+        "title": "Memoria de compras",
+        "description": "Mira lo que Luxe recuerda de tu navegación y artículos guardados.",
+        "badge": "Nuevo",
+        "action": "Ver memoria"
+      },
+      "goal": {
+        "title": "Compras por objetivo",
+        "description": "Describe un resultado y obtén un plan con productos del catálogo.",
+        "badge": "Beta",
+        "action": "Definir objetivo"
+      },
+      "mood": {
+        "title": "Compras por estado de ánimo",
+        "description": "Elige cómo te sientes y descubre productos que encajan con tu vibe.",
+        "badge": "Nuevo",
+        "action": "Comprar por mood"
+      }
+    },
     "cards": {
       "comingSoon": "Próximamente",
       "web": {

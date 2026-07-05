@@ -104,15 +104,15 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 022 — Wishlist Intelligence ✅
 
-## Task 023 — Shopping Memory
+## Task 023 — Shopping Memory ✅
 
-## Task 024 — Goal-Based Shopping
+## Task 024 — Goal-Based Shopping ✅
 
-## Task 025 — Mood Shopping
+## Task 025 — Mood Shopping ✅
 
-## Task 026 — Smart Cart
+## Task 026 — Smart Cart ✅
 
-## Task 027 — Personalized Notifications
+## Task 027 — Personalized Notifications ✅
 
 ## Task 028 — Replenishment Reminders
 

@@ -6,6 +6,8 @@ import { Text } from '@/components/ui/typography';
 import { SectionShell } from '@/domains/support/components/section-shell';
 import { SupportPageHero } from '@/domains/support/components/support-page-hero';
 
+import { AppVersionUpdateBanner } from './components/app-version-update-banner';
+import { PersonalizationFeaturesSection } from './components/personalization-features-section';
 import { PlatformCardsGrid } from './components/platform-cards-grid';
 
 export function AppsDomain() {
@@ -20,9 +22,15 @@ export function AppsDomain() {
         breadcrumbs={[{ name: t('hero.home'), href: '/' }, { name: t('hero.current') }]}
       />
 
-      <SectionShell className='mt-14'>
+      <SectionShell className='mt-8'>
+        <AppVersionUpdateBanner />
+      </SectionShell>
+
+      <SectionShell className='mt-10'>
         <PlatformCardsGrid />
       </SectionShell>
+
+      <PersonalizationFeaturesSection />
 
       <SectionShell size='md' className='mt-10'>
         <Text variant='muted' align='center'>
