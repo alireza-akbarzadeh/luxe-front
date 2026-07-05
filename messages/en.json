@@ -446,6 +446,35 @@
         "high": "Higher risk"
       }
     },
+    "purchaseAdvisor": {
+      "title": "Should you buy this?",
+      "loading": "Building your purchase recommendation…",
+      "pros": "Why buy",
+      "cons": "Watch outs",
+      "idealFor": "Best for",
+      "considerations": "Before you checkout",
+      "confidence": "{level} confidence",
+      "footer": "AI guidance from listing details, reviews, returns, and price history. Not financial advice.",
+      "verdict": {
+        "buy": "Buy now",
+        "wait": "Wait",
+        "consider": "Consider carefully"
+      }
+    },
+    "sizeRecommendation": {
+      "title": "Size guide",
+      "loading": "Finding your best fit…",
+      "recommended": "Try {size}",
+      "alternative": "Also consider {size}",
+      "confidence": "{level} confidence",
+      "footer": "AI guidance from sizes, reviews, and returns. Always check the size chart.",
+      "fitNotes": {
+        "runs_small": "Runs small",
+        "runs_large": "Runs large",
+        "true_to_size": "True to size",
+        "unknown": "Fit varies"
+      }
+    },
     "info": {
       "sku": "SKU · {sku}",
       "ratingReviews": " · {count, number} reviews",
@@ -2143,7 +2172,20 @@
       "outOfStock": "Out of stock",
       "removeAria": "Remove from wishlist",
       "addToCart": "Add to cart",
-      "unavailable": "Unavailable"
+      "unavailable": "Unavailable",
+      "intelligence": {
+        "title": "Wishlist insights",
+        "loading": "Prioritizing your saved items…",
+        "estimatedSavings": "You could save up to {amount} on discounted items",
+        "priorities": "What to do next",
+        "footer": "AI guidance from prices, stock, and discounts on your saved items.",
+        "priority": {
+          "buy_now": "Buy now",
+          "watch": "Watch",
+          "wait": "Wait",
+          "remove": "Consider removing"
+        }
+      }
     },
     "activity": {
       "title": "Reviews & questions",

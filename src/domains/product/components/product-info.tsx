@@ -29,9 +29,14 @@ import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { useCartStore } from '~/src/store/card.store';
 
+import {
+  getVariantPickerAttributes,
+  resolveProductAttributeKind
+} from '../lib/product-attribute.utils';
 import { ProductAiBriefButton } from './product-ai-brief-sheet';
 import { ProductFeatureHighlights } from './product-feature-highlights';
 import ProductQuantity from './product-quantity';
+import { ProductSizeRecommendation } from './product-size-recommendation';
 import { ProductStockNotify } from './product-stock-notify';
 import { ProductVariantAttributes } from './product-variant-attributes';
 
@@ -69,6 +74,11 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
     variantSelections['colour'] ??
     variantSelections['colours'];
   const selectedSize = variantSelections['size'] ?? variantSelections['sizes'];
+
+  const hasSizeVariants = getVariantPickerAttributes(product.attributes, {
+    colors: product.colors,
+    sizes: product.sizes
+  }).some((attribute) => resolveProductAttributeKind(attribute) === 'size');
 
   const discountAmount =
     product.compare_at_price && product.compare_at_price > Number(product.price ?? 0)
@@ -238,6 +248,8 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         sizes={product.sizes}
         onSelectionChange={setVariantSelections}
       />
+
+      {hasSizeVariants && product.id ? <ProductSizeRecommendation productId={product.id} /> : null}
 
       <ProductFeatureHighlights attributes={product.attributes} />
 

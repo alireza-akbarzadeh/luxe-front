@@ -16,14 +16,10 @@ export function useProductDurabilityScore(productId: number) {
     if (productId <= 0) {
       return null;
     }
-    try {
-      const response = await mutation.mutateAsync({
-        data: { product_id: productId }
-      });
-      return response.data ?? null;
-    } catch {
-      return null;
-    }
+    const response = await mutation.mutateAsync({
+      data: { product_id: productId }
+    });
+    return response.data ?? null;
   };
 
   return {

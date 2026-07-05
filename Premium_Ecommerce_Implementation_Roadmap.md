@@ -92,15 +92,17 @@ AI 0–100 sustainability score on PDP insights: materials, packaging, ethics, a
 
 ## Task 019 — Product Timeline
 
-## Task 020 — AI Purchase Advisor
+## Task 020 — AI Purchase Advisor ✅
+
+Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper profile, and checkout considerations from listing, reviews, returns, and price history.
 
 ---
 
 # Phase 3 — Personalization
 
-## Task 021 — AI Size Recommendation
+## Task 021 — AI Size Recommendation ✅
 
-## Task 022 — Wishlist Intelligence
+## Task 022 — Wishlist Intelligence ✅
 
 ## Task 023 — Shopping Memory
 

@@ -13,6 +13,7 @@ import { WishlistEmptyState } from './components/wishlist-empty-state';
 import { WishlistFooter } from './components/wishlist-footer';
 import { WishlistGuestState } from './components/wishlist-guest-state';
 import { WishlistHeader } from './components/wishlist-header';
+import { WishlistIntelligencePanel } from './components/wishlist-intelligence-panel';
 import { WishlistItemRow } from './components/wishlist-item-row';
 import { WishlistPageSkeleton } from './components/wishlist-page-skeleton';
 import { useWishlistActions } from './hooks/use-wishlist-actions';
@@ -107,6 +108,8 @@ export function WishlistDomain() {
         onClearAll={() => void clearAll(productIds)}
         onSortChange={setSortBy}
       />
+
+      <WishlistIntelligencePanel itemCount={total} />
 
       <ul className='flex flex-col gap-3 lg:hidden'>
         {items.map((item) =>

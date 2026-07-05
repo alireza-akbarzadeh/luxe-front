@@ -446,6 +446,35 @@
         "high": "Riesgo alto"
       }
     },
+    "purchaseAdvisor": {
+      "title": "¿Deberías comprarlo?",
+      "loading": "Preparando tu recomendación de compra…",
+      "pros": "Por qué comprar",
+      "cons": "Precauciones",
+      "idealFor": "Ideal para",
+      "considerations": "Antes de pagar",
+      "confidence": "Confianza {level}",
+      "footer": "Orientación de IA según detalles, reseñas, devoluciones e historial de precios. No es asesoramiento financiero.",
+      "verdict": {
+        "buy": "Comprar ahora",
+        "wait": "Esperar",
+        "consider": "Valorar con calma"
+      }
+    },
+    "sizeRecommendation": {
+      "title": "Guía de tallas",
+      "loading": "Buscando tu mejor talla…",
+      "recommended": "Prueba {size}",
+      "alternative": "También considera {size}",
+      "confidence": "Confianza {level}",
+      "footer": "Orientación de IA según tallas, reseñas y devoluciones. Consulta siempre la tabla de tallas.",
+      "fitNotes": {
+        "runs_small": "Queda pequeño",
+        "runs_large": "Queda grande",
+        "true_to_size": "Talla exacta",
+        "unknown": "Ajuste variable"
+      }
+    },
     "info": {
       "sku": "SKU · {sku}",
       "ratingReviews": " · {count, number} reseñas",
@@ -2142,7 +2171,20 @@
       "outOfStock": "Agotado",
       "removeAria": "Eliminar de la lista de deseos",
       "addToCart": "Añadir al carrito",
-      "unavailable": "No disponible"
+      "unavailable": "No disponible",
+      "intelligence": {
+        "title": "Ideas para tu lista",
+        "loading": "Priorizando tus artículos guardados…",
+        "estimatedSavings": "Podrías ahorrar hasta {amount} en artículos con descuento",
+        "priorities": "Qué hacer ahora",
+        "footer": "Orientación de IA según precios, stock y descuentos de tus guardados.",
+        "priority": {
+          "buy_now": "Comprar ya",
+          "watch": "Vigilar",
+          "wait": "Esperar",
+          "remove": "Valorar quitar"
+        }
+      }
     },
     "activity": {
       "title": "Reseñas y preguntas",

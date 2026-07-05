@@ -9,6 +9,7 @@ import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { ProductDurabilityScore } from './product-durability-score';
 import { ProductMarketSnapshot } from './product-market-snapshot';
 import { ProductPriceChart } from './product-price-chart';
+import { ProductPurchaseAdvisor } from './product-purchase-advisor';
 import { ProductReturnRiskInsight } from './product-return-risk-insight';
 import { ProductSustainabilityScore } from './product-sustainability-score';
 import { ProductTrustScore } from './product-trust-score';
@@ -70,6 +71,12 @@ export function ProductInsightsSection({
       <ProductReturnRiskInsight
         className='mt-6'
         enabled={isStageReached('returnRisk')}
+        productId={numericProductId}
+      />
+
+      <ProductPurchaseAdvisor
+        className='mt-6'
+        enabled={isStageReached('purchaseAdvisor')}
         productId={numericProductId}
       />
     </section>

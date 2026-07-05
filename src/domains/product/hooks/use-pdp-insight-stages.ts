@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 /** Stagger delays (ms) so PDP insight APIs do not fire in one burst. */
-const STAGE_DELAYS_MS = [0, 400, 800, 1000, 1200, 1600, 2000] as const;
+const STAGE_DELAYS_MS = [0, 400, 800, 1000, 1200, 1600, 2000, 2400, 2800] as const;
 
 export type PdpInsightStage =
   | 'idle'
@@ -13,6 +13,7 @@ export type PdpInsightStage =
   | 'priceChart'
   | 'market'
   | 'returnRisk'
+  | 'purchaseAdvisor'
   | 'pricePrediction';
 
 const STAGE_ORDER: PdpInsightStage[] = [
@@ -23,6 +24,7 @@ const STAGE_ORDER: PdpInsightStage[] = [
   'priceChart',
   'market',
   'returnRisk',
+  'purchaseAdvisor',
   'pricePrediction'
 ];
 
