@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ProductReviewAiSummary } from '@/domains/product/components/product-review-ai-summary';
 import type {
   ProductReviewResponse,
   ProductReviewsListResponse,
@@ -43,9 +44,7 @@ function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
           />
         ))}
       </div>
-      <p className='text-muted-foreground mt-2 text-sm'>
-        {t('basedOn', { count: total })}
-      </p>
+      <p className='text-muted-foreground mt-2 text-sm'>{t('basedOn', { count: total })}</p>
 
       <div className='mt-6 space-y-1.5'>
         {[5, 4, 3, 2, 1].map((stars) => {
@@ -53,9 +52,7 @@ function RatingBreakdown({ summary }: { summary?: ProductReviewSummary }) {
           const pct = total > 0 ? Math.round((count / total) * 100) : 0;
           return (
             <div key={stars} className='flex items-center gap-2 text-xs'>
-              <span className='text-muted-foreground w-12'>
-                {t('starLabel', { stars })}
-              </span>
+              <span className='text-muted-foreground w-12'>{t('starLabel', { stars })}</span>
               <div className='bg-muted h-1.5 flex-1 overflow-hidden rounded-full'>
                 <div className='bg-foreground h-full transition-all' style={{ width: `${pct}%` }} />
               </div>
@@ -167,6 +164,7 @@ export function ProductReviewList({ productId }: ProductReviewListProps) {
   return (
     <div className='space-y-8'>
       <RatingBreakdown summary={summary} />
+      <ProductReviewAiSummary productId={productId} reviewCount={total} />
 
       {reviews.length > 0 ? (
         <>

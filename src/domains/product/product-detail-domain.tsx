@@ -91,7 +91,11 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
       </div>
 
       <div className='pdp-defer-mobile'>
-        <ProductInsightsSection productId={productSlug} product={product} />
+        <ProductInsightsSection
+          productId={productSlug}
+          numericProductId={numericProductId}
+          product={product}
+        />
       </div>
 
       <div className='pdp-defer-mobile'>

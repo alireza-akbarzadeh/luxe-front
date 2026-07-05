@@ -377,8 +377,21 @@
     "reviewsIntro": "Read what shoppers say about {name}, or share your own experience.",
     "thisProduct": "this product",
     "insightsTitle": "Shop with confidence",
-    "insightsDescription": "Track how this price has moved and see how it compares to the same model at other stores.",
+    "insightsDescription": "Track how this price has moved, compare listings, and understand return risk before you buy.",
     "thisListing": "This listing",
+    "returnRisk": {
+      "title": "Return risk insight",
+      "loading": "Analyzing return patterns…",
+      "commonReasons": "Common return reasons",
+      "tips": "Buy with confidence",
+      "footer": "AI guidance from product details, reviews, and return history. Not a guarantee.",
+      "returnRate": "About {rate, number}% of orders with this item were returned (based on {orders, number} orders).",
+      "riskLevel": {
+        "low": "Low risk",
+        "medium": "Moderate risk",
+        "high": "Higher risk"
+      }
+    },
     "info": {
       "sku": "SKU · {sku}",
       "ratingReviews": " · {count, number} reviews",
@@ -567,7 +580,15 @@
       "toastUpdateFailed": "Failed to update review",
       "toastSubmitFailed": "Failed to submit review",
       "toastRemoved": "Review removed",
-      "toastDeleteFailed": "Failed to delete review"
+      "toastDeleteFailed": "Failed to delete review",
+      "aiSummary": {
+        "title": "What buyers are saying",
+        "loading": "Summarizing reviews…",
+        "highlights": "Shoppers praise",
+        "watchOuts": "Worth noting",
+        "footer": "AI summary from verified buyer reviews.",
+        "unavailable": "Review summary is temporarily unavailable."
+      }
     },
     "related": {
       "title": "You may also like",

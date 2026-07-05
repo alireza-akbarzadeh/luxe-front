@@ -6,14 +6,20 @@ import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { ProductMarketSnapshot } from './product-market-snapshot';
 import { ProductPriceChart } from './product-price-chart';
+import { ProductReturnRiskInsight } from './product-return-risk-insight';
 
 interface ProductInsightsSectionProps {
   productId: string;
+  numericProductId: number;
   product: DtoProductWithLike;
 }
 
-/** Two-column PDP insights: price trend + marketplace comparison. */
-export function ProductInsightsSection({ productId, product }: ProductInsightsSectionProps) {
+/** Two-column PDP insights: price trend, marketplace comparison, and return-risk AI. */
+export function ProductInsightsSection({
+  productId,
+  numericProductId,
+  product
+}: ProductInsightsSectionProps) {
   const t = useTranslations('pdp');
 
   return (
@@ -32,6 +38,8 @@ export function ProductInsightsSection({ productId, product }: ProductInsightsSe
           storeName={product.store?.name ?? t('thisListing')}
         />
       </div>
+
+      <ProductReturnRiskInsight className='mt-6' productId={numericProductId} />
     </section>
   );
 }

@@ -377,8 +377,21 @@
     "reviewsIntro": "Lee lo que dicen los compradores sobre {name} o comparte tu experiencia.",
     "thisProduct": "este producto",
     "insightsTitle": "Compra con confianza",
-    "insightsDescription": "Sigue la evolución del precio y compáralo con el mismo modelo en otras tiendas.",
+    "insightsDescription": "Sigue la evolución del precio, compara listados y entiende el riesgo de devolución antes de comprar.",
     "thisListing": "Este anuncio",
+    "returnRisk": {
+      "title": "Riesgo de devolución",
+      "loading": "Analizando patrones de devolución…",
+      "commonReasons": "Motivos frecuentes de devolución",
+      "tips": "Compra con confianza",
+      "footer": "Orientación de IA según detalles, reseñas e historial de devoluciones. No es una garantía.",
+      "returnRate": "Aproximadamente el {rate, number} % de pedidos con este artículo se devolvieron (según {orders, number} pedidos).",
+      "riskLevel": {
+        "low": "Riesgo bajo",
+        "medium": "Riesgo moderado",
+        "high": "Riesgo alto"
+      }
+    },
     "info": {
       "sku": "SKU · {sku}",
       "ratingReviews": " · {count, number} reseñas",
@@ -567,7 +580,15 @@
       "toastUpdateFailed": "Error al actualizar la reseña",
       "toastSubmitFailed": "Error al enviar la reseña",
       "toastRemoved": "Reseña eliminada",
-      "toastDeleteFailed": "Error al eliminar la reseña"
+      "toastDeleteFailed": "Error al eliminar la reseña",
+      "aiSummary": {
+        "title": "Lo que dicen los compradores",
+        "loading": "Resumiendo reseñas…",
+        "highlights": "Lo que más valoran",
+        "watchOuts": "Ten en cuenta",
+        "footer": "Resumen de IA basado en reseñas verificadas.",
+        "unavailable": "El resumen de reseñas no está disponible temporalmente."
+      }
     },
     "related": {
       "title": "También te puede gustar",

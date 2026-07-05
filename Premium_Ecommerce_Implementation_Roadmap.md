@@ -62,9 +62,13 @@ Build a guided gift recommendation experience based on recipient, occasion, and 
 
 # Phase 2 — Trust & Decision Making
 
-## Task 011 — AI Review Summary
+## Task 011 — AI Review Summary ✅
 
-## Task 012 — Return Risk Insights
+Summarize verified buyer reviews into highlights and caveats on the PDP reviews tab.
+
+## Task 012 — Return Risk Insights ✅
+
+AI return-risk card on PDP insights: risk level, common reasons, tips, and optional return-rate stats from order history.
 
 ## Task 013 — Product Trust Score
 
