@@ -1762,6 +1762,21 @@
     "notFoundBody": "Este perfil puede haber sido eliminado o aún no está publicado.",
     "backToList": "Ver todos los creadores"
   },
+  "communityListsPage": {
+    "breadcrumb": "Listas",
+    "eyebrow": "Selecciones de la comunidad",
+    "title": "Listas de compras",
+    "description": "Ediciones prácticas de la comunidad — invitados de boda, esenciales para el piso, cápsulas de viaje y más.",
+    "viewLabel": "Ver lista",
+    "itemCount": "{count, plural, one {# artículo} other {# artículos}}",
+    "curatedBy": "Curada por {name}",
+    "shopList": "{count, plural, one {Comprar este artículo} other {Comprar los # artículos}}",
+    "empty": "Aún no hay listas de la comunidad — vuelve pronto.",
+    "noItems": "Esta lista aún no tiene artículos.",
+    "notFoundTitle": "Lista no encontrada",
+    "notFoundBody": "Esta lista puede haber sido eliminada o aún no está publicada.",
+    "backToList": "Ver todas las listas"
+  },
   "shopTheLookPage": {
     "breadcrumb": "Compra el look",
     "eyebrow": "Ediciones interactivas",

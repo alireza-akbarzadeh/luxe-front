@@ -1762,6 +1762,21 @@
     "notFoundBody": "This profile may have been removed or is not published yet.",
     "backToList": "Browse all creators"
   },
+  "communityListsPage": {
+    "breadcrumb": "Lists",
+    "eyebrow": "Community picks",
+    "title": "Shopping lists",
+    "description": "Practical edits from the community — wedding guest outfits, apartment essentials, travel capsules, and more you can shop in one place.",
+    "viewLabel": "View list",
+    "itemCount": "{count, plural, one {# item} other {# items}}",
+    "curatedBy": "Curated by {name}",
+    "shopList": "{count, plural, one {Shop this item} other {Shop all # items}}",
+    "empty": "No community lists are live yet — check back soon.",
+    "noItems": "This list has no items yet.",
+    "notFoundTitle": "List not found",
+    "notFoundBody": "This list may have been removed or is not published yet.",
+    "backToList": "Browse all lists"
+  },
   "shopTheLookPage": {
     "breadcrumb": "Shop the look",
     "eyebrow": "Interactive edits",

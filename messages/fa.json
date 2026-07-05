@@ -1762,6 +1762,21 @@
     "notFoundBody": "این پروفایل حذف شده یا هنوز منتشر نشده است.",
     "backToList": "همه خالقان"
   },
+  "communityListsPage": {
+    "breadcrumb": "لیست‌ها",
+    "eyebrow": "انتخاب‌های جامعه",
+    "title": "لیست‌های خرید",
+    "description": "ویرایش‌های کاربردی از جامعه — لباس مهمان عروسی، لوازم اولیه آپارتمان، کپسول سفر و بیشتر.",
+    "viewLabel": "مشاهده لیست",
+    "itemCount": "{count, plural, one {# مورد} other {# مورد}}",
+    "curatedBy": "گردآوری {name}",
+    "shopList": "{count, plural, one {خرید این مورد} other {خرید همه # مورد}}",
+    "empty": "هنوز لیست جامعه‌ای فعال نیست — به‌زودی سر بزنید.",
+    "noItems": "این لیست هنوز موردی ندارد.",
+    "notFoundTitle": "لیست پیدا نشد",
+    "notFoundBody": "این لیست حذف شده یا هنوز منتشر نشده است.",
+    "backToList": "همه لیست‌ها"
+  },
   "shopTheLookPage": {
     "breadcrumb": "خرید از روی استایل",
     "eyebrow": "ویرایش‌های تعاملی",

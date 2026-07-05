@@ -5,13 +5,13 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { AppDialog } from '@/components/app-dialog';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Input } from '@/components/ui/input';
 import { Typography } from '@/components/ui/typography';
 import { readImageDataUrl } from '@/domains/search/lib/read-image-data-url';
 import type { DtoAiVirtualTryOnResponse } from '@/services/-ai-virtual-try-on-post.schemas';
-import { AppDialog } from '~/src/components/app-dialog';
 
 import { useVirtualTryOn } from '../../hooks/use-virtual-try-on';
 import { VirtualTryOnResults } from './virtual-try-on-results';
