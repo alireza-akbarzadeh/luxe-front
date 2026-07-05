@@ -721,6 +721,64 @@
       "alternatives": "Alternatives",
       "footer": "Based on listing facts only — not a substitute for seller Q&A"
     },
+    "roomPreview": {
+      "button": "Preview in your room",
+      "title": "Room preview",
+      "description": "Upload a photo of your space for AI placement guidance.",
+      "descriptionNamed": "See how {name} could fit in your room.",
+      "dropzoneTitle": "Add a room photo",
+      "dropzoneHint": "JPEG, PNG, or WebP — well-lit, straight-on works best",
+      "contextPlaceholder": "Optional: corner, wall color, or style notes",
+      "analyze": "Preview placement",
+      "analyzing": "Analyzing your room…",
+      "tryAnother": "Try another photo",
+      "placementTips": "Placement ideas",
+      "harmonyNotes": "Style harmony",
+      "warnings": "Things to watch",
+      "recommendations": "Pairs well with",
+      "changePhoto": "Change photo",
+      "upload": "Upload",
+      "errors": {
+        "readFailed": "Could not read that image. Try another file.",
+        "analyzeFailed": "Room preview is unavailable right now. Try again shortly."
+      }
+    },
+    "virtualTryOn": {
+      "button": "Virtual try-on",
+      "title": "Virtual try-on",
+      "description": "Upload a photo for AI fit and style guidance.",
+      "descriptionNamed": "See how {name} might suit you.",
+      "dropzoneTitle": "Add your photo",
+      "dropzoneHint": "Front-facing, good lighting — shoulders up for apparel",
+      "sizePlaceholder": "Optional: usual size or fit preference",
+      "analyze": "Get style guidance",
+      "analyzing": "Reviewing your photo…",
+      "tryAnother": "Try another photo",
+      "styleMatch": "Style match: {match}",
+      "confidence": "Confidence: {level}",
+      "tips": "Styling tips",
+      "alternatives": "Alternatives to consider",
+      "disclaimer": "Visual guidance only — not a size guarantee or rendered try-on.",
+      "changePhoto": "Change photo",
+      "upload": "Upload",
+      "errors": {
+        "readFailed": "Could not read that image. Try another file.",
+        "analyzeFailed": "Virtual try-on is unavailable right now. Try again shortly."
+      }
+    },
+    "interactiveViewer": {
+      "openViewer": "Open interactive product viewer",
+      "title": "Interactive viewer",
+      "description": "Tap numbered pins to explore key details on this photo.",
+      "descriptionNamed": "Explore {name} feature by feature.",
+      "loading": "Mapping product details…",
+      "featuresTitle": "Highlighted features",
+      "hotspotLabel": "{label} — feature {index, number}",
+      "footer": "Hotspots are AI-guided from listing photos and specs — not measured CAD overlays.",
+      "errors": {
+        "loadFailed": "Interactive viewer is unavailable right now. Try again shortly."
+      }
+    },
     "badges": {
       "freeShipping": "Free shipping",
       "warranty": "2-year warranty",

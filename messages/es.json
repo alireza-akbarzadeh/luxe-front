@@ -721,6 +721,64 @@
       "alternatives": "Alternativas",
       "footer": "Basado solo en datos del anuncio — no sustituye las preguntas al vendedor"
     },
+    "roomPreview": {
+      "button": "Vista previa en tu habitación",
+      "title": "Vista previa en la habitación",
+      "description": "Sube una foto de tu espacio para obtener orientación de colocación con IA.",
+      "descriptionNamed": "Mira cómo {name} podría encajar en tu habitación.",
+      "dropzoneTitle": "Añade una foto de la habitación",
+      "dropzoneHint": "JPEG, PNG o WebP — luz uniforme y encuadre frontal funcionan mejor",
+      "contextPlaceholder": "Opcional: rincón, color de pared o notas de estilo",
+      "analyze": "Previsualizar colocación",
+      "analyzing": "Analizando tu habitación…",
+      "tryAnother": "Probar otra foto",
+      "placementTips": "Ideas de colocación",
+      "harmonyNotes": "Armonía de estilo",
+      "warnings": "Aspectos a considerar",
+      "recommendations": "Combina bien con",
+      "changePhoto": "Cambiar foto",
+      "upload": "Subir",
+      "errors": {
+        "readFailed": "No se pudo leer la imagen. Prueba otro archivo.",
+        "analyzeFailed": "La vista previa no está disponible ahora. Inténtalo de nuevo."
+      }
+    },
+    "virtualTryOn": {
+      "button": "Probador virtual",
+      "title": "Probador virtual",
+      "description": "Sube una foto para orientación de ajuste y estilo con IA.",
+      "descriptionNamed": "Mira cómo {name} podría quedarte.",
+      "dropzoneTitle": "Añade tu foto",
+      "dropzoneHint": "De frente, buena luz — hombros visibles para ropa",
+      "sizePlaceholder": "Opcional: talla habitual o preferencia de ajuste",
+      "analyze": "Obtener orientación de estilo",
+      "analyzing": "Revisando tu foto…",
+      "tryAnother": "Probar otra foto",
+      "styleMatch": "Coincidencia de estilo: {match}",
+      "confidence": "Confianza: {level}",
+      "tips": "Consejos de estilo",
+      "alternatives": "Alternativas a considerar",
+      "disclaimer": "Solo orientación visual — no es garantía de talla ni prueba renderizada.",
+      "changePhoto": "Cambiar foto",
+      "upload": "Subir",
+      "errors": {
+        "readFailed": "No se pudo leer la imagen. Prueba otro archivo.",
+        "analyzeFailed": "El probador virtual no está disponible ahora. Inténtalo de nuevo."
+      }
+    },
+    "interactiveViewer": {
+      "openViewer": "Abrir visor interactivo del producto",
+      "title": "Visor interactivo",
+      "description": "Toca los puntos numerados para explorar detalles en esta foto.",
+      "descriptionNamed": "Explora {name} característica por característica.",
+      "loading": "Mapeando detalles del producto…",
+      "featuresTitle": "Características destacadas",
+      "hotspotLabel": "{label} — característica {index, number}",
+      "footer": "Los puntos son guías de IA según fotos y especificaciones — no son medidas CAD.",
+      "errors": {
+        "loadFailed": "El visor interactivo no está disponible ahora. Inténtalo de nuevo."
+      }
+    },
     "badges": {
       "freeShipping": "Envío gratis",
       "warranty": "Garantía de 2 años",

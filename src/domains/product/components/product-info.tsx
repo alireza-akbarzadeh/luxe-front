@@ -39,6 +39,7 @@ import ProductQuantity from './product-quantity';
 import { ProductSizeRecommendation } from './product-size-recommendation';
 import { ProductStockNotify } from './product-stock-notify';
 import { ProductVariantAttributes } from './product-variant-attributes';
+import { ProductVisualizationActions } from './visualization/product-visualization-actions';
 
 interface ProductInfoProps {
   product: DtoProductWithLike;
@@ -238,7 +239,10 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         )}
 
         {product.id ? (
-          <ProductAiBriefButton productId={product.id} productName={product.name} />
+          <>
+            <ProductAiBriefButton productId={product.id} productName={product.name} />
+            <ProductVisualizationActions productId={product.id} productName={product.name} />
+          </>
         ) : null}
       </div>
 

@@ -124,11 +124,11 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 # Phase 4 — Visualization
 
-## Task 031 — Room Preview (AR)
+## Task 031 — Room Preview (AR) ✅
 
-## Task 032 — Virtual Try-On
+## Task 032 — Virtual Try-On ✅
 
-## Task 033 — Interactive Product Viewer
+## Task 033 — Interactive Product Viewer ✅
 
 ## Task 034 — Product Configurator
 

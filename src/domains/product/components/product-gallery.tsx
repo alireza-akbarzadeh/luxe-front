@@ -20,6 +20,7 @@ import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
+import { ProductInteractiveViewerTrigger } from './interactive-viewer/product-interactive-viewer-trigger';
 import { ProductGalleryLightbox } from './product-gallery-lightbox';
 import { ProductImageMagnifier } from './product-image-magnifier';
 import { ProductVideoPlayer } from './product-video-player';
@@ -83,9 +84,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
             <ProductVideoPlayer product={product} className='rounded-3xl' />
             <div className='absolute bottom-4 left-4 z-20'>
               <div className='bg-background/90 border-border/50 inline-flex rounded-full border p-1 shadow-sm backdrop-blur-md'>
-                {(
-                  mediaModes
-                ).map(([mode, Icon, label]) => (
+                {mediaModes.map(([mode, Icon, label]) => (
                   <button
                     key={mode}
                     type='button'
@@ -158,6 +157,15 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                     total: images.length
                   })}
                 </span>
+                {product.id ? (
+                  <ProductInteractiveViewerTrigger
+                    productId={product.id}
+                    productName={product.name}
+                    images={images}
+                    imageIndex={selectedImage}
+                    className='bg-background/90 hover:bg-background h-10 w-10 rounded-full border-0 shadow-sm backdrop-blur-md'
+                  />
+                ) : null}
                 <Button
                   type='button'
                   variant='secondary'
