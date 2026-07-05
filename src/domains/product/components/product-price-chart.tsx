@@ -11,6 +11,9 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PdpInsightShell } from '@/domains/product/components/pdp-insight-shell';
+import { ProductPricePrediction } from '@/domains/product/components/product-price-prediction';
+import { PDP_CHART_SHELL_CLASS } from '@/domains/product/lib/pdp-insight-layout';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { useGetProductsIdPriceHistory } from '@/services/-products-{id}-price-history-get';
@@ -18,11 +21,20 @@ import type { DtoPriceHistoryPoint } from '@/services/-products-{id}-price-histo
 
 interface ProductPriceChartProps {
   productId: string | number;
+  numericProductId: number;
+  fetchEnabled?: boolean;
+  predictionEnabled?: boolean;
   className?: string;
 }
 
 /** Price trend over time for PDP transparency. */
-export function ProductPriceChart({ productId, className }: ProductPriceChartProps) {
+export function ProductPriceChart({
+  productId,
+  numericProductId,
+  fetchEnabled = false,
+  predictionEnabled = false,
+  className
+}: ProductPriceChartProps) {
   const t = useTranslations('pdp.priceChart');
   const formatter = useFormatter();
   const { formatPrice, formatInteger, moneyClassName } = useLocaleFormatters();
@@ -32,7 +44,11 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
     compare: { label: t('listPrice'), color: 'hsl(var(--muted-foreground))' }
   } satisfies ChartConfig;
 
-  const { data, isLoading } = useGetProductsIdPriceHistory(String(productId), { days: 90 });
+  const { data, isLoading } = useGetProductsIdPriceHistory(
+    String(productId),
+    { days: 90 },
+    { query: { enabled: fetchEnabled && Boolean(productId) } }
+  );
   const points = data?.data?.points ?? [];
 
   const formatChartDate = (isoDate: string) => {
@@ -49,11 +65,21 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
 
   const formatAxisPrice = (value: number) => formatPrice(Math.round(value));
 
+  if (!fetchEnabled) {
+    return (
+      <PdpInsightShell
+        title={t('title')}
+        shellClassName={cn(PDP_CHART_SHELL_CLASS, 'h-full')}
+        className={className}
+      />
+    );
+  }
+
   if (isLoading) {
     return (
       <div
         className={cn(
-          'border-border/60 bg-card flex h-full flex-col rounded-2xl border p-6',
+          'border-border/60 bg-card flex h-full min-h-[22rem] flex-col rounded-2xl border p-6',
           className
         )}
       >
@@ -67,12 +93,17 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
     return (
       <div
         className={cn(
-          'border-border/60 bg-muted/20 flex h-full flex-col rounded-2xl border p-6',
+          'border-border/60 bg-muted/20 flex h-full min-h-[22rem] flex-col rounded-2xl border p-6',
           className
         )}
       >
         <h3 className='font-display text-lg font-semibold'>{t('title')}</h3>
         <p className='text-muted-foreground mt-2 text-sm'>{t('empty')}</p>
+        <ProductPricePrediction
+          className='mt-auto pt-4'
+          enabled={predictionEnabled}
+          productId={numericProductId}
+        />
       </div>
     );
   }
@@ -89,7 +120,7 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
   return (
     <div
       className={cn(
-        'border-border/60 bg-card flex h-full flex-col rounded-2xl border p-6',
+        'border-border/60 bg-card flex h-full min-h-[22rem] flex-col rounded-2xl border p-6',
         className
       )}
     >
@@ -122,9 +153,7 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
             domain={['auto', 'auto']}
           />
           <ChartTooltip
-            content={
-              <ChartTooltipContent formatter={(value) => formatPrice(Number(value))} />
-            }
+            content={<ChartTooltipContent formatter={(value) => formatPrice(Number(value))} />}
           />
           <Area
             type='monotone'
@@ -169,6 +198,12 @@ export function ProductPriceChart({ productId, className }: ProductPriceChartPro
           </p>
         </div>
       </div>
+
+      <ProductPricePrediction
+        className='border-border/60 mt-5 border-t pt-5'
+        enabled={predictionEnabled}
+        productId={numericProductId}
+      />
     </div>
   );
 }

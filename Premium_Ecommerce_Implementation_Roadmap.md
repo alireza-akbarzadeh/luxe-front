@@ -70,13 +70,21 @@ Summarize verified buyer reviews into highlights and caveats on the PDP reviews 
 
 AI return-risk card on PDP insights: risk level, common reasons, tips, and optional return-rate stats from order history.
 
-## Task 013 — Product Trust Score
+## Task 013 — Product Trust Score ✅
 
-## Task 014 — Durability Score
+Composite 0–100 AI trust score on PDP insights: seller profile, reviews, listing quality, and order/return history with factor breakdown.
 
-## Task 015 — Sustainability Score
+## Task 014 — Durability Score ✅
 
-## Task 016 — Price History & Prediction
+AI 0–100 durability score on PDP insights: specs/attributes, materials, review longevity signals, lifespan estimate, and care tips.
+
+## Task 015 — Sustainability Score ✅
+
+AI 0–100 sustainability score on PDP insights: materials, packaging, ethics, and longevity pillars from listing specs, tags, shipping notes, and eco-themed review signals.
+
+## Task 016 — Price History & Prediction ✅
+
+90-day price chart (existing API) plus deferred AI price outlook: trend, buy-now/wait guidance, and predicted range from recorded snapshots.
 
 ## Task 017 — Delivery Prediction
 

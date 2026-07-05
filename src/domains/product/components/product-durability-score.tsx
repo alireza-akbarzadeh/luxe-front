@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  IconAlertTriangle,
-  IconCircleCheck,
-  IconShieldCheck,
-  IconSparkles
-} from '@tabler/icons-react';
+import { IconAlertTriangle, IconHammer, IconSparkles } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -16,47 +11,74 @@ import { Card } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { PdpInsightShell } from '@/domains/product/components/pdp-insight-shell';
-import { useProductReturnRisk } from '@/domains/product/hooks/use-product-return-risk';
-import { PDP_WIDE_INSIGHT_SHELL_CLASS } from '@/domains/product/lib/pdp-insight-layout';
+import { useProductDurabilityScore } from '@/domains/product/hooks/use-product-durability-score';
+import { PDP_SCORE_CARD_SHELL_CLASS } from '@/domains/product/lib/pdp-insight-layout';
 import { cn } from '@/lib/utils';
-import type { DtoAiReturnRiskResponse } from '@/services/-ai-return-risk-post.schemas';
+import type { DtoAiDurabilityScoreResponse } from '@/services/-ai-durability-score-post.schemas';
 
-type ProductReturnRiskInsightProps = {
+type ProductDurabilityScoreProps = {
   productId: number;
   enabled?: boolean;
   className?: string;
 };
 
-function riskBadgeClass(level?: string) {
-  switch (level) {
-    case 'low':
+function scoreRingClass(score: number) {
+  if (score >= 75) {
+    return 'text-emerald-600 dark:text-emerald-400';
+  }
+  if (score >= 50) {
+    return 'text-gold-strong';
+  }
+  return 'text-amber-700 dark:text-amber-400';
+}
+
+function tierBadgeClass(tier?: string) {
+  switch (tier) {
+    case 'excellent':
       return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300';
-    case 'high':
+    case 'good':
+      return 'border-gold/30 bg-gold/10 text-gold-strong';
+    case 'fair':
       return 'border-amber-600/30 bg-amber-500/10 text-amber-900 dark:text-amber-300';
     default:
-      return 'border-gold/30 bg-gold/10 text-gold-strong';
+      return 'border-border/60 bg-muted/50 text-muted-foreground';
   }
 }
 
-function RiskIcon({ level }: { level?: string }) {
-  if (level === 'low') {
-    return <IconCircleCheck className='size-5 shrink-0 text-emerald-600 dark:text-emerald-400' />;
-  }
-  if (level === 'high') {
-    return <IconAlertTriangle className='size-5 shrink-0 text-amber-700 dark:text-amber-400' />;
-  }
-  return <IconShieldCheck className='text-gold-strong size-5 shrink-0' />;
+function DurabilityScoreRing({ score }: { score: number }) {
+  const clamped = Math.max(0, Math.min(100, score));
+  const degrees = (clamped / 100) * 360;
+
+  return (
+    <div
+      className={cn(
+        'relative flex size-20 shrink-0 items-center justify-center rounded-full',
+        scoreRingClass(clamped)
+      )}
+      style={{
+        background: `conic-gradient(currentColor ${degrees}deg, color-mix(in oklab, currentColor 18%, transparent) ${degrees}deg)`
+      }}
+      aria-hidden
+    >
+      <div className='bg-card flex size-[4.25rem] flex-col items-center justify-center rounded-full'>
+        <span className='text-xl font-semibold tabular-nums'>{clamped}</span>
+        <span className='text-muted-foreground text-[10px] font-medium tracking-wide uppercase'>
+          /100
+        </span>
+      </div>
+    </div>
+  );
 }
 
-/** AI return-risk insight card for PDP trust signals. */
-export function ProductReturnRiskInsight({
+/** AI durability score card for PDP insights. */
+export function ProductDurabilityScore({
   productId,
   enabled = false,
   className
-}: ProductReturnRiskInsightProps) {
-  const t = useTranslations('pdp.returnRisk');
-  const { fetchReturnRisk, isPending, offlineMessage } = useProductReturnRisk(productId);
-  const [insight, setInsight] = useState<DtoAiReturnRiskResponse | null>(null);
+}: ProductDurabilityScoreProps) {
+  const t = useTranslations('pdp.durabilityScore');
+  const { fetchDurabilityScore, isPending, offlineMessage } = useProductDurabilityScore(productId);
+  const [insight, setInsight] = useState<DtoAiDurabilityScoreResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -69,7 +91,7 @@ export function ProductReturnRiskInsight({
     const load = async () => {
       setError(null);
       setInsight(null);
-      const result = await fetchReturnRisk();
+      const result = await fetchDurabilityScore();
       if (cancelled) {
         return;
       }
@@ -97,7 +119,7 @@ export function ProductReturnRiskInsight({
       <PdpInsightShell
         title={t('title')}
         icon={<IconSparkles className='text-gold-strong size-5 shrink-0' />}
-        shellClassName={PDP_WIDE_INSIGHT_SHELL_CLASS}
+        shellClassName={cn(PDP_SCORE_CARD_SHELL_CLASS, 'h-full')}
         className={className}
       />
     );
@@ -106,7 +128,7 @@ export function ProductReturnRiskInsight({
   return (
     <Card
       className={cn(
-        'border-border/70 from-card to-muted/20 rounded-2xl border bg-linear-to-br p-5 sm:p-6',
+        'border-border/70 from-card to-muted/20 h-full rounded-2xl border bg-linear-to-br p-5 sm:p-6',
         className
       )}
     >
@@ -117,12 +139,12 @@ export function ProductReturnRiskInsight({
             {t('title')}
           </Typography.H3>
         </Flex>
-        {insight?.risk_level ? (
+        {insight?.tier ? (
           <Badge
             variant='outline'
-            className={cn('shrink-0 rounded-full capitalize', riskBadgeClass(insight.risk_level))}
+            className={cn('shrink-0 rounded-full capitalize', tierBadgeClass(insight.tier))}
           >
-            {t(`riskLevel.${insight.risk_level}`)}
+            {t(`tier.${insight.tier}`)}
           </Badge>
         ) : null}
       </Flex>
@@ -142,9 +164,15 @@ export function ProductReturnRiskInsight({
         </Flex>
       ) : insight ? (
         <Flex direction='column' spacing={5}>
-          <Flex direction='row' align='start' spacing={3}>
-            <RiskIcon level={insight.risk_level} />
+          <Flex direction='row' align='start' spacing={4} className='gap-4'>
+            {typeof insight.score === 'number' ? (
+              <DurabilityScoreRing score={insight.score} />
+            ) : null}
             <Flex direction='column' spacing={2} className='min-w-0 flex-1'>
+              <Flex direction='row' align='center' spacing={2} className='text-sm font-medium'>
+                <IconHammer className='text-gold-strong size-4 shrink-0' />
+                <span>{t('scoreLabel')}</span>
+              </Flex>
               {insight.summary ? (
                 <Message from='assistant' className='max-w-none'>
                   <MessageContent className='w-full max-w-none px-0 py-0'>
@@ -154,42 +182,41 @@ export function ProductReturnRiskInsight({
                   </MessageContent>
                 </Message>
               ) : null}
-
-              {typeof insight.return_rate_pct === 'number' && insight.order_sample_size ? (
+              {insight.lifespan_estimate ? (
                 <Typography.Muted className='text-xs'>
-                  {t('returnRate', {
-                    rate: insight.return_rate_pct,
-                    orders: insight.order_sample_size
-                  })}
+                  {t('lifespan', { estimate: insight.lifespan_estimate })}
                 </Typography.Muted>
               ) : null}
             </Flex>
           </Flex>
 
-          {insight.common_reasons && insight.common_reasons.length > 0 ? (
+          {insight.highlights && insight.highlights.length > 0 ? (
             <Flex direction='column' spacing={2}>
-              <Typography.Text className='text-sm font-medium'>
-                {t('commonReasons')}
-              </Typography.Text>
+              <Typography.Text className='text-sm font-medium'>{t('highlights')}</Typography.Text>
               <ul className='text-muted-foreground space-y-2 ps-1 text-sm leading-relaxed'>
-                {insight.common_reasons.map((item) => (
-                  <li key={item} className='flex gap-2'>
+                {insight.highlights.map((item) => (
+                  <li key={`${item.label}-${item.note}`} className='flex gap-2'>
                     <span className='text-muted-foreground/60 mt-2 size-1 shrink-0 rounded-full bg-current' />
-                    <span>{item}</span>
+                    <span>
+                      {item.label ? (
+                        <span className='text-foreground font-medium'>{item.label}: </span>
+                      ) : null}
+                      {item.note}
+                    </span>
                   </li>
                 ))}
               </ul>
             </Flex>
           ) : null}
 
-          {insight.tips && insight.tips.length > 0 ? (
+          {insight.care_tips && insight.care_tips.length > 0 ? (
             <Flex direction='column' spacing={2}>
-              <Typography.Text className='text-sm font-medium'>{t('tips')}</Typography.Text>
+              <Typography.Text className='text-sm font-medium'>{t('careTips')}</Typography.Text>
               <ul className='text-muted-foreground space-y-2 ps-1 text-sm leading-relaxed'>
-                {insight.tips.map((item) => (
-                  <li key={item} className='flex gap-2'>
+                {insight.care_tips.map((tip) => (
+                  <li key={tip} className='flex gap-2'>
                     <span className='text-muted-foreground/60 mt-2 size-1 shrink-0 rounded-full bg-current' />
-                    <span>{item}</span>
+                    <span>{tip}</span>
                   </li>
                 ))}
               </ul>

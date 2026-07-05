@@ -389,8 +389,50 @@
     "reviewsIntro": "Lee lo que dicen los compradores sobre {name} o comparte tu experiencia.",
     "thisProduct": "este producto",
     "insightsTitle": "Compra con confianza",
-    "insightsDescription": "Sigue la evolución del precio, compara listados y entiende el riesgo de devolución antes de comprar.",
+    "insightsDescription": "Consulta confianza y durabilidad, precio, otras tiendas y riesgo de devolución antes de comprar.",
     "thisListing": "Este anuncio",
+    "trustScore": {
+      "title": "Puntuación de confianza",
+      "loading": "Calculando señales de confianza…",
+      "scoreLabel": "Confianza general",
+      "reviewStats": "{rating, number} de media en {count, number} reseñas",
+      "footer": "Puntuación IA según calidad del anuncio, vendedor, reseñas e historial de pedidos. No es una garantía.",
+      "confidence": {
+        "low": "Datos limitados",
+        "medium": "Confianza moderada",
+        "high": "Alta confianza"
+      }
+    },
+    "durabilityScore": {
+      "title": "Puntuación de durabilidad",
+      "loading": "Evaluando señales de longevidad…",
+      "scoreLabel": "Longevidad esperada",
+      "lifespan": "Vida útil típica: {estimate}",
+      "highlights": "Qué respalda la durabilidad",
+      "careTips": "Consejos de cuidado",
+      "footer": "Estimación IA según especificaciones y reseñas. No es prueba de laboratorio ni garantía.",
+      "tier": {
+        "excellent": "Excelente",
+        "good": "Buena",
+        "fair": "Regular",
+        "limited": "Datos limitados"
+      }
+    },
+    "sustainabilityScore": {
+      "title": "Puntuación de sostenibilidad",
+      "loading": "Evaluando señales ecológicas y éticas…",
+      "scoreLabel": "Señales ambientales y éticas",
+      "pillars": "Desglose por dimensión",
+      "highlights": "Señales positivas",
+      "watchOuts": "Aspectos a considerar",
+      "footer": "Estimación IA según el anuncio y reseñas. No es una certificación de terceros.",
+      "rating": {
+        "leading": "Destacada",
+        "good": "Buena",
+        "mixed": "Mixta",
+        "low": "Señales limitadas"
+      }
+    },
     "returnRisk": {
       "title": "Riesgo de devolución",
       "loading": "Analizando patrones de devolución…",
@@ -469,6 +511,17 @@
       "high90": "Máximo 90 días",
       "low90": "Mínimo 90 días",
       "range": "Rango"
+    },
+    "pricePrediction": {
+      "title": "Perspectiva de precio",
+      "loading": "Pronosticando tendencia a corto plazo…",
+      "predictedRange": "Rango estimado: {range}",
+      "footer": "Pronóstico IA según historial registrado. No es asesoramiento financiero.",
+      "recommendation": {
+        "buy_now": "Buen momento para comprar",
+        "wait": "Considera esperar",
+        "neutral": "Momento neutral"
+      }
     },
     "alternatives": {
       "title": "Mismo modelo, otras tiendas",

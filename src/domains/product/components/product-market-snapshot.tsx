@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  IconCircleCheck,
-  IconTrendingDown,
-  IconTrendingUp
-} from '@tabler/icons-react';
+import { IconCircleCheck, IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts';
 
@@ -15,6 +11,8 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PdpInsightShell } from '@/domains/product/components/pdp-insight-shell';
+import { PDP_CHART_SHELL_CLASS } from '@/domains/product/lib/pdp-insight-layout';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import { useGetProductsIdAlternatives } from '@/services/-products-{id}-alternatives-get';
@@ -24,6 +22,7 @@ interface ProductMarketSnapshotProps {
   currentPrice?: number;
   compareAtPrice?: number;
   storeName?: string;
+  fetchEnabled?: boolean;
 }
 
 /** Side-by-side marketplace price comparison for the same model. */
@@ -31,7 +30,8 @@ export function ProductMarketSnapshot({
   productId,
   currentPrice = 0,
   compareAtPrice,
-  storeName
+  storeName,
+  fetchEnabled = false
 }: ProductMarketSnapshotProps) {
   const t = useTranslations('pdp.market');
   const tPdp = useTranslations('pdp');
@@ -42,10 +42,18 @@ export function ProductMarketSnapshot({
     price: { label: t('listingPrice'), color: 'hsl(var(--foreground))' }
   } satisfies ChartConfig;
 
-  const { data, isLoading } = useGetProductsIdAlternatives(String(productId));
+  const { data, isLoading } = useGetProductsIdAlternatives(String(productId), undefined, {
+    query: { enabled: fetchEnabled && Boolean(productId) }
+  });
   const alternatives = data?.data?.alternatives ?? [];
 
   const formatAxisPrice = (value: number) => formatPrice(Math.round(value / 100) * 100);
+
+  if (!fetchEnabled) {
+    return (
+      <PdpInsightShell title={t('title')} shellClassName={cn(PDP_CHART_SHELL_CLASS, 'h-full')} />
+    );
+  }
 
   if (isLoading) {
     return (
@@ -72,7 +80,9 @@ export function ProductMarketSnapshot({
   const lowest = prices.length ? Math.min(...prices) : currentPrice;
   const highest = prices.length ? Math.max(...prices) : currentPrice;
   const average =
-    prices.length > 0 ? prices.reduce((sum, value) => sum + value, 0) / prices.length : currentPrice;
+    prices.length > 0
+      ? prices.reduce((sum, value) => sum + value, 0) / prices.length
+      : currentPrice;
   const isBestPrice = currentPrice <= lowest;
   const savingsVsHigh = highest - currentPrice;
   const msrpSavings =
@@ -110,9 +120,7 @@ export function ProductMarketSnapshot({
             />
             <ChartTooltip
               cursor={false}
-              content={
-                <ChartTooltipContent formatter={(value) => formatPrice(Number(value))} />
-              }
+              content={<ChartTooltipContent formatter={(value) => formatPrice(Number(value))} />}
             />
             <Bar dataKey='price' radius={[0, 6, 6, 0]}>
               {rows.map((row) => (
@@ -207,7 +215,7 @@ function StatPill({
       >
         {value}
       </p>
-      {hint && <p className='text-emerald-600 mt-0.5 text-[10px] dark:text-emerald-400'>{hint}</p>}
+      {hint && <p className='mt-0.5 text-[10px] text-emerald-600 dark:text-emerald-400'>{hint}</p>}
     </div>
   );
 }
@@ -225,7 +233,9 @@ function InsightRow({
     <div
       className={cn(
         'flex items-start gap-2 rounded-xl px-3 py-2 text-xs leading-relaxed',
-        tone === 'success' ? 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300' : 'bg-muted/40 text-muted-foreground'
+        tone === 'success'
+          ? 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
+          : 'bg-muted/40 text-muted-foreground'
       )}
     >
       <Icon className='mt-0.5 h-4 w-4 shrink-0' />

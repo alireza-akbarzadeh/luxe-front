@@ -389,8 +389,50 @@
     "reviewsIntro": "Read what shoppers say about {name}, or share your own experience.",
     "thisProduct": "this product",
     "insightsTitle": "Shop with confidence",
-    "insightsDescription": "Track how this price has moved, compare listings, and understand return risk before you buy.",
+    "insightsDescription": "See trust and durability scores, track price moves, compare sellers, and understand return risk before you buy.",
     "thisListing": "This listing",
+    "trustScore": {
+      "title": "Product trust score",
+      "loading": "Scoring trust signals…",
+      "scoreLabel": "Overall trust",
+      "reviewStats": "{rating, number} average from {count, number} buyer reviews",
+      "footer": "AI score from listing quality, seller profile, reviews, and order history. Not a guarantee.",
+      "confidence": {
+        "low": "Limited data",
+        "medium": "Moderate confidence",
+        "high": "High confidence"
+      }
+    },
+    "durabilityScore": {
+      "title": "Durability score",
+      "loading": "Assessing longevity signals…",
+      "scoreLabel": "Expected longevity",
+      "lifespan": "Typical lifespan: {estimate}",
+      "highlights": "What supports durability",
+      "careTips": "Care tips",
+      "footer": "AI estimate from specs, materials, and review signals. Not a lab test or warranty.",
+      "tier": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "limited": "Limited data"
+      }
+    },
+    "sustainabilityScore": {
+      "title": "Sustainability score",
+      "loading": "Assessing eco and ethics signals…",
+      "scoreLabel": "Environmental & ethical signals",
+      "pillars": "Score breakdown",
+      "highlights": "Positive signals",
+      "watchOuts": "Gaps to consider",
+      "footer": "AI estimate from listing details and reviews. Not a third-party certification.",
+      "rating": {
+        "leading": "Leading",
+        "good": "Good",
+        "mixed": "Mixed",
+        "low": "Limited signals"
+      }
+    },
     "returnRisk": {
       "title": "Return risk insight",
       "loading": "Analyzing return patterns…",
@@ -469,6 +511,17 @@
       "high90": "90-day high",
       "low90": "90-day low",
       "range": "Range"
+    },
+    "pricePrediction": {
+      "title": "Price outlook",
+      "loading": "Forecasting short-term trend…",
+      "predictedRange": "Estimated range: {range}",
+      "footer": "AI forecast from recorded history. Not financial advice.",
+      "recommendation": {
+        "buy_now": "Good time to buy",
+        "wait": "Consider waiting",
+        "neutral": "Neutral timing"
+      }
     },
     "alternatives": {
       "title": "Same model, other stores",
