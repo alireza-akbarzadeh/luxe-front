@@ -116,7 +116,7 @@ export function ProductDetailTabs({
         </Tabs>
       </section>
 
-      <ProductChatFab onClick={() => setChatOpen(true)} />
+      <ProductChatFab onClick={() => setChatOpen(true)} className='hidden lg:inline-flex' />
       <ProductChatSheet open={chatOpen} onOpenChange={setChatOpen} product={product} />
     </>
   );

@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation';
 import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
 import { ShoppingAssistantFab, ShoppingAssistantSheet } from './shopping-assistant-sheet';
 
-const HIDDEN_PATH_PREFIXES = ['/checkout'];
+const HIDDEN_PATH_PREFIXES = ['/checkout', '/cart', '/product/'];
 
-/** Site-wide shopping assistant FAB + sheet; hidden on checkout. */
+/** Site-wide shopping assistant FAB + sheet; hidden where sticky bottom bars already exist. */
 export function ShoppingAssistantRoot() {
   const pathname = usePathname();
   const isOpen = useShoppingAssistantStore((state) => state.isOpen);
