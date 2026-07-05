@@ -4,6 +4,9 @@
  */
 import './src/env';
 
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+
 import { withSerwist } from '@serwist/turbopack';
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
@@ -14,7 +17,29 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const backendApiUrl = resolveApiBaseUrl();
 
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+  version?: string;
+};
+
+function resolveBuildId(): string {
+  if (process.env['VERCEL_GIT_COMMIT_SHA']) {
+    return process.env['VERCEL_GIT_COMMIT_SHA'].slice(0, 7);
+  }
+  try {
+    return execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch {
+    return 'dev';
+  }
+}
+
+const appVersion = pkg.version ?? '0.0.0';
+const buildId = resolveBuildId();
+
 const config = {
+  env: {
+    NEXT_PUBLIC_APP_VERSION: appVersion,
+    NEXT_PUBLIC_BUILD_ID: buildId
+  },
   reactCompiler: true,
   reactStrictMode: true,
   compiler: {

@@ -23,6 +23,7 @@ import { FooterLinkColumn } from '@/components/footer/footer-link-column';
 import { Newsletter } from '@/components/footer/news-letter';
 import { TrustStrip } from '@/components/footer/trust-stripe';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
+import { formatAppVersionLabel } from '@/lib/app-version';
 import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
 
 function BackToTop() {
@@ -47,6 +48,7 @@ export function Footer() {
   const tSections = useTranslations('footer.sections');
   const tLegal = useTranslations('footer.legal');
   const footerBarCopy = getFooterBarCopyParams();
+  const appVersionLabel = formatAppVersionLabel();
 
   return (
     <footer className='border-border/60 bg-background relative mt-24 border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
@@ -178,6 +180,8 @@ export function Footer() {
               <IconLock className='size-3.5' />
               {t('secureCheckout', footerBarCopy)}
             </span>
+            <span className='hidden sm:inline'>·</span>
+            <span className='text-muted-foreground/80 tabular-nums'>{appVersionLabel}</span>
           </div>
           <div className='flex flex-wrap items-center gap-x-5 gap-y-2 text-xs'>
             {legalLinks.map((l) => (

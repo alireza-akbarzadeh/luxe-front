@@ -8,7 +8,19 @@
     "signIn": "Sign in",
     "continueShopping": "Continue shopping",
     "proceedToCheckout": "Proceed to checkout",
-    "backToTop": "Back to top"
+    "backToTop": "Back to top",
+    "updateAvailable": {
+      "title": "Update available",
+      "description": "A new version of Luxe is ready. Refresh to get the latest fixes and features.",
+      "reload": "Refresh"
+    },
+    "offline": {
+      "title": "You're offline",
+      "description": "Some features may be unavailable until your connection returns."
+    },
+    "online": {
+      "title": "Back online"
+    }
   },
   "errors": {
     "network": "No response from server. Check your network connection.",
@@ -2280,7 +2292,11 @@
       "emailPreferencesTitle": "Email preferences",
       "emailPreferencesBody": "Marketing and newsletter controls are not available yet. Order and account emails related to your purchases will still be sent when needed.",
       "deleteAccountTitle": "Delete account",
-      "deleteAccountBody": "Self-service account deletion is not enabled yet. Contact support if you need your account and data permanently removed."
+      "deleteAccountBody": "Self-service account deletion is not enabled yet. Contact support if you need your account and data permanently removed.",
+      "appVersionTitle": "App version",
+      "appVersionBody": "Release and build identifiers for this install. A new build is published on every deploy.",
+      "appVersionRelease": "Release",
+      "appVersionBuild": "Build"
     },
     "verification": {
       "title": "Email verification",

@@ -4,6 +4,7 @@ import { IconBell, IconShieldLock } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
 import { ActiveSessionsPanel } from '../components/active-sessions-panel';
+import { AppVersionPanel } from '../components/app-version-panel';
 import { ChangePasswordPanel } from '../components/change-password-panel';
 import { EmailVerificationPanel } from '../components/email-verification-panel';
 
@@ -20,6 +21,8 @@ export function AccountSetting() {
       <ChangePasswordPanel />
       <EmailVerificationPanel />
       <ActiveSessionsPanel />
+
+      <AppVersionPanel />
 
       <div className='bg-card border-border rounded-2xl border p-6 sm:p-7'>
         <div className='mb-4 flex items-start gap-3'>
@@ -45,7 +48,9 @@ export function AccountSetting() {
               <h3 className='font-display text-lg font-semibold tracking-tight'>
                 {t('deleteAccountTitle')}
               </h3>
-              <p className='text-muted-foreground mt-1 max-w-xl text-sm'>{t('deleteAccountBody')}</p>
+              <p className='text-muted-foreground mt-1 max-w-xl text-sm'>
+                {t('deleteAccountBody')}
+              </p>
             </div>
           </div>
         </div>

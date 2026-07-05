@@ -21,4 +21,12 @@ const result = spawnSync('pnpm', ['api:gen'], {
   stdio: 'inherit',
   shell: process.platform === 'win32'
 });
-process.exit(result.status ?? 1);
+if (result.status !== 0) {
+  process.exit(result.status ?? 1);
+}
+
+const versionResult = spawnSync('node', ['scripts/write-version.mjs'], {
+  stdio: 'inherit',
+  shell: process.platform === 'win32'
+});
+process.exit(versionResult.status ?? 1);

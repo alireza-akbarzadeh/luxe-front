@@ -8,7 +8,19 @@
     "signIn": "Iniciar sesión",
     "continueShopping": "Seguir comprando",
     "proceedToCheckout": "Ir al pago",
-    "backToTop": "Volver arriba"
+    "backToTop": "Volver arriba",
+    "updateAvailable": {
+      "title": "Actualización disponible",
+      "description": "Hay una nueva versión de Luxe. Actualiza la página para obtener las últimas mejoras.",
+      "reload": "Actualizar"
+    },
+    "offline": {
+      "title": "Sin conexión",
+      "description": "Algunas funciones pueden no estar disponibles hasta que vuelva la conexión."
+    },
+    "online": {
+      "title": "Conexión restaurada"
+    }
   },
   "errors": {
     "network": "Sin respuesta del servidor. Compruebe su conexión de red.",
@@ -2279,7 +2291,11 @@
       "emailPreferencesTitle": "Preferencias de correo",
       "emailPreferencesBody": "Las opciones de marketing aún no están disponibles. Los correos de pedidos se seguirán enviando cuando sea necesario.",
       "deleteAccountTitle": "Eliminar cuenta",
-      "deleteAccountBody": "La eliminación automática de cuenta aún no está habilitada. Contacta con soporte para eliminar tus datos."
+      "deleteAccountBody": "La eliminación automática de cuenta aún no está habilitada. Contacta con soporte para eliminar tus datos.",
+      "appVersionTitle": "Versión de la app",
+      "appVersionBody": "Identificadores de versión y compilación de esta instalación. Cada despliegue publica una nueva compilación.",
+      "appVersionRelease": "Versión",
+      "appVersionBuild": "Compilación"
     },
     "verification": {
       "title": "Verificación de correo",
