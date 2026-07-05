@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-env node */
 /**
  * Writes public/version.json for client-side update polling.
  * Semver comes from package.json; buildId is git SHA (new on every deploy).

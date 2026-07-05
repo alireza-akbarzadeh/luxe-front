@@ -73,7 +73,7 @@ make run          # restart required — OpenAPI cached at startup
 pnpm api:gen      # OPENAPI_BASE_URL defaults to http://localhost:8080
 ```
 
-`pnpm build` runs `prebuild` → `api:gen` automatically.
+`pnpm build` runs `scripts/prebuild.mjs` → `api:gen` → `next build` automatically.
 
 ### Using generated clients
 

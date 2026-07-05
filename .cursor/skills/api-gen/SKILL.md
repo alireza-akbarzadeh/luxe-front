@@ -66,7 +66,7 @@ Invalidate with `get*QueryKey()` factories only.
 - **Backend agent finished Swagger?** Confirm API was **restarted** before running `pnpm api:gen`.
 - **Missing hook after regen** → Swagger comments missing/wrong on controller, not a frontend fix. Fix `@Router` / `@Success` → `make swagger` → restart → regen.
 - **Form Zod schemas ≠ API types.** Form validation stays in `domains/*/schemas/`; request/response types come from `*.schemas.ts`.
-- **`pnpm build` runs `prebuild` → `api:gen`.** CI needs a reachable OpenAPI or committed generated files.
+- **`pnpm build` runs `scripts/prebuild.mjs` then `next build`.** Vercel/CI uses committed `openapi3.json`; keep it updated via `pnpm openapi:sync`.
 
 ## If hook still missing
 

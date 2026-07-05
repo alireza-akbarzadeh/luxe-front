@@ -50,7 +50,20 @@ export default [
   ...tanstackQuery.configs['flat/recommended'],
 
   /**
-   * 3. APP RULES
+   * 3. NODE SCRIPTS (prebuild, openapi-sync, etc.)
+   */
+  {
+    files: ['scripts/**/*.{js,mjs}', 'code-generator.js'],
+
+    languageOptions: {
+      globals: {
+        ...globals.node
+      }
+    }
+  },
+
+  /**
+   * 4. APP RULES
    */
   {
     files: ['**/*.{ts,tsx}'],
@@ -100,7 +113,7 @@ export default [
   },
 
   /**
-   * 4. PRETTIER (LAST - disables conflicts)
+   * 5. PRETTIER (LAST - disables conflicts)
    */
   prettierConfig
 ];

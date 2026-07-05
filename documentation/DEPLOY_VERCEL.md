@@ -104,8 +104,7 @@ BACKEND_API_URL=http://localhost:8080/api/v1
 |-------|-----|
 | CORS error in browser | `CORS_ALLOW_ORIGINS` on Render must match exact Vercel origin |
 | API 502 / slow first load | Render free tier cold start — wait or upgrade plan |
-| Build fails on Orval | Ensure `openapi3.json` is committed and current. After backend Swagger changes: `OPENAPI_BASE_URL=https://luxe-3pvz.onrender.com pnpm openapi:sync` then commit `openapi3.json`. Live API Swagger UI: [luxe-3pvz.onrender.com/swagger](https://luxe-3pvz.onrender.com/swagger/index.html) |
-| `Can't resolve '@/services/-…'` | Stale `openapi3.json` — missing routes (e.g. gift-finder, smart-bundles). Run `pnpm openapi:sync` from a deployed API, commit `openapi3.json`, redeploy Vercel |
+| Build fails on Orval / `Can't resolve '@/services/-…'` | Ensure `openapi3.json` is committed. Build runs `node scripts/prebuild.mjs` (uses `openapi3.json` on Vercel). After backend Swagger changes: `OPENAPI_BASE_URL=https://luxe-3pvz.onrender.com pnpm openapi:sync` then commit `openapi3.json`. Do **not** set Vercel build command to `next build` alone — use default `pnpm build`. |
 | API calls go to `localhost:8080` in production | Remove `NEXT_PUBLIC_API_URL` / `BACKEND_API_URL` if set to localhost on Vercel; redeploy. Server code now ignores localhost in production and uses Render. |
 | `https://localhost:8080/...` in logs | Wrong Vercel env or stale build — set both API vars to `https://luxe-3pvz.onrender.com/api/v1` and redeploy |
 | Checkout shows “payment could not be started” / no Stripe redirect | On **Render**: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` (required in production), and `FRONTEND_URL=https://your-project.vercel.app`. Redeploy API after env changes. Confirm `GET /api/v1/payments/stripe-config` returns `"enabled": true`. |
