@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-undef */
+ 
 /**
  * Installs Playwright browsers with fallbacks for regions where cdn.playwright.dev
  * returns 403 (geo-restricted networks).

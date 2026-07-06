@@ -27,6 +27,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { VendorActivityFeed } from '@/domains/vendor/panel/components/ui/vendor-activity-feed';
+import { VendorAiDashboardPanel } from '@/domains/vendor/panel/components/ui/vendor-ai-dashboard-panel';
 import { VendorDashboardCharts } from '@/domains/vendor/panel/components/ui/vendor-dashboard-charts';
 import { VendorModuleHeader } from '@/domains/vendor/panel/components/ui/vendor-module-header';
 import { VendorStatCard } from '@/domains/vendor/panel/components/ui/vendor-stat-card';
@@ -35,6 +36,8 @@ import {
   VENDOR_RECENT_ORDERS,
   VENDOR_TOP_PRODUCTS
 } from '@/domains/vendor/panel/data/vendor-dashboard.data';
+import { useVendorStoreOrderStatsQuery } from '@/domains/vendor/panel/hooks/use-vendor-store-orders';
+import { useVendorStoreProductStatsQuery } from '@/domains/vendor/panel/hooks/use-vendor-store-products';
 import { cn } from '@/lib/utils';
 
 const ORDER_STATUS_STYLES: Record<string, string> = {
@@ -50,6 +53,15 @@ function formatCurrency(value: number) {
 
 export function VendorDashboardDomain() {
   const stats = VENDOR_DASHBOARD_STATS;
+  const { data: productStatsData } = useVendorStoreProductStatsQuery();
+  const { data: orderStatsData } = useVendorStoreOrderStatsQuery();
+
+  const productStats = productStatsData?.data;
+  const orderStats = orderStatsData?.data;
+  const pendingOrders =
+    (orderStats?.by_status?.['pending'] ?? 0) + (orderStats?.by_status?.['processing'] ?? 0);
+  const productCount = productStats?.total ?? stats.products;
+  const lowStockCount = productStats?.low_stock ?? stats.lowStock;
 
   return (
     <div className='space-y-8'>
@@ -62,6 +74,8 @@ export function VendorDashboardDomain() {
           </Button>
         }
       />
+
+      <VendorAiDashboardPanel />
 
       <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-6'>
         <VendorStatCard
@@ -84,13 +98,13 @@ export function VendorDashboardDomain() {
         />
         <VendorStatCard
           label='Pending orders'
-          value={String(stats.pendingOrders)}
+          value={String(pendingOrders > 0 ? pendingOrders : stats.pendingOrders)}
           icon={IconReceipt}
         />
-        <VendorStatCard label='Products' value={String(stats.products)} icon={IconPackage} />
+        <VendorStatCard label='Products' value={String(productCount)} icon={IconPackage} />
         <VendorStatCard
           label='Low stock'
-          value={String(stats.lowStock)}
+          value={String(lowStockCount)}
           icon={IconAlertTriangle}
         />
       </div>

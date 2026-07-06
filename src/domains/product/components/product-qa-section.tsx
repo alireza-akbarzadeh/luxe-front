@@ -1,6 +1,6 @@
 'use client';
 
-import { IconBuildingStore, IconLoader2, IconRobot } from '@tabler/icons-react';
+import { IconBuildingStore, IconCheck, IconLoader2, IconRobot } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
@@ -27,10 +27,17 @@ function QuestionThread({ question }: { question: DtoProductQuestionResponse }) 
     <article className='border-border/60 rounded-2xl border p-5'>
       <div className='flex items-start justify-between gap-3'>
         <div>
-          <p className='font-medium'>{question.author || t('shopper')}</p>
-          {question.is_owner && (
-            <span className='text-accent text-[11px] font-medium'>{t('yourQuestion')}</span>
-          )}
+          <div className='flex flex-wrap items-center gap-2'>
+            <p className='font-medium'>{question.author || t('shopper')}</p>
+            {question.is_verified_buyer && (
+              <Badge variant='outline' className='gap-1 text-[10px]'>
+                <IconCheck className='h-2.5 w-2.5' /> {t('verifiedBuyer')}
+              </Badge>
+            )}
+            {question.is_owner && (
+              <span className='text-accent text-[11px] font-medium'>{t('yourQuestion')}</span>
+            )}
+          </div>
         </div>
         {question.created_at && (
           <time className='text-muted-foreground shrink-0 text-xs'>
@@ -54,6 +61,11 @@ function QuestionThread({ question }: { question: DtoProductQuestionResponse }) 
                 {answer.is_ai_reply && (
                   <Badge variant='outline' className='gap-1 text-[10px]'>
                     <IconRobot className='h-3 w-3' /> {t('aiAssistant')}
+                  </Badge>
+                )}
+                {answer.is_verified_buyer && (
+                  <Badge variant='outline' className='gap-1 text-[10px]'>
+                    <IconCheck className='h-2.5 w-2.5' /> {t('verifiedBuyer')}
                   </Badge>
                 )}
               </div>

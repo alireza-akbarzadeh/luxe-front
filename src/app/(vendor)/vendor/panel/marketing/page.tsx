@@ -1,5 +1,5 @@
-import { VendorModuleDomain } from '@/domains/vendor/panel/vendor-module.domain';
+import { VendorMarketingDomain } from '@/domains/vendor/panel/vendor-marketing.domain';
 
 export default function VendorMarketingPage() {
-  return <VendorModuleDomain moduleId="marketing" />;
+  return <VendorMarketingDomain />;
 }
