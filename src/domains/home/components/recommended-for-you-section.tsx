@@ -7,6 +7,7 @@ import { SectionCarousel } from '@/components/section-carousel';
 import { mapHomeProductItem } from '@/domains/home/lib/home-utils';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetHomeRecommended } from '@/services/-home-recommended-get';
+import { usePrivateShoppingStore } from '@/stores/private-shopping-store';
 
 const PRODUCT_LIMIT = 12;
 
@@ -15,18 +16,19 @@ export function RecommendedForYouSection() {
   const t = useTranslations('home.recommended');
   const tCommon = useTranslations('home.common');
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const privateMode = usePrivateShoppingStore((s) => s.enabled);
 
   const { data, isLoading } = useGetHomeRecommended(
     { limit: PRODUCT_LIMIT },
     {
       query: {
-        enabled: isAuthenticated,
-        staleTime: 60_000,
-      },
+        enabled: isAuthenticated && !privateMode,
+        staleTime: 60_000
+      }
     }
   );
 
-  if (isAuthLoading || !isAuthenticated) {
+  if (isAuthLoading || !isAuthenticated || privateMode) {
     return null;
   }
 

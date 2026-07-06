@@ -5,6 +5,9 @@ export const PERSONALIZATION_ROUTES = {
   mood: '/mood-shopping',
   replenishment: '/replenishment-reminders',
   household: '/household-profiles',
+  voiceShopping: '/voice-shopping',
+  compatibility: '/compatibility',
+  shoppingAgent: '/shopping-agent',
   apps: '/apps'
 } as const;
 

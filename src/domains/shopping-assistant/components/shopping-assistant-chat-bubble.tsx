@@ -1,0 +1,79 @@
+'use client';
+
+import { IconRobot, IconUser } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
+
+import { Message, MessageContent, MessageLabel, MessageResponse } from '@/components/ai/message';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
+
+import type { ShoppingAssistantChatMessage } from '../hooks/use-shopping-assistant-conversation';
+import { ShoppingAssistantRecommendationCard } from './shopping-assistant-recommendation-card';
+
+function AssistantAvatar() {
+  return (
+    <Flex align='center' justify='center' className='bg-gold/15 mt-1 size-8 shrink-0 rounded-full'>
+      <IconRobot className='text-gold-strong size-4' />
+    </Flex>
+  );
+}
+
+function UserAvatar() {
+  return (
+    <Flex align='center' justify='center' className='bg-muted mt-1 size-8 shrink-0 rounded-full'>
+      <IconUser className='size-4' />
+    </Flex>
+  );
+}
+
+export function ShoppingAssistantChatBubble({
+  message
+}: {
+  message: ShoppingAssistantChatMessage;
+}) {
+  const t = useTranslations('shoppingAssistant');
+  const isUser = message.role === 'user';
+
+  return (
+    <Flex
+      direction='column'
+      spacing={2}
+      className={cn('mb-3 w-full', isUser ? 'items-end' : 'items-start')}
+    >
+      <Flex
+        direction='row'
+        align='start'
+        spacing={2}
+        className={cn('w-full', isUser ? 'justify-end' : 'justify-start')}
+      >
+        {!isUser ? <AssistantAvatar /> : null}
+
+        <Message from={message.role} className='max-w-[82%]'>
+          <MessageContent>
+            {!isUser ? <MessageLabel>{t('assistant')}</MessageLabel> : null}
+            <MessageResponse>{message.content}</MessageResponse>
+          </MessageContent>
+        </Message>
+
+        {isUser ? <UserAvatar /> : null}
+      </Flex>
+
+      {!isUser && message.recommendations && message.recommendations.length > 0 ? (
+        <Flex direction='column' spacing={2} className='w-full ps-10'>
+          <Typography.Overline className='text-muted-foreground'>
+            {t('picksForYou')}
+          </Typography.Overline>
+          {message.recommendations.map((item, index) => (
+            <ShoppingAssistantRecommendationCard
+              key={String(item.product?.id ?? index)}
+              item={item}
+            />
+          ))}
+        </Flex>
+      ) : null}
+    </Flex>
+  );
+}
+
+export { AssistantAvatar };

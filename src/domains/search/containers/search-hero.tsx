@@ -2,6 +2,7 @@
 
 import { IconCamera, IconCommand, IconMicrophone, IconX } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -55,6 +56,12 @@ function SearchHeroMobileBar() {
             onClick={openSearchSheetWithVoice}
           >
             <IconMicrophone className='h-5 w-5' />
+          </Button>
+        </div>
+
+        <div className='mt-4 flex justify-center'>
+          <Button variant='ghost' size='sm' className='rounded-full' asChild>
+            <Link href='/voice-shopping?listen=1'>{t('voiceShoppingCta')}</Link>
           </Button>
         </div>
       </div>
@@ -251,6 +258,20 @@ function SearchHeroDesktop() {
             ))}
           </motion.div>
         ) : null}
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className='mt-8 flex justify-center'
+        >
+          <Button variant='outline' className='rounded-full' asChild>
+            <Link href='/voice-shopping?listen=1'>
+              <IconMicrophone className='size-4' aria-hidden />
+              {t('voiceShoppingCta')}
+            </Link>
+          </Button>
+        </motion.div>
       </div>
     </section>
   );

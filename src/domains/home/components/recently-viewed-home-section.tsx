@@ -7,6 +7,7 @@ import { SectionCarousel } from '@/components/section-carousel';
 import { mapHomeProductItem } from '@/domains/home/lib/home-utils';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetHomeRecentlyViewed } from '@/services/-home-recently-viewed-get';
+import { usePrivateShoppingStore } from '@/stores/private-shopping-store';
 
 const PRODUCT_LIMIT = 12;
 
@@ -15,18 +16,19 @@ export function RecentlyViewedHomeSection() {
   const t = useTranslations('home.recentlyViewed');
   const tCommon = useTranslations('home.common');
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const privateMode = usePrivateShoppingStore((s) => s.enabled);
 
   const { data, isLoading } = useGetHomeRecentlyViewed(
     { limit: PRODUCT_LIMIT },
     {
       query: {
-        enabled: isAuthenticated,
-        staleTime: 30_000,
-      },
+        enabled: isAuthenticated && !privateMode,
+        staleTime: 30_000
+      }
     }
   );
 
-  if (isAuthLoading || !isAuthenticated) {
+  if (isAuthLoading || !isAuthenticated || privateMode) {
     return null;
   }
 

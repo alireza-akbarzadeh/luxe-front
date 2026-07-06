@@ -6,12 +6,16 @@ import { usePdpInsightStages } from '@/domains/product/hooks/use-pdp-insight-sta
 import { useWhenVisible } from '@/domains/product/hooks/use-when-visible';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
+import { ProductDeliveryPrediction } from './product-delivery-prediction';
 import { ProductDurabilityScore } from './product-durability-score';
 import { ProductMarketSnapshot } from './product-market-snapshot';
+import { ProductNegotiation } from './product-negotiation';
 import { ProductPriceChart } from './product-price-chart';
 import { ProductPurchaseAdvisor } from './product-purchase-advisor';
 import { ProductReturnRiskInsight } from './product-return-risk-insight';
+import { ProductStockHeatmap } from './product-stock-heatmap';
 import { ProductSustainabilityScore } from './product-sustainability-score';
+import { ProductTimeline } from './product-timeline';
 import { ProductTrustScore } from './product-trust-score';
 
 interface ProductInsightsSectionProps {
@@ -77,6 +81,26 @@ export function ProductInsightsSection({
       <ProductPurchaseAdvisor
         className='mt-6'
         enabled={isStageReached('purchaseAdvisor')}
+        productId={numericProductId}
+      />
+
+      <div className='mt-6 grid items-stretch gap-6 lg:grid-cols-2'>
+        <ProductDeliveryPrediction
+          enabled={isStageReached('deliveryPrediction')}
+          productId={numericProductId}
+        />
+        <ProductStockHeatmap enabled={isStageReached('stockHeatmap')} productId={productId} />
+      </div>
+
+      <ProductTimeline
+        className='mt-6'
+        enabled={isStageReached('timeline')}
+        productId={productId}
+      />
+
+      <ProductNegotiation
+        className='mt-6'
+        listPrice={Number(product.price ?? 0)}
         productId={numericProductId}
       />
     </section>

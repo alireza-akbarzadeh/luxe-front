@@ -464,6 +464,65 @@
         "consider": "Consider carefully"
       }
     },
+    "deliveryPrediction": {
+      "title": "Delivery estimate",
+      "loading": "Estimating delivery window…",
+      "highlights": "What to expect",
+      "footer": "AI estimate from listing, store shipping history, and carriers. Actual delivery may vary.",
+      "speed": {
+        "fast": "Fast delivery",
+        "standard": "Standard shipping",
+        "digital": "Instant access"
+      }
+    },
+    "stockHeatmap": {
+      "title": "Availability history",
+      "inStockDays": "In stock days",
+      "lowStockDays": "Low stock days",
+      "outOfStockDays": "Sold out days",
+      "footer": "Daily stock levels over the last 90 days from inventory history.",
+      "legend": {
+        "in_stock": "In stock",
+        "low_stock": "Low stock",
+        "out_of_stock": "Out of stock"
+      }
+    },
+    "timeline": {
+      "title": "Product timeline",
+      "footer": "Notable listing, pricing, stock, and review milestones.",
+      "priceChange": "{from} → {to}",
+      "firstReviewDetail": "First review · {rating, number} stars",
+      "reviewsMilestoneDetail": "{count, number} verified reviews",
+      "events": {
+        "listed": "Listed on Luxe",
+        "published": "Published to storefront",
+        "price_drop": "Price dropped",
+        "price_increase": "Price increased",
+        "sold_out": "Sold out",
+        "restocked": "Back in stock",
+        "status_change": "Listing updated",
+        "first_review": "First review",
+        "reviews_milestone": "Review milestone"
+      }
+    },
+    "negotiation": {
+      "title": "Make an offer",
+      "subtitle": "List price {price}. See how your offer compares before checkout.",
+      "offerLabel": "Your offer",
+      "offerPlaceholder": "Enter your offer",
+      "messageLabel": "Optional note",
+      "messagePlaceholder": "Why this price works for you (optional)",
+      "checkOffer": "Check offer",
+      "checking": "Reviewing offer…",
+      "offline": "Negotiation is unavailable right now. Try again shortly.",
+      "counter": "Suggested counter: {price}",
+      "footer": "AI guidance only — final price is set by the seller at checkout.",
+      "verdict": {
+        "accept": "Strong offer",
+        "counter": "Counter likely",
+        "decline": "Below typical range"
+      }
+    },
     "sizeRecommendation": {
       "title": "Size guide",
       "loading": "Finding your best fit…",
@@ -1633,7 +1692,8 @@
       "subtitle": "Search in plain language or keywords — try “waterproof jacket under $200”",
       "placeholder": "Search products, or describe what you need…",
       "searchButton": "Search",
-      "keyboardHint": "to search anywhere"
+      "keyboardHint": "to search anywhere",
+      "voiceShoppingCta": "Try full voice shopping"
     },
     "mobileSheet": {
       "title": "Search",
@@ -2187,7 +2247,62 @@
     "promptMood": "Match my mood",
     "promptMemory": "What do you remember?",
     "promptHome": "Minimalist home decor",
-    "promptTrending": "What's trending right now?"
+    "promptTrending": "What's trending right now?",
+    "voice": {
+      "inputLabel": "Message to shopping assistant",
+      "listening": "Listening…",
+      "startListening": "Start voice input",
+      "stopListening": "Stop voice input",
+      "unsupported": "Voice input is not supported in this browser — you can still type.",
+      "permissionDenied": "Microphone access was denied. Allow the mic in browser settings or type your message.",
+      "keyboardHint": "Tip: hold Space anywhere on the page for hold-to-talk"
+    }
+  },
+  "voiceShoppingPage": {
+    "title": "Voice shopping",
+    "subtitle": "Tell Luxe what you're looking for — speak naturally and get curated picks from our catalog.",
+    "welcome": "Welcome to voice shopping! Tap the microphone or hold Space, describe what you need, and I'll suggest products. You can refine with your keyboard anytime.",
+    "speakNaturally": "Speak naturally — I'll understand context and budget",
+    "composerHint": "Voice + text — mix both in one message",
+    "placeholder": "Say or type what you're shopping for…",
+    "cta": "Try full voice shopping",
+    "ctaHint": "Dedicated voice-first experience with AI recommendations"
+  },
+  "privateShopping": {
+    "title": "Private shopping mode",
+    "description": "Hide personalized home rails and taste memory while you browse. Browsing still works — recommendations pause until you turn this off.",
+    "toggleLabel": "Enable private shopping mode",
+    "activeHint": "Private mode is on — personalized rails and memory summaries are hidden."
+  },
+  "compatibilityPage": {
+    "title": "Compatibility check",
+    "subtitle": "Enter two product IDs from our catalog to see how well they work together.",
+    "productA": "Product A (ID)",
+    "productB": "Product B (ID)",
+    "idPlaceholder": "e.g. 42",
+    "check": "Check compatibility",
+    "checking": "Analyzing pair…",
+    "invalidIds": "Enter two different valid product IDs.",
+    "offline": "Compatibility check is unavailable. Try again shortly.",
+    "worksWell": "Works well together",
+    "concerns": "Watch outs",
+    "levels": {
+      "excellent": "Excellent match",
+      "good": "Good match",
+      "mixed": "Mixed fit",
+      "poor": "Poor match"
+    }
+  },
+  "personalShoppingAgent": {
+    "title": "Personal shopping agent",
+    "subtitle": "Your memory-aware AI stylist — curated picks based on what Luxe knows about your taste.",
+    "welcome": "Hi! I'm your personal shopping agent. Tell me what you're shopping for and I'll use your taste profile to suggest pieces you'll love.",
+    "placeholder": "Describe what you're looking for…",
+    "signInPrompt": "Sign in to use your personal shopping agent with taste memory.",
+    "signIn": "Sign in",
+    "offline": "The agent is unavailable right now. Try again shortly.",
+    "memoryTitle": "Your taste profile",
+    "privateModeHint": "Private mode is on — taste memory is hidden from this session."
   },
   "pwa": {
     "install": {
@@ -2863,6 +2978,24 @@
         "description": "Profiles for everyone you shop for — with picks tailored to each person.",
         "badge": "Beta",
         "action": "Open profiles"
+      },
+      "voiceShopping": {
+        "title": "Voice shopping",
+        "description": "Speak naturally and get curated catalog picks in a voice-first AI chat.",
+        "badge": "New",
+        "action": "Start voice shopping"
+      },
+      "compatibility": {
+        "title": "Compatibility check",
+        "description": "Compare two products to see style, use-case, and bundle fit.",
+        "badge": "New",
+        "action": "Check compatibility"
+      },
+      "shoppingAgent": {
+        "title": "Personal shopping agent",
+        "description": "Memory-aware AI stylist with recommendations tuned to your taste.",
+        "badge": "Beta",
+        "action": "Open agent"
       }
     },
     "cards": {

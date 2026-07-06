@@ -1,8 +1,8 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Badge } from '@/components/ui/badge';
@@ -68,7 +68,9 @@ export function ReverseMarketplaceDetailDomain({ requestId }: ReverseMarketplace
                 {request.title}
               </Typography.H1>
               {request.description ? (
-                <Typography.P className='text-muted-foreground leading-relaxed'>{request.description}</Typography.P>
+                <Typography.P className='text-muted-foreground leading-relaxed'>
+                  {request.description}
+                </Typography.P>
               ) : null}
             </div>
 

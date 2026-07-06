@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import {
+  type CreateReverseMarketplaceOfferPayload,
   createVendorReverseMarketplaceOffer,
-  listVendorReverseMarketplaceRequests,
-  type CreateReverseMarketplaceOfferPayload
+  listVendorReverseMarketplaceRequests
 } from '@/lib/api/reverse-marketplace';
 
 /** Open buyer requests for the active vendor store to respond to. */
@@ -33,7 +33,9 @@ export function useCreateVendorReverseMarketplaceOfferMutation() {
       payload: CreateReverseMarketplaceOfferPayload;
     }) => createVendorReverseMarketplaceOffer(activeStoreId, requestId, payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['vendor-reverse-marketplace-requests', activeStoreId] });
+      void queryClient.invalidateQueries({
+        queryKey: ['vendor-reverse-marketplace-requests', activeStoreId]
+      });
     }
   });
 }

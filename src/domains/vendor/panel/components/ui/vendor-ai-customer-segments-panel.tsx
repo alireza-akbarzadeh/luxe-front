@@ -5,8 +5,8 @@ import {
   IconLoader2,
   IconRefresh,
   IconRobot,
-  IconSpeakerphone,
-  IconSparkles
+  IconSparkles,
+  IconSpeakerphone
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 

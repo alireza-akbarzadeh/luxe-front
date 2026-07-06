@@ -1,10 +1,13 @@
 'use client';
 
 import {
+  IconArrowsExchange,
   IconBrain,
   IconHomeHeart,
+  IconMicrophone,
   IconMoodSmile,
   IconRefresh,
+  IconRobot,
   IconTargetArrow
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
@@ -70,6 +73,31 @@ export function PersonalizationFeaturesSection() {
           badge={t('household.badge')}
           actionLabel={t('household.action')}
           href={PERSONALIZATION_ROUTES.household}
+        />
+        <PlatformCard
+          icon={<IconMicrophone className='size-5' />}
+          title={t('voiceShopping.title')}
+          description={t('voiceShopping.description')}
+          badge={t('voiceShopping.badge')}
+          actionLabel={t('voiceShopping.action')}
+          href={PERSONALIZATION_ROUTES.voiceShopping}
+        />
+        <PlatformCard
+          icon={<IconArrowsExchange className='size-5' />}
+          title={t('compatibility.title')}
+          description={t('compatibility.description')}
+          badge={t('compatibility.badge')}
+          actionLabel={t('compatibility.action')}
+          href={PERSONALIZATION_ROUTES.compatibility}
+        />
+        <PlatformCard
+          icon={<IconRobot className='size-5' />}
+          title={t('shoppingAgent.title')}
+          description={t('shoppingAgent.description')}
+          badge={t('shoppingAgent.badge')}
+          recommended
+          actionLabel={t('shoppingAgent.action')}
+          href={PERSONALIZATION_ROUTES.shoppingAgent}
         />
       </Grid>
     </SectionShell>

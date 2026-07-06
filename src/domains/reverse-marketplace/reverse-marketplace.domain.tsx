@@ -1,8 +1,8 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useQuery } from '@tanstack/react-query';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Badge } from '@/components/ui/badge';
@@ -41,7 +41,9 @@ export function ReverseMarketplaceDomain() {
           <Typography.H1 className='font-display mt-3 text-4xl font-bold tracking-tight lg:text-5xl'>
             {t('title')}
           </Typography.H1>
-          <Typography.P className='text-muted-foreground mt-4 leading-relaxed'>{t('description')}</Typography.P>
+          <Typography.P className='text-muted-foreground mt-4 leading-relaxed'>
+            {t('description')}
+          </Typography.P>
           <Button asChild className='mt-6 rounded-full'>
             <Link href='/reverse-marketplace/new'>{t('postRequest')}</Link>
           </Button>
@@ -72,9 +74,13 @@ export function ReverseMarketplaceDomain() {
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   {request.description ? (
-                    <p className='text-muted-foreground line-clamp-3 text-sm'>{request.description}</p>
+                    <p className='text-muted-foreground line-clamp-3 text-sm'>
+                      {request.description}
+                    </p>
                   ) : null}
-                  <p className='text-sm font-medium'>{formatBudget(request.budget_min, request.budget_max)}</p>
+                  <p className='text-sm font-medium'>
+                    {formatBudget(request.budget_min, request.budget_max)}
+                  </p>
                   <Button asChild variant='outline' className='rounded-full'>
                     <Link href={`/reverse-marketplace/${request.id}`}>{t('viewRequest')}</Link>
                   </Button>

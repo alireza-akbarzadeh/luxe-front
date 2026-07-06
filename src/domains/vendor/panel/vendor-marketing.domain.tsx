@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
@@ -101,7 +100,9 @@ export function VendorMarketingDomain() {
                     ) : null}
                   </div>
                   {request.description ? (
-                    <p className='text-muted-foreground line-clamp-2 text-sm'>{request.description}</p>
+                    <p className='text-muted-foreground line-clamp-2 text-sm'>
+                      {request.description}
+                    </p>
                   ) : null}
                   <p className='text-muted-foreground text-xs'>
                     {t('budget')}: {formatBudget(request.budget_min, request.budget_max)} ·{' '}
@@ -154,7 +155,11 @@ export function VendorMarketingDomain() {
             <Button type='button' variant='outline' onClick={() => setSelected(null)}>
               {t('cancel')}
             </Button>
-            <Button type='button' onClick={() => void submitOffer()} disabled={offerMutation.isPending}>
+            <Button
+              type='button'
+              onClick={() => void submitOffer()}
+              disabled={offerMutation.isPending}
+            >
               {t('sendOffer')}
             </Button>
           </DialogFooter>

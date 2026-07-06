@@ -7,6 +7,7 @@ import { ActiveSessionsPanel } from '../components/active-sessions-panel';
 import { AppVersionPanel } from '../components/app-version-panel';
 import { ChangePasswordPanel } from '../components/change-password-panel';
 import { EmailVerificationPanel } from '../components/email-verification-panel';
+import { PrivateShoppingPanel } from '../components/private-shopping-panel';
 
 export function AccountSetting() {
   const t = useTranslations('account.settings');
@@ -21,6 +22,7 @@ export function AccountSetting() {
       <ChangePasswordPanel />
       <EmailVerificationPanel />
       <ActiveSessionsPanel />
+      <PrivateShoppingPanel />
 
       <AppVersionPanel />
 

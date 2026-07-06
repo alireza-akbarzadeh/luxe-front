@@ -86,11 +86,17 @@ AI 0–100 sustainability score on PDP insights: materials, packaging, ethics, a
 
 90-day price chart (existing API) plus deferred AI price outlook: trend, buy-now/wait guidance, and predicted range from recorded snapshots.
 
-## Task 017 — Delivery Prediction
+## Task 017 — Delivery Prediction ✅
 
-## Task 018 — Stock Heatmap
+Deferred PDP insight: AI delivery window estimate from listing, store shipping history, and carriers. `POST /ai/delivery-prediction`.
 
-## Task 019 — Product Timeline
+## Task 018 — Stock Heatmap ✅
+
+90-day daily stock levels on PDP from inventory history. `GET /products/{id}/stock-heatmap`.
+
+## Task 019 — Product Timeline ✅
+
+Listing milestones (price, stock, reviews) on PDP. `GET /products/{id}/timeline`.
 
 ## Task 020 — AI Purchase Advisor ✅
 
@@ -118,7 +124,9 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 029 — Household Profiles ✅
 
-## Task 030 — Private Shopping Mode
+## Task 030 — Private Shopping Mode ✅
+
+Client-side private mode toggle in account settings. Hides personalized home rails (recommended, recently viewed) while browsing; taste memory hidden in personal agent when enabled.
 
 ---
 
@@ -168,13 +176,13 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 046 — Reverse Marketplace ✅
 
-## Task 047 — Voice Shopping
+## Task 047 — Voice Shopping ✅
 
-## Task 048 — AI Negotiation
+## Task 048 — AI Negotiation ✅
 
-## Task 049 — Universal Compatibility Engine
+## Task 049 — Universal Compatibility Engine ✅
 
-## Task 050 — Personal Shopping Agent
+## Task 050 — Personal Shopping Agent ✅
 
 ---
 

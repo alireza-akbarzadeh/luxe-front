@@ -464,6 +464,65 @@
         "consider": "Valorar con calma"
       }
     },
+    "deliveryPrediction": {
+      "title": "Estimación de entrega",
+      "loading": "Calculando ventana de entrega…",
+      "highlights": "Qué esperar",
+      "footer": "Estimación de IA según el anuncio, historial de envíos y transportistas. La entrega real puede variar.",
+      "speed": {
+        "fast": "Entrega rápida",
+        "standard": "Envío estándar",
+        "digital": "Acceso instantáneo"
+      }
+    },
+    "stockHeatmap": {
+      "title": "Historial de disponibilidad",
+      "inStockDays": "Días en stock",
+      "lowStockDays": "Días con stock bajo",
+      "outOfStockDays": "Días agotado",
+      "footer": "Niveles de stock diarios en los últimos 90 días.",
+      "legend": {
+        "in_stock": "En stock",
+        "low_stock": "Stock bajo",
+        "out_of_stock": "Agotado"
+      }
+    },
+    "timeline": {
+      "title": "Línea de tiempo del producto",
+      "footer": "Hitos de publicación, precios, stock y reseñas.",
+      "priceChange": "{from} → {to}",
+      "firstReviewDetail": "Primera reseña · {rating, number} estrellas",
+      "reviewsMilestoneDetail": "{count, number} reseñas verificadas",
+      "events": {
+        "listed": "Publicado en Luxe",
+        "published": "Publicado en la tienda",
+        "price_drop": "Bajada de precio",
+        "price_increase": "Subida de precio",
+        "sold_out": "Agotado",
+        "restocked": "De vuelta en stock",
+        "status_change": "Anuncio actualizado",
+        "first_review": "Primera reseña",
+        "reviews_milestone": "Hito de reseñas"
+      }
+    },
+    "negotiation": {
+      "title": "Haz una oferta",
+      "subtitle": "Precio de lista {price}. Comprueba tu oferta antes de pagar.",
+      "offerLabel": "Tu oferta",
+      "offerPlaceholder": "Introduce tu oferta",
+      "messageLabel": "Nota opcional",
+      "messagePlaceholder": "Por qué este precio te encaja (opcional)",
+      "checkOffer": "Revisar oferta",
+      "checking": "Revisando oferta…",
+      "offline": "La negociación no está disponible. Inténtalo de nuevo.",
+      "counter": "Contraoferta sugerida: {price}",
+      "footer": "Solo orientación de IA — el precio final lo fija el vendedor.",
+      "verdict": {
+        "accept": "Oferta sólida",
+        "counter": "Contraoferta probable",
+        "decline": "Por debajo del rango habitual"
+      }
+    },
     "sizeRecommendation": {
       "title": "Guía de tallas",
       "loading": "Buscando tu mejor talla…",
@@ -1633,7 +1692,8 @@
       "subtitle": "Busca en lenguaje natural o con palabras clave — prueba “chaqueta impermeable por menos de $200”",
       "placeholder": "Busca productos o describe lo que necesitas…",
       "searchButton": "Buscar",
-      "keyboardHint": "para buscar en cualquier lugar"
+      "keyboardHint": "para buscar en cualquier lugar",
+      "voiceShoppingCta": "Probar compras por voz"
     },
     "mobileSheet": {
       "title": "Buscar",
@@ -2187,7 +2247,62 @@
     "promptMood": "Según mi mood",
     "promptMemory": "¿Qué recuerdas de mí?",
     "promptHome": "Decoración minimalista",
-    "promptTrending": "¿Qué está de moda ahora?"
+    "promptTrending": "¿Qué está de moda ahora?",
+    "voice": {
+      "inputLabel": "Mensaje al asistente de compras",
+      "listening": "Escuchando…",
+      "startListening": "Iniciar entrada por voz",
+      "stopListening": "Detener entrada por voz",
+      "unsupported": "La entrada por voz no es compatible con este navegador — puedes escribir.",
+      "permissionDenied": "Se denegó el micrófono. Permítelo en la configuración del navegador o escribe tu mensaje.",
+      "keyboardHint": "Consejo: mantén Espacio en cualquier parte de la página para hablar"
+    }
+  },
+  "voiceShoppingPage": {
+    "title": "Compras por voz",
+    "subtitle": "Cuéntale a Luxe qué buscas — habla con naturalidad y recibe selecciones del catálogo.",
+    "welcome": "¡Bienvenido a compras por voz! Toca el micrófono o mantén Espacio, describe lo que necesitas y te sugeriré productos. Puedes refinar con el teclado en cualquier momento.",
+    "speakNaturally": "Habla con naturalidad — entiendo contexto y presupuesto",
+    "composerHint": "Voz + texto — combina ambos en un mensaje",
+    "placeholder": "Di o escribe lo que buscas…",
+    "cta": "Probar compras por voz",
+    "ctaHint": "Experiencia dedicada con recomendaciones de IA"
+  },
+  "privateShopping": {
+    "title": "Modo compra privada",
+    "description": "Oculta los carriles personalizados y la memoria de gustos mientras navegas. La compra sigue funcionando — las recomendaciones se pausan hasta que lo desactives.",
+    "toggleLabel": "Activar modo compra privada",
+    "activeHint": "Modo privado activo — carriles personalizados y resúmenes de memoria ocultos."
+  },
+  "compatibilityPage": {
+    "title": "Comprobación de compatibilidad",
+    "subtitle": "Introduce dos IDs de producto del catálogo para ver qué tan bien encajan.",
+    "productA": "Producto A (ID)",
+    "productB": "Producto B (ID)",
+    "idPlaceholder": "p. ej. 42",
+    "check": "Comprobar compatibilidad",
+    "checking": "Analizando pareja…",
+    "invalidIds": "Introduce dos IDs de producto válidos y distintos.",
+    "offline": "La comprobación no está disponible. Inténtalo de nuevo.",
+    "worksWell": "Funcionan bien juntos",
+    "concerns": "Precauciones",
+    "levels": {
+      "excellent": "Excelente combinación",
+      "good": "Buena combinación",
+      "mixed": "Combinación mixta",
+      "poor": "Combinación pobre"
+    }
+  },
+  "personalShoppingAgent": {
+    "title": "Agente personal de compras",
+    "subtitle": "Tu estilista de IA con memoria — selecciones según lo que Luxe sabe de tu gusto.",
+    "welcome": "¡Hola! Soy tu agente personal. Cuéntame qué buscas y usaré tu perfil de gusto para sugerir piezas que te encanten.",
+    "placeholder": "Describe lo que buscas…",
+    "signInPrompt": "Inicia sesión para usar tu agente con memoria de gustos.",
+    "signIn": "Iniciar sesión",
+    "offline": "El agente no está disponible. Inténtalo de nuevo.",
+    "memoryTitle": "Tu perfil de gusto",
+    "privateModeHint": "Modo privado activo — la memoria de gustos está oculta en esta sesión."
   },
   "pwa": {
     "install": {
@@ -2863,6 +2978,24 @@
         "description": "Perfiles para quien compras, con picks para cada persona.",
         "badge": "Beta",
         "action": "Abrir perfiles"
+      },
+      "voiceShopping": {
+        "title": "Compras por voz",
+        "description": "Habla con naturalidad y recibe selecciones del catálogo en un chat de IA.",
+        "badge": "Nuevo",
+        "action": "Empezar compras por voz"
+      },
+      "compatibility": {
+        "title": "Comprobación de compatibilidad",
+        "description": "Compara dos productos: estilo, uso y encaje en bundle.",
+        "badge": "Nuevo",
+        "action": "Comprobar compatibilidad"
+      },
+      "shoppingAgent": {
+        "title": "Agente personal de compras",
+        "description": "Estilista de IA con memoria y recomendaciones según tu gusto.",
+        "badge": "Beta",
+        "action": "Abrir agente"
       }
     },
     "cards": {

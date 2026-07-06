@@ -28,7 +28,8 @@
 | 007 | Lifestyle Collections | ✅ | `/lifestyle` |
 | 008 | Smart Bundles | ✅ | `/product/[slug]`, `/cart` |
 | 009 | Personalized Homepage | ✅ | `/` (signed in) |
-| 051 | AI Voice Shopping Assistant | ✅ | `/search` + assistant sheet |
+| 051 | AI Voice Shopping Assistant | ✅ | `/search` + assistant sheet + `/voice-shopping` |
+| 047 | Voice Shopping (flagship page) | ✅ | `/voice-shopping` |
 | 010 | AI Gift Finder | ✅ | `/gift-finder` |
 
 ---
@@ -257,7 +258,7 @@
 ### Features implemented
 
 - Browser **Web Speech API** (client STT — no new backend STT service)
-- **VoiceComposer** in shopping assistant: mic, waveform, live transcript, text refinement
+- **VoiceAiChatComposer** in shopping assistant sheet: mic, waveform, live transcript, text refinement, Space hold-to-talk
 - **Search page mic** → voice-to-text **into the search field** (waveform in box; does **not** open AI assistant)
 - Tap = push-to-talk; hold ~350ms = hold-to-talk
 - Locales: `en-US`, `es-ES`, `fa-IR`
@@ -293,6 +294,35 @@ window.addEventListener('luxe:voice-assistant', (e) => console.log(e.detail));
 ```
 
 Expect `voice_started`, `voice_completed`, or error events.
+
+---
+
+## Task 047 — Voice Shopping (flagship page) ✅
+
+### Features implemented
+
+- Dedicated **`/voice-shopping`** page — voice-first full-screen AI shopping conversation
+- Reuses `POST /ai/shopping-assistant` (same as Tasks 001 & 051)
+- **VoiceAiChatComposer** with auto-start when opened via `?listen=1`
+- Entry from `/search` hero CTA → `/voice-shopping?listen=1`
+- Shared chat hook + bubble components with assistant sheet
+
+### Where to test
+
+- `/voice-shopping`
+- `/search` → “Try full voice shopping” link
+- API: `POST /ai/shopping-assistant`
+
+### Test cases
+
+| ID | Steps | Expected result |
+|----|-------|-----------------|
+| TC-047-01 | Open `/voice-shopping`. | Voice shopping hero, welcome message, mic composer at bottom. |
+| TC-047-02 | Open `/voice-shopping?listen=1` in Chrome. | Mic auto-starts (if supported); “Listening…” status. |
+| TC-047-03 | Speak a request → Send. | AI reply + optional product recommendation cards. |
+| TC-047-04 | `/search` → click voice shopping CTA. | Navigates to `/voice-shopping?listen=1`. |
+| TC-047-05 | Hold **Space** (focus not in textarea) → speak → release. | Hold-to-talk captures speech into composer field. |
+| TC-047-06 | Block mic → type message → Send. | Text-only flow still works. |
 
 ---
 
@@ -355,6 +385,7 @@ When completing roadmap Task `NNN`:
 | Task | Domain path |
 |------|-------------|
 | 001, 051 | `src/domains/shopping-assistant/` |
+| 047 | `src/domains/voice-shopping/`, `src/components/ai/voice-ai-chat-composer.tsx` |
 | 002, 003 | `src/domains/search/` |
 | 004 | `src/domains/product/` |
 | 005 | `src/domains/compare/` |

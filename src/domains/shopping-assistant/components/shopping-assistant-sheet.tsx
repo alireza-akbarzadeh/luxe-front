@@ -1,115 +1,30 @@
 'use client';
 
-import { IconRobot, IconSparkles, IconUser } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
+import { IconSparkles } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import { useRef, useState } from 'react';
 
-import { AiChatComposer } from '@/components/ai/ai-chat-composer';
 import { AiThinkingRow } from '@/components/ai/ai-thinking-row';
 import {
   Conversation,
   ConversationContent,
   ConversationScrollButton
 } from '@/components/ai/conversation';
-import { Message, MessageContent, MessageLabel, MessageResponse } from '@/components/ai/message';
 import { type PromptInputMessage } from '@/components/ai/prompt-input';
 import { Suggestion, Suggestions } from '@/components/ai/suggestion';
+import { VoiceAiChatComposer } from '@/components/ai/voice-ai-chat-composer';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Typography } from '@/components/ui/typography';
-import { PERSONALIZATION_ROUTES } from '@/domains/personalization/lib/personalization-routes';
 import { cn } from '@/lib/utils';
-import type { DtoAiRecommendedProduct } from '@/services/-ai-shopping-assistant-post.schemas';
 
-import { useShoppingAssistant } from '../hooks/use-shopping-assistant';
+import { useShoppingAssistantConversation } from '../hooks/use-shopping-assistant-conversation';
 import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
-import { ShoppingAssistantRecommendationCard } from './shopping-assistant-recommendation-card';
-
-type ChatRole = 'assistant' | 'user';
-
-interface ChatMessage {
-  id: string;
-  role: ChatRole;
-  content: string;
-  recommendations?: DtoAiRecommendedProduct[];
-  followUpQuestions?: string[];
-}
-
-const QUICK_SEND_KEYS = ['promptHome', 'promptTrending'] as const;
-
-const QUICK_ROUTE_ACTIONS = [
-  { key: 'promptGift', href: '/gift-cards/finder' },
-  { key: 'promptGoal', href: PERSONALIZATION_ROUTES.goal },
-  { key: 'promptMood', href: PERSONALIZATION_ROUTES.mood },
-  { key: 'promptMemory', href: PERSONALIZATION_ROUTES.memory }
-] as const;
+import { AssistantAvatar, ShoppingAssistantChatBubble } from './shopping-assistant-chat-bubble';
 
 interface ShoppingAssistantSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
-
-function AssistantAvatar() {
-  return (
-    <Flex align='center' justify='center' className='bg-gold/15 mt-1 size-8 shrink-0 rounded-full'>
-      <IconRobot className='text-gold-strong size-4' />
-    </Flex>
-  );
-}
-
-function UserAvatar() {
-  return (
-    <Flex align='center' justify='center' className='bg-muted mt-1 size-8 shrink-0 rounded-full'>
-      <IconUser className='size-4' />
-    </Flex>
-  );
-}
-
-function ChatBubble({ message }: { message: ChatMessage }) {
-  const t = useTranslations('shoppingAssistant');
-  const isUser = message.role === 'user';
-
-  return (
-    <Flex
-      direction='column'
-      spacing={2}
-      className={cn('mb-3 w-full', isUser ? 'items-end' : 'items-start')}
-    >
-      <Flex
-        direction='row'
-        align='start'
-        spacing={2}
-        className={cn('w-full', isUser ? 'justify-end' : 'justify-start')}
-      >
-        {!isUser ? <AssistantAvatar /> : null}
-
-        <Message from={message.role} className='max-w-[82%]'>
-          <MessageContent>
-            {!isUser ? <MessageLabel>{t('assistant')}</MessageLabel> : null}
-            <MessageResponse>{message.content}</MessageResponse>
-          </MessageContent>
-        </Message>
-
-        {isUser ? <UserAvatar /> : null}
-      </Flex>
-
-      {!isUser && message.recommendations && message.recommendations.length > 0 ? (
-        <Flex direction='column' spacing={2} className='w-full ps-10'>
-          <Typography.Overline className='text-muted-foreground'>
-            {t('picksForYou')}
-          </Typography.Overline>
-          {message.recommendations.map((item, index) => (
-            <ShoppingAssistantRecommendationCard
-              key={String(item.product?.id ?? index)}
-              item={item}
-            />
-          ))}
-        </Flex>
-      ) : null}
-    </Flex>
-  );
 }
 
 export function ShoppingAssistantSheet({ open, onOpenChange }: ShoppingAssistantSheetProps) {
@@ -124,77 +39,9 @@ export function ShoppingAssistantSheet({ open, onOpenChange }: ShoppingAssistant
 
 function ShoppingAssistantPanel() {
   const t = useTranslations('shoppingAssistant');
-  const router = useRouter();
   const closeAssistant = useShoppingAssistantStore((s) => s.close);
-  const { sendTurn, isPending, offlineReply } = useShoppingAssistant();
-  const messageIdRef = useRef(0);
-
-  const nextMessageId = (role: ChatRole) => {
-    messageIdRef.current += 1;
-    return `${role}-${messageIdRef.current}`;
-  };
-
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'assistant-welcome',
-      role: 'assistant',
-      content: t('welcome')
-    }
-  ]);
-  const [activeFollowUps, setActiveFollowUps] = useState<string[]>([]);
-
-  const chipPrompts =
-    activeFollowUps.length > 0
-      ? activeFollowUps
-      : [
-          ...QUICK_ROUTE_ACTIONS.map((action) => t(action.key)),
-          ...QUICK_SEND_KEYS.map((key) => t(key))
-        ];
-  const chipLabel = activeFollowUps.length > 0 ? t('followUpQuestions') : t('quickPrompts');
-
-  const appendMessage = (message: Omit<ChatMessage, 'id'> & { id?: string }) => {
-    setMessages((current) => [
-      ...current,
-      { ...message, id: message.id ?? nextMessageId(message.role) }
-    ]);
-  };
-
-  const handleSend = async (text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed || isPending) {
-      return;
-    }
-
-    const userMessage: ChatMessage = {
-      id: nextMessageId('user'),
-      role: 'user',
-      content: trimmed
-    };
-    const nextMessages = [...messages, userMessage];
-    setMessages(nextMessages);
-    setActiveFollowUps([]);
-
-    const apiMessages = nextMessages
-      .filter((m) => m.role === 'user' || m.role === 'assistant')
-      .map((m) => ({
-        role: m.role,
-        content: m.content
-      }));
-
-    const result = await sendTurn(apiMessages);
-    if (!result) {
-      appendMessage({ role: 'assistant', content: offlineReply });
-      return;
-    }
-
-    appendMessage({
-      role: 'assistant',
-      content: result.reply?.trim() || offlineReply,
-      recommendations: result.recommendations,
-      followUpQuestions: result.follow_up_questions
-    });
-    setActiveFollowUps(result.follow_up_questions ?? []);
-  };
+  const { messages, isPending, chipPrompts, chipLabel, handleSend, handleSuggestionClick } =
+    useShoppingAssistantConversation({ onNavigateAway: closeAssistant });
 
   const handlePromptSubmit = async ({ text }: PromptInputMessage) => {
     const trimmed = text.trim();
@@ -202,29 +49,6 @@ function ShoppingAssistantPanel() {
       throw new Error('empty');
     }
     await handleSend(trimmed);
-  };
-
-  const handleQuickPrompt = (label: string) => {
-    const routeAction = QUICK_ROUTE_ACTIONS.find((action) => t(action.key) === label);
-    if (routeAction) {
-      closeAssistant();
-      router.push(routeAction.href);
-      return;
-    }
-
-    const sendKey = QUICK_SEND_KEYS.find((key) => t(key) === label);
-    if (sendKey) {
-      void handleSend(label);
-    }
-  };
-
-  const handleSuggestionClick = (prompt: string) => {
-    if (activeFollowUps.length > 0) {
-      void handleSend(prompt);
-      return;
-    }
-
-    handleQuickPrompt(prompt);
   };
 
   return (
@@ -244,7 +68,7 @@ function ShoppingAssistantPanel() {
       <Conversation className='min-h-0 flex-1'>
         <ConversationContent className='gap-0 px-4 py-4'>
           {messages.map((message) => (
-            <ChatBubble key={message.id} message={message} />
+            <ShoppingAssistantChatBubble key={message.id} message={message} />
           ))}
           {isPending ? <AiThinkingRow avatar={<AssistantAvatar />} label={t('thinking')} /> : null}
 
@@ -266,7 +90,7 @@ function ShoppingAssistantPanel() {
       </Conversation>
 
       <Flex direction='column' spacing={2} className='border-border border-t px-4 py-3'>
-        <AiChatComposer
+        <VoiceAiChatComposer
           isPending={isPending}
           onSubmit={handlePromptSubmit}
           placeholder={t('placeholder')}
