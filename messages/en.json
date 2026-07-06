@@ -16,20 +16,20 @@
     },
     "offline": {
       "title": "You're offline",
-      "description": "Some features may be unavailable until your connection returns."
+      "description": "Reconnect to browse, save items, and checkout without interruption."
     },
     "online": {
       "title": "Back online"
     }
   },
   "errors": {
-    "network": "No response from server. Check your network connection.",
+    "network": "We couldn't reach the server. Check your connection and try again.",
     "networkError": "Network error: {detail}",
     "sessionExpired": "Your session has expired. Please log in again.",
     "authFailed": "Authentication failed. Please log in again.",
     "forbiddenFallback": "You do not have permission to perform this action.",
     "serverUnavailable": "The server is temporarily unavailable. Please try again shortly.",
-    "unexpected": "An unexpected error occurred.",
+    "unexpected": "Something unexpected happened. Please try again.",
     "tooManyRequests": "Too many requests.",
     "tryAgainIn": " Try again in {seconds}s.",
     "common": {
@@ -40,7 +40,7 @@
       "logIn": "Log in",
       "backToHome": "Back to home",
       "continueShopping": "Continue shopping",
-      "goShopping": "Go Shopping"
+      "goShopping": "Start shopping"
     },
     "site": {
       "recovery": {
@@ -62,16 +62,16 @@
       },
       "forbidden": {
         "title": "Access forbidden",
-        "description": "You don't have permission to view this page. Please contact your administrator if you believe this is a mistake."
+        "description": "You don't have permission to view this page. Contact your administrator if you believe this is an error."
       },
       "unauthorized": {
-        "title": "Authentication required",
-        "description": "Please log in to continue. You need an active session to access this page."
+        "title": "Sign in required",
+        "description": "Sign in to your account to access this page and continue where you left off."
       }
     },
     "cart": {
-      "emptyTitle": "Your Cart is empty",
-      "emptyDescription": "Add some items to your cart before checking out."
+      "emptyTitle": "Your cart is empty",
+      "emptyDescription": "Discover something you love, then return here when you're ready to checkout."
     },
     "store": {
       "notFoundTitle": "Store Not Found",
@@ -90,7 +90,7 @@
     },
     "products": {
       "errorTitle": "Something went wrong",
-      "errorDescription": "We couldn't load the product catalog. Check your connection and try again."
+      "errorDescription": "We couldn't load the catalog right now. Check your connection and try again."
     },
     "admin": {
       "ui": {
@@ -253,26 +253,26 @@
         },
         "compare": {
           "title": "Compare",
-          "subtitle": "Find your perfect match"
+          "subtitle": "Side-by-side, spec by spec"
         },
         "notifications": {
           "title": "Notifications",
-          "subtitle": "Order and shipping alerts"
+          "subtitle": "Orders, shipping, and alerts"
         },
         "settings": {
           "title": "Settings",
-          "subtitle": "Preferences & privacy"
+          "subtitle": "Privacy, language, and preferences"
         }
       },
       "theme": {
         "title": "Appearance",
-        "subtitle": "Switch between light & dark"
+        "subtitle": "Light or dark — your choice"
       },
       "auth": {
         "signOut": "Sign out",
-        "signOutSubtitle": "End current session",
+        "signOutSubtitle": "End this session securely",
         "logIn": "Log in",
-        "logInSubtitle": "Access your account"
+        "logInSubtitle": "Pick up where you left off"
       }
     }
   },
@@ -345,23 +345,23 @@
       "ratingRange": "Rating: {min} – {max}",
       "reviewsRange": "Reviews: {min} – {max}",
       "digitalOnly": "Digital Only",
-      "clearAll": "Clear all"
+      "clearAll": "Clear all filters"
     },
     "results": {
-      "salePageNote": "Showing sale items from the current page of results.",
-      "loadFailed": "Could not load products. Please try again.",
-      "retry": "Retry",
-      "empty": "No products found matching your criteria.",
-      "clearFilters": "Clear Filters"
+      "salePageNote": "Sale picks from this page — refine filters to see more.",
+      "loadFailed": "We couldn't load products just now. Please try again.",
+      "retry": "Try again",
+      "empty": "Nothing matches your filters yet. Widen your search or clear a few filters.",
+      "clearFilters": "Clear all filters"
     },
     "pagination": {
       "ariaLabel": "Shop pagination",
-      "previous": "Previous",
-      "next": "Next"
+      "previous": "Previous page",
+      "next": "Next page"
     },
     "error": {
       "title": "Something went wrong",
-      "description": "We could not load the shop right now. Please try again.",
+      "description": "The shop didn't load. Give it another moment and try again.",
       "retry": "Try again"
     }
   },
@@ -466,9 +466,9 @@
     },
     "deliveryPrediction": {
       "title": "Delivery estimate",
-      "loading": "Estimating delivery window…",
+      "loading": "Estimating your delivery window…",
       "highlights": "What to expect",
-      "footer": "AI estimate from listing, store shipping history, and carriers. Actual delivery may vary.",
+      "footer": "AI estimate based on this listing, seller shipping history, and carriers. Actual delivery times may vary.",
       "speed": {
         "fast": "Fast delivery",
         "standard": "Standard shipping",
@@ -477,10 +477,10 @@
     },
     "stockHeatmap": {
       "title": "Availability history",
-      "inStockDays": "In stock days",
+      "inStockDays": "Days in stock",
       "lowStockDays": "Low stock days",
       "outOfStockDays": "Sold out days",
-      "footer": "Daily stock levels over the last 90 days from inventory history.",
+      "footer": "Daily stock levels over the last 90 days — for full transparency.",
       "legend": {
         "in_stock": "In stock",
         "low_stock": "Low stock",
@@ -489,7 +489,7 @@
     },
     "timeline": {
       "title": "Product timeline",
-      "footer": "Notable listing, pricing, stock, and review milestones.",
+      "footer": "Key moments in listing, pricing, stock, and reviews.",
       "priceChange": "{from} → {to}",
       "firstReviewDetail": "First review · {rating, number} stars",
       "reviewsMilestoneDetail": "{count, number} verified reviews",
@@ -507,16 +507,16 @@
     },
     "negotiation": {
       "title": "Make an offer",
-      "subtitle": "List price {price}. See how your offer compares before checkout.",
+      "subtitle": "List price {price}. See how your offer stacks up before checkout.",
       "offerLabel": "Your offer",
-      "offerPlaceholder": "Enter your offer",
+      "offerPlaceholder": "Enter your offer amount",
       "messageLabel": "Optional note",
       "messagePlaceholder": "Why this price works for you (optional)",
-      "checkOffer": "Check offer",
-      "checking": "Reviewing offer…",
-      "offline": "Negotiation is unavailable right now. Try again shortly.",
+      "checkOffer": "Review offer",
+      "checking": "Reviewing your offer…",
+      "offline": "Offer review isn't available right now. Please try again shortly.",
       "counter": "Suggested counter: {price}",
-      "footer": "AI guidance only — final price is set by the seller at checkout.",
+      "footer": "AI guidance only — the final price is confirmed at checkout.",
       "verdict": {
         "accept": "Strong offer",
         "counter": "Counter likely",
@@ -967,32 +967,32 @@
         "clearAll": "Clear all"
       },
       "results": {
-        "loadFailed": "Could not load products. Please try again.",
-        "retry": "Retry",
-        "emptyTitle": "No products found",
-        "emptyDescription": "Try adjusting your filters to find what you're looking for.",
+        "loadFailed": "We couldn't load products just now. Please try again.",
+        "retry": "Try again",
+        "emptyTitle": "No matches yet",
+        "emptyDescription": "Loosen a filter or two — your next favorite might be one click away.",
         "showing": "Showing {shown, number} of {total, number} products",
-        "loadMore": "Load more products",
+        "loadMore": "Load more",
         "loading": "Loading…",
-        "allSeenTitle": "You've seen all products",
-        "allSeenDescription": "{count, plural, one {# product from this store} other {# products from this store}}"
+        "allSeenTitle": "You've seen it all",
+        "allSeenDescription": "{count, plural, one {# piece from this store} other {# pieces from this store}}"
       },
       "reviews": {
         "title": "Customer reviews",
-        "intro": "Read what shoppers say about {name}, or share your own experience.",
+        "intro": "See what shoppers say about {name}, or add your own take.",
         "basedOn": "Based on {count, number} {count, plural, one {review} other {reviews}}",
         "starLabel": "{stars, number} star",
         "anonymous": "Anonymous",
         "yourReview": "Your review",
         "loadMore": "Load more reviews",
-        "empty": "No reviews yet. Be the first to share your experience!",
+        "empty": "No reviews yet — yours could be the first.",
         "updateTitle": "Update your review",
         "writeTitle": "Write a review",
-        "editHint": "You can edit or remove your review anytime.",
-        "writeHint": "Help other shoppers by rating this store.",
+        "editHint": "Edit or remove your review anytime.",
+        "writeHint": "Help fellow shoppers with an honest rating.",
         "yourRating": "Your rating",
         "commentLabel": "Your review",
-        "commentPlaceholder": "Tell others about product quality, shipping, customer service…",
+        "commentPlaceholder": "Quality, shipping speed, service — what stood out?",
         "updateButton": "Update review",
         "postButton": "Post review",
         "delete": "Delete",
@@ -1001,25 +1001,25 @@
         "toastUpdated": "Review updated",
         "toastPublished": "Review published",
         "toastSignIn": "Sign in to leave a review",
-        "toastUpdateFailed": "Failed to update review",
-        "toastSubmitFailed": "Failed to submit review",
+        "toastUpdateFailed": "Couldn't update review — try again",
+        "toastSubmitFailed": "Couldn't post review — try again",
         "toastRemoved": "Review removed",
-        "toastDeleteFailed": "Failed to delete review"
+        "toastDeleteFailed": "Couldn't delete review — try again"
       },
       "error": {
         "title": "Something went wrong",
         "notFound": "Store not found",
-        "loadFailed": "We couldn't load this store right now. Please try again.",
-        "retry": "Retry"
+        "loadFailed": "This store didn't load. Give it another moment and try again.",
+        "retry": "Try again"
       }
     }
   },
   "cart": {
     "signInTitle": "Sign in to view your cart",
-    "signInDescription": "Save items across devices and checkout faster when you are signed in.",
+    "signInDescription": "Sign in to save items across devices, track orders, and checkout in seconds.",
     "signInDescriptionAlt": "Save items across devices, track orders, and checkout securely.",
     "emptyTitle": "Your cart is empty",
-    "emptyDescription": "Discover curated pieces from independent luxury brands.",
+    "emptyDescription": "Explore curated pieces from independent luxury brands — your next favorite is waiting.",
     "emptyDescriptionAlt": "Discover curated pieces designed to last — start building your collection.",
     "sheetTitle": "Shopping cart",
     "titleWithCount": "Your cart · {count, number}",
@@ -1030,7 +1030,7 @@
       "title": "Shopping Cart",
       "mobileEyebrow": "Your bag",
       "itemCount": "{count, plural, one {# item} other {# items}}",
-      "reviewHint": "Review before checkout",
+      "reviewHint": "Review your items before checkout",
       "continueShopping": "Continue shopping",
       "checkout": "Checkout",
       "proceedToCheckout": "Proceed to checkout",
@@ -1043,9 +1043,9 @@
       "estimatedTax": "Est. tax ({rate})",
       "estimatedTotal": "Estimated total",
       "taxNote": "Taxes calculated at checkout.",
-      "variantWarning": "Select color or size for highlighted items before checkout.",
+      "variantWarning": "Choose a color or size for highlighted items before you checkout.",
       "errorTitle": "Couldn't load your cart",
-      "errorDescription": "Something went wrong while fetching your items. Please try again.",
+      "errorDescription": "We couldn't load your cart right now. Check your connection and try again.",
       "retry": "Retry"
     },
     "mobileSummary": {
@@ -1060,7 +1060,7 @@
     "smartBundles": {
       "eyebrow": "Smart bundles",
       "title": "Complete your cart",
-      "description": "Compatibility-ranked sets based on what you already added.",
+      "description": "Compatibility-ranked sets designed to pair with what's already in your bag.",
       "addAll": "Add bundle",
       "compatibility": "{score}% match"
     },
@@ -1078,7 +1078,7 @@
     "tagline": "A curated multi-vendor marketplace for timeless design, premium craftsmanship, and independent luxury brands — all in one place.",
     "followUs": "Follow us",
     "shopOnTheGoTitle": "Shop on the go",
-    "shopOnTheGoDescription": "Get the Luxe app for exclusive in-app drops & order tracking.",
+    "shopOnTheGoDescription": "Get the Luxe app for exclusive drops, faster checkout, and real-time order tracking.",
     "downloadOn": "Download on the",
     "appStore": "App Store",
     "getItOn": "Get it on",
@@ -1125,7 +1125,7 @@
       "freeShippingTitle": "Free Shipping",
       "freeShippingSubtitle": "On orders over {amount, number, usd}",
       "returnsTitle": "{days, number}-Day Returns",
-      "returnsSubtitle": "Hassle-free, on us",
+      "returnsSubtitle": "Simple returns, on us",
       "authenticityTitle": "Authenticity",
       "authenticitySubtitle": "{percent, number, percentWhole} verified brands",
       "conciergeTitle": "{hours, number}/{days, number} Concierge",
@@ -1142,7 +1142,7 @@
       "joining": "Joining",
       "errorInvalidEmail": "Please enter a valid email address.",
       "successHint": "Your email app should open — send the message to complete signup.",
-      "idleHint": "Opens your email app to subscribe. Or <link>create an account</link> for order updates.",
+      "idleHint": "Opens your email app to subscribe — or <link>create an account</link> for order updates and saved items.",
       "mailtoSubject": "Luxe Edit newsletter signup",
       "mailtoBody": "Please add me to the Luxe Edit newsletter:\n\n{email}"
     }
@@ -1162,12 +1162,12 @@
       "headline": "Craft, provenance, and pieces worth keeping.",
       "subhead": "Shop verified sellers, compare with confidence, and return within {days, number} days.",
       "cardEyebrow": "Member perk",
-      "cardBody": "Save favorites, track orders, and get early access to drops when you create a free account."
+      "cardBody": "Save favorites, track orders, and get first access to drops with a free account."
     },
     "highlights": {
-      "curated": "Verified brands",
-      "secure": "Secure checkout",
-      "delivery": "Global shipping"
+      "curated": "Verified brands only",
+      "secure": "Encrypted checkout",
+      "delivery": "Worldwide shipping"
     }
   },
   "auth": {
@@ -1253,7 +1253,7 @@
     "forgotPassword": {
       "backToSignIn": "Back to sign in",
       "title": "Forgot password?",
-      "subtitle": "Enter your email and we'll send you a reset link.",
+      "subtitle": "Enter your email and we'll send a secure link to reset your password.",
       "submit": "Send reset link",
       "sending": "Sending...",
       "emailRequired": "Please enter your email address",
@@ -1328,7 +1328,7 @@
     "sidebar": {
       "login": {
         "title": "Premium shopping experience",
-        "description": "Discover exclusive collections and enjoy personalized recommendations tailored just for you. Sign in to access your wishlist, track orders, and more.",
+        "description": "Discover curated collections, track orders, and save favorites — all in a shopping experience designed around you.",
         "stats": {
           "secureCheckout": "Secure checkout",
           "secureCheckoutValue": "{bits, number}-bit SSL",
@@ -1339,8 +1339,8 @@
         }
       },
       "register": {
-        "title": "Join our community",
-        "description": "Create an account to unlock exclusive benefits, early access to new collections, and personalized shopping experiences.",
+        "title": "Join the Luxe community",
+        "description": "Create your account for member-only perks, early access to drops, and a checkout experience that remembers you.",
         "benefits": {
           "discounts": "Exclusive member-only discounts",
           "earlyAccess": "Early access to new arrivals",
@@ -1399,7 +1399,7 @@
     "marketplace": {
       "eyebrow": "The marketplace",
       "title": "One premium destination for modern shopping",
-      "description": "LUXE brings together independent brands, curated collections, and a shopping experience designed to feel effortless from discovery to delivery.",
+      "description": "LUXE brings together independent brands, curated collections, and a seamless path from discovery to delivery.",
       "liveLabel": "Live marketplace",
       "productCount": "{count, number}+",
       "productSubtext": "Products across {brandCount, number}+ brands",
@@ -1433,7 +1433,7 @@
     "wishlists": {
       "eyebrow": "Most wishlisted",
       "title": "Most wishlisted products",
-      "description": "Products that are most wishlisted by our shoppers."
+      "description": "The pieces shoppers save again and again."
     },
     "categories": {
       "eyebrow": "Browse by category",
@@ -1594,7 +1594,7 @@
     "promo": {
       "badge": "Limited time",
       "title": "{discount, number, percentWhole} off your first order",
-      "description": "Join the LUXE community and unlock exclusive access to private sales, early drops, and member-only styling sessions. Use code {code} at checkout.",
+      "description": "Unlock {discount, number, percentWhole} off your first order — plus early access to private sales, new drops, and member-only styling sessions. Use code {code} at checkout.",
       "code": "WELCOME30",
       "countdown": {
         "hours": "Hours",
@@ -1762,58 +1762,58 @@
       "storeFallback": "Store {id}",
       "mobile": {
         "selectedApply": "{count, number} selected · tap Apply when ready",
-        "refineDescription": "Refine products by category, price, and more",
+        "refineDescription": "Narrow by category, price, rating, and more",
         "reset": "Reset",
-        "clearSelection": "Clear selection",
+        "clearSelection": "Clear",
         "applyFilters": "Apply filters"
       },
       "badges": {
-        "inStock": "In Stock",
-        "onSale": "On Sale",
-        "newArrivals": "New Arrivals",
+        "inStock": "In stock",
+        "onSale": "On sale",
+        "newArrivals": "New arrivals",
         "digital": "Digital"
       }
     },
     "results": {
       "forQuery": "Results for \"{query}\"",
-      "allProducts": "All Products",
+      "allProducts": "All products",
       "count": "{count, plural, one {# product found} other {# products found}}",
       "sortBy": "Sort by",
       "sort": {
-        "relevance": "Most Relevant",
-        "newest": "Newest First",
+        "relevance": "Most relevant",
+        "newest": "Newest first",
         "priceAsc": "Price: Low to High",
         "priceDesc": "Price: High to Low",
-        "rating": "Highest Rated",
-        "popular": "Most Popular"
+        "rating": "Highest rated",
+        "popular": "Most popular"
       },
       "viewGrid": "Grid view",
       "viewList": "List view"
     },
     "empty": {
-      "title": "No products found",
-      "noQuery": "No products match your current filters. Try removing some filters.",
-      "withQuery": "We couldn't find any products matching \"{query}\". Try adjusting your search or filters.",
-      "clearAll": "Clear All",
-      "browseAll": "Browse All Products"
+      "title": "No matches yet",
+      "noQuery": "Nothing fits your filters right now. Try removing one or two.",
+      "withQuery": "We couldn't find \"{query}\" — adjust your search or filters and try again.",
+      "clearAll": "Clear all",
+      "browseAll": "Browse all products"
     },
     "pagination": {
-      "previous": "Previous",
-      "next": "Next"
+      "previous": "Previous page",
+      "next": "Next page"
     },
     "recentlyViewed": {
-      "title": "Recently Viewed",
-      "clear": "Clear"
+      "title": "Recently viewed",
+      "clear": "Clear history"
     },
     "suggestions": {
-      "loading": "Loading suggestions…",
+      "loading": "Finding suggestions…",
       "title": "Suggestions",
       "pressEnter": "Press Enter to search",
-      "noneForQuery": "No suggestions found for \"{query}\"",
+      "noneForQuery": "No suggestions for \"{query}\"",
       "pressEnterAnyway": "Press Enter to search anyway",
-      "recent": "Recent Searches",
+      "recent": "Recent searches",
       "clear": "Clear",
-      "trending": "Trending Searches",
+      "trending": "Trending now",
       "types": {
         "product": "Product",
         "store": "Store",
@@ -1829,7 +1829,7 @@
       "recommendation": "Our pick",
       "bestFor": "Best for each goal",
       "tradeoffs": "Key trade-offs",
-      "footer": "Based on listing facts only — use the spec table for full details"
+      "footer": "Grounded in listing details — see the full spec table for a complete comparison."
     }
   },
   "creatorsPage": {
@@ -2004,11 +2004,11 @@
       "title": "Gift ideas for you",
       "messageIdeas": "Card message ideas",
       "picks": "Recommended gifts",
-      "empty": "We couldn't find catalog matches yet — try adjusting budget or interests.",
+      "empty": "No matches yet — try widening your budget or adding a few more interests.",
       "startOver": "Start over"
     },
     "errors": {
-      "unavailable": "Our gift finder is temporarily unavailable. Try search or browse the catalog."
+      "unavailable": "Our gift finder is taking a short break. Try search or browse the catalog instead."
     },
     "giftCardLink": "Prefer a gift card? Send digital credit instead"
   },
@@ -2019,14 +2019,14 @@
     "guestDescription": "We need your browsing history and saved items to build a personalized memory.",
     "signIn": "Sign in",
     "loading": "Reading your shopping signals…",
-    "styleNotes": "Your style",
-    "signals": "What we remember",
-    "picks": "Picks for you",
-    "footer": "AI guidance from your activity on Luxe — not stored outside your account signals."
+    "styleNotes": "Your style signature",
+    "signals": "What shapes your picks",
+    "picks": "Recommended for you",
+    "footer": "Built from your Luxe activity — views, wishlist, and categories you love."
   },
   "goalShopping": {
     "title": "Goal-based shopping",
-    "subtitle": "Describe what you want to achieve — we'll suggest steps and products from the catalog.",
+    "subtitle": "Describe what you want to achieve — we'll map the steps and surface products from our catalog.",
     "fields": {
       "goal": "Your goal",
       "goalPlaceholder": "e.g. Build a minimalist home office under $2,000",
@@ -2041,7 +2041,7 @@
     "submitting": "Planning…",
     "steps": "Suggested steps",
     "picks": "Product picks",
-    "footer": "AI guidance from catalog search — verify fit and stock before checkout.",
+    "footer": "AI guidance from catalog search — confirm fit and availability before checkout.",
     "errors": {
       "goalTooShort": "Describe your shopping goal in at least 3 characters"
     }
@@ -2065,13 +2065,13 @@
       "calm": "Calm"
     },
     "submit": "Find my vibe",
-    "submitting": "Curating…",
-    "moodTags": "Your vibe",
-    "styleCues": "Style cues",
-    "picks": "Picks for you",
-    "footer": "AI guidance from catalog search — moods are inspiration, not guarantees.",
+    "submitting": "Curating your edit…",
+    "moodTags": "Your mood",
+    "styleCues": "Style direction",
+    "picks": "Curated for you",
+    "footer": "Mood picks are inspiration from our catalog — always verify fit and stock before checkout.",
     "errors": {
-      "moodRequired": "Pick a mood to continue"
+      "moodRequired": "Choose a mood to continue"
     }
   },
   "replenishmentReminders": {
@@ -2081,16 +2081,16 @@
     "guestDescription": "We need your purchase history to suggest reorder timing.",
     "signIn": "Sign in",
     "loading": "Checking your purchase history…",
-    "reminders": "Reorder soon",
+    "reminders": "Time to reorder",
     "picks": "Suggested refills",
     "daysSince": "{count, plural, one {# day since last order} other {# days since last order}}",
     "urgency": {
-      "watch": "Watch",
-      "due": "Due",
-      "soon": "Soon",
-      "overdue": "Overdue"
+      "watch": "On your radar",
+      "due": "Reorder now",
+      "soon": "Coming up",
+      "overdue": "Past due"
     },
-    "footer": "AI estimates from your orders — adjust timing to your real usage."
+    "footer": "Timing is estimated from your order history — adjust to how you actually use each item."
   },
   "householdProfiles": {
     "title": "Household profiles",
@@ -2108,24 +2108,24 @@
       "name": "Name",
       "namePlaceholder": "e.g. Sam",
       "relationship": "Relationship",
-      "relationshipPlaceholder": "e.g. partner, child, parent",
+      "relationshipPlaceholder": "Partner, child, parent…",
       "sizes": "Sizes",
-      "sizesPlaceholder": "e.g. shoe 9, shirt M",
+      "sizesPlaceholder": "Shoe 9, shirt M…",
       "preferences": "Preferences",
-      "preferencesPlaceholder": "e.g. neutral colors, no wool",
+      "preferencesPlaceholder": "Neutral palette, no wool, vegan leather…",
       "interests": "Interests",
-      "interestsPlaceholder": "e.g. running, skincare, gaming",
+      "interestsPlaceholder": "Running, skincare, gaming…",
       "context": "Shopping context (optional)",
-      "contextPlaceholder": "e.g. back-to-school, holiday gifts",
+      "contextPlaceholder": "Back-to-school, holiday gifts, new apartment…",
       "budgetMin": "Min budget",
       "budgetMax": "Max budget"
     },
-    "submit": "Get household picks",
-    "submitting": "Personalizing…",
-    "footer": "Profiles are stored locally in your browser. Picks come from catalog search.",
+    "submit": "Get personalized picks",
+    "submitting": "Tailoring recommendations…",
+    "footer": "Profiles stay in your browser. Picks are drawn from live catalog search.",
     "errors": {
-      "nameTooShort": "Enter a name with at least 2 characters",
-      "noMembers": "Add at least one household member first"
+      "nameTooShort": "Use at least 2 characters for the name",
+      "noMembers": "Add at least one household member to continue"
     }
   },
   "personalizationDiscovery": {
@@ -2155,21 +2155,21 @@
       },
       "replenishment": {
         "title": "Replenishment reminders",
-        "description": "See when repeat buys from your orders may need a refill.",
+        "description": "Know when repeat buys from your orders may need a refill.",
         "badge": "For you",
         "action": "View reminders",
         "signInHint": "Sign in to analyze your order history."
       },
       "household": {
         "title": "Household profiles",
-        "description": "Save preferences for family members and shop with picks for each person.",
+        "description": "Save sizes and preferences for everyone you shop for — picks tailored to each person.",
         "badge": "New",
         "action": "Manage household"
       }
     },
     "promo": {
-      "title": "Try personalized shopping",
-      "description": "Explore AI-guided paths beyond search — built for how you shop.",
+      "title": "Shop your way",
+      "description": "Go beyond search with AI paths built around your taste, goals, and mood.",
       "goal": "Shop by goal",
       "mood": "Shop by mood",
       "memory": "Shopping memory"
@@ -2178,7 +2178,7 @@
   "giftCardsPage": {
     "eyebrow": "Gift cards",
     "title": "Give the gift of choice",
-    "description": "Send a digital Luxe gift card by email. Recipients redeem at checkout on any marketplace purchase.",
+    "description": "Send digital Luxe credit by email — recipients redeem at checkout on any marketplace purchase.",
     "breadcrumbHome": "Home",
     "breadcrumb": "Gift cards",
     "tabs": {
@@ -2187,11 +2187,11 @@
     },
     "finderPromo": {
       "title": "Not sure what to buy?",
-      "description": "Our AI gift finder suggests thoughtful picks from our catalog — by recipient, occasion, and budget.",
+      "description": "Not sure what to give? Our AI gift finder suggests thoughtful picks by recipient, occasion, and budget.",
       "cta": "Try the gift finder"
     },
     "purchase": {
-      "intro": "Choose an amount and who it's for. You'll complete payment securely on Stripe — we never store your full card number.",
+      "intro": "Choose an amount and recipient. Payment is processed securely — we never store your full card number.",
       "signInTitle": "Sign in to purchase",
       "signInDescription": "Create or sign in to your Luxe account so we can send your receipt and track sent gift cards.",
       "signInCta": "Sign in to continue",
@@ -2204,7 +2204,7 @@
       "recipientEmailPlaceholder": "recipient@email.com",
       "deliveryDate": "Send on (optional)",
       "message": "Personal message (optional)",
-      "messagePlaceholder": "Enjoy!",
+      "messagePlaceholder": "Wishing you something wonderful.",
       "stripeNote": "You'll be redirected to Stripe to pay. The gift card is delivered to the recipient email after payment succeeds.",
       "submit": "Continue to pay {amount}",
       "success": "Gift card created — {amount} sent to your recipient.",
@@ -2236,56 +2236,56 @@
     "thinking": "Finding ideas for you…",
     "quickPrompts": "Try asking",
     "followUpQuestions": "A few quick questions",
-    "placeholder": "e.g. waterproof jacket under $200 for hiking…",
-    "sendMessage": "Send message",
-    "footer": "Recommendations use live catalog search — availability may change",
-    "fab": "Shop with AI",
-    "picksForYou": "Picks for you",
+    "placeholder": "e.g. waterproof jacket under $200 for weekend hikes…",
+    "sendMessage": "Send",
+    "footer": "Picks come from live catalog search — availability can change.",
+    "fab": "Shop with Luxe AI",
+    "picksForYou": "Selected for you",
     "viewProduct": "View product",
     "promptGift": "Gift ideas under $100",
     "promptGoal": "Shop toward a goal",
     "promptMood": "Match my mood",
     "promptMemory": "What do you remember?",
     "promptHome": "Minimalist home decor",
-    "promptTrending": "What's trending right now?",
+    "promptTrending": "What's trending now?",
     "voice": {
       "inputLabel": "Message to shopping assistant",
       "listening": "Listening…",
       "startListening": "Start voice input",
       "stopListening": "Stop voice input",
-      "unsupported": "Voice input is not supported in this browser — you can still type.",
-      "permissionDenied": "Microphone access was denied. Allow the mic in browser settings or type your message.",
-      "keyboardHint": "Tip: hold Space anywhere on the page for hold-to-talk"
+      "unsupported": "Voice isn't supported here — type your message instead.",
+      "permissionDenied": "Microphone blocked. Allow access in browser settings, or type your message.",
+      "keyboardHint": "Hold Space anywhere on the page for hold-to-talk"
     }
   },
   "voiceShoppingPage": {
     "title": "Voice shopping",
     "subtitle": "Tell Luxe what you're looking for — speak naturally and get curated picks from our catalog.",
     "welcome": "Welcome to voice shopping! Tap the microphone or hold Space, describe what you need, and I'll suggest products. You can refine with your keyboard anytime.",
-    "speakNaturally": "Speak naturally — I'll understand context and budget",
-    "composerHint": "Voice + text — mix both in one message",
-    "placeholder": "Say or type what you're shopping for…",
-    "cta": "Try full voice shopping",
-    "ctaHint": "Dedicated voice-first experience with AI recommendations"
+    "speakNaturally": "Speak naturally — Luxe understands context, budget, and occasion",
+    "composerHint": "Mix voice and text in one conversation",
+    "placeholder": "Say or type what you're looking for…",
+    "cta": "Open voice shopping",
+    "ctaHint": "A voice-first experience with curated AI recommendations"
   },
   "privateShopping": {
     "title": "Private shopping mode",
-    "description": "Hide personalized home rails and taste memory while you browse. Browsing still works — recommendations pause until you turn this off.",
+    "description": "Browse without personalized home recommendations or taste memory. Shopping stays available — tailored picks pause until you turn this off.",
     "toggleLabel": "Enable private shopping mode",
-    "activeHint": "Private mode is on — personalized rails and memory summaries are hidden."
+    "activeHint": "Private mode is on — personalized picks and taste memory stay hidden until you turn it off."
   },
   "compatibilityPage": {
     "title": "Compatibility check",
-    "subtitle": "Enter two product IDs from our catalog to see how well they work together.",
+    "subtitle": "Enter two product IDs from our catalog to see how well they pair — for bundles, outfits, and everyday use.",
     "productA": "Product A (ID)",
     "productB": "Product B (ID)",
     "idPlaceholder": "e.g. 42",
     "check": "Check compatibility",
-    "checking": "Analyzing pair…",
-    "invalidIds": "Enter two different valid product IDs.",
-    "offline": "Compatibility check is unavailable. Try again shortly.",
+    "checking": "Analyzing this pair…",
+    "invalidIds": "Please enter two different valid product IDs.",
+    "offline": "Compatibility check isn't available right now. Please try again shortly.",
     "worksWell": "Works well together",
-    "concerns": "Watch outs",
+    "concerns": "Things to consider",
     "levels": {
       "excellent": "Excellent match",
       "good": "Good match",
@@ -2295,14 +2295,14 @@
   },
   "personalShoppingAgent": {
     "title": "Personal shopping agent",
-    "subtitle": "Your memory-aware AI stylist — curated picks based on what Luxe knows about your taste.",
-    "welcome": "Hi! I'm your personal shopping agent. Tell me what you're shopping for and I'll use your taste profile to suggest pieces you'll love.",
+    "subtitle": "Your memory-aware AI stylist — curated picks shaped by what Luxe knows about your taste.",
+    "welcome": "Hi! I'm your personal shopping agent. Tell me what you're looking for and I'll suggest pieces you'll love, based on your taste profile.",
     "placeholder": "Describe what you're looking for…",
     "signInPrompt": "Sign in to use your personal shopping agent with taste memory.",
     "signIn": "Sign in",
-    "offline": "The agent is unavailable right now. Try again shortly.",
+    "offline": "Your agent isn't available right now. Please try again shortly.",
     "memoryTitle": "Your taste profile",
-    "privateModeHint": "Private mode is on — taste memory is hidden from this session."
+    "privateModeHint": "Private mode is on — taste memory is hidden for this session."
   },
   "pwa": {
     "install": {
@@ -2313,21 +2313,21 @@
       "dismiss": "Dismiss"
     },
     "push": {
-      "title": "Browser push notifications",
-      "descriptionDisabled": "Get order updates and alerts even when Luxe is closed. Requires an installed PWA on iOS 16.4+.",
-      "descriptionEnabled": "Push notifications are active on this device.",
-      "enable": "Enable push",
-      "disable": "Disable push",
+      "title": "Push notifications",
+      "descriptionDisabled": "Get order and delivery updates even when Luxe is closed. On iOS, install the PWA first (16.4+).",
+      "descriptionEnabled": "Push notifications are on for this device.",
+      "enable": "Turn on push",
+      "disable": "Turn off push",
       "working": "Updating…",
       "enabledSuccess": "Push notifications enabled",
       "disabledSuccess": "Push notifications disabled",
-      "unsupported": "Push notifications are not supported in this browser.",
-      "permissionDenied": "Notifications are blocked. Enable them in your browser settings.",
-      "error": "Could not update push notifications",
+      "unsupported": "Push isn't supported in this browser.",
+      "permissionDenied": "Notifications are blocked — enable them in your browser settings.",
+      "error": "Couldn't update push settings",
       "sendTest": "Send test",
       "sendingTest": "Sending…",
       "testSent": "Test notification sent",
-      "testError": "Could not send test notification"
+      "testError": "Couldn't send test notification"
     }
   },
   "plus": {
@@ -2457,40 +2457,40 @@
       "pricingSection": {
         "eyebrow": "Subscribe",
         "title": "Ready to upgrade?",
-        "description": "Pick your payment method and activate Luxe Plus on your account in minutes."
+        "description": "Choose how to pay and activate Luxe Plus in minutes."
       },
       "faq": {
         "eyebrow": "FAQ",
         "title": "Common questions",
-        "description": "Everything you need to know before subscribing.",
+        "description": "What to know before you join.",
         "billing": {
           "question": "How does billing work?",
-          "answer": "Luxe Plus is an annual membership billed once per year. Your renewal date appears in your account under Membership. We do not auto-renew without your consent on your chosen payment method."
+          "answer": "Luxe Plus is billed annually, once per year. Your renewal date lives in Account → Membership. We never auto-renew without your consent on your chosen payment method."
         },
         "discount": {
           "question": "When does the checkout discount apply?",
-          "answer": "The member discount applies automatically at checkout on eligible orders after any coupon codes you enter. It does not stack on top of the same promotion twice — coupons apply first, then your Plus savings."
+          "answer": "Your member discount applies automatically at checkout on eligible orders — after any coupon you enter. Coupons apply first, then Plus savings."
         },
         "returns": {
           "question": "How do extended returns work?",
-          "answer": "Return windows are measured from the delivery date on your order. Free accounts get 30 days; Plus members get 60 days on delivered orders, subject to our standard return policy."
+          "answer": "Return windows start on delivery date. Free accounts get 30 days; Plus members get 60 days on delivered orders, per our standard return policy."
         },
         "cancel": {
           "question": "Can I cancel?",
-          "answer": "Your membership stays active until the end of your paid term. We do not offer partial refunds for unused months, but you keep all perks until your expiry date."
+          "answer": "Your membership stays active through your paid term. We don't offer partial refunds, but every perk remains until your expiry date."
         },
         "payment": {
           "question": "Which payment methods are accepted?",
-          "answer": "You can pay with your Luxe wallet balance, redeem a gift card code, or use credit/debit card via Stripe. Wallet and gift card subscriptions activate immediately; card payments activate once Stripe confirms payment."
+          "answer": "Pay with your Luxe wallet, a gift card, or credit/debit card via Stripe. Wallet and gift card activate instantly; card payments activate once Stripe confirms."
         },
         "giftCard": {
           "question": "Can I use a gift card to subscribe?",
-          "answer": "Yes — enter your gift card code at checkout on this page. The card must cover the full annual membership price and be assigned to your account email."
+          "answer": "Yes — enter your gift card code at checkout on this page. It must cover the full annual price and match your account email."
         }
       },
       "finalCta": {
         "title": "Make every purchase count",
-        "description": "Join Luxe Plus today and start saving on checkout, shipping, returns, and support — automatically.",
+        "description": "Join Luxe Plus and save on checkout, shipping, returns, and support — automatically, every time.",
         "ctaPrimary": "Get Luxe Plus",
         "ctaSecondary": "Read the FAQ"
       }
@@ -2506,7 +2506,7 @@
       "signInToSubscribe": "Sign in to subscribe",
       "processing": "Processing…",
       "success": "Welcome to Luxe Plus!",
-      "error": "Could not complete subscription. Try another payment method or check your balance.",
+      "error": "Subscription didn't complete — try another payment method or check your balance.",
       "active": "Your Luxe Plus membership is active.",
       "activeUntil": "Active until {date}",
       "manageAccount": "View account",
@@ -2514,41 +2514,41 @@
       "payWallet": "Luxe wallet",
       "walletBalance": "Balance: {amount}",
       "walletBalanceLoading": "Balance: …",
-      "walletInsufficient": "Your wallet balance is too low for this purchase.",
+      "walletInsufficient": "Wallet balance is too low for this purchase.",
       "topUpWallet": "Top up wallet in account settings",
       "payGiftCard": "Gift card",
-      "payGiftCardHint": "Use a gift card sent to your email",
+      "payGiftCardHint": "Redeem a gift card sent to your email",
       "giftCardCode": "Gift card code",
       "giftCardRequired": "Enter your gift card code",
       "payStripe": "Credit or debit card",
-      "payStripeHint": "Secure checkout powered by Stripe",
-      "stripeCancelled": "Payment cancelled — your membership was not activated.",
-      "paymentNote": "Wallet and gift card activate instantly. Card payments activate after Stripe confirms payment."
+      "payStripeHint": "Secure checkout via Stripe",
+      "stripeCancelled": "Payment cancelled — membership wasn't activated.",
+      "paymentNote": "Wallet and gift card activate instantly. Card payments activate after Stripe confirms."
     },
     "account": {
       "title": "Membership",
-      "loading": "Loading membership status…",
-      "freeDescription": "You are on the Free plan. Upgrade to unlock member perks.",
-      "plusDescription": "You have Luxe Plus — perks apply automatically at checkout.",
-      "renewsOn": "Renews on {date}",
+      "loading": "Loading membership…",
+      "freeDescription": "You're on Free. Upgrade for member pricing, extended returns, and priority support.",
+      "plusDescription": "Luxe Plus is active — perks apply automatically at checkout.",
+      "renewsOn": "Renews {date}",
       "subscribedOn": "Member since {date}",
-      "unlockDiscount": "{percent}% checkout discount",
+      "unlockDiscount": "{percent}% off at checkout",
       "unlockReturns": "{days}-day returns",
       "unlockShipping": "Priority shipping",
-      "unlockSupport": "Plus support",
+      "unlockSupport": "Plus support line",
       "activeDiscount": "{percent}% checkout discount (active)",
       "activeReturns": "{days}-day returns (active)",
       "activeShipping": "Priority shipping (active)",
       "activeSupport": "Plus support (active)",
       "upgrade": "Upgrade to Luxe Plus",
       "viewBenefits": "View Plus benefits",
-      "activating": "Activating your Luxe Plus membership…",
-      "activationSuccess": "Welcome to Luxe Plus! Your membership is now active.",
-      "activationError": "We could not confirm your payment yet. Try refreshing or contact support.",
-      "stripeCancelled": "Payment cancelled — your membership was not activated.",
+      "activating": "Activating Luxe Plus…",
+      "activationSuccess": "Welcome to Luxe Plus — your membership is live.",
+      "activationError": "We couldn't confirm payment yet. Refresh or contact support.",
+      "stripeCancelled": "Payment cancelled — membership wasn't activated.",
       "activation": {
-        "title": "Payment successful — Luxe Plus is active",
-        "description": "Your annual membership is active. Perks apply automatically on your next checkout.",
+        "title": "You're in — Luxe Plus is active",
+        "description": "Your annual membership is live. Perks apply on your next checkout.",
         "dismiss": "Dismiss",
         "plan": "Plan",
         "amount": "Amount paid",
@@ -2566,7 +2566,7 @@
     },
     "header": {
       "title": "My Account",
-      "welcome": "Welcome back, {name}! Manage your account and preferences."
+      "welcome": "Welcome back, {name}. Manage your profile, orders, and preferences in one place."
     },
     "nav": {
       "overview": "Overview",
@@ -2638,7 +2638,7 @@
       "subtitle": "{count, plural, one {# order placed with your account} other {# orders placed with your account}}",
       "loadError": "Failed to load order history.",
       "emptyTitle": "No orders yet",
-      "emptyDescription": "When you place your first order, it will appear here with tracking and item details.",
+      "emptyDescription": "When you place your first order, it will appear here with live tracking and full item details.",
       "startShopping": "Start shopping",
       "placed": "Placed {date}",
       "dateUnavailable": "Date unavailable",
@@ -2660,7 +2660,7 @@
       "fullWishlist": "Full wishlist",
       "loadError": "Failed to load wishlist.",
       "emptyTitle": "Your wishlist is empty",
-      "emptyDescription": "Save items you love with the heart icon on any product, then find them here.",
+      "emptyDescription": "Tap the heart on any product to save it here for later.",
       "exploreProducts": "Explore products",
       "removed": "Removed from wishlist",
       "removeFailed": "Failed to remove item",
@@ -2720,7 +2720,7 @@
       "recipientEmailPlaceholder": "recipient@email.com",
       "deliveryDate": "Send on (optional)",
       "message": "Personal message (optional)",
-      "messagePlaceholder": "Enjoy!",
+      "messagePlaceholder": "Wishing you something wonderful.",
       "createSubmit": "Continue to pay {amount}",
       "createSuccess": "Gift card created",
       "paymentRequired": "Payment checkout could not be started. Ensure Stripe is enabled and try again.",
@@ -2770,7 +2770,7 @@
       "loading": "Loading addresses...",
       "loadError": "Failed to load addresses.",
       "emptyTitle": "No saved addresses",
-      "emptyDescription": "Add an address to speed up checkout",
+      "emptyDescription": "Save a delivery address for faster checkout next time.",
       "addressFallback": "Address",
       "deleteTitle": "Delete Address?",
       "deleteDescription": "This action cannot be undone. This will permanently delete this address from your account.",
@@ -2812,7 +2812,7 @@
       "chartOutflow": "Money out",
       "chartEmpty": "Activity will appear after your first deposit or purchase.",
       "depositDialogTitle": "Add funds",
-      "depositDialogDescription": "Top up your Luxe wallet for faster checkout.",
+      "depositDialogDescription": "Add funds to your Luxe wallet for faster, one-tap checkout.",
       "depositAmount": "Amount (USD)",
       "depositPreview": "You will deposit {amount}",
       "depositNote": "You will be redirected to Stripe to pay securely. Funds are credited after payment is confirmed.",
@@ -2861,7 +2861,7 @@
       "refreshAria": "Refresh notifications",
       "loadError": "Failed to load notifications.",
       "emptyTitle": "No notifications yet",
-      "emptyDescription": "Order updates, payment confirmations, and shipping alerts will appear here in real time.",
+      "emptyDescription": "Order updates, payment confirmations, and shipping alerts will appear here as they happen.",
       "markReadFailed": "Unable to mark notification as read",
       "markAllReadSuccess": "All notifications marked as read",
       "markAllReadFailed": "Unable to mark all as read",
@@ -2981,19 +2981,19 @@
       },
       "voiceShopping": {
         "title": "Voice shopping",
-        "description": "Speak naturally and get curated catalog picks in a voice-first AI chat.",
+        "description": "Describe what you need out loud — get curated catalog picks in a voice-first chat.",
         "badge": "New",
         "action": "Start voice shopping"
       },
       "compatibility": {
         "title": "Compatibility check",
-        "description": "Compare two products to see style, use-case, and bundle fit.",
+        "description": "See how two products pair — style, use case, and bundle fit at a glance.",
         "badge": "New",
         "action": "Check compatibility"
       },
       "shoppingAgent": {
         "title": "Personal shopping agent",
-        "description": "Memory-aware AI stylist with recommendations tuned to your taste.",
+        "description": "A memory-aware stylist that recommends pieces aligned with your taste.",
         "badge": "Beta",
         "action": "Open agent"
       }
@@ -3002,36 +3002,36 @@
       "comingSoon": "Coming soon",
       "web": {
         "title": "Website",
-        "description": "Use Luxe instantly in any modern browser.",
+        "description": "Shop instantly in any modern browser — no install required.",
         "action": "Open website",
         "recommended": "Recommended"
       },
       "ios": {
         "title": "iPhone app",
-        "description": "Native iOS app is currently under development.",
+        "description": "Native iOS app — arriving soon. Install the PWA today for the best mobile experience.",
         "recommended": "Your device"
       },
       "android": {
         "title": "Android app",
-        "description": "Native Android app is currently under development.",
+        "description": "Native Android app — arriving soon. Install the PWA today for the best mobile experience.",
         "recommended": "Your device"
       },
       "pwa": {
-        "title": "Installable PWA",
-        "description": "Install Luxe on your device and launch it like an app.",
-        "install": "Install PWA",
+        "title": "Installable app",
+        "description": "Add Luxe to your home screen — fast launches, offline-ready, app-like feel.",
+        "install": "Install app",
         "openWeb": "Open shop",
         "installed": "Installed",
-        "recommended": "Best now",
+        "recommended": "Best option now",
         "iosManual": "Manual install",
-        "unsupported": "Install is not available in this browser.",
-        "installFailed": "Could not start installation.",
+        "unsupported": "Install isn't available in this browser.",
+        "installFailed": "Install couldn't start — try again.",
         "iosGuide": {
           "title": "Install on iPhone",
           "description": "Use Safari to add Luxe to your home screen.",
-          "step1": "Tap the Share button in Safari.",
+          "step1": "Tap Share in Safari.",
           "step2": "Choose Add to Home Screen.",
-          "step3": "Tap Add to finish installation."
+          "step3": "Tap Add to finish."
         }
       }
     }
@@ -3065,7 +3065,7 @@
       "failed": "Failed to place order. Please try again.",
       "invalidResponse": "We could not read the checkout response from the server. Check that the API is reachable and redeploy the latest backend.",
       "stripeMissingCheckoutUrl": "Payment could not be started. On Render, set STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and FRONTEND_URL to your Vercel URL, then redeploy the API.",
-      "cartEmpty": "Your cart is no longer active (it may have been used by a previous checkout attempt). Go back to the cart, add your items again, then retry."
+      "cartEmpty": "Your cart is no longer active — it may have been used in a previous checkout. Return to your cart, add your items again, and try once more."
     },
     "mobileSummary": {
       "showSummary": "Show order summary",
@@ -3086,11 +3086,11 @@
     },
     "shipping": {
       "title": "Delivery details",
-      "subtitle": "Where should we send your order?",
+      "subtitle": "Tell us where to deliver your order.",
       "contact": "Contact",
       "email": "Email",
       "emailPlaceholder": "you@example.com",
-      "newsletter": "Email me with news and offers",
+      "newsletter": "Keep me updated on news and exclusive offers",
       "address": "Shipping address",
       "savedAddresses": "Saved addresses",
       "defaultAddress": "Default",
@@ -3161,7 +3161,7 @@
     },
     "payment": {
       "title": "Payment",
-      "secureNotice": "Your payment information is encrypted and secure.",
+      "secureNotice": "Your payment details are encrypted and never stored on our servers.",
       "stripeTitle": "Secure payment with Stripe",
       "stripeDescription": "After you place your order, you'll be redirected to Stripe to enter your card details. We never store your full card number on our site.",
       "demoNotice": "Demo checkout: card details are validated locally and processed through our checkout API. No real charge is made in development environments.",
@@ -3174,7 +3174,7 @@
     },
     "review": {
       "title": "Review your order",
-      "subtitle": "Please confirm everything looks right before placing your order.",
+      "subtitle": "Double-check everything looks right, then place your order with confidence.",
       "contact": "Contact",
       "shippingAddress": "Shipping address",
       "shippingMethod": "Shipping method",
@@ -3199,7 +3199,7 @@
     },
     "stripe": {
       "paymentConfirming": "Confirming your payment…",
-      "paymentConfirmed": "Payment confirmed — your order is on its way!",
+      "paymentConfirmed": "Payment confirmed — your order is on its way.",
       "paymentConfirmError": "We couldn't confirm your payment. Try refreshing or check your orders.",
       "paymentCancelled": "Payment cancelled — your order is saved. Complete payment from order tracking.",
       "paymentPendingTitle": "Payment pending",
@@ -3219,10 +3219,10 @@
       "total": "Total"
     },
     "mobile": {
-      "copyOrder": "Copy order #",
-      "copied": "Copied!",
-      "continueShopping": "Continue shopping",
-      "contactSupport": "Contact support",
+      "copyOrder": "Copy order number",
+      "copied": "Copied",
+      "continueShopping": "Keep shopping",
+      "contactSupport": "Contact concierge",
       "orderNumberLabel": "Order"
     }
   },

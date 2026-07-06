@@ -28,8 +28,6 @@ export function CompareAiInsight({ productIds }: CompareAiInsightProps) {
 
   useEffect(() => {
     if (productIds.length < 2) {
-      setInsight(null);
-      setError(null);
       return;
     }
 
