@@ -1777,6 +1777,21 @@
     "notFoundBody": "Esta lista puede haber sido eliminada o aún no está publicada.",
     "backToList": "Ver todas las listas"
   },
+  "publicCollectionsPage": {
+    "breadcrumb": "Colecciones de la comunidad",
+    "eyebrow": "Compartidas por compradores",
+    "title": "Colecciones públicas",
+    "description": "Tableros curados por la comunidad — cápsulas de trabajo, guías de regalos y ediciones temáticas.",
+    "viewLabel": "Ver colección",
+    "itemCount": "{count, plural, one {# pieza} other {# piezas}}",
+    "curatedBy": "Curada por {name}",
+    "shopCollection": "{count, plural, one {Comprar esta pieza} other {Comprar las # piezas}}",
+    "empty": "Aún no hay colecciones públicas — vuelve pronto.",
+    "noItems": "Esta colección aún no tiene artículos.",
+    "notFoundTitle": "Colección no encontrada",
+    "notFoundBody": "Esta colección puede haber sido eliminada o aún no está publicada.",
+    "backToList": "Ver todas las colecciones"
+  },
   "shopTheLookPage": {
     "breadcrumb": "Compra el look",
     "eyebrow": "Ediciones interactivas",

@@ -1777,6 +1777,21 @@
     "notFoundBody": "این لیست حذف شده یا هنوز منتشر نشده است.",
     "backToList": "همه لیست‌ها"
   },
+  "publicCollectionsPage": {
+    "breadcrumb": "مجموعه‌های جامعه",
+    "eyebrow": "به اشتراک‌گذاری خریداران",
+    "title": "مجموعه‌های عمومی",
+    "description": "بردهای گردآوری‌شده از جامعه — کپسول‌های کاری، راهنمای هدیه و ویرایش‌های موضوعی.",
+    "viewLabel": "مشاهده مجموعه",
+    "itemCount": "{count, plural, one {# قطعه} other {# قطعه}}",
+    "curatedBy": "گردآوری {name}",
+    "shopCollection": "{count, plural, one {خرید این قطعه} other {خرید همه # قطعه}}",
+    "empty": "هنوز مجموعه عمومی فعال نیست — به‌زودی سر بزنید.",
+    "noItems": "این مجموعه هنوز موردی ندارد.",
+    "notFoundTitle": "مجموعه پیدا نشد",
+    "notFoundBody": "این مجموعه حذف شده یا هنوز منتشر نشده است.",
+    "backToList": "همه مجموعه‌ها"
+  },
   "shopTheLookPage": {
     "breadcrumb": "خرید از روی استایل",
     "eyebrow": "ویرایش‌های تعاملی",

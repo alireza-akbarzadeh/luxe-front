@@ -12,7 +12,8 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
+  NestedDrawer
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +40,10 @@ interface AppDialogProps {
   onOpenChange?: (open: boolean) => void;
   /** Desktop only — mobile always renders as a drawer. Omit for centered dialog. */
   component?: 'sheet';
+  /** Vaul nested drawer — stacks on an open parent drawer (mobile only). */
+  nested?: boolean;
+  /** Extra bottom padding for mobile tab bars. Default true on root drawers. */
+  tabBarPadding?: boolean;
   className?: string;
   contentClassName?: string;
   size?: AppDialogSize;
@@ -54,24 +59,28 @@ export function AppDialog(props: AppDialogProps) {
     open,
     onOpenChange,
     component,
+    nested = false,
+    tabBarPadding = true,
     className,
     contentClassName,
     size = 'md',
     side = 'left'
   } = props;
   const { width } = useMediaDevices();
-  const useDrawerShell = width == null ? true : width <= DRAWER_MAX_WIDTH;
+  const useDrawerShell = nested || width == null || width <= DRAWER_MAX_WIDTH;
   const sizeClasses = getAppDialogClasses(size, className);
+  const DrawerRoot = nested ? NestedDrawer : Drawer;
 
   if (useDrawerShell) {
     return (
-      <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
+      <DrawerRoot open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
         {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
         <DrawerContent
           showHandle
           radius='xl'
           className={cn(
-            'border-border pb-[calc(5rem+env(safe-area-inset-bottom))]',
+            'border-border',
+            tabBarPadding && 'pb-[calc(5rem+env(safe-area-inset-bottom))]',
             sizeClasses.drawer
           )}
         >
@@ -91,7 +100,7 @@ export function AppDialog(props: AppDialogProps) {
             {children}
           </div>
         </DrawerContent>
-      </Drawer>
+      </DrawerRoot>
     );
   }
 

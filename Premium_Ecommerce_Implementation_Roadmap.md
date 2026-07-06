@@ -142,7 +142,7 @@ Deferred AI buy/wait/consider verdict on PDP insights: pros, cons, ideal shopper
 
 ## Task 037 — Community Shopping Lists ✅
 
-## Task 038 — Public Collections
+## Task 038 — Public Collections ✅
 
 ## Task 039 — Product Discussions
 

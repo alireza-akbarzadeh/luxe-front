@@ -10,6 +10,14 @@ function Drawer({
   return <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />;
 }
 
+/** Stacked drawer — must be rendered inside an open parent `Drawer` / `DrawerContent`. */
+function NestedDrawer({
+  shouldScaleBackground = false,
+  ...props
+}: ComponentProps<typeof DrawerPrimitive.NestedRoot>) {
+  return <DrawerPrimitive.NestedRoot shouldScaleBackground={shouldScaleBackground} {...props} />;
+}
+
 const DrawerTrigger = DrawerPrimitive.Trigger;
 
 const DrawerPortal = DrawerPrimitive.Portal;
@@ -118,5 +126,6 @@ export {
   DrawerOverlay,
   DrawerPortal,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
+  NestedDrawer
 };

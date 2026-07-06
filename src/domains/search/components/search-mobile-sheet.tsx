@@ -3,15 +3,10 @@
 import { IconCamera, IconX } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
+import { AppDialog } from '@/components/app-dialog';
 import { Button } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
 import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet';
 import { Typography } from '@/components/ui/typography';
 import { useSearchHeroController } from '@/domains/search/hooks/useSearchHeroController';
 import { useSearchStore } from '@/domains/search/search.store';
@@ -20,8 +15,7 @@ import { useSearchVoiceInput } from '../hooks/use-search-voice-input';
 import { SearchInputLeadingIcon } from './search-input-leading-icon';
 import { SearchSuggestionsPanel } from './search-suggestions-panel';
 import { SearchVoiceMicButton } from './search-voice-mic-button';
-
-const sheetCloseButtonClass = '[&>button.absolute]:hidden';
+import { VisualSearchDialog } from './visual-search-dialog';
 
 /** Mobile-native search drawer — opened from navbar or search page compact bar. */
 export function SearchMobileSheet() {
@@ -29,9 +23,16 @@ export function SearchMobileSheet() {
   const setSearchSheetOpen = useSearchStore((state) => state.setSearchSheetOpen);
 
   return (
-    <Sheet open={isOpen} onOpenChange={setSearchSheetOpen}>
+    <AppDialog
+      open={isOpen}
+      onOpenChange={setSearchSheetOpen}
+      size='full'
+      tabBarPadding={false}
+      className='h-[96dvh] max-h-[96dvh]'
+      contentClassName='flex min-h-0 flex-1 flex-col overflow-hidden p-0 px-0 pb-0'
+    >
       {isOpen ? <SearchMobileSheetContent /> : null}
-    </Sheet>
+    </AppDialog>
   );
 }
 
@@ -67,20 +68,17 @@ function SearchMobileSheetContent() {
   const isLoading = isSearching || suggestionsLoading;
 
   return (
-    <SheetContent
-      side='bottom'
-      className={`flex h-[96dvh] max-h-[96dvh] flex-col gap-0 rounded-t-3xl border-t p-0 sm:max-w-none ${sheetCloseButtonClass}`}
-    >
-      <div className='flex shrink-0 justify-center pt-3 pb-1' aria-hidden>
-        <div className='bg-muted-foreground/25 h-1.5 w-12 rounded-full' />
-      </div>
-
-      <SheetHeader className='border-border shrink-0 border-b px-6 py-4 text-start'>
-        <div className='flex items-start justify-between gap-3'>
-          <div className='space-y-1'>
-            <SheetTitle className='font-display text-xl'>{t('mobileSheet.title')}</SheetTitle>
-            <SheetDescription>{t('mobileSheet.description')}</SheetDescription>
-          </div>
+    <>
+      <Flex
+        direction='column'
+        spacing={0}
+        className='border-border shrink-0 border-b px-6 py-4 text-start'
+      >
+        <Flex align='start' justify='between' spacing={3}>
+          <Flex direction='column' spacing={1} className='min-w-0'>
+            <Typography.H3 className='font-display text-xl'>{t('mobileSheet.title')}</Typography.H3>
+            <Typography.Muted className='text-sm'>{t('mobileSheet.description')}</Typography.Muted>
+          </Flex>
           <Button
             type='button'
             variant='ghost'
@@ -90,8 +88,8 @@ function SearchMobileSheetContent() {
           >
             {t('mobileSheet.close')}
           </Button>
-        </div>
-      </SheetHeader>
+        </Flex>
+      </Flex>
 
       <div className='border-border shrink-0 border-b px-6 py-4'>
         <div className='relative'>
@@ -129,10 +127,7 @@ function SearchMobileSheetContent() {
               size='icon'
               className='h-8 w-8 rounded-full'
               aria-label={tVisual('openCamera')}
-              onClick={() => {
-                closeSearchSheet();
-                openVisualSearch();
-              }}
+              onClick={openVisualSearch}
             >
               <IconCamera className='h-4 w-4' />
             </Button>
@@ -186,6 +181,8 @@ function SearchMobileSheetContent() {
           />
         ) : null}
       </div>
-    </SheetContent>
+
+      <VisualSearchDialog nested />
+    </>
   );
 }

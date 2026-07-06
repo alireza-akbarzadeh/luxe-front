@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
+import { useSearchStore } from '@/domains/search/search.store';
 import { cn } from '@/lib/utils';
 
 import { CartButton } from '../cart/cart-button';
@@ -33,6 +34,12 @@ const VisualSearchDialog = dynamic(
     import('@/domains/search/components/visual-search-dialog').then((m) => m.VisualSearchDialog),
   { ssr: false }
 );
+
+function NavbarVisualSearchDialog() {
+  const isSearchSheetOpen = useSearchStore((state) => state.isSearchSheetOpen);
+  if (isSearchSheetOpen) return null;
+  return <VisualSearchDialog />;
+}
 
 const NavbarMobileDrawer = dynamic(
   () => import('./navbar-mobile-drawer').then((m) => m.NavbarMobileDrawer),
@@ -157,7 +164,7 @@ export function Navbar() {
 
       <CartSheet />
       <SearchMobileSheet />
-      <VisualSearchDialog />
+      <NavbarVisualSearchDialog />
     </>
   );
 }

@@ -1777,6 +1777,21 @@
     "notFoundBody": "This list may have been removed or is not published yet.",
     "backToList": "Browse all lists"
   },
+  "publicCollectionsPage": {
+    "breadcrumb": "Community collections",
+    "eyebrow": "Shared by shoppers",
+    "title": "Public collections",
+    "description": "Curated boards from the community — workwear capsules, gift guides, and themed edits you can browse and shop.",
+    "viewLabel": "View collection",
+    "itemCount": "{count, plural, one {# piece} other {# pieces}}",
+    "curatedBy": "Curated by {name}",
+    "shopCollection": "{count, plural, one {Shop this piece} other {Shop all # pieces}}",
+    "empty": "No public collections are live yet — check back soon.",
+    "noItems": "This collection has no items yet.",
+    "notFoundTitle": "Collection not found",
+    "notFoundBody": "This collection may have been removed or is not published yet.",
+    "backToList": "Browse all collections"
+  },
   "shopTheLookPage": {
     "breadcrumb": "Shop the look",
     "eyebrow": "Interactive edits",

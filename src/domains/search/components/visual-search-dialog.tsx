@@ -6,15 +6,9 @@ import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 
+import { AppDialog } from '@/components/app-dialog';
 import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
@@ -25,8 +19,13 @@ import { readImageDataUrl } from '../lib/read-image-data-url';
 import { useSearchStore } from '../search.store';
 import { buildVisualSearchUrl } from '../search.utils';
 
-/** Dialog for uploading a product photo and finding similar catalog items. */
-export function VisualSearchDialog() {
+interface VisualSearchDialogProps {
+  /** When true, stacks as a Vaul nested drawer over the mobile search sheet. */
+  nested?: boolean;
+}
+
+/** Upload a product photo and find similar catalog items. */
+export function VisualSearchDialog({ nested = false }: VisualSearchDialogProps) {
   const t = useTranslations('search.visual');
   const isOpen = useSearchStore((state) => state.isVisualSearchOpen);
   const setVisualSearchOpen = useSearchStore((state) => state.setVisualSearchOpen);
@@ -97,94 +96,103 @@ export function VisualSearchDialog() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className='max-w-md gap-0 overflow-hidden p-0'>
-        <DialogHeader className='space-y-1 px-6 pt-6 pb-4 text-start'>
-          <DialogTitle className='flex items-center gap-2'>
-            <IconCamera className='size-5' />
-            {t('dialogTitle')}
-          </DialogTitle>
-          <DialogDescription>{t('dialogDescription')}</DialogDescription>
-        </DialogHeader>
+    <AppDialog
+      nested={nested}
+      open={isOpen}
+      onOpenChange={handleClose}
+      size='md'
+      tabBarPadding={!nested}
+      contentClassName='px-0 pb-0'
+    >
+      <Flex
+        direction='column'
+        spacing={1}
+        className='border-border shrink-0 border-b px-6 py-4 text-start'
+      >
+        <Flex align='center' spacing={2}>
+          <IconCamera className='size-5 shrink-0' aria-hidden />
+          <Typography.H3 className='text-lg font-semibold'>{t('dialogTitle')}</Typography.H3>
+        </Flex>
+        <Typography.Muted className='text-sm'>{t('dialogDescription')}</Typography.Muted>
+      </Flex>
 
-        <div className='px-6 pb-6'>
-          <input
-            ref={inputRef}
-            type='file'
-            accept='image/jpeg,image/png,image/webp,image/gif'
-            capture='environment'
-            className='sr-only'
-            onChange={(event) => void handleFile(event.target.files?.[0])}
-          />
+      <div className='px-6 py-4'>
+        <input
+          ref={inputRef}
+          type='file'
+          accept='image/jpeg,image/png,image/webp,image/gif'
+          capture='environment'
+          className='sr-only'
+          onChange={(event) => void handleFile(event.target.files?.[0])}
+        />
 
-          {preview ? (
-            <div className='relative mb-4 aspect-[4/3] overflow-hidden rounded-2xl border'>
-              <AppImage src={preview} alt='' fill sizes='400px' className='object-cover' />
-            </div>
-          ) : (
-            <button
-              type='button'
-              onClick={() => inputRef.current?.click()}
-              onDragOver={(event) => {
-                event.preventDefault();
-                setIsDragOver(true);
-              }}
-              onDragLeave={() => setIsDragOver(false)}
-              onDrop={(event) => {
-                event.preventDefault();
-                setIsDragOver(false);
-                const file = event.dataTransfer.files?.[0];
-                void handleFile(file);
-              }}
-              className={cn(
-                'border-border hover:border-primary/40 mb-4 flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 transition-colors',
-                isDragOver && 'border-primary bg-primary/5'
-              )}
-            >
-              <Flex align='center' justify='center' className='bg-muted size-14 rounded-full'>
-                <IconPhoto className='text-muted-foreground size-7' />
-              </Flex>
-              <Flex direction='column' spacing={1} className='text-center'>
-                <Typography.Small weight='semibold'>{t('dropzoneTitle')}</Typography.Small>
-                <Typography.Muted className='text-sm'>{t('dropzoneHint')}</Typography.Muted>
-              </Flex>
-            </button>
-          )}
-
-          <Flex direction='row' spacing={2}>
-            {preview ? (
-              <Button type='button' variant='outline' className='flex-1' onClick={resetLocal}>
-                {t('changePhoto')}
-              </Button>
-            ) : (
-              <Button
-                type='button'
-                variant='outline'
-                className='flex-1'
-                onClick={() => inputRef.current?.click()}
-              >
-                <IconUpload className='cn-rtl-flip me-2 size-4' />
-                {t('upload')}
-              </Button>
+        {preview ? (
+          <div className='relative mb-4 aspect-[4/3] overflow-hidden rounded-2xl border'>
+            <AppImage src={preview} alt='' fill sizes='400px' className='object-cover' />
+          </div>
+        ) : (
+          <button
+            type='button'
+            onClick={() => inputRef.current?.click()}
+            onDragOver={(event) => {
+              event.preventDefault();
+              setIsDragOver(true);
+            }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={(event) => {
+              event.preventDefault();
+              setIsDragOver(false);
+              const file = event.dataTransfer.files?.[0];
+              void handleFile(file);
+            }}
+            className={cn(
+              'border-border hover:border-primary/40 mb-4 flex w-full flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-10 transition-colors',
+              isDragOver && 'border-primary bg-primary/5'
             )}
+          >
+            <Flex align='center' justify='center' className='bg-muted size-14 rounded-full'>
+              <IconPhoto className='text-muted-foreground size-7' />
+            </Flex>
+            <Flex direction='column' spacing={1} className='text-center'>
+              <Typography.Small weight='semibold'>{t('dropzoneTitle')}</Typography.Small>
+              <Typography.Muted className='text-sm'>{t('dropzoneHint')}</Typography.Muted>
+            </Flex>
+          </button>
+        )}
+
+        <Flex direction='row' spacing={2}>
+          {preview ? (
+            <Button type='button' variant='outline' className='flex-1' onClick={resetLocal}>
+              {t('changePhoto')}
+            </Button>
+          ) : (
             <Button
               type='button'
+              variant='outline'
               className='flex-1'
-              disabled={!preview || isPending}
-              onClick={() => void handleSubmit()}
+              onClick={() => inputRef.current?.click()}
             >
-              {isPending ? (
-                <>
-                  <IconLoader2 className='me-2 size-4 animate-spin' />
-                  {t('searching')}
-                </>
-              ) : (
-                t('findSimilar')
-              )}
+              <IconUpload className='cn-rtl-flip me-2 size-4' />
+              {t('upload')}
             </Button>
-          </Flex>
-        </div>
-      </DialogContent>
-    </Dialog>
+          )}
+          <Button
+            type='button'
+            className='flex-1'
+            disabled={!preview || isPending}
+            onClick={() => void handleSubmit()}
+          >
+            {isPending ? (
+              <>
+                <IconLoader2 className='me-2 size-4 animate-spin' />
+                {t('searching')}
+              </>
+            ) : (
+              t('findSimilar')
+            )}
+          </Button>
+        </Flex>
+      </div>
+    </AppDialog>
   );
 }
