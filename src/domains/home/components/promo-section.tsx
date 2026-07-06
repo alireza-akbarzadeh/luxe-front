@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { PromoCountdown } from '@/domains/home/components/ui/promo-countdown';
+import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { marketingNumbers } from '@/lib/i18n/marketing-numbers';
 import { getHomeFlashDeals } from '@/services/-home-flash-deals-get';
 
@@ -12,8 +13,7 @@ export async function PromoSection() {
     getTranslations('home.common')
   ]);
 
-  // Fetch flash deal data
-  const data = await getHomeFlashDeals({ limit: 1 });
+  const data = await safeHomeFetch(() => getHomeFlashDeals({ limit: 1 }));
   const deal = data?.data?.deals?.[0];
   const promoImage = deal?.product?.images?.[0];
   const promoEnd = deal?.ends_at ? new Date(deal.ends_at) : null;
