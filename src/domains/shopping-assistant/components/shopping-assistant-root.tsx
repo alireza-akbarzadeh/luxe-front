@@ -2,8 +2,10 @@
 
 import { usePathname } from 'next/navigation';
 
+import { ShoppingAssistantFab } from '~/src/domains/shopping-assistant/components/shopping-assistant-fab';
+
 import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
-import { ShoppingAssistantFab, ShoppingAssistantSheet } from './shopping-assistant-sheet';
+import { ShoppingAssistantSheet } from './shopping-assistant-sheet';
 
 const HIDDEN_PATH_PREFIXES = ['/checkout', '/cart', '/product/'];
 

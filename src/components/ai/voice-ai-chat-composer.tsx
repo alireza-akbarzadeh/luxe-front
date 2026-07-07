@@ -7,20 +7,26 @@ import { useEffect } from 'react';
 
 import {
   PromptInput,
+  PromptInputActionAddAttachments,
+  PromptInputActionAddScreenshot,
+  PromptInputActionMenu,
+  PromptInputActionMenuContent,
+  PromptInputActionMenuTrigger,
   PromptInputBody,
   PromptInputFooter,
   type PromptInputMessage,
   PromptInputProvider,
   PromptInputSubmit,
   PromptInputTextarea,
+  PromptInputTools,
   usePromptInputController
 } from '@/components/ai/prompt-input';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
-import { VoiceWaveform } from '@/domains/shopping-assistant/components/voice-waveform';
 import { useVoiceChatInput } from '@/domains/shopping-assistant/hooks/use-voice-chat-input';
 import { cn } from '@/lib/utils';
+import { FlexVoiceStatus } from '~/src/components/ai/flex-voice-status';
 
 export type VoiceAiChatComposerProps = {
   isPending: boolean;
@@ -31,7 +37,8 @@ export type VoiceAiChatComposerProps = {
   className?: string;
 };
 
-function VoiceAiChatComposerInner({
+/** AI chat composer with browser speech recognition (push + hold-to-talk). */
+export function VoiceAiChatComposerInner({
   isPending,
   placeholder,
   onSubmit,
@@ -40,6 +47,7 @@ function VoiceAiChatComposerInner({
   className
 }: VoiceAiChatComposerProps) {
   const t = useTranslations('shoppingAssistant.voice');
+
   const { textInput } = usePromptInputController();
   const inputStatus: ChatStatus | undefined = isPending ? 'submitted' : undefined;
   const canSubmit = textInput.value.trim().length > 0 && !isPending;
@@ -91,7 +99,7 @@ function VoiceAiChatComposerInner({
         </Typography.Muted>
       ) : null}
 
-      <PromptInput className='rounded-2xl' onSubmit={onSubmit}>
+      <PromptInput className='rounded-2xl' onSubmit={onSubmit} globalDrop multiple>
         <PromptInputBody>
           <PromptInputTextarea
             className='max-h-28 min-h-12'
@@ -101,33 +109,42 @@ function VoiceAiChatComposerInner({
           />
         </PromptInputBody>
         <PromptInputFooter className='justify-between gap-2 ps-2 pe-2 pb-2'>
-          {voice.isSupported ? (
-            <Button
-              type='button'
-              variant='ghost'
-              size='icon'
-              className={cn('size-10 rounded-xl', voice.isListening && 'bg-accent/10')}
-              aria-label={voice.isListening ? t('stopListening') : t('startListening')}
-              aria-pressed={voice.isListening}
-              onClick={voice.toggleVoice}
-              onPointerDown={(event) => {
-                if (event.pointerType !== 'mouse') {
-                  voice.startHoldToTalk();
-                }
-              }}
-              onPointerUp={voice.stopHoldToTalk}
-              onPointerLeave={voice.stopHoldToTalk}
-              disabled={isPending}
-            >
-              {voice.permissionDenied ? (
-                <IconMicrophoneOff className='size-4' />
-              ) : (
-                <IconMicrophone className={cn('size-4', voice.isListening && 'text-accent')} />
-              )}
-            </Button>
-          ) : (
-            <span />
-          )}
+          <PromptInputTools className='gap-0'>
+            <PromptInputActionMenu>
+              <PromptInputActionMenuTrigger />
+              <PromptInputActionMenuContent>
+                <PromptInputActionAddAttachments />
+                <PromptInputActionAddScreenshot />
+              </PromptInputActionMenuContent>
+            </PromptInputActionMenu>
+            {voice.isSupported ? (
+              <Button
+                type='button'
+                variant='ghost'
+                size='icon'
+                className={cn('size-10 rounded-xl', voice.isListening && 'bg-accent/10')}
+                aria-label={voice.isListening ? t('stopListening') : t('startListening')}
+                aria-pressed={voice.isListening}
+                onClick={voice.toggleVoice}
+                onPointerDown={(event) => {
+                  if (event.pointerType !== 'mouse') {
+                    voice.startHoldToTalk();
+                  }
+                }}
+                onPointerUp={voice.stopHoldToTalk}
+                onPointerLeave={voice.stopHoldToTalk}
+                disabled={isPending}
+              >
+                {voice.permissionDenied ? (
+                  <IconMicrophoneOff className='size-4' />
+                ) : (
+                  <IconMicrophone className={cn('size-4', voice.isListening && 'text-accent')} />
+                )}
+              </Button>
+            ) : (
+              <span />
+            )}
+          </PromptInputTools>
           <PromptInputSubmit
             className='size-10 rounded-xl'
             disabled={!canSubmit}
@@ -138,23 +155,6 @@ function VoiceAiChatComposerInner({
       {voice.isSupported ? (
         <Typography.Muted className='text-center text-xs'>{t('keyboardHint')}</Typography.Muted>
       ) : null}
-    </Flex>
-  );
-}
-
-function FlexVoiceStatus({ label }: { label: string }) {
-  return (
-    <Flex
-      direction='row'
-      align='center'
-      justify='center'
-      spacing={2}
-      className='bg-accent/5 rounded-xl px-3 py-2'
-      role='status'
-      aria-live='polite'
-    >
-      <VoiceWaveform active compact barClassName='bg-accent' />
-      <Typography.Small className='text-accent font-medium'>{label}</Typography.Small>
     </Flex>
   );
 }

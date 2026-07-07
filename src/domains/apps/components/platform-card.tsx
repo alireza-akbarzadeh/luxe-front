@@ -58,12 +58,19 @@ export function PlatformCard({
       direction='column'
       gap={4}
       className={cn(
-        'bg-card border-border/70 rounded-3xl border p-6 shadow-xs',
-        recommended && 'border-accent/60 shadow-md'
+        'bg-card relative z-10 rounded-2xl border p-6 shadow-xs transition-colors',
+        recommended && 'shadow-md'
       )}
+      style={{
+        borderColor: recommended ? 'color-mix(in oklab, var(--accent) 55%, transparent)' : undefined
+      }}
     >
       <Flex align='start' justify='between' gap={3}>
-        <Flex align='center' justify='center' className='bg-muted size-11 rounded-2xl'>
+        <Flex
+          align='center'
+          justify='center'
+          className='bg-muted text-foreground size-11 rounded-2xl'
+        >
           {icon}
         </Flex>
         {badge ? (
@@ -80,7 +87,9 @@ export function PlatformCard({
       </Flex>
 
       <Flex direction='column' gap={1.5}>
-        <Text variant='large'>{title}</Text>
+        <Text variant='large' className='text-foreground'>
+          {title}
+        </Text>
         <Text variant='muted'>{description}</Text>
       </Flex>
 

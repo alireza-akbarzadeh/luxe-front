@@ -11,12 +11,10 @@ import {
 } from '@/components/ai/conversation';
 import { type PromptInputMessage } from '@/components/ai/prompt-input';
 import { Suggestion, Suggestions } from '@/components/ai/suggestion';
-import { VoiceAiChatComposer } from '@/components/ai/voice-ai-chat-composer';
-import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Typography } from '@/components/ui/typography';
-import { cn } from '@/lib/utils';
+import { VoiceAiChatComposer } from '~/src/components/ai/voice-ai-chat-composer';
 
 import { useShoppingAssistantConversation } from '../hooks/use-shopping-assistant-conversation';
 import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
@@ -56,7 +54,7 @@ function ShoppingAssistantPanel() {
       <SheetHeader className='border-border border-b px-4 py-3'>
         <Flex direction='row' align='center' spacing={3}>
           <Flex align='center' justify='center' className='bg-gold/15 size-9 shrink-0 rounded-full'>
-            <IconSparkles className='text-gold-strong size-[18px]' />
+            <IconSparkles className='text-gold-strong size-4.5' />
           </Flex>
           <Flex direction='column' spacing={0} className='min-w-0 flex-1'>
             <SheetTitle className='text-base'>{t('title')}</SheetTitle>
@@ -98,31 +96,5 @@ function ShoppingAssistantPanel() {
         <Typography.Muted className='text-center text-xs'>{t('footer')}</Typography.Muted>
       </Flex>
     </>
-  );
-}
-
-/** Floating site-wide entry point for the shopping assistant. */
-export function ShoppingAssistantFab({
-  onClick,
-  className
-}: {
-  onClick: () => void;
-  className?: string;
-}) {
-  const t = useTranslations('shoppingAssistant');
-
-  return (
-    <Button
-      type='button'
-      onClick={onClick}
-      className={cn(
-        'bg-gold hover:bg-gold/90 fixed start-6 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 gap-2 rounded-full px-5 shadow-lg lg:bottom-6',
-        className
-      )}
-    >
-      <IconSparkles className='size-5' />
-      <span className='hidden sm:inline'>{t('fab')}</span>
-      <span className='sr-only sm:hidden'>{t('fab')}</span>
-    </Button>
   );
 }
