@@ -7,13 +7,7 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
+import { DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,6 +18,7 @@ import {
   useVendorReverseMarketplaceRequestsQuery
 } from '@/domains/vendor/panel/hooks/use-vendor-reverse-marketplace';
 import type { ReverseMarketplaceRequestListItem } from '@/lib/api/reverse-marketplace';
+import { AppDialog } from '~/src/components/app-dialog';
 
 function formatBudget(min?: number, max?: number) {
   const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
@@ -122,49 +117,47 @@ export function VendorMarketingDomain() {
           )}
         </CardContent>
       </Card>
-
-      <Dialog open={selected != null} onOpenChange={(open) => !open && setSelected(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('offerDialogTitle')}</DialogTitle>
-          </DialogHeader>
-          <div className='space-y-4'>
-            <div className='space-y-2'>
-              <Label htmlFor='offer-price'>{t('offeredPrice')}</Label>
-              <Input
-                id='offer-price'
-                type='number'
-                min={0}
-                step='0.01'
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='offer-message'>{t('message')}</Label>
-              <Textarea
-                id='offer-message'
-                rows={4}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder={t('messagePlaceholder')}
-              />
-            </div>
+      <AppDialog
+        title={t('offerDialogTitle')}
+        open={selected != null}
+        onOpenChange={(open) => !open && setSelected(null)}
+      >
+        <div className='space-y-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='offer-price'>{t('offeredPrice')}</Label>
+            <Input
+              id='offer-price'
+              type='number'
+              min={0}
+              step='0.01'
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
           </div>
-          <DialogFooter>
-            <Button type='button' variant='outline' onClick={() => setSelected(null)}>
-              {t('cancel')}
-            </Button>
-            <Button
-              type='button'
-              onClick={() => void submitOffer()}
-              disabled={offerMutation.isPending}
-            >
-              {t('sendOffer')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <div className='space-y-2'>
+            <Label htmlFor='offer-message'>{t('message')}</Label>
+            <Textarea
+              id='offer-message'
+              rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={t('messagePlaceholder')}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button type='button' variant='outline' onClick={() => setSelected(null)}>
+            {t('cancel')}
+          </Button>
+          <Button
+            type='button'
+            onClick={() => void submitOffer()}
+            disabled={offerMutation.isPending}
+          >
+            {t('sendOffer')}
+          </Button>
+        </DialogFooter>
+      </AppDialog>
     </div>
   );
 }

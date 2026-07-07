@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import {
   Dialog,
   DialogContent,
@@ -34,7 +36,7 @@ const DRAWER_MAX_WIDTH = 1024;
 interface AppDialogProps {
   trigger?: React.ReactNode;
   children: React.ReactNode;
-  title?: string;
+  title?: string | React.ReactNode;
   description?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -45,6 +47,7 @@ interface AppDialogProps {
   /** Extra bottom padding for mobile tab bars. Default true on root drawers. */
   tabBarPadding?: boolean;
   className?: string;
+  headerClassName?: string;
   contentClassName?: string;
   size?: AppDialogSize;
   side?: 'bottom' | 'top' | 'right' | 'left' | undefined;
@@ -64,7 +67,8 @@ export function AppDialog(props: AppDialogProps) {
     className,
     contentClassName,
     size = 'md',
-    side = 'left'
+    side = 'left',
+    headerClassName
   } = props;
   const { width } = useMediaDevices();
   const useDrawerShell = nested || width == null || width <= DRAWER_MAX_WIDTH;
@@ -85,7 +89,9 @@ export function AppDialog(props: AppDialogProps) {
           )}
         >
           {(title || description) && (
-            <DrawerHeader className='shrink-0 px-4 pt-1 pb-2 text-center sm:text-start'>
+            <DrawerHeader
+              className={cn('shrink-0 px-4 pt-1 pb-2 text-center sm:text-start', headerClassName)}
+            >
               {title ? <DrawerTitle className='text-lg font-semibold'>{title}</DrawerTitle> : null}
               {description ? <DrawerDescription>{description}</DrawerDescription> : null}
             </DrawerHeader>
@@ -113,7 +119,12 @@ export function AppDialog(props: AppDialogProps) {
           className={cn('flex h-full w-full flex-col gap-0 p-0', sizeClasses.sheet)}
         >
           {(title || description) && (
-            <SheetHeader className='shrink-0 space-y-1 border-b px-6 py-5 pe-14 text-start'>
+            <SheetHeader
+              className={cn(
+                'shrink-0 space-y-1 border-b px-6 py-5 pe-14 text-start',
+                headerClassName
+              )}
+            >
               {title && <SheetTitle className='text-lg font-semibold'>{title}</SheetTitle>}
               {description && <SheetDescription>{description}</SheetDescription>}
             </SheetHeader>
@@ -136,7 +147,7 @@ export function AppDialog(props: AppDialogProps) {
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className={sizeClasses.dialog}>
         {(title || description) && (
-          <DialogHeader className='pe-14 text-start'>
+          <DialogHeader className={cn('pe-14 text-start', headerClassName)}>
             {title && <DialogTitle>{title}</DialogTitle>}
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>

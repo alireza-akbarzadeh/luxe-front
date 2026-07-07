@@ -26,7 +26,7 @@ export function LegalDocumentLink({ kind, children, className }: LegalDocumentLi
       >
         {children}
       </button>
-      <LegalDocumentDialog kind={kind} open={open} onOpenChange={setOpen} />
+      <LegalDocumentDialog kind={kind} open={open} onOpenChangeAction={setOpen} />
     </>
   );
 }

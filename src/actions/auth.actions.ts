@@ -126,7 +126,7 @@ export async function loginAction(formData: FormData) {
       headers: await getClientRequestHeaders(),
       body: JSON.stringify({ email, password })
     });
-
+    logger.info(res);
     const json = (await res.json()) as DtoRegisterResponse;
     const error = await handleAuthResponse(res, json, rememberMe, formData);
     if (error) return error;

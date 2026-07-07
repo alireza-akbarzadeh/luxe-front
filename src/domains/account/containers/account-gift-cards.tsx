@@ -16,13 +16,6 @@ import { toast } from 'sonner';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text, Typography } from '@/components/ui/typography';
 import { GiftCardTransferDialog } from '@/domains/gift-cards/components/gift-card-transfer-dialog';
@@ -41,6 +34,7 @@ import {
   useGetGiftCardsReceived
 } from '@/services/-gift-cards-received-get';
 import { useGetGiftCardsSent } from '@/services/-gift-cards-sent-get';
+import { AppDialog } from '~/src/components/app-dialog';
 
 import { type PaginatedGiftCardsData, readPaginatedData } from '../lib/account-list-data';
 
@@ -244,13 +238,14 @@ export function AccountGiftCards() {
         </div>
       ) : null}
 
-      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-lg'>
-          <DialogHeader>
-            <DialogTitle>{t('createDialogTitle')}</DialogTitle>
-            <DialogDescription>{t('createDialogDescription')}</DialogDescription>
-          </DialogHeader>
-
+      <AppDialog
+        contentClassName='max-h-[90vh] overflow-y-auto sm:max-w-lg'
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        title={t('createDialogTitle')}
+        description={t('createDialogDescription')}
+      >
+        <>
           <div className='mb-4'>
             <Text className='mb-3 text-sm font-medium'>{t('selectAmount')}</Text>
             <div className='flex flex-wrap gap-2'>
@@ -267,7 +262,6 @@ export function AccountGiftCards() {
               ))}
             </div>
           </div>
-
           <createForm.Root
             onSubmit={(e) => {
               e.preventDefault();
@@ -337,8 +331,8 @@ export function AccountGiftCards() {
               )}
             />
           </createForm.Root>
-        </DialogContent>
-      </Dialog>
+        </>
+      </AppDialog>
 
       <GiftCardTransferDialog
         card={transferCard}

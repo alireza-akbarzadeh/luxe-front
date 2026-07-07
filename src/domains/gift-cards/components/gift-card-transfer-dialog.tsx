@@ -16,18 +16,12 @@ import {
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
 import { Text } from '@/components/ui/typography';
 import { formatPrice } from '@/domains/home/lib/home-utils';
 import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import { getGetGiftCardsReceivedQueryKey } from '@/services/-gift-cards-received-get';
 import { getGetGiftCardsSentQueryKey } from '@/services/-gift-cards-sent-get';
+import { AppDialog } from '~/src/components/app-dialog';
 
 import { type GiftRecipientLookup, postGiftCardTransfer } from '../lib/gift-card-transfer-api';
 import { GiftCardRecipientPicker } from './gift-card-recipient-picker';
@@ -82,41 +76,38 @@ export function GiftCardTransferDialog({ card, open, onOpenChange }: GiftCardTra
 
   return (
     <>
-      <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className='sm:max-w-md'>
-          <DialogHeader>
-            <DialogTitle>{t('title')}</DialogTitle>
-            <DialogDescription>{t('description')}</DialogDescription>
-          </DialogHeader>
+      <AppDialog
+        open={open}
+        onOpenChange={handleClose}
+        title={t('title')}
+        description={t('description')}
+      >
+        {card ? (
+          <div className='bg-muted/40 border-border/60 space-y-1 rounded-xl border p-4'>
+            <Text className='font-semibold tabular-nums'>{formatPrice(balance)}</Text>
+            <Text variant='muted' className='font-mono text-xs'>
+              {card.code}
+            </Text>
+          </div>
+        ) : null}
 
-          {card ? (
-            <div className='bg-muted/40 border-border/60 space-y-1 rounded-xl border p-4'>
-              <Text className='font-semibold tabular-nums'>{formatPrice(balance)}</Text>
-              <Text variant='muted' className='font-mono text-xs'>
-                {card.code}
-              </Text>
-            </div>
-          ) : null}
+        <GiftCardRecipientPicker
+          label={t('searchLabel')}
+          placeholder={t('searchPlaceholder')}
+          emptyLabel={t('searchEmpty')}
+          searchingLabel={t('searching')}
+          value={selectedUser ? String(selectedUser.id) : ''}
+          onChange={setSelectedUser}
+        />
 
-          <GiftCardRecipientPicker
-            label={t('searchLabel')}
-            placeholder={t('searchPlaceholder')}
-            emptyLabel={t('searchEmpty')}
-            searchingLabel={t('searching')}
-            value={selectedUser ? String(selectedUser.id) : ''}
-            onChange={setSelectedUser}
-          />
-
-          <Button
-            className='w-full rounded-full'
-            disabled={!selectedUser}
-            onClick={() => setConfirmOpen(true)}
-          >
-            {t('continue')}
-          </Button>
-        </DialogContent>
-      </Dialog>
-
+        <Button
+          className='w-full rounded-full'
+          disabled={!selectedUser}
+          onClick={() => setConfirmOpen(true)}
+        >
+          {t('continue')}
+        </Button>
+      </AppDialog>
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -187,9 +187,11 @@ export function LoginDomain() {
           </p>
 
           <p className='text-muted-foreground mt-4 text-center text-xs leading-relaxed'>
-            {tLogin('legalPrefix')}{' '}
+            {tLogin('legalPrefix')}
+            {'  '}
             <LegalDocumentLink kind='terms'>{tRegister('termsLink')}</LegalDocumentLink>{' '}
-            {tRegister('termsAnd')}{' '}
+            {tRegister('termsAnd')}
+            {'  '}
             <LegalDocumentLink kind='privacy'>{tRegister('privacyLink')}</LegalDocumentLink>
           </p>
         </motion.div>
