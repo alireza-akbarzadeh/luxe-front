@@ -1299,6 +1299,11 @@
       "successToast": "رمز عبور با موفقیت به‌روزرسانی شد"
     },
     "vendor": {
+      "dashboardScroll": {
+        "titleLine1": "Everything you need, in",
+        "titleLine2": "One Vendor Dashboard",
+        "description": "Track orders, manage inventory, and watch revenue grow in real time — all from a single, powerful control center."
+      },
       "brandSuffix": "فروشنده",
       "login": {
         "title": "ورود فروشنده",

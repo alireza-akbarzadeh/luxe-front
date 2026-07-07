@@ -2,8 +2,7 @@
  * Resolves the Go API base URL for server-side fetches and Next.js rewrites.
  * Browser clients should use same-origin `/api/v1` (see api-client.ts).
  */
-// const DEV_API_BASE = 'http://localhost:8080/api/v1';
-const DEV_API_BASE = 'https://luxe-3pvz.onrender.com/api/v1';
+const DEV_API_BASE = 'http://localhost:8080/api/v1';
 
 /** Last-resort production default — matches `.env.production` and Render deploy. */
 const PRODUCTION_API_BASE = 'https://luxe-3pvz.onrender.com/api/v1';

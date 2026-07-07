@@ -15,6 +15,7 @@ import { VendorTestimonialsSection } from '@/domains/vendor/landing/components/v
 import { VendorWhySellSection } from '@/domains/vendor/landing/components/vendor-why-sell-section';
 import { getServerUser } from '@/lib/auth/auth-server';
 import { getServerVendorStores, isVendorPanelAdmin } from '@/lib/auth/vendor-server';
+import { VendorDashboardScrollSection } from '~/src/domains/vendor/landing/components/ui/vendor-dashboard-scroll-sections';
 
 export async function VendorLandingDomain() {
   const user = await getServerUser();
@@ -26,6 +27,7 @@ export async function VendorLandingDomain() {
       <VendorLandingNav hasVendorStore={hasVendorStore} />
       <main>
         <VendorHeroSection hasVendorStore={hasVendorStore} />
+        <VendorDashboardScrollSection />
         <VendorLogoCloudSection />
         <VendorWhySellSection />
         <VendorMarketplaceBenefitsSection />

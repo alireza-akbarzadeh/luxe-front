@@ -356,3 +356,13 @@ export function slugify(value: string) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
+
+export async function safeParseJson<T>(res: Response): Promise<{ data: T | null; raw: string }> {
+  const raw = await res.text();
+  if (!raw) return { data: null, raw };
+  try {
+    return { data: JSON.parse(raw) as T, raw };
+  } catch {
+    return { data: null, raw };
+  }
+}

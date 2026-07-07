@@ -4,7 +4,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { BASE_URL } from '@/lib/api/api-client';
-import { getCallbackUrl } from '@/lib/utils';
+import { getCallbackUrl, safeParseJson } from '@/lib/utils';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
 import { logger } from '~/src/lib/api/logger';
 import { clearAuthCookies, setAuthCookies } from '~/src/lib/auth/auth-helpers';
@@ -126,8 +126,14 @@ export async function loginAction(formData: FormData) {
       headers: await getClientRequestHeaders(),
       body: JSON.stringify({ email, password })
     });
-    logger.info(res);
-    const json = (await res.json()) as DtoRegisterResponse;
+
+    const { data: json, raw } = await safeParseJson<DtoRegisterResponse>(res);
+
+    if (!json) {
+      logger.error('Login: empty/invalid JSON from backend', { status: res.status, raw });
+      return { error: 'Server returned an unexpected response. Please try again.' };
+    }
+
     const error = await handleAuthResponse(res, json, rememberMe, formData);
     if (error) return error;
   } catch (error) {

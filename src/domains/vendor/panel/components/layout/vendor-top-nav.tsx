@@ -2,6 +2,7 @@
 
 import {
   IconBell,
+  IconCalendar,
   IconChevronDown,
   IconLayoutSidebarLeftCollapse,
   IconLayoutSidebarLeftExpand,
@@ -44,6 +45,7 @@ import { type Locale, locales } from '@/i18n/config';
 import { listVendorStores } from '@/lib/api/vendor-stores';
 import type { UserPayload } from '@/lib/auth/auth-server';
 import { cn } from '@/lib/utils';
+import { AppImage } from '~/src/components/ui/app-image';
 
 const iconButtonClass = 'size-9 shrink-0 rounded-xl';
 
@@ -87,6 +89,12 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
       router.refresh();
     });
   };
+
+  const avatarUrl = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(
+    `${user.first_name} ${user.last_name}`
+  )}&backgroundColor=d4af37&textColor=ffffff`;
+
+  const isOnline = true;
 
   return (
     <header className='border-border/60 bg-background/80 sticky top-0 z-20 shrink-0 border-b backdrop-blur-xl'>
@@ -144,12 +152,43 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
+                size='sm'
+                variant='outline'
+                className='hidden h-9 gap-1 rounded-xl sm:inline-flex'
+              >
+                <IconCalendar className='size-4 shrink-0' />
+                <span className='hidden md:inline'>Calendar</span>
+                <IconChevronDown className='ml-1 size-3 shrink-0 opacity-60' />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-52'>
+              <DropdownMenuItem asChild>
+                <Link href='/vendor/panel/products'>Last 30 days</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/vendor/panel/discounts'>Last 60 days</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/vendor/panel/marketing'>Last 90 days</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/vendor/panel/inventory'>Last 180 days</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/vendor/panel/team'>Last 365 days</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
                 variant='outline'
                 size='sm'
                 className='hidden h-9 gap-1 rounded-xl lg:inline-flex'
               >
                 <span className='max-w-32 truncate'>{activeStoreName}</span>
-                <IconChevronDown className='size-3.5 shrink-0 opacity-60' />
+                <IconChevronDown className='ml-1 size-3.5 shrink-0 opacity-60' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-56'>
@@ -282,9 +321,27 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
                 size='sm'
                 className='h-9 max-w-[9.5rem] gap-2 rounded-xl px-2'
               >
-                <span className='bg-gold/15 text-gold flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold'>
-                  {userInitials}
+                <span className='relative size-7 shrink-0'>
+                  <AppImage
+                    src={avatarUrl}
+                    alt={`${user.first_name} ${user.last_name}`}
+                    fill
+                    sizes='28px'
+                    className='rounded-full object-cover'
+                    unoptimized
+                  />
+                  <span
+                    className={cn(
+                      'border-background absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full border-2',
+                      isOnline ? 'bg-emerald-500' : 'bg-muted-foreground/50'
+                    )}
+                  >
+                    {isOnline && (
+                      <span className='absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-75' />
+                    )}
+                  </span>
                 </span>
+
                 <span className='hidden min-w-0 truncate text-sm font-medium md:inline'>
                   {user.first_name}
                 </span>
