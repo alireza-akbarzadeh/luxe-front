@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { BASE_URL } from '@/lib/api/api-client';
 import { getCallbackUrl } from '@/lib/utils';
 import type { DtoRegisterResponse } from '@/services/-auth-register-post.schemas';
+import { logger } from '~/src/lib/api/logger';
 import { clearAuthCookies, setAuthCookies } from '~/src/lib/auth/auth-helpers';
 import { refreshSessionFromCookies } from '~/src/lib/auth/auth-refresh';
 
@@ -133,7 +134,7 @@ export async function loginAction(formData: FormData) {
     if (isNextRedirectError(error)) {
       throw error;
     }
-    console.error('Login error:', error);
+    logger.error('Login error:', error);
     return { error: 'An unexpected error occurred during login' };
   }
 }
@@ -176,7 +177,7 @@ export async function registerAction(formData: FormData) {
     if (isNextRedirectError(error)) {
       throw error;
     }
-    console.error('Registration error:', error);
+    logger.error('Registration error:', error);
     return { error: 'An unexpected error occurred during registration' };
   }
 }
@@ -225,7 +226,7 @@ export async function vendorRegisterAction(payload: {
     await setAuthCookies(access_token, refresh_token, true);
     return {};
   } catch (error) {
-    console.error('Vendor registration error:', error);
+    logger.error('Vendor registration error:', error);
     return { error: 'An unexpected error occurred during registration' };
   }
 }

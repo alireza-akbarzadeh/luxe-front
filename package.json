@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
+    "@sentry/nextjs": "^10.63.0",
     "@t3-oss/env-nextjs": "0.13.11",
     "@tabler/icons-react": "3.42.0",
     "@tanstack/react-form": "^1.29.3",
