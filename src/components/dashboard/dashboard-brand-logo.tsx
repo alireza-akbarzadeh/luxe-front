@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { BRAND_ASSETS } from '@/lib/brand-assets';
 import { cn } from '@/lib/utils';
 
 interface DashboardBrandLogoProps {
@@ -33,7 +34,7 @@ export function DashboardBrandLogo({
       )}
     >
       <Image
-        src='/assets/logo.png'
+        src={BRAND_ASSETS.logo}
         alt='Luxe'
         width={collapsed ? 28 : 32}
         height={collapsed ? 28 : 32}

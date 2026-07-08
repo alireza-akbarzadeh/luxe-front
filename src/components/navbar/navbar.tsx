@@ -10,6 +10,7 @@ import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { useSearchStore } from '@/domains/search/search.store';
+import { BRAND_ASSETS } from '@/lib/brand-assets';
 import { cn } from '@/lib/utils';
 import { AppImage } from '~/src/components/ui/app-image';
 
@@ -92,7 +93,7 @@ export function Navbar() {
               aria-label='LUXE Home'
               className='relative z-20 inline-flex min-h-11 items-center rtl:flex-row-reverse'
             >
-              <AppImage src='/assets/logo.png' alt='LUXE' width={200} height={200} />
+              <AppImage src={BRAND_ASSETS.logo} alt='LUXE' width={200} height={200} />
             </Link>
 
             <div className='hidden min-w-0 lg:block'>

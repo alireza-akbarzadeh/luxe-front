@@ -5,6 +5,8 @@ import { defaultCache } from '@serwist/turbopack/worker';
 import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from 'serwist';
 import { NetworkOnly, Serwist } from 'serwist';
 
+import { BRAND_ASSETS } from '@/lib/brand-assets';
+
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
     __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
@@ -109,8 +111,8 @@ self.addEventListener('push', (event: PushEvent) => {
     self.registration.showNotification(payload.title ?? 'Luxe', {
       body: payload.body,
       tag: payload.tag,
-      icon: payload.icon ?? '/favicon.svg',
-      badge: '/favicon.svg',
+      icon: payload.icon ?? BRAND_ASSETS.androidChrome192,
+      badge: BRAND_ASSETS.androidChrome192,
       data: { url: payload.url ?? '/notifications' }
     })
   );

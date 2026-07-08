@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { BRAND_ASSETS } from '@/lib/brand-assets';
 import { absoluteUrl } from '@/lib/seo/site-url';
 
 export interface PageMetadataInput {
@@ -82,7 +83,7 @@ export function organizationJsonLd(): Record<string, unknown> {
     '@type': 'Organization',
     name: 'Luxe',
     url: siteUrl,
-    logo: absoluteUrl('/favicon.svg'),
+    logo: absoluteUrl(BRAND_ASSETS.logo),
     sameAs: []
   };
 }

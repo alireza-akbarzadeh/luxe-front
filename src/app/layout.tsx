@@ -11,6 +11,7 @@ import { SpeedInsightsClient } from '@/components/analytics/speed-insights-clien
 import RootProvider from '@/components/providers/root';
 import { LuxeSerwistProvider } from '@/components/providers/serwist-provider';
 import { getDirection, type Locale } from '@/i18n/config';
+import { BRAND_ASSETS, siteIconsMetadata } from '@/lib/brand-assets';
 import { cn } from '@/lib/utils';
 
 const geistSans = Geist({
@@ -49,8 +50,8 @@ const vazirmatn = Vazirmatn({
 
 export const metadata: Metadata = {
   ...siteMetadata,
-  icons: '/favicon.svg',
-  manifest: '/app.webmanifest',
+  icons: siteIconsMetadata,
+  manifest: BRAND_ASSETS.webManifest,
   applicationName: 'Luxe',
   appleWebApp: {
     capable: true,
