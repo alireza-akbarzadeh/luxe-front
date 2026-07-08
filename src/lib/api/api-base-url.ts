@@ -8,7 +8,12 @@ const DEV_API_BASE = 'http://localhost:8080/api/v1';
 const PRODUCTION_API_BASE = 'https://luxe-3pvz.onrender.com/api/v1';
 
 function normalizeBaseUrl(url: string): string {
-  return url.replace(/\/$/, '');
+  const trimmed = url.replace(/\/$/, '');
+  // Common typo: letter "i" instead of digit "1" in /api/v1
+  if (trimmed.endsWith('/api/vi')) {
+    return `${trimmed.slice(0, -1)}1`;
+  }
+  return trimmed;
 }
 
 function isLocalhostUrl(url: string): boolean {

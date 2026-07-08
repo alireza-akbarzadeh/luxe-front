@@ -20,7 +20,7 @@ export function TopNavIconCluster() {
       direction='row'
       align='center'
       spacing={0.5}
-      className='border-border/60 bg-muted/20 rounded-xl border p-0.5'
+      className='dashboard-icon-cluster p-0.5'
     >
       <TopNavNotifications />
 

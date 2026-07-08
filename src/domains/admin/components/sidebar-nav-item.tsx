@@ -33,11 +33,13 @@ function isPathActive(pathname: string, href?: string) {
 export function SidebarNavItem({
   item,
   isCollapsed,
-  pathname
+  pathname,
+  onNavigate
 }: {
   item: DtoMenuItemResponse;
   isCollapsed: boolean;
   pathname: string;
+  onNavigate?: () => void;
 }) {
   const hasChildren = !!(item.children && item.children.length > 0);
   const navKey = getMenuItemNavKey(item);
@@ -56,19 +58,17 @@ export function SidebarNavItem({
   }, [isChildActive, navKey, setExpanded]);
 
   const itemClasses = cn(
-    'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 outline-none',
-    isActive
-      ? 'bg-primary/10 text-foreground shadow-[inset_3px_0_0_0_hsl(var(--primary))]'
-      : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
-    isCollapsed && 'mx-auto h-10 w-10 justify-center rounded-xl p-0'
+    'dashboard-nav-item group relative outline-none',
+    isActive ? 'dashboard-nav-item-active' : '',
+    isCollapsed && 'mx-auto h-10 w-10 justify-center px-0'
   );
 
   const childLinkClasses = (active: boolean) =>
     cn(
       'relative block rounded-lg px-3 py-2 text-xs font-medium transition-all',
       active
-        ? 'bg-primary/12 text-foreground font-semibold shadow-[inset_2px_0_0_0_hsl(var(--primary))]'
-        : 'text-muted-foreground hover:bg-accent/40 hover:text-foreground'
+        ? 'dashboard-nav-item-active font-semibold'
+        : 'text-muted-foreground hover:bg-white/4 hover:text-foreground'
     );
 
   const renderIcon = (iconName?: string, active?: boolean) => {
@@ -77,7 +77,7 @@ export function SidebarNavItem({
       <div
         className={cn(
           'flex shrink-0 items-center justify-center transition-colors',
-          active ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
+          active ? 'text-emerald-400' : 'text-muted-foreground group-hover:text-foreground'
         )}
       >
         {IconComponent ? (
@@ -152,7 +152,7 @@ export function SidebarNavItem({
             <IconChevronDown
               className={cn(
                 'h-4 w-4 shrink-0 opacity-50 transition-transform duration-200',
-                isOpen && 'text-primary rotate-180 opacity-100'
+                isOpen && 'text-emerald-400 rotate-180 opacity-100'
               )}
             />
           </button>
@@ -178,11 +178,11 @@ export function SidebarNavItem({
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
-        <Link href={item.href || '#'} className={itemClasses}>
+        <Link href={item.href || '#'} className={itemClasses} onClick={onNavigate}>
           {renderIcon(item.icon, isActive)}
           {!isCollapsed ? <span className='flex-1 truncate'>{item.label}</span> : null}
           {isActive && isCollapsed ? (
-            <div className='bg-primary absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r-full' />
+            <div className='absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r-full bg-emerald-400' />
           ) : null}
         </Link>
       </TooltipTrigger>

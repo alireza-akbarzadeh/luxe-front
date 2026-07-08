@@ -68,7 +68,7 @@ export function DashboardTables({
   return (
     <>
       <section className='grid gap-4 lg:grid-cols-3'>
-        <Card className='lg:col-span-2'>
+        <Card className='dashboard-card border-0 shadow-none lg:col-span-2'>
           <CardHeader>
             <div className='flex items-center justify-between gap-4'>
               <div>
@@ -135,7 +135,7 @@ export function DashboardTables({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className='dashboard-card border-0 shadow-none'>
           <CardHeader>
             <div className='flex items-center justify-between gap-2'>
               <div>
@@ -191,7 +191,7 @@ export function DashboardTables({
       </section>
 
       <section>
-        <Card>
+        <Card className='dashboard-card border-0 shadow-none'>
           <CardHeader>
             <div className='flex items-center justify-between gap-4'>
               <div>

@@ -30,8 +30,8 @@ function StatCard({ item }: { item: StatItem }) {
   const content = (
     <Card
       className={cn(
-        'transition-all',
-        item.href && 'hover:-translate-y-0.5 hover:shadow-md'
+        'dashboard-card border-0 shadow-none transition-all',
+        item.href && 'hover:-translate-y-0.5'
       )}
     >
       <CardContent className='flex items-start gap-4 p-5'>

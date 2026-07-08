@@ -23,7 +23,7 @@ export function VendorTopNav({ user, onOpenMobileNav }: VendorTopNavProps) {
   const isOnline = true;
 
   return (
-    <header className='border-border/60 bg-background/80 sticky top-0 z-20 shrink-0 border-b shadow-[0_1px_0_0_rgba(0,0,0,0.02)] backdrop-blur-xl'>
+    <header className='dashboard-topnav sticky top-0 z-20 shrink-0 border-b'>
       <Flex
         direction='row'
         align='center'

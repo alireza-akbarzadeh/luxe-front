@@ -70,12 +70,13 @@ export const VENDOR_NAV_GROUP_DEFS: VendorNavGroupDef[] = [
         id: 'orders',
         href: '/vendor/panel/orders',
         icon: IconShoppingBag,
-        badge: '12'
+        badge: '128'
       },
       {
         id: 'products',
         href: '/vendor/panel/products',
-        icon: IconPackage
+        icon: IconPackage,
+        badge: '542'
       },
       {
         id: 'categories',
@@ -95,18 +96,20 @@ export const VENDOR_NAV_GROUP_DEFS: VendorNavGroupDef[] = [
       {
         id: 'customers',
         href: '/vendor/panel/customers',
-        icon: IconUsers
+        icon: IconUsers,
+        badge: '1.2k'
       },
       {
         id: 'messages',
         href: '/vendor/panel/messages',
         icon: IconMessage,
-        badge: '3'
+        badge: '8'
       },
       {
         id: 'reviews',
         href: '/vendor/panel/reviews',
-        icon: IconStar
+        icon: IconStar,
+        badge: '24'
       }
     ]
   },

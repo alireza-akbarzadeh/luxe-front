@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, type Transition } from 'framer-motion';
 
+import { DashboardBrandLogo } from '@/components/dashboard/dashboard-brand-logo';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ToggleSidebarAction } from '@/domains/admin/components/toggle-sidebar-action';
@@ -10,18 +11,17 @@ import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.s
 import { useDashboardStore } from '../admin.store';
 import { AdminSidebarSkeleton } from './admin-sidebar-skeleton';
 import { SidebarNavItem } from './sidebar-nav-item';
-import { UserProfile } from './user-profile';
-import { WorkspaceSwitcher } from './workspace-switcher';
 
 interface AdminSidebarProps {
   groups: DtoMenuGroupResponse[];
   pathname: string;
   className?: string;
   isLoading?: boolean;
+  onNavigate?: () => void;
 }
 
 export function AdminSidebar(props: AdminSidebarProps) {
-  const { groups, pathname, className, isLoading = false } = props;
+  const { groups, pathname, className, isLoading = false, onNavigate } = props;
   const { isMobile } = useMediaDevices();
   const isSidebarCollapsed = useDashboardStore((store) => store.isSidebarCollapsed);
   const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
@@ -36,31 +36,33 @@ export function AdminSidebar(props: AdminSidebarProps) {
   return (
     <motion.aside
       initial={false}
-      animate={{ width: effectiveCollapsed ? 76 : 280 }}
+      animate={{ width: effectiveCollapsed ? 76 : 260 }}
       transition={springTransition}
       className={cn(
-        'bg-card/95 relative z-30 flex h-full shrink-0 flex-col border-r border-border/60',
-        'overflow-hidden select-none backdrop-blur-sm',
+        'dashboard-sidebar relative z-30 flex h-full shrink-0 flex-col border-r',
+        'overflow-hidden select-none',
         className
       )}
     >
       <div
         className={cn(
-          'flex shrink-0 items-center gap-1 p-2',
-          effectiveCollapsed ? 'flex-col' : 'justify-between'
+          'flex shrink-0 items-center gap-1 p-3',
+          effectiveCollapsed ? 'flex-col gap-2' : 'justify-between'
         )}
       >
-        <WorkspaceSwitcher isCollapsed={effectiveCollapsed} />
+        <DashboardBrandLogo
+          variant='admin'
+          collapsed={effectiveCollapsed}
+          onNavigate={onNavigate}
+        />
         <ToggleSidebarAction />
       </div>
 
-      <Separator
-        className={cn('opacity-40', effectiveCollapsed ? 'mx-auto mb-3 w-10' : 'mx-4 mb-4 w-auto')}
-      />
+      <Separator className={cn('opacity-30', effectiveCollapsed ? 'mx-auto w-10' : 'mx-3')} />
 
       <ScrollArea className='w-full flex-1' type='auto'>
         <div
-          className={cn('flex flex-col gap-6 pb-8', effectiveCollapsed ? 'items-center px-1' : 'px-2')}
+          className={cn('flex flex-col gap-5 pb-6 pt-2', effectiveCollapsed ? 'items-center px-1' : 'px-2')}
         >
           {isLoading && groups.length === 0 ? (
             <AdminSidebarSkeleton isCollapsed={effectiveCollapsed} />
@@ -74,7 +76,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -4 }}
                       transition={{ duration: 0.15 }}
-                      className='text-muted-foreground/50 mb-2 px-3 text-[10px] font-bold tracking-[0.18em] whitespace-nowrap uppercase'
+                      className='text-muted-foreground mb-1.5 px-3 text-[10px] font-bold tracking-[0.16em] whitespace-nowrap uppercase'
                     >
                       {group.name}
                     </motion.h4>
@@ -87,6 +89,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
                       item={item}
                       isCollapsed={effectiveCollapsed}
                       pathname={pathname}
+                      onNavigate={onNavigate}
                     />
                   ))}
                 </div>
@@ -95,10 +98,6 @@ export function AdminSidebar(props: AdminSidebarProps) {
           )}
         </div>
       </ScrollArea>
-
-      <div className='bg-muted/20 mt-auto flex shrink-0 flex-col gap-1 border-t border-border/60 p-2'>
-        <UserProfile variant='sidebar' isCollapsed={effectiveCollapsed} />
-      </div>
     </motion.aside>
   );
 }

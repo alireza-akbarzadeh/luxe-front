@@ -1,81 +1,97 @@
 'use client';
 
-import { IconMenu, IconSearch } from '@tabler/icons-react';
-import * as React from 'react';
+import { IconCalendar, IconChevronDown, IconMenu, IconSearch } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Flex } from '@/components/ui/flex';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import { HeaderActions } from '@/domains/admin/components/header-action';
+import { UserProfile } from '@/domains/admin/components/user-profile';
+import {
+  dashboardPeriodLabel,
+  dashboardPeriods,
+  useDashboardPeriod
+} from '@/domains/dashboard/hooks/use-dashboard-period';
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
 import { useDashboardStore } from '../admin.store';
-import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
 
 interface AppHeaderProps {
   pathname: string;
   sidebar_menu: DtoMenuGroupResponse[];
 }
 
-export function AppHeader({ pathname, sidebar_menu }: AppHeaderProps) {
-  const [isScrolled, setIsScrolled] = React.useState(false);
-
-  React.useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+export function AppHeader({ pathname: _pathname, sidebar_menu: _sidebarMenu }: AppHeaderProps) {
+  const [period, setPeriod] = useDashboardPeriod();
   const setMobileSidebarOpen = useDashboardStore((state) => state.setMobileSidebarOpen);
   const setSearchOpen = useDashboardStore((state) => state.setSearchOpen);
 
   return (
-    <header
-      className={cn(
-        'border-border/60 sticky top-0 z-20 flex h-[70px] shrink-0 items-center gap-3 border-b px-3 transition-all duration-300 md:gap-4 md:px-5',
-        isScrolled
-          ? 'bg-card/85 supports-[backdrop-filter]:bg-card/70 shadow-sm backdrop-blur-xl'
-          : 'bg-card/95'
-      )}
-    >
+    <header className='dashboard-topnav sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b px-3 md:h-16 md:gap-3 md:px-4'>
       <Button
         variant='ghost'
         size='icon'
-        className='hover:bg-accent/60 h-10 w-10 rounded-xl md:hidden'
+        className='h-9 w-9 rounded-xl md:hidden'
         aria-label='Open navigation menu'
         onClick={() => setMobileSidebarOpen(true)}
       >
         <IconMenu className='h-5 w-5' />
       </Button>
 
-      <div className='hidden items-center gap-2 lg:flex'>
-        <ThemeToggle />
-        <div className='bg-border/50 hidden h-5 w-px sm:block' />
-      </div>
+      <Flex grow className='min-w-0'>
+        <button
+          type='button'
+          onClick={() => setSearchOpen(true)}
+          className={cn(
+            'dashboard-search flex h-9 w-full items-center gap-2 px-3 text-sm transition-colors',
+            'focus-visible:ring-emerald-500/40 focus-visible:ring-2 focus-visible:outline-none md:max-w-xl'
+          )}
+        >
+          <IconSearch className='size-4 shrink-0' />
+          <span className='truncate'>Search orders, products, customers…</span>
+          <kbd className='bg-background/60 text-muted-foreground ms-auto hidden rounded-md border px-1.5 py-0.5 text-[10px] font-medium md:inline'>
+            ⌘K
+          </kbd>
+        </button>
+      </Flex>
 
-      <DashboardBreadcrumbs sidebar_menu={sidebar_menu} pathname={pathname} />
-
-      <div className='flex min-w-0 flex-1 items-center justify-end gap-3'>
-        <div className='hidden max-w-sm flex-1 md:block lg:max-w-md'>
-          <Button
-            variant='outline'
-            className={cn(
-              'text-muted-foreground group relative h-10 w-full justify-start rounded-xl text-sm',
-              'bg-muted/30 hover:bg-muted/50 border-border/40 border shadow-none'
-            )}
-            onClick={() => setSearchOpen(true)}
-          >
-            <IconSearch className='group-hover:text-primary mr-2 h-4 w-4 shrink-0 transition-colors' />
-            <span className='hidden font-medium lg:inline'>Search commands…</span>
-            <span className='lg:hidden'>Search…</span>
-            <kbd className='bg-background text-muted-foreground pointer-events-none absolute top-1/2 right-2 hidden h-6 -translate-y-1/2 items-center gap-0.5 rounded-md border px-1.5 font-mono text-[10px] font-semibold sm:inline-flex'>
-              <span>⌘</span>K
-            </kbd>
-          </Button>
-        </div>
+      <Flex direction='row' align='center' spacing={2} shrink className='ms-auto'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              size='sm'
+              variant='outline'
+              className='hidden h-9 gap-1 rounded-xl border-white/10 bg-transparent sm:inline-flex'
+            >
+              <IconCalendar className='size-4 shrink-0' />
+              <span className='hidden md:inline'>{dashboardPeriodLabel(period)}</span>
+              <IconChevronDown className='size-3 shrink-0 opacity-60' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-44'>
+            {dashboardPeriods.map((option) => (
+              <DropdownMenuItem key={option} onClick={() => setPeriod(option)}>
+                {dashboardPeriodLabel(option)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <HeaderActions />
-      </div>
+
+        <div className='dashboard-icon-cluster hidden items-center gap-0.5 p-0.5 sm:flex'>
+          <ThemeToggle variant='ghost' className='h-8 w-8 rounded-lg' />
+        </div>
+
+        <UserProfile variant='header' />
+      </Flex>
     </header>
   );
 }

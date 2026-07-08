@@ -69,7 +69,7 @@ export function DashboardCharts({
 
   return (
     <section className='grid gap-4 lg:grid-cols-3'>
-      <Card className='lg:col-span-2'>
+      <Card className='dashboard-card border-0 shadow-none lg:col-span-2'>
         <CardHeader>
           <CardTitle>Revenue & orders</CardTitle>
           <CardDescription>Daily performance for the selected period</CardDescription>
@@ -117,7 +117,7 @@ export function DashboardCharts({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='dashboard-card border-0 shadow-none'>
         <CardHeader>
           <CardTitle>Orders by status</CardTitle>
           <CardDescription>

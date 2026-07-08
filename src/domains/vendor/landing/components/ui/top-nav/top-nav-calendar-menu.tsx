@@ -23,9 +23,9 @@ export function TopNavCalendarMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size='sm' variant='outline' className='hidden h-9 gap-1 rounded-xl sm:inline-flex'>
+        <Button size='sm' variant='outline' className='hidden h-9 gap-1 rounded-xl border-white/10 bg-transparent sm:inline-flex'>
           <IconCalendar className='size-4 shrink-0' />
-          <span className='hidden md:inline'>Calendar</span>
+          <span className='hidden md:inline'>Last 30 days</span>
           <IconChevronDown className='ml-1 size-3 shrink-0 opacity-60' />
         </Button>
       </DropdownMenuTrigger>

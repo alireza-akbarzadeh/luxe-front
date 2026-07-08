@@ -36,7 +36,7 @@ export function TopNavQuickActions() {
       <DropdownMenuTrigger asChild>
         <Button
           size='sm'
-          className='bg-gold hover:bg-gold/90 text-gold-foreground hidden h-9 gap-1 rounded-xl shadow-sm sm:inline-flex'
+          className='dashboard-quick-action hidden h-9 gap-1.5 rounded-xl px-3 font-medium sm:inline-flex'
         >
           <IconPlus className='size-4 shrink-0' />
           <span className='hidden md:inline'>{t('quickActions')}</span>

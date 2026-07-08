@@ -26,12 +26,12 @@ export function VendorPanelShell({ children, user }: VendorPanelShellProps) {
   return (
     <RealtimeProvider>
       <VendorRealtimeSync user={user} />
-      <div className='bg-background flex h-screen w-full overflow-hidden'>
+      <div className='dashboard-shell flex h-screen w-full overflow-hidden'>
         <VendorStoresHydrator />
         <VendorSidebar className='hidden md:flex' />
 
         <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
-          <SheetContent side='left' className='w-[272px] border-none p-0'>
+          <SheetContent side='left' className='dashboard-shell w-[272px] border-none p-0'>
             <VendorSidebar onNavigate={() => setMobileSidebarOpen(false)} />
           </SheetContent>
         </Sheet>
@@ -39,7 +39,7 @@ export function VendorPanelShell({ children, user }: VendorPanelShellProps) {
         <div className='flex min-w-0 flex-1 flex-col overflow-hidden'>
           <VendorTopNav user={user} onOpenMobileNav={() => setMobileSidebarOpen(true)} />
 
-          <div className='border-border/40 bg-muted/20 hidden border-b px-4 py-2 md:block lg:px-6'>
+          <div className='hidden border-b border-white/8 px-4 py-2 md:block lg:px-6'>
             <p className='text-muted-foreground text-xs'>
               Managing <span className='text-foreground font-medium'>{activeStoreName}</span>
             </p>

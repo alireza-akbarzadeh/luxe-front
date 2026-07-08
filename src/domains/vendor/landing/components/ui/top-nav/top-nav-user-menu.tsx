@@ -51,7 +51,7 @@ export function TopNavUserMenu({ user, isOnline }: TopNavUserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='sm' className='hover:bg-muted/60 h-9 max-w-[9.5rem] gap-2 rounded-xl px-2'>
+        <Button variant='ghost' size='sm' className='hover:bg-white/5 h-9 max-w-[11rem] gap-2 rounded-xl px-2'>
           <span className='relative size-7 shrink-0'>
             <AppImage
               src={avatarUrl}
@@ -76,6 +76,7 @@ export function TopNavUserMenu({ user, isOnline }: TopNavUserMenuProps) {
           <span className='hidden min-w-0 truncate text-sm font-medium md:inline'>
             {user.first_name}
           </span>
+          <span className='text-muted-foreground hidden text-[11px] md:inline'>Vendor</span>
           <IconChevronDown className='hidden size-3.5 shrink-0 opacity-60 md:inline' />
         </Button>
       </DropdownMenuTrigger>

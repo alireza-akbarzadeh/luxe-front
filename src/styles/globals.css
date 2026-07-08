@@ -530,3 +530,128 @@ html[dir='rtl'] .brands-marquee-track {
     animation: none;
   }
 }
+
+/* ── Dashboard shell (admin + vendor panel) — dark analytics UI ── */
+.dashboard-shell {
+  --background: #070809;
+  --foreground: #f3f4f6;
+  --card: #111317;
+  --card-foreground: #f3f4f6;
+  --popover: #151820;
+  --popover-foreground: #f3f4f6;
+  --primary: #f3f4f6;
+  --primary-foreground: #070809;
+  --secondary: #1a1d24;
+  --secondary-foreground: #f3f4f6;
+  --muted: #1a1d24;
+  --muted-foreground: #8b919a;
+  --accent: #10b981;
+  --accent-foreground: #ecfdf5;
+  --border: rgb(255 255 255 / 8%);
+  --input: rgb(255 255 255 / 10%);
+  --ring: #10b981;
+  --gold: #d4af37;
+  --gold-strong: #b8941f;
+  --dashboard-teal: #10b981;
+  --dashboard-sidebar: #0c0d10;
+  --dashboard-nav-active-bg: rgb(16 185 129 / 12%);
+  --dashboard-nav-active-text: #34d399;
+  --chart-1: #10b981;
+  --chart-2: #3b82f6;
+  --chart-3: #a855f7;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dashboard-shell .dashboard-sidebar {
+  background: var(--dashboard-sidebar);
+  border-color: var(--border);
+}
+
+.dashboard-shell .dashboard-topnav {
+  background: rgb(7 8 9 / 92%);
+  border-color: var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.dashboard-shell .dashboard-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+  padding: 1.25rem;
+}
+
+.dashboard-shell .dashboard-kpi-card {
+  min-height: 9.5rem;
+}
+
+.dashboard-shell .dashboard-nav-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.dashboard-shell .dashboard-nav-item:hover {
+  background: rgb(255 255 255 / 4%);
+  color: var(--foreground);
+}
+
+.dashboard-shell .dashboard-nav-item-active {
+  background: var(--dashboard-nav-active-bg);
+  color: var(--dashboard-nav-active-text);
+}
+
+.dashboard-shell .dashboard-nav-item-active:hover {
+  background: var(--dashboard-nav-active-bg);
+  color: var(--dashboard-nav-active-text);
+}
+
+.dashboard-shell .dashboard-nav-badge {
+  margin-left: auto;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 6%);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.dashboard-shell .dashboard-search {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 3%);
+  color: var(--muted-foreground);
+}
+
+.dashboard-shell .dashboard-search:hover {
+  border-color: rgb(255 255 255 / 14%);
+  background: rgb(255 255 255 / 5%);
+}
+
+.dashboard-shell .dashboard-quick-action {
+  border-radius: 0.75rem;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.dashboard-shell .dashboard-quick-action:hover {
+  background: color-mix(in oklab, var(--foreground) 92%, transparent);
+}
+
+.dashboard-shell .dashboard-icon-cluster {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 3%);
+}

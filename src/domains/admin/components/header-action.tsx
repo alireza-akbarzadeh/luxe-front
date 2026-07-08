@@ -14,15 +14,15 @@ import { NotificationCenter } from '@/domains/admin/components/notification-cent
 
 export function HeaderActions() {
   return (
-    <div className='ml-auto flex items-center gap-1.5'>
+    <div className='flex items-center gap-1.5'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant='ghost'
-            className='hover:bg-primary/10 hover:text-primary hidden h-9 gap-2 rounded-xl px-3 transition-all sm:flex'
+            size='sm'
+            className='dashboard-quick-action hidden h-9 gap-1.5 rounded-xl px-3 font-medium sm:inline-flex'
           >
             <IconPlus className='h-4 w-4' />
-            <span className='text-xs font-bold tracking-wider uppercase'>Create</span>
+            <span className='hidden md:inline'>Quick actions</span>
           </Button>
         </DropdownMenuTrigger>
 

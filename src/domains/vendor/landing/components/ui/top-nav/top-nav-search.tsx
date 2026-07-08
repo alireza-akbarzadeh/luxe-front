@@ -17,7 +17,7 @@ export function TopNavSearch({ onOpen }: TopNavSearchProps) {
       <button
         type='button'
         onClick={onOpen}
-        className='border-border/60 bg-muted/30 text-muted-foreground hover:border-border hover:bg-muted/50 focus-visible:ring-gold/40 flex h-9 w-full items-center gap-2 rounded-xl border px-3 text-sm transition-colors duration-150 focus-visible:ring-2 focus-visible:outline-none md:max-w-md'
+        className='dashboard-search flex h-9 w-full items-center gap-2 px-3 text-sm transition-colors focus-visible:ring-emerald-500/40 focus-visible:ring-2 focus-visible:outline-none md:max-w-xl'
         aria-label={t('openSearch')}
       >
         <IconSearch className='size-4 shrink-0' />

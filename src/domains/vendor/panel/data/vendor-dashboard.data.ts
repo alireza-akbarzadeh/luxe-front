@@ -5,6 +5,12 @@ export const VENDOR_STORES = [
 ] as const;
 
 export const VENDOR_DASHBOARD_STATS = {
+  totalRevenue: 128490,
+  totalRevenueChange: 18.2,
+  netProfit: 42340,
+  netProfitChange: 21.6,
+  orders: 1248,
+  ordersChange: 15.7,
   todayRevenue: 2840,
   todayRevenueChange: 12.4,
   monthlyRevenue: 48290,
@@ -12,22 +18,68 @@ export const VENDOR_DASHBOARD_STATS = {
   ordersToday: 34,
   ordersTodayChange: 8.1,
   pendingOrders: 12,
-  products: 342,
+  products: 542,
   lowStock: 7,
-  visitors: 4821,
-  visitorsChange: 5.6,
-  conversionRate: 3.8,
-  conversionChange: 0.4,
+  visitors: 28542,
+  visitorsChange: 12.5,
+  conversionRate: 3.87,
+  conversionChange: 9.1,
   averageOrderValue: 76.4,
   aovChange: 2.1,
   refundRequests: 3,
-  unreadMessages: 3,
-  recentReviews: 5,
+  unreadMessages: 8,
+  recentReviews: 24,
   newCustomers: 28,
   pendingPayout: 12840,
-  storeRating: 4.9,
-  storeHealth: 92
+  storeRating: 4.8,
+  storeHealth: 85,
+  repeatCustomerRate: 42.6
 } as const;
+
+export const VENDOR_SALES_CHANNELS = [
+  { channel: 'Direct', percent: 32, revenue: 31680, color: '#10b981' },
+  { channel: 'Organic Search', percent: 28, revenue: 28420, color: '#3b82f6' },
+  { channel: 'Social Media', percent: 19, revenue: 18932, color: '#a855f7' },
+  { channel: 'Referral', percent: 13, revenue: 12640, color: '#f59e0b' },
+  { channel: 'Email', percent: 8, revenue: 7430, color: '#ef4444' }
+] as const;
+
+export const VENDOR_INSIGHTS = [
+  {
+    id: '1',
+    tone: 'emerald',
+    title: 'Revenue is up 18.2%',
+    description: 'Your store earned $16,430 yesterday — best day this month.'
+  },
+  {
+    id: '2',
+    tone: 'blue',
+    title: 'Luxe Watch is trending',
+    description: 'Top seller with 124 units this week. Consider restocking.'
+  },
+  {
+    id: '3',
+    tone: 'amber',
+    title: 'Low stock alert',
+    description: 'Silk Scarf has only 12 units left in inventory.'
+  },
+  {
+    id: '4',
+    tone: 'violet',
+    title: 'High demand detected',
+    description: 'Organic search traffic increased 12.5% this period.'
+  }
+] as const;
+
+export const VENDOR_REVENUE_OVERVIEW = [
+  { date: 'Jun 1', revenue: 8200 },
+  { date: 'Jun 5', revenue: 9400 },
+  { date: 'Jun 10', revenue: 11200 },
+  { date: 'Jun 15', revenue: 13800 },
+  { date: 'Jun 21', revenue: 16430 },
+  { date: 'Jun 25', revenue: 14900 },
+  { date: 'Jun 30', revenue: 17200 }
+] as const;
 
 export const VENDOR_REVENUE_SERIES = [
   { date: 'Mon', revenue: 4200, orders: 48 },
@@ -56,11 +108,11 @@ export const VENDOR_TRAFFIC_SOURCES = [
 ] as const;
 
 export const VENDOR_TOP_PRODUCTS = [
-  { name: 'Linen Blazer', revenue: 8420, units: 124 },
+  { name: 'Luxe Watch', revenue: 8420, units: 124 },
+  { name: 'Premium Bag', revenue: 7180, units: 86 },
   { name: 'Silk Scarf', revenue: 6180, units: 206 },
   { name: 'Leather Tote', revenue: 5920, units: 74 },
-  { name: 'Cashmere Wrap', revenue: 4810, units: 96 },
-  { name: 'Ceramic Vase Set', revenue: 3240, units: 108 }
+  { name: 'Cashmere Wrap', revenue: 4810, units: 96 }
 ] as const;
 
 export const VENDOR_RECENT_ORDERS = [

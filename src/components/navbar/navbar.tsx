@@ -11,6 +11,7 @@ import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { useSearchStore } from '@/domains/search/search.store';
 import { cn } from '@/lib/utils';
+import { AppImage } from '~/src/components/ui/app-image';
 
 import { CartButton } from '../cart/cart-button';
 import { AppsButton } from './apps-button';
@@ -89,9 +90,9 @@ export function Navbar() {
             <Link
               href='/'
               aria-label='LUXE Home'
-              className='relative z-20 inline-flex min-h-11 items-center px-4 rtl:flex-row-reverse'
+              className='relative z-20 inline-flex min-h-11 items-center rtl:flex-row-reverse'
             >
-              <span className='font-display text-2xl font-semibold tracking-tight'>LUXE</span>
+              <AppImage src='/assets/logo.png' alt='LUXE' width={200} height={200} />
             </Link>
 
             <div className='hidden min-w-0 lg:block'>

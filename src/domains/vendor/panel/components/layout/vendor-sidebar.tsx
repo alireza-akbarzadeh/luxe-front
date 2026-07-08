@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { logoutAction } from '@/actions/auth.actions';
-import { Badge } from '@/components/ui/badge';
+import { DashboardBrandLogo } from '@/components/dashboard/dashboard-brand-logo';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -41,36 +41,22 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
     <TooltipProvider delayDuration={0}>
       <motion.aside
         initial={false}
-        animate={{ width: effectiveCollapsed ? 76 : 272 }}
+        animate={{ width: effectiveCollapsed ? 76 : 260 }}
         transition={springTransition}
         className={cn(
-          'bg-card/95 border-border/60 relative z-30 flex h-full shrink-0 flex-col border-r backdrop-blur-sm',
+          'dashboard-sidebar relative z-30 flex h-full shrink-0 flex-col border-r',
           className
         )}
       >
-        <div
-          className={cn(
-            'p-3',
-            effectiveCollapsed ? 'flex flex-col items-center gap-2' : 'px-4 py-3'
-          )}
-        >
-          <Link href='/vendor/panel' className='block min-w-0' onClick={onNavigate}>
-            {effectiveCollapsed ? (
-              <span className='text-gold text-lg font-bold'>L</span>
-            ) : (
-              <>
-                <p className='text-muted-foreground text-[10px] font-bold tracking-[0.18em] uppercase'>
-                  {t('brandEyebrow')}
-                </p>
-                <p className='text-foreground mt-0.5 truncate text-sm font-semibold tracking-tight'>
-                  {t('brandTitle')}
-                </p>
-              </>
-            )}
-          </Link>
+        <div className={cn('p-3', effectiveCollapsed ? 'flex justify-center' : 'px-4')}>
+          <DashboardBrandLogo
+            variant='vendor'
+            collapsed={effectiveCollapsed}
+            onNavigate={onNavigate}
+          />
         </div>
 
-        <Separator className={cn('opacity-40', effectiveCollapsed ? 'mx-auto w-10' : 'mx-3')} />
+        <Separator className={cn('opacity-30', effectiveCollapsed ? 'mx-auto w-10' : 'mx-3')} />
 
         <ScrollArea className='flex-1 py-3'>
           <div className={cn('space-y-5', effectiveCollapsed ? 'px-1.5' : 'px-2')}>
@@ -82,7 +68,7 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className='text-muted-foreground/60 mb-1.5 px-3 text-[10px] font-bold tracking-[0.16em] uppercase'
+                      className='text-muted-foreground mb-1.5 px-3 text-[10px] font-bold tracking-[0.16em] uppercase'
                     >
                       {group.label}
                     </motion.p>
@@ -104,7 +90,7 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
           </div>
         </ScrollArea>
 
-        <div className='border-border/60 space-y-1 border-t p-2'>
+        <div className='space-y-1 border-t border-white/8 p-2'>
           <VendorSidebarLink
             item={logoutItem}
             pathname={pathname}
@@ -146,19 +132,15 @@ function VendorSidebarLink({
       <item.icon className='size-4 shrink-0' aria-hidden />
       {!collapsed ? <span className='truncate'>{item.label}</span> : null}
       {!collapsed && item.badge ? (
-        <Badge variant='secondary' className='ml-auto rounded-full px-1.5 text-[10px]'>
-          {item.badge}
-        </Badge>
+        <span className='dashboard-nav-badge'>{item.badge}</span>
       ) : null}
     </>
   );
 
   const className = cn(
-    'flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors',
+    'dashboard-nav-item',
     collapsed && 'justify-center px-2',
-    isActive
-      ? 'bg-accent text-accent-foreground font-medium'
-      : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
+    isActive && 'dashboard-nav-item-active'
   );
 
   if (onLogout) {

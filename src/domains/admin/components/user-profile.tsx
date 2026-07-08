@@ -7,6 +7,7 @@ import {
 } from '@tabler/icons-react';
 
 import { AnimatePresence, motion } from '@/components/motion';
+import { AppImage } from '@/components/ui/app-image';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +35,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
   const userEmail = user?.email || 'guest@verc.com';
   const userRole = user?.role || 'USER';
   const userId = user?.id || 'GUEST';
+  const avatarUrl = `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=d4af37&textColor=ffffff`;
 
   const handleSignOut = async () => {
     clearClientAccessToken();
@@ -60,33 +62,47 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
           >
             {/* Avatar Section */}
             <div className='relative shrink-0'>
-              {/*<Image*/}
-              {/*  fill*/}
-              {/*  alt={userName}*/}
-              {/*  src={`${avatarSeed}`}*/}
-              {/*  className={cn(*/}
-              {/*    'ring-border group-hover:ring-primary/50 rounded-lg object-cover shadow-sm ring-1 transition-all',*/}
-              {/*    isHeader ? 'h-8 w-8' : 'h-9 w-9'*/}
-              {/*  )}*/}
-              {/*/>*/}
-              {/* Animated Status Indicator */}
-              <div className='absolute -right-0.5 -bottom-0.5 flex items-center justify-center'>
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0.5 }}
-                  animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeOut'
-                  }}
-                  className='absolute h-2.5 w-2.5 rounded-full bg-emerald-500'
-                />
-                <div className='border-card relative z-10 h-2.5 w-2.5 rounded-full border-2 bg-emerald-500' />
-              </div>
+              <AppImage
+                src={avatarUrl}
+                alt={userName}
+                width={isHeader ? 32 : 36}
+                height={isHeader ? 32 : 36}
+                className={cn(
+                  'ring-border/60 rounded-full object-cover ring-1',
+                  isHeader ? 'size-8' : 'size-9'
+                )}
+                unoptimized
+              />
+              {!isHeader ? (
+                <div className='absolute -right-0.5 -bottom-0.5 flex items-center justify-center'>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0.5 }}
+                    animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeOut'
+                    }}
+                    className='absolute h-2.5 w-2.5 rounded-full bg-emerald-500'
+                  />
+                  <div className='border-card relative z-10 h-2.5 w-2.5 rounded-full border-2 bg-emerald-500' />
+                </div>
+              ) : null}
             </div>
 
+            {isHeader ? (
+              <div className='hidden min-w-0 flex-col items-start text-left md:flex'>
+                <span className='truncate text-sm font-medium'>{userName}</span>
+                <span className='text-muted-foreground truncate text-[11px] capitalize'>
+                  {userRole.replace('_', ' ')}
+                </span>
+              </div>
+            ) : null}
+
+            {isHeader ? <IconChevronRight size={14} className='hidden opacity-60 md:inline' /> : null}
+
             {/* Name and Role - ONLY for Sidebar (and only if not collapsed) */}
-            {!isHeader && (
+            {!isHeader ? (
               <AnimatePresence mode='wait'>
                 {!isCollapsed && (
                   <motion.div
@@ -107,15 +123,15 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
                   </motion.div>
                 )}
               </AnimatePresence>
-            )}
+            ) : null}
 
             {/* Chevron - ONLY for Sidebar (and only if not collapsed) */}
-            {!isHeader && !isCollapsed && (
+            {!isHeader && !isCollapsed ? (
               <IconChevronRight
                 size={14}
                 className='text-muted-foreground group-hover:text-foreground transition-all group-data-[state=open]:rotate-90'
               />
-            )}
+            ) : null}
           </button>
         </DropdownMenuTrigger>
 

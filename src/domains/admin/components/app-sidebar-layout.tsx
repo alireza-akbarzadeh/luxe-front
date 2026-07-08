@@ -38,7 +38,7 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
     <RealtimeProvider>
       <AdminNotificationsSync />
       <TooltipProvider delayDuration={0}>
-        <div className='bg-background flex h-screen w-full overflow-hidden'>
+        <div className='bg-background flex h-screen w-full overflow-hidden dashboard-shell'>
           {/* Desktop Sidebar */}
           <AdminSidebar
             pathname={pathname}
@@ -49,22 +49,23 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
 
           {/* Mobile Sidebar - controlled by store */}
           <Sheet open={mobileSidebarOpen} onOpenChange={setMobileSidebarOpen}>
-            <SheetContent side='left' className='w-72 border-none p-0'>
+            <SheetContent side='left' className='dashboard-shell w-72 border-none p-0'>
               <AdminSidebar
                 pathname={pathname}
                 groups={sidebar_menu}
                 isLoading={showSidebarSkeleton}
+                onNavigate={() => setMobileSidebarOpen(false)}
               />
             </SheetContent>
           </Sheet>
 
           <div className='relative flex flex-1 flex-col overflow-hidden'>
             <AppHeader sidebar_menu={sidebar_menu} pathname={pathname} />
-            <main className='flex-1 overflow-y-auto scroll-smooth p-px'>
+            <main className='flex-1 overflow-y-auto scroll-smooth'>
               <div
                 className={cn(
-                  'bg-card min-h-full',
-                  isFullWidth ? 'max-w-none p-4' : 'w-full px-2 py-2'
+                  'min-h-full p-4 md:p-6 lg:p-8',
+                  isFullWidth ? 'max-w-none' : 'w-full'
                 )}
               >
                 {children}
