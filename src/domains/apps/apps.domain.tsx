@@ -30,7 +30,9 @@ export function AppsDomain() {
         <PlatformCardsGrid />
       </SectionShell>
 
-      <PersonalizationFeaturesSection />
+      <div className='mt-10'>
+        <PersonalizationFeaturesSection />
+      </div>
 
       <SectionShell size='md' className='mt-10'>
         <Text variant='muted' align='center'>

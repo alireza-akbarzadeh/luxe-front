@@ -114,7 +114,9 @@ const config = {
   }
 } satisfies NextConfig;
 
-export default withSentryConfig(withSerwist(withNextIntl(config)), {
+const appConfig = withSerwist(withNextIntl(config));
+
+const sentryBuildOptions = {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
@@ -150,4 +152,10 @@ export default withSentryConfig(withSerwist(withNextIntl(config)), {
       removeDebugLogging: true
     }
   }
-});
+} as const;
+
+/** Skip Sentry webpack/turbopack hooks in local dev — avoids intermittent instrumentation cache errors. */
+const enableSentryBuild =
+  process.env['NODE_ENV'] === 'production' || process.env['SENTRY_ENABLE_DEV'] === 'true';
+
+export default enableSentryBuild ? withSentryConfig(appConfig, sentryBuildOptions) : appConfig;

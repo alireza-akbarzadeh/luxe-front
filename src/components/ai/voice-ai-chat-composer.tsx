@@ -3,7 +3,7 @@
 import { IconMicrophone, IconMicrophoneOff } from '@tabler/icons-react';
 import type { ChatStatus } from 'ai';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
   PromptInput,
@@ -12,6 +12,7 @@ import {
   PromptInputActionMenu,
   PromptInputActionMenuContent,
   PromptInputActionMenuTrigger,
+  PromptInputAttachmentList,
   PromptInputBody,
   PromptInputFooter,
   type PromptInputMessage,
@@ -27,6 +28,7 @@ import { Typography } from '@/components/ui/typography';
 import { useVoiceChatInput } from '@/domains/shopping-assistant/hooks/use-voice-chat-input';
 import { cn } from '@/lib/utils';
 import { FlexVoiceStatus } from '~/src/components/ai/flex-voice-status';
+import { TooltipProvider } from '~/src/components/ui/tooltip';
 
 export type VoiceAiChatComposerProps = {
   isPending: boolean;
@@ -48,9 +50,10 @@ export function VoiceAiChatComposerInner({
 }: VoiceAiChatComposerProps) {
   const t = useTranslations('shoppingAssistant.voice');
 
-  const { textInput } = usePromptInputController();
+  const { textInput, attachments } = usePromptInputController();
   const inputStatus: ChatStatus | undefined = isPending ? 'submitted' : undefined;
-  const canSubmit = textInput.value.trim().length > 0 && !isPending;
+  const hasContent = textInput.value.trim().length > 0 || attachments.files.length > 0;
+  const canSubmit = hasContent && !isPending;
 
   const voice = useVoiceChatInput({
     value: textInput.value,
@@ -58,6 +61,12 @@ export function VoiceAiChatComposerInner({
     autoStart: autoStartVoice,
     onAutoStartConsumed
   });
+
+  const voiceRef = useRef(voice);
+
+  useEffect(() => {
+    voiceRef.current = voice;
+  }, [voice]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -69,14 +78,14 @@ export function VoiceAiChatComposerInner({
         return;
       }
       event.preventDefault();
-      voice.startHoldToTalk();
+      voiceRef.current.startHoldToTalk();
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
       if (event.code !== 'Space') {
         return;
       }
-      voice.stopHoldToTalk();
+      voiceRef.current.stopHoldToTalk();
     };
 
     window.addEventListener('keydown', onKeyDown);
@@ -85,7 +94,7 @@ export function VoiceAiChatComposerInner({
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
     };
-  }, [isPending, voice.startHoldToTalk, voice.stopHoldToTalk]);
+  }, [isPending]);
 
   return (
     <Flex direction='column' spacing={2} className={className}>
@@ -99,7 +108,14 @@ export function VoiceAiChatComposerInner({
         </Typography.Muted>
       ) : null}
 
-      <PromptInput className='rounded-2xl' onSubmit={onSubmit} globalDrop multiple>
+      <PromptInput
+        className='rounded-2xl'
+        onSubmit={onSubmit}
+        globalDrop
+        multiple
+        accept='image/*,application/pdf,text/*'
+      >
+        <PromptInputAttachmentList />
         <PromptInputBody>
           <PromptInputTextarea
             className='max-h-28 min-h-12'
@@ -111,10 +127,10 @@ export function VoiceAiChatComposerInner({
         <PromptInputFooter className='justify-between gap-2 ps-2 pe-2 pb-2'>
           <PromptInputTools className='gap-0'>
             <PromptInputActionMenu>
-              <PromptInputActionMenuTrigger />
+              <PromptInputActionMenuTrigger tooltip={t('addMenu')} />
               <PromptInputActionMenuContent>
-                <PromptInputActionAddAttachments />
-                <PromptInputActionAddScreenshot />
+                <PromptInputActionAddAttachments label={t('addFiles')} />
+                <PromptInputActionAddScreenshot label={t('addScreenshot')} />
               </PromptInputActionMenuContent>
             </PromptInputActionMenu>
             {voice.isSupported ? (
@@ -163,7 +179,9 @@ export function VoiceAiChatComposerInner({
 export function VoiceAiChatComposer(props: VoiceAiChatComposerProps) {
   return (
     <PromptInputProvider>
-      <VoiceAiChatComposerInner {...props} />
+      <TooltipProvider>
+        <VoiceAiChatComposerInner {...props} />
+      </TooltipProvider>
     </PromptInputProvider>
   );
 }

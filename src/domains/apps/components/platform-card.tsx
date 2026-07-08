@@ -20,6 +20,7 @@ interface PlatformCardProps {
   href?: string;
   onAction?: () => void;
   helperText?: string;
+  className?: string;
 }
 
 export function PlatformCard({
@@ -32,7 +33,8 @@ export function PlatformCard({
   actionLabel,
   href,
   onAction,
-  helperText
+  helperText,
+  className
 }: PlatformCardProps) {
   const actionButton = actionLabel ? (
     href ? (
@@ -58,12 +60,10 @@ export function PlatformCard({
       direction='column'
       gap={4}
       className={cn(
-        'bg-card relative z-10 rounded-2xl border p-6 shadow-xs transition-colors',
-        recommended && 'shadow-md'
+        'bg-card/90 border-border/50 relative z-10 rounded-2xl border p-5 shadow-xs transition-colors sm:p-6',
+        recommended && 'border-accent/35 bg-accent/5 shadow-sm',
+        className
       )}
-      style={{
-        borderColor: recommended ? 'color-mix(in oklab, var(--accent) 55%, transparent)' : undefined
-      }}
     >
       <Flex align='start' justify='between' gap={3}>
         <Flex
@@ -86,14 +86,16 @@ export function PlatformCard({
         ) : null}
       </Flex>
 
-      <Flex direction='column' gap={1.5}>
-        <Text variant='large' className='text-foreground'>
+      <Flex direction='column' gap={1.5} className='flex-1'>
+        <Text variant='large' className='text-foreground leading-snug'>
           {title}
         </Text>
-        <Text variant='muted'>{description}</Text>
+        <Text variant='muted' className='text-sm leading-relaxed'>
+          {description}
+        </Text>
       </Flex>
 
-      {actionButton}
+      {actionButton ? <div className='mt-auto pt-1'>{actionButton}</div> : null}
 
       {helperText ? (
         <Text variant='subtle' className='text-muted-foreground'>

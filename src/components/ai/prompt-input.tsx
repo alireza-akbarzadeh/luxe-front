@@ -35,6 +35,13 @@ import {
 } from 'react';
 
 import {
+  Attachment,
+  AttachmentInfo,
+  AttachmentPreview,
+  AttachmentRemove,
+  Attachments
+} from '@/components/ai/attachments';
+import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -238,6 +245,7 @@ export const PromptInputProvider = ({
   // ----- attachments state (global when wrapped)
   const [attachmentFiles, setAttachmentFiles] = useState<(FileUIPart & { id: string })[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const registeredInputRef = useRef<RefObject<HTMLInputElement | null> | null>(null);
   // oxlint-disable-next-line eslint(no-empty-function)
   const openRef = useRef<() => void>(() => {});
 
@@ -300,7 +308,11 @@ export const PromptInputProvider = ({
   );
 
   const openFileDialog = useCallback(() => {
-    openRef.current?.();
+    if (openRef.current) {
+      openRef.current();
+      return;
+    }
+    registeredInputRef.current?.current?.click();
   }, []);
 
   const attachments = useMemo<AttachmentsContext>(
@@ -317,6 +329,7 @@ export const PromptInputProvider = ({
 
   const __registerFileInput = useCallback(
     (ref: RefObject<HTMLInputElement | null>, open: () => void) => {
+      registeredInputRef.current = ref;
       fileInputRef.current = ref.current;
       openRef.current = open;
     },
@@ -676,7 +689,8 @@ export const PromptInput = ({
     if (!usingProvider) {
       return;
     }
-    controller.__registerFileInput(inputRef, () => inputRef.current?.click());
+    const open = () => inputRef.current?.click();
+    controller.__registerFileInput(inputRef, open);
   }, [usingProvider, controller]);
 
   // Note: File input cannot be programmatically set for security reasons
@@ -1088,8 +1102,8 @@ export const PromptInputButton = forwardRef<
 PromptInputButton.displayName = 'PromptInputButton';
 
 export type PromptInputActionMenuProps = ComponentProps<typeof DropdownMenu>;
-export const PromptInputActionMenu = (props: PromptInputActionMenuProps) => (
-  <DropdownMenu {...props} />
+export const PromptInputActionMenu = ({ modal = false, ...props }: PromptInputActionMenuProps) => (
+  <DropdownMenu modal={modal} {...props} />
 );
 
 export type PromptInputActionMenuTriggerProps = PromptInputButtonProps;
@@ -1100,18 +1114,47 @@ export const PromptInputActionMenuTrigger = ({
   ...props
 }: PromptInputActionMenuTriggerProps) => (
   <DropdownMenuTrigger asChild>
-    <PromptInputButton className={className} {...props}>
+    <PromptInputButton className={className} aria-label='Add attachments' {...props}>
       {children ?? <IconPlus className='size-4' />}
     </PromptInputButton>
   </DropdownMenuTrigger>
 );
+
+/** Inline attachment chips above the textarea. */
+export const PromptInputAttachmentList = ({ className }: { className?: string }) => {
+  const attachments = usePromptInputAttachments();
+
+  if (attachments.files.length === 0) {
+    return null;
+  }
+
+  return (
+    <PromptInputHeader className={className}>
+      <Attachments variant='inline'>
+        {attachments.files.map((file) => (
+          <Attachment
+            key={file.id}
+            data={file}
+            onRemove={() => {
+              attachments.remove(file.id);
+            }}
+          >
+            <AttachmentPreview />
+            <AttachmentInfo />
+            <AttachmentRemove />
+          </Attachment>
+        ))}
+      </Attachments>
+    </PromptInputHeader>
+  );
+};
 
 export type PromptInputActionMenuContentProps = ComponentProps<typeof DropdownMenuContent>;
 export const PromptInputActionMenuContent = ({
   className,
   ...props
 }: PromptInputActionMenuContentProps) => (
-  <DropdownMenuContent align='start' className={cn(className)} {...props} />
+  <DropdownMenuContent align='start' className={cn('z-[110]', className)} {...props} />
 );
 
 export type PromptInputActionMenuItemProps = ComponentProps<typeof DropdownMenuItem>;

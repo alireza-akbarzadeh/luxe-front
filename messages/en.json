@@ -1384,6 +1384,10 @@
       "socialProof": "Trusted by {count, number}+ shoppers",
       "shopNewArrivals": "Shop new arrivals",
       "exploreCollections": "Explore collections",
+      "trust": {
+        "shipping": "Complimentary worldwide shipping",
+        "authenticity": "Authenticity guaranteed"
+      },
       "statsFootnote": "Marketplace highlights · updated seasonally",
       "editorsPick": "Editor's pick",
       "signatureEditFallback": "The Signature Edit",
@@ -1395,6 +1399,12 @@
         "brands": "Designer brands",
         "countries": "Countries shipped"
       }
+    },
+    "experienceScroll": {
+      "titleLine1": "One destination for",
+      "titleLine2": "curated luxury",
+      "description": "Independent stores, editorial collections, and seamless checkout — designed for how you actually shop.",
+      "imageAlt": "Curated luxury boutique interior"
     },
     "brands": {
       "eyebrow": "Featured brands",
@@ -2260,7 +2270,42 @@
       "stopListening": "Stop voice input",
       "unsupported": "Voice isn't supported here — type your message instead.",
       "permissionDenied": "Microphone blocked. Allow access in browser settings, or type your message.",
-      "keyboardHint": "Hold Space anywhere on the page for hold-to-talk"
+      "keyboardHint": "Hold Space anywhere on the page for hold-to-talk",
+      "addMenu": "Add attachments",
+      "addFiles": "Add photos or files",
+      "addScreenshot": "Take screenshot",
+      "attachmentsPending": "Attachments saved locally",
+      "attachmentsPendingHint": "The assistant is text-only for now — add details in your message."
+    }
+  },
+  "vendorAssistant": {
+    "fab": "Ask Luxe Vendor AI",
+    "title": "Vendor assistant",
+    "subtitle": "Selling guidance, dashboard insights, and next steps",
+    "assistant": "Luxe Vendor AI",
+    "welcomeLanding": "Hi! I can help you understand fees, getting started on Luxe, and what the vendor dashboard offers.",
+    "welcomePanel": "Hi! Ask about today's priorities, pricing, inventory, sales, or customers — I'll pull insights from your active store.",
+    "thinking": "Checking your store…",
+    "quickPrompts": "Try asking",
+    "placeholder": "e.g. What should I focus on today? or How do commissions work?",
+    "footer": "Insights use your store data when you're signed in to the vendor panel.",
+    "offline": "Vendor AI is temporarily unavailable. Try again shortly or open the relevant panel section.",
+    "noActiveStore": "Select an active store first, then ask again for store-specific insights.",
+    "promptStartSelling": "How do I start selling?",
+    "promptFees": "What are the fees?",
+    "promptDashboard": "Show me the dashboard",
+    "promptContact": "Talk to our team",
+    "promptPriorities": "What should I focus on today?",
+    "promptPricing": "Pricing recommendations",
+    "promptInventory": "Inventory forecast",
+    "promptSales": "How are sales trending?",
+    "promptAnalytics": "Open analytics",
+    "landingResponses": {
+      "fees": "Luxe offers transparent commission tiers on the pricing section of this page — no hidden listing fees. Scroll to Pricing or open Apply to see the plan that fits your catalog size.",
+      "startSelling": "Create your seller application, connect your catalog, and go live after a quick review. Start at Apply — most brands are onboarded within a few business days.",
+      "dashboard": "The vendor dashboard brings orders, inventory, analytics, and payouts into one place. Scroll to the dashboard preview on this page or sign in if you already sell on Luxe.",
+      "contact": "Our partnerships team can walk you through onboarding and integrations. Visit Contact to schedule a demo or ask about enterprise selling.",
+      "default": "I can help with fees, getting started, the vendor dashboard, or connecting you with our team. Try a quick prompt below or ask in your own words."
     }
   },
   "voiceShoppingPage": {

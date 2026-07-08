@@ -34,7 +34,7 @@ function MobileDeferredSection({ children }: { children: ReactNode }) {
   return <div className='home-defer-mobile'>{children}</div>;
 }
 
-/** Commerce-first section order — shop intent before long marketing scroll. */
+/** Curated section order — brand story and social proof before long carousel tail. */
 export function HomeSections() {
   return (
     <>
@@ -45,14 +45,12 @@ export function HomeSections() {
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={null}>
-          <PersonalizationDiscoverySection />
-        </SectionBoundary>
+        <MarketplaceShowcaseSection />
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
-          <RecentlyViewedHomeSection />
+        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+          <FeaturedProducts />
         </SectionBoundary>
       </MobileDeferredSection>
 
@@ -63,8 +61,8 @@ export function HomeSections() {
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
-          <FeaturedProducts />
+        <SectionBoundary fallback={null}>
+          <PersonalizationDiscoverySection />
         </SectionBoundary>
       </MobileDeferredSection>
 
@@ -111,28 +109,34 @@ export function HomeSections() {
       </MobileDeferredSection>
 
       <MobileDeferredSection>
+        <TestimonialsSection />
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <StatsSection />
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <FinalCtaSection />
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
+          <RecentlyViewedHomeSection />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
         <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
           <CategoriesSection />
         </SectionBoundary>
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <MarketplaceShowcaseSection />
-      </MobileDeferredSection>
-      <MobileDeferredSection>
-        <TestimonialsSection />
-      </MobileDeferredSection>
-      <MobileDeferredSection>
-        <FinalCtaSection />
-      </MobileDeferredSection>
-      <MobileDeferredSection>
         <HowItWorksSection />
       </MobileDeferredSection>
       <MobileDeferredSection>
         <FeaturesSection />
-      </MobileDeferredSection>
-      <MobileDeferredSection>
-        <StatsSection />
       </MobileDeferredSection>
       <MobileDeferredSection>
         <FaqSection />

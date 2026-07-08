@@ -18,6 +18,7 @@
     "postinstall": "node scripts/playwright-install.mjs",
     "start": "next start",
     "dev": "next dev",
+    "dev:clean": "rm -rf .next && next dev",
     "build": "node scripts/prebuild.mjs && next build",
     "preview": "next start",
     "typecheck": "tsc --noEmit",

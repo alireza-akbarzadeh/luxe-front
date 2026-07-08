@@ -1,5 +1,5 @@
-import { HeroSection } from '~/src/domains/home/components/hero-section';
-import { HeroMobile } from '~/src/domains/home/components/ui/hero-mobile';
+import { HeroSection } from '@/domains/home/components/hero-section';
+import { HeroMobile } from '@/domains/home/components/ui/hero-mobile';
 
 /**
  * Responsive hero — CSS breakpoints (md) instead of client JS so HeroSection

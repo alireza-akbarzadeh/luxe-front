@@ -12,36 +12,38 @@ import {
 } from '@/components/ai/conversation';
 import { type PromptInputMessage } from '@/components/ai/prompt-input';
 import { Suggestion, Suggestions } from '@/components/ai/suggestion';
+import { VoiceAiChatComposer } from '@/components/ai/voice-ai-chat-composer';
 import { Flex } from '@/components/ui/flex';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Typography } from '@/components/ui/typography';
-import { VoiceAiChatComposer } from '~/src/components/ai/voice-ai-chat-composer';
 
-import { useShoppingAssistantConversation } from '../hooks/use-shopping-assistant-conversation';
-import { useShoppingAssistantStore } from '../store/shopping-assistant.store';
-import { AssistantAvatar, ShoppingAssistantChatBubble } from './shopping-assistant-chat-bubble';
+import { useVendorAssistantConversation } from '../hooks/use-vendor-assistant-conversation';
+import { useVendorAssistantStore } from '../store/vendor-assistant.store';
+import type { VendorAssistantVariant } from '../types/vendor-assistant.types';
+import { AssistantAvatar, VendorAssistantChatBubble } from './vendor-assistant-chat-bubble';
 
-interface ShoppingAssistantSheetProps {
+interface VendorAssistantSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  variant: VendorAssistantVariant;
 }
 
-export function ShoppingAssistantSheet({ open, onOpenChange }: ShoppingAssistantSheetProps) {
+export function VendorAssistantSheet({ open, onOpenChange, variant }: VendorAssistantSheetProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side='right' className='flex w-full flex-col gap-0 p-0 sm:max-w-md'>
-        {open ? <ShoppingAssistantPanel key={open ? 'open' : 'closed'} /> : null}
+        {open ? <VendorAssistantPanel key={`${variant}-${open}`} variant={variant} /> : null}
       </SheetContent>
     </Sheet>
   );
 }
 
-function ShoppingAssistantPanel() {
-  const t = useTranslations('shoppingAssistant');
+function VendorAssistantPanel({ variant }: { variant: VendorAssistantVariant }) {
+  const t = useTranslations('vendorAssistant');
   const tVoice = useTranslations('shoppingAssistant.voice');
-  const closeAssistant = useShoppingAssistantStore((s) => s.close);
+  const closeAssistant = useVendorAssistantStore((s) => s.close);
   const { messages, isPending, chipPrompts, chipLabel, handleSend, handleSuggestionClick } =
-    useShoppingAssistantConversation({ onNavigateAway: closeAssistant });
+    useVendorAssistantConversation({ variant, onNavigateAway: closeAssistant });
 
   const handlePromptSubmit = async ({ text, files }: PromptInputMessage) => {
     const trimmed = text.trim();
@@ -73,7 +75,7 @@ function ShoppingAssistantPanel() {
       <Conversation className='min-h-0 flex-1'>
         <ConversationContent className='gap-0 px-4 py-4'>
           {messages.map((message) => (
-            <ShoppingAssistantChatBubble key={message.id} message={message} />
+            <VendorAssistantChatBubble key={message.id} message={message} />
           ))}
           {isPending ? <AiThinkingRow avatar={<AssistantAvatar />} label={t('thinking')} /> : null}
 

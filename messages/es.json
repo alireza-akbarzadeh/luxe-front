@@ -1384,6 +1384,10 @@
       "socialProof": "Con la confianza de más de {count, number} compradores",
       "shopNewArrivals": "Ver novedades",
       "exploreCollections": "Explorar colecciones",
+      "trust": {
+        "shipping": "Envío gratuito a todo el mundo",
+        "authenticity": "Autenticidad garantizada"
+      },
       "statsFootnote": "Destacados del marketplace · actualizados cada temporada",
       "editorsPick": "Selección del editor",
       "signatureEditFallback": "La edición signature",
@@ -1395,6 +1399,12 @@
         "brands": "Marcas de diseño",
         "countries": "Países con envío"
       }
+    },
+    "experienceScroll": {
+      "titleLine1": "Un destino para",
+      "titleLine2": "lujo curado",
+      "description": "Tiendas independientes, colecciones editoriales y checkout fluido — diseñado para cómo compras de verdad.",
+      "imageAlt": "Interior de boutique de lujo curada"
     },
     "brands": {
       "eyebrow": "Marcas destacadas",
@@ -2260,7 +2270,42 @@
       "stopListening": "Detener entrada por voz",
       "unsupported": "La entrada por voz no es compatible con este navegador — puedes escribir.",
       "permissionDenied": "Se denegó el micrófono. Permítelo en la configuración del navegador o escribe tu mensaje.",
-      "keyboardHint": "Consejo: mantén Espacio en cualquier parte de la página para hablar"
+      "keyboardHint": "Consejo: mantén Espacio en cualquier parte de la página para hablar",
+      "addMenu": "Añadir adjuntos",
+      "addFiles": "Añadir fotos o archivos",
+      "addScreenshot": "Capturar pantalla",
+      "attachmentsPending": "Adjuntos guardados localmente",
+      "attachmentsPendingHint": "El asistente solo acepta texto por ahora — describe los detalles en tu mensaje."
+    }
+  },
+  "vendorAssistant": {
+    "fab": "Pregunta a Luxe Vendor AI",
+    "title": "Asistente para vendedores",
+    "subtitle": "Guía de venta, insights del panel y próximos pasos",
+    "assistant": "Luxe Vendor AI",
+    "welcomeLanding": "¡Hola! Puedo ayudarte con comisiones, cómo empezar en Luxe y qué ofrece el panel de vendedor.",
+    "welcomePanel": "¡Hola! Pregunta por prioridades, precios, inventario, ventas o clientes — usaré datos de tu tienda activa.",
+    "thinking": "Revisando tu tienda…",
+    "quickPrompts": "Prueba preguntar",
+    "placeholder": "p. ej. ¿En qué debo enfocarme hoy? o ¿Cómo funcionan las comisiones?",
+    "footer": "Los insights usan los datos de tu tienda cuando inicias sesión en el panel.",
+    "offline": "La IA de vendedor no está disponible ahora. Inténtalo de nuevo en un momento.",
+    "noActiveStore": "Selecciona primero una tienda activa y vuelve a preguntar.",
+    "promptStartSelling": "¿Cómo empiezo a vender?",
+    "promptFees": "¿Cuáles son las comisiones?",
+    "promptDashboard": "Muéstrame el panel",
+    "promptContact": "Hablar con el equipo",
+    "promptPriorities": "¿En qué debo enfocarme hoy?",
+    "promptPricing": "Recomendaciones de precios",
+    "promptInventory": "Pronóstico de inventario",
+    "promptSales": "¿Cómo van las ventas?",
+    "promptAnalytics": "Abrir analíticas",
+    "landingResponses": {
+      "fees": "Luxe tiene planes de comisión transparentes en la sección de precios — sin tarifas ocultas. Ve a Precios o solicita vender.",
+      "startSelling": "Crea tu solicitud, conecta el catálogo y publica tras una revisión rápida. Empieza en Solicitar vender.",
+      "dashboard": "El panel reúne pedidos, inventario, analíticas y pagos. Mira la vista previa aquí o inicia sesión si ya vendes.",
+      "contact": "Nuestro equipo de partnerships puede guiarte en onboarding e integraciones. Visita Contacto para una demo.",
+      "default": "Puedo ayudarte con comisiones, empezar a vender, el panel o contactar al equipo. Prueba un acceso rápido abajo."
     }
   },
   "voiceShoppingPage": {

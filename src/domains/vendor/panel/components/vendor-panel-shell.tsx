@@ -1,6 +1,7 @@
 'use client';
 
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { VendorAssistantRoot } from '@/domains/vendor/assistant/components/vendor-assistant-root';
 import { VendorCommandPalette } from '@/domains/vendor/panel/components/layout/vendor-command-palette';
 import { VendorSidebar } from '@/domains/vendor/panel/components/layout/vendor-sidebar';
 import { VendorRealtimeSync } from '@/domains/vendor/panel/components/vendor-realtime-sync';
@@ -49,6 +50,7 @@ export function VendorPanelShell({ children, user }: VendorPanelShellProps) {
         </div>
 
         <VendorCommandPalette />
+        <VendorAssistantRoot variant='panel' />
       </div>
     </RealtimeProvider>
   );

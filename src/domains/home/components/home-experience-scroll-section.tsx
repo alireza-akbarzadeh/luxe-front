@@ -5,11 +5,18 @@ import { useTranslations } from 'next-intl';
 import { ContainerScroll } from '@/components/scroll/container-scroll-animation';
 import { AppImage } from '@/components/ui/app-image';
 
-export function VendorDashboardScrollSection() {
-  const t = useTranslations('auth.vendor.dashboardScroll');
+import { HOME_EXPERIENCE_SCROLL_IMAGE } from '../lib/home-mock-data';
+
+/** Scroll-flatten showcase — mirrors vendor dashboard moment for the storefront. */
+export function HomeExperienceScrollSection() {
+  const t = useTranslations('home.experienceScroll');
 
   return (
-    <section className='relative overflow-hidden pb-16 md:pb-24'>
+    <section className='relative overflow-hidden pb-4 md:pb-8'>
+      <div
+        aria-hidden
+        className='pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_70%_80%_at_50%_0%,var(--gold)_0%,transparent_70%)] opacity-[0.08] dark:opacity-[0.14]'
+      />
       <ContainerScroll
         titleComponent={
           <>
@@ -26,11 +33,11 @@ export function VendorDashboardScrollSection() {
         }
       >
         <AppImage
-          src='/assets/vendor.png'
-          alt='hero'
+          src={HOME_EXPERIENCE_SCROLL_IMAGE}
+          alt={t('imageAlt')}
           height={720}
           width={1400}
-          className='mx-auto h-full rounded-2xl object-cover object-left-top'
+          className='mx-auto h-full rounded-2xl object-cover object-center'
           draggable={false}
         />
       </ContainerScroll>

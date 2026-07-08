@@ -12,10 +12,10 @@ import {
 } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
+import { SectionCarousel } from '@/components/section-carousel';
 import { PERSONALIZATION_ROUTES } from '@/domains/personalization/lib/personalization-routes';
-import { SectionShell } from '@/domains/support/components/section-shell';
-import { SectionCarousel } from '~/src/components/section-carousel';
-import { PlatformCard } from '~/src/domains/apps/components/platform-card';
+
+import { PlatformCard } from './platform-card';
 
 /** Entry points for Phase 3 personalization features on the apps hub. */
 export function PersonalizationFeaturesSection() {
@@ -99,18 +99,17 @@ export function PersonalizationFeaturesSection() {
   ];
 
   return (
-    <SectionShell className='mt-14'>
-      <SectionCarousel
-        title={t('title')}
-        description={t('subtitle')}
-        sectionId='favorite-categories'
-        className='border-border/40 border-b py-10 sm:py-12 lg:py-16'
-        columns={{ mobile: 2, tablet: 3, desktop: 4 }}
-        loop={false}
-      >
-        {items.map((item) => (
+    <SectionCarousel
+      title={t('title')}
+      description={t('subtitle')}
+      sectionId='personalized-shopping'
+      className='border-border/40 border-b py-10 sm:py-12 lg:py-16'
+      columns={{ mobile: 2, tablet: 3, desktop: 4 }}
+      loop={false}
+    >
+      {items.map((item) => (
+        <div key={item.key} className='h-full'>
           <PlatformCard
-            key={item.key}
             icon={item.icon}
             title={item.title}
             description={item.description}
@@ -118,9 +117,10 @@ export function PersonalizationFeaturesSection() {
             recommended={item.recommended}
             actionLabel={item.actionLabel}
             href={item.href}
+            className='h-full'
           />
-        ))}
-      </SectionCarousel>
-    </SectionShell>
+        </div>
+      ))}
+    </SectionCarousel>
   );
 }

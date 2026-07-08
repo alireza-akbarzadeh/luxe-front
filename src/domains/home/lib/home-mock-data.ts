@@ -43,6 +43,10 @@ export const HERO_TRUST_AVATARS = [
 export const HERO_EDITORIAL_SPOTLIGHT_IMAGE =
   'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=900&fit=crop';
 
+/** Home scroll showcase — curated boutique interior (below fold). */
+export const HOME_EXPERIENCE_SCROLL_IMAGE =
+  'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&h=900&fit=crop';
+
 export const TRUST_ITEMS = [
   { key: 'freeShipping', icon: 'truck' },
   { key: 'easyReturns', icon: 'return' },
