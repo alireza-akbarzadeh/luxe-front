@@ -1,8 +1,9 @@
 import { IconArrowRight, IconBuildingStore, IconShoppingBag } from '@tabler/icons-react';
 import Link from 'next/link';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { GradientCtaLink } from '@/components/buttons/gradient-cta-link';
+import { LandingCtaShell } from '@/components/effects/landing-cta-shell';
+import { Button } from '@/components/ui/button';
 
 import { getHomeContent } from '../lib/get-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
@@ -14,12 +15,7 @@ export async function FinalCtaSection() {
     <section className='pb-8 sm:pb-12'>
       <div className={sectionContainerClass}>
         <div className='luxe-rise'>
-          <div className='border-border/50 from-gold/12 via-card/80 to-accent/5 relative overflow-hidden rounded-4xl border bg-linear-to-br px-6 py-14 text-center sm:px-12 sm:py-16'>
-            <div
-              aria-hidden
-              className='bg-gold/20 pointer-events-none absolute -top-20 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full blur-3xl'
-            />
-
+          <LandingCtaShell className='rounded-4xl px-6 py-14 sm:px-12 sm:py-16'>
             <div className='relative mx-auto max-w-2xl'>
               <h2 className='font-display text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl'>
                 {t('finalCta.title')}
@@ -28,17 +24,14 @@ export async function FinalCtaSection() {
                 {t('finalCta.description')}
               </p>
               <div className='mt-8 flex flex-col justify-center gap-3 sm:flex-row'>
-                <Link
+                <GradientCtaLink
                   href='/shop'
-                  className={cn(
-                    buttonVariants({ size: 'lg' }),
-                    'group h-12 gap-2 rounded-full px-8 sm:h-14'
-                  )}
+                  className='group inline-flex h-12 items-center gap-2 sm:h-14'
                 >
                   <IconShoppingBag className='size-4' aria-hidden />
                   {t('finalCta.startShopping')}
                   <IconArrowRight className='cn-rtl-flip size-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
-                </Link>
+                </GradientCtaLink>
                 <Button
                   variant='outline'
                   size='lg'
@@ -52,7 +45,7 @@ export async function FinalCtaSection() {
                 </Button>
               </div>
             </div>
-          </div>
+          </LandingCtaShell>
         </div>
       </div>
     </section>

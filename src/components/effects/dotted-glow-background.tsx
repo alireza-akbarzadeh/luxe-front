@@ -139,6 +139,14 @@ export const DottedGlowBackground = ({
   ]);
 
   useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reduceMotion = mq.matches;
+
+    const handleMql = () => {
+      reduceMotion = mq.matches;
+    };
+    mq.addEventListener('change', handleMql);
+
     const el = canvasRef.current;
     const container = containerRef.current;
     if (!el || !container) return;
@@ -194,16 +202,13 @@ export const DottedGlowBackground = ({
 
     regenDots();
 
-    const last = performance.now();
-
     const draw = (now: number) => {
       if (stopped) return;
-      if (!isVisible) {
+      if (!isVisible || reduceMotion) {
         raf = requestAnimationFrame(draw);
         return;
       }
 
-      const last = now;
       const { width, height } = container.getBoundingClientRect();
 
       ctx.clearRect(0, 0, el.width, el.height);
@@ -276,6 +281,7 @@ export const DottedGlowBackground = ({
     return () => {
       stopped = true;
       cancelAnimationFrame(raf);
+      mq.removeEventListener('change', handleMql);
       window.removeEventListener('resize', handleResize);
       observer.disconnect();
       ro.disconnect();

@@ -123,11 +123,10 @@ export const Highlight = ({
       }}
       style={{
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'left center',
-        display: 'inline'
+        backgroundPosition: 'left center'
       }}
       className={cn(
-        `relative inline-block rounded-lg bg-gradient-to-r from-indigo-300 to-purple-300 px-1 pb-1 dark:from-indigo-500 dark:to-purple-500`,
+        `from-gold/30 to-gold/10 dark:from-gold/40 dark:to-gold/20 relative inline-block rounded-lg bg-gradient-to-r px-1 pb-1`,
         className
       )}
     >

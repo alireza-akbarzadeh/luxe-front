@@ -4,14 +4,15 @@ import { IconCalendar } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { GradientCtaLink } from '@/components/buttons/gradient-cta-link';
+import { LandingCtaShell } from '@/components/effects/landing-cta-shell';
+import { Button } from '@/components/ui/button';
 import { DirectionalArrow } from '@/components/ui/directional-icon';
 import {
   FadeInView,
   LandingContainer
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
 import { getVendorStartHref } from '@/domains/vendor/lib/vendor-routes';
-import { cn } from '@/lib/utils';
 
 interface VendorFinalCtaSectionProps {
   hasVendorStore: boolean;
@@ -24,35 +25,26 @@ export function VendorFinalCtaSection({ hasVendorStore }: VendorFinalCtaSectionP
   return (
     <LandingContainer className='pb-20 md:pb-28'>
       <FadeInView>
-        <div className='border-border/50 from-gold/15 via-gold/5 to-card/40 relative overflow-hidden rounded-[2rem] border bg-gradient-to-br px-6 py-16 text-center md:px-12 md:py-20'>
-          <div
-            aria-hidden
-            className='bg-gold/20 pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl'
-          />
-          <div className='relative'>
-            <h2 className='text-3xl font-semibold tracking-tight text-balance md:text-4xl lg:text-5xl'>
-              {t('growTitle')}
-            </h2>
-            <p className='text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed md:text-lg'>
-              {t('growDescription')}
-            </p>
-            <div className='mt-8 flex flex-wrap items-center justify-center gap-3'>
-              <Link
-                href={vendorHref}
-                className={cn(buttonVariants({ size: 'lg' }), 'gap-2 rounded-full px-8')}
-              >
-                {t('becomeVendor')}
-                <DirectionalArrow />
+        <LandingCtaShell>
+          <h2 className='text-3xl font-semibold tracking-tight text-balance md:text-4xl lg:text-5xl'>
+            {t('growTitle')}
+          </h2>
+          <p className='text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed md:text-lg'>
+            {t('growDescription')}
+          </p>
+          <div className='mt-8 flex flex-wrap items-center justify-center gap-3'>
+            <GradientCtaLink href={vendorHref} className='inline-flex items-center gap-2'>
+              {t('becomeVendor')}
+              <DirectionalArrow />
+            </GradientCtaLink>
+            <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
+              <Link href='/contact'>
+                <IconCalendar className='size-4' aria-hidden />
+                {t('scheduleDemo')}
               </Link>
-              <Button variant='outline' size='lg' className='gap-2 rounded-full px-6' asChild>
-                <Link href='/contact'>
-                  <IconCalendar className='size-4' aria-hidden />
-                  {t('scheduleDemo')}
-                </Link>
-              </Button>
-            </div>
+            </Button>
           </div>
-        </div>
+        </LandingCtaShell>
       </FadeInView>
     </LandingContainer>
   );

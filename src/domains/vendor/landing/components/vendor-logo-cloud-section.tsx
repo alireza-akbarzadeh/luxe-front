@@ -7,7 +7,7 @@ import {
   LandingContainer,
   SectionTitle
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
-import { TRUSTED_BRANDS } from '@/domains/vendor/landing/data/vendor-landing.data';
+import { VendorBrandsMarquee } from '@/domains/vendor/landing/components/vendor-brands-marquee';
 import { useVendorLandingContent } from '@/domains/vendor/landing/hooks/use-vendor-landing-content';
 
 export function VendorLogoCloudSection() {
@@ -27,19 +27,7 @@ export function VendorLogoCloudSection() {
       </FadeInView>
 
       <FadeInView delay={0.1}>
-        <ul
-          className='mx-auto grid max-w-4xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4'
-          aria-label={t('partnerBrandsAria')}
-        >
-          {TRUSTED_BRANDS.map((brand) => (
-            <li
-              key={brand}
-              className='text-muted-foreground flex items-center justify-center text-sm font-semibold tracking-wide uppercase opacity-70 transition-opacity hover:opacity-100'
-            >
-              {brand}
-            </li>
-          ))}
-        </ul>
+        <VendorBrandsMarquee />
       </FadeInView>
 
       <FadeInView delay={0.15}>

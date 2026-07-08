@@ -4,6 +4,7 @@ import {
   SectionTitle,
   TestimonialCard
 } from '@/domains/vendor/landing/components/ui/vendor-landing-primitives';
+import { VendorTestimonialsMarquee } from '@/domains/vendor/landing/components/vendor-testimonials-marquee';
 import { TESTIMONIALS } from '@/domains/vendor/landing/data/vendor-landing.data';
 
 export function VendorTestimonialsSection() {
@@ -24,6 +25,8 @@ export function VendorTestimonialsSection() {
           </FadeInView>
         ))}
       </div>
+
+      <VendorTestimonialsMarquee />
     </LandingContainer>
   );
 }

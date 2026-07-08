@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+import { LandingHeroBackground } from '@/components/effects/landing-hero-background';
 import { cn } from '@/lib/utils';
 
+import { HeroAccentHighlight } from './ui/hero-accent-highlight';
 import {
   HeroIconArrowRight,
   HeroIconShieldCheck,
@@ -39,6 +41,7 @@ export function HeroSection() {
 
   return (
     <section className='hero-mobile-perf bg-background relative overflow-hidden'>
+      <LandingHeroBackground />
       <div
         aria-hidden
         className='from-background via-background to-surface pointer-events-none absolute inset-0 bg-gradient-to-b'
@@ -63,9 +66,9 @@ export function HeroSection() {
 
             <h1 className='hero-lcp-title font-display text-4xl leading-[1.03] font-semibold tracking-tight text-balance max-lg:font-sans sm:text-5xl lg:text-6xl xl:text-[3.5rem]'>
               Modern luxury,
-              <span className='hero-lcp-accent text-gold-gradient lg:font-display mt-1 block italic'>
+              <HeroAccentHighlight className='hero-lcp-accent text-gold-gradient lg:font-display mt-1 block italic'>
                 beautifully curated
-              </span>
+              </HeroAccentHighlight>
             </h1>
 
             <p className='text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed text-pretty sm:text-lg lg:mx-0'>

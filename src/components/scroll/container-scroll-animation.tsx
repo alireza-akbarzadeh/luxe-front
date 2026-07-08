@@ -1,6 +1,21 @@
 'use client';
-import { motion, MotionValue, useScroll, useTransform } from 'framer-motion';
-import React, { useRef } from 'react';
+
+import { motion, MotionValue, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useSyncExternalStore } from 'react';
+
+function subscribeMobileMq(onStoreChange: () => void) {
+  const mq = window.matchMedia('(max-width: 768px)');
+  mq.addEventListener('change', onStoreChange);
+  return () => mq.removeEventListener('change', onStoreChange);
+}
+
+function getMobileSnapshot() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+
+function getMobileServerSnapshot() {
+  return false;
+}
 
 export const ContainerScroll = ({
   titleComponent,
@@ -10,43 +25,46 @@ export const ContainerScroll = ({
   children: React.ReactNode;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const isMobile = useSyncExternalStore(
+    subscribeMobileMq,
+    getMobileSnapshot,
+    getMobileServerSnapshot
+  );
+
   const { scrollYProgress } = useScroll({
-    target: containerRef
+    target: containerRef,
+    offset: ['start end', 'end start']
   });
-  const [isMobile, setIsMobile] = React.useState(false);
 
-  React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
+  const scaleRange = isMobile ? [0.7, 0.9] : [1.05, 1];
+  const rotate = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [20, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], reduceMotion ? [1, 1] : scaleRange);
+  const translate = useTransform(scrollYProgress, [0, 1], reduceMotion ? [0, 0] : [0, -100]);
 
-  const scaleDimensions = () => {
-    return isMobile ? [0.7, 0.9] : [1.05, 1];
-  };
-
-  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
-  const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  if (reduceMotion) {
+    return (
+      <div className='relative flex items-center justify-center p-2 md:p-20' ref={containerRef}>
+        <div className='relative w-full max-w-5xl py-10 md:py-20'>
+          <div className='mx-auto max-w-5xl text-center'>{titleComponent}</div>
+          <div className='border-border/50 bg-card mx-auto mt-8 w-full overflow-hidden rounded-[30px] border p-2 shadow-xl md:p-6'>
+            <div className='bg-muted/30 h-[30rem] overflow-hidden rounded-2xl md:h-[40rem]'>
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       className='relative flex h-[60rem] items-center justify-center p-2 md:h-[80rem] md:p-20'
       ref={containerRef}
     >
-      <div
-        className='relative w-full py-10 md:py-40'
-        style={{
-          perspective: '1000px'
-        }}
-      >
+      <div className='relative w-full py-10 md:py-40' style={{ perspective: '1000px' }}>
         <Header translate={translate} titleComponent={titleComponent} />
-        <Card rotate={rotate} translate={translate} scale={scale}>
+        <Card rotate={rotate} scale={scale} translate={translate}>
           {children}
         </Card>
       </div>
@@ -62,12 +80,7 @@ export const Header = ({
   titleComponent: string | React.ReactNode;
 }) => {
   return (
-    <motion.div
-      style={{
-        translateY: translate
-      }}
-      className='div mx-auto max-w-5xl text-center'
-    >
+    <motion.div style={{ translateY: translate }} className='mx-auto max-w-5xl text-center'>
       {titleComponent}
     </motion.div>
   );
@@ -91,11 +104,9 @@ export const Card = ({
         boxShadow:
           '0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003'
       }}
-      className='mx-auto -mt-12 h-[30rem] w-full max-w-5xl rounded-[30px] border-4 border-[#6C6C6C] bg-[#222222] p-2 shadow-2xl md:h-[40rem] md:p-6'
+      className='border-border/60 bg-card mx-auto -mt-12 h-[30rem] w-full max-w-5xl rounded-[30px] border-2 p-2 shadow-2xl md:h-[40rem] md:p-6'
     >
-      <div className='h-full w-full overflow-hidden rounded-2xl bg-gray-100 md:rounded-2xl md:p-4 dark:bg-zinc-900'>
-        {children}
-      </div>
+      <div className='bg-muted/20 h-full w-full overflow-hidden rounded-2xl md:p-2'>{children}</div>
     </motion.div>
   );
 };
