@@ -1,5 +1,5 @@
 import type { GeocodedAddress } from '@/lib/geocoding/types';
-import { normalizePhoneForInput } from '@/lib/phone-utils';
+import { formatPhoneE164ForApi, normalizePhoneForInput } from '@/lib/phone-utils';
 import type { DtoUpdateAddressRequest } from '@/services/-addresses-{id}-put.schemas';
 import type { ModelsAddress } from '@/services/-addresses-get.schemas';
 import type { DtoCreateAddressRequest } from '@/services/-addresses-post.schemas';
@@ -131,7 +131,7 @@ export function buildCheckoutCreateAddressPayload(
     label?: string;
   }
 ): DtoCreateAddressRequest | null {
-  const phone = normalizePhoneForInput(ctx.phone);
+  const phone = formatPhoneE164ForApi(ctx.phone) ?? normalizePhoneForInput(ctx.phone);
   if (!phone) return null;
 
   const mapped = geocodedToAddressEditFields(geocoded);

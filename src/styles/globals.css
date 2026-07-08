@@ -82,9 +82,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), 'Geist', 'Geist Fallback', ui-sans-serif, sans-serif;
+  --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
   --font-mono: var(--font-geist-mono), 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
-  --font-display: var(--font-playfair), 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
 
   /* v4 Variable Color Bindings */
   --color-background: var(--background);
@@ -167,12 +167,9 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Editorial serif headlines get tighter tracking + ligatures */
+  /* Commerce headlines — Plus Jakarta, slightly tighter tracking */
   .font-display {
-    font-feature-settings:
-      'liga' 1,
-      'dlig' 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   /* Gold selection — a subtle luxury signature */
@@ -319,7 +316,7 @@
 
 /**
  * RTL / Persian (fa): swap sans + display stacks to Vazirmatn.
- * Playfair/Geist lack Persian glyphs.
+ * Geist/Jakarta lack Persian glyphs.
  * Must use html[dir='rtl'] — do not reuse --font-sans for next/font variables (Nunito conflict).
  */
 html[dir='rtl'],
@@ -419,7 +416,7 @@ html.locale-fa .font-display {
 /*
  * Mobile Lighthouse (max-lg): faster LCP + lower TBT without changing desktop (lg+).
  * - Solid hero accent text (gradient clip delays LCP paint on slow devices)
- * - Geist stack on hero title (avoids Playfair italic fetch on critical path)
+ * - Plus Jakarta on hero title (avoids display-font fetch on critical path)
  * - Disable decorative CSS animations (marquee, category ring, luxe-fade)
  * - Defer below-fold section layout/paint via content-visibility
  */
@@ -433,7 +430,7 @@ html.locale-fa .font-display {
   }
 
   .hero-lcp-title {
-    font-family: var(--font-geist-sans), ui-sans-serif, sans-serif !important;
+    font-family: var(--font-jakarta), ui-sans-serif, sans-serif !important;
   }
 
   .luxe-rise,
@@ -549,8 +546,17 @@ html[dir='rtl'] .brands-marquee-track {
   }
 }
 
-/* ── Dashboard shell (admin + vendor panel) — dark analytics UI ── */
+/* ── Commerce shell — Plus Jakarta Sans (storefront, marketing, auth) ── */
+.font-shell-commerce {
+  --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
+  --font-display: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, sans-serif;
+}
+
+/* ── Dashboard shell (admin + vendor panel) — dark analytics UI + Geist ── */
 .dashboard-shell {
+  --font-sans: var(--font-geist-sans), 'Geist', 'Geist Fallback', ui-sans-serif, sans-serif;
+  --font-display: var(--font-geist-sans), 'Geist', 'Geist Fallback', ui-sans-serif, sans-serif;
+  font-family: var(--font-sans);
   --background: #070809;
   --foreground: #f3f4f6;
   --card: #111317;

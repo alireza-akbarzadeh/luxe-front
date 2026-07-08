@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { getDirection, type Locale } from '@/i18n/config';
+import { formatPhoneE164ForApi } from '@/lib/phone-utils';
 import { registerAction } from '~/src/actions/auth.actions';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
@@ -54,7 +55,10 @@ export function RegisterDomain() {
         formData.append('password', value.password);
         formData.append('firstName', value.firstName);
         formData.append('lastName', value.lastName);
-        if (value.phone) formData.append('phone', value.phone);
+        if (value.phone) {
+          const phone = formatPhoneE164ForApi(value.phone);
+          if (phone) formData.append('phone', phone);
+        }
         formData.append('acceptTerms', String(value.acceptTerms));
         formData.append('acceptMarketing', String(value.acceptMarketing));
 

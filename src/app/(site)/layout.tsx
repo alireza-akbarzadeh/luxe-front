@@ -12,7 +12,7 @@ export default async function SiteLayout({ children }: TRootLayout) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div id='site-layout'>
+      <div id='site-layout' className='font-shell-commerce min-h-screen font-sans'>
         <Navbar />
         <ClientSiteLayout>{children}</ClientSiteLayout>
       </div>

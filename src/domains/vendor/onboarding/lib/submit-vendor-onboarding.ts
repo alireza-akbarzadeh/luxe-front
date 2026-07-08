@@ -12,6 +12,7 @@ import {
   type VendorOnboardingValues
 } from '@/domains/vendor/onboarding/schemas/vendor-onboarding.schema';
 import { createVendorStore } from '@/lib/api/vendor-stores';
+import { formatPhoneE164ForApi } from '@/lib/phone-utils';
 
 type OnboardingFormApi = Parameters<typeof applyVendorOnboardingFieldErrors>[0];
 
@@ -70,7 +71,7 @@ export async function submitVendorOnboarding({
       password: value.password,
       firstName: value.firstName,
       lastName: value.lastName,
-      phone: value.phone || undefined
+      phone: formatPhoneE164ForApi(value.phone) ?? undefined
     });
 
     if (registerResult.error) {

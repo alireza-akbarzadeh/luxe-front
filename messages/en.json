@@ -1267,6 +1267,7 @@
     "forgotPasswordLink": "Forgot password?",
     "togglePasswordVisibility": "Toggle password visibility",
     "searchCountry": "Search country...",
+    "selectCountry": "Select country",
     "noCountryFound": "No country found.",
     "resetPassword": {
       "backToSignIn": "Back to sign in",

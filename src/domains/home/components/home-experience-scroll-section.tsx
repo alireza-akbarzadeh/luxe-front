@@ -12,7 +12,7 @@ export function HomeExperienceScrollSection() {
   const t = useTranslations('home.experienceScroll');
 
   return (
-    <section className='relative overflow-hidden pb-4 md:pb-8'>
+    <section className='relative overflow-x-clip pb-4 md:pb-8'>
       <div
         aria-hidden
         className='pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_70%_80%_at_50%_0%,var(--gold)_0%,transparent_70%)] opacity-[0.08] dark:opacity-[0.14]'

@@ -1,5 +1,5 @@
 import type { GeocodedAddress } from '@/lib/geocoding/types';
-import { normalizePhoneForInput } from '@/lib/phone-utils';
+import { formatPhoneE164ForApi } from '@/lib/phone-utils';
 import type { DtoDefaultAddressDTO } from '@/services/-account-summary-get.schemas';
 import { putAddressesId } from '@/services/-addresses-{id}-put';
 import type { DtoUpdateAddressRequest } from '@/services/-addresses-{id}-put.schemas';
@@ -14,8 +14,7 @@ export interface SaveGeocodedShippingContext {
 }
 
 function resolvePhone(phone: string | undefined | null): string | null {
-  const normalized = normalizePhoneForInput(phone ?? undefined);
-  return normalized ?? null;
+  return formatPhoneE164ForApi(phone) ?? null;
 }
 
 function buildAddressFields(address: GeocodedAddress, instructions: string) {

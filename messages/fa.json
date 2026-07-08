@@ -1267,6 +1267,7 @@
     "forgotPasswordLink": "رمز عبور را فراموش کرده‌اید؟",
     "togglePasswordVisibility": "نمایش یا پنهان کردن رمز عبور",
     "searchCountry": "جستجوی کشور...",
+    "selectCountry": "انتخاب کشور",
     "noCountryFound": "کشوری یافت نشد.",
     "resetPassword": {
       "backToSignIn": "بازگشت به ورود",

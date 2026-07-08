@@ -10,6 +10,7 @@ import { useCartController } from '@/hooks/useCartController';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
 import { ShippingProviders } from '@/lib/constants/enum-statuses';
+import { formatPhoneE164ForApi } from '@/lib/phone-utils';
 import { getGetCartQueryKey } from '@/services/-cart-get';
 import { usePostCheckout } from '@/services/-checkout-post';
 import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
@@ -94,7 +95,7 @@ export function useCheckoutSubmit() {
           state: values.state,
           zip: values.zip,
           country: values.country,
-          phone: values.phone || '',
+          phone: formatPhoneE164ForApi(values.phone) ?? '',
           shipping_provider_id: Number(values.shippingProviderId),
           payment_method: paymentMethod,
           save_info: values.saveInfo,

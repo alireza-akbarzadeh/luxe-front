@@ -9,7 +9,7 @@ export function VendorDashboardScrollSection() {
   const t = useTranslations('auth.vendor.dashboardScroll');
 
   return (
-    <section className='relative overflow-hidden pb-16 md:pb-24'>
+    <section className='relative overflow-x-clip pb-16 md:pb-24'>
       <ContainerScroll
         titleComponent={
           <>

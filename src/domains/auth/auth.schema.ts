@@ -1,5 +1,5 @@
+import { isValidPhoneNumber } from 'react-phone-number-input';
 import { z } from 'zod';
-
 type ValidationT = (key: string) => string;
 
 export function createLoginFormSchema(t: ValidationT) {
@@ -16,12 +16,7 @@ export function createRegisterFormSchema(t: ValidationT) {
       firstName: z.string().min(2, t('firstNameRequired')),
       lastName: z.string().min(2, t('lastNameRequired')),
       email: z.string().email(t('invalidEmail')),
-      phone: z
-        .string()
-        .refine(
-          (val) => val === '' || /^\+?[1-9]\d{1,14}$/.test(val),
-          t('phoneE164')
-        ),
+      phone: z.string().refine((val) => val === '' || isValidPhoneNumber(val), t('phoneE164')),
       password: z.string().min(8, t('passwordMinLength')),
       confirmPassword: z.string(),
       acceptTerms: z.boolean().refine((val) => val, {

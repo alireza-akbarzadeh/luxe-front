@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { phoneE164String } from '@/schemas/phone.schema';
+
 export const addressFormSchema = z.object({
   label: z.string(),
   firstName: z.string().min(1, 'First name is required'),
@@ -10,7 +12,7 @@ export const addressFormSchema = z.object({
   state: z.string().min(1, 'State is required'),
   zipCode: z.string().min(1, 'ZIP code is required'),
   country: z.string().min(1, 'Country is required'),
-  phone: z.string().min(1, 'Phone number is required'),
+  phone: phoneE164String(),
   address_type: z.enum(['both', 'billing', 'shipping']),
   isDefault: z.boolean()
 });
@@ -21,7 +23,7 @@ export const profileFormSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.email(),
-  phone: z.string()
+  phone: phoneE164String({ required: false })
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
