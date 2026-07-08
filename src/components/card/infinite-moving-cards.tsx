@@ -69,7 +69,7 @@ export const InfiniteMovingCards = ({
 
   const cardClass =
     variant === 'brand'
-      ? 'border-border/50 bg-card/80 flex w-[200px] items-center justify-center rounded-xl border px-6 py-4 md:w-[240px]'
+      ? 'border-white/8 bg-white/[0.03] text-foreground/85 flex w-[220px] items-center justify-center rounded-[1.25rem] border px-7 py-5 shadow-[0_16px_40px_-28px_rgba(0,0,0,0.75)] backdrop-blur-xl md:w-[260px]'
       : 'border-border/50 bg-card relative w-[350px] max-w-full shrink-0 rounded-2xl border px-8 py-6 md:w-[450px]';
 
   return (
@@ -91,7 +91,7 @@ export const InfiniteMovingCards = ({
         {items.map((item) => (
           <li className={cardClass} key={`${variant}-${item.quote}-${item.name}`}>
             {variant === 'brand' ? (
-              <span className='text-muted-foreground text-sm font-semibold tracking-wide uppercase'>
+              <span className='font-display text-sm font-semibold tracking-[0.22em] uppercase'>
                 {item.quote}
               </span>
             ) : (

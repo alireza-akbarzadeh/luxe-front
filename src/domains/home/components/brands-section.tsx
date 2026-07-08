@@ -2,20 +2,11 @@ import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { BrandCard } from '@/domains/home/components/ui/brand-card';
-import { BrandsMarqueeTrack } from '@/domains/home/components/ui/brands-marquee-track';
-import { fullBleedClass } from '@/domains/home/lib/home-utils';
+import { HomeBrandsMarquee } from '@/domains/home/components/ui/home-brands-marquee';
 import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeTopBrands } from '@/services/-home-top-brands-get';
-import type { DtoHomeBrandItem } from '@/services/-home-top-brands-get.schemas';
 
 const BRAND_LIMIT = 12;
-
-function toMarqueeItems(brands: DtoHomeBrandItem[]) {
-  return brands.map((brand, index) => ({
-    key: String(brand.id ?? brand.slug ?? index),
-    name: brand.name ?? ''
-  }));
-}
 
 /** Top brands — one API fetch: trust marquee strip + brand cards carousel. */
 export async function BrandsSection() {
@@ -33,14 +24,12 @@ export async function BrandsSection() {
 
   return (
     <>
-      <section
-        className={`${fullBleedClass} border-border/50 bg-muted/30 border-y py-8 sm:py-10`}
-        aria-label={tCommon('partnerBrandsAria')}
-      >
-        <p className='text-foreground/90 app-container mb-6 text-center text-xs font-medium tracking-[0.22em] uppercase'>
-          {t('title')}
-        </p>
-        <BrandsMarqueeTrack items={toMarqueeItems(brands)} />
+      <section className='py-8 sm:py-10 lg:py-12' aria-label={tCommon('partnerBrandsAria')}>
+        <div className='app-container'>
+          <div className='luxury-glass overflow-hidden rounded-[1.75rem] border border-white/8 py-5 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.65)] sm:rounded-[2rem] sm:py-6'>
+            <HomeBrandsMarquee brands={brands} />
+          </div>
+        </div>
       </section>
 
       <SectionCarousel
@@ -48,8 +37,8 @@ export async function BrandsSection() {
         eyebrow={t('eyebrow')}
         title={t('title')}
         description={t('description')}
-        viewAllHref='/shop'
-        viewAllLabel={tCommon('shopAll')}
+        viewAllHref='/brands'
+        viewAllLabel={tCommon('viewAll')}
         loop={false}
       >
         {brands.map((brand, index) => (

@@ -101,11 +101,7 @@ export function Navbar() {
             </div>
 
             <div className='-mt-[13px] ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
-              <Link
-                href='/search'
-                aria-label={t('search')}
-                className='border-border/60 bg-card/50 text-muted-foreground hover:border-gold/40 hover:text-foreground me-1 hidden h-10 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm backdrop-blur transition-colors lg:inline-flex xl:min-w-40'
-              >
+              <Link href='/search' aria-label={t('search')}>
                 <IconSearch
                   className={cn('size-4', locale === 'fa' ? 'rotate-80 transform' : '')}
                   stroke={1.75}
