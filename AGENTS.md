@@ -4,7 +4,7 @@ Guide for AI agents and automated tools working in this repository.
 
 ## Project
 
-Next.js 16 admin + storefront: **React 19**, **TypeScript**, **Tailwind v4**, **shadcn/ui**, **TanStack Query/Form/Table**, **Zustand**, **Orval** (API clients from backend OpenAPI).
+Next.js 16 admin + Luxe: **React 19**, **TypeScript**, **Tailwind v4**, **shadcn/ui**, **TanStack Query/Form/Table**, **Zustand**, **Orval** (API clients from backend OpenAPI).
 
 ## Authoritative rules (read before any task)
 

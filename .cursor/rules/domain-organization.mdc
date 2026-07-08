@@ -9,16 +9,16 @@ Feature code lives under `src/domains/<domain>/`. **Do not mix types, Zod schema
 
 ## Folder roles
 
-| Folder | Purpose | Examples |
-|--------|---------|----------|
-| `types/` | **One** `*.types.ts` per domain — props, step ids, local interfaces | `checkout.types.ts` |
-| `schemas/` | Zod validation for forms (not API DTOs) | `checkout.schema.ts`, `checkout-address-edit.schema.ts` |
-| `lib/` | Pure helpers, mappers, validation (no React hooks) | `checkout-validation.ts`, `checkout-address.ts` |
-| `hooks/` | Stateful logic, TanStack Query, form orchestration | `use-checkout-wizard-actions.ts` |
-| `sections/` | Form field groups, step panels | `checkout-address-edit-form.tsx` |
-| `components/` | Presentational UI; compose hooks + sections | `checkout-address-edit-dialog.tsx` |
-| `containers/` | Route-level segments wiring data + layout | `checkout-shipping.tsx`, `checkout-review.tsx` |
-| `store/` or `stores/` | Zustand UI state only (not server lists) | `checkout.store.ts` |
+| Folder                | Purpose                                                             | Examples                                                |
+| --------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
+| `types/`              | **One** `*.types.ts` per domain — props, step ids, local interfaces | `checkout.types.ts`                                     |
+| `schemas/`            | Zod validation for forms (not API DTOs)                             | `checkout.schema.ts`, `checkout-address-edit.schema.ts` |
+| `lib/`                | Pure helpers, mappers, validation (no React hooks)                  | `checkout-validation.ts`, `checkout-address.ts`         |
+| `hooks/`              | Stateful logic, TanStack Query, form orchestration                  | `use-checkout-wizard-actions.ts`                        |
+| `sections/`           | Form field groups, step panels                                      | `checkout-address-edit-form.tsx`                        |
+| `components/`         | Presentational UI; compose hooks + sections                         | `checkout-address-edit-dialog.tsx`                      |
+| `containers/`         | Route-level segments wiring data + layout                           | `checkout-shipping.tsx`, `checkout-review.tsx`          |
+| `store/` or `stores/` | Zustand UI state only (not server lists)                            | `checkout.store.ts`                                     |
 
 ## Placement rules
 
@@ -44,7 +44,7 @@ Feature code lives under `src/domains/<domain>/`. **Do not mix types, Zod schema
 
 ## Skills
 
-- Checkout storefront: `/checkout-domain` (`.cursor/skills/checkout-domain/SKILL.md`)
+- Checkout Luxe: `/checkout-domain` (`.cursor/skills/checkout-domain/SKILL.md`)
 - Admin forms: `/admin-forms`
 - Zustand: `/zustand`
 - Layout: `/layout-typography`

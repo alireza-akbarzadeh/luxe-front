@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { StorefrontBrandLogo } from '@/components/brand/storefront-brand-logo';
 import {
   footerSections,
   legalLinks,
@@ -25,8 +26,6 @@ import { TrustStrip } from '@/components/footer/trust-stripe';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { formatAppVersionLabel } from '@/lib/app-version';
 import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
-import { AppImage } from '~/src/components/ui/app-image';
-import { BRAND_ASSETS } from '~/src/lib/brand-assets';
 
 function BackToTop() {
   const t = useTranslations('common');
@@ -70,15 +69,9 @@ export function Footer() {
             <Link
               href='/'
               aria-label='LUXE Home'
-              className='relative z-20 inline-flex items-center rtl:flex-row-reverse'
+              className='relative z-20 inline-flex shrink-0 items-center self-start'
             >
-              <AppImage
-                src={BRAND_ASSETS.logo}
-                alt='LUXE'
-                className='size-10'
-                width={0}
-                height={0}
-              />
+              <StorefrontBrandLogo className='h-9 max-w-[11rem] sm:h-10 sm:max-w-[12rem]' />
             </Link>
 
             <p className='text-muted-foreground mt-4 max-w-sm text-sm leading-relaxed'>

@@ -6,13 +6,12 @@ import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { StorefrontBrandLogo } from '@/components/brand/storefront-brand-logo';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { useNavMenus } from '@/domains/menus/hooks/use-nav-menus';
 import { sortNavMenuItems } from '@/domains/menus/lib/nav-menu-payload';
 import { useSearchStore } from '@/domains/search/search.store';
-import { BRAND_ASSETS } from '@/lib/brand-assets';
 import { cn } from '@/lib/utils';
-import { AppImage } from '~/src/components/ui/app-image';
 
 import { CartButton } from '../cart/cart-button';
 import { AppsButton } from './apps-button';
@@ -87,21 +86,24 @@ export function Navbar() {
         )}
       >
         <nav className='app-container'>
-          <div className='mt-2 flex h-16 items-center gap-2 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-3 xl:gap-x-5'>
+          <div className='mt-2 flex h-16 items-center justify-between gap-3 lg:grid lg:h-20 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-x-3 xl:gap-x-5'>
             <Link
               href='/'
               aria-label='LUXE Home'
-              className='relative z-20 inline-flex min-h-11 items-center rtl:flex-row-reverse'
+              className='inline-flex shrink-0 items-center lg:col-start-1 lg:justify-self-start'
             >
-              <AppImage src={BRAND_ASSETS.logo} alt='LUXE' width={200} height={200} />
+              <StorefrontBrandLogo priority />
             </Link>
-
-            <div className='-mt-[13px] hidden min-w-0 lg:block'>
+            <div className='-mt-[13px] hidden min-w-0 lg:col-start-2 lg:block'>
               <DesktopNav navMenus={sortedNavMenus} />
             </div>
 
-            <div className='-mt-[13px] ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1 lg:ml-0'>
-              <Link href='/search' aria-label={t('search')}>
+            <div className='-mt-[13px] flex shrink-0 items-center gap-0.5 sm:gap-1 lg:col-start-3 lg:justify-self-end'>
+              <Link
+                href='/search'
+                aria-label={t('search')}
+                className='border-border/60 bg-card/50 text-muted-foreground hover:border-gold/40 hover:text-foreground me-1 flex hidden h-10 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm backdrop-blur transition-colors lg:inline-flex xl:min-w-40'
+              >
                 <IconSearch
                   className={cn('size-4', locale === 'fa' ? 'rotate-80 transform' : '')}
                   stroke={1.75}
