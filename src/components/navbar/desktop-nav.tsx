@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { MegaMenuPanel } from '@/components/navbar/mega-menu';
 import {
@@ -17,9 +18,20 @@ import { GlowBadge } from '~/src/components/badges/glow-badge';
 
 const triggerClassName = cn(
   'bg-transparent h-auto px-0 py-0 text-xs font-medium lg:text-[13px] xl:text-sm',
-  'text-muted-foreground hover:text-foreground hover:bg-transparent',
-  'focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-foreground'
+  'text-muted-foreground hover:text-gold hover:bg-transparent transition-colors',
+  'focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-gold'
 );
+
+const activeLinkClassName = cn(
+  'text-gold relative',
+  'after:bg-gold after:absolute after:inset-x-0 after:-bottom-1.5 after:h-px'
+);
+
+function isActiveHref(pathname: string, href: string | undefined): boolean {
+  if (!href) return false;
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 interface DesktopNavProps {
   navMenus: DtoNavItemResponse[] | undefined;
@@ -27,6 +39,7 @@ interface DesktopNavProps {
 
 export function DesktopNav(props: DesktopNavProps) {
   const { navMenus } = props;
+  const pathname = usePathname();
 
   return (
     <NavigationMenu className='relative z-10 w-full max-w-full min-w-0 justify-center'>
@@ -37,10 +50,12 @@ export function DesktopNav(props: DesktopNavProps) {
               <NavigationMenuLink asChild>
                 <Link
                   href={item.href as string}
+                  aria-current={isActiveHref(pathname, item.href) ? 'page' : undefined}
                   className={cn(
                     triggerClassName,
                     'inline-flex items-center gap-1.5 whitespace-nowrap',
-                    item.badge && 'text-foreground'
+                    item.badge && 'text-foreground',
+                    isActiveHref(pathname, item.href) && activeLinkClassName
                   )}
                 >
                   {item.label}

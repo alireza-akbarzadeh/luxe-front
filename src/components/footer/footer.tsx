@@ -25,6 +25,8 @@ import { TrustStrip } from '@/components/footer/trust-stripe';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { formatAppVersionLabel } from '@/lib/app-version';
 import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
+import { AppImage } from '~/src/components/ui/app-image';
+import { BRAND_ASSETS } from '~/src/lib/brand-assets';
 
 function BackToTop() {
   const t = useTranslations('common');
@@ -67,11 +69,18 @@ export function Footer() {
           <div className='lg:col-span-4'>
             <Link
               href='/'
-              className='inline-flex items-baseline gap-1 text-3xl font-semibold tracking-tight'
+              aria-label='LUXE Home'
+              className='relative z-20 inline-flex items-center rtl:flex-row-reverse'
             >
-              LUXE
-              <span className='bg-accent size-1.5 rounded-full' />
+              <AppImage
+                src={BRAND_ASSETS.logo}
+                alt='LUXE'
+                className='size-10'
+                width={0}
+                height={0}
+              />
             </Link>
+
             <p className='text-muted-foreground mt-4 max-w-sm text-sm leading-relaxed'>
               {t('tagline')}
             </p>
@@ -196,17 +205,29 @@ export function Footer() {
           </div>
         </div>
         <div className='border-border/60 flex flex-col-reverse items-start justify-between gap-6 border-t py-6 md:flex-row md:items-center'>
-          <div className='flex items-center gap-3'>
-            <IconCreditCard className='text-muted-foreground size-4' />
-            <div className='flex flex-wrap gap-1.5'>
-              {paymentMethods.map((p) => (
-                <span
-                  key={p}
-                  className='border-border/60 bg-card text-muted-foreground rounded-md border px-2 py-1 text-[10px] font-semibold tracking-wider uppercase'
-                >
-                  {p}
+          <div className='flex items-start gap-4'>
+            <div className='bg-gold/10 border-gold/20 text-gold flex size-11 shrink-0 items-center justify-center rounded-xl border'>
+              <IconLock className='size-5' />
+            </div>
+            <div className='min-w-0'>
+              <div className='text-sm font-semibold'>{t('securePayments.title')}</div>
+              <p className='text-muted-foreground mt-0.5 text-xs'>
+                {t('securePayments.description')} {t('securePayments.poweredBy')}
+              </p>
+              <div className='mt-3 flex flex-wrap items-center gap-1.5'>
+                <span className='border-gold/30 bg-gold/10 text-gold inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-semibold tracking-wider uppercase'>
+                  <IconCreditCard className='size-3' />
+                  Stripe
                 </span>
-              ))}
+                {paymentMethods.map((p) => (
+                  <span
+                    key={p}
+                    className='border-border/60 bg-card text-muted-foreground rounded-md border px-2 py-1 text-[10px] font-semibold tracking-wider uppercase'
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
           <BackToTop />

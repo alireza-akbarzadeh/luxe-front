@@ -109,16 +109,8 @@ const socialLinks = [
   { name: 'Facebook', icon: IconBrandFacebook, href: 'https://facebook.com' }
 ] as const;
 
-const paymentMethods = [
-  'Visa',
-  'Mastercard',
-  'Amex',
-  'PayPal',
-  'Apple Pay',
-  'Google Pay',
-  'Klarna',
-  'Crypto'
-] as const;
+/** Payment methods currently processed through Stripe. */
+const paymentMethods = ['Visa', 'Mastercard', 'Amex', 'Apple Pay', 'Google Pay'] as const;
 
 const legalLinks: ReadonlyArray<{ key: LegalLinkKey; href: string }> = [
   { key: 'privacy', href: '/legal/privacy' },

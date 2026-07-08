@@ -23,5 +23,5 @@ export function applyResolvedTheme(resolved: ResolvedTheme) {
   document.documentElement.classList.toggle('dark', resolved === 'dark');
 }
 
-/** Inline script for layout — runs before paint to avoid theme flash. */
-export const themeInitScript = `(function(){try{var k='${THEME_STORAGE_KEY}';var t=localStorage.getItem(k);var s=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var r=t==='dark'||t==='light'?t:s;document.documentElement.classList.toggle('dark',r==='dark');}catch(e){}})();`;
+/** Inline script for layout — runs before paint to avoid theme flash. Brand default is dark; 'system' is respected only when explicitly chosen. */
+export const themeInitScript = `(function(){try{var k='${THEME_STORAGE_KEY}';var t=localStorage.getItem(k);var s=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var r=t==='dark'||t==='light'?t:(t==='system'?s:'dark');document.documentElement.classList.toggle('dark',r==='dark');}catch(e){}})();`;

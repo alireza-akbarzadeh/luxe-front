@@ -1085,6 +1085,11 @@
     "googlePlay": "Google Play",
     "copyright": "© {year, number} Luxe Marketplace, Inc. All rights reserved.",
     "secureCheckout": "Secure checkout · {bits, number}-bit SSL",
+    "securePayments": {
+      "title": "Secure Payments",
+      "description": "100% secure payment with SSL encryption.",
+      "poweredBy": "Payments are processed securely by Stripe."
+    },
     "sections": {
       "shop": "Shop",
       "stores": "Stores",
@@ -1545,25 +1550,25 @@
       "linkLabel": "Shop new arrivals"
     },
     "features": {
-      "eyebrow": "Shopping experience",
-      "title": "Why shoppers choose LUXE",
-      "description": "Every touchpoint — from discovery to delivery — is designed to feel premium, transparent, and effortless.",
+      "eyebrow": "The LUXE standard",
+      "title": "Every detail, considered",
+      "description": "From unboxing to aftercare — the experience is designed to feel as considered as the pieces themselves.",
       "items": {
         "shipping": {
-          "title": "Free Shipping",
-          "description": "Complimentary delivery on orders over {amount, number, usd} worldwide."
+          "title": "Complimentary delivery",
+          "description": "White-glove shipping on orders over {amount, number, usd} — tracked, insured, and on your schedule."
         },
         "quality": {
-          "title": "Premium Quality",
-          "description": "Every item is vetted for materials, fit, and longevity."
+          "title": "Precision crafted",
+          "description": "Every item is vetted for materials, fit, and longevity before it earns a place in the edit."
         },
         "warranty": {
-          "title": "{years, number}-Year Warranty",
-          "description": "Extended protection on eligible products."
+          "title": "{years, number}-year assurance",
+          "description": "Extended protection on eligible pieces — because true luxury is built to endure."
         },
         "support": {
-          "title": "{hours, number}/{days, number} Support",
-          "description": "Concierge-style help whenever you need it."
+          "title": "Concierge {hours, number}/{days, number}",
+          "description": "Dedicated stylists and order specialists — whenever you need a second opinion."
         }
       }
     },
@@ -1646,6 +1651,27 @@
           "answer": "Absolutely. Independent brands and merchants can apply to open a storefront on our marketplace with dedicated seller tools and analytics."
         }
       }
+    },
+    "productStory": {
+      "eyebrow": "The atelier",
+      "title": "Crafted for those who notice the difference",
+      "description": "Every piece on LUXE is selected for exceptional materials, deliberate construction, and a finish that endures beyond the season.",
+      "imageAlt": "Artisan examining luxury leather craftsmanship",
+      "pillars": {
+        "craftsmanship": {
+          "title": "Precision crafted",
+          "description": "Hand-finished details and rigorous quality checks before anything reaches your door."
+        },
+        "materials": {
+          "title": "Premium materials",
+          "description": "Full-grain leather, surgical steel, and ethically sourced textiles — named, not hidden."
+        },
+        "guarantee": {
+          "title": "Lifetime assurance",
+          "description": "Extended protection and concierge support on eligible pieces — because luxury should last."
+        }
+      },
+      "cta": "Discover the edit"
     },
     "finalCta": {
       "title": "Ready to experience premium shopping?",

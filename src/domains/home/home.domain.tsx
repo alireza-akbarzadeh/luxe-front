@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 
 import { Hero } from '@/domains/home/components/hero';
-import { HomeExperienceScrollSection } from '@/domains/home/components/home-experience-scroll-section';
 import { CardGridSkeleton, CarouselSkeleton } from '@/domains/home/components/ui/home-skeleton';
 
 import { TrustBar } from './components/trust-bar';
@@ -14,7 +13,6 @@ export function HomeDomains() {
       <Suspense fallback={null}>
         <TrustBar />
       </Suspense>
-      <HomeExperienceScrollSection />
       <HomeSections />
     </div>
   );

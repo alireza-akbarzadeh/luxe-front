@@ -87,9 +87,9 @@ export async function HeroSection() {
               gap={2}
               className='mt-7 flex-col sm:flex-row lg:items-start'
             >
-              <Flex direction='row' align='center' gap={1}>
+              <Flex direction='row' gap={1}>
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <HeroIconStar key={i} className='text-gold size-4' />
+                  <HeroIconStar key={i} className='text-gold mt-2 size-4' />
                 ))}
               </Flex>
               <Typography.Muted className='text-sm'>

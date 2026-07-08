@@ -34,10 +34,10 @@ export function DashboardBrandLogo({
       )}
     >
       <Image
-        src={BRAND_ASSETS.logo}
+        src={BRAND_ASSETS.tinyLogo}
         alt='Luxe'
         width={collapsed ? 28 : 32}
-        height={collapsed ? 28 : 32}
+        height={collapsed ? 28 : 40}
         className='shrink-0'
         priority
       />

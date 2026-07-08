@@ -29,22 +29,24 @@ export async function TrustBar() {
     description: t(`trust.items.${item.key}.description`, trustItemParams[item.key])
   }));
   return (
-    <section className={`${fullBleedClass} border-border/60 bg-secondary/40 border-y`}>
+    <section className={fullBleedClass}>
       <div className={sectionContainerClass}>
-        <ul className='grid grid-cols-2 gap-4 py-6 sm:grid-cols-4 sm:gap-6 sm:py-8'>
+        <ul className='grid grid-cols-2 gap-3 py-6 sm:grid-cols-4 sm:gap-4 sm:py-8'>
           {trustItems.map((item) => {
             const Icon = iconMap[item.icon];
             return (
               <li
                 key={item.title}
-                className='flex items-center gap-3 sm:flex-col sm:items-center sm:text-center lg:flex-row lg:items-center lg:text-start'
+                className='border-border/60 bg-card/60 hover:border-gold/40 flex items-center gap-3 rounded-xl border px-4 py-4 transition-colors sm:px-5'
               >
-                <div className='bg-background text-accent border-border/60 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border shadow-sm sm:h-11 sm:w-11'>
+                <div className='bg-gold/10 border-gold/20 text-gold flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border sm:h-11 sm:w-11'>
                   <Icon className='h-5 w-5' stroke={1.5} />
                 </div>
                 <div className='min-w-0'>
-                  <p className='text-sm font-semibold'>{item.title}</p>
-                  <p className='text-muted-foreground text-xs sm:text-sm'>{item.description}</p>
+                  <p className='truncate text-sm font-semibold'>{item.title}</p>
+                  <p className='text-muted-foreground truncate text-xs sm:text-sm'>
+                    {item.description}
+                  </p>
                 </div>
               </li>
             );

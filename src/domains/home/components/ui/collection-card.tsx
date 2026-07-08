@@ -19,7 +19,7 @@ export function HomeCollectionCard({
   const href = banner.href ?? (banner.slug ? `/collections/${banner.slug}` : '/collections');
 
   return (
-    <article className='group border-border/60 bg-card relative min-h-[22rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[26rem] sm:rounded-3xl lg:min-h-[32rem]'>
+    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[22rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[26rem] sm:rounded-3xl lg:min-h-[32rem]'>
       {banner.image_url ? (
         <AppImage
           src={banner.image_url}

@@ -43,6 +43,18 @@ export const handleApiError = (
   const status = axiosError.response?.status;
   const url = config.url ?? '';
 
+  // AI endpoints (/ai/*) are decorative PDP insights or dialogs with their own
+  // inline error handling — never toast for them, regardless of status.
+  if (url.includes('/ai/')) {
+    if (process.env['NODE_ENV'] !== 'production') {
+      logger.info(`[API error] ${axiosError.config?.method?.toUpperCase()} ${url}`, {
+        status,
+        data: axiosError.response?.data
+      });
+    }
+    return;
+  }
+
   if (!status) {
     toast.error(
       isNetworkError(axiosError) || !axiosError.request
@@ -89,8 +101,11 @@ export const handleApiError = (
       break;
 
     case HttpStatusCode.BadGateway:
-    case HttpStatusCode.ServiceUnavailable:
     case HttpStatusCode.GatewayTimeout:
+      toast.error(serverMessage ?? t.serverUnavailable);
+      break;
+
+    case HttpStatusCode.ServiceUnavailable:
       toast.error(serverMessage ?? t.serverUnavailable);
       break;
 

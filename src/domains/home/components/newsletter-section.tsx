@@ -1,5 +1,8 @@
 import { IconMail } from '@tabler/icons-react';
 
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
+
 import { getHomeContent } from '../lib/get-home-content';
 import { sectionContainerClass } from '../lib/home-utils';
 import { NewsletterForm } from './ui/newsletter-form';
@@ -10,25 +13,42 @@ export async function NewsletterSection() {
   return (
     <section className='pb-20 sm:pb-24 lg:pb-32'>
       <div className={sectionContainerClass}>
-        <div className='luxe-rise border-border/60 from-card to-secondary/40 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-8 sm:rounded-3xl sm:p-12 lg:p-16'>
-          <div className='bg-accent/8 pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full blur-3xl' />
-          <div className='bg-accent/5 pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full blur-3xl' />
+        <div className='luxe-rise luxury-glass relative overflow-hidden rounded-2xl p-8 sm:rounded-3xl sm:p-12 lg:p-16'>
+          <div
+            aria-hidden
+            className='bg-gold/10 pointer-events-none absolute -end-24 -top-24 size-64 rounded-full blur-3xl'
+          />
+          <div
+            aria-hidden
+            className='bg-gold/5 pointer-events-none absolute -start-16 -bottom-16 size-48 rounded-full blur-3xl'
+          />
 
-          <div className='relative mx-auto max-w-2xl text-center'>
-            <div className='bg-accent/10 text-accent mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-full'>
-              <IconMail className='h-5 w-5' />
-            </div>
-            <span className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
+          <Flex
+            direction='column'
+            align='center'
+            className='relative mx-auto max-w-2xl text-center'
+          >
+            <Flex
+              align='center'
+              justify='center'
+              className='bg-gold/10 text-gold mb-5 size-12 rounded-full'
+            >
+              <IconMail className='size-5' />
+            </Flex>
+            <Typography.Overline className='text-gold'>
               {t('newsletter.eyebrow')}
-            </span>
-            <h2 className='font-display mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl'>
+            </Typography.Overline>
+            <Typography.H2
+              family='display'
+              className='mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl'
+            >
               {t('newsletter.title')}
-            </h2>
-            <p className='text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base'>
+            </Typography.H2>
+            <Typography.Muted className='mt-3 text-sm leading-relaxed sm:text-base'>
               {t('newsletter.description')}
-            </p>
+            </Typography.Muted>
 
-            <div className='mt-8'>
+            <div className='mt-8 w-full'>
               <NewsletterForm
                 labels={{
                   emailPlaceholder: t('newsletter.emailPlaceholder'),
@@ -39,7 +59,7 @@ export async function NewsletterSection() {
                 }}
               />
             </div>
-          </div>
+          </Flex>
         </div>
       </div>
     </section>

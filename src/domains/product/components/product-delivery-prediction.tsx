@@ -71,7 +71,8 @@ export function ProductDeliveryPrediction({
     return () => {
       cancelled = true;
     };
-  }, [enabled, productId, fetchDeliveryPrediction, offlineMessage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- enabled + productId gate fetch; fetchDeliveryPrediction identity changes with mutation state and would loop
+  }, [productId, enabled]);
 
   if (!enabled) {
     return (

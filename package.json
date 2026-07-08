@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
     "@sentry/nextjs": "^10.63.0",
     "@t3-oss/env-nextjs": "0.13.11",
     "@tabler/icons-react": "3.42.0",

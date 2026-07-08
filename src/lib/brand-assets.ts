@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
  */
 export const BRAND_ASSETS = {
   logo: '/assets/logo.png',
+  tinyLogo: '/assets/tiny-logo.png',
   logoOnDark: '/assets/logo-dark.png',
   faviconIco: '/favicon.ico',
   faviconSvg: '/favicon.svg',

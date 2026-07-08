@@ -11,7 +11,7 @@ import RootProvider from '@/components/providers/root';
 import { LuxeSerwistProvider } from '@/components/providers/serwist-provider';
 import { getDirection, type Locale } from '@/i18n/config';
 import { BRAND_ASSETS, siteIconsMetadata } from '@/lib/brand-assets';
-import { geistMono, geistSans, plusJakartaSans, vazirmatn } from '@/lib/fonts';
+import { geistMono, geistSans, vazirmatn } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -47,7 +47,6 @@ export default async function RootLayout({ children }: TRootLayout) {
       lang={locale}
       dir={dir}
       className={cn(
-        plusJakartaSans.variable,
         geistSans.variable,
         geistMono.variable,
         locale === 'fa' && vazirmatn.variable,

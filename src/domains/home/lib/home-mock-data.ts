@@ -47,6 +47,10 @@ export const HERO_EDITORIAL_SPOTLIGHT_IMAGE =
 export const HOME_EXPERIENCE_SCROLL_IMAGE =
   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&h=900&fit=crop';
 
+/** Product story split — artisan craftsmanship editorial (below fold). */
+export const HOME_PRODUCT_STORY_IMAGE =
+  'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=1200&h=1500&fit=crop';
+
 export const TRUST_ITEMS = [
   { key: 'freeShipping', icon: 'truck' },
   { key: 'easyReturns', icon: 'return' },

@@ -45,7 +45,7 @@ export async function PromoSection() {
           t={{
             badge: t('badge'),
             title: t('title', { discount }),
-            description: t('description', { code: promoCode }),
+            description: t('description', { discount, code: promoCode }),
             shopSale: t('shopSale'),
             createAccount: t('createAccount'),
             countdown: {

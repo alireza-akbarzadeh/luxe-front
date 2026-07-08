@@ -3,8 +3,8 @@
 import { IconBuildingStore, IconRobot, IconSparkles, IconUser } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
-import { AiChatComposer } from '@/components/ai/ai-chat-composer';
 import { AiThinkingRow } from '@/components/ai/ai-thinking-row';
 import {
   Conversation,
@@ -21,6 +21,7 @@ import { Typography } from '@/components/ui/typography';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
+import { VoiceAiChatComposer } from '~/src/components/ai/voice-ai-chat-composer';
 
 import { useProductAiChat } from '../hooks/use-product-ai-chat';
 
@@ -110,6 +111,7 @@ export function ProductChatSheet({ open, onOpenChange, product }: ProductChatShe
 function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
   const t = useTranslations('pdp.chat');
   const tPdp = useTranslations('pdp');
+  const tVoice = useTranslations('shoppingAssistant.voice');
   const { formatPrice, moneyClassName } = useLocaleFormatters();
   const numericProductId = Number(product.id ?? 0);
   const { sendMessage, isPending } = useProductAiChat(numericProductId);
@@ -172,8 +174,13 @@ function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
     appendMessage('assistant', reply);
   };
 
-  const handlePromptSubmit = async ({ text }: PromptInputMessage) => {
+  const handlePromptSubmit = async ({ text, files }: PromptInputMessage) => {
     const trimmed = text.trim();
+    if (files.length > 0) {
+      toast.message(tVoice('attachmentsPending'), {
+        description: tVoice('attachmentsPendingHint')
+      });
+    }
     if (!trimmed || isPending) {
       throw new Error('empty');
     }
@@ -232,7 +239,7 @@ function ProductChatPanel({ product }: { product: DtoProductWithLike }) {
       </Conversation>
 
       <Flex direction='column' spacing={2} className='border-border border-t px-4 py-3'>
-        <AiChatComposer
+        <VoiceAiChatComposer
           isPending={isPending}
           onSubmit={handlePromptSubmit}
           placeholder={t('placeholder')}

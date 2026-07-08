@@ -19,7 +19,7 @@ type TRootProvider = Readonly<
 
 export default function RootProvider({ children, dir }: TRootProvider) {
   return (
-    <ThemeProvider defaultTheme='system'>
+    <ThemeProvider defaultTheme='dark'>
       <DirectionProvider dir={dir}>
         <NuqsAdapter>
           <Toaster />

@@ -1085,6 +1085,11 @@
     "googlePlay": "Google Play",
     "copyright": "© {year, number} Luxe Marketplace, Inc. Todos los derechos reservados.",
     "secureCheckout": "Pago seguro · SSL de {bits, number} bits",
+    "securePayments": {
+      "title": "Pagos seguros",
+      "description": "Pago 100% seguro con cifrado SSL.",
+      "poweredBy": "Los pagos se procesan de forma segura a través de Stripe."
+    },
     "sections": {
       "shop": "Tienda",
       "stores": "Tiendas",
@@ -1545,25 +1550,25 @@
       "linkLabel": "Ver novedades"
     },
     "features": {
-      "eyebrow": "Experiencia de compra",
-      "title": "Por qué eligen LUXE",
-      "description": "Cada punto de contacto — del descubrimiento a la entrega — está diseñado para sentirse premium, transparente y sin esfuerzo.",
+      "eyebrow": "El estándar LUXE",
+      "title": "Cada detalle, considerado",
+      "description": "Precisión, materiales y presentación — los pilares detrás de cada pieza que ofrecemos.",
       "items": {
         "shipping": {
-          "title": "Envío gratis",
-          "description": "Entrega gratuita en pedidos superiores a {amount, number, usd} en todo el mundo."
+          "title": "Envío de cortesía",
+          "description": "Entrega premium en pedidos superiores a {amount, number, usd} — rastreado del atelier a tu puerta."
         },
         "quality": {
-          "title": "Calidad premium",
-          "description": "Cada artículo se verifica por materiales, ajuste y durabilidad."
+          "title": "Precisión artesanal",
+          "description": "Cada artículo verificado en construcción, ajuste y acabado dignos de un guardarropa permanente."
         },
         "warranty": {
-          "title": "Garantía de {years, number} años",
-          "description": "Protección extendida en productos elegibles."
+          "title": "Garantía de por vida",
+          "description": "Protección ampliada en piezas elegibles — lujo hecho para superar tendencias."
         },
         "support": {
-          "title": "Soporte {hours, number}/{days, number}",
-          "description": "Ayuda estilo concierge cuando la necesites."
+          "title": "Soporte concierge",
+          "description": "Asistencia de estilo y pedidos {hours, number}/{days, number} — humana, no automatizada."
         }
       }
     },
@@ -1646,6 +1651,27 @@
           "answer": "Por supuesto. Marcas y comerciantes independientes pueden solicitar abrir una tienda con herramientas y analíticas dedicadas."
         }
       }
+    },
+    "productStory": {
+      "eyebrow": "El atelier",
+      "title": "Creado para quienes notan la diferencia",
+      "description": "Cada pieza en LUXE se elige por materiales excepcionales, construcción deliberada y un acabado que perdura más allá de la temporada.",
+      "imageAlt": "Artesano examinando artesanía en cuero de lujo",
+      "pillars": {
+        "craftsmanship": {
+          "title": "Precisión artesanal",
+          "description": "Detalles acabados a mano y controles rigurosos antes de que algo llegue a tu puerta."
+        },
+        "materials": {
+          "title": "Materiales premium",
+          "description": "Cuero de plena flor, acero quirúrgico y textiles de origen ético — con nombre, sin ocultar."
+        },
+        "guarantee": {
+          "title": "Garantía de por vida",
+          "description": "Protección ampliada y soporte concierge en piezas elegibles — porque el lujo debe durar."
+        }
+      },
+      "cta": "Descubrir la selección"
     },
     "finalCta": {
       "title": "¿Listo para una experiencia premium?",

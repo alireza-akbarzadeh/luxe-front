@@ -51,6 +51,7 @@ export function ProductVariantAttributes({
   }, [attributes, colors, sizes]);
 
   const variantKey = variantAttributes.map((attribute) => attribute.name ?? '').join('|');
+  const presetKey = JSON.stringify(presetSelections ?? {});
   const defaultSelections = useMemo(
     () => buildDefaultSelections(variantAttributes),
     [variantAttributes]
@@ -58,15 +59,19 @@ export function ProductVariantAttributes({
 
   const [userOverrides, setUserOverrides] = useState<Record<string, string>>({});
   const [lastVariantKey, setLastVariantKey] = useState(variantKey);
-  const presetKey = JSON.stringify(presetSelections ?? {});
-  const [lastPresetKey, setLastPresetKey] = useState(presetKey);
+  const [lastPresetKey, setLastPresetKey] = useState<string | null>(null);
 
-  if (variantKey !== lastVariantKey) {
+  // Render-time state adjustments instead of effects
+  // (react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes).
+  if (lastVariantKey !== variantKey) {
     setLastVariantKey(variantKey);
+    setLastPresetKey(null);
     setUserOverrides({});
-  }
-
-  if (presetKey !== lastPresetKey && presetSelections && Object.keys(presetSelections).length > 0) {
+  } else if (
+    presetSelections &&
+    Object.keys(presetSelections).length > 0 &&
+    presetKey !== lastPresetKey
+  ) {
     setLastPresetKey(presetKey);
     setUserOverrides((prev) => ({ ...prev, ...presetSelections }));
   }

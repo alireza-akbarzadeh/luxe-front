@@ -1,10 +1,8 @@
-import {
-  IconDiamond,
-  IconHeadphones,
-  IconShield,
-  IconTruck
-} from '@tabler/icons-react';
+import { IconDiamond, IconHeadphones, IconShield, IconTruck } from '@tabler/icons-react';
 
+import { Flex } from '@/components/ui/flex';
+import { Grid } from '@/components/ui/grid';
+import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
 import { getHomeContent } from '../lib/get-home-content';
@@ -30,32 +28,37 @@ export async function FeaturesSection() {
           description={t('features.description')}
         />
 
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5'>
+        <Grid cols={1} className='gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5'>
           {features.map((feature, index) => {
             const Icon = iconMap[feature.icon];
             return (
-              <div
+              <Flex
                 key={feature.id}
+                direction='column'
                 className={cn(
-                  'luxe-fade group',
+                  'group luxe-fade luxury-glass luxury-card h-full p-6 sm:p-8',
                   index === 1 && 'luxe-delay-1',
                   index === 2 && 'luxe-delay-2',
                   index === 3 && 'luxe-delay-3'
                 )}
               >
-                <div className='bg-card border-border/60 hover:border-border h-full rounded-2xl border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:rounded-3xl sm:p-8'>
-                  <div className='bg-secondary text-accent group-hover:bg-accent group-hover:text-accent-foreground mb-5 flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-300'>
-                    <Icon className='h-6 w-6' stroke={1.5} />
-                  </div>
-                  <h3 className='font-display text-lg font-semibold'>{feature.title}</h3>
-                  <p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
+                <Flex
+                  align='center'
+                  justify='center'
+                  className='bg-gold/10 text-gold group-hover:bg-gold group-hover:text-gold-foreground mb-5 size-12 rounded-xl transition-colors duration-300'
+                >
+                  <Icon className='size-6' stroke={1.5} />
+                </Flex>
+                <Typography.H3 family='display' className='text-lg font-semibold'>
+                  {feature.title}
+                </Typography.H3>
+                <Typography.Muted className='mt-2 text-sm leading-relaxed'>
+                  {feature.description}
+                </Typography.Muted>
+              </Flex>
             );
           })}
-        </div>
+        </Grid>
       </div>
     </section>
   );

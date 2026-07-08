@@ -1,14 +1,4 @@
-import { Geist, Geist_Mono, Plus_Jakarta_Sans, Vazirmatn } from 'next/font/google';
-
-/** Commerce / storefront — premium sans (English). */
-export const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  adjustFontFallback: true,
-  preload: true
-});
+import { Geist, Geist_Mono, Vazirmatn } from 'next/font/google';
 
 /** Admin + vendor panel dashboards. */
 export const geistSans = Geist({
