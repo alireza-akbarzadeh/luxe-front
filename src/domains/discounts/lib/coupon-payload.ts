@@ -1,4 +1,5 @@
 import type { CouponFormValues } from '@/domains/discounts/discount.schema';
+import { couponCustomerSegmentAny } from '@/domains/discounts/discount.schema';
 import type {
   DtoCouponConditionsRequest,
   DtoCreateCouponRequest
@@ -20,7 +21,7 @@ function buildConditionsPayload(
     first_order_only: conditions.first_order_only || undefined,
     min_item_quantity: conditions.min_item_quantity,
     customer_segment:
-      conditions.customer_segment && conditions.customer_segment.length > 0
+      conditions.customer_segment && conditions.customer_segment !== couponCustomerSegmentAny
         ? conditions.customer_segment
         : undefined,
     category_ids: parseIdList(conditions.category_ids),

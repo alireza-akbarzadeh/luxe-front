@@ -92,7 +92,7 @@ export function Navbar() {
               aria-label='LUXE Home'
               className='inline-flex shrink-0 items-center lg:col-start-1 lg:justify-self-start'
             >
-              <StorefrontBrandLogo priority />
+              <StorefrontBrandLogo variant='compact' />
             </Link>
             <div className='-mt-[13px] hidden min-w-0 lg:col-start-2 lg:block'>
               <DesktopNav navMenus={sortedNavMenus} />

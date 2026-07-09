@@ -1,5 +1,5 @@
-import { NewslettersAdminDomain } from '@/domains/newsletters-admin/newsletters-admin.domain';
+import { redirect } from 'next/navigation';
 
-export default function NewslettersPage() {
-  return <NewslettersAdminDomain />;
+export default function LegacyNewslettersPage() {
+  redirect('/dashboard/marketing/subscribers');
 }

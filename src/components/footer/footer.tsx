@@ -71,7 +71,7 @@ export function Footer() {
               aria-label='LUXE Home'
               className='relative z-20 inline-flex shrink-0 items-center self-start'
             >
-              <StorefrontBrandLogo className='h-9 max-w-[11rem] sm:h-10 sm:max-w-[12rem]' />
+              <StorefrontBrandLogo variant='editorial' />
             </Link>
 
             <p className='text-muted-foreground mt-4 max-w-sm text-sm leading-relaxed'>
@@ -229,8 +229,8 @@ export function Footer() {
           aria-hidden
           className='pointer-events-none -mt-4 overflow-hidden pb-2 text-center select-none'
         >
-          <div className='from-foreground/20 via-foreground/8 dark:from-foreground/10 dark:via-foreground/4 bg-linear-to-b to-transparent bg-clip-text text-[18vw] leading-[0.9] font-black tracking-tighter text-transparent'>
-            LUXE
+          <div className='font-display text-gold/12 text-[18vw] leading-[0.9] font-semibold tracking-[0.12em] italic'>
+            Luxe
           </div>
         </div>
       </div>

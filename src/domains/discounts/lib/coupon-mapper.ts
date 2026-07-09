@@ -1,4 +1,5 @@
 import type { CouponFormValues } from '@/domains/discounts/discount.schema';
+import { couponCustomerSegmentAny } from '@/domains/discounts/discount.schema';
 import type { ModelsCoupon } from '@/services/-coupons-{id}-get.schemas';
 import type { DtoCouponConditionsRequest } from '@/services/-coupons-post.schemas';
 
@@ -14,7 +15,7 @@ function parseConditionsFromApi(raw: unknown): CouponFormValues['conditions'] {
     return {
       first_order_only: false,
       min_item_quantity: undefined,
-      customer_segment: undefined,
+      customer_segment: couponCustomerSegmentAny,
       category_ids: '',
       product_ids: ''
     };
@@ -24,7 +25,7 @@ function parseConditionsFromApi(raw: unknown): CouponFormValues['conditions'] {
   return {
     first_order_only: conditions.first_order_only ?? false,
     min_item_quantity: conditions.min_item_quantity,
-    customer_segment: conditions.customer_segment,
+    customer_segment: conditions.customer_segment ?? couponCustomerSegmentAny,
     category_ids: conditions.category_ids?.join(', ') ?? '',
     product_ids: conditions.product_ids?.join(', ') ?? ''
   };

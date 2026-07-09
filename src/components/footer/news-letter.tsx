@@ -4,31 +4,35 @@ import { IconArrowRight, IconCheck, IconMail } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { getFooterNewsletterCopyParams } from '@/lib/i18n/marketing-copy-params';
 import { cn } from '@/lib/utils';
+import { usePostNewslettersSubscribe } from '@/services/-newsletters-subscribe-post';
 
 export function Newsletter() {
   const t = useTranslations('footer.newsletter');
   const copy = getFooterNewsletterCopyParams();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { mutateAsync: subscribe } = usePostNewslettersSubscribe();
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) {
       setStatus('error');
       return;
     }
     setStatus('loading');
-
-    const subject = encodeURIComponent(t('mailtoSubject'));
-    const body = encodeURIComponent(t('mailtoBody', { email }));
-    window.location.href = `mailto:concierge@luxe.com?subject=${subject}&body=${body}`;
-
-    setStatus('success');
-    setEmail('');
-    setTimeout(() => setStatus('idle'), 3500);
+    try {
+      await subscribe({ data: { email: email.trim(), source: 'footer' } });
+      setStatus('success');
+      setEmail('');
+      setTimeout(() => setStatus('idle'), 3500);
+    } catch {
+      setStatus('error');
+      toast.error(t('errorInvalidEmail'));
+    }
   }
 
   return (
@@ -57,7 +61,7 @@ export function Newsletter() {
             {t('description', copy)}
           </p>
         </div>
-        <form onSubmit={handleSubmit} className='min-w-0 space-y-3'>
+        <form onSubmit={(e) => void handleSubmit(e)} className='min-w-0 space-y-3'>
           <div
             className={cn(
               'group bg-background/70 relative flex min-w-0 flex-col gap-2 rounded-2xl border p-2 backdrop-blur transition-all sm:flex-row sm:items-center',

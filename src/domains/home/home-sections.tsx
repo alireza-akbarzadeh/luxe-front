@@ -28,6 +28,7 @@ import { NewsletterSection } from './components/newsletter-section';
 import { PromoSection } from './components/promo-section';
 import { RecentlyViewedHomeSection } from './components/recently-viewed-home-section';
 import { RecommendedForYouSection } from './components/recommended-for-you-section';
+import { SeasonalPicksSection } from './components/seasonal-picks-section';
 import { StatsSection } from './components/stats-section';
 import { TestimonialsSection } from './components/testimonials-section';
 
@@ -50,6 +51,12 @@ export function HomeSections() {
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
           <CollectionBanner />
+        </SectionBoundary>
+      </MobileDeferredSection>
+
+      <MobileDeferredSection>
+        <SectionBoundary fallback={<CarouselSkeleton count={3} />}>
+          <SeasonalPicksSection />
         </SectionBoundary>
       </MobileDeferredSection>
 

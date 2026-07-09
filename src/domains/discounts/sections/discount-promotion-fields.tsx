@@ -6,7 +6,7 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Typography } from '@/components/ui/typography';
 
-import { couponDefaultValues } from '../discount.schema';
+import { couponCustomerSegmentAny, couponDefaultValues } from '../discount.schema';
 
 /** Application type, BOGO settings, and eligibility conditions. */
 export function DiscountPromotionFields() {
@@ -141,7 +141,7 @@ export function DiscountPromotionFields() {
               <field.Select
                 label='Customer segment'
                 options={[
-                  { label: 'Any customer', value: '' },
+                  { label: 'Any customer', value: couponCustomerSegmentAny },
                   { label: 'VIP', value: 'vip' },
                   { label: 'Plus members', value: 'plus' },
                   { label: 'New customers', value: 'new' }

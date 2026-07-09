@@ -1,10 +1,12 @@
 'use client';
 
-import { IconArrowRight, IconCircleCheck } from '@tabler/icons-react';
+import { IconCircleCheck, IconLoader2 } from '@tabler/icons-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { usePostNewslettersSubscribe } from '@/services/-newsletters-subscribe-post';
 
 interface NewsletterFormProps {
   labels: {
@@ -14,18 +16,29 @@ interface NewsletterFormProps {
     success: string;
     privacyNote: string;
   };
+  source?: 'home' | 'footer';
 }
 
-/** Client island for newsletter email capture (form state only). */
-export function NewsletterForm({ labels }: NewsletterFormProps) {
+/** Client island for newsletter email capture. */
+export function NewsletterForm({ labels, source = 'home' }: NewsletterFormProps) {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { mutateAsync: subscribe, isPending } = usePostNewslettersSubscribe();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    const trimmed = email.trim();
+    if (!trimmed) return;
+
+    try {
+      await subscribe({ data: { email: trimmed, source } });
       setIsSubscribed(true);
       setEmail('');
+    } catch (error) {
+      toast.error('Could not subscribe', {
+        description: error instanceof Error ? error.message : 'Please try again'
+      });
     }
   };
 
@@ -40,7 +53,10 @@ export function NewsletterForm({ labels }: NewsletterFormProps) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className='mx-auto flex max-w-md flex-col gap-3 sm:flex-row'>
+      <form
+        onSubmit={(e) => void handleSubmit(e)}
+        className='mx-auto flex max-w-md flex-col gap-3 sm:flex-row'
+      >
         <Input
           type='email'
           placeholder={labels.emailPlaceholder}
@@ -50,9 +66,13 @@ export function NewsletterForm({ labels }: NewsletterFormProps) {
           required
           aria-label={labels.emailAriaLabel}
         />
-        <Button type='submit' size='lg' className='group h-12 shrink-0 rounded-full px-6 sm:h-14 sm:px-8'>
-          {labels.subscribe}
-          <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5' />
+        <Button
+          type='submit'
+          size='lg'
+          className='group h-12 shrink-0 rounded-full px-6 sm:h-14 sm:px-8'
+          disabled={isPending}
+        >
+          {isPending ? <IconLoader2 className='size-4 animate-spin' /> : labels.subscribe}
         </Button>
       </form>
       <p className='text-muted-foreground mt-4 text-xs'>{labels.privacyNote}</p>

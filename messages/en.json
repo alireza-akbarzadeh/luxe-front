@@ -1550,6 +1550,11 @@
         }
       }
     },
+    "seasonalPicks": {
+      "eyebrow": "Seasonal picks",
+      "title": "Editorial banners",
+      "viewAll": "Shop seasonal edits"
+    },
     "collections": {
       "eyebrow": "Collections",
       "title": "Curated edits",

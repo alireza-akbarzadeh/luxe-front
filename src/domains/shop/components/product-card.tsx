@@ -9,12 +9,13 @@ import {
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { LikeButton } from '@/components/buttons/like-button';
 import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Lens } from '@/components/ui/lens';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { type CartItemPayload, useCartController } from '@/hooks/useCartController';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
@@ -112,6 +113,15 @@ export function ProductCard({
   const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const isCompact = size === 'compact';
   const { increment, isLoading, items: cartItems } = useCartController();
+  const [canHoverLens, setCanHoverLens] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const update = () => setCanHoverLens(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
 
   const productHref = getProductPath(product);
   const primaryImage = product.images?.[0] || IMAGE_FALLBACK;
@@ -156,6 +166,55 @@ export function ProductCard({
     return isCompact ? t('add') : t('addToCart');
   };
 
+  const showLens = canHoverLens && !isCompact;
+  const showSecondaryImage = Boolean(secondaryImage) && !showLens;
+
+  const productImage = (
+    <div
+      className={cn(
+        'bg-muted relative block aspect-4/5 overflow-hidden',
+        isCompact ? 'rounded-t-xl' : 'rounded-t-2xl',
+        showLens && 'cursor-crosshair'
+      )}
+    >
+      <AppImage
+        src={primaryImage}
+        alt={product.name ?? 'Product'}
+        fill
+        priority={priority}
+        sizes={isCompact ? '(max-width: 640px) 50vw, 20vw' : '(max-width: 640px) 100vw, 25vw'}
+        className={cn(
+          'object-cover transition-all duration-700 ease-out',
+          showSecondaryImage
+            ? 'group-hover:scale-[1.03] group-hover:opacity-0'
+            : 'group-hover:scale-[1.04]'
+        )}
+      />
+
+      {showSecondaryImage && secondaryImage ? (
+        <AppImage
+          src={secondaryImage}
+          alt=''
+          aria-hidden
+          fill
+          loading='lazy'
+          sizes={isCompact ? '(max-width: 640px) 50vw, 20vw' : '(max-width: 640px) 100vw, 25vw'}
+          className='object-cover opacity-0 transition-all duration-700 ease-out group-hover:scale-[1.04] group-hover:opacity-100'
+        />
+      ) : null}
+
+      <div className='from-foreground/30 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+
+      {isOutOfStock ? (
+        <div className='bg-background/55 absolute inset-0 flex items-center justify-center backdrop-blur-[2px]'>
+          <Badge variant='inverse' size={isCompact ? 'sm' : 'default'}>
+            {t('soldOut')}
+          </Badge>
+        </div>
+      ) : null}
+    </div>
+  );
+
   return (
     <div className='h-full'>
       <article
@@ -168,48 +227,19 @@ export function ProductCard({
         <div className='relative'>
           <Link
             href={productHref}
-            className={cn(
-              'bg-muted relative block aspect-4/5 overflow-hidden',
-              isCompact ? 'rounded-t-xl' : 'rounded-t-2xl'
-            )}
+            className='block'
             aria-label={t('viewProduct', { name: product.name ?? '' })}
           >
-            <AppImage
-              src={primaryImage}
-              alt={product.name ?? 'Product'}
-              fill
-              priority={priority}
-              sizes={isCompact ? '(max-width: 640px) 50vw, 20vw' : '(max-width: 640px) 100vw, 25vw'}
-              className={cn(
-                'object-cover transition-all duration-700 ease-out',
-                secondaryImage
-                  ? 'group-hover:scale-[1.03] group-hover:opacity-0'
-                  : 'group-hover:scale-[1.04]'
-              )}
-            />
-
-            {secondaryImage && (
-              <AppImage
-                src={secondaryImage}
-                alt=''
-                aria-hidden
-                fill
-                loading='lazy'
-                sizes={
-                  isCompact ? '(max-width: 640px) 50vw, 20vw' : '(max-width: 640px) 100vw, 25vw'
-                }
-                className='object-cover opacity-0 transition-all duration-700 ease-out group-hover:scale-[1.04] group-hover:opacity-100'
-              />
-            )}
-
-            <div className='from-foreground/30 pointer-events-none absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
-
-            {isOutOfStock && (
-              <div className='bg-background/55 absolute inset-0 flex items-center justify-center backdrop-blur-[2px]'>
-                <Badge variant='inverse' size={isCompact ? 'sm' : 'default'}>
-                  {t('soldOut')}
-                </Badge>
-              </div>
+            {showLens ? (
+              <Lens
+                zoomFactor={1.6}
+                lensSize={140}
+                className={isCompact ? 'rounded-t-xl' : 'rounded-t-2xl'}
+              >
+                {productImage}
+              </Lens>
+            ) : (
+              productImage
             )}
           </Link>
 

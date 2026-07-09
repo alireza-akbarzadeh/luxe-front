@@ -3,11 +3,15 @@ import { z } from 'zod';
 export const couponApplicationTypes = ['code', 'automatic', 'bogo'] as const;
 export const couponDiscountTypes = ['percentage', 'fixed'] as const;
 export const couponCustomerSegments = ['vip', 'plus', 'new'] as const;
+/** Radix Select cannot use empty string — sentinel for "no segment filter". */
+export const couponCustomerSegmentAny = 'any' as const;
 
 export const couponConditionsSchema = z.object({
   first_order_only: z.boolean(),
   min_item_quantity: z.number().int().min(1).optional(),
-  customer_segment: z.union([z.enum(couponCustomerSegments), z.literal('')]).optional(),
+  customer_segment: z
+    .union([z.enum(couponCustomerSegments), z.literal(couponCustomerSegmentAny)])
+    .optional(),
   category_ids: z.string().optional(),
   product_ids: z.string().optional()
 });
@@ -83,7 +87,7 @@ export const couponDefaultValues: CouponFormValues = {
   conditions: {
     first_order_only: false,
     min_item_quantity: undefined,
-    customer_segment: undefined,
+    customer_segment: couponCustomerSegmentAny,
     category_ids: '',
     product_ids: ''
   },
