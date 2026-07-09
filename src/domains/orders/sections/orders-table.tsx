@@ -9,6 +9,7 @@ import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { OrderMobileCard } from '@/domains/orders/components/order-mobile-card';
 import { useOrdersQueryState } from '@/domains/orders/hooks/use-orders-query';
 import { downloadOrdersCsv } from '@/domains/orders/lib/order-export';
 import {
@@ -19,12 +20,14 @@ import type { OrderStatusFilter } from '@/domains/orders/orders.schema';
 import { ORDER_STATUS_TABS } from '@/domains/orders/orders.schema';
 import { orderColumns, orderRowMenuActions } from '@/domains/orders/sections/orders-columns';
 import { OrdersFilterSheet } from '@/domains/orders/sections/orders-filter-sheet';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { useGetOrders } from '@/services/-orders-get';
 import type { DtoAdminOrderListItem, GetOrders200 } from '@/services/-orders-get.schemas';
 
 export function OrdersTable() {
   const router = useRouter();
   const [filterOpen, setFilterOpen] = useState(false);
+  const { isDesktop } = useMediaDevices();
 
   const {
     status,
@@ -112,7 +115,7 @@ export function OrdersTable() {
           onValueChange={(value) => void setStatus(value as OrderStatusFilter)}
           className='px-1'
         >
-          <TabsList className='mb-3 h-auto flex-wrap'>
+          <TabsList className='mb-3 h-auto max-w-full flex-wrap overflow-x-auto'>
             {ORDER_STATUS_TABS.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
                 {tab.label}
@@ -140,20 +143,30 @@ export function OrdersTable() {
             ) : null}
           </Button>
 
-          <Button type='button' variant='outline' size='sm' onClick={() => void handleExport()}>
-            <IconDownload className='size-4' />
-            Export CSV
-          </Button>
+          {isDesktop ? (
+            <Button type='button' variant='outline' size='sm' onClick={() => void handleExport()}>
+              <IconDownload className='size-4' />
+              Export CSV
+            </Button>
+          ) : null}
         </Table.Toolbar>
 
-        <Table.Grid<DtoAdminOrderListItem>
-          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
-          onRowDoubleClick={(row) => row.original.id && openOrder(row.original.id)}
-          getDetailsUrl={(row) =>
-            row.original.id ? `/dashboard/orders/${row.original.id}` : '/dashboard/orders'
-          }
-          extendMenuActions={(row) => orderRowMenuActions(row.original, openOrder)}
-        />
+        {isDesktop ? (
+          <Table.Grid<DtoAdminOrderListItem>
+            isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+            onRowDoubleClick={(row) => row.original.id && openOrder(row.original.id)}
+            getDetailsUrl={(row) =>
+              row.original.id ? `/dashboard/orders/${row.original.id}` : '/dashboard/orders'
+            }
+            extendMenuActions={(row) => orderRowMenuActions(row.original, openOrder)}
+          />
+        ) : (
+          <Table.MobileList<DtoAdminOrderListItem>
+            isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+            renderCard={(row) => <OrderMobileCard row={row} />}
+            onCardClick={(row) => row.original.id && openOrder(row.original.id)}
+          />
+        )}
 
         <Table.Pagination
           showPageSize

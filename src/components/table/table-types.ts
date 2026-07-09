@@ -48,6 +48,8 @@ interface BaseTableToolbarProps {
   showSorting?: boolean;
   showExport?: boolean;
   showBulkActions?: boolean;
+  /** Hide column visibility, sorting, export, and row count on mobile/tablet. Default true. */
+  compactOnMobile?: boolean;
   onDelete?: () => void;
 }
 

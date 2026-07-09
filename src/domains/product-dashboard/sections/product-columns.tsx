@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 
 import { Badge } from '@/components/ui/badge';
+import { ProductRowActions } from '@/domains/product-dashboard/components/product-row-actions';
 import { cn } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
 import { formatPrice } from '~/src/domains/home/lib/home-utils';
@@ -145,5 +146,12 @@ export const productColumns: ColumnDef<DtoProductWithLike>[] = [
       const date = row.original.created_at;
       return <div className='text-xs'>{date ? new Date(date).toLocaleDateString() : '—'}</div>;
     }
+  },
+  {
+    id: 'actions',
+    header: '',
+    cell: ({ row }) => <ProductRowActions product={row.original} />,
+    enableSorting: false,
+    enableHiding: false
   }
 ];

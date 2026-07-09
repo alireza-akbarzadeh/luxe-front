@@ -31,7 +31,7 @@ export function UsersDomain() {
   return (
     <div className='bg-background min-h-screen'>
       <div className='bg-card/80 sticky top-0 z-20 border-b backdrop-blur-sm'>
-        <div className='mx-auto max-w-400 px-6 py-5'>
+        <div className='mx-auto max-w-400 px-4 py-4 md:px-6 md:py-5'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='bg-primary/10 flex h-9 w-9 items-center justify-center rounded-xl'>
@@ -56,7 +56,7 @@ export function UsersDomain() {
         </div>
       </div>
 
-      <div className='mx-auto max-w-400 space-y-8 px-6 py-8'>
+      <div className='mx-auto max-w-400 space-y-6 px-4 py-6 md:space-y-8 md:px-6 md:py-8'>
         <UsersKPICards
           stats={statsResponse?.data}
           overview={overviewResponse?.data}
@@ -71,7 +71,7 @@ export function UsersDomain() {
               Roles & Permissions.
             </p>
           </div>
-          <div className='border-border/40 bg-card/30 rounded-[2.5rem] border shadow-2xl shadow-black/5 backdrop-blur-xl'>
+          <div className='border-border/40 bg-card/30 rounded-3xl border shadow-2xl shadow-black/5 backdrop-blur-xl md:rounded-[2.5rem]'>
             <UserManagementTable />
           </div>
         </div>

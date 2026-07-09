@@ -3,8 +3,6 @@
 import {
   IconAlertTriangle,
   IconArrowsHorizontal,
-  IconChevronDown,
-  IconFilter,
   IconUserCheck,
   IconUserMinus
 } from '@tabler/icons-react';
@@ -16,13 +14,12 @@ import { AdvancedFilterContent } from '@/components/table/advanced-filter-conten
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+import { Flex } from '@/components/ui/flex';
+import { Text } from '@/components/ui/typography';
 import { UserDetailSheet } from '@/domains/users/components/user-detail-sheet';
+import { UserMobileCard } from '@/domains/users/components/user-mobile-card';
+import { UserSegmentPicker } from '@/domains/users/components/user-segment-picker';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { cn } from '@/lib/utils';
 import { useGetAdminUsers } from '@/services/-admin-users-get';
 import type {
@@ -63,10 +60,7 @@ export function UserManagementTable({ defaultSegment }: UserManagementTableProps
     return params;
   }, []);
 
-  const getRows = useCallback(
-    (data: GetAdminUsers200 | undefined) => data?.data?.users ?? [],
-    []
-  );
+  const getRows = useCallback((data: GetAdminUsers200 | undefined) => data?.data?.users ?? [], []);
 
   const getTotal = useCallback((data: GetAdminUsers200 | undefined) => data?.data?.total ?? 0, []);
 
@@ -163,7 +157,9 @@ function UserTableContent({
   userStatusOptions,
   onRowOpen
 }: {
-  serverTable: ReturnType<typeof useServerTable<DtoAdminUserResponse, GetAdminUsers200, GetAdminUsersParams>>;
+  serverTable: ReturnType<
+    typeof useServerTable<DtoAdminUserResponse, GetAdminUsers200, GetAdminUsersParams>
+  >;
   applySegment: (segment: UserSegment) => void;
   userStatusOptions: Array<{
     label: string;
@@ -174,6 +170,7 @@ function UserTableContent({
   onRowOpen: (user: DtoAdminUserResponse) => void;
 }) {
   const { tableState, isLoading, isFetching, refetch, total } = serverTable;
+  const { isDesktop } = useMediaDevices();
 
   return (
     <Table.Root {...serverTable.rootProps}>
@@ -188,48 +185,10 @@ function UserTableContent({
         showSorting
         showExport
       >
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant='outline'
-              size='sm'
-              className='border-border/60 hover:bg-background h-10 gap-2 rounded-xl border-dashed text-[10px] font-bold uppercase'
-            >
-              <IconFilter className='text-primary h-3.5 w-3.5' />
-              Segment: {tableState.columnFilters.length > 0 ? 'Custom' : 'All'}
-              <IconChevronDown className='h-3 w-3 opacity-50' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align='end'
-            className='border-border/40 w-48 rounded-xl p-1 shadow-2xl'
-          >
-            <DropdownMenuItem
-              onClick={() => applySegment('all')}
-              className='py-2 text-[10px] font-bold uppercase'
-            >
-              All Users
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => applySegment('active')}
-              className='py-2 text-[10px] font-bold text-emerald-600 uppercase'
-            >
-              Active Users
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => applySegment('inactive')}
-              className='text-muted-foreground py-2 text-[10px] font-bold uppercase'
-            >
-              Inactive Users
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => applySegment('admins')}
-              className='text-primary py-2 text-[10px] font-bold uppercase'
-            >
-              Admins
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserSegmentPicker
+          hasCustomFilters={tableState.columnFilters.length > 0}
+          onSelect={applySegment}
+        />
 
         <AppDialog
           title='Advanced Parameters'
@@ -241,7 +200,7 @@ function UserTableContent({
               className='hover:bg-background h-10 gap-2 rounded-xl text-[10px] font-bold uppercase'
             >
               <IconArrowsHorizontal className='h-3.5 w-3.5' />
-              Advanced
+              {isDesktop ? 'Advanced' : 'Filters'}
               {tableState.columnFilters.length > 0 && (
                 <span className='bg-primary text-primary-foreground ml-1 flex h-4 w-4 items-center justify-center rounded-full text-[8px]'>
                   {tableState.columnFilters.length}
@@ -257,46 +216,70 @@ function UserTableContent({
         </AppDialog>
       </Table.Toolbar>
 
-      <div className='border-border/40 bg-background/50 flex flex-wrap items-center justify-between border-b px-6 py-4'>
-        <div className='flex flex-wrap gap-2'>
-          {userStatusOptions.map((option) => {
-            const isActive = tableState.columnFilters.some(
-              (f) => f.id === 'status' && f.value === option.value
-            );
-            return (
-              <Button
-                key={option.label}
-                variant={isActive ? 'default' : 'outline'}
-                size='sm'
-                className='gap-2 rounded-full px-3 text-xs'
-                onClick={() => {
-                  if (isActive) {
-                    tableState.setColumnFilters(
-                      tableState.columnFilters.filter((f) => f.id !== 'status')
-                    );
-                  } else {
-                    tableState.setColumnFilters([
-                      ...tableState.columnFilters.filter((f) => f.id !== 'status'),
-                      { id: 'status', value: option.value }
-                    ]);
-                  }
-                }}
-              >
-                <option.icon className={cn('h-3.5 w-3.5', option.color)} />
-                {option.label}
-              </Button>
-            );
-          })}
+      {isDesktop ? (
+        <div className='border-border/40 bg-background/50 flex flex-wrap items-center justify-between border-b px-6 py-4'>
+          <div className='flex flex-wrap gap-2'>
+            {userStatusOptions.map((option) => {
+              const isActive = tableState.columnFilters.some(
+                (f) => f.id === 'status' && f.value === option.value
+              );
+              return (
+                <Button
+                  key={option.label}
+                  variant={isActive ? 'default' : 'outline'}
+                  size='sm'
+                  className='gap-2 rounded-full px-3 text-xs'
+                  onClick={() => {
+                    if (isActive) {
+                      tableState.setColumnFilters(
+                        tableState.columnFilters.filter((f) => f.id !== 'status')
+                      );
+                    } else {
+                      tableState.setColumnFilters([
+                        ...tableState.columnFilters.filter((f) => f.id !== 'status'),
+                        { id: 'status', value: option.value }
+                      ]);
+                    }
+                  }}
+                >
+                  <option.icon className={cn('h-3.5 w-3.5', option.color)} />
+                  {option.label}
+                </Button>
+              );
+            })}
+          </div>
+          <div className='text-primary bg-primary/10 border-primary/20 rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
+            {total.toLocaleString()} Results
+          </div>
         </div>
-        <div className='text-primary bg-primary/10 border-primary/20 rounded-full border px-4 py-1.5 text-[10px] leading-none font-black tracking-widest uppercase'>
-          {total.toLocaleString()} Results
-        </div>
-      </div>
+      ) : (
+        <Flex
+          direction='row'
+          align='center'
+          justify='between'
+          className='border-border/40 bg-background/50 border-b px-4 py-3'
+        >
+          <Text variant='muted' className='text-[10px] font-bold tracking-widest uppercase'>
+            {total.toLocaleString()} results
+          </Text>
+          <Text variant='muted' className='text-[10px]'>
+            Tap a user for details
+          </Text>
+        </Flex>
+      )}
 
-      <Table.Grid<DtoAdminUserResponse>
-        onRowDoubleClick={(row) => onRowOpen(row.original)}
-        isLoading={isLoading}
-      />
+      {isDesktop ? (
+        <Table.Grid<DtoAdminUserResponse>
+          onRowDoubleClick={(row) => onRowOpen(row.original)}
+          isLoading={isLoading}
+        />
+      ) : (
+        <Table.MobileList<DtoAdminUserResponse>
+          isLoading={isLoading}
+          renderCard={(row) => <UserMobileCard row={row} />}
+          onCardClick={(row) => onRowOpen(row.original)}
+        />
+      )}
 
       <Table.Pagination
         showPageSize

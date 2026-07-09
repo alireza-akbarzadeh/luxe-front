@@ -3,6 +3,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
+import { downloadBlobExport } from '@/lib/download-blob-export';
 import { getAdminDashboardExport } from '@/services/-admin-dashboard-export-get';
 import type { GetAdminDashboardExportParams } from '@/services/-admin-dashboard-export-get.schemas';
 
@@ -10,18 +11,10 @@ import type { GetAdminDashboardExportParams } from '@/services/-admin-dashboard-
 export function useDashboardExport() {
   return useMutation({
     mutationFn: async (params: GetAdminDashboardExportParams) => {
-      const blob = await getAdminDashboardExport(params, { responseType: 'blob' });
-      return blob;
+      return getAdminDashboardExport(params, { responseType: 'blob' });
     },
     onSuccess: (blob, params) => {
-      const url = window.URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = `dashboard_${params.period ?? '30d'}.csv`;
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      window.URL.revokeObjectURL(url);
+      downloadBlobExport(blob, `dashboard_${params.period ?? '30d'}.csv`);
       toast.success('Dashboard report exported');
     },
     onError: () => {

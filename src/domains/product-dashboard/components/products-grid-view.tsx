@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { ProductRowActions } from '@/domains/product-dashboard/components/product-row-actions';
 import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -27,7 +28,7 @@ export function ProductsGridView({ products, onOpen }: ProductsGridViewProps) {
   }
 
   return (
-    <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+    <div className='grid gap-4 p-3 sm:grid-cols-2 md:p-0 lg:grid-cols-3 xl:grid-cols-4'>
       {products.map((product) => {
         const stock = product.stock ?? 0;
         const href = `/dashboard/products/edit/${product.id}`;
@@ -46,20 +47,26 @@ export function ProductsGridView({ products, onOpen }: ProductsGridViewProps) {
                   sizes='(max-width: 640px) 50vw, 25vw'
                   className='object-cover transition-transform group-hover:scale-[1.02]'
                 />
-                <Flex direction='row' className='absolute top-2 left-2 gap-1'>
-                  {product.is_new ? (
-                    <Badge
-                      variant='outline'
-                      className='bg-background/80 border-emerald-500/40 text-[10px]'
-                    >
-                      New
-                    </Badge>
-                  ) : null}
-                  {product.is_digital ? (
-                    <Badge variant='secondary' className='bg-background/80 text-[10px]'>
-                      Digital
-                    </Badge>
-                  ) : null}
+                <Flex
+                  direction='row'
+                  className='absolute top-2 right-2 left-2 justify-between gap-1'
+                >
+                  <Flex direction='row' className='gap-1'>
+                    {product.is_new ? (
+                      <Badge
+                        variant='outline'
+                        className='bg-background/80 border-emerald-500/40 text-[10px]'
+                      >
+                        New
+                      </Badge>
+                    ) : null}
+                    {product.is_digital ? (
+                      <Badge variant='secondary' className='bg-background/80 text-[10px]'>
+                        Digital
+                      </Badge>
+                    ) : null}
+                  </Flex>
+                  <ProductRowActions product={product} />
                 </Flex>
               </div>
               <CardContent className='space-y-2 p-4'>

@@ -6,6 +6,7 @@ import { TableSearch } from '@/components/table/table-search';
 import type { TableToolbarProps } from '@/components/table/table-types';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { cn } from '@/lib/utils';
 import {
   BulkActionsBar,
@@ -30,8 +31,12 @@ export function TableToolbar<TData>(props: TableToolbarProps) {
     showSorting = true,
     showExport = true,
     showBulkActions = true,
+    compactOnMobile = true,
     onDelete
   } = props;
+
+  const { isDesktop } = useMediaDevices();
+  const isCompact = compactOnMobile && !isDesktop;
 
   const { table, state } = useTableContext<TData>();
   const globalFilter = table.getState().globalFilter ?? state.globalFilter;
@@ -101,27 +106,29 @@ export function TableToolbar<TData>(props: TableToolbarProps) {
           </TooltipProvider>
         )}
 
-        {showColumnVisibility && <ColumnVisibilityDropdown<TData> />}
-        {showSorting && <SortingDropdown<TData> />}
-        {showExport && <ExportButton<TData> />}
+        {!isCompact && showColumnVisibility ? <ColumnVisibilityDropdown<TData> /> : null}
+        {!isCompact && showSorting ? <SortingDropdown<TData> /> : null}
+        {!isCompact && showExport ? <ExportButton<TData> /> : null}
 
-        <TooltipProvider delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant='outline'
-                size='icon'
-                className='border-border/40 bg-card/40 hover:bg-background relative inline-flex size-8 items-center justify-center rounded-lg transition-colors'
-              >
-                <IconDatabase className='size-4' />
-                <span className='bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold'>
-                  {filteredCount}
-                </span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side='top'>Total rows after filters</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {!isCompact ? (
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant='outline'
+                  size='icon'
+                  className='border-border/40 bg-card/40 hover:bg-background relative inline-flex size-8 items-center justify-center rounded-lg transition-colors'
+                >
+                  <IconDatabase className='size-4' />
+                  <span className='bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold'>
+                    {filteredCount}
+                  </span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='top'>Total rows after filters</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : null}
 
         {children}
       </div>

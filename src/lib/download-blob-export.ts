@@ -1,0 +1,13 @@
+/**
+ * Triggers a browser download from a Blob returned by a backend export endpoint.
+ */
+export function downloadBlobExport(blob: Blob, filename: string): void {
+  const url = window.URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.URL.revokeObjectURL(url);
+}

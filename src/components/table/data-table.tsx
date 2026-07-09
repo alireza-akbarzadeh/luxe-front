@@ -5,6 +5,7 @@ import { TableRoot } from './table-context';
 import { TableFilterTabs } from './table-filter-tabs';
 import { TableGrid } from './table-grid';
 import { TableLoading } from './table-loading';
+import { TableMobileList } from './table-mobile-list';
 import { TablePagination } from './table-pagination';
 import { TableSearch } from './table-search';
 import { TableStatusFilters } from './table-status-filters';
@@ -52,6 +53,7 @@ export const Table = {
   FilterTabs: TableFilterTabs,
   StatusFilters: TableStatusFilters,
   Grid: TableGrid,
+  MobileList: TableMobileList,
   Pagination: TablePagination,
   BulkActions: TableBulkActions,
   Loading: TableLoading,
