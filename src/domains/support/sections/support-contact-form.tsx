@@ -3,10 +3,13 @@
 import { IconArrowRight, IconCheck } from '@tabler/icons-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
+import { usePostSupportTickets } from '@/services/-support-tickets-post';
+import { DtoCreateSupportTicketRequestChannel } from '@/services/-support-tickets-post.schemas';
 
 const contactSchema = z.object({
   name: z.string().optional(),
@@ -20,19 +23,10 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 const subjects = ['Order help', 'Returns', 'Vendor inquiry', 'Press', 'Partnerships', 'Other'];
 
-/** Opens the system mail client without assigning to `window.location` (React Compiler). */
-function openMailto(href: string) {
-  const link = document.createElement('a');
-  link.href = href;
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
 export function SupportContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const reduce = useReducedMotion();
+  const { mutateAsync: createTicket } = usePostSupportTickets();
 
   const form = useAppForm({
     defaultValues: {
@@ -48,18 +42,37 @@ export function SupportContactForm() {
     onSubmit: async ({ value }) => {
       setStatus('loading');
 
-      const subject = encodeURIComponent(
-        `[Luxe Contact] ${value.subject}${value.orderId ? ` · Order ${value.orderId}` : ''}`
-      );
-      const body = encodeURIComponent(
-        `Name: ${value.name || 'Not provided'}\nEmail: ${value.email}\n\n${value.message}`
-      );
+      const orderId = value.orderId?.trim();
+      const parsedOrderId = orderId ? Number(orderId.replace(/\D/g, '')) : undefined;
 
-      openMailto(`mailto:concierge@luxe.com?subject=${subject}&body=${body}`);
+      try {
+        await createTicket({
+          data: {
+            subject: `[${value.subject}] ${orderId ? `Order ${orderId}` : 'Contact request'}`.slice(
+              0,
+              255
+            ),
+            message: value.message,
+            customer_email: value.email,
+            customer_name: value.name?.trim() || undefined,
+            channel: DtoCreateSupportTicketRequestChannel.email,
+            order_id:
+              parsedOrderId && Number.isFinite(parsedOrderId) && parsedOrderId > 0
+                ? parsedOrderId
+                : undefined
+          }
+        });
 
-      setStatus('success');
-      form.reset();
-      setTimeout(() => setStatus('idle'), 3500);
+        setStatus('success');
+        form.reset();
+        toast.success('Message sent — our team will reply by email.');
+        setTimeout(() => setStatus('idle'), 3500);
+      } catch {
+        setStatus('error');
+        toast.error('Could not send your message', {
+          description: 'Please try again or email concierge@luxe.com directly.'
+        });
+      }
     }
   });
 
@@ -119,10 +132,10 @@ export function SupportContactForm() {
         <div className='flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between'>
           <p className={`text-xs ${status === 'error' ? 'text-red-500' : 'text-muted-foreground'}`}>
             {status === 'error'
-              ? 'Please fill in your email and message.'
+              ? 'Something went wrong — check your email and message, then try again.'
               : status === 'success'
-                ? 'Your email app should open — send the message to reach our team.'
-                : 'We typically reply within 4 hours. Submitting opens your email app.'}
+                ? 'Thanks — we received your message and will reply by email.'
+                : 'We typically reply within 4 hours.'}
           </p>
           <form.Subscribe
             selector={(state) => [state.isSubmitting]}
