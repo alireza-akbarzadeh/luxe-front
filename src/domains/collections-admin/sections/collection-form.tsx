@@ -20,9 +20,11 @@ import {
   COLLECTION_PREVIEW_SORT_OPTIONS,
   COLLECTION_STATUS_OPTIONS,
   COLLECTION_THEME_OPTIONS,
+  COLLECTION_TYPE_OPTIONS,
   collectionDefaultValues,
   collectionFormSchema
 } from '@/domains/collections-admin/collection.schema';
+import { CollectionProductPicker } from '@/domains/collections-admin/components/collection-product-picker';
 import { CollectionRulesPreview } from '@/domains/collections-admin/components/collection-rules-preview';
 import {
   mapCollectionToFormValues,
@@ -396,61 +398,136 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Smart collection rules</h3>
-                  <p className='text-muted-foreground text-sm'>
-                    Dynamic product row shown under this collection on the storefront — filters apply
-                    automatically.
-                  </p>
+                  <h3 className='text-foreground text-sm font-medium'>Collection type</h3>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
-                        name='preview_sort'
+                        name='collection_type'
                         children={(field) => (
                           <field.Select
-                            label='Preview sort'
-                            options={[...COLLECTION_PREVIEW_SORT_OPTIONS]}
-                          />
-                        )}
-                      />
-                    </GridItem>
-                    <GridItem>
-                      <form.AppField
-                        name='preview_category_id'
-                        children={(field) => (
-                          <field.Select label='Preview category' options={categoryOptions} />
-                        )}
-                      />
-                    </GridItem>
-                    <GridItem>
-                      <form.AppField
-                        name='preview_is_new'
-                        children={(field) => (
-                          <field.Switch
-                            label='New products only'
-                            description='Filter preview to new items'
+                            label='Type'
+                            options={[...COLLECTION_TYPE_OPTIONS]}
+                            description='Smart collections use dynamic rules; manual collections pick specific products'
+                            required
                           />
                         )}
                       />
                     </GridItem>
                   </Grid>
-
-                  <form.Subscribe
-                    selector={(state) => ({
-                      previewSort: state.values.preview_sort,
-                      previewCategoryId: state.values.preview_category_id,
-                      previewIsNew: state.values.preview_is_new
-                    })}
-                    children={({ previewSort, previewCategoryId, previewIsNew }) => (
-                      <CollectionRulesPreview
-                        previewSort={previewSort}
-                        previewCategoryId={previewCategoryId}
-                        previewIsNew={previewIsNew}
-                      />
-                    )}
-                  />
                 </Flex>
 
                 <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <h3 className='text-foreground text-sm font-medium'>Schedule</h3>
+                  <p className='text-muted-foreground text-sm'>
+                    Optional start and end dates control when an active collection appears on the
+                    storefront.
+                  </p>
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
+                      <form.AppField
+                        name='starts_at'
+                        children={(field) => (
+                          <field.TextField
+                            label='Starts at'
+                            type='datetime-local'
+                            detail='Leave empty to start immediately'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='ends_at'
+                        children={(field) => (
+                          <field.TextField
+                            label='Ends at'
+                            type='datetime-local'
+                            detail='Leave empty for no end date'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                  </Grid>
+                </Flex>
+
+                <Separator />
+
+                <form.Subscribe
+                  selector={(state) => state.values.collection_type}
+                  children={(collectionType) =>
+                    collectionType === 'manual' ? (
+                      <Flex direction='column' spacing={4}>
+                        <h3 className='text-foreground text-sm font-medium'>Manual products</h3>
+                        <p className='text-muted-foreground text-sm'>
+                          Choose the exact products shown in this collection preview.
+                        </p>
+                        <form.AppField
+                          name='product_ids'
+                          children={(field) => <CollectionProductPicker field={field} />}
+                        />
+                      </Flex>
+                    ) : (
+                      <Flex direction='column' spacing={4}>
+                        <h3 className='text-foreground text-sm font-medium'>
+                          Smart collection rules
+                        </h3>
+                        <p className='text-muted-foreground text-sm'>
+                          Dynamic product row shown under this collection on the storefront —
+                          filters apply automatically.
+                        </p>
+                        <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                          <GridItem>
+                            <form.AppField
+                              name='preview_sort'
+                              children={(field) => (
+                                <field.Select
+                                  label='Preview sort'
+                                  options={[...COLLECTION_PREVIEW_SORT_OPTIONS]}
+                                />
+                              )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='preview_category_id'
+                              children={(field) => (
+                                <field.Select label='Preview category' options={categoryOptions} />
+                              )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='preview_is_new'
+                              children={(field) => (
+                                <field.Switch
+                                  label='New products only'
+                                  description='Filter preview to new items'
+                                />
+                              )}
+                            />
+                          </GridItem>
+                        </Grid>
+
+                        <form.Subscribe
+                          selector={(state) => ({
+                            previewSort: state.values.preview_sort,
+                            previewCategoryId: state.values.preview_category_id,
+                            previewIsNew: state.values.preview_is_new
+                          })}
+                          children={({ previewSort, previewCategoryId, previewIsNew }) => (
+                            <CollectionRulesPreview
+                              previewSort={previewSort}
+                              previewCategoryId={previewCategoryId}
+                              previewIsNew={previewIsNew}
+                            />
+                          )}
+                        />
+                      </Flex>
+                    )
+                  }
+                />
 
                 <Flex direction='row' justify='between' spacing={3} className='flex-wrap'>
                   <Button

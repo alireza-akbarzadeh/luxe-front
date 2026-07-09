@@ -7,6 +7,11 @@ export const COLLECTION_STATUS_OPTIONS = [
   { label: 'Archived', value: 'archived' }
 ] as const;
 
+export const COLLECTION_TYPE_OPTIONS = [
+  { label: 'Smart collection', value: 'smart' },
+  { label: 'Manual collection', value: 'manual' }
+] as const;
+
 export const COLLECTION_PREVIEW_SORT_NONE = 'none' as const;
 
 export const COLLECTION_PREVIEW_SORT_OPTIONS = [
@@ -28,40 +33,59 @@ export const COLLECTION_THEME_OPTIONS = [
 ] as const;
 
 export const collectionStatusSchema = z.enum(['draft', 'active', 'inactive', 'archived']);
+export const collectionTypeSchema = z.enum(['manual', 'smart']);
 
-export const collectionFormSchema = z.object({
-  eyebrow: z.string().max(128, 'Eyebrow must be at most 128 characters').optional(),
-  title: z
-    .string()
-    .min(2, 'Title must be at least 2 characters')
-    .max(255, 'Title must be at most 255 characters'),
-  slug: z
-    .string()
-    .min(2, 'Slug must be at least 2 characters')
-    .max(128, 'Slug must be at most 128 characters')
-    .regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      'Slug must be lowercase letters, numbers, and hyphens only'
-    ),
-  description: z.string().max(2000, 'Description must be at most 2000 characters').optional(),
-  href: z
-    .string()
-    .max(512)
-    .refine((value) => value === '' || value.startsWith('/'), 'Href must start with /')
-    .optional(),
-  image_url: z
-    .string()
-    .max(2048)
-    .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
-    .optional(),
-  cta_label: z.string().max(128).optional(),
-  sort_order: z.number().int().min(0).max(9999),
-  theme: z.string().max(64).optional(),
-  status: collectionStatusSchema,
-  preview_sort: z.string().max(64).optional(),
-  preview_is_new: z.boolean(),
-  preview_category_id: z.string()
-});
+export const collectionFormSchema = z
+  .object({
+    eyebrow: z.string().max(128, 'Eyebrow must be at most 128 characters').optional(),
+    title: z
+      .string()
+      .min(2, 'Title must be at least 2 characters')
+      .max(255, 'Title must be at most 255 characters'),
+    slug: z
+      .string()
+      .min(2, 'Slug must be at least 2 characters')
+      .max(128, 'Slug must be at most 128 characters')
+      .regex(
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+        'Slug must be lowercase letters, numbers, and hyphens only'
+      ),
+    description: z.string().max(2000, 'Description must be at most 2000 characters').optional(),
+    href: z
+      .string()
+      .max(512)
+      .refine((value) => value === '' || value.startsWith('/'), 'Href must start with /')
+      .optional(),
+    image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    cta_label: z.string().max(128).optional(),
+    sort_order: z.number().int().min(0).max(9999),
+    theme: z.string().max(64).optional(),
+    status: collectionStatusSchema,
+    collection_type: collectionTypeSchema,
+    starts_at: z.string().optional(),
+    ends_at: z.string().optional(),
+    product_ids: z.array(z.string()),
+    preview_sort: z.string().max(64).optional(),
+    preview_is_new: z.boolean(),
+    preview_category_id: z.string()
+  })
+  .superRefine((values, ctx) => {
+    if (values.starts_at && values.ends_at) {
+      const start = new Date(values.starts_at);
+      const end = new Date(values.ends_at);
+      if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime()) && end <= start) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'End date must be after start date',
+          path: ['ends_at']
+        });
+      }
+    }
+  });
 
 export type CollectionFormValues = z.infer<typeof collectionFormSchema>;
 
@@ -78,6 +102,10 @@ export const collectionDefaultValues: CollectionFormValues = {
   sort_order: 0,
   theme: '',
   status: 'draft',
+  collection_type: 'smart',
+  starts_at: '',
+  ends_at: '',
+  product_ids: [],
   preview_sort: COLLECTION_PREVIEW_SORT_NONE,
   preview_is_new: false,
   preview_category_id: COLLECTION_CATEGORY_NONE

@@ -2,14 +2,15 @@ import { IconCopy, IconEye } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format, parseISO } from 'date-fns';
 
-import {
-  DropdownMenuItem,
-  DropdownMenuSeparator
-} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
+import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Flex } from '@/components/ui/flex';
 import {
   ApiOrderStatusBadge,
-  ApiPaymentStatusBadge
+  ApiPaymentStatusBadge,
+  ApiShipmentStatusBadge
 } from '@/domains/orders/components/order-api-badges';
+import { WorkflowStateBadge } from '@/domains/workflows/components/workflow-state-badge';
 import { formatCurrency } from '@/lib/format';
 import { copyToClipboard } from '@/lib/utils';
 import { createSelectColumn } from '~/src/components/table/data-table';
@@ -42,7 +43,9 @@ export const orderColumns: ColumnDef<DtoAdminOrderListItem>[] = [
     cell: ({ row }) => (
       <div className='min-w-44'>
         <p className='text-sm font-medium'>{row.original.customer_name ?? 'Unknown'}</p>
-        <p className='text-muted-foreground truncate text-xs'>{row.original.customer_email ?? '—'}</p>
+        <p className='text-muted-foreground truncate text-xs'>
+          {row.original.customer_email ?? '—'}
+        </p>
       </div>
     )
   },
@@ -57,6 +60,39 @@ export const orderColumns: ColumnDef<DtoAdminOrderListItem>[] = [
     accessorKey: 'payment_status',
     header: 'Payment',
     cell: ({ row }) => <ApiPaymentStatusBadge status={row.original.payment_status} />
+  },
+
+  {
+    accessorKey: 'shipment_status',
+    header: 'Shipment',
+    cell: ({ row }) => <ApiShipmentStatusBadge status={row.original.shipment_status} />
+  },
+
+  {
+    id: 'workflow_state',
+    header: 'Workflow',
+    cell: ({ row }) => <WorkflowStateBadge state={row.original.workflow_state} fallbackLabel='—' />
+  },
+
+  {
+    id: 'tags',
+    header: 'Tags',
+    cell: ({ row }) => {
+      const tags = row.original.tags ?? [];
+      if (tags.length === 0) {
+        return <span className='text-muted-foreground text-xs'>—</span>;
+      }
+
+      return (
+        <Flex direction='row' wrap='wrap' className='max-w-[160px] gap-1'>
+          {tags.map((tag) => (
+            <Badge key={tag} variant='outline' className='text-[9px] font-medium'>
+              {tag}
+            </Badge>
+          ))}
+        </Flex>
+      );
+    }
   },
 
   {
@@ -90,10 +126,7 @@ export const orderColumns: ColumnDef<DtoAdminOrderListItem>[] = [
   }
 ];
 
-export function orderRowMenuActions(
-  order: DtoAdminOrderListItem,
-  onView: (id: number) => void
-) {
+export function orderRowMenuActions(order: DtoAdminOrderListItem, onView: (id: number) => void) {
   const id = order.id;
   if (!id) return null;
 

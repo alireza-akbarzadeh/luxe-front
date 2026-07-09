@@ -1,4 +1,5 @@
 import { OrderStatus } from '@/lib/constants/enum-statuses';
+import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 import type { ModelsOrder, ModelsShipment } from '~/src/services/-orders-my-get.schemas';
 
 export type OrderProgressStepStatus = 'completed' | 'active' | 'upcoming' | 'cancelled';
@@ -128,6 +129,76 @@ export function getOrderProgressState(orderStatus: string): OrderProgressState {
     progressPercent: Math.min(100, Math.max(8, progressPercent)),
     isTerminal: false
   };
+}
+
+/** Normalizes admin order detail or legacy nested order payloads for tracking UI. */
+export function normalizeOrderForTracking(
+  order: DtoAdminOrderDetailResponse | ModelsOrder
+): ModelsOrder {
+  if (!isAdminOrderDetail(order)) {
+    return order;
+  }
+
+  const detail = order;
+  const address = detail.shipping_address;
+
+  return {
+    id: detail.id,
+    order_number: detail.order_number,
+    status: detail.status,
+    currency: detail.currency,
+    total_amount: detail.total_amount,
+    created_at: detail.created_at,
+    updated_at: detail.updated_at,
+    notes: detail.notes,
+    tags: detail.tags?.map((tag, index) => ({ id: index, tag })),
+    payment: detail.payment_status
+      ? {
+          status: detail.payment_status,
+          method: detail.payment_method,
+          amount: detail.total_amount,
+          currency: detail.currency
+        }
+      : undefined,
+    shipment:
+      detail.shipment_status || detail.carrier || address
+        ? {
+            status: detail.shipment_status,
+            carrier: detail.carrier,
+            tracking_number: detail.tracking_number,
+            estimated_delivery: detail.estimated_delivery,
+            address_line1: address?.address_line1,
+            address_line2: address?.address_line2,
+            city: address?.city,
+            state: address?.state,
+            postal_code: address?.postal_code,
+            country: address?.country
+          }
+        : undefined,
+    items: detail.items?.map((item) => ({
+      id: item.id,
+      product_id: item.product_id,
+      quantity: item.quantity,
+      price: item.unit_price,
+      total: item.total_price,
+      product:
+        item.name != null
+          ? {
+              name: item.name,
+              sku: item.sku ?? '',
+              slug: item.sku ?? String(item.product_id ?? item.id ?? 'item'),
+              images: item.image ? [item.image] : [],
+              price: item.unit_price ?? 0
+            }
+          : undefined
+    }))
+  };
+}
+
+function isAdminOrderDetail(
+  order: DtoAdminOrderDetailResponse | ModelsOrder
+): order is DtoAdminOrderDetailResponse {
+  return 'payment_status' in order || 'customer_email' in order || 'shipping_address' in order;
 }
 
 /** Merges REST order payload with optimistic live WebSocket overlays. */

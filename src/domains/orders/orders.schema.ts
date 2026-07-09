@@ -11,6 +11,26 @@ export const ORDER_STATUS_TABS = [
 
 export type OrderStatusFilter = (typeof ORDER_STATUS_TABS)[number]['value'];
 
+export const PAYMENT_STATUS_FILTERS = [
+  { label: 'All payments', value: 'all' },
+  { label: 'Pending', value: 'pending' },
+  { label: 'Succeeded', value: 'succeeded' },
+  { label: 'Completed', value: 'completed' },
+  { label: 'Failed', value: 'failed' },
+  { label: 'Refunded', value: 'refunded' }
+] as const;
+
+export type PaymentStatusFilter = (typeof PAYMENT_STATUS_FILTERS)[number]['value'];
+
+export const SHIPMENT_STATUS_FILTERS = [
+  { label: 'All shipments', value: 'all' },
+  { label: 'Pending', value: 'pending' },
+  { label: 'Shipped', value: 'shipped' },
+  { label: 'Delivered', value: 'delivered' }
+] as const;
+
+export type ShipmentStatusFilter = (typeof SHIPMENT_STATUS_FILTERS)[number]['value'];
+
 export const ORDER_BULK_ACTIONS = [
   { label: 'Mark as shipped', status: 'shipped' as const },
   { label: 'Mark as delivered', status: 'delivered' as const },

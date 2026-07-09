@@ -3,6 +3,10 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { createSelectColumn } from '@/components/table/data-table';
 import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
+import {
+  formatScheduleStatusLabel,
+  getCollectionScheduleStatus
+} from '@/domains/collections-admin/lib/collection-schedule';
 import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
 import { mapBrandStatusToStateView } from '@/domains/workflows/lib/workflow-runtime';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
@@ -63,9 +67,42 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
   },
 
   {
+    accessorKey: 'collection_type',
+    header: 'Type',
+    cell: ({ row }) => {
+      const type = row.original.collection_type ?? 'smart';
+      return (
+        <Badge variant='outline' className='text-[10px] capitalize'>
+          {type}
+        </Badge>
+      );
+    }
+  },
+
+  {
+    id: 'schedule',
+    header: 'Schedule',
+    cell: ({ row }) => {
+      const status = getCollectionScheduleStatus(row.original.starts_at, row.original.ends_at);
+      return (
+        <span className='text-muted-foreground text-xs'>{formatScheduleStatusLabel(status)}</span>
+      );
+    }
+  },
+
+  {
     id: 'smart_rules',
     header: 'Smart rules',
     cell: ({ row }) => {
+      if (row.original.collection_type === 'manual') {
+        const count = row.original.product_ids?.length ?? 0;
+        return (
+          <span className='text-muted-foreground text-xs'>
+            {count ? `${count} product${count === 1 ? '' : 's'}` : 'No products'}
+          </span>
+        );
+      }
+
       const rules: string[] = [];
       if (row.original.preview_is_new) rules.push('New');
       if (row.original.preview_category_id) rules.push(`Cat #${row.original.preview_category_id}`);

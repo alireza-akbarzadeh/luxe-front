@@ -15,8 +15,8 @@ import {
 import { useCartController } from '@/hooks/useCartController';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
+import type { PostCheckoutConfirmStripe200 } from '@/services/-checkout-confirm-stripe-post.schemas';
 import { getGetOrdersIdQueryKey } from '@/services/-orders-{id}-get';
-import type { GetOrdersId200 } from '@/services/-orders-{id}-get.schemas';
 
 export interface OrderStripeConfirmState {
   isStripeReturn: boolean;
@@ -25,7 +25,7 @@ export interface OrderStripeConfirmState {
   /** True once the confirm attempt finished (success or failure). */
   confirmSettled: boolean;
   /** Order payload from confirm-stripe — avoids a second fetch on success. */
-  confirmedOrder: GetOrdersId200['data'];
+  confirmedOrder: PostCheckoutConfirmStripe200['data'];
 }
 
 /** Confirms Stripe payment once when returning from Checkout with payment=success. */
@@ -40,7 +40,7 @@ export function useOrderStripeConfirm(orderId: string): OrderStripeConfirmState 
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmFailed, setConfirmFailed] = useState(false);
   const [confirmSettled, setConfirmSettled] = useState(false);
-  const [confirmedOrder, setConfirmedOrder] = useState<GetOrdersId200['data']>();
+  const [confirmedOrder, setConfirmedOrder] = useState<PostCheckoutConfirmStripe200['data']>();
 
   const payment = searchParams.get('payment');
   const sessionIdFromUrl = searchParams.get('session_id')?.trim() ?? '';

@@ -6,6 +6,10 @@ import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
+import {
+  formatScheduleStatusLabel,
+  getCollectionScheduleStatus
+} from '@/domains/collections-admin/lib/collection-schedule';
 import { WorkflowStateBadge } from '@/domains/workflows/components/workflow-state-badge';
 import { mapBrandStatusToStateView } from '@/domains/workflows/lib/workflow-runtime';
 import { IMAGE_FALLBACK } from '@/lib/images';
@@ -18,6 +22,7 @@ interface CollectionMobileCardProps {
 export function CollectionMobileCard({ row }: CollectionMobileCardProps) {
   const collection = row.original;
   const workflowState = collection.workflow_state ?? mapBrandStatusToStateView(collection.status);
+  const scheduleStatus = getCollectionScheduleStatus(collection.starts_at, collection.ends_at);
 
   return (
     <Flex direction='row' align='start' className='gap-3 p-4'>
@@ -49,6 +54,12 @@ export function CollectionMobileCard({ row }: CollectionMobileCardProps) {
         </Flex>
 
         <Flex direction='row' align='center' wrap='wrap' className='gap-2'>
+          <Badge variant='outline' className='text-[10px] capitalize'>
+            {collection.collection_type ?? 'smart'}
+          </Badge>
+          <Badge variant='secondary' className='text-[10px]'>
+            {formatScheduleStatusLabel(scheduleStatus)}
+          </Badge>
           {collection.theme ? (
             <Badge variant='outline' className='text-[10px] capitalize'>
               {collection.theme}

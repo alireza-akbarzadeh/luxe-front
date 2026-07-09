@@ -15,8 +15,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   ApiOrderStatusBadge,
-  ApiPaymentStatusBadge
+  ApiPaymentStatusBadge,
+  ApiShipmentStatusBadge
 } from '@/domains/orders/components/order-api-badges';
+import { WorkflowStateBadge } from '@/domains/workflows/components/workflow-state-badge';
 import { copyToClipboard } from '@/lib/utils';
 import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 
@@ -68,6 +70,10 @@ export function OrderDetailHeader({ order, onCancel, isCancelling }: OrderDetail
               </h1>
               <ApiOrderStatusBadge status={order.status} size='md' />
               <ApiPaymentStatusBadge status={order.payment_status} size='md' />
+              {order.shipment_status ? (
+                <ApiShipmentStatusBadge status={order.shipment_status} size='md' />
+              ) : null}
+              {order.workflow_state ? <WorkflowStateBadge state={order.workflow_state} /> : null}
             </div>
             <p className='text-muted-foreground mt-1.5 text-xs font-medium'>
               Placed {formatPlacedAt(order.created_at)}

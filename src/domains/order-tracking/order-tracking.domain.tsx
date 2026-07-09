@@ -27,7 +27,8 @@ import {
   getOrderProgressState,
   getOrderSubtotal,
   getOrderTax,
-  mergeOrderWithLive
+  mergeOrderWithLive,
+  normalizeOrderForTracking
 } from './lib/order-tracking-utils';
 
 interface OrderTrackingDomainProps {
@@ -49,7 +50,7 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   if (isLoading) return <OrderTrackingSkeleton />;
   if (error || !initialData?.data) return notFound();
 
-  const order = mergeOrderWithLive(initialData.data, liveState);
+  const order = mergeOrderWithLive(normalizeOrderForTracking(initialData.data), liveState);
   const currentStatus = order.status ?? OrderStatus.Pending;
   const progress = getOrderProgressState(currentStatus);
 

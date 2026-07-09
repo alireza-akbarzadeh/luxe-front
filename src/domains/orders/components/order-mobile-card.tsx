@@ -7,7 +7,8 @@ import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import {
   ApiOrderStatusBadge,
-  ApiPaymentStatusBadge
+  ApiPaymentStatusBadge,
+  ApiShipmentStatusBadge
 } from '@/domains/orders/components/order-api-badges';
 import { formatCurrency } from '@/lib/format';
 import type { DtoAdminOrderListItem } from '@/services/-orders-get.schemas';
@@ -54,6 +55,7 @@ export function OrderMobileCard({ row }: OrderMobileCardProps) {
       <Flex direction='row' align='center' wrap='wrap' className='gap-2'>
         <ApiOrderStatusBadge status={order.status} />
         <ApiPaymentStatusBadge status={order.payment_status} />
+        {order.shipment_status ? <ApiShipmentStatusBadge status={order.shipment_status} /> : null}
         <Text variant='muted' className='text-[11px] tabular-nums'>
           {order.items_count ?? 0} items
         </Text>

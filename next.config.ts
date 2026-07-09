@@ -102,6 +102,10 @@ const config = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.business-link.d1a.app'
       }
     ]
   },

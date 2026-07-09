@@ -1,7 +1,10 @@
-import { IconCalendar, IconHash, IconTruck } from '@tabler/icons-react';
+import { IconCalendar, IconHash, IconMapPin, IconTruck } from '@tabler/icons-react';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 
+import { Flex } from '@/components/ui/flex';
+import { Text } from '@/components/ui/typography';
+import { ApiShipmentStatusBadge } from '@/domains/orders/components/order-api-badges';
 import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 
 interface OrderShippingCardProps {
@@ -22,36 +25,58 @@ function formatDeliveryDate(value?: string) {
   return format(date, 'MMM d, yyyy');
 }
 
+function formatAddress(order: DtoAdminOrderDetailResponse) {
+  const address = order.shipping_address;
+  if (!address) return null;
+
+  const lines = [
+    address.address_line1,
+    address.address_line2,
+    [address.city, address.state, address.postal_code].filter(Boolean).join(', '),
+    address.country
+  ].filter(Boolean);
+
+  return lines.length > 0 ? lines : null;
+}
+
 export function OrderShippingCard({ order }: OrderShippingCardProps) {
   const carrier = order.carrier?.trim();
   const tracking = order.tracking_number?.trim();
-  const trackUrl =
-    tracking && carrier
-      ? (CARRIER_TRACK[carrier] ?? '#') + tracking
-      : null;
+  const trackUrl = tracking && carrier ? (CARRIER_TRACK[carrier] ?? '#') + tracking : null;
   const estimatedDelivery = formatDeliveryDate(order.estimated_delivery);
+  const addressLines = formatAddress(order);
 
   return (
     <div className='bg-card border-border/40 overflow-hidden rounded-2xl border shadow-sm'>
       <div className='bg-muted/20 border-border/10 border-b px-6 py-4'>
-        <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
+        <Text variant='overline' className='text-muted-foreground'>
           Shipping & fulfillment
-        </h2>
+        </Text>
       </div>
-      <div className='space-y-4 p-6'>
-        <div className='flex items-center justify-between'>
-          <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+      <Flex direction='column' spacing={4} className='p-6'>
+        <Flex direction='row' align='center' justify='between'>
+          <Flex direction='row' align='center' className='text-muted-foreground gap-2 text-xs'>
+            <IconTruck className='h-3.5 w-3.5' />
+            Shipment status
+          </Flex>
+          <ApiShipmentStatusBadge status={order.shipment_status} size='md' />
+        </Flex>
+
+        <Flex direction='row' align='center' justify='between'>
+          <Flex direction='row' align='center' className='text-muted-foreground gap-2 text-xs'>
             <IconTruck className='h-3.5 w-3.5' />
             Carrier
-          </div>
-          <span className='text-foreground text-xs font-bold'>{carrier || '—'}</span>
-        </div>
+          </Flex>
+          <Text variant='small' className='font-bold'>
+            {carrier || '—'}
+          </Text>
+        </Flex>
 
-        <div className='flex items-center justify-between'>
-          <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+        <Flex direction='row' align='center' justify='between'>
+          <Flex direction='row' align='center' className='text-muted-foreground gap-2 text-xs'>
             <IconHash className='h-3.5 w-3.5' />
             Tracking
-          </div>
+          </Flex>
           {tracking ? (
             trackUrl && trackUrl !== '#' ? (
               <Link
@@ -63,23 +88,45 @@ export function OrderShippingCard({ order }: OrderShippingCardProps) {
                 {tracking.length > 20 ? `${tracking.slice(0, 20)}…` : tracking}
               </Link>
             ) : (
-              <span className='text-foreground font-mono text-[11px] font-semibold'>{tracking}</span>
+              <Text variant='small' className='font-mono font-semibold'>
+                {tracking}
+              </Text>
             )
           ) : (
-            <span className='text-muted-foreground text-xs font-medium italic'>Not assigned</span>
+            <Text variant='muted' className='text-xs italic'>
+              Not assigned
+            </Text>
           )}
-        </div>
+        </Flex>
 
-        <div className='flex items-center justify-between'>
-          <div className='text-muted-foreground flex items-center gap-2 text-xs'>
+        <Flex direction='row' align='center' justify='between'>
+          <Flex direction='row' align='center' className='text-muted-foreground gap-2 text-xs'>
             <IconCalendar className='h-3.5 w-3.5' />
             Est. delivery
-          </div>
-          <span className='text-foreground text-xs font-semibold'>
+          </Flex>
+          <Text variant='small' className='font-semibold'>
             {estimatedDelivery ?? '—'}
-          </span>
-        </div>
-      </div>
+          </Text>
+        </Flex>
+
+        {addressLines ? (
+          <div className='border-border/40 border-t pt-4'>
+            <Flex
+              direction='row'
+              align='start'
+              className='text-muted-foreground mb-2 gap-2 text-xs'
+            >
+              <IconMapPin className='mt-0.5 h-3.5 w-3.5 shrink-0' />
+              Ship to
+            </Flex>
+            <address className='text-foreground space-y-0.5 text-xs leading-relaxed not-italic'>
+              {addressLines.map((line) => (
+                <div key={line}>{line}</div>
+              ))}
+            </address>
+          </div>
+        ) : null}
+      </Flex>
     </div>
   );
 }

@@ -32,6 +32,9 @@ export function OrdersTable() {
   const {
     status,
     setStatus,
+    paymentStatus,
+    shipmentStatus,
+    tag,
     fromDate,
     toDate,
     minAmount,
@@ -46,12 +49,15 @@ export function OrdersTable() {
       offset: state.pagination.pageIndex * state.pagination.pageSize,
       search: filter.trim() || undefined,
       status: status === 'all' ? undefined : status,
+      payment_status: paymentStatus === 'all' ? undefined : paymentStatus,
+      shipment_status: shipmentStatus === 'all' ? undefined : shipmentStatus,
+      tag: tag.trim() || undefined,
       from_date: fromDate || undefined,
       to_date: toDate || undefined,
       min_amount: minAmount ?? undefined,
       max_amount: maxAmount ?? undefined
     }),
-    [status, fromDate, toDate, minAmount, maxAmount]
+    [status, paymentStatus, shipmentStatus, tag, fromDate, toDate, minAmount, maxAmount]
   );
 
   const getRows = useCallback(

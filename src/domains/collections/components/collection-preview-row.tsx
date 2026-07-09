@@ -1,12 +1,18 @@
 'use client';
 
 import { IconArrowRight } from '@tabler/icons-react';
+import { useQueries } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
+import { getProductsId } from '@/services/-products-{id}-get';
 import { useGetProducts } from '@/services/-products-get';
-import type { GetProductsParams, GetProductsSort } from '@/services/-products-get.schemas';
+import type {
+  DtoProductWithLike,
+  GetProductsParams,
+  GetProductsSort
+} from '@/services/-products-get.schemas';
 
 import { CollectionProductCard } from './collection-product-card';
 
@@ -15,13 +21,19 @@ interface CollectionPreviewRowProps {
   className?: string;
 }
 
-export function CollectionPreviewRow({ collection, className }: CollectionPreviewRowProps) {
+function SmartCollectionPreview({
+  collection,
+  className
+}: {
+  collection: DtoCollectionResponse;
+  className?: string;
+}) {
   const previewParams: GetProductsParams = {
     status: 'active',
     limit: 4,
     offset: 0,
     sort: collection.preview_sort as GetProductsSort,
-    is_new: true,
+    is_new: collection.preview_is_new || undefined,
     category_id: collection.preview_category_id
   };
 
@@ -30,6 +42,69 @@ export function CollectionPreviewRow({ collection, className }: CollectionPrevie
   const products = data?.data?.products ?? [];
   const total = data?.data?.total;
 
+  return (
+    <CollectionPreviewContent
+      className={className}
+      collection={collection}
+      products={products}
+      total={total}
+      isLoading={isLoading}
+    />
+  );
+}
+
+function ManualCollectionPreview({
+  collection,
+  className
+}: {
+  collection: DtoCollectionResponse;
+  className?: string;
+}) {
+  const productIds = (collection.product_ids ?? []).slice(0, 4);
+
+  const productQueries = useQueries({
+    queries: productIds.map((id) => ({
+      queryKey: ['collection-preview-product', id],
+      queryFn: () => getProductsId(String(id)),
+      staleTime: 60_000
+    }))
+  });
+
+  const isLoading = productQueries.some((query) => query.isLoading);
+  const products: DtoProductWithLike[] = [];
+  for (const query of productQueries) {
+    const product = query.data?.data?.product;
+    if (!product) continue;
+    products.push({
+      ...product,
+      is_liked: query.data?.data?.is_liked
+    });
+  }
+
+  return (
+    <CollectionPreviewContent
+      className={className}
+      collection={collection}
+      products={products}
+      total={collection.product_ids?.length}
+      isLoading={isLoading}
+    />
+  );
+}
+
+function CollectionPreviewContent({
+  collection,
+  products,
+  total,
+  isLoading,
+  className
+}: {
+  collection: DtoCollectionResponse;
+  products: DtoProductWithLike[];
+  total?: number;
+  isLoading: boolean;
+  className?: string;
+}) {
   if (isLoading) {
     return (
       <div className={cn('mt-8', className)}>
@@ -96,4 +171,12 @@ export function CollectionPreviewRow({ collection, className }: CollectionPrevie
       </div>
     </div>
   );
+}
+
+export function CollectionPreviewRow({ collection, className }: CollectionPreviewRowProps) {
+  if (collection.collection_type === 'manual') {
+    return <ManualCollectionPreview collection={collection} className={className} />;
+  }
+
+  return <SmartCollectionPreview collection={collection} className={className} />;
 }

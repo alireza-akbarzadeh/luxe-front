@@ -19,8 +19,10 @@ import { OrderActivityCard } from '../sections/order-activity-card';
 import { OrderDetailSkeleton } from '../sections/order-detail-skeleton';
 import { OrderDetailHeader } from '../sections/order-details-header';
 import { OrderLineItems } from '../sections/order-line-items';
+import { OrderNotesCard } from '../sections/order-notes-card';
 import { OrderPaymentSummary } from '../sections/order-payment-summary';
 import { OrderShippingCard } from '../sections/order-shipping-card';
+import { OrderTagsCard } from '../sections/order-tags-card';
 
 interface OrderDetailDomainProps {
   orderId: string;
@@ -49,8 +51,7 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
       toast.success('Order cancelled');
     } catch (cancelError) {
       toast.error('Could not cancel order', {
-        description:
-          cancelError instanceof Error ? cancelError.message : 'Something went wrong'
+        description: cancelError instanceof Error ? cancelError.message : 'Something went wrong'
       });
       throw cancelError;
     }
@@ -110,7 +111,12 @@ interface OrderDetailViewProps {
   onWorkflowChange: () => void;
 }
 
-function OrderDetailView({ order, onCancel, isCancelling, onWorkflowChange }: OrderDetailViewProps) {
+function OrderDetailView({
+  order,
+  onCancel,
+  isCancelling,
+  onWorkflowChange
+}: OrderDetailViewProps) {
   const orderId = order.id!;
   const currency = order.currency ?? 'USD';
   const items = order.items ?? [];
@@ -167,6 +173,18 @@ function OrderDetailView({ order, onCancel, isCancelling, onWorkflowChange }: Or
             <OrderPaymentSummary order={order} />
             <OrderCustomerCard order={order} />
             <OrderShippingCard order={order} />
+            <OrderNotesCard
+              key={order.notes ?? 'empty'}
+              orderId={orderId}
+              notes={order.notes}
+              onSaved={onWorkflowChange}
+            />
+            <OrderTagsCard
+              key={(order.tags ?? []).join(',')}
+              orderId={orderId}
+              tags={order.tags}
+              onSaved={onWorkflowChange}
+            />
           </div>
         </div>
       </div>

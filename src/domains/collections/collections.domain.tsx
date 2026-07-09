@@ -17,7 +17,7 @@ import { CURATED_COLLECTIONS } from './lib/collections.config';
 
 export function CollectionsDomain() {
   const { data: listResponse, isLoading } = useGetCollections(
-    { status: 'active', limit: 100, page: 1 },
+    { status: 'active', live_only: true, limit: 100, page: 1 },
     { query: { staleTime: 60_000 } }
   );
 
