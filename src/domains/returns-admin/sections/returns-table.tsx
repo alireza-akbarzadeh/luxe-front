@@ -1,34 +1,43 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useReturnTransition } from '@/domains/returns-admin/hooks/use-return-transition';
 import { useReturnsQueryState } from '@/domains/returns-admin/hooks/use-returns-query';
 import {
   type DtoReturnResponse,
   type GetAdminReturns200,
   getReturnsFromListResponse,
-  getReturnsTotalFromListResponse} from '@/domains/returns-admin/lib/return-list';
-import type { ReturnStatusFilter } from '@/domains/returns-admin/returns.schema';
-import { RETURN_STATUS_TABS } from '@/domains/returns-admin/returns.schema';
-import { returnColumns, returnRowMenuActions } from '@/domains/returns-admin/sections/returns-columns';
+  getReturnsTotalFromListResponse
+} from '@/domains/returns-admin/lib/return-list';
+import type { ReturnStatusFilter, ReturnTypeFilter } from '@/domains/returns-admin/returns.schema';
+import { RETURN_STATUS_TABS, RETURN_TYPE_TABS } from '@/domains/returns-admin/returns.schema';
+import {
+  createReturnColumns,
+  returnRowMenuActions
+} from '@/domains/returns-admin/sections/returns-columns';
 import { useGetAdminReturns } from '@/services/-admin-returns-get';
 
 export function ReturnsTable() {
   const router = useRouter();
-  const { status, setStatus } = useReturnsQueryState();
+  const { status, setStatus, returnType, setReturnType } = useReturnsQueryState();
+
+  const { applyTransition, isPending } = useReturnTransition();
 
   const getQueryParams = useCallback(
-    (state: TableState) => ({
+    (state: TableState, filter: string) => ({
       limit: state.pagination.pageSize,
       offset: state.pagination.pageIndex * state.pagination.pageSize,
-      status: status === 'all' ? undefined : status
+      status: status === 'all' ? undefined : status,
+      return_type: returnType === 'all' ? undefined : returnType,
+      search: filter.trim() || undefined
     }),
-    [status]
+    [status, returnType]
   );
 
   const getRows = useCallback(
@@ -41,10 +50,36 @@ export function ReturnsTable() {
     []
   );
 
+  const handleQuickApprove = useCallback(
+    (returnItem: DtoReturnResponse) => {
+      if (!returnItem.id) return;
+      void applyTransition(returnItem.id, 'approve');
+    },
+    [applyTransition]
+  );
+
+  const handleQuickReject = useCallback(
+    (returnItem: DtoReturnResponse) => {
+      if (!returnItem.id) return;
+      void applyTransition(returnItem.id, 'reject');
+    },
+    [applyTransition]
+  );
+
+  const columns = useMemo(
+    () =>
+      createReturnColumns({
+        onQuickApprove: handleQuickApprove,
+        onQuickReject: handleQuickReject,
+        isActionPending: isPending
+      }),
+    [handleQuickApprove, handleQuickReject, isPending]
+  );
+
   const serverTable = useServerTable({
-    columns: returnColumns,
+    columns,
     initialPageSize: 20,
-    getQueryParams: (state) => getQueryParams(state),
+    getQueryParams,
     getRows,
     getTotal,
     useQuery: useGetAdminReturns,
@@ -73,6 +108,20 @@ export function ReturnsTable() {
   return (
     <Table.Root {...serverTable.rootProps}>
       <Tabs
+        value={returnType}
+        onValueChange={(value) => void setReturnType(value as ReturnTypeFilter)}
+        className='px-1'
+      >
+        <TabsList className='mb-2 h-auto flex-wrap'>
+          {RETURN_TYPE_TABS.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      <Tabs
         value={status}
         onValueChange={(value) => void setStatus(value as ReturnStatusFilter)}
         className='px-1'
@@ -87,11 +136,12 @@ export function ReturnsTable() {
       </Tabs>
 
       <Table.Toolbar
-        showSearch={false}
+        searchPlaceholder='Search reason, order #, or customer'
+        showSearch
         showRefresh
         onRefresh={serverTable.refetch}
         isLoading={serverTable.isFetching}
-        showClear={false}
+        showClear
         showColumnVisibility
         showSorting={false}
         showExport={false}

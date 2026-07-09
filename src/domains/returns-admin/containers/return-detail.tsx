@@ -8,16 +8,28 @@ import { notFound } from 'next/navigation';
 import { useCallback } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
+import { Text } from '@/components/ui/typography';
+import { ReturnQuickActions } from '@/domains/returns-admin/components/return-quick-actions';
+import { ReturnTypeBadge } from '@/domains/returns-admin/components/return-type-badge';
+import { ReturnDetailSkeleton } from '@/domains/returns-admin/sections/return-detail-skeleton';
+import { ReturnNotesCard } from '@/domains/returns-admin/sections/return-notes-card';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { WorkflowHistoryTimeline } from '@/domains/workflows/components/workflow-history-timeline';
+import { WorkflowStateBadge } from '@/domains/workflows/components/workflow-state-badge';
 import { parseWorkflowHistoryResponse } from '@/domains/workflows/lib/workflow-runtime';
 import { formatCurrency } from '@/lib/format';
-import { useGetAdminReturnsId } from '@/services/-admin-returns-{id}-get';
-import type { DtoReturnResponse } from '@/services/-admin-returns-{id}-get.schemas';
+import {
+  getGetAdminReturnsIdQueryKey,
+  useGetAdminReturnsId
+} from '@/services/-admin-returns-{id}-get';
+import type {
+  DtoReturnResponse,
+  GetAdminReturnsId200
+} from '@/services/-admin-returns-{id}-get.schemas';
 import { getGetAdminReturnsQueryKey } from '@/services/-admin-returns-get';
+import { getGetAdminReturnsStatsQueryKey } from '@/services/-admin-returns-stats-get';
 import { useGetWorkflowsKeyEntityIdHistory } from '@/services/-workflows-{key}-{entityId}-history-get';
-
-import { ReturnDetailSkeleton } from '../sections/return-detail-skeleton';
 
 interface ReturnDetailDomainProps {
   returnId: string;
@@ -40,9 +52,25 @@ export function ReturnDetailDomain({ returnId }: ReturnDetailDomainProps) {
   });
 
   const invalidateReturnQueries = useCallback(() => {
-    void queryClient.invalidateQueries({ queryKey: [`/admin/returns/${numericId}`] });
+    void queryClient.invalidateQueries({ queryKey: getGetAdminReturnsIdQueryKey(numericId) });
     void queryClient.invalidateQueries({ queryKey: getGetAdminReturnsQueryKey() });
+    void queryClient.invalidateQueries({ queryKey: getGetAdminReturnsStatsQueryKey() });
   }, [numericId, queryClient]);
+
+  const applyReturnUpdate = useCallback(
+    (returnItem: DtoReturnResponse) => {
+      queryClient.setQueryData<GetAdminReturnsId200>(
+        getGetAdminReturnsIdQueryKey(numericId),
+        (previous) => ({
+          ...(previous ?? {}),
+          data: returnItem
+        })
+      );
+      void queryClient.invalidateQueries({ queryKey: getGetAdminReturnsQueryKey() });
+      void queryClient.invalidateQueries({ queryKey: getGetAdminReturnsStatsQueryKey() });
+    },
+    [numericId, queryClient]
+  );
 
   if (!isValidId) {
     notFound();
@@ -82,18 +110,25 @@ export function ReturnDetailDomain({ returnId }: ReturnDetailDomainProps) {
   }
 
   return (
-    <ReturnDetailView returnItem={returnItem} onWorkflowChange={invalidateReturnQueries} />
+    <ReturnDetailView
+      returnItem={returnItem}
+      onWorkflowChange={invalidateReturnQueries}
+      onReturnUpdate={applyReturnUpdate}
+    />
   );
 }
 
 function ReturnDetailView({
   returnItem,
-  onWorkflowChange
+  onWorkflowChange,
+  onReturnUpdate
 }: {
   returnItem: DtoReturnResponse;
   onWorkflowChange: () => void;
+  onReturnUpdate: (returnItem: DtoReturnResponse) => void;
 }) {
   const returnId = returnItem.id!;
+  const isExchange = returnItem.return_type === 'exchange';
 
   const { data: historyData, isLoading: isHistoryLoading } = useGetWorkflowsKeyEntityIdHistory(
     'return',
@@ -108,7 +143,7 @@ function ReturnDetailView({
     <div className='bg-background min-h-screen'>
       <div className='bg-card/80 border-border/40 sticky top-0 z-20 border-b backdrop-blur-sm'>
         <div className='mx-auto max-w-350 px-6 py-4'>
-          <div className='flex items-start gap-4'>
+          <Flex align='start' className='gap-4'>
             <Link href='/dashboard/returns'>
               <Button
                 variant='ghost'
@@ -118,11 +153,15 @@ function ReturnDetailView({
                 <IconArrowLeft className='h-4 w-4' />
               </Button>
             </Link>
-            <div>
-              <h1 className='text-foreground font-mono text-xl font-black tracking-tight'>
-                Return #{returnItem.id}
-              </h1>
-              <p className='text-muted-foreground mt-1 text-xs'>
+            <Flex direction='column' className='gap-2'>
+              <Flex align='center' wrap='wrap' className='gap-2'>
+                <Text variant='h4' as='h1' className='font-mono'>
+                  Return #{returnItem.id}
+                </Text>
+                <ReturnTypeBadge returnType={returnItem.return_type} />
+                <WorkflowStateBadge state={returnItem.state} fallbackLabel='Requested' />
+              </Flex>
+              <Text variant='muted' className='text-xs'>
                 Order{' '}
                 {returnItem.order_id ? (
                   <Link
@@ -135,9 +174,10 @@ function ReturnDetailView({
                   '—'
                 )}
                 {' · '}Requested {formatDate(returnItem.created_at)}
-              </p>
-            </div>
-          </div>
+              </Text>
+              <ReturnQuickActions returnItem={returnItem} onUpdated={onWorkflowChange} />
+            </Flex>
+          </Flex>
         </div>
       </div>
 
@@ -146,26 +186,36 @@ function ReturnDetailView({
           workflowKey='return'
           entityId={returnId}
           title='Return workflow'
-          description='Approve or reject requests, confirm receipt, and complete refunds.'
+          description='Approve or reject requests, confirm receipt, and complete refunds or exchanges.'
           onTransitionSuccess={onWorkflowChange}
         />
 
         <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
           <div className='space-y-6 lg:col-span-2'>
             <div className='bg-card border-border/40 rounded-2xl border p-6 shadow-sm'>
-              <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
-                Return reason
-              </h2>
-              <p className='text-foreground mt-3 text-sm leading-relaxed'>
+              <Text variant='overline' className='text-muted-foreground'>
+                Customer reason
+              </Text>
+              <Text variant='p' className='mt-3 leading-relaxed'>
                 {returnItem.reason?.trim() || 'No reason provided.'}
-              </p>
+              </Text>
+              {isExchange && returnItem.exchange_notes ? (
+                <>
+                  <Text variant='overline' className='text-muted-foreground mt-5'>
+                    Exchange notes
+                  </Text>
+                  <Text variant='p' className='mt-2 leading-relaxed'>
+                    {returnItem.exchange_notes}
+                  </Text>
+                </>
+              ) : null}
             </div>
 
             <div className='bg-card border-border/40 overflow-hidden rounded-2xl border shadow-sm'>
               <div className='bg-muted/20 border-border/10 border-b px-6 py-4'>
-                <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
+                <Text variant='overline' className='text-muted-foreground'>
                   Activity
-                </h2>
+                </Text>
               </div>
               <div className='p-6'>
                 <WorkflowHistoryTimeline
@@ -179,32 +229,45 @@ function ReturnDetailView({
 
           <div className='space-y-5'>
             <div className='bg-card border-border/40 rounded-2xl border p-6 shadow-sm'>
-              <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
-                Refund
-              </h2>
-              <p className='text-foreground mt-3 text-2xl font-black tabular-nums'>
-                {formatCurrency(returnItem.refund_amount ?? 0)}
-              </p>
-              <p className='text-muted-foreground mt-1 text-xs'>Amount to refund customer</p>
+              <Text variant='overline' className='text-muted-foreground'>
+                {isExchange ? 'Resolution' : 'Refund'}
+              </Text>
+              <Text variant='h3' className='mt-3 tabular-nums'>
+                {isExchange ? 'Product exchange' : formatCurrency(returnItem.refund_amount ?? 0)}
+              </Text>
+              <Text variant='muted' className='mt-1 text-xs'>
+                {isExchange
+                  ? 'No monetary refund for exchange requests'
+                  : 'Amount to refund customer'}
+              </Text>
             </div>
 
             <div className='bg-card border-border/40 space-y-3 rounded-2xl border p-6 text-sm shadow-sm'>
-              <h2 className='text-muted-foreground text-[10px] font-black tracking-widest uppercase'>
+              <Text variant='overline' className='text-muted-foreground'>
                 Details
-              </h2>
-              <div className='flex justify-between gap-4'>
-                <span className='text-muted-foreground'>Customer</span>
-                <span className='font-mono text-xs'>User #{returnItem.user_id ?? '—'}</span>
-              </div>
-              <div className='flex justify-between gap-4'>
-                <span className='text-muted-foreground'>Status</span>
-                <span className='text-xs font-semibold capitalize'>{returnItem.status ?? '—'}</span>
-              </div>
-              <div className='flex justify-between gap-4'>
-                <span className='text-muted-foreground'>Last updated</span>
-                <span className='text-xs tabular-nums'>{formatDate(returnItem.updated_at)}</span>
-              </div>
+              </Text>
+              <Flex justify='between' className='gap-4'>
+                <Text variant='muted'>Customer</Text>
+                <Text variant='small'>{returnItem.customer_name?.trim() || 'Unknown'}</Text>
+              </Flex>
+              <Flex justify='between' className='gap-4'>
+                <Text variant='muted'>Email</Text>
+                <Text variant='small'>{returnItem.customer_email ?? '—'}</Text>
+              </Flex>
+              <Flex justify='between' className='gap-4'>
+                <Text variant='muted'>Last updated</Text>
+                <Text variant='small' className='tabular-nums'>
+                  {formatDate(returnItem.updated_at)}
+                </Text>
+              </Flex>
             </div>
+
+            <ReturnNotesCard
+              key={returnItem.admin_notes ?? 'empty'}
+              returnId={returnId}
+              notes={returnItem.admin_notes}
+              onSaved={onReturnUpdate}
+            />
           </div>
         </div>
       </div>

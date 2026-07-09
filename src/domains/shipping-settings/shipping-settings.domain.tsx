@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowRight, IconPackage, IconPackageExport,IconTruck } from '@tabler/icons-react';
+import { IconArrowRight, IconPackage, IconPackageExport, IconTruck } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
