@@ -55,7 +55,7 @@ export function UserProfile({ variant = 'sidebar', isCollapsed = false }: UserPr
         !isHeader && isCollapsed && 'justify-center px-0'
       )}
     >
-      <div className='relative shrink-0'>
+      <div className='relative shrink-0 gap-2'>
         <AppImage
           src={avatarUrl}
           alt={userName}

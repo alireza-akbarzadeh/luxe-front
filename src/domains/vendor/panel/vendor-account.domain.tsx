@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { profileFormSchema } from '@/domains/account/account.schema';
+import { AccountProfileAvatarField } from '@/domains/account/components/account-profile-avatar-field';
+import { AccountUserAvatar } from '@/domains/account/components/account-user-avatar';
 import { ChangePasswordPanel } from '@/domains/account/components/change-password-panel';
 import { EmailVerificationPanel } from '@/domains/account/components/email-verification-panel';
 import { VendorModuleHeader } from '@/domains/vendor/panel/components/ui/vendor-module-header';
@@ -39,7 +41,8 @@ function VendorAccountSettingsContent() {
       firstName: '',
       lastName: '',
       email: '',
-      phone: ''
+      phone: '',
+      avatarUrl: ''
     },
     validators: { onSubmit: profileFormSchema },
     onSubmit: async ({ value }) => {
@@ -49,7 +52,8 @@ function VendorAccountSettingsContent() {
           data: {
             first_name: value.firstName,
             last_name: value.lastName,
-            phone: value.phone
+            phone: value.phone,
+            avatar_url: value.avatarUrl
           }
         });
         await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
@@ -72,7 +76,8 @@ function VendorAccountSettingsContent() {
       firstName: user.first_name ?? '',
       lastName: user.last_name ?? '',
       email: user.email ?? '',
-      phone: user.phone ?? ''
+      phone: user.phone ?? '',
+      avatarUrl: user.avatar_url ?? ''
     });
   }, [form, user]);
 
@@ -83,8 +88,6 @@ function VendorAccountSettingsContent() {
   if (error || !user) {
     return <p className='text-destructive text-sm'>{t('loadError')}</p>;
   }
-
-  const initials = `${user.first_name?.[0] ?? ''}${user.last_name?.[0] ?? ''}`;
 
   return (
     <Flex direction='column' spacing={8} fullWidth>
@@ -106,9 +109,12 @@ function VendorAccountSettingsContent() {
       <Card className='border-border/40 bg-card/50 rounded-2xl shadow-none'>
         <CardHeader>
           <Flex direction='row' align='center' spacing={4}>
-            <span className='bg-gold/15 text-gold flex size-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold'>
-              {initials}
-            </span>
+            <AccountUserAvatar
+              avatarUrl={user.avatar_url}
+              firstName={user.first_name}
+              lastName={user.last_name}
+              sizeClassName='size-12'
+            />
             <div className='min-w-0'>
               <CardTitle className='text-base'>
                 {user.first_name} {user.last_name}
@@ -128,6 +134,21 @@ function VendorAccountSettingsContent() {
               }}
             >
               <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                <form.Subscribe
+                  selector={(state) => ({
+                    avatarUrl: state.values.avatarUrl,
+                    firstName: state.values.firstName,
+                    lastName: state.values.lastName
+                  })}
+                >
+                  {({ avatarUrl, firstName, lastName }) => (
+                    <AccountProfileAvatarField
+                      avatarUrl={avatarUrl}
+                      fallbackLabel={`${firstName}${lastName}`}
+                      onAvatarUrlChange={(url) => form.setFieldValue('avatarUrl', url)}
+                    />
+                  )}
+                </form.Subscribe>
                 <form.AppField
                   name='firstName'
                   children={(field) => <field.TextField label={tFields('firstName')} required />}

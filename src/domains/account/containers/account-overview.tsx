@@ -13,11 +13,13 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { OrderNumber } from '@/components/order-number';
+import { Flex } from '@/components/ui/flex';
 import { Button } from '~/src/components/ui/button';
 import { useGetAccountSummary } from '~/src/services/-account-summary-get';
 import type { DtoDefaultAddressDTO } from '~/src/services/-account-summary-get.schemas';
 
 import { AccountProfileForm } from '../components/account-profile-form';
+import { AccountUserAvatar } from '../components/account-user-avatar';
 import { OrderStatusBadge } from '../components/order-status-badge';
 import { PlusMembershipPanel } from '../components/plus-membership-panel';
 import { useSidebarTab } from '../hooks/useSidebarTab';
@@ -122,16 +124,16 @@ export function AccountOverview() {
             firstName: user?.first_name ?? '',
             lastName: user?.last_name ?? '',
             email: user?.email ?? '',
-            phone: user?.phone ?? ''
+            phone: user?.phone ?? '',
+            avatarUrl: user?.avatar_url ?? ''
           }}
         />
-        <div className='flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6'>
-          <div className='bg-accent/20 flex h-20 w-20 items-center justify-center rounded-full'>
-            <span className='text-accent text-2xl font-semibold'>
-              {user.first_name?.[0]}
-              {user.last_name?.[0]}
-            </span>
-          </div>
+        <Flex direction='row' align='start' gap={4} className='sm:items-center'>
+          <AccountUserAvatar
+            avatarUrl={user.avatar_url}
+            firstName={user.first_name}
+            lastName={user.last_name}
+          />
           <div>
             <h3 className='text-lg font-medium'>
               {user.first_name} {user.last_name}
@@ -139,7 +141,7 @@ export function AccountOverview() {
             <p className='text-muted-foreground'>{user.email}</p>
             {user.phone ? <p className='text-muted-foreground'>{user.phone}</p> : null}
           </div>
-        </div>
+        </Flex>
       </div>
 
       <div className='bg-card border-border rounded-2xl border p-6'>

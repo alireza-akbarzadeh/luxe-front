@@ -31,8 +31,16 @@ export function ProductsDomains() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [viewMode] = useProductsViewMode();
   const { isDesktop } = useMediaDevices();
-  const { status, minPrice, maxPrice, categoryId, isDigital, hasActiveFilters, resetFilters } =
-    useProductsQueryState();
+  const {
+    status,
+    minPrice,
+    maxPrice,
+    categoryId,
+    brandId,
+    isDigital,
+    hasActiveFilters,
+    resetFilters
+  } = useProductsQueryState();
   const exportMutation = useProductsExport();
 
   const effectiveViewMode = isDesktop ? viewMode : 'grid';
@@ -46,9 +54,10 @@ export function ProductsDomains() {
       min_price: minPrice ?? undefined,
       max_price: maxPrice ?? undefined,
       category_id: categoryId ?? undefined,
+      brand_id: brandId ?? undefined,
       is_digital: isDigital === 'all' ? undefined : isDigital === 'yes'
     }),
-    [status, minPrice, maxPrice, categoryId, isDigital]
+    [status, minPrice, maxPrice, categoryId, brandId, isDigital]
   );
 
   const getRows = useCallback((data: GetProducts200 | undefined) => data?.data?.products ?? [], []);
@@ -102,6 +111,7 @@ export function ProductsDomains() {
         minPrice,
         maxPrice,
         categoryId,
+        brandId,
         isDigital,
         search
       })
@@ -112,6 +122,7 @@ export function ProductsDomains() {
     minPrice,
     maxPrice,
     categoryId,
+    brandId,
     isDigital,
     serverTable.tableState.globalFilter
   ]);

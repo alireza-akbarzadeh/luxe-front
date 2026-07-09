@@ -2,12 +2,12 @@
 
 import { IconLoader2, IconPhoto, IconUpload } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
@@ -15,11 +15,13 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Text } from '@/components/ui/typography';
 import {
   BRAND_STATUS_OPTIONS,
   brandDefaultValues,
   brandFormSchema
 } from '@/domains/brands/brand.schema';
+import { BrandStatsPanel } from '@/domains/brands/components/brand-stats-panel';
 import {
   mapBrandToFormValues,
   mapFormToCreateBrandRequest,
@@ -167,6 +169,13 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
           }}
         />
       ) : null}
+      {isEdit && editBrandId ? (
+        <BrandStatsPanel
+          brandId={editBrandId}
+          productCount={brand?.product_count}
+          isFeatured={brand?.is_featured}
+        />
+      ) : null}
       <Card className='border-border/40 bg-card/40 backdrop-blur-2xl'>
         <CardHeader>
           <CardTitle>{isEdit ? 'Edit brand' : 'Create brand'}</CardTitle>
@@ -188,7 +197,9 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
             >
               <Flex direction='column' spacing={6}>
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Basic information</h3>
+                  <Text variant='small' className='font-medium'>
+                    Basic information
+                  </Text>
 
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
@@ -236,15 +247,21 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Logo</h3>
+                  <Text variant='small' className='font-medium'>
+                    Logo
+                  </Text>
 
                   <form.Subscribe
                     selector={(state) => state.values.logo_url}
                     children={(logoUrl) => (
                       <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
-                        <div className='border-border/40 bg-muted/30 relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-xl border'>
+                        <Flex
+                          align='center'
+                          justify='center'
+                          className='bg-muted relative h-24 w-24 overflow-hidden rounded-xl border'
+                        >
                           {logoUrl ? (
-                            <Image
+                            <AppImage
                               src={logoUrl}
                               alt='Brand logo preview'
                               fill
@@ -254,7 +271,7 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
                           ) : (
                             <IconPhoto className='text-muted-foreground size-8' />
                           )}
-                        </div>
+                        </Flex>
 
                         <Flex direction='column' spacing={3} className='min-w-60 flex-1'>
                           <input
@@ -303,7 +320,86 @@ export function BrandForm({ isEdit = false, brandId }: BrandFormProps) {
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Visibility</h3>
+                  <Text variant='small' className='font-medium'>
+                    SEO
+                  </Text>
+
+                  <form.AppField
+                    name='meta_title'
+                    children={(field) => (
+                      <field.TextField
+                        label='Meta title'
+                        placeholder='Brand title for search engines'
+                        detail={`${(field.state.value ?? '').length}/70 characters`}
+                      />
+                    )}
+                  />
+
+                  <form.AppField
+                    name='meta_description'
+                    children={(field) => (
+                      <field.TextArea
+                        label='Meta description'
+                        placeholder='Short summary for search results'
+                        rows={3}
+                        description={`${(field.state.value ?? '').length}/160 characters`}
+                      />
+                    )}
+                  />
+                </Flex>
+
+                <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <Text variant='small' className='font-medium'>
+                    Merchandising
+                  </Text>
+
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
+                      <form.AppField
+                        name='is_featured'
+                        children={(field) => (
+                          <field.Switch
+                            label='Featured on homepage'
+                            description='Pinned to the top of homepage top-brands before sales-ranked brands'
+                          />
+                        )}
+                      />
+                    </GridItem>
+
+                    <GridItem>
+                      <form.Subscribe
+                        selector={(state) => state.values.is_featured}
+                        children={(isFeatured) =>
+                          isFeatured ? (
+                            <form.AppField
+                              name='featured_sort_order'
+                              children={(field) => (
+                                <field.TextField
+                                  label='Featured sort order'
+                                  type='number'
+                                  detail='Lower numbers appear first among featured brands'
+                                />
+                              )}
+                            />
+                          ) : (
+                            <Text variant='muted' className='text-sm'>
+                              Enable featured to set homepage display order.
+                            </Text>
+                          )
+                        }
+                      />
+                    </GridItem>
+                  </Grid>
+                </Flex>
+
+                <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <Text variant='small' className='font-medium'>
+                    Visibility
+                  </Text>
 
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>

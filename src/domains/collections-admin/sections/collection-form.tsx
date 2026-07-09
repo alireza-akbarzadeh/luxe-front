@@ -1,12 +1,13 @@
 'use client';
 
-import { IconLoader2 } from '@tabler/icons-react';
+import { IconLoader2, IconPhoto, IconUpload } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
@@ -18,14 +19,17 @@ import {
   COLLECTION_CATEGORY_NONE,
   COLLECTION_PREVIEW_SORT_OPTIONS,
   COLLECTION_STATUS_OPTIONS,
+  COLLECTION_THEME_OPTIONS,
   collectionDefaultValues,
   collectionFormSchema
 } from '@/domains/collections-admin/collection.schema';
+import { CollectionRulesPreview } from '@/domains/collections-admin/components/collection-rules-preview';
 import {
   mapCollectionToFormValues,
   mapFormToCreateCollectionRequest,
   mapFormToUpdateCollectionRequest
 } from '@/domains/collections-admin/lib/collection-mapper';
+import { uploadCollectionImage } from '@/domains/collections-admin/lib/upload-collection-image';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
 import { useGetCategories } from '@/services/-categories-get';
@@ -44,6 +48,8 @@ interface CollectionFormProps {
 export function CollectionForm({ isEdit = false, collectionId }: CollectionFormProps) {
   const { push } = useRouter();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const { data: categoriesData } = useGetCategories({ limit: 100 });
 
@@ -75,7 +81,7 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
     }
   });
 
-  const isPending = isCreating || isUpdating;
+  const isPending = isCreating || isUpdating || isUploadingImage;
 
   const categoryOptions = useMemo(() => {
     const options: { label: string; value: string }[] = [];
@@ -136,6 +142,21 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
       form.reset(mapCollectionToFormValues(collection));
     }
   }, [isEdit, collection, form]);
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploadingImage(true);
+    try {
+      const publicUrl = await uploadCollectionImage(file);
+      form.setFieldValue('image_url', publicUrl);
+      toast.success('Image uploaded');
+    } catch (error) {
+      toast.error('Failed to upload image', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   if (isEdit && isLoadingCollection) {
     return (
@@ -274,6 +295,18 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
+                        name='theme'
+                        children={(field) => (
+                          <field.Select
+                            label='Theme'
+                            options={[...COLLECTION_THEME_OPTIONS]}
+                            description='Visual style on the storefront collections page'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
                         name='href'
                         children={(field) => (
                           <field.TextField
@@ -292,28 +325,81 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                         )}
                       />
                     </GridItem>
-                    <GridItem className='sm:col-span-2'>
-                      <form.AppField
-                        name='image_url'
-                        children={(field) => (
-                          <field.TextField
-                            label='Hero image URL'
-                            placeholder='https://…'
-                            detail='Cover image for cards and hero grid'
-                          />
-                        )}
-                      />
-                    </GridItem>
                   </Grid>
+
+                  <form.Subscribe
+                    selector={(state) => state.values.image_url}
+                    children={(imageUrl) => (
+                      <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
+                        <Flex
+                          align='center'
+                          justify='center'
+                          className='bg-muted relative h-28 w-28 overflow-hidden rounded-xl border'
+                        >
+                          {imageUrl ? (
+                            <AppImage
+                              src={imageUrl}
+                              alt='Collection hero preview'
+                              fill
+                              sizes='112px'
+                              className='object-cover'
+                            />
+                          ) : (
+                            <IconPhoto className='text-muted-foreground size-8' />
+                          )}
+                        </Flex>
+
+                        <Flex direction='column' spacing={3} className='min-w-60 flex-1'>
+                          <input
+                            ref={fileInputRef}
+                            type='file'
+                            accept='image/jpeg,image/png,image/webp,image/gif'
+                            className='hidden'
+                            onChange={(event) => {
+                              const file = event.target.files?.[0];
+                              if (file) void handleImageUpload(file);
+                              event.target.value = '';
+                            }}
+                          />
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='sm'
+                            className='w-fit'
+                            disabled={isUploadingImage}
+                            onClick={() => fileInputRef.current?.click()}
+                          >
+                            {isUploadingImage ? (
+                              <IconLoader2 className='size-4 animate-spin' />
+                            ) : (
+                              <IconUpload className='size-4' />
+                            )}
+                            Upload hero image
+                          </Button>
+
+                          <form.AppField
+                            name='image_url'
+                            children={(field) => (
+                              <field.TextField
+                                label='Hero image URL'
+                                placeholder='https://…'
+                                detail='Upload an image or paste a public URL'
+                              />
+                            )}
+                          />
+                        </Flex>
+                      </Flex>
+                    )}
+                  />
                 </Flex>
 
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Product preview</h3>
+                  <h3 className='text-foreground text-sm font-medium'>Smart collection rules</h3>
                   <p className='text-muted-foreground text-sm'>
-                    Optional filters for the product row shown under each collection on the
-                    storefront.
+                    Dynamic product row shown under this collection on the storefront — filters apply
+                    automatically.
                   </p>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
@@ -347,6 +433,21 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                       />
                     </GridItem>
                   </Grid>
+
+                  <form.Subscribe
+                    selector={(state) => ({
+                      previewSort: state.values.preview_sort,
+                      previewCategoryId: state.values.preview_category_id,
+                      previewIsNew: state.values.preview_is_new
+                    })}
+                    children={({ previewSort, previewCategoryId, previewIsNew }) => (
+                      <CollectionRulesPreview
+                        previewSort={previewSort}
+                        previewCategoryId={previewCategoryId}
+                        previewIsNew={previewIsNew}
+                      />
+                    )}
+                  />
                 </Flex>
 
                 <Separator />

@@ -1,6 +1,11 @@
 'use client';
 
-import { IconFileSpreadsheet, IconFolderSymlink, IconPencil } from '@tabler/icons-react';
+import {
+  IconFileSpreadsheet,
+  IconFolderSymlink,
+  IconGripVertical,
+  IconPencil
+} from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
@@ -14,6 +19,7 @@ import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import { CategoryImportDialog } from '@/domains/categories/components/category-import-dialog';
 import { CategoryMobileCard } from '@/domains/categories/components/category-mobile-card';
+import { CategoryReorderDialog } from '@/domains/categories/components/category-reorder-dialog';
 import { CategoryReparentDialog } from '@/domains/categories/components/category-reparent-dialog';
 import { CategoryTreeActions } from '@/domains/categories/components/category-tree-actions';
 import { categoryColumns } from '@/domains/categories/sections/category-columns';
@@ -27,6 +33,7 @@ export function CategoriesDomains() {
   const queryClient = useQueryClient();
   const { isDesktop } = useMediaDevices();
   const [importOpen, setImportOpen] = useState(false);
+  const [reorderOpen, setReorderOpen] = useState(false);
   const [reparentCategory, setReparentCategory] = useState<ModelsCategory | null>(null);
 
   const getQueryParams = useCallback(
@@ -67,6 +74,9 @@ export function CategoriesDomains() {
   });
 
   const allCategories = serverTable.rows;
+
+  const { data: categoryTreeData } = useGetCategories({ limit: 100 });
+  const categoryTreeRoots = categoryTreeData?.data?.categories ?? allCategories;
 
   const handleBulkDelete = useCallback(() => {
     const ids = Object.entries(serverTable.tableState.rowSelection)
@@ -113,10 +123,21 @@ export function CategoriesDomains() {
         >
           <CategoryTreeActions />
           {isDesktop ? (
-            <Button type='button' variant='outline' size='sm' onClick={() => setImportOpen(true)}>
-              <IconFileSpreadsheet className='size-4' />
-              Import Excel
-            </Button>
+            <>
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                onClick={() => setReorderOpen(true)}
+              >
+                <IconGripVertical className='size-4' />
+                Reorder
+              </Button>
+              <Button type='button' variant='outline' size='sm' onClick={() => setImportOpen(true)}>
+                <IconFileSpreadsheet className='size-4' />
+                Import Excel
+              </Button>
+            </>
           ) : null}
         </Table.Toolbar>
 
@@ -180,11 +201,17 @@ export function CategoriesDomains() {
 
       <CategoryReparentDialog
         category={reparentCategory}
-        allCategories={allCategories}
+        allCategories={categoryTreeRoots}
         open={reparentCategory != null}
         onOpenChange={(open) => {
           if (!open) setReparentCategory(null);
         }}
+      />
+
+      <CategoryReorderDialog
+        roots={categoryTreeRoots}
+        open={reorderOpen}
+        onOpenChange={setReorderOpen}
       />
     </>
   );

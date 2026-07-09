@@ -1,12 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import Image from 'next/image';
 
+import { createSelectColumn } from '@/components/table/data-table';
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
-import { createSelectColumn } from '~/src/components/table/data-table';
-import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
-import { mapBrandStatusToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
-import { DATE_FORMATS, formatDate } from '~/src/lib/date';
-import type { DtoCollectionResponse } from '~/src/services/-collections-get.schemas';
+import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
+import { mapBrandStatusToStateView } from '@/domains/workflows/lib/workflow-runtime';
+import { DATE_FORMATS, formatDate } from '@/lib/date';
+import { IMAGE_FALLBACK } from '@/lib/images';
+import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
 
 export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
   createSelectColumn<DtoCollectionResponse>(),
@@ -18,19 +19,13 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
       const imageUrl = row.original.image_url;
       return (
         <div className='bg-muted relative h-12 w-12 overflow-hidden rounded-md border'>
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={row.original.title ?? 'Collection'}
-              fill
-              className='object-cover'
-              sizes='48px'
-            />
-          ) : (
-            <div className='text-muted-foreground flex h-full w-full items-center justify-center text-xs'>
-              —
-            </div>
-          )}
+          <AppImage
+            src={imageUrl ?? IMAGE_FALLBACK}
+            alt={row.original.title ?? 'Collection'}
+            fill
+            className='object-cover'
+            sizes='48px'
+          />
         </div>
       );
     }
@@ -65,6 +60,35 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
         {row.original.sort_order ?? 0}
       </Badge>
     )
+  },
+
+  {
+    id: 'smart_rules',
+    header: 'Smart rules',
+    cell: ({ row }) => {
+      const rules: string[] = [];
+      if (row.original.preview_is_new) rules.push('New');
+      if (row.original.preview_category_id) rules.push(`Cat #${row.original.preview_category_id}`);
+      if (row.original.preview_sort) rules.push(row.original.preview_sort);
+      return (
+        <span className='text-muted-foreground text-xs'>
+          {rules.length ? rules.join(' · ') : 'All products'}
+        </span>
+      );
+    }
+  },
+
+  {
+    accessorKey: 'theme',
+    header: 'Theme',
+    cell: ({ row }) =>
+      row.original.theme ? (
+        <Badge variant='outline' className='text-[10px] capitalize'>
+          {row.original.theme}
+        </Badge>
+      ) : (
+        <span className='text-muted-foreground text-xs'>—</span>
+      )
   },
 
   createWorkflowStateColumn<DtoCollectionResponse>({

@@ -18,6 +18,15 @@ export const COLLECTION_PREVIEW_SORT_OPTIONS = [
   { label: 'Price: high to low', value: 'price_desc' }
 ] as const;
 
+export const COLLECTION_THEME_OPTIONS = [
+  { label: 'Default', value: '' },
+  { label: 'Lifestyle', value: 'lifestyle' },
+  { label: 'Editorial', value: 'editorial' },
+  { label: 'Sale', value: 'sale' },
+  { label: 'Seasonal', value: 'seasonal' },
+  { label: 'Minimal', value: 'minimal' }
+] as const;
+
 export const collectionStatusSchema = z.enum(['draft', 'active', 'inactive', 'archived']);
 
 export const collectionFormSchema = z.object({
@@ -47,6 +56,7 @@ export const collectionFormSchema = z.object({
     .optional(),
   cta_label: z.string().max(128).optional(),
   sort_order: z.number().int().min(0).max(9999),
+  theme: z.string().max(64).optional(),
   status: collectionStatusSchema,
   preview_sort: z.string().max(64).optional(),
   preview_is_new: z.boolean(),
@@ -66,6 +76,7 @@ export const collectionDefaultValues: CollectionFormValues = {
   image_url: '',
   cta_label: 'Shop collection',
   sort_order: 0,
+  theme: '',
   status: 'draft',
   preview_sort: COLLECTION_PREVIEW_SORT_NONE,
   preview_is_new: false,

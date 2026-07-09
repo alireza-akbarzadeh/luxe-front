@@ -1,23 +1,27 @@
 'use client';
 
-import { IconLoader2 } from '@tabler/icons-react';
+import { IconLoader2, IconPhoto } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Text } from '@/components/ui/typography';
 import {
   mapCategoryToFormValues,
   mapFormToCreateCategoryRequest,
   mapFormToUpdateCategoryRequest
 } from '@/domains/categories/lib/category-mapper';
+import { sortCategoriesByOrder } from '@/domains/categories/lib/category-tree';
+import { uploadCategoryImage } from '@/domains/categories/lib/upload-category-image';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
 import {
@@ -39,6 +43,8 @@ interface CategoryFormProps {
 export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) {
   const { push } = useRouter();
   const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const { data: categoriesData } = useGetCategories({ limit: 100 });
 
@@ -84,7 +90,7 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
 
     flatten(categoriesData?.data?.categories ?? []);
 
-    return all
+    return sortCategoriesByOrder(all)
       .filter((c) => c.id !== category?.id)
       .map((c) => ({ label: c.name, value: String(c.id) }));
   }, [categoriesData, category?.id]);
@@ -131,6 +137,21 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
       form.reset(mapCategoryToFormValues(category));
     }
   }, [isEdit, category, form]);
+
+  const handleImageUpload = async (file: File) => {
+    setIsUploadingImage(true);
+    try {
+      const publicUrl = await uploadCategoryImage(file);
+      form.setFieldValue('image_url', publicUrl);
+      toast.success('Image uploaded');
+    } catch (error) {
+      toast.error('Failed to upload image', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   if (isEdit && isLoadingCategory) {
     return (
@@ -217,7 +238,129 @@ export function CategoryForm({ isEdit = false, categoryId }: CategoryFormProps) 
             <Separator />
 
             <Flex direction='column' spacing={4}>
-              <h3 className='text-foreground text-sm font-medium'>Organization</h3>
+              <Text variant='small' className='font-medium'>
+                Appearance
+              </Text>
+
+              <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                <GridItem>
+                  <form.AppField
+                    name='icon'
+                    children={(field) => (
+                      <field.TextField
+                        label='Icon name'
+                        placeholder='e.g. IconShirt'
+                        detail='Optional Tabler icon name shown in navigation'
+                      />
+                    )}
+                  />
+                </GridItem>
+              </Grid>
+
+              <form.Subscribe
+                selector={(state) => state.values.image_url}
+                children={(imageUrl) => (
+                  <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
+                    <Flex
+                      align='center'
+                      justify='center'
+                      className='bg-muted relative h-28 w-28 overflow-hidden rounded-xl border'
+                    >
+                      {imageUrl ? (
+                        <AppImage
+                          src={imageUrl}
+                          alt='Category image preview'
+                          fill
+                          sizes='112px'
+                          className='object-cover'
+                        />
+                      ) : (
+                        <IconPhoto className='text-muted-foreground size-8' />
+                      )}
+                    </Flex>
+
+                    <Flex direction='column' spacing={3} className='min-w-60 flex-1'>
+                      <input
+                        ref={fileInputRef}
+                        type='file'
+                        accept='image/jpeg,image/png,image/webp,image/gif'
+                        className='hidden'
+                        onChange={(event) => {
+                          const file = event.target.files?.[0];
+                          if (file) void handleImageUpload(file);
+                          event.target.value = '';
+                        }}
+                      />
+                      <Button
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        className='w-fit'
+                        disabled={isUploadingImage}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        {isUploadingImage ? (
+                          <>
+                            <IconLoader2 className='size-4 animate-spin' />
+                            Uploading…
+                          </>
+                        ) : (
+                          'Upload featured image'
+                        )}
+                      </Button>
+                      <form.AppField
+                        name='image_url'
+                        children={(field) => (
+                          <field.TextField
+                            label='Image URL'
+                            placeholder='https://…'
+                            detail='Or paste a CDN URL directly'
+                          />
+                        )}
+                      />
+                    </Flex>
+                  </Flex>
+                )}
+              />
+            </Flex>
+
+            <Separator />
+
+            <Flex direction='column' spacing={4}>
+              <Text variant='small' className='font-medium'>
+                SEO
+              </Text>
+
+              <form.AppField
+                name='meta_title'
+                children={(field) => (
+                  <field.TextField
+                    label='Meta title'
+                    placeholder='Category title for search engines'
+                    detail={`${(field.state.value ?? '').length}/70 characters`}
+                  />
+                )}
+              />
+
+              <form.AppField
+                name='meta_description'
+                children={(field) => (
+                  <field.TextArea
+                    label='Meta description'
+                    placeholder='Short summary for search results'
+                    rows={3}
+                    description={`${(field.state.value ?? '').length}/160 characters`}
+                  />
+                )}
+              />
+            </Flex>
+
+            <Separator />
+
+            <Flex direction='column' spacing={4}>
+              <Text variant='small' className='font-medium'>
+                Organization
+              </Text>
 
               <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                 <GridItem>

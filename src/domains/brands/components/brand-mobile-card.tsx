@@ -5,6 +5,8 @@ import type { Row } from '@tanstack/react-table';
 import { AppImage } from '@/components/ui/app-image';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
+import { BrandHomepageBadge } from '@/domains/brands/components/brand-homepage-badge';
+import { BrandProductCountCell } from '@/domains/brands/components/brand-product-count-cell';
 import { WorkflowStateBadge } from '@/domains/workflows/components/workflow-state-badge';
 import { mapBrandStatusToStateView } from '@/domains/workflows/lib/workflow-runtime';
 import { IMAGE_FALLBACK } from '@/lib/images';
@@ -44,7 +46,17 @@ export function BrandMobileCard({ row }: BrandMobileCardProps) {
               /{brand.slug ?? '—'}
             </Text>
           </Flex>
-          <WorkflowStateBadge state={workflowState} className='shrink-0 text-[10px]' />
+          <Flex direction='column' align='end' spacing={1} className='shrink-0'>
+            <WorkflowStateBadge state={workflowState} className='text-[10px]' />
+            <BrandHomepageBadge brand={brand} />
+          </Flex>
+        </Flex>
+
+        <Flex direction='row' align='center' spacing={2}>
+          <BrandProductCountCell brand={brand} />
+          <Text variant='muted' className='text-[11px]'>
+            products
+          </Text>
         </Flex>
 
         {brand.description ? (

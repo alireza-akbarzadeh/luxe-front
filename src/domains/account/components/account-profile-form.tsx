@@ -12,6 +12,7 @@ import { getGetAccountSummaryQueryKey } from '~/src/services/-account-summary-ge
 import { usePutProfile } from '~/src/services/-profile-put';
 
 import { profileFormSchema, type ProfileFormValues } from '../account.schema';
+import { AccountProfileAvatarField } from './account-profile-avatar-field';
 
 interface AccountProfileFormProps {
   onClose: () => void;
@@ -42,7 +43,8 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
             data: {
               first_name: value.firstName,
               last_name: value.lastName,
-              phone: value.phone
+              phone: value.phone,
+              avatar_url: value.avatarUrl
             }
           });
           await queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() });
@@ -69,6 +71,21 @@ export function AccountProfileForm(props: AccountProfileFormProps) {
           }}
           className='grid grid-cols-2 gap-4'
         >
+          <form.Subscribe
+            selector={(state) => ({
+              avatarUrl: state.values.avatarUrl,
+              firstName: state.values.firstName,
+              lastName: state.values.lastName
+            })}
+          >
+            {({ avatarUrl, firstName, lastName }) => (
+              <AccountProfileAvatarField
+                avatarUrl={avatarUrl}
+                fallbackLabel={`${firstName}${lastName}`}
+                onAvatarUrlChange={(url) => form.setFieldValue('avatarUrl', url)}
+              />
+            )}
+          </form.Subscribe>
           <form.AppField name='firstName'>
             {(field) => <field.TextField label={tFields('firstName')} />}
           </form.AppField>

@@ -28,6 +28,7 @@ export function CategoryMobileCard({ row }: CategoryMobileCardProps) {
       <Flex direction='row' align='start' justify='between' className='gap-2'>
         <Flex direction='column' className='min-w-0 flex-1 gap-0.5'>
           <Text variant='small' className='truncate font-semibold'>
+            {category.icon ? `${category.icon.replace(/^Icon/, '')} · ` : ''}
             {category.name ?? '—'}
           </Text>
           <Text variant='muted' className='truncate text-xs'>

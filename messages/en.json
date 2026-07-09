@@ -2749,7 +2749,12 @@
       "recentOrdersTitle": "Recent Orders",
       "noOrders": "No orders yet.",
       "profileUpdated": "Profile updated successfully",
-      "profileUpdateFailed": "Failed to update profile"
+      "profileUpdateFailed": "Failed to update profile",
+      "avatarLabel": "Profile photo",
+      "uploadAvatar": "Upload photo",
+      "removeAvatar": "Remove",
+      "avatarUploaded": "Photo uploaded",
+      "avatarUploadFailed": "Failed to upload photo"
     },
     "orders": {
       "title": "Order History",

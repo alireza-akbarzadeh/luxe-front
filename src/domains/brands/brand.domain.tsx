@@ -1,6 +1,6 @@
 'use client';
 
-import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconExternalLink, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -148,6 +148,15 @@ export function BrandsDomains() {
                 <IconPencil className='size-3.5' />
                 Edit brand
               </DropdownMenuItem>
+              {row.original.id ? (
+                <DropdownMenuItem
+                  className='gap-2 text-[11px] font-semibold'
+                  onClick={() => push(`/dashboard/products?brand_id=${row.original.id}`)}
+                >
+                  <IconExternalLink className='size-3.5' />
+                  View products
+                </DropdownMenuItem>
+              ) : null}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className='text-destructive gap-2 text-[11px] font-semibold'

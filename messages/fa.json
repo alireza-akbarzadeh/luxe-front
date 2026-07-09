@@ -2749,7 +2749,12 @@
       "recentOrdersTitle": "سفارش‌های اخیر",
       "noOrders": "هنوز سفارشی ثبت نشده.",
       "profileUpdated": "پروفایل با موفقیت به‌روزرسانی شد",
-      "profileUpdateFailed": "به‌روزرسانی پروفایل ناموفق بود"
+      "profileUpdateFailed": "به‌روزرسانی پروفایل ناموفق بود",
+      "avatarLabel": "عکس پروفایل",
+      "uploadAvatar": "بارگذاری عکس",
+      "removeAvatar": "حذف",
+      "avatarUploaded": "عکس بارگذاری شد",
+      "avatarUploadFailed": "بارگذاری عکس ناموفق بود"
     },
     "orders": {
       "title": "تاریخچه سفارش",

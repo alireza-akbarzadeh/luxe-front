@@ -15,7 +15,11 @@ export function mapFormToCreateBrandRequest(values: BrandFormValues): DtoCreateB
     slug: values.slug.trim(),
     description: optionalText(values.description),
     logo_url: optionalText(values.logo_url),
-    status: values.status
+    status: values.status,
+    is_featured: values.is_featured,
+    featured_sort_order: values.is_featured ? (values.featured_sort_order ?? 0) : 0,
+    meta_title: optionalText(values.meta_title),
+    meta_description: optionalText(values.meta_description)
   };
 }
 
@@ -25,7 +29,11 @@ export function mapFormToUpdateBrandRequest(values: BrandFormValues): DtoUpdateB
     name: values.name.trim(),
     slug: values.slug.trim(),
     description: optionalText(values.description),
-    logo_url: optionalText(values.logo_url)
+    logo_url: optionalText(values.logo_url),
+    is_featured: values.is_featured,
+    featured_sort_order: values.is_featured ? (values.featured_sort_order ?? 0) : 0,
+    meta_title: optionalText(values.meta_title),
+    meta_description: optionalText(values.meta_description)
   };
 }
 
@@ -42,6 +50,10 @@ export function mapBrandToFormValues(brand: DtoBrandResponse): BrandFormValues {
     slug: brand.slug ?? '',
     description: brand.description ?? '',
     logo_url: brand.logo_url ?? '',
-    status: validStatus
+    status: validStatus,
+    is_featured: brand.is_featured ?? false,
+    featured_sort_order: brand.featured_sort_order ?? 0,
+    meta_title: brand.meta_title ?? '',
+    meta_description: brand.meta_description ?? ''
   };
 }

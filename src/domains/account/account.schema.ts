@@ -23,7 +23,10 @@ export const profileFormSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.email(),
-  phone: phoneE164String({ required: false })
+  phone: phoneE164String({ required: false }),
+  avatarUrl: z
+    .string()
+    .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid avatar URL')
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

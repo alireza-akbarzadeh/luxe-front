@@ -15,7 +15,14 @@ export const categoryFormSchema = z.object({
     ),
   description: z.string().max(500, 'Description must be at most 500 characters').optional(),
   parent_id: z.string().nullable().optional(),
-  is_active: z.boolean()
+  is_active: z.boolean(),
+  icon: z.string().max(64, 'Icon name must be at most 64 characters').optional(),
+  image_url: z.string().max(512).optional(),
+  meta_title: z.string().max(70, 'Meta title must be at most 70 characters').optional(),
+  meta_description: z
+    .string()
+    .max(160, 'Meta description must be at most 160 characters')
+    .optional()
 });
 
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
@@ -25,5 +32,9 @@ export const categoryDefaultValues: CategoryFormValues = {
   slug: '',
   description: '',
   parent_id: null,
-  is_active: true
+  is_active: true,
+  icon: '',
+  image_url: '',
+  meta_title: '',
+  meta_description: ''
 };

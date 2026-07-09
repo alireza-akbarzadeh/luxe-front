@@ -28,7 +28,14 @@ export const brandFormSchema = z.object({
     .max(2048)
     .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid logo URL')
     .optional(),
-  status: brandStatusSchema
+  status: brandStatusSchema,
+  is_featured: z.boolean(),
+  featured_sort_order: z.number().int().min(0).optional(),
+  meta_title: z.string().max(70, 'Meta title must be at most 70 characters').optional(),
+  meta_description: z
+    .string()
+    .max(160, 'Meta description must be at most 160 characters')
+    .optional()
 });
 
 export type BrandFormValues = z.infer<typeof brandFormSchema>;
@@ -38,5 +45,9 @@ export const brandDefaultValues: BrandFormValues = {
   slug: '',
   description: '',
   logo_url: '',
-  status: 'draft'
+  status: 'draft',
+  is_featured: false,
+  featured_sort_order: 0,
+  meta_title: '',
+  meta_description: ''
 };

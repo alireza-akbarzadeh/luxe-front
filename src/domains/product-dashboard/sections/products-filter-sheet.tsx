@@ -20,6 +20,7 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { useProductsQueryState } from '@/domains/product-dashboard/hooks/use-products-query';
+import { useGetBrands } from '@/services/-brands-get';
 import { GetProductsStatus } from '@/services/-products-get.schemas';
 
 interface ProductsFilterSheetProps {
@@ -38,9 +39,18 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
     setMaxPrice,
     categoryId,
     setCategoryId,
+    brandId,
+    setBrandId,
     isDigital,
     setIsDigital
   } = useProductsQueryState();
+
+  const { data: brandsData } = useGetBrands({ limit: 100, page: 1 });
+  const brandOptions =
+    brandsData?.data?.brands?.map((brand) => ({
+      label: brand.name ?? `Brand #${brand.id}`,
+      value: String(brand.id)
+    })) ?? [];
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -117,6 +127,26 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
                 void setCategoryId(value === '' ? null : Number(value));
               }}
             />
+          </div>
+
+          <div className='space-y-2'>
+            <Label>Brand</Label>
+            <Select
+              value={brandId != null ? String(brandId) : 'all'}
+              onValueChange={(value) => void setBrandId(value === 'all' ? null : Number(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder='All brands' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='all'>All brands</SelectItem>
+                {brandOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className='space-y-2'>

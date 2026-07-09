@@ -2708,7 +2708,12 @@
       "recentOrdersTitle": "Pedidos recientes",
       "noOrders": "Aún no hay pedidos.",
       "profileUpdated": "Perfil actualizado correctamente",
-      "profileUpdateFailed": "No se pudo actualizar el perfil"
+      "profileUpdateFailed": "No se pudo actualizar el perfil",
+      "avatarLabel": "Foto de perfil",
+      "uploadAvatar": "Subir foto",
+      "removeAvatar": "Eliminar",
+      "avatarUploaded": "Foto subida",
+      "avatarUploadFailed": "No se pudo subir la foto"
     },
     "orders": {
       "title": "Historial de pedidos",

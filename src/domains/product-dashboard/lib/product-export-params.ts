@@ -6,6 +6,7 @@ interface BuildProductExportParamsInput {
   minPrice: number | null;
   maxPrice: number | null;
   categoryId: number | null;
+  brandId: number | null;
   isDigital: 'all' | 'yes' | 'no';
   search?: string;
 }
@@ -20,6 +21,7 @@ export function buildProductExportParams(
     min_price: input.minPrice ?? undefined,
     max_price: input.maxPrice ?? undefined,
     category_id: input.categoryId ?? undefined,
+    brand_id: input.brandId ?? undefined,
     is_digital: input.isDigital === 'all' ? undefined : input.isDigital === 'yes',
     format: 'csv'
   };

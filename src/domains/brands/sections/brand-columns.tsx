@@ -1,11 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import Image from 'next/image';
 
-import { createSelectColumn } from '~/src/components/table/data-table';
-import { createWorkflowStateColumn } from '~/src/domains/workflows/lib/create-workflow-state-column';
-import { mapBrandStatusToStateView } from '~/src/domains/workflows/lib/workflow-runtime';
-import { DATE_FORMATS, formatDate } from '~/src/lib/date';
-import type { DtoBrandResponse } from '~/src/services/-brands-get.schemas';
+import { createSelectColumn } from '@/components/table/data-table';
+import { AppImage } from '@/components/ui/app-image';
+import { Flex } from '@/components/ui/flex';
+import { BrandHomepageBadge } from '@/domains/brands/components/brand-homepage-badge';
+import { BrandProductCountCell } from '@/domains/brands/components/brand-product-count-cell';
+import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
+import { mapBrandStatusToStateView } from '@/domains/workflows/lib/workflow-runtime';
+import { DATE_FORMATS, formatDate } from '@/lib/date';
+import { IMAGE_FALLBACK } from '@/lib/images';
+import type { DtoBrandResponse } from '@/services/-brands-get.schemas';
 
 export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
   createSelectColumn<DtoBrandResponse>(),
@@ -16,20 +20,14 @@ export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
     cell: ({ row }) => {
       const logoUrl = row.original.logo_url;
       return (
-        <div className='relative h-12 w-12 overflow-hidden rounded-md p-2'>
-          {logoUrl ? (
-            <Image
-              src={logoUrl}
-              alt={row.original.name ?? 'Brand'}
-              fill
-              className='object-contain'
-              sizes='48px'
-            />
-          ) : (
-            <div className='text-muted-foreground flex h-full w-full items-center justify-center text-xs'>
-              —
-            </div>
-          )}
+        <div className='relative h-12 w-12 overflow-hidden rounded-md border p-1'>
+          <AppImage
+            src={logoUrl ?? IMAGE_FALLBACK}
+            alt={row.original.name ?? 'Brand'}
+            fill
+            className='object-contain'
+            sizes='48px'
+          />
         </div>
       );
     }
@@ -39,11 +37,20 @@ export const brandColumns: ColumnDef<DtoBrandResponse>[] = [
     accessorKey: 'name',
     header: 'Brand',
     cell: ({ row }) => (
-      <div className='flex flex-col'>
-        <span className='font-medium'>{row.original.name || '—'}</span>
+      <Flex direction='column' spacing={1}>
+        <Flex direction='row' align='center' wrap='wrap' spacing={2}>
+          <span className='font-medium'>{row.original.name || '—'}</span>
+          <BrandHomepageBadge brand={row.original} />
+        </Flex>
         <span className='text-muted-foreground text-xs'>Slug: {row.original.slug || '—'}</span>
-      </div>
+      </Flex>
     )
+  },
+
+  {
+    id: 'product_count',
+    header: 'Products',
+    cell: ({ row }) => <BrandProductCountCell brand={row.original} />
   },
 
   {

@@ -30,7 +30,7 @@ export function flattenCategoryTree(
 ): Array<{ category: ModelsCategory; depth: number }> {
   const result: Array<{ category: ModelsCategory; depth: number }> = [];
 
-  for (const node of nodes) {
+  for (const node of sortCategoriesByOrder(nodes)) {
     result.push({ category: node, depth });
     if (node.children?.length) {
       result.push(...flattenCategoryTree(node.children, depth + 1));
@@ -38,4 +38,33 @@ export function flattenCategoryTree(
   }
 
   return result;
+}
+
+/** Sorts categories by persisted sort_order then id. */
+export function sortCategoriesByOrder(categories: ModelsCategory[]): ModelsCategory[] {
+  return [...categories].sort(
+    (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || (a.id ?? 0) - (b.id ?? 0)
+  );
+}
+
+/** Returns direct siblings for a parent id (null = top-level). */
+export function getCategorySiblings(
+  roots: ModelsCategory[],
+  parentId: number | null
+): ModelsCategory[] {
+  if (parentId == null) {
+    return sortCategoriesByOrder(roots);
+  }
+
+  function findNode(nodes: ModelsCategory[]): ModelsCategory | undefined {
+    for (const node of nodes) {
+      if (node.id === parentId) return node;
+      const nested = findNode(node.children ?? []);
+      if (nested) return nested;
+    }
+    return undefined;
+  }
+
+  const parent = findNode(roots);
+  return sortCategoriesByOrder(parent?.children ?? []);
 }
