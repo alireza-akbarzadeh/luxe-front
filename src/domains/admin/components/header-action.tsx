@@ -24,10 +24,11 @@ export function HeaderActions() {
         <DropdownMenuTrigger asChild>
           <Button
             size='sm'
-            className='dashboard-quick-action hidden h-9 gap-1.5 rounded-xl px-3 font-medium sm:inline-flex'
+            className='dashboard-quick-action hidden h-9 shrink-0 rounded-xl px-0 font-medium md:inline-flex md:px-3'
+            aria-label={t('label')}
           >
-            <IconPlus className='h-4 w-4' />
-            <span className='hidden md:inline'>{t('label')}</span>
+            <IconPlus className='h-4 w-4 md:mr-0' />
+            <span className='hidden lg:inline'>{t('label')}</span>
           </Button>
         </DropdownMenuTrigger>
 
@@ -130,7 +131,7 @@ export function HeaderActions() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <div className='bg-border/40 mx-2 hidden h-6 w-px sm:block' />
+      <div className='bg-border/40 mx-1 hidden h-6 w-px lg:mx-2 lg:block' />
       <NotificationCenter />
     </div>
   );

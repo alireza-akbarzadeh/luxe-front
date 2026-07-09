@@ -1,3 +1,5 @@
+'use client';
+
 import { IconChevronRight, IconHome } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useMemo } from 'react';

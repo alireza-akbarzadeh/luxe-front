@@ -17,6 +17,7 @@ import { useGetUserMenuStructure } from '@/services/-user-menu-structure-get';
 import { AdminNotificationsSync } from './admin-notifications-sync';
 import { AdminSidebar } from './admin-sidebar';
 import { AppHeader } from './app-header';
+import { DashboardBreadcrumbs } from './dashboard-breadcrumbs';
 import { SearchSide } from './search-dashboard';
 
 interface AppSidebarLayoutProps {
@@ -73,6 +74,9 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
                   isFullWidth ? 'max-w-none' : 'w-full'
                 )}
               >
+                <div className='mb-4'>
+                  <DashboardBreadcrumbs pathname={pathname} sidebar_menu={sidebar_menu} />
+                </div>
                 {children}
               </div>
             </main>

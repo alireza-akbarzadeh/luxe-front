@@ -52,7 +52,12 @@ export function SearchSide({ data }: CommandSettingProps) {
   };
 
   return (
-    <CommandDialog dialogClassName='border-6' open={searchOpen} onOpenChange={setSearchOpen}>
+    <CommandDialog
+      dialogClassName='border-6'
+      open={searchOpen}
+      onOpenChange={setSearchOpen}
+      title='Search dashboard'
+    >
       <CommandInput
         placeholder='Search pages, tools, or staff settings...'
         className='text-foreground border-b border-none bg-transparent'

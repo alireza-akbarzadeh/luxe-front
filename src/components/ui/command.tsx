@@ -6,8 +6,8 @@ import * as React from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
 
-import { Dialog, DialogContent } from './dialog';
-import { Drawer, DrawerContent } from './drawer';
+import { Dialog, DialogContent, DialogTitle } from './dialog';
+import { Drawer, DrawerContent, DrawerTitle } from './drawer';
 
 function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive>) {
   return (
@@ -24,10 +24,17 @@ function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive
 interface CommandDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
   children: React.ReactNode;
   dialogClassName?: string;
+  /** Screen-reader label — visually hidden; required by Radix Dialog/Drawer. */
+  title?: string;
 }
 
 // FIX: Ensure this is the ONLY declaration of CommandDialog in this file
-export function CommandDialog({ children, dialogClassName, ...props }: CommandDialogProps) {
+export function CommandDialog({
+  children,
+  dialogClassName,
+  title = 'Command menu',
+  ...props
+}: CommandDialogProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // We use a state to ensure we don't get hydration errors
@@ -48,6 +55,7 @@ export function CommandDialog({ children, dialogClassName, ...props }: CommandDi
     return (
       <Dialog {...props}>
         <DialogContent className={cn('overflow-hidden p-0 shadow-lg', dialogClassName)}>
+          <DialogTitle className='sr-only'>{title}</DialogTitle>
           {CommandContent}
         </DialogContent>
       </Dialog>
@@ -57,6 +65,7 @@ export function CommandDialog({ children, dialogClassName, ...props }: CommandDi
   return (
     <Drawer {...props}>
       <DrawerContent className='p-0'>
+        <DrawerTitle className='sr-only'>{title}</DrawerTitle>
         <div className='overflow-hidden rounded-t-[10px]'>{CommandContent}</div>
       </DrawerContent>
     </Drawer>

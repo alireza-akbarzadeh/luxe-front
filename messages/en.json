@@ -25,7 +25,11 @@
   "adminShell": {
     "header": {
       "openMenu": "Open navigation menu",
-      "searchPlaceholder": "Search orders, products, customers…"
+      "search": "Open search",
+      "searchPlaceholder": "Search orders, products, customers…",
+      "moreActions": "More actions",
+      "period": "Period",
+      "theme": "Theme"
     },
     "nav": {
       "favorites": "Favorites",

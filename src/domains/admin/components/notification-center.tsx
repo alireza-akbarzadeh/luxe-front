@@ -1,9 +1,10 @@
 'use client';
 
 import { IconBell } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AdminShellPanel } from '@/domains/admin/components/admin-shell-panel';
 import { useAdminNotificationsPanel } from '@/domains/admin/hooks/use-admin-notifications';
 import { useAdminShellStore } from '@/domains/admin/stores/admin-shell-store';
 import { cn } from '@/lib/utils';
@@ -11,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { NotificationList } from '../sections/notification-list';
 
 export function NotificationCenter() {
+  const t = useTranslations('adminShell.notifications');
   const isOpen = useAdminShellStore((state) => state.notificationOpen);
   const setNotificationOpen = useAdminShellStore((state) => state.setNotificationOpen);
 
@@ -20,13 +22,17 @@ export function NotificationCenter() {
   const unreadTotal = notifications.filter((item) => !item.is_read).length;
 
   return (
-    <Popover open={isOpen} onOpenChange={setNotificationOpen}>
-      <PopoverTrigger asChild>
+    <AdminShellPanel
+      open={isOpen}
+      onOpenChange={setNotificationOpen}
+      title={t('title')}
+      desktopSurface='popover'
+      trigger={
         <Button
           size='icon'
           variant='ghost'
-          aria-label='Notifications'
-          className='relative h-10 w-10 rounded-xl'
+          aria-label={t('title')}
+          className='relative h-9 w-9 rounded-xl'
         >
           <IconBell className={cn('h-5 w-5', unreadTotal > 0 && 'text-primary')} />
           {unreadTotal > 0 ? (
@@ -35,21 +41,16 @@ export function NotificationCenter() {
             </span>
           ) : null}
         </Button>
-      </PopoverTrigger>
-
-      <PopoverContent
-        align='end'
-        className='border-border/60 w-[min(100vw-2rem,24rem)] overflow-hidden rounded-2xl p-0 shadow-xl'
-      >
-        <NotificationList
-          notifications={notifications}
-          total={total}
-          unreadOnPage={unreadOnPage}
-          isLoading={isLoading}
-          isError={isError}
-          onRefresh={() => void refetch()}
-        />
-      </PopoverContent>
-    </Popover>
+      }
+    >
+      <NotificationList
+        notifications={notifications}
+        total={total}
+        unreadOnPage={unreadOnPage}
+        isLoading={isLoading}
+        isError={isError}
+        onRefresh={() => void refetch()}
+      />
+    </AdminShellPanel>
   );
 }

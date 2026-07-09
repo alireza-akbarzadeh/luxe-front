@@ -4,6 +4,8 @@ interface AdminShellStoreState {
   searchOpen: boolean;
   isSidebarCollapsed: boolean;
   notificationOpen: boolean;
+  userMenuOpen: boolean;
+  overflowMenuOpen: boolean;
   mobileSidebarOpen: boolean;
 }
 
@@ -12,6 +14,8 @@ interface AdminShellStoreActions {
   setMobileSidebarOpen: (open: boolean) => void;
   setSidebarCollapsed: (open: boolean) => void;
   setNotificationOpen: (open: boolean) => void;
+  setUserMenuOpen: (open: boolean) => void;
+  setOverflowMenuOpen: (open: boolean) => void;
   reset: () => void;
 }
 
@@ -21,6 +25,8 @@ const initialState: AdminShellStoreState = {
   searchOpen: false,
   isSidebarCollapsed: false,
   notificationOpen: false,
+  userMenuOpen: false,
+  overflowMenuOpen: false,
   mobileSidebarOpen: false
 };
 
@@ -31,6 +37,8 @@ export const useAdminShellStore = create<AdminShellStore>()((set) => ({
   setSearchOpen: (open) => set({ searchOpen: open }),
   setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
   setNotificationOpen: (open) => set({ notificationOpen: open }),
+  setUserMenuOpen: (open) => set({ userMenuOpen: open }),
+  setOverflowMenuOpen: (open) => set({ overflowMenuOpen: open }),
   reset: () => set(initialState)
 }));
 

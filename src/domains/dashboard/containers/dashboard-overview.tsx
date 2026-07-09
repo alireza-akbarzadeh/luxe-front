@@ -14,6 +14,7 @@ import { DashboardHealthSection } from '@/domains/dashboard/sections/dashboard-h
 import { DashboardInsightsSection } from '@/domains/dashboard/sections/dashboard-insights-section';
 import { DashboardKpiSection } from '@/domains/dashboard/sections/dashboard-kpi-section';
 import { DashboardLowStockTable } from '@/domains/dashboard/sections/dashboard-low-stock-table';
+import { DashboardNotificationsSection } from '@/domains/dashboard/sections/dashboard-notifications-section';
 import { DashboardPlatformSection } from '@/domains/dashboard/sections/dashboard-platform-section';
 import { DashboardQuickActionsSection } from '@/domains/dashboard/sections/dashboard-quick-actions-section';
 import { DashboardRecentOrdersTable } from '@/domains/dashboard/sections/dashboard-recent-orders-table';
@@ -95,7 +96,10 @@ export function DashboardOverviewContainer({
         <DashboardQuickActionsSection />
       </div>
 
-      <DashboardInsightsSection insights={overview?.ai_insights} />
+      <div className='grid gap-4 xl:grid-cols-2'>
+        <DashboardNotificationsSection />
+        <DashboardInsightsSection insights={overview?.ai_insights} />
+      </div>
 
       <DashboardPlatformSection platform={overview?.platform} />
 

@@ -25,7 +25,11 @@
   "adminShell": {
     "header": {
       "openMenu": "باز کردن منوی ناوبری",
-      "searchPlaceholder": "جستجوی سفارش‌ها، محصولات، مشتریان…"
+      "search": "باز کردن جستجو",
+      "searchPlaceholder": "جستجوی سفارش‌ها، محصولات، مشتریان…",
+      "moreActions": "اقدامات بیشتر",
+      "period": "بازه",
+      "theme": "تم"
     },
     "nav": {
       "favorites": "علاقه‌مندی‌ها",
