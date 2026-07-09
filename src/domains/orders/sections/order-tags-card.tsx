@@ -9,33 +9,45 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/typography';
+import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 import { usePutOrdersIdTags } from '@/services/-orders-{id}-tags-put';
 
 interface OrderTagsCardProps {
   orderId: number;
   tags?: string[];
-  onSaved: () => void;
+  onSaved: (order: DtoAdminOrderDetailResponse) => void;
 }
 
 function normalizeTag(value: string) {
   return value.trim().toLowerCase();
 }
 
-/** Admin tag editor for an order detail page. */
+/** Admin tag editor — saves immediately when tags are added or removed. */
 export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProps) {
   const [draftTags, setDraftTags] = useState(tags);
   const [newTag, setNewTag] = useState('');
   const { mutateAsync: saveTags, isPending } = usePutOrdersIdTags();
 
-  const sortedDraft = [...draftTags].sort();
-  const sortedOriginal = [...tags].sort();
-  const hasChanges =
-    sortedDraft.length !== sortedOriginal.length ||
-    sortedDraft.some((tag, index) => tag !== sortedOriginal[index]);
+  const persistTags = async (nextTags: string[]) => {
+    try {
+      const result = await saveTags({ id: orderId, data: { tags: nextTags } });
+      const updated = result.data;
+      if (updated) {
+        onSaved(updated);
+        setDraftTags(updated.tags ?? nextTags);
+      }
+      toast.success('Tags saved');
+    } catch (error) {
+      toast.error('Could not save tags', {
+        description: error instanceof Error ? error.message : 'Something went wrong'
+      });
+    }
+  };
 
   const addTag = () => {
     const normalized = normalizeTag(newTag);
-    if (!normalized) return;
+    if (!normalized || isPending) return;
+
     if (draftTags.includes(normalized)) {
       setNewTag('');
       return;
@@ -44,24 +56,18 @@ export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProp
       toast.error('Maximum 20 tags per order');
       return;
     }
-    setDraftTags((current) => [...current, normalized]);
+
+    const nextTags = [...draftTags, normalized];
+    setDraftTags(nextTags);
     setNewTag('');
+    void persistTags(nextTags);
   };
 
   const removeTag = (tag: string) => {
-    setDraftTags((current) => current.filter((item) => item !== tag));
-  };
-
-  const handleSave = async () => {
-    try {
-      await saveTags({ id: orderId, data: { tags: draftTags } });
-      onSaved();
-      toast.success('Tags saved');
-    } catch (error) {
-      toast.error('Could not save tags', {
-        description: error instanceof Error ? error.message : 'Something went wrong'
-      });
-    }
+    if (isPending) return;
+    const nextTags = draftTags.filter((item) => item !== tag);
+    setDraftTags(nextTags);
+    void persistTags(nextTags);
   };
 
   return (
@@ -75,17 +81,21 @@ export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProp
         <Text variant='overline' className='text-muted-foreground'>
           Tags
         </Text>
-        {hasChanges ? (
-          <Button type='button' size='sm' disabled={isPending} onClick={() => void handleSave()}>
-            {isPending ? 'Saving…' : 'Save'}
-          </Button>
+        {isPending ? (
+          <Text variant='muted' className='text-[10px]'>
+            Saving…
+          </Text>
         ) : null}
       </Flex>
       <Flex direction='column' spacing={4} className='p-6'>
+        <Text variant='muted' className='text-[11px]'>
+          Labels for filtering and triage. Also visible in the orders table Tags column.
+        </Text>
+
         <Flex direction='row' wrap='wrap' className='gap-2'>
           {draftTags.length === 0 ? (
             <Text variant='muted' className='text-xs italic'>
-              No tags yet
+              No tags yet — add one below
             </Text>
           ) : (
             draftTags.map((tag) => (
@@ -93,8 +103,9 @@ export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProp
                 {tag}
                 <button
                   type='button'
-                  className='hover:bg-muted rounded-full p-0.5'
+                  className='hover:bg-muted rounded-full p-0.5 disabled:opacity-50'
                   aria-label={`Remove tag ${tag}`}
+                  disabled={isPending}
                   onClick={() => removeTag(tag)}
                 >
                   <IconX className='size-3' />
@@ -108,8 +119,9 @@ export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProp
           <Input
             value={newTag}
             onChange={(event) => setNewTag(event.target.value)}
-            placeholder='Add tag'
+            placeholder='Add tag (e.g. vip, wholesale)'
             maxLength={64}
+            disabled={isPending}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 event.preventDefault();
@@ -117,7 +129,14 @@ export function OrderTagsCard({ orderId, tags = [], onSaved }: OrderTagsCardProp
               }
             }}
           />
-          <Button type='button' variant='outline' size='icon' onClick={addTag} aria-label='Add tag'>
+          <Button
+            type='button'
+            variant='outline'
+            size='icon'
+            disabled={isPending || !normalizeTag(newTag)}
+            onClick={addTag}
+            aria-label='Add tag'
+          >
             <IconPlus className='size-4' />
           </Button>
         </Flex>

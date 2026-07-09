@@ -1222,7 +1222,7 @@
     "login": {
       "title": "Bienvenido de nuevo",
       "subtitle": "Introduzca sus credenciales para acceder a su cuenta",
-      "rememberMe": "Recordarme durante 7 días",
+      "rememberMe": "Recordarme durante 15 días",
       "submit": "Iniciar sesión",
       "orContinueWith": "O continuar con",
       "noAccount": "¿No tiene cuenta?",

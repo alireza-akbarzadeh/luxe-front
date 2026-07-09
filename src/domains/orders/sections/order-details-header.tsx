@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { AppDialog } from '@/components/app-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -84,6 +85,15 @@ export function OrderDetailHeader({ order, onCancel, isCancelling }: OrderDetail
                 </span>
               ) : null}
             </p>
+            {order.tags && order.tags.length > 0 ? (
+              <div className='mt-2 flex flex-wrap gap-1.5'>
+                {order.tags.map((tag) => (
+                  <Badge key={tag} variant='outline' className='text-[10px] font-medium'>
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
 

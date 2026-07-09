@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Textarea } from '@/components/ui/textarea';
 import { Text } from '@/components/ui/typography';
+import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
 import { usePatchOrdersIdNotes } from '@/services/-orders-{id}-notes-patch';
 
 interface OrderNotesCardProps {
   orderId: number;
   notes?: string;
-  onSaved: () => void;
+  onSaved: (order: DtoAdminOrderDetailResponse) => void;
 }
 
 /** Admin notes editor for an order detail page. */
@@ -24,8 +25,12 @@ export function OrderNotesCard({ orderId, notes = '', onSaved }: OrderNotesCardP
 
   const handleSave = async () => {
     try {
-      await saveNotes({ id: orderId, data: { notes: draft } });
-      onSaved();
+      const result = await saveNotes({ id: orderId, data: { notes: draft } });
+      const updated = result.data;
+      if (updated) {
+        onSaved(updated);
+        setDraft(updated.notes ?? draft);
+      }
       toast.success('Notes saved');
     } catch (error) {
       toast.error('Could not save notes', {
@@ -45,13 +50,19 @@ export function OrderNotesCard({ orderId, notes = '', onSaved }: OrderNotesCardP
         <Text variant='overline' className='text-muted-foreground'>
           Admin notes
         </Text>
-        {hasChanges ? (
-          <Button type='button' size='sm' disabled={isPending} onClick={() => void handleSave()}>
-            {isPending ? 'Saving…' : 'Save'}
-          </Button>
-        ) : null}
+        <Button
+          type='button'
+          size='sm'
+          disabled={isPending || !hasChanges}
+          onClick={() => void handleSave()}
+        >
+          {isPending ? 'Saving…' : 'Save notes'}
+        </Button>
       </Flex>
       <div className='p-6'>
+        <Text variant='muted' className='mb-3 text-[11px]'>
+          Internal notes for your team only — not shown to customers.
+        </Text>
         <Textarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
@@ -61,7 +72,7 @@ export function OrderNotesCard({ orderId, notes = '', onSaved }: OrderNotesCardP
           className='min-h-24 resize-y text-sm'
         />
         <Text variant='muted' className='mt-2 text-[10px]'>
-          Visible to admins only. {draft.length}/2000
+          {draft.length}/2000 characters
         </Text>
       </div>
     </div>

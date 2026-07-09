@@ -12,6 +12,7 @@ import { formatCurrency } from '@/lib/format';
 import { usePostOrdersIdCancel } from '@/services/-orders-{id}-cancel-post';
 import { getGetOrdersIdQueryKey, useGetOrdersId } from '@/services/-orders-{id}-get';
 import type { DtoAdminOrderDetailResponse } from '@/services/-orders-{id}-get.schemas';
+import type { GetOrdersId200 } from '@/services/-orders-{id}-get.schemas';
 import { getGetOrdersQueryKey } from '@/services/-orders-get';
 
 import { OrderCustomerCard } from '../sections/customer-order-detail';
@@ -43,6 +44,17 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
     void queryClient.invalidateQueries({ queryKey: getGetOrdersIdQueryKey(numericId) });
     void queryClient.invalidateQueries({ queryKey: getGetOrdersQueryKey() });
   }, [numericId, queryClient]);
+
+  const applyOrderUpdate = useCallback(
+    (order: DtoAdminOrderDetailResponse) => {
+      queryClient.setQueryData<GetOrdersId200>(getGetOrdersIdQueryKey(numericId), (previous) => ({
+        ...(previous ?? {}),
+        data: order
+      }));
+      void queryClient.invalidateQueries({ queryKey: getGetOrdersQueryKey() });
+    },
+    [numericId, queryClient]
+  );
 
   const handleCancel = useCallback(async () => {
     try {
@@ -100,6 +112,7 @@ export function OrderDetailDomain({ orderId }: OrderDetailDomainProps) {
       onCancel={handleCancel}
       isCancelling={isCancelling}
       onWorkflowChange={invalidateOrderQueries}
+      onOrderUpdate={applyOrderUpdate}
     />
   );
 }
@@ -109,13 +122,15 @@ interface OrderDetailViewProps {
   onCancel: () => Promise<void>;
   isCancelling: boolean;
   onWorkflowChange: () => void;
+  onOrderUpdate: (order: DtoAdminOrderDetailResponse) => void;
 }
 
 function OrderDetailView({
   order,
   onCancel,
   isCancelling,
-  onWorkflowChange
+  onWorkflowChange,
+  onOrderUpdate
 }: OrderDetailViewProps) {
   const orderId = order.id!;
   const currency = order.currency ?? 'USD';
@@ -174,16 +189,16 @@ function OrderDetailView({
             <OrderCustomerCard order={order} />
             <OrderShippingCard order={order} />
             <OrderNotesCard
-              key={order.notes ?? 'empty'}
+              key={`notes-${order.notes ?? ''}`}
               orderId={orderId}
               notes={order.notes}
-              onSaved={onWorkflowChange}
+              onSaved={onOrderUpdate}
             />
             <OrderTagsCard
               key={(order.tags ?? []).join(',')}
               orderId={orderId}
               tags={order.tags}
-              onSaved={onWorkflowChange}
+              onSaved={onOrderUpdate}
             />
           </div>
         </div>

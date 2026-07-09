@@ -1,11 +1,11 @@
 // config/auth.ts
 export const APP_CONFIG = {
   accessToken: {
-    defaultMaxAge: 15 * 60, // 15 minutes in seconds
-    rememberMeMaxAge: 7 * 24 * 60 * 60 // 7 days in seconds
+    defaultMaxAge: 15 * 60, // 15 minutes — short-lived; refresh handles renewal
+    rememberMeMaxAge: 15 * 24 * 60 * 60 // 15 days in seconds
   },
   refreshToken: {
-    maxAge: 30 * 24 * 60 * 60 // 30 days in seconds
+    maxAge: 15 * 24 * 60 * 60 // 15 days — must match backend JWT_REFRESH_TOKEN_EXPIRY
   },
   API_DEFAULT_TIMEOUT: 30000,
   MAX_RETRY_LIMIT: 3,

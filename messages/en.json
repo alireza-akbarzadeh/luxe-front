@@ -1263,7 +1263,7 @@
     "login": {
       "title": "Welcome back",
       "subtitle": "Enter your credentials to access your account",
-      "rememberMe": "Remember me for 7 days",
+      "rememberMe": "Remember me for 15 days",
       "submit": "Sign in",
       "orContinueWith": "Or continue with",
       "noAccount": "Don't have an account?",
