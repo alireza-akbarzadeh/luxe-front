@@ -5,12 +5,18 @@ import type {
   DtoCreateCouponRequest
 } from '@/services/-coupons-post.schemas';
 
-function parseIdList(value?: string): number[] | undefined {
-  if (!value?.trim()) return undefined;
-  const ids = value
-    .split(',')
-    .map((part) => Number(part.trim()))
-    .filter((id) => Number.isFinite(id) && id > 0);
+function parseIdList(value?: string | string[]): number[] | undefined {
+  if (!value) return undefined;
+
+  const parts = Array.isArray(value)
+    ? value
+    : value
+        .split(',')
+        .map((part) => part.trim())
+        .filter(Boolean);
+
+  const ids = parts.map((part) => Number(part)).filter((id) => Number.isFinite(id) && id > 0);
+
   return ids.length > 0 ? ids : undefined;
 }
 
@@ -25,7 +31,8 @@ function buildConditionsPayload(
         ? conditions.customer_segment
         : undefined,
     category_ids: parseIdList(conditions.category_ids),
-    product_ids: parseIdList(conditions.product_ids)
+    product_ids: parseIdList(conditions.product_ids),
+    user_ids: parseIdList(conditions.user_ids)
   };
 
   const hasRules =
@@ -33,7 +40,8 @@ function buildConditionsPayload(
     payload.min_item_quantity ||
     payload.customer_segment ||
     (payload.category_ids?.length ?? 0) > 0 ||
-    (payload.product_ids?.length ?? 0) > 0;
+    (payload.product_ids?.length ?? 0) > 0 ||
+    (payload.user_ids?.length ?? 0) > 0;
 
   return hasRules ? payload : undefined;
 }

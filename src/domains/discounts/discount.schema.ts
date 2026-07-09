@@ -12,8 +12,9 @@ export const couponConditionsSchema = z.object({
   customer_segment: z
     .union([z.enum(couponCustomerSegments), z.literal(couponCustomerSegmentAny)])
     .optional(),
-  category_ids: z.string().optional(),
-  product_ids: z.string().optional()
+  category_ids: z.array(z.string()).optional(),
+  product_ids: z.string().optional(),
+  user_ids: z.array(z.string()).optional()
 });
 
 export const couponFormSchema = z
@@ -88,8 +89,9 @@ export const couponDefaultValues: CouponFormValues = {
     first_order_only: false,
     min_item_quantity: undefined,
     customer_segment: couponCustomerSegmentAny,
-    category_ids: '',
-    product_ids: ''
+    category_ids: [],
+    product_ids: '',
+    user_ids: []
   },
   bogo_buy_quantity: 1,
   bogo_get_quantity: 1,

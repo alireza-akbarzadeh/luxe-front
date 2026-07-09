@@ -1,16 +1,31 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useTypedAppFormContext } from '@/components/forms/useAppForm';
 import { Flex } from '@/components/ui/flex';
 import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Typography } from '@/components/ui/typography';
+import { DiscountUsersPicker } from '@/domains/discounts/components/discount-users-picker';
+import { useGetCategories } from '@/services/-categories-get';
 
 import { couponCustomerSegmentAny, couponDefaultValues } from '../discount.schema';
 
 /** Application type, BOGO settings, and eligibility conditions. */
 export function DiscountPromotionFields() {
   const form = useTypedAppFormContext({ defaultValues: couponDefaultValues });
+  const { data: categoriesData } = useGetCategories({ limit: 100 });
+
+  const categoryOptions = useMemo(() => {
+    const categories = categoriesData?.data?.categories ?? [];
+    return categories
+      .filter((category) => category.id)
+      .map((category) => ({
+        value: String(category.id),
+        label: category.name ?? `Category ${category.id}`
+      }));
+  }, [categoriesData]);
 
   return (
     <Flex direction='column' spacing={4}>
@@ -154,10 +169,15 @@ export function DiscountPromotionFields() {
           <form.AppField
             name='conditions.category_ids'
             children={(field) => (
-              <field.TextField
-                label='Category IDs'
-                placeholder='e.g. 12, 34'
-                detail='Comma-separated category IDs (optional)'
+              <field.MultiSelect
+                label='Categories'
+                placeholder='Select categories…'
+                detail='Promotion applies only when the cart includes products from these categories'
+                props={{
+                  options: categoryOptions,
+                  getOptionValue: (opt) => opt.value,
+                  getOptionLabel: (opt) => opt.label
+                }}
               />
             )}
           />
@@ -172,6 +192,12 @@ export function DiscountPromotionFields() {
                 detail='Comma-separated product IDs (optional)'
               />
             )}
+          />
+        </GridItem>
+        <GridItem className='sm:col-span-2'>
+          <form.AppField
+            name='conditions.user_ids'
+            children={(field) => <DiscountUsersPicker field={field} />}
           />
         </GridItem>
       </Grid>

@@ -16,8 +16,9 @@ function parseConditionsFromApi(raw: unknown): CouponFormValues['conditions'] {
       first_order_only: false,
       min_item_quantity: undefined,
       customer_segment: couponCustomerSegmentAny,
-      category_ids: '',
-      product_ids: ''
+      category_ids: [],
+      product_ids: '',
+      user_ids: []
     };
   }
 
@@ -26,8 +27,9 @@ function parseConditionsFromApi(raw: unknown): CouponFormValues['conditions'] {
     first_order_only: conditions.first_order_only ?? false,
     min_item_quantity: conditions.min_item_quantity,
     customer_segment: conditions.customer_segment ?? couponCustomerSegmentAny,
-    category_ids: conditions.category_ids?.join(', ') ?? '',
-    product_ids: conditions.product_ids?.join(', ') ?? ''
+    category_ids: conditions.category_ids?.map(String) ?? [],
+    product_ids: conditions.product_ids?.join(', ') ?? '',
+    user_ids: conditions.user_ids?.map(String) ?? []
   };
 }
 
