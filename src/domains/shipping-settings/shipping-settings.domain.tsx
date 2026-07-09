@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowRight, IconPackage, IconTruck } from '@tabler/icons-react';
+import { IconArrowRight, IconPackage, IconPackageExport,IconTruck } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Flex } from '@/components/ui/flex';
 
 const LINKS = [
+  {
+    title: 'Fulfillment center',
+    description: 'Pick, pack, and ship paid orders with workflow-driven queues and tracking.',
+    href: '/dashboard/fulfillment',
+    icon: IconPackageExport
+  },
   {
     title: 'Shipping providers',
     description: 'Manage carrier names, flat rates, and active/inactive status shown at checkout.',
