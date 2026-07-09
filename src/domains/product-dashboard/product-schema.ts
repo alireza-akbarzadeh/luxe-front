@@ -38,6 +38,16 @@ export const inventorySchema = z.object({
   allowBackorder: z.boolean().default(false)
 });
 
+// ─── Shipping ─────────────────────────────────────────────────────────────────
+
+export const shippingSchema = z.object({
+  weight: z.number().min(0).nullable().optional(),
+  isDigital: z.boolean().default(false),
+  isNew: z.boolean().default(false),
+  sizes: z.array(z.string()),
+  colors: z.array(z.string())
+});
+
 // ─── Media ────────────────────────────────────────────────────────────────────
 
 export const mediaFileSchema = z.object({
@@ -70,6 +80,7 @@ export const publishingSchema = z.object({
 export const productSchema = basicInfoSchema
   .extend(variantsPricingSchema.shape)
   .extend(inventorySchema.shape)
+  .extend(shippingSchema.shape)
   .extend(mediaSchema.shape)
   .extend(publishingSchema.shape);
 
@@ -96,6 +107,12 @@ export const productDefaultValues: ProductFormValues = {
   lowStockThreshold: 5,
   warehouseLocation: '',
   allowBackorder: false,
+  // shipping
+  weight: null,
+  isDigital: false,
+  isNew: false,
+  sizes: [],
+  colors: [],
   // media
   images: [],
   // publishing
@@ -122,6 +139,7 @@ export const stepFields = {
     'warehouseLocation',
     'allowBackorder'
   ],
+  shipping: ['weight', 'isDigital', 'isNew', 'sizes', 'colors'],
   media: ['images'],
   publishing: [
     'status',

@@ -8,7 +8,8 @@ import {
   IconInfoCircle,
   IconPhoto,
   IconRocket,
-  IconTag
+  IconTag,
+  IconTruck
 } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -32,6 +33,7 @@ import {
   StepperTrigger
 } from '@/components/ui/stepper';
 import { LeaveGuard } from '@/domains/product-dashboard/components/product-leave-guard';
+import { ProductLifecycleTimeline } from '@/domains/product-dashboard/components/product-lifecycle-timeline';
 import {
   mapFormToCreateRequest,
   mapFormToUpdateRequest
@@ -48,6 +50,7 @@ import { BasicInfoStep } from '@/domains/product-dashboard/sections/basic-info';
 import { InventoryStep } from '@/domains/product-dashboard/sections/inventory';
 import { MediaStep } from '@/domains/product-dashboard/sections/media';
 import { PublishingStep } from '@/domains/product-dashboard/sections/publishing';
+import { ShippingStep } from '@/domains/product-dashboard/sections/shipping';
 import { VariantsPricingStep } from '@/domains/product-dashboard/sections/variants-pricing';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { getGetProductsIdQueryKey } from '@/services/-products-{id}-get';
@@ -73,6 +76,12 @@ const STEPS = [
     title: 'Inventory',
     description: 'Stock & identifiers',
     icon: <IconBox />
+  },
+  {
+    id: 'shipping' as StepId,
+    title: 'Shipping',
+    description: 'Weight & fulfillment',
+    icon: <IconTruck />
   },
   {
     id: 'media' as StepId,
@@ -223,17 +232,19 @@ export function ProductForm({ productId, initialValues, isEditMode = false }: Pr
     <>
       <LeaveGuard isDirty={form.state.isDirty && !isSubmitting} />
       {isEditMode && productId ? (
-        <EntityWorkflowPanel
-          workflowKey='product'
-          entityId={productId}
-          className='mb-6'
-          onTransitionSuccess={() => {
-            void queryClient.invalidateQueries({
-              queryKey: getGetProductsIdQueryKey(String(productId))
-            });
-            void queryClient.invalidateQueries({ queryKey: getGetProductsQueryKey() });
-          }}
-        />
+        <Flex direction='column' spacing={6} className='mb-6'>
+          <EntityWorkflowPanel
+            workflowKey='product'
+            entityId={productId}
+            onTransitionSuccess={() => {
+              void queryClient.invalidateQueries({
+                queryKey: getGetProductsIdQueryKey(String(productId))
+              });
+              void queryClient.invalidateQueries({ queryKey: getGetProductsQueryKey() });
+            }}
+          />
+          <ProductLifecycleTimeline productId={productId} />
+        </Flex>
       ) : null}
       <form.AppForm>
         <form.Root
@@ -296,6 +307,9 @@ export function ProductForm({ productId, initialValues, isEditMode = false }: Pr
                   </StepperContent>
                   <StepperContent value='inventory' forceMount>
                     {currentStepId === 'inventory' && <InventoryStep form={form} />}
+                  </StepperContent>
+                  <StepperContent value='shipping' forceMount>
+                    {currentStepId === 'shipping' && <ShippingStep form={form} />}
                   </StepperContent>
                   <StepperContent value='media' forceMount>
                     {currentStepId === 'media' && <MediaStep form={form} />}

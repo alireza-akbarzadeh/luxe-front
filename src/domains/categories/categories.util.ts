@@ -1,4 +1,4 @@
-import type { ModelsCategory } from '~/src/services/-checkout-post.schemas';
+import type { ModelsCategory } from '@/services/-categories-get.schemas';
 
 export function buildCategoryTree(flatList: ModelsCategory[]): ModelsCategory[] {
   const map = new Map<number, ModelsCategory>();

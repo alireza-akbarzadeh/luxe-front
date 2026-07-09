@@ -49,7 +49,12 @@ export function mapFormToCreateRequest(
     visibility: values.visibility,
     tags: values.tags,
     channels: values.channels,
-    published_at: values.publishedAt ? new Date(values.publishedAt).toISOString() : undefined
+    published_at: values.publishedAt ? new Date(values.publishedAt).toISOString() : undefined,
+    weight: values.weight ?? undefined,
+    is_digital: values.isDigital,
+    is_new: values.isNew,
+    sizes: values.sizes.length ? values.sizes : undefined,
+    colors: values.colors.length ? values.colors : undefined
   };
 }
 
@@ -81,7 +86,12 @@ export function mapFormToUpdateRequest(
     visibility: values.visibility,
     tags: values.tags,
     channels: values.channels,
-    published_at: values.publishedAt ? new Date(values.publishedAt).toISOString() : undefined
+    published_at: values.publishedAt ? new Date(values.publishedAt).toISOString() : undefined,
+    weight: values.weight ?? undefined,
+    is_digital: values.isDigital,
+    is_new: values.isNew,
+    sizes: values.sizes.length ? values.sizes : undefined,
+    colors: values.colors.length ? values.colors : undefined
   };
 }
 
@@ -111,6 +121,11 @@ export function mapProductToFormValues(product: DtoProductResponse): Partial<Pro
     lowStockThreshold: product.low_stock_threshold ?? 5,
     warehouseLocation: product.warehouse_location ?? '',
     allowBackorder: product.allow_backorder ?? false,
+    weight: product.weight ?? null,
+    isDigital: product.is_digital ?? false,
+    isNew: product.is_new ?? false,
+    sizes: product.sizes ?? [],
+    colors: product.colors ?? [],
     images:
       product.images?.map((url, index) => ({
         id: `existing-${index}`,

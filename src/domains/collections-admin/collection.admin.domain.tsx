@@ -9,11 +9,15 @@ import { toast } from 'sonner';
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Flex } from '@/components/ui/flex';
+import { Text } from '@/components/ui/typography';
+import { CollectionMobileCard } from '@/domains/collections-admin/components/collection-mobile-card';
 import {
   getCollectionsFromListResponse,
   getCollectionsTotalFromListResponse
 } from '@/domains/collections-admin/lib/collection-list';
 import { collectionColumns } from '@/domains/collections-admin/sections/collection-columns';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { deleteCollectionsId } from '@/services/-collections-{id}-delete';
 import { getGetCollectionsQueryKey, useGetCollections } from '@/services/-collections-get';
 import type {
@@ -24,6 +28,7 @@ import type {
 export function CollectionsAdminDomain() {
   const { push } = useRouter();
   const queryClient = useQueryClient();
+  const { isDesktop } = useMediaDevices();
 
   const getQueryParams = useCallback(
     (state: TableState, filter: string) => ({
@@ -111,40 +116,69 @@ export function CollectionsAdminDomain() {
         showCreate
         onCreate={() => push('/dashboard/collections/create')}
         showClear
-        showColumnVisibility
-        showBulkActions
-        onDelete={handleBulkDelete}
+        showColumnVisibility={isDesktop}
+        showBulkActions={isDesktop}
+        onDelete={isDesktop ? handleBulkDelete : undefined}
       />
-      <Table.Grid<DtoCollectionResponse>
-        isLoading={serverTable.isLoading && serverTable.rows.length === 0}
-        onRowDoubleClick={(row) => {
-          const id = row.original.id;
-          if (id) push(`/dashboard/collections/edit/${id}`);
-        }}
-        extendMenuActions={(row) => (
-          <>
-            <DropdownMenuItem
-              className='gap-2 text-[11px] font-semibold'
-              onClick={() => push(`/dashboard/collections/edit/${row.original.id}`)}
-            >
-              <IconPencil className='size-3.5' />
-              Edit collection
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className='text-destructive gap-2 text-[11px] font-semibold'
-              onClick={() => void handleDelete(row.original)}
-            >
-              <IconTrash className='size-3.5' />
-              Delete collection
-            </DropdownMenuItem>
-          </>
-        )}
-      />
+
+      {!isDesktop ? (
+        <Flex
+          direction='row'
+          align='center'
+          justify='between'
+          className='border-border/40 bg-background/50 border-b px-4 py-3'
+        >
+          <Text variant='muted' className='text-[10px] font-bold tracking-widest uppercase'>
+            {serverTable.total.toLocaleString()} collections
+          </Text>
+          <Text variant='muted' className='text-[10px]'>
+            Tap to edit
+          </Text>
+        </Flex>
+      ) : null}
+
+      {isDesktop ? (
+        <Table.Grid<DtoCollectionResponse>
+          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+          onRowDoubleClick={(row) => {
+            const id = row.original.id;
+            if (id) push(`/dashboard/collections/edit/${id}`);
+          }}
+          extendMenuActions={(row) => (
+            <>
+              <DropdownMenuItem
+                className='gap-2 text-[11px] font-semibold'
+                onClick={() => push(`/dashboard/collections/edit/${row.original.id}`)}
+              >
+                <IconPencil className='size-3.5' />
+                Edit collection
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className='text-destructive gap-2 text-[11px] font-semibold'
+                onClick={() => void handleDelete(row.original)}
+              >
+                <IconTrash className='size-3.5' />
+                Delete collection
+              </DropdownMenuItem>
+            </>
+          )}
+        />
+      ) : (
+        <Table.MobileList<DtoCollectionResponse>
+          isLoading={serverTable.isLoading && serverTable.rows.length === 0}
+          renderCard={(row) => <CollectionMobileCard row={row} />}
+          onCardClick={(row) => {
+            const id = row.original.id;
+            if (id) push(`/dashboard/collections/edit/${id}`);
+          }}
+        />
+      )}
+
       <Table.Pagination
         showPageSize
-        showTotalRows
-        showJumpToPage
+        showTotalRows={isDesktop}
+        showJumpToPage={isDesktop}
         pageSizeOptions={[10, 15, 20, 50, 100]}
       />
     </Table.Root>

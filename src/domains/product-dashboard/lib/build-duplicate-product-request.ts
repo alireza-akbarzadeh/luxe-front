@@ -37,6 +37,9 @@ export function buildDuplicateProductRequest(product: DtoProductResponse): DtoCr
     channels: product.channels?.length ? product.channels : ['online_store'],
     is_digital: product.is_digital,
     is_new: false,
+    weight: product.weight,
+    sizes: product.sizes,
+    colors: product.colors,
     store_id: product.store_id
   };
 }
