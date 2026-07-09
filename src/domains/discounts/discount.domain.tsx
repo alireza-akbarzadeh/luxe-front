@@ -1,18 +1,19 @@
 'use client';
 
 import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
 import { DiscountKpiCards } from '@/domains/discounts/sections/discount-kpi-cards';
 import { DiscountTable } from '@/domains/discounts/sections/discount-table';
 
 export function DiscountDomain() {
   return (
     <Flex direction='column' className='gap-6'>
-      <div>
-        <h1 className='text-2xl font-semibold tracking-tight'>Discounts</h1>
-        <p className='text-muted-foreground mt-1 text-sm'>
-          Create and manage coupon codes, usage limits, and promotional campaigns.
-        </p>
-      </div>
+      <Flex direction='column' spacing={1}>
+        <Typography.H2>Discounts</Typography.H2>
+        <Typography.Muted>
+          Create and manage coupon codes, automatic promotions, BOGO offers, and usage limits.
+        </Typography.Muted>
+      </Flex>
 
       <DiscountKpiCards />
 

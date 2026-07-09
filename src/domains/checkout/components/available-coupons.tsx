@@ -12,6 +12,7 @@ import {
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import type { AvailableCouponsProps } from '@/domains/checkout/types/checkout.types';
+import { formatApplicationTypeLabel } from '@/domains/discounts/lib/coupon-labels';
 import { formatDiscountLabel } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
@@ -77,7 +78,9 @@ export function AvailableCoupons({
                   <Flex direction='column' spacing={0.5} className='min-w-0 flex-1'>
                     <Flex direction='row' align='center' justify='between' spacing={2}>
                       <Typography.Text variant='small' className='font-mono'>
-                        {coupon.code}
+                        {coupon.application_type === 'automatic'
+                          ? formatApplicationTypeLabel('automatic')
+                          : coupon.code}
                       </Typography.Text>
                       <Typography.Text
                         variant='subtle'

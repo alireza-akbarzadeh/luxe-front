@@ -3,6 +3,9 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { createSelectColumn } from '@/components/table/data-table';
+import { Badge } from '@/components/ui/badge';
+import { formatApplicationTypeLabel } from '@/domains/discounts/lib/coupon-labels';
+import { formatCouponScheduleLabel } from '@/domains/discounts/lib/coupon-schedule';
 import { createWorkflowStateColumn } from '@/domains/workflows/lib/create-workflow-state-column';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
@@ -27,9 +30,30 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
   },
 
   {
+    id: 'application_type',
+    header: 'Type',
+    cell: ({ row }) => (
+      <Badge variant='secondary' className='font-normal'>
+        {formatApplicationTypeLabel(row.original.application_type)}
+      </Badge>
+    )
+  },
+
+  {
     id: 'discount',
     header: 'Discount',
     cell: ({ row }) => {
+      if (row.original.application_type === 'bogo') {
+        const buy = row.original.bogo_buy_quantity ?? 1;
+        const get = row.original.bogo_get_quantity ?? 1;
+        const percent = row.original.bogo_get_discount_percent ?? 100;
+        return (
+          <span>
+            Buy {buy} get {get} ({percent}% off)
+          </span>
+        );
+      }
+
       const type = row.original.discount_type;
       const value = row.original.discount_value ?? 0;
       if (type === 'percentage') {
@@ -50,19 +74,12 @@ export const couponColumns: ColumnDef<ModelsCoupon>[] = [
 
   {
     id: 'validity',
-    header: 'Valid period',
-    cell: ({ row }) => {
-      const start = row.original.start_date;
-      const end = row.original.end_date;
-      if (!start && !end) return '—';
-      const startStr = start ? formatDate(start, DATE_FORMATS.SHORT) : 'anytime';
-      const endStr = end ? formatDate(end, DATE_FORMATS.SHORT) : 'forever';
-      return (
-        <span className='text-xs'>
-          {startStr} → {endStr}
-        </span>
-      );
-    }
+    header: 'Schedule',
+    cell: ({ row }) => (
+      <span className='text-xs'>
+        {formatCouponScheduleLabel(row.original.start_date, row.original.end_date)}
+      </span>
+    )
   },
 
   {

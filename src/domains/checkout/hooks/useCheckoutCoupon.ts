@@ -8,22 +8,25 @@ import { useCheckoutStore } from '../store/checkout.store';
 
 interface Props {
   subtotal: number;
+  itemCount: number;
   setCouponCode: (code: string) => void;
 }
 
-export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
+export function useCheckoutCoupon({ subtotal, itemCount, setCouponCode }: Props) {
   const [error, setError] = useState<string>('');
 
   const { setCouponDiscount, setAppliedCouponCode, resetCoupon } = useCheckoutStore();
 
   const { mutate, isPending } = usePostCouponsValidate();
 
-  const applyCoupon = (code: string) => {
+  const applyCoupon = (code: string, options?: { silent?: boolean }) => {
     if (!code || code.trim() === '') {
       resetCoupon();
       setCouponCode('');
       setError('');
-      toast.info('Coupon removed');
+      if (!options?.silent) {
+        toast.info('Coupon removed');
+      }
       return;
     }
 
@@ -33,7 +36,8 @@ export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
       {
         data: {
           code: code.trim().toUpperCase(),
-          order_total: subtotal
+          order_total: subtotal,
+          item_count: itemCount > 0 ? itemCount : 1
         }
       },
       {
@@ -41,7 +45,7 @@ export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
           if (!res?.data?.discount_amount && res?.data?.discount_amount !== 0) {
             const errorMessage = 'Invalid coupon response';
             setError(errorMessage);
-            toast.error(errorMessage);
+            if (!options?.silent) toast.error(errorMessage);
             resetCoupon();
             setCouponCode('');
             return;
@@ -54,14 +58,16 @@ export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
           setCouponCode(code.trim().toUpperCase());
 
           setError('');
-          toast.success(`Coupon applied! You save $${discount.toFixed(2)}`);
+          if (!options?.silent) {
+            toast.success(`Coupon applied! You save $${discount.toFixed(2)}`);
+          }
         },
 
         onError: (err) => {
           const errorMessage = err?.message || err?.error || 'Invalid or expired coupon';
 
           setError(errorMessage);
-          toast.error(errorMessage);
+          if (!options?.silent) toast.error(errorMessage);
 
           resetCoupon();
           setCouponCode('');
@@ -70,8 +76,19 @@ export function useCheckoutCoupon({ subtotal, setCouponCode }: Props) {
     );
   };
 
+  const applyCouponResult = (code: string, discount: number, options?: { silent?: boolean }) => {
+    setError('');
+    setCouponDiscount(discount);
+    setAppliedCouponCode(code.trim().toUpperCase());
+    setCouponCode(code.trim().toUpperCase());
+    if (!options?.silent && discount > 0) {
+      toast.success(`Promotion applied! You save $${discount.toFixed(2)}`);
+    }
+  };
+
   return {
     applyCoupon,
+    applyCouponResult,
     isApplyingCoupon: isPending,
     error
   };

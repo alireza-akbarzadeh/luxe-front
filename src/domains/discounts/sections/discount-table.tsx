@@ -13,10 +13,13 @@ import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdow
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDiscountsQueryState } from '@/domains/discounts/hooks/use-discounts-query';
 import {
+  COUPON_APPLICATION_TABS,
   COUPON_STATUS_TABS,
+  type CouponApplicationFilter,
   type CouponStatusFilter,
   getCouponsFromListResponse,
-  getCouponsTotalFromListResponse} from '@/domains/discounts/lib/discount-filters';
+  getCouponsTotalFromListResponse
+} from '@/domains/discounts/lib/discount-filters';
 import { couponColumns } from '@/domains/discounts/sections/discount-column';
 import { getGetAdminCouponsQueryKey, useGetAdminCoupons } from '@/services/-admin-coupons-get';
 import type { DtoCouponListResponse, ModelsCoupon } from '@/services/-admin-coupons-get.schemas';
@@ -25,16 +28,17 @@ import { deleteCouponsId } from '@/services/-coupons-{id}-delete';
 export function DiscountTable() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { status, setStatus } = useDiscountsQueryState();
+  const { status, setStatus, applicationType, setApplicationType } = useDiscountsQueryState();
 
   const getQueryParams = useCallback(
     (state: TableState, filter: string) => ({
       limit: state.pagination.pageSize,
       offset: state.pagination.pageIndex * state.pagination.pageSize,
       code: filter || undefined,
-      status: status === 'all' ? 'all' : status
+      status: status === 'all' ? 'all' : status,
+      application_type: applicationType === 'all' ? undefined : applicationType
     }),
-    [status]
+    [status, applicationType]
   );
 
   const getRows = useCallback(
@@ -135,6 +139,20 @@ export function DiscountTable() {
       >
         <TabsList className='mb-3 h-auto flex-wrap'>
           {COUPON_STATUS_TABS.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
+              {tab.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
+      <Tabs
+        value={applicationType}
+        onValueChange={(value) => void setApplicationType(value as CouponApplicationFilter)}
+        className='px-1'
+      >
+        <TabsList className='mb-3 h-auto flex-wrap'>
+          {COUPON_APPLICATION_TABS.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value} className='text-xs'>
               {tab.label}
             </TabsTrigger>
