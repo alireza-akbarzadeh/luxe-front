@@ -15,20 +15,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
-  getMenuItemNavKey,
-  useAdminSidebarNav
-} from '@/domains/admin/hooks/use-admin-sidebar-nav';
+  SidebarNavBadge,
+  SidebarNavFavoriteButton,
+  SidebarNavIcon
+} from '@/domains/admin/components/sidebar-nav-item-parts';
+import { useAdminNavPreferences } from '@/domains/admin/hooks/use-admin-nav-preferences';
+import { getMenuItemNavKey, useAdminSidebarNav } from '@/domains/admin/hooks/use-admin-sidebar-nav';
+import {
+  childLinkClasses,
+  isPathActive,
+  navItemClasses
+} from '@/domains/admin/lib/sidebar-nav-utils';
 import { cn } from '@/lib/utils';
 import type { DtoMenuItemResponse } from '@/services/-user-menu-structure-get.schemas';
-
-import { ICON_MAP } from '../data';
-
-function isPathActive(pathname: string, href?: string) {
-  if (!href) return false;
-  if (pathname === href) return true;
-  if (href !== '/dashboard' && pathname.startsWith(`${href}/`)) return true;
-  return false;
-}
 
 export function SidebarNavItem({
   item,
@@ -44,12 +43,14 @@ export function SidebarNavItem({
   const hasChildren = !!(item.children && item.children.length > 0);
   const navKey = getMenuItemNavKey(item);
   const { isExpanded, setExpanded, toggleExpanded } = useAdminSidebarNav();
+  const { isFavorite, toggleFavorite, favoritePendingHref } = useAdminNavPreferences();
 
   const isChildActive =
     hasChildren && item.children?.some((child) => isPathActive(pathname, child.href));
   const isSelfActive = isPathActive(pathname, item.href);
   const isActive = isSelfActive || !!isChildActive;
   const isOpen = isExpanded(navKey, !!isChildActive);
+  const itemClasses = navItemClasses(isActive, isCollapsed);
 
   useEffect(() => {
     if (isChildActive) {
@@ -57,42 +58,16 @@ export function SidebarNavItem({
     }
   }, [isChildActive, navKey, setExpanded]);
 
-  const itemClasses = cn(
-    'dashboard-nav-item group relative outline-none',
-    isActive ? 'dashboard-nav-item-active' : '',
-    isCollapsed && 'mx-auto h-10 w-10 justify-center px-0'
+  const favoriteButton = (
+    <SidebarNavFavoriteButton
+      href={item.href}
+      label={item.label}
+      isCollapsed={isCollapsed}
+      isFavorite={isFavorite}
+      favoritePendingHref={favoritePendingHref}
+      onToggle={(href, label) => void toggleFavorite(href, label)}
+    />
   );
-
-  const childLinkClasses = (active: boolean) =>
-    cn(
-      'relative block rounded-lg px-3 py-2 text-xs font-medium transition-all',
-      active
-        ? 'dashboard-nav-item-active font-semibold'
-        : 'text-muted-foreground hover:bg-white/4 hover:text-foreground'
-    );
-
-  const renderIcon = (iconName?: string, active?: boolean) => {
-    const IconComponent = iconName ? ICON_MAP[iconName as keyof typeof ICON_MAP] : null;
-    return (
-      <div
-        className={cn(
-          'flex shrink-0 items-center justify-center transition-colors',
-          active ? 'text-emerald-400' : 'text-muted-foreground group-hover:text-foreground'
-        )}
-      >
-        {IconComponent ? (
-          <IconComponent size={20} strokeWidth={active ? 2.5 : 2} />
-        ) : (
-          <div
-            className={cn(
-              'h-1.5 w-1.5 rounded-full bg-current transition-all',
-              active ? 'scale-125 opacity-100' : 'opacity-30'
-            )}
-          />
-        )}
-      </div>
-    );
-  };
 
   if (isCollapsed && hasChildren) {
     return (
@@ -101,7 +76,7 @@ export function SidebarNavItem({
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
               <button className={cn(itemClasses, 'cursor-pointer overflow-visible')}>
-                {renderIcon(item.icon, isActive)}
+                <SidebarNavIcon iconName={item.icon} active={isActive} />
                 {isChildActive ? (
                   <div className='bg-primary border-background absolute top-1 right-1 h-2 w-2 rounded-full border-2' />
                 ) : null}
@@ -146,13 +121,15 @@ export function SidebarNavItem({
         <CollapsibleTrigger asChild>
           <button type='button' className={cn(itemClasses, 'w-full justify-between')}>
             <div className='flex min-w-0 items-center gap-3'>
-              {renderIcon(item.icon, isActive)}
+              <SidebarNavIcon iconName={item.icon} active={isActive} />
               <span className='truncate'>{item.label}</span>
+              <SidebarNavBadge item={item} />
+              {favoriteButton}
             </div>
             <IconChevronDown
               className={cn(
                 'h-4 w-4 shrink-0 opacity-50 transition-transform duration-200',
-                isOpen && 'text-emerald-400 rotate-180 opacity-100'
+                isOpen && 'rotate-180 text-emerald-400 opacity-100'
               )}
             />
           </button>
@@ -179,8 +156,14 @@ export function SidebarNavItem({
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <Link href={item.href || '#'} className={itemClasses} onClick={onNavigate}>
-          {renderIcon(item.icon, isActive)}
-          {!isCollapsed ? <span className='flex-1 truncate'>{item.label}</span> : null}
+          <SidebarNavIcon iconName={item.icon} active={isActive} />
+          {!isCollapsed ? (
+            <>
+              <span className='flex-1 truncate'>{item.label}</span>
+              <SidebarNavBadge item={item} />
+              {favoriteButton}
+            </>
+          ) : null}
           {isActive && isCollapsed ? (
             <div className='absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r-full bg-emerald-400' />
           ) : null}

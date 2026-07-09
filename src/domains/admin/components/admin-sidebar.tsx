@@ -4,11 +4,15 @@ import { DashboardBrandLogo } from '@/components/dashboard/dashboard-brand-logo'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { ToggleSidebarAction } from '@/domains/admin/components/toggle-sidebar-action';
+import { useAdminNavPreferences } from '@/domains/admin/hooks/use-admin-nav-preferences';
+import { resolveFavoriteLinks } from '@/domains/admin/lib/admin-nav-utils';
+import { AdminNavFavorites } from '@/domains/admin/sections/admin-nav-favorites';
+import { AdminNavRecent } from '@/domains/admin/sections/admin-nav-recent';
+import { useAdminShellStore } from '@/domains/admin/stores/admin-shell-store';
 import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
-import { useDashboardStore } from '../admin.store';
 import { AdminSidebarSkeleton } from './admin-sidebar-skeleton';
 import { SidebarNavItem } from './sidebar-nav-item';
 
@@ -23,8 +27,10 @@ interface AdminSidebarProps {
 export function AdminSidebar(props: AdminSidebarProps) {
   const { groups, pathname, className, isLoading = false, onNavigate } = props;
   const { isMobile } = useMediaDevices();
-  const isSidebarCollapsed = useDashboardStore((store) => store.isSidebarCollapsed);
+  const isSidebarCollapsed = useAdminShellStore((store) => store.isSidebarCollapsed);
   const effectiveCollapsed = isMobile ? false : isSidebarCollapsed;
+  const { favorites, recent } = useAdminNavPreferences();
+  const favoriteLinks = resolveFavoriteLinks(favorites, groups);
 
   const springTransition: Transition = {
     type: 'spring',
@@ -62,8 +68,18 @@ export function AdminSidebar(props: AdminSidebarProps) {
 
       <ScrollArea className='w-full flex-1' type='auto'>
         <div
-          className={cn('flex flex-col gap-5 pb-6 pt-2', effectiveCollapsed ? 'items-center px-1' : 'px-2')}
+          className={cn(
+            'flex flex-col gap-5 pt-2 pb-6',
+            effectiveCollapsed ? 'items-center px-1' : 'px-2'
+          )}
         >
+          <AdminNavFavorites
+            items={favoriteLinks}
+            isCollapsed={effectiveCollapsed}
+            onNavigate={onNavigate}
+          />
+          <AdminNavRecent items={recent} isCollapsed={effectiveCollapsed} onNavigate={onNavigate} />
+
           {isLoading && groups.length === 0 ? (
             <AdminSidebarSkeleton isCollapsed={effectiveCollapsed} />
           ) : (

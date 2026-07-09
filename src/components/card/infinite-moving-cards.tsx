@@ -1,22 +1,9 @@
 'use client';
 
-import React, { useEffect, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
-
-function subscribeReducedMotionMq(onStoreChange: () => void) {
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  mq.addEventListener('change', onStoreChange);
-  return () => mq.removeEventListener('change', onStoreChange);
-}
-
-function getReducedMotionSnapshot() {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-function getReducedMotionServerSnapshot() {
-  return false;
-}
 
 export const InfiniteMovingCards = ({
   items,
@@ -40,31 +27,63 @@ export const InfiniteMovingCards = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollerRef = React.useRef<HTMLUListElement>(null);
   const [start, setStart] = useState(false);
-  const reduceMotion = useSyncExternalStore(
-    subscribeReducedMotionMq,
-    getReducedMotionSnapshot,
-    getReducedMotionServerSnapshot
-  );
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (reduceMotion || !containerRef.current || !scrollerRef.current) {
       return;
     }
 
-    const scrollerContent = Array.from(scrollerRef.current.children);
-    scrollerContent.forEach((item) => {
-      scrollerRef.current?.appendChild(item.cloneNode(true));
-    });
+    const container = containerRef.current;
+    const scroller = scrollerRef.current;
+    let clones: Node[] = [];
+    let started = false;
 
-    if (direction === 'left') {
-      containerRef.current.style.setProperty('--animation-direction', 'forwards');
-    } else {
-      containerRef.current.style.setProperty('--animation-direction', 'reverse');
-    }
+    const initScroller = () => {
+      if (started || !containerRef.current || !scrollerRef.current) {
+        return;
+      }
 
-    const duration = speed === 'fast' ? '20s' : speed === 'normal' ? '40s' : '80s';
-    containerRef.current.style.setProperty('--animation-duration', duration);
-    setStart(true);
+      started = true;
+      const scrollerContent = Array.from(scrollerRef.current.children);
+      clones = scrollerContent.map((item) => {
+        const clone = item.cloneNode(true);
+        scrollerRef.current?.appendChild(clone);
+        return clone;
+      });
+
+      if (direction === 'left') {
+        container.style.setProperty('--animation-direction', 'forwards');
+      } else {
+        container.style.setProperty('--animation-direction', 'reverse');
+      }
+
+      const duration = speed === 'fast' ? '20s' : speed === 'normal' ? '40s' : '80s';
+      container.style.setProperty('--animation-duration', duration);
+      setStart(true);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          initScroller();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '120px' }
+    );
+
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+      clones.forEach((clone) => {
+        if (clone.parentNode === scroller) {
+          scroller.removeChild(clone);
+        }
+      });
+      setStart(false);
+    };
   }, [direction, speed, reduceMotion, items.length]);
 
   const cardClass =

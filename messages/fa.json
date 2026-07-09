@@ -22,6 +22,43 @@
       "title": "اتصال برقرار شد"
     }
   },
+  "adminShell": {
+    "header": {
+      "openMenu": "باز کردن منوی ناوبری",
+      "searchPlaceholder": "جستجوی سفارش‌ها، محصولات، مشتریان…"
+    },
+    "nav": {
+      "favorites": "علاقه‌مندی‌ها",
+      "recent": "اخیر"
+    },
+    "notifications": {
+      "title": "اعلان‌ها",
+      "totalUnread": "{total} کل · {unread} خوانده‌نشده",
+      "live": "زنده",
+      "connecting": "در حال اتصال…",
+      "offline": "آفلاین",
+      "refresh": "بروزرسانی اعلان‌ها",
+      "markAllRead": "علامت‌گذاری همه به‌عنوان خوانده‌شده",
+      "loadFailed": "بارگذاری اعلان‌ها ناموفق بود",
+      "retry": "تلاش مجدد",
+      "emptyTitle": "همه را دیده‌اید",
+      "emptyDescription": "هشدارهای جدید به‌صورت زنده اینجا نمایش داده می‌شوند.",
+      "viewAll": "مشاهده همه",
+      "liveFeed": "فید زنده"
+    },
+    "quickActions": {
+      "label": "اقدامات سریع",
+      "inventorySales": "موجودی و فروش",
+      "newProduct": "محصول جدید",
+      "newProductDescription": "افزودن کالا به کاتالوگ",
+      "newCollection": "مجموعه جدید",
+      "newCollectionDescription": "گروه‌بندی محصولات بر اساس موضوع",
+      "newDiscount": "ایجاد کوپن",
+      "newDiscountDescription": "تولید کد تخفیف",
+      "newCustomer": "افزودن مشتری",
+      "newCustomerDescription": "ثبت حساب خرده‌فروشی دستی"
+    }
+  },
   "errors": {
     "network": "پاسخی از سرور دریافت نشد. لطفاً اتصال اینترنت خود را بررسی کنید.",
     "networkError": "خطای شبکه: {detail}",

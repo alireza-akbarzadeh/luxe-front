@@ -1,9 +1,9 @@
 'use client';
 
-import { useReducedMotion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
 import { Spotlight } from '@/components/effects/spotlight';
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 
 const BackgroundBeams = dynamic(
@@ -21,7 +21,7 @@ export function LandingHeroBackground({
   className,
   spotlightClassName
 }: LandingHeroBackgroundProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   if (reduceMotion) {
     return null;

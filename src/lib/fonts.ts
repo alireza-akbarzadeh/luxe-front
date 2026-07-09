@@ -1,3 +1,5 @@
+import '@fontsource-variable/plus-jakarta-sans/wght.css';
+
 import { Geist, Geist_Mono, Vazirmatn } from 'next/font/google';
 
 /** Admin + vendor panel dashboards. */

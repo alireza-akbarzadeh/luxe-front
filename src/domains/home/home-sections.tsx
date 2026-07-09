@@ -43,11 +43,9 @@ function MobileDeferredSection({ children }: { children: ReactNode }) {
 export function HomeSections() {
   return (
     <>
-      <MobileDeferredSection>
-        <SectionBoundary fallback={<MarqueeSkeleton />}>
-          <BrandsSection />
-        </SectionBoundary>
-      </MobileDeferredSection>
+      <SectionBoundary fallback={<MarqueeSkeleton />}>
+        <BrandsSection />
+      </SectionBoundary>
 
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={2} />}>

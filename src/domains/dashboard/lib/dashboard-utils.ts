@@ -35,10 +35,13 @@ export function isPositiveChange(change?: number): boolean {
 }
 
 export function formatKpiValue(
-  kind: 'currency' | 'count' | 'average',
+  kind: 'currency' | 'count' | 'average' | 'percent',
   kpi?: DtoAdminDashboardKPI
 ): string {
   const value = kpi?.value ?? 0;
+  if (kind === 'percent') {
+    return `${value.toFixed(1)}%`;
+  }
   if (kind === 'currency' || kind === 'average') {
     return formatCurrency(value);
   }

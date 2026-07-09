@@ -1,5 +1,8 @@
+'use client';
+
 import { IconPackage, IconPlus, IconTags, IconTicket, IconUserPlus } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +16,8 @@ import {
 import { NotificationCenter } from '@/domains/admin/components/notification-center';
 
 export function HeaderActions() {
+  const t = useTranslations('adminShell.quickActions');
+
   return (
     <div className='flex items-center gap-1.5'>
       <DropdownMenu>
@@ -22,7 +27,7 @@ export function HeaderActions() {
             className='dashboard-quick-action hidden h-9 gap-1.5 rounded-xl px-3 font-medium sm:inline-flex'
           >
             <IconPlus className='h-4 w-4' />
-            <span className='hidden md:inline'>Quick actions</span>
+            <span className='hidden md:inline'>{t('label')}</span>
           </Button>
         </DropdownMenuTrigger>
 
@@ -31,11 +36,10 @@ export function HeaderActions() {
           className='border-border/40 bg-popover/95 z-50 w-60 rounded-2xl p-2 shadow-2xl backdrop-blur-md'
         >
           <DropdownMenuLabel className='text-muted-foreground px-3 py-2 text-[10px] font-bold tracking-widest uppercase'>
-            Inventory & Sales
+            {t('inventorySales')}
           </DropdownMenuLabel>
           <DropdownMenuSeparator className='opacity-50' />
 
-          {/* New Product */}
           <DropdownMenuItem
             asChild
             className='hover:bg-muted/20 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
@@ -46,10 +50,10 @@ export function HeaderActions() {
               </div>
               <div className='flex min-w-0 flex-1 flex-col'>
                 <span className='text-foreground text-sm font-semibold tracking-tight'>
-                  New Product
+                  {t('newProduct')}
                 </span>
                 <span className='text-muted-foreground truncate text-[10px]'>
-                  Add item to digital catalog
+                  {t('newProductDescription')}
                 </span>
               </div>
               <kbd className='text-muted-foreground bg-muted border-border/40 rounded border px-1.5 py-0.5 font-mono text-[9px] select-none'>
@@ -58,7 +62,6 @@ export function HeaderActions() {
             </Link>
           </DropdownMenuItem>
 
-          {/* New Collection */}
           <DropdownMenuItem
             asChild
             className='hover:bg-muted/80 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
@@ -69,10 +72,10 @@ export function HeaderActions() {
               </div>
               <div className='flex min-w-0 flex-1 flex-col'>
                 <span className='text-foreground text-sm font-semibold tracking-tight'>
-                  New Collection
+                  {t('newCollection')}
                 </span>
                 <span className='text-muted-foreground truncate text-[10px]'>
-                  Group products by theme
+                  {t('newCollectionDescription')}
                 </span>
               </div>
               <kbd className='text-muted-foreground bg-muted border-border/40 rounded border px-1.5 py-0.5 font-mono text-[9px] select-none'>
@@ -81,7 +84,6 @@ export function HeaderActions() {
             </Link>
           </DropdownMenuItem>
 
-          {/* New Discount / Coupon */}
           <DropdownMenuItem
             asChild
             className='hover:bg-muted/80 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
@@ -92,10 +94,10 @@ export function HeaderActions() {
               </div>
               <div className='flex min-w-0 flex-1 flex-col'>
                 <span className='text-foreground text-sm font-semibold tracking-tight'>
-                  Create Coupon
+                  {t('newDiscount')}
                 </span>
                 <span className='text-muted-foreground truncate text-[10px]'>
-                  Generate promotional code
+                  {t('newDiscountDescription')}
                 </span>
               </div>
               <kbd className='text-muted-foreground bg-muted border-border/40 rounded border px-1.5 py-0.5 font-mono text-[9px] select-none'>
@@ -104,7 +106,6 @@ export function HeaderActions() {
             </Link>
           </DropdownMenuItem>
 
-          {/* New Customer Profile */}
           <DropdownMenuItem
             asChild
             className='hover:bg-muted/80 focus:bg-muted/80 flex cursor-pointer items-center gap-3 rounded-xl p-2.5 transition-colors'
@@ -115,10 +116,10 @@ export function HeaderActions() {
               </div>
               <div className='flex min-w-0 flex-1 flex-col'>
                 <span className='text-foreground text-sm font-semibold tracking-tight'>
-                  Add Customer
+                  {t('newCustomer')}
                 </span>
                 <span className='text-muted-foreground truncate text-[10px]'>
-                  Register manual retail account
+                  {t('newCustomerDescription')}
                 </span>
               </div>
               <kbd className='text-muted-foreground bg-muted border-border/40 rounded border px-1.5 py-0.5 font-mono text-[9px] select-none'>

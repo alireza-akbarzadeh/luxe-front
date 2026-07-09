@@ -22,6 +22,43 @@
       "title": "Back online"
     }
   },
+  "adminShell": {
+    "header": {
+      "openMenu": "Open navigation menu",
+      "searchPlaceholder": "Search orders, products, customers…"
+    },
+    "nav": {
+      "favorites": "Favorites",
+      "recent": "Recent"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "totalUnread": "{total} total · {unread} unread shown",
+      "live": "Live",
+      "connecting": "Connecting…",
+      "offline": "Offline",
+      "refresh": "Refresh notifications",
+      "markAllRead": "Mark all read",
+      "loadFailed": "Failed to load notifications",
+      "retry": "Retry",
+      "emptyTitle": "You're all caught up",
+      "emptyDescription": "New alerts appear here in real time.",
+      "viewAll": "View all",
+      "liveFeed": "Live feed"
+    },
+    "quickActions": {
+      "label": "Quick actions",
+      "inventorySales": "Inventory & Sales",
+      "newProduct": "New Product",
+      "newProductDescription": "Add item to digital catalog",
+      "newCollection": "New Collection",
+      "newCollectionDescription": "Group products by theme",
+      "newDiscount": "Create Coupon",
+      "newDiscountDescription": "Generate promotional code",
+      "newCustomer": "Add Customer",
+      "newCustomerDescription": "Register manual retail account"
+    }
+  },
   "errors": {
     "network": "We couldn't reach the server. Check your connection and try again.",
     "networkError": "Network error: {detail}",

@@ -1,6 +1,7 @@
 'use client';
 
 import { IconCalendar, IconChevronDown, IconMenu, IconSearch } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +14,7 @@ import { Flex } from '@/components/ui/flex';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import { HeaderActions } from '@/domains/admin/components/header-action';
 import { UserProfile } from '@/domains/admin/components/user-profile';
+import { useAdminShellStore } from '@/domains/admin/stores/admin-shell-store';
 import {
   dashboardPeriodLabel,
   dashboardPeriods,
@@ -21,17 +23,16 @@ import {
 import { cn } from '@/lib/utils';
 import type { DtoMenuGroupResponse } from '@/services/-user-menu-structure-get.schemas';
 
-import { useDashboardStore } from '../admin.store';
-
 interface AppHeaderProps {
   pathname: string;
   sidebar_menu: DtoMenuGroupResponse[];
 }
 
 export function AppHeader({ pathname: _pathname, sidebar_menu: _sidebarMenu }: AppHeaderProps) {
+  const t = useTranslations('adminShell.header');
   const [period, setPeriod] = useDashboardPeriod();
-  const setMobileSidebarOpen = useDashboardStore((state) => state.setMobileSidebarOpen);
-  const setSearchOpen = useDashboardStore((state) => state.setSearchOpen);
+  const setMobileSidebarOpen = useAdminShellStore((state) => state.setMobileSidebarOpen);
+  const setSearchOpen = useAdminShellStore((state) => state.setSearchOpen);
 
   return (
     <header className='dashboard-topnav sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b px-3 md:h-16 md:gap-3 md:px-4'>
@@ -39,7 +40,7 @@ export function AppHeader({ pathname: _pathname, sidebar_menu: _sidebarMenu }: A
         variant='ghost'
         size='icon'
         className='h-9 w-9 rounded-xl md:hidden'
-        aria-label='Open navigation menu'
+        aria-label={t('openMenu')}
         onClick={() => setMobileSidebarOpen(true)}
       >
         <IconMenu className='h-5 w-5' />
@@ -51,11 +52,11 @@ export function AppHeader({ pathname: _pathname, sidebar_menu: _sidebarMenu }: A
           onClick={() => setSearchOpen(true)}
           className={cn(
             'dashboard-search flex h-9 w-full items-center gap-2 px-3 text-sm transition-colors',
-            'focus-visible:ring-emerald-500/40 focus-visible:ring-2 focus-visible:outline-none md:max-w-xl'
+            'focus-visible:ring-2 focus-visible:ring-emerald-500/40 focus-visible:outline-none md:max-w-xl'
           )}
         >
           <IconSearch className='size-4 shrink-0' />
-          <span className='truncate'>Search orders, products, customers…</span>
+          <span className='truncate'>{t('searchPlaceholder')}</span>
           <kbd className='bg-background/60 text-muted-foreground ms-auto hidden rounded-md border px-1.5 py-0.5 text-[10px] font-medium md:inline'>
             ⌘K
           </kbd>

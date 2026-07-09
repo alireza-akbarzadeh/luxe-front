@@ -4,12 +4,16 @@ import React from 'react';
 
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import {
+  resolveAdminPageLabel,
+  useAdminRecentPages
+} from '@/domains/admin/hooks/use-admin-recent-pages';
+import { useAdminShellStore } from '@/domains/admin/stores/admin-shell-store';
 import { useDashboardShortcuts } from '@/domains/admin/useDahboardShortcut';
 import { RealtimeProvider } from '@/lib/realtime/realtime-provider';
 import { cn } from '@/lib/utils';
 import { useGetUserMenuStructure } from '@/services/-user-menu-structure-get';
 
-import { useDashboardStore } from '../admin.store';
 import { AdminNotificationsSync } from './admin-notifications-sync';
 import { AdminSidebar } from './admin-sidebar';
 import { AppHeader } from './app-header';
@@ -20,9 +24,10 @@ interface AppSidebarLayoutProps {
 }
 
 export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
-  const { mobileSidebarOpen, setMobileSidebarOpen } = useDashboardStore();
+  const { mobileSidebarOpen, setMobileSidebarOpen } = useAdminShellStore();
   const pathname = usePathname();
   useDashboardShortcuts();
+  useAdminRecentPages(resolveAdminPageLabel(pathname));
   const {
     data: { data: sidebar_menu = [] } = {},
     isLoading: isMenuLoading,
@@ -38,7 +43,7 @@ export function AppSidebarLayout({ children }: AppSidebarLayoutProps) {
     <RealtimeProvider>
       <AdminNotificationsSync />
       <TooltipProvider delayDuration={0}>
-        <div className='bg-background flex h-screen w-full overflow-hidden dashboard-shell'>
+        <div className='bg-background dashboard-shell flex h-screen w-full overflow-hidden'>
           {/* Desktop Sidebar */}
           <AdminSidebar
             pathname={pathname}

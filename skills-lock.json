@@ -1,53 +1,103 @@
 {
   "version": 1,
   "skills": {
+    "admin-forms": {
+      "source": ".cursor/skills/admin-forms",
+      "sourceType": "local",
+      "computedHash": "e974041471b40d528d5905e8565199a4872116ad1c80543cd22f87b5e04a6f1c"
+    },
+    "api-gen": {
+      "source": ".cursor/skills/api-gen",
+      "sourceType": "local",
+      "computedHash": "addfa7242929d9cbec4cb77a222c41b09e453ad66b68658e0a0a45fa7502231b"
+    },
+    "checkout-domain": {
+      "source": ".cursor/skills/checkout-domain",
+      "sourceType": "local",
+      "computedHash": "cbcc552585b2c60fb832dfa0442b88e8559e57565df3e96169476bd183920d51"
+    },
     "design-taste-frontend": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/taste-skill/SKILL.md",
-      "computedHash": "899b84384f74f540ea5284d9b2e9234e050998b42eacc805410b518d4226c0b3"
+      "computedHash": "ac4ea379cada030093a85bc47f25fe9241fa568a054028fb164acd44fa1a0b0c"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
-      "computedHash": "645b891da1edbae76ab79c7b088d4e73397464f8396edaf773c0e01971ce75d6"
+      "computedHash": "f6595b7819cd245ffe14910141f01fd4c00a5b9f9ab54fc6a9720d02dd1532e8"
     },
     "framer-motion": {
       "source": "mindrally/skills",
       "sourceType": "github",
       "skillPath": "framer-motion/SKILL.md",
-      "computedHash": "4bbfec771a1a13e3462cdd30c442fd09513c50d13a2652a275a8e09ad4532189"
+      "computedHash": "6d440c40749f9280a7e849eaa85d12c8f3c2577b0cce152896a6464e4c106526"
     },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
-      "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
+      "computedHash": "2d7b8f83e3e9564204d200bb9534570cde8d4ffbcb36543d427bdfd3e96149a3"
+    },
+    "layout-typography": {
+      "source": ".cursor/skills/layout-typography",
+      "sourceType": "local",
+      "computedHash": "c2d655c8f787a89df4365f5e6c64a5843e48395dffc9badbe7978f2b4e130d68"
+    },
+    "lighthouse-performance": {
+      "source": ".cursor/skills/lighthouse-performance",
+      "sourceType": "local",
+      "computedHash": "c5e70cd7bc076a92a7f5229f6a9bcb1a63e23dc86ce9ccb2ad9321ebd3cb1eb1"
+    },
+    "luxe-react-performance": {
+      "source": ".cursor/skills/luxe-react-performance",
+      "sourceType": "local",
+      "computedHash": "0d15ccaa729753b0f22f0de40cf68e5afec336eb47c2f489905fd132ee669dc8"
+    },
+    "new-admin-domain": {
+      "source": ".cursor/skills/new-admin-domain",
+      "sourceType": "local",
+      "computedHash": "fb7f71450cc1b757ffe44c8693ca13067a2eab292afb3cb0706a1699b5367b5d"
     },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "0dc0edeeaec2ae491ae506806517866a3f9bd48d04e0458feb37e0252862891f"
+      "computedHash": "ac9d0d69caac7de1d1e5647f3db3bcd2f13af355d6b3a78780fbf7fc80e8dca0"
+    },
+    "tanstack-query": {
+      "source": ".cursor/skills/tanstack-query",
+      "sourceType": "local",
+      "computedHash": "afdf6c7f180c16d71215c7bde84da74872638ce0547ad6c38907cc62196d98ab"
+    },
+    "tanstack-table": {
+      "source": ".cursor/skills/tanstack-table",
+      "sourceType": "local",
+      "computedHash": "474c348684b062e583b2a8d4d9286be1b85f57cf43cd95cef48ad6b546fce6bf"
     },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/composition-patterns/SKILL.md",
-      "computedHash": "10eb4ec94577b79ae98c63ce3e7f35f8a6a06436a4011bff083b397de6960eeb"
+      "computedHash": "859bf0e2d2473661f54e722b97c2659269b10c9f86b3d3b53b430d2b9b4efc55"
     },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/react-best-practices/SKILL.md",
-      "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
+      "computedHash": "835235d96e06bca0be39668a703df715f75432c723d2dfa8e27d5d802a5372ca"
     },
     "web-design-guidelines": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/web-design-guidelines/SKILL.md",
-      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+      "computedHash": "a6a44d5498f7e8f68289902f3dedfc6f38ae0cee1e96527c80724cf27f727c2a"
+    },
+    "zustand": {
+      "source": ".cursor/skills/zustand",
+      "sourceType": "local",
+      "computedHash": "769e2ff1dc1b11ae2c7e4bdeb806c8d472de8d1676fec87a97a73fbb499e756b"
     }
   }
 }
