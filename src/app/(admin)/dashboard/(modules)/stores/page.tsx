@@ -1,5 +1,5 @@
-import { StoresAdminDomain } from '@/domains/stores-admin/stores-admin.domain';
+import { redirect } from 'next/navigation';
 
 export default function StoresPage() {
-  return <StoresAdminDomain />;
+  redirect('/dashboard/vendors');
 }

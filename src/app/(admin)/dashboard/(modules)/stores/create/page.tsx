@@ -1,5 +1,5 @@
-import { StoreForm } from '@/domains/stores-admin/sections/store-form';
+import { redirect } from 'next/navigation';
 
 export default function CreateStorePage() {
-  return <StoreForm />;
+  redirect('/dashboard/vendors/create');
 }

@@ -1,11 +1,10 @@
-import { StoreForm } from '@/domains/stores-admin/sections/store-form';
+import { redirect } from 'next/navigation';
 
-interface EditStorePageProps {
+interface EditStoreRedirectPageProps {
   params: Promise<{ storeId: string }>;
 }
 
-export default async function EditStorePage(props: EditStorePageProps) {
-  const { storeId } = await props.params;
-
-  return <StoreForm isEdit storeId={storeId} />;
+export default async function EditStoreRedirectPage({ params }: EditStoreRedirectPageProps) {
+  const { storeId } = await params;
+  redirect(`/dashboard/vendors/edit/${storeId}`);
 }
