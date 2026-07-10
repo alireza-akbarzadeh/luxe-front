@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowLeft, IconRefresh } from '@tabler/icons-react';
+import { IconArrowLeft, IconPencil, IconRefresh } from '@tabler/icons-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useCallback } from 'react';
@@ -92,7 +92,11 @@ export function VendorDetailDomain({ vendorId }: VendorDetailDomainProps) {
 
   if (isError || data?.success === false || !store) {
     return (
-      <Flex direction='column' align='center' className='gap-4 rounded-2xl border border-dashed p-8'>
+      <Flex
+        direction='column'
+        align='center'
+        className='gap-4 rounded-2xl border border-dashed p-8'
+      >
         <Typography.H3>Unable to load vendor</Typography.H3>
         <Button variant='outline' onClick={() => refetch()}>
           <IconRefresh className='me-2 size-4' />
@@ -122,7 +126,11 @@ export function VendorDetailDomain({ vendorId }: VendorDetailDomainProps) {
           <Typography.H2>{store.name}</Typography.H2>
           <Flex align='center' className='gap-2'>
             <VendorStatusBadge status={store.status} />
-            {store.is_verified ? <Badge>Verified</Badge> : <Badge variant='outline'>Unverified</Badge>}
+            {store.is_verified ? (
+              <Badge>Verified</Badge>
+            ) : (
+              <Badge variant='outline'>Unverified</Badge>
+            )}
           </Flex>
           <Typography.Muted className='max-w-2xl text-sm'>
             {store.owner_email ?? 'No owner email'} · {store.location ?? 'No location'}
@@ -130,6 +138,12 @@ export function VendorDetailDomain({ vendorId }: VendorDetailDomainProps) {
         </Flex>
 
         <Flex direction='row' wrap='wrap' className='gap-2'>
+          <Button variant='outline' asChild>
+            <Link href={`/dashboard/vendors/edit/${numericId}`}>
+              <IconPencil className='me-2 size-4' />
+              Edit profile
+            </Link>
+          </Button>
           {store.status === 'pending' ? (
             <>
               <Button variant='outline' onClick={() => void handleReject()}>

@@ -1,11 +1,15 @@
 'use client';
 
+import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
+import { toast } from 'sonner';
 
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
+import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useVendorsQueryState } from '@/domains/vendors-admin/hooks/use-vendors-query-state';
 import {
@@ -15,11 +19,17 @@ import {
 import type { VendorStatusFilter } from '@/domains/vendors-admin/schemas/vendors.schema';
 import { VENDOR_STATUS_TABS } from '@/domains/vendors-admin/schemas/vendors.schema';
 import { createVendorColumns } from '@/domains/vendors-admin/sections/vendors-columns';
-import { useGetAdminStores } from '@/services/-admin-stores-get';
-import type { DtoAdminStoreResponse, GetAdminStores200 } from '@/services/-admin-stores-get.schemas';
+import { deleteAdminStoresId } from '@/services/-admin-stores-{id}-delete';
+import { getGetAdminStoresQueryKey, useGetAdminStores } from '@/services/-admin-stores-get';
+import type {
+  DtoAdminStoreResponse,
+  GetAdminStores200
+} from '@/services/-admin-stores-get.schemas';
+import { getGetAdminVendorsKpisQueryKey } from '@/services/-admin-vendors-kpis-get';
 
 export function VendorsTable() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { status, setStatus } = useVendorsQueryState();
 
   const getQueryParams = useCallback(
@@ -49,6 +59,38 @@ export function VendorsTable() {
       router.push(`/dashboard/vendors/${store.id}`);
     },
     [router]
+  );
+
+  const openEdit = useCallback(
+    (id: number) => {
+      router.push(`/dashboard/vendors/edit/${id}`);
+    },
+    [router]
+  );
+
+  const invalidateList = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: getGetAdminStoresQueryKey() });
+    void queryClient.invalidateQueries({ queryKey: getGetAdminVendorsKpisQueryKey() });
+  }, [queryClient]);
+
+  const handleDeleteVendor = useCallback(
+    async (store: DtoAdminStoreResponse) => {
+      if (!store.id) return;
+
+      const confirmed = window.confirm(`Delete vendor "${store.name ?? 'this vendor'}"?`);
+      if (!confirmed) return;
+
+      try {
+        await deleteAdminStoresId(store.id);
+        invalidateList();
+        toast.success('Vendor deleted');
+      } catch (error) {
+        toast.error('Failed to delete vendor', {
+          description: error instanceof Error ? error.message : 'Something went wrong'
+        });
+      }
+    },
+    [invalidateList]
   );
 
   const columns = useMemo(() => createVendorColumns({ onOpen: openVendor }), [openVendor]);
@@ -96,6 +138,8 @@ export function VendorsTable() {
         showRefresh
         onRefresh={serverTable.refetch}
         isLoading={serverTable.isFetching}
+        showCreate
+        onCreate={() => router.push('/dashboard/vendors/create')}
         showClear
         showColumnVisibility
         showBulkActions={false}
@@ -107,6 +151,25 @@ export function VendorsTable() {
         getDetailsUrl={(row) =>
           row.original.id ? `/dashboard/vendors/${row.original.id}` : '/dashboard/vendors'
         }
+        extendMenuActions={(row) => (
+          <>
+            <DropdownMenuItem
+              className='gap-2 text-[11px] font-semibold'
+              onClick={() => row.original.id && openEdit(row.original.id)}
+            >
+              <IconPencil className='size-3.5' />
+              Edit profile
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className='text-destructive gap-2 text-[11px] font-semibold'
+              onClick={() => void handleDeleteVendor(row.original)}
+            >
+              <IconTrash className='size-3.5' />
+              Delete vendor
+            </DropdownMenuItem>
+          </>
+        )}
       />
 
       <Table.Pagination

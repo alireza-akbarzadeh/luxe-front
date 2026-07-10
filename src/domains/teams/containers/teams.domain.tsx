@@ -1,25 +1,24 @@
 'use client';
 
-import { IconPlus, IconRotateClockwise2, IconShieldLock } from '@tabler/icons-react';
+import { IconPlus, IconRotateClockwise2, IconUsersGroup } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
-import { RoleFormDialog } from '@/domains/roles/components/role-form-dialog';
-import { RoleList } from '@/domains/roles/components/role-list';
-import { RolePermissionsPanel } from '@/domains/roles/components/role-permissions-panel';
-import { useRoles } from '@/domains/roles/hooks/use-roles';
-import { useRolesStore } from '@/domains/roles/stores/roles-store';
-import { getGetAdminPermissionsQueryKey } from '@/services/-admin-permissions-get';
-import { getGetAdminRolesQueryKey } from '@/services/-admin-roles-get';
+import { AddTeamMemberDialog } from '@/domains/teams/components/add-team-member-dialog';
+import { TeamFormDialog } from '@/domains/teams/components/team-form-dialog';
+import { TeamList } from '@/domains/teams/components/team-list';
+import { TeamMembersPanel } from '@/domains/teams/components/team-members-panel';
+import { useTeams } from '@/domains/teams/hooks/use-teams';
+import { useTeamsStore } from '@/domains/teams/stores/teams-store';
+import { getGetAdminTeamsQueryKey } from '@/services/-admin-teams-get';
 
-export function RolesDomain() {
+export function TeamsDomain() {
   const queryClient = useQueryClient();
-  const { openCreateDialog } = useRolesStore();
-  const { data: roles = [], isLoading, isError, refetch } = useRoles();
+  const { openCreateDialog } = useTeamsStore();
+  const { data: teams = [], isLoading, isError, refetch } = useTeams();
 
   const handleRefresh = () => {
-    void queryClient.invalidateQueries({ queryKey: getGetAdminRolesQueryKey() });
-    void queryClient.invalidateQueries({ queryKey: getGetAdminPermissionsQueryKey() });
+    void queryClient.invalidateQueries({ queryKey: getGetAdminTeamsQueryKey() });
   };
 
   return (
@@ -29,12 +28,12 @@ export function RolesDomain() {
           <div className='flex items-center justify-between gap-4'>
             <div className='flex items-center gap-3'>
               <div className='bg-primary/10 flex h-9 w-9 items-center justify-center rounded-xl'>
-                <IconShieldLock className='text-primary h-4.5 w-4.5' />
+                <IconUsersGroup className='text-primary h-4.5 w-4.5' />
               </div>
               <div>
-                <h1 className='text-xl font-black tracking-tight'>Roles & Permissions</h1>
+                <h1 className='text-xl font-black tracking-tight'>Teams</h1>
                 <p className='text-muted-foreground text-[10px] font-bold tracking-widest uppercase'>
-                  Access control
+                  Staff groups
                 </p>
               </div>
             </div>
@@ -52,7 +51,7 @@ export function RolesDomain() {
                 className='h-9 gap-2 rounded-xl text-[10px] font-bold uppercase'
                 onClick={openCreateDialog}
               >
-                <IconPlus className='h-3.5 w-3.5' /> New role
+                <IconPlus className='h-3.5 w-3.5' /> New team
               </Button>
             </div>
           </div>
@@ -62,7 +61,7 @@ export function RolesDomain() {
       <div className='mx-auto max-w-400 px-6 py-8'>
         {isError ? (
           <div className='border-border/60 rounded-2xl border p-10 text-center'>
-            <p className='text-destructive font-medium'>Failed to load roles.</p>
+            <p className='text-destructive font-medium'>Failed to load teams.</p>
             <Button variant='outline' className='mt-4 rounded-xl' onClick={() => void refetch()}>
               Retry
             </Button>
@@ -71,22 +70,23 @@ export function RolesDomain() {
           <div className='grid min-h-[640px] gap-4 lg:grid-cols-[320px_1fr]'>
             <aside className='border-border/60 bg-card/40 rounded-2xl border p-3'>
               <div className='mb-3 px-1'>
-                <h2 className='text-sm font-bold'>Roles</h2>
+                <h2 className='text-sm font-bold'>All teams</h2>
                 <p className='text-muted-foreground text-[11px]'>
-                  User accounts use the role slug (`admin`, `user`, `moderator`).
+                  Group staff for support routing and access visibility.
                 </p>
               </div>
-              <RoleList roles={roles} isLoading={isLoading} />
+              <TeamList teams={teams} isLoading={isLoading} />
             </aside>
 
             <section className='border-border/60 bg-card/40 overflow-hidden rounded-2xl border'>
-              <RolePermissionsPanel />
+              <TeamMembersPanel />
             </section>
           </div>
         )}
       </div>
 
-      <RoleFormDialog />
+      <TeamFormDialog />
+      <AddTeamMemberDialog />
     </div>
   );
 }

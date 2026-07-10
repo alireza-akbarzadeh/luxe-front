@@ -11,7 +11,8 @@ export function VendorsAdminDomain() {
       <Flex direction='column' className='gap-1'>
         <Typography.H2 as='h1'>Vendors</Typography.H2>
         <Typography.Muted className='max-w-2xl'>
-          Approvals, verification, suspension, revenue, and performance across marketplace sellers.
+          Single hub for marketplace sellers — create profiles, run approvals, and review
+          performance.
         </Typography.Muted>
       </Flex>
 

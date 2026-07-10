@@ -7,98 +7,98 @@ import { AppDialog } from '@/components/app-dialog';
 import { useAppForm } from '@/components/forms/useAppForm';
 import { Button } from '@/components/ui/button';
 import { zodFormValidators } from '@/domains/menus/schemas/form-validator';
-import { useRole, useRoleMutations } from '@/domains/roles/hooks/use-roles';
+import { useTeam, useTeamMutations } from '@/domains/teams/hooks/use-teams';
 import {
-  roleDefaults,
-  roleEditDefaults,
-  roleEditSchema,
-  roleSchema,
-  slugifyRoleName
-} from '@/domains/roles/schemas/role.schema';
-import { useRolesStore } from '@/domains/roles/stores/roles-store';
+  slugifyTeamName,
+  teamDefaults,
+  teamEditDefaults,
+  teamEditSchema,
+  teamSchema
+} from '@/domains/teams/schemas/team.schema';
+import { useTeamsStore } from '@/domains/teams/stores/teams-store';
 
-export function RoleFormDialog() {
-  const { createDialogOpen, editRoleId, closeDialogs } = useRolesStore();
-  const { data: editingRole } = useRole(editRoleId);
-  const { createRole, updateRole, isCreating, isUpdating } = useRoleMutations();
+export function TeamFormDialog() {
+  const { createDialogOpen, editTeamId, closeDialogs } = useTeamsStore();
+  const { data: editingTeam } = useTeam(editTeamId);
+  const { createTeam, updateTeam, isCreating, isUpdating } = useTeamMutations();
 
-  const isEdit = editRoleId != null;
+  const isEdit = editTeamId != null;
   const open = createDialogOpen || isEdit;
 
   const createForm = useAppForm({
-    defaultValues: roleDefaults,
-    validators: zodFormValidators(roleSchema),
+    defaultValues: teamDefaults,
+    validators: zodFormValidators(teamSchema),
     listeners: {
       onChange: ({ formApi, fieldApi }) => {
         if (fieldApi?.name !== 'name') return;
         const slugMeta = formApi.getFieldMeta('slug');
         if (slugMeta?.isDirty) return;
-        const slug = slugifyRoleName(formApi.getFieldValue('name'));
+        const slug = slugifyTeamName(formApi.getFieldValue('name'));
         if (slug) formApi.setFieldValue('slug', slug);
       }
     },
     onSubmit: async ({ value, formApi }) => {
       try {
-        await createRole({
+        await createTeam({
           name: value.name,
           slug: value.slug,
           description: value.description?.trim() || undefined
         });
-        toast.success('Role created');
+        toast.success('Team created');
         closeDialogs();
         formApi.reset();
       } catch {
-        toast.error('Failed to create role');
+        toast.error('Failed to create team');
       }
     }
   });
 
   const editForm = useAppForm({
-    defaultValues: roleEditDefaults,
-    validators: zodFormValidators(roleEditSchema),
+    defaultValues: teamEditDefaults,
+    validators: zodFormValidators(teamEditSchema),
     onSubmit: async ({ value, formApi }) => {
-      if (!editRoleId) return;
+      if (!editTeamId) return;
       try {
-        await updateRole({
-          id: editRoleId,
+        await updateTeam({
+          id: editTeamId,
           data: {
             name: value.name,
             description: value.description?.trim() || undefined
           }
         });
-        toast.success('Role updated');
+        toast.success('Team updated');
         closeDialogs();
         formApi.reset();
       } catch {
-        toast.error('Failed to update role');
+        toast.error('Failed to update team');
       }
     }
   });
 
   useEffect(() => {
     if (!createDialogOpen) return;
-    createForm.reset(roleDefaults);
+    createForm.reset(teamDefaults);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- reset only when dialog opens
   }, [createDialogOpen]);
 
   useEffect(() => {
-    if (!isEdit || !editingRole) return;
+    if (!isEdit || !editingTeam) return;
     editForm.reset({
-      name: editingRole.name ?? '',
-      description: editingRole.description ?? ''
+      name: editingTeam.name ?? '',
+      description: editingTeam.description ?? ''
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset when editing role loads
-  }, [isEdit, editingRole?.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset when editing team loads
+  }, [isEdit, editingTeam?.id]);
 
   return (
     <AppDialog
       open={open}
       onOpenChange={(nextOpen) => !nextOpen && closeDialogs()}
-      title={isEdit ? 'Edit role' : 'New role'}
+      title={isEdit ? 'Edit team' : 'New team'}
       description={
         isEdit
-          ? 'Update the display name and description. Slug is fixed after creation.'
-          : 'Create a custom role. Assign permissions after saving.'
+          ? 'Update the team name and description. Slug is fixed after creation.'
+          : 'Create a team to organize staff members.'
       }
       size='md'
     >
@@ -111,7 +111,7 @@ export function RoleFormDialog() {
             }}
           >
             <editForm.AppField name='name'>
-              {(field) => <field.TextField label='Role name' />}
+              {(field) => <field.TextField label='Team name' />}
             </editForm.AppField>
             <editForm.AppField name='description'>
               {(field) => <field.TextArea label='Description (optional)' />}
@@ -133,16 +133,16 @@ export function RoleFormDialog() {
             }}
           >
             <createForm.AppField name='name'>
-              {(field) => <field.TextField label='Role name' placeholder='Content manager' />}
+              {(field) => <field.TextField label='Team name' placeholder='Support' />}
             </createForm.AppField>
             <createForm.AppField name='slug'>
-              {(field) => <field.TextField label='Slug' placeholder='content-manager' />}
+              {(field) => <field.TextField label='Slug' placeholder='support' />}
             </createForm.AppField>
             <createForm.AppField name='description'>
               {(field) => (
                 <field.TextArea
                   label='Description (optional)'
-                  placeholder='What this role can do'
+                  placeholder='What this team handles'
                 />
               )}
             </createForm.AppField>
@@ -150,7 +150,7 @@ export function RoleFormDialog() {
               <Button type='button' variant='outline' onClick={closeDialogs}>
                 Cancel
               </Button>
-              <createForm.Submit isPending={isCreating}>Create role</createForm.Submit>
+              <createForm.Submit isPending={isCreating}>Create team</createForm.Submit>
             </div>
           </createForm.Root>
         </createForm.AppForm>

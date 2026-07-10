@@ -32,6 +32,7 @@ export function RolePermissionsPanel() {
   const grouped = useMemo(() => {
     const map = new Map<string, typeof permissions>();
     for (const permission of permissions) {
+      if (!permission.id || !permission.module) continue;
       const list = map.get(permission.module) ?? [];
       list.push(permission);
       map.set(permission.module, list);
@@ -45,8 +46,8 @@ export function RolePermissionsPanel() {
     );
   };
 
-  const toggleModule = (modulePermissions: typeof permissions, checked: boolean) => {
-    const ids = modulePermissions.map((item) => item.id);
+  const toggleModule = (modulePermissions: Array<{ id?: number }>, checked: boolean) => {
+    const ids = modulePermissions.map((item) => item.id).filter((id): id is number => id != null);
     setSelectedIds((current) => {
       if (checked) return [...new Set([...current, ...ids])];
       return current.filter((id) => !ids.includes(id));
@@ -120,7 +121,9 @@ export function RolePermissionsPanel() {
         ) : (
           <div className='space-y-5'>
             {grouped.map(([module, modulePermissions]) => {
-              const moduleIds = modulePermissions.map((item) => item.id);
+              const moduleIds = modulePermissions
+                .map((item) => item.id)
+                .filter((id): id is number => id != null);
               const allSelected = moduleIds.every((id) => selectedIds.includes(id));
               const someSelected = moduleIds.some((id) => selectedIds.includes(id));
 
@@ -146,31 +149,34 @@ export function RolePermissionsPanel() {
                   </div>
 
                   <div className='space-y-2'>
-                    {modulePermissions.map((permission) => (
-                      <label
-                        key={permission.id}
-                        className={cn(
-                          'hover:bg-muted/30 flex cursor-pointer items-start gap-3 rounded-xl border border-transparent px-3 py-2 transition-colors',
-                          selectedIds.includes(permission.id) && 'bg-primary/5 border-primary/20'
-                        )}
-                      >
-                        <Checkbox
-                          checked={selectedIds.includes(permission.id)}
-                          onCheckedChange={(checked) =>
-                            togglePermission(permission.id, checked === true)
-                          }
-                          className='mt-0.5'
-                        />
-                        <div className='min-w-0'>
-                          <p className='text-sm font-medium'>{permission.key}</p>
-                          {permission.description ? (
-                            <p className='text-muted-foreground text-xs'>
-                              {permission.description}
-                            </p>
-                          ) : null}
-                        </div>
-                      </label>
-                    ))}
+                    {modulePermissions.map((permission) => {
+                      if (!permission.id) return null;
+                      return (
+                        <label
+                          key={permission.id}
+                          className={cn(
+                            'hover:bg-muted/30 flex cursor-pointer items-start gap-3 rounded-xl border border-transparent px-3 py-2 transition-colors',
+                            selectedIds.includes(permission.id) && 'bg-primary/5 border-primary/20'
+                          )}
+                        >
+                          <Checkbox
+                            checked={selectedIds.includes(permission.id)}
+                            onCheckedChange={(checked) =>
+                              togglePermission(permission.id!, checked === true)
+                            }
+                            className='mt-0.5'
+                          />
+                          <div className='min-w-0'>
+                            <p className='text-sm font-medium'>{permission.key}</p>
+                            {permission.description ? (
+                              <p className='text-muted-foreground text-xs'>
+                                {permission.description}
+                              </p>
+                            ) : null}
+                          </div>
+                        </label>
+                      );
+                    })}
                   </div>
                 </section>
               );

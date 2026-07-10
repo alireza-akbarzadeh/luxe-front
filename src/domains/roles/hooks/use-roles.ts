@@ -1,93 +1,104 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import {
-  createRole,
-  deleteRole,
-  fetchPermissions,
-  fetchRole,
-  fetchRoles,
-  setRolePermissions,
-  updateRole
-} from '@/domains/roles/api/roles-api';
-
-export const ROLES_QUERY_KEY = ['admin', 'roles'] as const;
-export const PERMISSIONS_QUERY_KEY = ['admin', 'permissions'] as const;
-
-export function getRoleQueryKey(id: number) {
-  return [...ROLES_QUERY_KEY, id] as const;
-}
+  getGetAdminPermissionsQueryKey,
+  useGetAdminPermissions
+} from '@/services/-admin-permissions-get';
+import { useDeleteAdminRolesId } from '@/services/-admin-roles-{id}-delete';
+import { getGetAdminRolesIdQueryKey, useGetAdminRolesId } from '@/services/-admin-roles-{id}-get';
+import { usePutAdminRolesIdPermissions } from '@/services/-admin-roles-{id}-permissions-put';
+import { usePutAdminRolesId } from '@/services/-admin-roles-{id}-put';
+import type { DtoUpdateRoleRequest } from '@/services/-admin-roles-{id}-put.schemas';
+import { getGetAdminRolesQueryKey, useGetAdminRoles } from '@/services/-admin-roles-get';
+import { usePostAdminRoles } from '@/services/-admin-roles-post';
+import type { DtoCreateRoleRequest } from '@/services/-admin-roles-post.schemas';
 
 export function useRoles() {
-  return useQuery({
-    queryKey: ROLES_QUERY_KEY,
-    queryFn: async () => {
-      const response = await fetchRoles();
-      return response.data ?? [];
+  return useGetAdminRoles({
+    query: {
+      select: (response) => response.data ?? []
     }
   });
 }
 
 export function useRole(id: number | null) {
-  return useQuery({
-    queryKey: getRoleQueryKey(id ?? 0),
-    queryFn: async () => {
-      if (!id) return null;
-      const response = await fetchRole(id);
-      return response.data ?? null;
-    },
-    enabled: id != null
+  return useGetAdminRolesId(id ?? 0, {
+    query: {
+      enabled: id != null,
+      select: (response) => response.data ?? null
+    }
   });
 }
 
 export function usePermissions() {
-  return useQuery({
-    queryKey: PERMISSIONS_QUERY_KEY,
-    queryFn: async () => {
-      const response = await fetchPermissions();
-      return response.data ?? [];
+  return useGetAdminPermissions({
+    query: {
+      select: (response) => response.data ?? []
     }
   });
 }
 
 export function useRoleMutations() {
   const queryClient = useQueryClient();
+  const createMutation = usePostAdminRoles();
+  const updateMutation = usePutAdminRolesId();
+  const deleteMutation = useDeleteAdminRolesId();
+  const permissionsMutation = usePutAdminRolesIdPermissions();
 
   const invalidate = async (roleId?: number) => {
-    await queryClient.invalidateQueries({ queryKey: ROLES_QUERY_KEY });
+    await queryClient.invalidateQueries({ queryKey: getGetAdminRolesQueryKey() });
+    await queryClient.invalidateQueries({ queryKey: getGetAdminPermissionsQueryKey() });
     if (roleId) {
-      await queryClient.invalidateQueries({ queryKey: getRoleQueryKey(roleId) });
+      await queryClient.invalidateQueries({ queryKey: getGetAdminRolesIdQueryKey(roleId) });
     }
   };
 
-  const createMutation = useMutation({
-    mutationFn: createRole,
-    onSuccess: () => void invalidate()
-  });
+  const createMutationWithInvalidation = {
+    ...createMutation,
+    mutateAsync: async (data: DtoCreateRoleRequest) => {
+      const result = await createMutation.mutateAsync({ data });
+      await invalidate();
+      return result;
+    }
+  };
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: { name: string; description?: string } }) =>
-      updateRole(id, data),
-    onSuccess: (_, variables) => void invalidate(variables.id)
-  });
+  const updateMutationWithInvalidation = {
+    ...updateMutation,
+    mutateAsync: async (variables: { id: number; data: DtoUpdateRoleRequest }) => {
+      const result = await updateMutation.mutateAsync(variables);
+      await invalidate(variables.id);
+      return result;
+    }
+  };
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteRole,
-    onSuccess: () => void invalidate()
-  });
+  const deleteMutationWithInvalidation = {
+    ...deleteMutation,
+    mutateAsync: async (id: number) => {
+      const result = await deleteMutation.mutateAsync({ id });
+      await invalidate();
+      return result;
+    }
+  };
 
-  const permissionsMutation = useMutation({
-    mutationFn: ({ id, permissionIds }: { id: number; permissionIds: number[] }) =>
-      setRolePermissions(id, permissionIds),
-    onSuccess: (_, variables) => void invalidate(variables.id)
-  });
+  const permissionsMutationWithInvalidation = {
+    ...permissionsMutation,
+    mutateAsync: async (variables: { id: number; permissionIds: number[] }) => {
+      const result = await permissionsMutation.mutateAsync({
+        id: variables.id,
+        data: { permission_ids: variables.permissionIds }
+      });
+      await invalidate(variables.id);
+      return result;
+    }
+  };
 
   return {
-    createRole: createMutation.mutateAsync,
-    updateRole: updateMutation.mutateAsync,
-    deleteRole: deleteMutation.mutateAsync,
-    setRolePermissions: permissionsMutation.mutateAsync,
+    createRole: createMutationWithInvalidation.mutateAsync,
+    updateRole: updateMutationWithInvalidation.mutateAsync,
+    deleteRole: deleteMutationWithInvalidation.mutateAsync,
+    setRolePermissions: permissionsMutationWithInvalidation.mutateAsync,
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,

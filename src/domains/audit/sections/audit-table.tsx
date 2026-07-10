@@ -1,11 +1,14 @@
 'use client';
 
 import { IconAlertTriangle, IconChevronDown, IconFilter } from '@tabler/icons-react';
+import { format } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
+import { DateRangePicker } from '@/components/ui/date-range-picker';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,21 +28,27 @@ import type { GetAdminAuditLogsParams } from '@/services/-admin-audit-logs-get.s
 export function AuditLogTable() {
   const [selectedLog, setSelectedLog] = useState<DtoAuditLogResponse | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
-  const getQueryParams = useCallback((state: TableState, filter: string) => {
-    const actionFilter = state.columnFilters.find((f) => f.id === 'action')?.value as
-      | string
-      | undefined;
+  const getQueryParams = useCallback(
+    (state: TableState, filter: string) => {
+      const actionFilter = state.columnFilters.find((f) => f.id === 'action')?.value as
+        | string
+        | undefined;
 
-    const params: GetAdminAuditLogsParams = {
-      limit: state.pagination.pageSize,
-      offset: state.pagination.pageIndex * state.pagination.pageSize,
-      search: filter.trim() || undefined,
-      action: actionFilter
-    };
+      const params: GetAdminAuditLogsParams = {
+        limit: state.pagination.pageSize,
+        offset: state.pagination.pageIndex * state.pagination.pageSize,
+        search: filter.trim() || undefined,
+        action: actionFilter,
+        date_from: dateRange?.from ? format(dateRange.from, 'yyyy-MM-dd') : undefined,
+        date_to: dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined
+      };
 
-    return params;
-  }, []);
+      return params;
+    },
+    [dateRange]
+  );
 
   const getRows = useCallback(
     (data: GetAdminAuditLogs200 | undefined) => data?.data?.logs ?? [],
@@ -110,7 +119,10 @@ export function AuditLogTable() {
           onRefresh={refetch}
           isLoading={isFetching}
           showClear
-          onClearFilter={() => tableState.resetFilters()}
+          onClearFilter={() => {
+            setDateRange(undefined);
+            tableState.resetFilters();
+          }}
           showColumnVisibility
           showSorting
           showExport
@@ -148,6 +160,11 @@ export function AuditLogTable() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <DateRangePicker
+            date={dateRange}
+            onDateChange={setDateRange}
+            className='border-border/60 hover:bg-background h-10 w-auto min-w-52 rounded-xl border-dashed text-[10px] font-bold uppercase'
+          />
         </Table.Toolbar>
 
         <div className='border-border/40 bg-background/50 flex flex-wrap items-center justify-between border-b px-6 py-4'>

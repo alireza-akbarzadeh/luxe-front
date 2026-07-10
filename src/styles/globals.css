@@ -551,6 +551,39 @@ html[dir='rtl'] .brands-marquee-track {
   animation-direction: reverse;
 }
 
+.vendor-brands-marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.vendor-brands-marquee-track {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+  animation: brands-marquee-scroll var(--vendor-brands-duration, 45s) linear infinite;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.vendor-brands-marquee:hover .vendor-brands-marquee-track {
+  animation-play-state: paused;
+}
+
+html[dir='rtl'] .vendor-brands-marquee-track {
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vendor-brands-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 @keyframes category-ring-spin {
   to {
     transform: rotate(360deg);
