@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { useGetOrdersMy } from '@/services/-orders-my-get';
+import { useGetAccountOrders } from '@/services/-account-orders-get';
 
 import { OrderHistoryCard } from '../components/order-history-card';
 import { OrderHistorySkeleton } from '../components/order-history-skeleton';
@@ -29,7 +29,7 @@ export function AccountOrder() {
     isLoading,
     isError,
     refetch
-  } = useGetOrdersMy({ offset, limit: PAGE_SIZE });
+  } = useGetAccountOrders({ offset, limit: PAGE_SIZE });
 
   const ordersData = response?.data?.orders ?? [];
   const totalOrders = response?.data?.total ?? 0;

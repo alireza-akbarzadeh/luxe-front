@@ -23,11 +23,6 @@ const MARKETING_LINKS = [
     title: 'Email campaigns',
     description:
       'Segment audiences and send via the job queue (distinct from merchandising campaigns).'
-  },
-  {
-    href: '/dashboard/marketing/newsletters',
-    title: 'Legacy newsletters route',
-    description: 'Redirects to this hub — use Subscribers and Campaigns above.'
   }
 ] as const;
 

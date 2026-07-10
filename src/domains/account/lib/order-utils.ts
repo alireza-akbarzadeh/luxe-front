@@ -1,4 +1,4 @@
-import type { ModelsOrder, ModelsOrderItem } from '~/src/services/-orders-my-get.schemas';
+import type { DtoOrderItemDetailDTO } from '@/services/-account-orders-get.schemas';
 
 export const ORDER_STATUS_STYLES: Record<string, string> = {
   pending:
@@ -37,17 +37,16 @@ export function formatOrderAmount(value?: number | string): string {
   }).format(safeAmount);
 }
 
-export function countOrderItems(items?: ModelsOrderItem[]): number {
+export function countAccountOrderItems(items?: DtoOrderItemDetailDTO[]): number {
   if (!items?.length) return 0;
   return items.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
 }
 
-export function getOrderLineTotal(item: ModelsOrderItem): number {
-  if (typeof item.total === 'number') return item.total;
+export function getAccountOrderLineTotal(item: DtoOrderItemDetailDTO): number {
   return (item.price ?? 0) * (item.quantity ?? 0);
 }
 
-export function getOrderTrackingHref(order: ModelsOrder): string | null {
-  if (!order.id) return null;
-  return `/order-tracking/${order.id}`;
+export function getOrderTrackingHref(orderId?: number): string | null {
+  if (!orderId) return null;
+  return `/order-tracking/${orderId}`;
 }

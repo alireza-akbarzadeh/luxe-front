@@ -1,13 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { TableState } from '@/components/table/data-table';
 import { Table, useServerTable } from '@/components/table/data-table';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  type CustomerRoleFilter,
+  CustomerRoleFilterSelect
+} from '@/domains/customers-admin/components/customer-role-filter';
 import { CustomerSegmentPicker } from '@/domains/customers-admin/components/customer-segment-picker';
 import type { CustomerSegment } from '@/domains/customers-admin/lib/customer-segments';
 import {
@@ -25,6 +29,7 @@ export function CustomersTable() {
   const router = useRouter();
   const [segment, setSegment] = useState<CustomerSegment>('');
   const [tier, setTier] = useState<'all' | 'plus' | 'free'>('all');
+  const [role, setRole] = useState<CustomerRoleFilter>('all');
 
   const getQueryParams = useCallback(
     (state: TableState, filter: string) => {
@@ -32,20 +37,31 @@ export function CustomersTable() {
         limit: state.pagination.pageSize,
         offset: state.pagination.pageIndex * state.pagination.pageSize,
         search: filter.trim() || undefined,
-        role: 'user',
+        role: role === 'all' ? undefined : role,
         customer_segment: segment || undefined,
         membership_tier: tier === 'all' ? undefined : tier
       };
       return params;
     },
-    [segment, tier]
+    [role, segment, tier]
   );
 
   const getRows = useCallback((data: GetAdminUsers200 | undefined) => data?.data?.users ?? [], []);
   const getTotal = useCallback((data: GetAdminUsers200 | undefined) => data?.data?.total ?? 0, []);
 
+  const columns = useMemo(
+    () =>
+      role === 'user'
+        ? customerColumns.filter(
+            (column) =>
+              column.id !== 'role' && !('accessorKey' in column && column.accessorKey === 'role')
+          )
+        : customerColumns,
+    [role]
+  );
+
   const serverTable = useServerTable({
-    columns: customerColumns,
+    columns,
     initialPageSize: 20,
     getQueryParams,
     getRows,
@@ -75,6 +91,7 @@ export function CustomersTable() {
   return (
     <Table.Root {...serverTable.rootProps}>
       <Flex direction='row' wrap='wrap' align='center' className='gap-2 px-1 pb-3'>
+        <CustomerRoleFilterSelect value={role} onValueChange={setRole} />
         <Tabs value={tier} onValueChange={(value) => setTier(value as 'all' | 'plus' | 'free')}>
           <TabsList className='h-10 rounded-xl'>
             <TabsTrigger value='all' className='text-[10px] font-bold uppercase'>

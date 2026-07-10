@@ -1,28 +1,29 @@
 'use client';
 
-import { IconChevronDown, IconExternalLink, IconPackage, IconTruck } from '@tabler/icons-react';
+import { IconChevronDown, IconExternalLink, IconPackage } from '@tabler/icons-react';
 import { format } from 'date-fns';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { OrderNumber } from '@/components/order-number';
+import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
-import type { ModelsOrder } from '~/src/services/-orders-my-get.schemas';
+import type { DtoOrderDetailDTO } from '@/services/-account-orders-get.schemas';
 
 import {
-  countOrderItems,
+  countAccountOrderItems,
   formatOrderAmount,
-  getOrderLineTotal,
+  getAccountOrderLineTotal,
   getOrderTrackingHref
 } from '../lib/order-utils';
 import { OrderStatusBadge } from './order-status-badge';
 
 interface OrderHistoryCardProps {
-  order: ModelsOrder;
+  order: DtoOrderDetailDTO;
 }
 
 export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
@@ -30,11 +31,10 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
   const t = useTranslations('account.orders');
   const tCommon = useTranslations('account.common');
   const items = order.items ?? [];
-  const itemCount = countOrderItems(items);
-  const trackingHref = getOrderTrackingHref(order);
+  const itemCount = countAccountOrderItems(items);
+  const trackingHref = getOrderTrackingHref(order.id);
   const previewItems = items.slice(0, 4);
   const hiddenCount = Math.max(items.length - previewItems.length, 0);
-  const shipment = order.shipment;
   const placedDate = order.created_at
     ? format(new Date(order.created_at), 'PPP')
     : t('dateUnavailable');
@@ -54,17 +54,6 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                 />
               </div>
               <p className='text-muted-foreground text-sm'>{t('placed', { date: placedDate })}</p>
-              {shipment?.tracking_number ? (
-                <p className='text-muted-foreground flex items-start gap-1.5 text-xs'>
-                  <IconTruck className='mt-0.5 size-3.5 shrink-0' />
-                  <span>
-                    {t('tracking')}{' '}
-                    <span className='font-mono tracking-normal break-all tabular-nums'>
-                      {shipment.tracking_number}
-                    </span>
-                  </span>
-                </p>
-              ) : null}
             </div>
 
             <div className='flex flex-wrap items-center gap-2 sm:justify-end'>
@@ -84,21 +73,15 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
             <div className='mt-5 flex items-center gap-3'>
               <div className='flex -space-x-2'>
                 {previewItems.map((item, index) => {
-                  const imageUrl = item.product?.images?.[0];
-                  const productName = item.product?.name ?? tCommon('product');
+                  const imageUrl = item.image_url ?? IMAGE_FALLBACK;
+                  const productName = item.product_name ?? tCommon('product');
 
                   return (
                     <div
-                      key={item.id ?? `${order.id}-preview-${index}`}
+                      key={item.product_id ?? `${order.id}-preview-${index}`}
                       className='bg-muted border-background relative size-12 overflow-hidden rounded-xl border-2 sm:size-14'
                     >
-                      {imageUrl ? (
-                        <Image src={imageUrl} alt={productName} fill className='object-cover' />
-                      ) : (
-                        <div className='text-muted-foreground flex h-full w-full items-center justify-center'>
-                          <IconPackage className='size-4' />
-                        </div>
-                      )}
+                      <AppImage src={imageUrl} alt={productName} fill sizes='56px' />
                     </div>
                   );
                 })}
@@ -109,8 +92,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                 ) : null}
               </div>
               <p className='text-muted-foreground text-sm'>
-                {itemCount}{' '}
-                {itemCount === 1 ? tCommon('item') : tCommon('items')}
+                {itemCount} {itemCount === 1 ? tCommon('item') : tCommon('items')}
               </p>
             </div>
           ) : null}
@@ -142,22 +124,16 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
           <div className='border-border border-t px-5 pb-5 sm:px-6 sm:pb-6'>
             <div className='divide-border divide-y'>
               {items.map((item, index) => {
-                const productName = item.product?.name ?? tCommon('product');
-                const imageUrl = item.product?.images?.[0];
+                const productName = item.product_name ?? tCommon('product');
+                const imageUrl = item.image_url ?? IMAGE_FALLBACK;
 
                 return (
                   <div
-                    key={item.id ?? `${order.id}-item-${index}`}
+                    key={item.product_id ?? `${order.id}-item-${index}`}
                     className='flex gap-3 py-4 first:pt-4 last:pb-0 sm:gap-4'
                   >
                     <div className='bg-muted relative size-16 shrink-0 overflow-hidden rounded-xl sm:size-20'>
-                      {imageUrl ? (
-                        <Image src={imageUrl} alt={productName} fill className='object-cover' />
-                      ) : (
-                        <div className='text-muted-foreground flex h-full w-full items-center justify-center'>
-                          <IconPackage className='size-5' />
-                        </div>
-                      )}
+                      <AppImage src={imageUrl} alt={productName} fill sizes='80px' />
                     </div>
                     <div className='flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between'>
                       <div className='min-w-0'>
@@ -170,7 +146,7 @@ export function OrderHistoryCard({ order }: OrderHistoryCardProps) {
                         </p>
                       </div>
                       <p className='font-medium tabular-nums'>
-                        {formatOrderAmount(getOrderLineTotal(item))}
+                        {formatOrderAmount(getAccountOrderLineTotal(item))}
                       </p>
                     </div>
                   </div>

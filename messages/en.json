@@ -31,6 +31,12 @@
       "period": "Period",
       "theme": "Theme"
     },
+    "userProfile": {
+      "loading": "Loading account…",
+      "guestUser": "Guest User",
+      "guestEmail": "Not signed in",
+      "openMenu": "Open account menu"
+    },
     "nav": {
       "favorites": "Favorites",
       "recent": "Recent"

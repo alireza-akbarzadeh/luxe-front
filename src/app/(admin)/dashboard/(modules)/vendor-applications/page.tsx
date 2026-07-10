@@ -1,5 +1,5 @@
-import { VendorApplicationsAdminDomain } from '@/domains/vendor-applications-admin/vendor-applications-admin.domain';
+import { redirect } from 'next/navigation';
 
-export default function VendorApplicationsPage() {
-  return <VendorApplicationsAdminDomain />;
+export default function VendorApplicationsRedirectPage() {
+  redirect('/dashboard/vendors?status=pending');
 }

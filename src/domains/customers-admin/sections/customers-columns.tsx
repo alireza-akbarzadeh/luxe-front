@@ -4,6 +4,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { CustomerSegmentBadge } from '@/domains/customers-admin/components/customer-segment-badge';
 import { LoyaltyBadge } from '@/domains/customers-admin/components/loyalty-badge';
+import { UserRoleBadge } from '@/domains/users/components/user-role-badge';
 import { DATE_FORMATS, formatDate } from '@/lib/date';
 import { formatCurrency } from '@/lib/format';
 import type { DtoAdminUserResponse } from '@/services/-admin-users-get.schemas';
@@ -23,6 +24,12 @@ export const customerColumns: ColumnDef<DtoAdminUserResponse>[] = [
         <span className='text-muted-foreground text-xs'>{row.original.email || '—'}</span>
       </div>
     )
+  },
+  {
+    accessorKey: 'role',
+    id: 'role',
+    header: 'Role',
+    cell: ({ row }) => <UserRoleBadge slug={row.original.role} />
   },
   {
     id: 'segment',

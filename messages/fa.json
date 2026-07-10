@@ -31,6 +31,12 @@
       "period": "بازه",
       "theme": "تم"
     },
+    "userProfile": {
+      "loading": "در حال بارگذاری حساب…",
+      "guestUser": "کاربر مهمان",
+      "guestEmail": "وارد نشده‌اید",
+      "openMenu": "باز کردن منوی حساب"
+    },
     "nav": {
       "favorites": "علاقه‌مندی‌ها",
       "recent": "اخیر"
