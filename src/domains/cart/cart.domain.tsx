@@ -12,7 +12,7 @@ import { Typography } from '@/components/ui/typography';
 import { PersonalizationJourneyPromo } from '@/domains/personalization/components/personalization-journey-promo';
 import { CartSmartBundles } from '@/domains/smart-bundles/components/cart-smart-bundles';
 import { useCartController } from '@/hooks/useCartController';
-import { useUser } from '@/hooks/useUser';
+import { useAuth } from '~/src/components/providers/auth-provider';
 
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartEmptyState } from './components/cart-empty-state';
@@ -33,7 +33,7 @@ const cartMainClass =
 
 export default function CartPage() {
   const t = useTranslations('cart.page');
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated } = useAuth();
   const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
     useCartController();
   const { total } = useCartOrderEstimate(items, subtotal);

@@ -2,8 +2,8 @@ import type { ComponentProps } from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 import {
+  MOBILE_COMMERCE_OVERLAY_BOTTOM_CLASS,
   MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS,
-  MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS,
   MOBILE_TAB_BAR_BOTTOM_CLASS
 } from '@/lib/mobile-commerce-drawer';
 import { cn } from '@/lib/utils';
@@ -81,14 +81,21 @@ function DrawerContent({
 
   return (
     <DrawerPortal>
-      {showOverlay ? <DrawerOverlay className='fixed inset-0 z-[70] bg-black/50' /> : null}
+      {showOverlay ? (
+        <DrawerOverlay
+          className={cn(
+            'fixed inset-x-0 top-0 z-[70] bg-black/50',
+            aboveCommerceActionBar ? MOBILE_COMMERCE_OVERLAY_BOTTOM_CLASS : 'bottom-0'
+          )}
+        />
+      ) : null}
 
       <DrawerPrimitive.Content
         aria-describedby={undefined}
         className={cn(
           'bg-background fixed inset-x-0 z-[71] flex h-auto flex-col border-t shadow-2xl',
           bottomClass,
-          aboveCommerceActionBar && MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS,
+          aboveCommerceActionBar && 'h-auto',
           'outline-none',
           radiusMap[radius],
           variant === 'ios' && 'px-4 pt-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.25)]',

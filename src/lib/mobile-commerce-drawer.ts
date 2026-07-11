@@ -9,6 +9,14 @@ export const MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS =
 export const MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS =
   'max-h-[calc(100dvh-13rem-env(safe-area-inset-bottom))]';
 
+/** Dim overlay stops above the sticky commerce action bar + tab bar. */
+export const MOBILE_COMMERCE_OVERLAY_BOTTOM_CLASS =
+  'bottom-[calc(13rem+env(safe-area-inset-bottom))]';
+
+/** Scrollable summary body — drawer chrome (handle, title, padding) subtracted. */
+export const MOBILE_COMMERCE_SUMMARY_SCROLL_MAX_HEIGHT_CLASS =
+  'max-h-[calc(100dvh-13rem-env(safe-area-inset-bottom)-6.5rem)]';
+
 /** Collapsed commerce bar — total row + primary CTA. */
 export const COMMERCE_SNAP_COLLAPSED = '168px';
 

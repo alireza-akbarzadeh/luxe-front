@@ -10,7 +10,10 @@ import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
-import { MOBILE_TAB_BAR_BOTTOM_CLASS } from '@/lib/mobile-commerce-drawer';
+import {
+  MOBILE_COMMERCE_SUMMARY_SCROLL_MAX_HEIGHT_CLASS,
+  MOBILE_TAB_BAR_BOTTOM_CLASS
+} from '@/lib/mobile-commerce-drawer';
 import { cn } from '@/lib/utils';
 
 import { CartMobileSummaryBody } from './cart-mobile-summary-body';
@@ -44,11 +47,16 @@ export function CartMobileCheckoutBar({
           showHandle
           className='lg:hidden'
         >
-          <Flex direction='column' className='flex min-h-0 flex-1 flex-col overflow-hidden'>
+          <Flex direction='column' className='min-h-0 overflow-hidden'>
             <DrawerTitle className='mb-3 shrink-0 text-base font-semibold'>
               {tMobile('viewSummary')}
             </DrawerTitle>
-            <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2'>
+            <div
+              className={cn(
+                'min-h-0 overflow-y-auto overscroll-contain pb-2',
+                MOBILE_COMMERCE_SUMMARY_SCROLL_MAX_HEIGHT_CLASS
+              )}
+            >
               <CartMobileSummaryBody showItems showTotals />
             </div>
           </Flex>
@@ -56,7 +64,11 @@ export function CartMobileCheckoutBar({
       </Drawer>
 
       <div
-        className={cn('fixed inset-x-0 z-[60] lg:hidden', MOBILE_TAB_BAR_BOTTOM_CLASS)}
+        className={cn(
+          'fixed inset-x-0 lg:hidden',
+          MOBILE_TAB_BAR_BOTTOM_CLASS,
+          summaryOpen ? 'z-[72]' : 'z-[60]'
+        )}
         role='region'
         aria-label={tMobile('viewSummary')}
       >
