@@ -13,6 +13,7 @@ import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
 import { CheckoutFormNav } from './components/checkout-form-nav';
 import { CheckoutLoading } from './components/checkout-loading';
 import { CheckoutMobileActionBar } from './components/checkout-mobile-action-bar';
+import { CheckoutMobileInlineSummary } from './components/checkout-mobile-inline-summary';
 import { CheckoutPaymentCancelledHandler } from './components/checkout-payment-cancelled-handler';
 import { CheckoutRedirectingScreen } from './components/checkout-redirecting';
 import { CheckoutStepperNav } from './components/checkout-stepper-nav';
@@ -101,6 +102,8 @@ export default function CheckoutDomain() {
                     <StepperContent value='review' forceMount>
                       {currentStepId === 'review' ? <CheckoutReview /> : null}
                     </StepperContent>
+
+                    <CheckoutMobileInlineSummary />
 
                     <CheckoutFormNav
                       currentStepId={currentStepId}

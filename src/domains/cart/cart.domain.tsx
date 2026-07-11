@@ -20,6 +20,7 @@ import { CartGuestState } from './components/cart-guest-state';
 import { CartItem } from './components/cart-item';
 import { CartItemRow } from './components/cart-item-row';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
+import { CartMobileInlineSummary } from './components/cart-mobile-inline-summary';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
 import { CartSmartInsights } from './components/cart-smart-insights';
 import { CartVariantAlert } from './components/cart-variant-alert';
@@ -125,6 +126,8 @@ export default function CartPage() {
                 />
               ))}
             </ul>
+
+            <CartMobileInlineSummary />
 
             <div className='hidden space-y-4 lg:block'>
               <AnimatePresence mode='popLayout'>
