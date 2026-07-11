@@ -58,7 +58,6 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
             {indexLabel}
           </span>
         </div>
-
         <div
           className={cn(
             'relative flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14',

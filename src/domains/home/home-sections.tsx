@@ -4,11 +4,7 @@ import { BrandsSection } from '@/domains/home/components/brands-section';
 import { HomeExperienceScrollSection } from '@/domains/home/components/home-experience-scroll-section';
 import { MostWhitelists } from '@/domains/home/components/most-whitelists';
 import { ProductStorySection } from '@/domains/home/components/product-story-section';
-import {
-  CardGridSkeleton,
-  CarouselSkeleton,
-  MarqueeSkeleton
-} from '@/domains/home/components/ui/home-skeleton';
+import { CarouselSkeleton, MarqueeSkeleton } from '@/domains/home/components/ui/home-skeleton';
 import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
 import { LifestyleCollectionsSection } from '@/domains/lifestyle-collections/components/lifestyle-collections-section';
 import { PersonalizationDiscoverySection } from '@/domains/personalization/components/personalization-discovery-section';
@@ -49,25 +45,43 @@ export function HomeSections() {
       </SectionBoundary>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
+        <SectionBoundary
+          fallback={
+            <CarouselSkeleton
+              count={2}
+              columns={{ mobile: 1, tablet: 1, desktop: 2 }}
+              aspect='aspect-[1.35]'
+            />
+          }
+        >
           <CollectionBanner />
         </SectionBoundary>
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CarouselSkeleton count={3} />}>
+        <SectionBoundary
+          fallback={<CarouselSkeleton count={3} columns={{ mobile: 1, tablet: 2, desktop: 3 }} />}
+        >
           <SeasonalPicksSection />
         </SectionBoundary>
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
           <CategoriesSection />
         </SectionBoundary>
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CardGridSkeleton count={8} />}>
+        <SectionBoundary
+          fallback={
+            <CarouselSkeleton
+              count={4}
+              columns={{ mobile: 1, tablet: 2, desktop: 4 }}
+              aspect='aspect-4/5'
+            />
+          }
+        >
           <FeaturedProducts />
         </SectionBoundary>
       </MobileDeferredSection>
@@ -91,7 +105,15 @@ export function HomeSections() {
       </MobileDeferredSection>
 
       <MobileDeferredSection>
-        <SectionBoundary fallback={<CardGridSkeleton count={12} />}>
+        <SectionBoundary
+          fallback={
+            <CarouselSkeleton
+              count={4}
+              columns={{ mobile: 1, tablet: 2, desktop: 4 }}
+              aspect='aspect-4/5'
+            />
+          }
+        >
           <MostWhitelists />
         </SectionBoundary>
       </MobileDeferredSection>

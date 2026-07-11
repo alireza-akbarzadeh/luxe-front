@@ -1,6 +1,45 @@
-// components/section-skeletons.tsx
+import type { ReactNode } from 'react';
+
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+
+type SectionSkeletonShellProps = {
+  children: ReactNode;
+  className?: string;
+  /** Vertical padding preset — carousel sections use SectionCarousel spacing. */
+  padding?: 'carousel' | 'marquee';
+};
+
+/** Matches storefront section width (`app-container`) and vertical rhythm. */
+function SectionSkeletonShell({
+  children,
+  className,
+  padding = 'carousel'
+}: SectionSkeletonShellProps) {
+  return (
+    <section
+      className={cn(
+        padding === 'carousel' ? 'py-16 sm:py-20 lg:py-28' : 'py-8 sm:py-10 lg:py-12',
+        className
+      )}
+    >
+      <div className='app-container'>{children}</div>
+    </section>
+  );
+}
+
+function SectionHeaderSkeleton() {
+  return (
+    <div className='mb-8 flex items-end justify-between gap-4 md:mb-10'>
+      <div className='min-w-0 space-y-2'>
+        <Skeleton className='h-4 w-24' />
+        <Skeleton className='h-9 w-64 max-w-full sm:h-10' />
+        <Skeleton className='h-4 w-96 max-w-full' />
+      </div>
+      <Skeleton className='hidden h-4 w-20 shrink-0 lg:block' />
+    </div>
+  );
+}
 
 type CarouselSkeletonProps = {
   count?: number;
@@ -10,34 +49,36 @@ type CarouselSkeletonProps = {
 };
 
 export function CarouselSkeleton({
-  count = 8,
+  count = 4,
   aspect = 'aspect-[0.78]',
-  columns = { mobile: 2, tablet: 3, desktop: 4 },
+  columns = { mobile: 1, tablet: 2, desktop: 4 },
   className
 }: CarouselSkeletonProps) {
+  const { mobile = 1, tablet = 2, desktop = 4 } = columns;
+
   return (
-    <div className={cn('border-border/40 border-b py-10 sm:py-12 lg:py-16', className)}>
-      <div className='mb-6 space-y-2 px-4 sm:px-6 lg:px-8'>
-        <Skeleton className='h-4 w-24' />
-        <Skeleton className='h-8 w-64' />
-        <Skeleton className='h-4 w-96 max-w-full' />
-      </div>
+    <SectionSkeletonShell className={className}>
+      <SectionHeaderSkeleton />
       <div
         className={cn(
-          'grid gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8',
-          columns.mobile === 2 && 'grid-cols-2',
-          columns.mobile === 3 && 'grid-cols-3',
-          columns.tablet === 3 && 'sm:grid-cols-3',
-          columns.tablet === 4 && 'sm:grid-cols-4',
-          columns.desktop === 4 && 'lg:grid-cols-4',
-          columns.desktop === 6 && 'lg:grid-cols-6'
+          'grid gap-3 sm:gap-4',
+          mobile === 1 && 'grid-cols-1',
+          mobile === 2 && 'grid-cols-2',
+          tablet === 1 && 'sm:grid-cols-1',
+          tablet === 2 && 'sm:grid-cols-2',
+          tablet === 3 && 'sm:grid-cols-3',
+          tablet === 4 && 'sm:grid-cols-4',
+          desktop === 2 && 'lg:grid-cols-2',
+          desktop === 3 && 'lg:grid-cols-3',
+          desktop === 4 && 'lg:grid-cols-4',
+          desktop === 6 && 'lg:grid-cols-6'
         )}
       >
         {Array.from({ length: count }).map((_, i) => (
-          <Skeleton key={i} className={cn('w-full rounded-3xl', aspect)} />
+          <Skeleton key={i} className={cn('w-full rounded-2xl', aspect)} />
         ))}
       </div>
-    </div>
+    </SectionSkeletonShell>
   );
 }
 
@@ -47,17 +88,26 @@ type CardGridSkeletonProps = {
   className?: string;
 };
 
+/** Product-style grid inside the same section shell as carousel blocks. */
 export function CardGridSkeleton({
   count = 8,
-  aspect = 'aspect-square',
+  aspect = 'aspect-4/5',
   className
 }: CardGridSkeletonProps) {
   return (
-    <div className={cn('grid grid-cols-2 gap-3 py-8 sm:grid-cols-4 sm:gap-4', className)}>
-      {Array.from({ length: count }).map((_, i) => (
-        <Skeleton key={i} className={cn('w-full rounded-2xl', aspect)} />
-      ))}
-    </div>
+    <SectionSkeletonShell className={className}>
+      <SectionHeaderSkeleton />
+      <div className='grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4'>
+        {Array.from({ length: count }).map((_, i) => (
+          <div key={i} className='space-y-3'>
+            <Skeleton className={cn('w-full rounded-xl', aspect)} />
+            <Skeleton className='h-3 w-1/3' />
+            <Skeleton className='h-4 w-4/5' />
+            <Skeleton className='h-3 w-1/2' />
+          </div>
+        ))}
+      </div>
+    </SectionSkeletonShell>
   );
 }
 
@@ -73,10 +123,14 @@ export function HeroEditorialPanelSkeleton() {
 
 export function MarqueeSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn('flex items-center gap-8 overflow-hidden py-8', className)}>
-      {Array.from({ length: 6 }).map((_, i) => (
-        <Skeleton key={i} className='h-12 w-32 shrink-0 rounded-lg' />
-      ))}
-    </div>
+    <SectionSkeletonShell padding='marquee' className={className}>
+      <div className='luxury-glass overflow-hidden rounded-[1.75rem] border border-white/8 py-5 sm:rounded-[2rem] sm:py-6'>
+        <div className='flex items-center gap-8 overflow-hidden px-4'>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className='h-12 w-32 shrink-0 rounded-lg' />
+          ))}
+        </div>
+      </div>
+    </SectionSkeletonShell>
   );
 }

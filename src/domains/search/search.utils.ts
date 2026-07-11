@@ -6,7 +6,8 @@ import type { DtoSuggestionItem } from '~/src/services/-search-suggestions-get.s
 import type { SearchParams } from './hooks/useSearchParams';
 
 export const SEARCH_DEFAULT_PRICE_MIN = 0;
-export const SEARCH_DEFAULT_PRICE_MAX = 1000;
+/** Slider ceiling only — default range does not send max_price to the API. */
+export const SEARCH_DEFAULT_PRICE_MAX = 10000;
 export const SEARCH_PRICE_STEP = 1;
 
 /** Client-side filter draft — applied to URL only when the mobile sheet is submitted. */
