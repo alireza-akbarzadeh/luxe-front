@@ -1,7 +1,11 @@
 import type { ComponentProps } from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
-import { MOBILE_TAB_BAR_BOTTOM_CLASS } from '@/lib/mobile-commerce-drawer';
+import {
+  MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS,
+  MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS,
+  MOBILE_TAB_BAR_BOTTOM_CLASS
+} from '@/lib/mobile-commerce-drawer';
 import { cn } from '@/lib/utils';
 
 function Drawer({
@@ -45,6 +49,10 @@ interface DrawerContentProps extends React.ComponentProps<typeof DrawerPrimitive
   radius?: Radius;
   /** Anchor above the mobile bottom tab bar instead of screen bottom. */
   aboveMobileTabBar?: boolean;
+  /** Anchor above sticky cart/checkout action bar (tab bar + CTA strip). */
+  aboveCommerceActionBar?: boolean;
+  /** Dim the page behind the drawer (default true). */
+  showOverlay?: boolean;
 }
 
 const radiusMap: Record<Radius, string> = {
@@ -61,17 +69,26 @@ function DrawerContent({
   showHandle = false,
   radius = 'xl',
   aboveMobileTabBar = false,
+  aboveCommerceActionBar = false,
+  showOverlay = true,
   ...props
 }: DrawerContentProps) {
+  const bottomClass = aboveCommerceActionBar
+    ? MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS
+    : aboveMobileTabBar
+      ? MOBILE_TAB_BAR_BOTTOM_CLASS
+      : 'bottom-0';
+
   return (
     <DrawerPortal>
-      <DrawerOverlay className='fixed inset-0 z-[100] bg-black/50' />
+      {showOverlay ? <DrawerOverlay className='fixed inset-0 z-[70] bg-black/50' /> : null}
 
       <DrawerPrimitive.Content
         aria-describedby={undefined}
         className={cn(
-          'bg-background fixed inset-x-0 z-[100] flex h-auto flex-col border-t shadow-2xl',
-          aboveMobileTabBar ? MOBILE_TAB_BAR_BOTTOM_CLASS : 'bottom-0',
+          'bg-background fixed inset-x-0 z-[71] flex h-auto flex-col border-t shadow-2xl',
+          bottomClass,
+          aboveCommerceActionBar && MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS,
           'outline-none',
           radiusMap[radius],
           variant === 'ios' && 'px-4 pt-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.25)]',

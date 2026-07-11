@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible';
+import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
@@ -22,7 +22,7 @@ interface CartMobileCheckoutBarProps {
   onCheckout: () => void;
 }
 
-/** Native fixed summary + checkout CTA above the mobile bottom tab bar. */
+/** Native fixed checkout CTA with summary drawer layered above the action bar. */
 export function CartMobileCheckoutBar({
   total,
   itemCount,
@@ -35,31 +35,44 @@ export function CartMobileCheckoutBar({
   const disabled = itemCount === 0 || hasIncompleteVariants;
 
   return (
-    <div
-      className={cn('fixed inset-x-0 z-[60] lg:hidden', MOBILE_TAB_BAR_BOTTOM_CLASS)}
-      role='region'
-      aria-label={tMobile('viewSummary')}
-    >
-      <Flex
-        direction='column'
-        className={cn(
-          'border-border/80 bg-background/95 border-t shadow-[0_-4px_24px_rgba(0,0,0,0.08)] backdrop-blur-xl',
-          'dark:shadow-[0_-4px_24px_rgba(0,0,0,0.35)]'
-        )}
-      >
-        <Collapsible open={summaryOpen} onOpenChange={setSummaryOpen}>
-          <CollapsibleContent className='border-border/60 max-h-[min(50dvh,20rem)] overflow-y-auto overscroll-contain border-b px-4 pt-3 pb-2'>
-            <Typography.H3 className='mb-3 text-base font-semibold'>
+    <>
+      <Drawer open={summaryOpen} onOpenChange={setSummaryOpen}>
+        <DrawerContent
+          aboveCommerceActionBar
+          variant='ios'
+          radius='full'
+          showHandle
+          className='lg:hidden'
+        >
+          <Flex direction='column' className='flex min-h-0 flex-1 flex-col overflow-hidden'>
+            <DrawerTitle className='mb-3 shrink-0 text-base font-semibold'>
               {tMobile('viewSummary')}
-            </Typography.H3>
-            <CartMobileSummaryBody showItems showTotals />
-          </CollapsibleContent>
+            </DrawerTitle>
+            <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2'>
+              <CartMobileSummaryBody showItems showTotals />
+            </div>
+          </Flex>
+        </DrawerContent>
+      </Drawer>
 
+      <div
+        className={cn('fixed inset-x-0 z-[60] lg:hidden', MOBILE_TAB_BAR_BOTTOM_CLASS)}
+        role='region'
+        aria-label={tMobile('viewSummary')}
+      >
+        <Flex
+          direction='column'
+          className={cn(
+            'border-border/80 bg-background/95 border-t shadow-[0_-4px_24px_rgba(0,0,0,0.08)] backdrop-blur-xl',
+            'dark:shadow-[0_-4px_24px_rgba(0,0,0,0.35)]'
+          )}
+        >
           <button
             type='button'
-            onClick={() => setSummaryOpen((open) => !open)}
+            onClick={() => setSummaryOpen(true)}
             className='hover:bg-muted/40 flex w-full items-center gap-3 px-4 py-3 transition-colors active:scale-[0.995]'
             aria-expanded={summaryOpen}
+            aria-haspopup='dialog'
             aria-label={tMobile('showSummary')}
           >
             <Flex direction='column' align='start' gap={0.5} className='min-w-0 flex-1 text-start'>
@@ -72,40 +85,34 @@ export function CartMobileCheckoutBar({
               <Typography.Text className={cn(cartMoneyClassName, 'text-lg font-bold tabular-nums')}>
                 {formatCartMoney(total)}
               </Typography.Text>
-              <IconChevronUp
-                className={cn(
-                  'text-muted-foreground size-4 shrink-0 transition-transform duration-200',
-                  summaryOpen && 'rotate-180'
-                )}
-                aria-hidden
-              />
+              <IconChevronUp className='text-muted-foreground size-4 shrink-0' aria-hidden />
             </Flex>
           </button>
-        </Collapsible>
 
-        <Flex direction='column' gap={2} className='px-4 pt-3 pb-3'>
-          {hasIncompleteVariants ? (
-            <Typography.Muted className='text-warning text-xs leading-relaxed'>
-              {t('variantWarning')}
-            </Typography.Muted>
-          ) : null}
-          <Button
-            type='button'
-            size='lg'
-            className={cn(
-              'bg-primary text-primary-foreground h-14 w-full rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]',
-              disabled && 'opacity-70'
-            )}
-            disabled={disabled}
-            onClick={onCheckout}
-          >
-            {t('proceedToCheckout')}
-          </Button>
-          <Button asChild variant='ghost' size='sm' className='text-muted-foreground h-9 text-xs'>
-            <Link href='/shop'>{t('continueShopping')}</Link>
-          </Button>
+          <Flex direction='column' gap={2} className='px-4 pt-3 pb-3'>
+            {hasIncompleteVariants ? (
+              <Typography.Muted className='text-warning text-xs leading-relaxed'>
+                {t('variantWarning')}
+              </Typography.Muted>
+            ) : null}
+            <Button
+              type='button'
+              size='lg'
+              className={cn(
+                'bg-primary text-primary-foreground h-14 w-full rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]',
+                disabled && 'opacity-70'
+              )}
+              disabled={disabled}
+              onClick={onCheckout}
+            >
+              {t('proceedToCheckout')}
+            </Button>
+            <Button asChild variant='ghost' size='sm' className='text-muted-foreground h-9 text-xs'>
+              <Link href='/shop'>{t('continueShopping')}</Link>
+            </Button>
+          </Flex>
         </Flex>
-      </Flex>
-    </div>
+      </div>
+    </>
   );
 }

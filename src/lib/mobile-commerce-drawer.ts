@@ -1,5 +1,13 @@
-/** Mobile storefront bottom tab bar — cart/checkout snap drawers sit above this. */
+/** Mobile storefront bottom tab bar — cart/checkout action bars sit above this. */
 export const MOBILE_TAB_BAR_BOTTOM_CLASS = 'bottom-[calc(4rem+env(safe-area-inset-bottom))]';
+
+/** Order-summary drawer — anchors above the sticky commerce action bar + tab bar. */
+export const MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS =
+  'bottom-[calc(13rem+env(safe-area-inset-bottom))]';
+
+/** Max height for summary drawer content area (viewport minus tab bar + action bar). */
+export const MOBILE_COMMERCE_SUMMARY_DRAWER_MAX_HEIGHT_CLASS =
+  'max-h-[calc(100dvh-13rem-env(safe-area-inset-bottom))]';
 
 /** Collapsed commerce bar — total row + primary CTA. */
 export const COMMERCE_SNAP_COLLAPSED = '168px';
