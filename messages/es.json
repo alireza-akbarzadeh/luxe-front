@@ -560,6 +560,21 @@
       "toastLinkCopied": "Enlace copiado al portapapeles",
       "toastShareFailed": "No se pudo compartir el producto"
     },
+    "mobileToolbar": {
+      "toggleActions": "Acciones del producto",
+      "closeActions": "Cerrar acciones",
+      "share": "Compartir",
+      "fullscreen": "Tamaño completo",
+      "viewer": "Vista interactiva"
+    },
+    "mobileSheet": {
+      "dragHint": "Desliza hacia arriba para detalles",
+      "expandDetails": "Mostrar detalles del producto",
+      "collapseDetails": "Ocultar detalles",
+      "inCart": "En tu carrito",
+      "quantity": "Cant. {count}",
+      "trustTitle": "Por qué comprar en Luxe"
+    },
     "gallery": {
       "photos": "Fotos",
       "video": "Vídeo",

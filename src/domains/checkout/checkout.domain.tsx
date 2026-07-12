@@ -7,6 +7,7 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Stepper, StepperContent, StepperPanel } from '@/components/ui/stepper';
 import { useCartController } from '@/hooks/useCartController';
+import { MOBILE_PAGE_COMMERCE_PADDING_CLASS } from '@/lib/mobile-commerce-drawer';
 import { cn } from '@/lib/utils';
 
 import { CheckoutBreadcrumb } from './components/checkout-breadcrumb';
@@ -72,8 +73,9 @@ export default function CheckoutDomain() {
     <Flex
       direction='column'
       className={cn(
-        'app-container max-w-full min-w-0 overflow-x-clip pt-2 pb-[calc(13rem+env(safe-area-inset-bottom))] sm:pt-6 lg:pb-16',
-        isLast && 'pb-[calc(14rem+env(safe-area-inset-bottom))] lg:pb-16'
+        'app-container max-w-full min-w-0 overflow-x-clip pt-2 sm:pt-6',
+        MOBILE_PAGE_COMMERCE_PADDING_CLASS,
+        isLast && 'max-lg:pb-[calc(14rem+env(safe-area-inset-bottom))]'
       )}
     >
       <CheckoutPaymentCancelledHandler />

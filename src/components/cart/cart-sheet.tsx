@@ -68,7 +68,9 @@ export function CartSheet() {
           <div className='flex items-start justify-between gap-3'>
             <div>
               <SheetTitle className='font-display text-xl'>
-                {itemCount > 0 ? tCart('titleWithCount', { count: itemCount }) : tCart('sheetTitle')}
+                {itemCount > 0
+                  ? tCart('titleWithCount', { count: itemCount })
+                  : tCart('sheetTitle')}
               </SheetTitle>
               {isAuthenticated && itemCount > 0 ? (
                 <p className='text-muted-foreground mt-1 text-sm'>
@@ -80,7 +82,7 @@ export function CartSheet() {
               <Button
                 variant='ghost'
                 size='icon-sm'
-                className='rounded-full'
+                className='-mt-3 mr-3 rounded-full'
                 aria-label='Refresh cart'
                 onClick={() => void refetch()}
               >
@@ -135,9 +137,7 @@ export function CartSheet() {
             </div>
             <div className='space-y-1'>
               <p className='font-display text-lg font-semibold'>{tCart('emptyTitle')}</p>
-              <p className='text-muted-foreground text-sm'>
-                {tCart('emptyDescriptionAlt')}
-              </p>
+              <p className='text-muted-foreground text-sm'>{tCart('emptyDescriptionAlt')}</p>
             </div>
             <Button asChild className='mt-1 rounded-full' onClick={closeCart}>
               <Link href='/shop'>

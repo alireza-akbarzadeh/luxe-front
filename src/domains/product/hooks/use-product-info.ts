@@ -24,7 +24,7 @@ export function useProductInfo(product: DtoProductWithLike) {
   const { formatInteger } = useLocaleFormatters();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
-  const { increment, decrement, itemCount, items, isLoading } = useCartController();
+  const { increment, decrement, itemCount, items, isLoading, subtotal } = useCartController();
   const openCart = useCartStore((state) => state.openCart);
   const { addItem, isInCompare, canAddMore } = useCompareController();
 
@@ -127,6 +127,7 @@ export function useProductInfo(product: DtoProductWithLike) {
     inCompare,
     itemCount,
     cartBadgeLabel,
+    subtotal,
     isLoading,
     handleAddToCart,
     handleDecrement,

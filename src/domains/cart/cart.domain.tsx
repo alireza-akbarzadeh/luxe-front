@@ -12,6 +12,7 @@ import { Typography } from '@/components/ui/typography';
 import { PersonalizationJourneyPromo } from '@/domains/personalization/components/personalization-journey-promo';
 import { CartSmartBundles } from '@/domains/smart-bundles/components/cart-smart-bundles';
 import { useCartController } from '@/hooks/useCartController';
+import { MOBILE_PAGE_COMMERCE_PADDING_CLASS } from '@/lib/mobile-commerce-drawer';
 import { useAuth } from '~/src/components/providers/auth-provider';
 
 import CartBreadcrumb from './components/cart-breadcrumb';
@@ -28,8 +29,7 @@ import { ProductSuggestion } from './components/product-suggestion';
 import { useCartCheckoutAction } from './hooks/use-cart-checkout-action';
 import { useCartOrderEstimate } from './hooks/use-cart-order-estimate';
 
-const cartMainClass =
-  'app-container pt-2 pb-[calc(11.5rem+env(safe-area-inset-bottom))] sm:pt-6 sm:pb-[calc(12rem+env(safe-area-inset-bottom))] lg:pt-8 lg:pb-16';
+const cartMainClass = `app-container pt-2 ${MOBILE_PAGE_COMMERCE_PADDING_CLASS} sm:pt-6 lg:pt-8`;
 
 export default function CartPage() {
   const t = useTranslations('cart.page');

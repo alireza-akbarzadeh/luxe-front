@@ -2,7 +2,7 @@
 
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
-import { useProductInfo } from '../hooks/use-product-info';
+import { useProductDetailContext } from '../context/product-detail-context';
 import { ProductConfiguratorTrigger } from './configurator/product-configurator-trigger';
 import { ProductFeatureHighlights } from './product-feature-highlights';
 import { ProductInfoActionBar } from './product-info/product-info-action-bar';
@@ -22,8 +22,10 @@ interface ProductInfoProps {
   is_liked: boolean;
 }
 
-export function ProductInfo({ product, is_liked }: ProductInfoProps) {
+export function ProductInfo({ product: _product, is_liked: _isLiked }: ProductInfoProps) {
   const {
+    product,
+    isLiked,
     variantSelections,
     setVariantSelections,
     configuratorPreset,
@@ -35,15 +37,16 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
     isLowStock,
     discountAmount,
     inCompare,
-    itemCount,
-    cartBadgeLabel,
     isLoading,
     handleAddToCart,
     handleDecrement,
     handleCompare,
     handleShare,
-    openCart
-  } = useProductInfo(product);
+    openCart,
+    cartBadgeLabel,
+    itemCount,
+    subtotal
+  } = useProductDetailContext();
 
   return (
     <div className='flex flex-col gap-7'>
@@ -83,18 +86,20 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
 
       <ProductFeatureHighlights attributes={product.attributes} />
 
-      <ProductQuantity
-        value={productQuantity}
-        onIncrement={handleAddToCart}
-        onDecrement={handleDecrement}
-        stock={stock}
-      />
+      <div className='hidden lg:block'>
+        <ProductQuantity
+          value={productQuantity}
+          onIncrement={handleAddToCart}
+          onDecrement={handleDecrement}
+          stock={stock}
+        />
+      </div>
 
       <div className='space-y-3 pt-1'>
         <div className='hidden lg:block'>
           <ProductInfoActionBar
             product={product}
-            isLiked={is_liked}
+            isLiked={isLiked}
             isLoading={isLoading}
             isOutOfStock={isOutOfStock}
             inCompare={inCompare}
@@ -116,16 +121,21 @@ export function ProductInfo({ product, is_liked }: ProductInfoProps) {
         ) : null}
       </div>
 
-      <ProductInfoTrustRow />
+      <div className='hidden lg:block'>
+        <ProductInfoTrustRow />
+      </div>
 
       <ProductMobileActionBar
+        product={product}
         price={Number(product.price ?? 0)}
+        subtotal={subtotal}
+        productQuantity={productQuantity}
+        stock={stock}
         isLoading={isLoading}
         isOutOfStock={isOutOfStock}
-        itemCount={itemCount}
-        cartBadgeLabel={cartBadgeLabel}
+        isLowStock={isLowStock}
         onAddToCart={handleAddToCart}
-        onOpenCart={openCart}
+        onDecrement={handleDecrement}
       />
     </div>
   );

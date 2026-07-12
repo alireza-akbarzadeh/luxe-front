@@ -9,6 +9,8 @@ import { Lens } from '@/components/ui/lens';
 import { IMAGE_FALLBACK, resolveImageSrc } from '@/lib/images';
 import { cn } from '@/lib/utils';
 
+import { PDP_MOBILE_GALLERY_IMAGE_CLASS } from '../lib/product-detail-mobile';
+
 const ZOOM_FACTOR = 2.2;
 const LENS_SIZE = 170;
 
@@ -46,7 +48,8 @@ export function ProductImageMagnifier({
   const image = (
     <div
       className={cn(
-        'relative aspect-[3/4] max-h-[min(85svh,820px)] w-full overflow-hidden rounded-none bg-neutral-100 lg:aspect-[4/5] lg:max-h-[min(620px,68vh)] lg:rounded-2xl dark:bg-neutral-900/40',
+        'relative w-full overflow-hidden rounded-none bg-neutral-100 lg:rounded-2xl dark:bg-neutral-900/40',
+        PDP_MOBILE_GALLERY_IMAGE_CLASS,
         !canHoverMagnify && onOpenLightbox && 'cursor-zoom-in',
         canHoverMagnify && 'cursor-crosshair'
       )}

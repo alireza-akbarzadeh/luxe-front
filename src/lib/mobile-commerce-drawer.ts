@@ -1,6 +1,32 @@
 /** Mobile storefront bottom tab bar — cart/checkout action bars sit above this. */
 export const MOBILE_TAB_BAR_BOTTOM_CLASS = 'bottom-[calc(4rem+env(safe-area-inset-bottom))]';
 
+/** Tab bar height inset — footer/main when only the bottom nav is fixed. */
+export const MOBILE_TAB_BAR_BOTTOM_INSET = 'calc(4rem + env(safe-area-inset-bottom))';
+
+/** Tab bar + collapsed sticky commerce action bar — page/footer scroll clearance on mobile. */
+export const MOBILE_COMMERCE_STACK_BOTTOM_INSET = 'calc(13rem + env(safe-area-inset-bottom))';
+
+export const MOBILE_FOOTER_TAB_BAR_PADDING_CLASS =
+  'pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0';
+
+export const MOBILE_FOOTER_COMMERCE_PADDING_CLASS =
+  'pb-[calc(13rem+env(safe-area-inset-bottom))] lg:pb-0';
+
+export const MOBILE_PAGE_COMMERCE_PADDING_CLASS =
+  'pb-[calc(13rem+env(safe-area-inset-bottom))] lg:pb-16';
+
+/** Routes with a fixed commerce action bar above the mobile tab nav. */
+export function pathHasMobileCommerceActionBar(pathname: string): boolean {
+  const normalized = pathname.replace(/\/$/, '') || '/';
+
+  return (
+    normalized.startsWith('/product/') ||
+    normalized === '/cart' ||
+    normalized.startsWith('/checkout')
+  );
+}
+
 /** Order-summary drawer — anchors above the sticky commerce action bar + tab bar. */
 export const MOBILE_COMMERCE_SUMMARY_DRAWER_BOTTOM_CLASS =
   'bottom-[calc(13rem+env(safe-area-inset-bottom))]';

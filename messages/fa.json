@@ -607,6 +607,21 @@
       "toastLinkCopied": "لینک در کلیپ‌بورد کپی شد",
       "toastShareFailed": "اشتراک‌گذاری محصول ممکن نشد"
     },
+    "mobileToolbar": {
+      "toggleActions": "عملیات محصول",
+      "closeActions": "بستن عملیات",
+      "share": "اشتراک‌گذاری",
+      "fullscreen": "اندازه کامل",
+      "viewer": "نمای تعاملی"
+    },
+    "mobileSheet": {
+      "dragHint": "برای جزئیات بالا بکشید",
+      "expandDetails": "نمایش جزئیات محصول",
+      "collapseDetails": "پنهان کردن جزئیات",
+      "inCart": "در سبد شما",
+      "quantity": "تعداد {count}",
+      "trustTitle": "چرا از لوکس خرید کنید"
+    },
     "gallery": {
       "photos": "عکس‌ها",
       "video": "ویدیو",

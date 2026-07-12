@@ -607,6 +607,21 @@
       "toastLinkCopied": "Link copied to clipboard",
       "toastShareFailed": "Could not share product"
     },
+    "mobileToolbar": {
+      "toggleActions": "Product actions",
+      "closeActions": "Close actions",
+      "share": "Share",
+      "fullscreen": "Full size",
+      "viewer": "Interactive view"
+    },
+    "mobileSheet": {
+      "dragHint": "Swipe up for details",
+      "expandDetails": "Show product details",
+      "collapseDetails": "Hide product details",
+      "inCart": "In your cart",
+      "quantity": "Qty {count}",
+      "trustTitle": "Why shop with Luxe"
+    },
     "gallery": {
       "photos": "Photos",
       "video": "Video",

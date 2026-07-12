@@ -11,6 +11,7 @@ import {
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import { StorefrontBrandLogo } from '@/components/brand/storefront-brand-logo';
@@ -26,6 +27,12 @@ import { TrustStrip } from '@/components/footer/trust-stripe';
 import { LanguageSwitcher } from '@/components/i18n/language-switcher';
 import { formatAppVersionLabel } from '@/lib/app-version';
 import { getFooterBarCopyParams } from '@/lib/i18n/marketing-copy-params';
+import {
+  MOBILE_FOOTER_COMMERCE_PADDING_CLASS,
+  MOBILE_FOOTER_TAB_BAR_PADDING_CLASS,
+  pathHasMobileCommerceActionBar
+} from '@/lib/mobile-commerce-drawer';
+import { cn } from '@/lib/utils';
 
 function BackToTop() {
   const t = useTranslations('common');
@@ -44,6 +51,7 @@ function BackToTop() {
 }
 
 export function Footer() {
+  const pathname = usePathname();
   const t = useTranslations('footer');
   const tLinks = useTranslations('footer.links');
   const tSections = useTranslations('footer.sections');
@@ -52,7 +60,14 @@ export function Footer() {
   const appVersionLabel = formatAppVersionLabel();
 
   return (
-    <footer className='border-border/60 bg-background relative mt-24 border-t pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0'>
+    <footer
+      className={cn(
+        'border-border/60 bg-background relative mt-24 border-t',
+        pathHasMobileCommerceActionBar(pathname)
+          ? MOBILE_FOOTER_COMMERCE_PADDING_CLASS
+          : MOBILE_FOOTER_TAB_BAR_PADDING_CLASS
+      )}
+    >
       <div
         aria-hidden
         className='via-accent/40 pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent to-transparent'

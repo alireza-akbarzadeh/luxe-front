@@ -20,9 +20,11 @@ import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
+import { useProductDetailContextOptional } from '../context/product-detail-context';
 import { hasCustomProductVideo } from '../lib/product-media-utils';
 import { ProductInteractiveViewerTrigger } from './interactive-viewer/product-interactive-viewer-trigger';
 import { ProductGalleryLightbox } from './product-gallery-lightbox';
+import { ProductGalleryMobileToolbar } from './product-gallery-mobile-toolbar';
 import { ProductImageMagnifier } from './product-image-magnifier';
 import { ProductVideoPlayer } from './product-video-player';
 
@@ -115,6 +117,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
   ] as const;
 
   const productLabel = product.name ?? tBreadcrumb('product');
+  const detail = useProductDetailContextOptional();
 
   return (
     <>
@@ -129,6 +132,22 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                 onChange={setMediaMode}
               />
             </div>
+            {detail ? (
+              <ProductGalleryMobileToolbar
+                isLiked={detail.isLiked}
+                inCompare={detail.inCompare}
+                productId={product.id}
+                productName={product.name}
+                images={images}
+                imageIndex={selectedImage}
+                showVideoToggle={showVideoToggle}
+                mediaMode={mediaMode}
+                onShare={detail.handleShare}
+                onCompare={detail.handleCompare}
+                onOpenFullscreen={() => setLightboxOpen(true)}
+                onMediaModeChange={setMediaMode}
+              />
+            ) : null}
           </div>
         ) : (
           <div className='flex flex-col gap-0 lg:gap-3'>
@@ -176,7 +195,7 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                 {hasMultiple ? (
                   <span
                     className={cn(
-                      'rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm lg:bg-background/90 lg:px-2.5 lg:py-1 lg:text-xs lg:text-foreground',
+                      'lg:bg-background/90 lg:text-foreground rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm lg:px-2.5 lg:py-1 lg:text-xs',
                       moneyClassName
                     )}
                   >
@@ -192,14 +211,14 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                     productName={product.name}
                     images={images}
                     imageIndex={selectedImage}
-                    className='bg-background/90 hover:bg-background hidden h-10 w-10 rounded-full border-0 text-foreground shadow-sm backdrop-blur-sm lg:flex'
+                    className='bg-background/90 hover:bg-background text-foreground hidden h-10 w-10 rounded-full border-0 shadow-sm backdrop-blur-sm lg:flex'
                   />
                 ) : null}
                 <Button
                   type='button'
                   variant='secondary'
                   size='icon'
-                  className='bg-background/90 hover:bg-background hidden h-10 w-10 rounded-full border-0 text-foreground shadow-sm backdrop-blur-sm lg:flex'
+                  className='bg-background/90 hover:bg-background text-foreground hidden h-10 w-10 rounded-full border-0 shadow-sm backdrop-blur-sm lg:flex'
                   onClick={() => setLightboxOpen(true)}
                   aria-label={t('openFullscreen')}
                 >
@@ -207,22 +226,21 @@ export function ProductGallery({ product, discount }: ProductGalleryProps) {
                 </Button>
               </div>
 
-              {hasMultiple ? (
-                <div className='pointer-events-auto absolute inset-x-0 bottom-4 z-20 flex justify-center gap-1.5 lg:hidden'>
-                  {images.map((_, index) => (
-                    <button
-                      key={`dot-${index}`}
-                      type='button'
-                      onClick={() => syncIndex(index)}
-                      className={cn(
-                        'h-1 rounded-full transition-all duration-200',
-                        selectedImage === index ? 'w-5 bg-white' : 'w-1.5 bg-white/45'
-                      )}
-                      aria-label={t('viewImage', { index: index + 1 })}
-                      aria-current={selectedImage === index}
-                    />
-                  ))}
-                </div>
+              {detail ? (
+                <ProductGalleryMobileToolbar
+                  isLiked={detail.isLiked}
+                  inCompare={detail.inCompare}
+                  productId={product.id}
+                  productName={product.name}
+                  images={images}
+                  imageIndex={selectedImage}
+                  showVideoToggle={showVideoToggle}
+                  mediaMode={mediaMode}
+                  onShare={detail.handleShare}
+                  onCompare={detail.handleCompare}
+                  onOpenFullscreen={() => setLightboxOpen(true)}
+                  onMediaModeChange={setMediaMode}
+                />
               ) : null}
 
               {showVideoToggle ? (
