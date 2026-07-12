@@ -8,6 +8,10 @@ export function CheckoutBreadcrumb() {
         Home
       </Link>
       <IconChevronRight className='h-4 w-4' />
+      <Link href='/shop' className='hover:text-foreground transition-colors'>
+        Shop
+      </Link>
+      `` <IconChevronRight className='h-4 w-4' />
       <Link href='/cart' className='hover:text-foreground transition-colors'>
         Cart
       </Link>

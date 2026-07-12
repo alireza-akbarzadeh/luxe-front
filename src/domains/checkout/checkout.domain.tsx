@@ -94,15 +94,17 @@ export default function CheckoutDomain() {
             <CheckoutTrustBadges />
 
             <StepperPanel>
-              <Grid gap={8} className='grid-cols-1 lg:grid-cols-5 lg:gap-12'>
+              <Grid gap={8} className='grid-cols-1 lg:grid-cols-5 lg:gap-10 xl:gap-12'>
                 <GridItem className='min-w-0 lg:col-span-3'>
                   <form.Root>
-                    <StepperContent value='shipping' forceMount>
-                      {currentStepId === 'shipping' ? <CheckoutShipping /> : null}
-                    </StepperContent>
-                    <StepperContent value='review' forceMount>
-                      {currentStepId === 'review' ? <CheckoutReview /> : null}
-                    </StepperContent>
+                    <div className='border-border/50 bg-card/30 max-lg:border-0 max-lg:bg-transparent lg:rounded-3xl lg:border lg:p-6 xl:p-8'>
+                      <StepperContent value='shipping' forceMount>
+                        {currentStepId === 'shipping' ? <CheckoutShipping /> : null}
+                      </StepperContent>
+                      <StepperContent value='review' forceMount>
+                        {currentStepId === 'review' ? <CheckoutReview /> : null}
+                      </StepperContent>
+                    </div>
 
                     <CheckoutFormNav
                       currentStepId={currentStepId}

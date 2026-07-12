@@ -1,53 +1,32 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-
-import { usePaymentProviders } from '../hooks/use-payment-providers';
+import { useCheckoutPaymentMethods } from '../hooks/use-checkout-payment-methods';
 import type { CheckoutFormValues } from '../types/checkout.types';
+import { CheckoutPaymentMethodPicker } from './checkout-payment-method-picker';
 
 interface PaymentMethodSelectorProps {
   value: CheckoutFormValues['paymentMethod'];
   onChange: (value: CheckoutFormValues['paymentMethod']) => void;
 }
 
+/** @deprecated Prefer CheckoutPaymentSection — kept for legacy imports. */
 export function PaymentMethodSelector({ value, onChange }: PaymentMethodSelectorProps) {
-  const { providers, isLoading, error } = usePaymentProviders();
-
-  if (isLoading) {
-    return <div className='mb-6'>Loading payment methods...</div>;
-  }
+  const { methods, isLoading, error } = useCheckoutPaymentMethods();
 
   if (error) {
     return (
-      <div className='text-destructive mb-6'>Failed to load payment methods. Please refresh.</div>
+      <div className='text-destructive mb-6 text-sm'>
+        Failed to load payment methods. Please refresh.
+      </div>
     );
   }
 
   return (
-    <div className='mb-6'>
-      <Label className='mb-3 block font-medium'>Payment Method</Label>
-      <RadioGroup
-        value={value}
-        onValueChange={(val) => onChange(val as CheckoutFormValues['paymentMethod'])}
-        className='flex flex-wrap gap-4'
-      >
-        {providers.map((provider) => (
-          <Label
-            key={provider.name}
-            htmlFor={`payment-${provider.name}`}
-            className={`flex cursor-pointer items-center gap-2 rounded-xl border p-3 transition-colors ${
-              value === provider.name ? 'border-accent bg-accent/5' : 'border-border'
-            }`}
-          >
-            <RadioGroupItem value={provider.name as string} id={`payment-${provider.name}`} />
-            <span>{provider.display_name}</span>
-            {provider.requires_card ? (
-              <span className='text-muted-foreground ml-1 text-xs'>(Card required)</span>
-            ) : null}
-          </Label>
-        ))}
-      </RadioGroup>
-    </div>
+    <CheckoutPaymentMethodPicker
+      methods={methods}
+      value={value}
+      onChange={onChange}
+      isLoading={isLoading}
+    />
   );
 }

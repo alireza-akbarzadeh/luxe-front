@@ -17,6 +17,7 @@ import type { PostCheckout201 } from '@/services/-checkout-post.schemas';
 import type { DtoCheckoutRequestPaymentMethod } from '@/services/-checkout-post.schemas';
 import { useGetShippingProviders } from '@/services/-shipping-providers-get';
 
+import { mapCheckoutPaymentMethodToApi } from '../lib/checkout-payment-methods';
 import {
   paymentMethodRequiresCard,
   resolveCheckoutOrderId,
@@ -25,23 +26,16 @@ import {
 import { persistStripeCheckoutSession } from '../lib/stripe-checkout-session-storage';
 import { useCheckoutStore } from '../store/checkout.store';
 import type { CheckoutFormValues } from '../types/checkout.types';
+import { useCheckoutPaymentMethods } from './use-checkout-payment-methods';
 import { useStripeCheckoutEnabled } from './useStripeCheckoutEnabled';
 
 /** Maps storefront payment UI values to API payment_method enum. */
 function mapCheckoutPaymentMethod(
   method: CheckoutFormValues['paymentMethod'],
-  isStripeCheckout: boolean
+  isStripeCheckout: boolean,
+  methods: ReturnType<typeof useCheckoutPaymentMethods>['methods']
 ): DtoCheckoutRequestPaymentMethod {
-  if (
-    isStripeCheckout &&
-    (method === 'credit_card' || method === 'debit_card' || method === 'paypal')
-  ) {
-    return 'stripe';
-  }
-  if (method === 'gift_card' || method === 'store_credit') {
-    return 'wallet';
-  }
-  return 'mock';
+  return mapCheckoutPaymentMethodToApi(method, methods, isStripeCheckout);
 }
 
 export function useCheckoutSubmit() {
@@ -55,6 +49,7 @@ export function useCheckoutSubmit() {
   const { data: providersResponse } = useGetShippingProviders();
   const providers = providersResponse?.data ?? [];
   const { isStripeCheckout } = useStripeCheckoutEnabled();
+  const { methods } = useCheckoutPaymentMethods();
   const submitLockRef = useRef(false);
 
   const { mutateAsync, isPending } = usePostCheckout();
@@ -67,7 +62,9 @@ export function useCheckoutSubmit() {
     const selectedProvider = providers.find(
       (provider) => provider.id === values.shippingProviderId
     );
-    const requiresCard = paymentMethodRequiresCard(values.paymentMethod);
+    const paymentMethod = mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout, methods);
+    const requiresCard =
+      paymentMethod === 'mock' && paymentMethodRequiresCard(values.paymentMethod);
     const cardDigits = (values.cardNumber ?? '').replace(/\D/g, '');
 
     try {
@@ -78,8 +75,6 @@ export function useCheckoutSubmit() {
         toast.error(message);
         throw new Error(message);
       }
-
-      const paymentMethod = mapCheckoutPaymentMethod(values.paymentMethod, isStripeCheckout);
 
       setRedirectMode(paymentMethod === 'stripe' ? 'payment' : 'confirmed');
       setIsRedirecting(true);
@@ -137,7 +132,7 @@ export function useCheckoutSubmit() {
         return;
       }
 
-      if (isStripeCheckout) {
+      if (isStripeCheckout && paymentMethod === 'stripe') {
         const message = orderId ? t('stripeMissingCheckoutUrl') : t('invalidResponse');
         setSubmitError(message);
         toast.error(message);

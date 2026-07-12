@@ -5,7 +5,7 @@ export default function CartBreadcrumb() {
   return (
     <nav
       aria-label='Breadcrumb'
-      className='text-muted-foreground mb-4 hidden items-center gap-2 text-sm sm:mb-8 sm:flex'
+      className='text-muted-foreground mb-4 flex items-center gap-2 text-sm sm:mb-8'
     >
       <Link href='/' className='hover:text-foreground transition-colors'>
         Home

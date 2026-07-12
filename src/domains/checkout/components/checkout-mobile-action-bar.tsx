@@ -1,24 +1,31 @@
 'use client';
 
-import { IconChevronLeft, IconChevronRight, IconChevronUp } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTitle } from '@/components/ui/drawer';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
 import {
-  MOBILE_COMMERCE_SUMMARY_SCROLL_MAX_HEIGHT_CLASS,
-  MOBILE_TAB_BAR_BOTTOM_CLASS
-} from '@/lib/mobile-commerce-drawer';
+  PDP_MOBILE_SHEET_RADIUS_CLASS,
+  PDP_MOBILE_SHEET_SHADOW_CLASS,
+  PDP_MOBILE_TAB_BAR_OFFSET
+} from '@/domains/product/lib/product-detail-mobile';
 import { cn } from '@/lib/utils';
 
 import type { CheckoutMobileActionBarProps } from '../types/checkout.types';
 import { CheckoutMobileSummaryBody } from './checkout-mobile-summary-body';
 
-/** Native fixed checkout CTA with summary drawer layered above the action bar. */
+const mobileSheetClassName = cn(
+  'bg-background/95 border-border/80 border-t backdrop-blur-xl',
+  PDP_MOBILE_SHEET_RADIUS_CLASS,
+  PDP_MOBILE_SHEET_SHADOW_CLASS
+);
+
+/** PDP/cart-style draggable checkout commerce sheet. */
 export function CheckoutMobileActionBar({
   total,
   itemCount,
@@ -33,146 +40,131 @@ export function CheckoutMobileActionBar({
   const t = useTranslations('checkout.navigation');
   const tValidation = useTranslations('checkout.validation');
   const tMobile = useTranslations('checkout.mobileSummary');
-  const tSummary = useTranslations('checkout.summary');
-  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const backLabel = isFirst ? t('backToCart') : t('backToShipping');
 
-  return (
-    <>
-      <Drawer open={summaryOpen} onOpenChange={setSummaryOpen}>
-        <DrawerContent
-          aboveCommerceActionBar
-          variant='ios'
-          radius='full'
-          showHandle
-          className='lg:hidden'
-        >
-          <Flex direction='column' className='min-h-0 overflow-hidden'>
-            <Flex
-              direction='column'
-              align='start'
-              gap={0.5}
-              className='shrink-0 pt-1 pb-3 text-start'
-            >
-              <DrawerTitle className='text-base font-semibold'>{tSummary('title')}</DrawerTitle>
-              <Typography.Muted className='text-xs'>
-                {tMobile('itemCount', { count: itemCount })}
-              </Typography.Muted>
-            </Flex>
-            <div
-              className={cn(
-                'min-h-0 overflow-y-auto overscroll-contain pb-2',
-                MOBILE_COMMERCE_SUMMARY_SCROLL_MAX_HEIGHT_CLASS
-              )}
-            >
-              <CheckoutMobileSummaryBody showItems showCoupons showTotals />
-            </div>
-          </Flex>
-        </DrawerContent>
-      </Drawer>
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (info.offset.y < -48 || info.velocity.y < -450) {
+      setExpanded(true);
+      return;
+    }
+    if (info.offset.y > 48 || info.velocity.y > 450) {
+      setExpanded(false);
+    }
+  };
 
-      <div
-        className={cn(
-          'fixed inset-x-0 lg:hidden',
-          MOBILE_TAB_BAR_BOTTOM_CLASS,
-          summaryOpen ? 'z-[72]' : 'z-[60]'
-        )}
-        role='region'
-        aria-label={tMobile('viewSummary')}
+  return (
+    <motion.div
+      className={cn('fixed inset-x-0 z-[45] overflow-hidden lg:hidden', mobileSheetClassName)}
+      style={{ bottom: PDP_MOBILE_TAB_BAR_OFFSET }}
+      role='region'
+      aria-label={tMobile('viewSummary')}
+    >
+      <motion.div
+        drag='y'
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.12}
+        onDragEnd={handleDragEnd}
+        className='flex min-h-0 flex-col'
       >
+        <button
+          type='button'
+          onClick={() => setExpanded((current) => !current)}
+          className='flex w-full shrink-0 flex-col items-center gap-1 px-4 pt-2.5 pb-1'
+          aria-expanded={expanded}
+          aria-label={expanded ? tMobile('hideSummary') : tMobile('showSummary')}
+        >
+          <span className='bg-muted-foreground/35 h-1 w-10 rounded-full' aria-hidden />
+          <Typography.Muted className='text-[10px] font-medium tracking-wide uppercase'>
+            {expanded ? tMobile('hideSummary') : tMobile('dragForSummary')}
+          </Typography.Muted>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {expanded ? (
+            <motion.div
+              key='summary'
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+              className='min-h-0 overflow-hidden'
+            >
+              <div className='max-h-[min(52dvh,420px)] overflow-y-auto overscroll-contain px-4 pt-2 pb-3'>
+                <CheckoutMobileSummaryBody showItems={false} showCoupons showTotals />
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
         <Flex
           direction='column'
-          className={cn(
-            'border-border/80 bg-background/95 border-t shadow-[0_-4px_24px_rgba(0,0,0,0.08)] backdrop-blur-xl',
-            'dark:shadow-[0_-4px_24px_rgba(0,0,0,0.35)]'
-          )}
+          gap={2}
+          className={cn('shrink-0 px-4 pt-2 pb-3.5', expanded && 'border-border/50 border-t')}
         >
-          <button
-            type='button'
-            onClick={() => setSummaryOpen(true)}
-            className='hover:bg-muted/40 flex w-full items-center gap-3 px-4 py-3 transition-colors active:scale-[0.995]'
-            aria-expanded={summaryOpen}
-            aria-haspopup='dialog'
-            aria-label={tMobile('showSummary')}
-          >
-            <Flex direction='column' align='start' gap={0.5} className='min-w-0 flex-1 text-start'>
-              <Typography.Small weight='semibold'>{tMobile('viewSummary')}</Typography.Small>
-              <Typography.Muted className='text-xs'>
-                {tMobile('itemCount', { count: itemCount })}
+          <Flex direction='row' align='center' justify='between' className='min-w-0 gap-3'>
+            <Flex direction='column' align='start' gap={0.5} className='min-w-0'>
+              <Typography.Muted className='text-[11px] font-medium tracking-wide uppercase'>
+                {tMobile('totalLabel')}
               </Typography.Muted>
-            </Flex>
-            <Flex direction='row' align='center' gap={1.5} className='shrink-0'>
-              <Typography.Text className={cn(cartMoneyClassName, 'text-lg font-bold tabular-nums')}>
+              <Typography.Text className={cn('text-xl font-bold tabular-nums', cartMoneyClassName)}>
                 {formatCartMoney(total)}
               </Typography.Text>
-              <IconChevronUp className='text-muted-foreground size-4 shrink-0' aria-hidden />
             </Flex>
-          </button>
+            <Typography.Muted className='text-xs tabular-nums'>
+              {tMobile('itemCount', { count: itemCount })}
+            </Typography.Muted>
+          </Flex>
 
-          <Flex direction='column' gap={2} className='border-border/50 border-t px-4 pt-3 pb-3'>
-            {!isFirst ? (
-              <button
-                type='button'
-                onClick={onBack}
-                disabled={isPending}
-                className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 self-start text-sm font-medium transition-colors disabled:opacity-50'
-              >
-                <IconChevronLeft className='size-4 shrink-0' aria-hidden />
-                {backLabel}
-              </button>
-            ) : null}
+          {isLast && !agreedToTerms ? (
+            <Typography.Muted className='text-destructive text-xs leading-relaxed'>
+              {tValidation('acceptTerms')}
+            </Typography.Muted>
+          ) : null}
+
+          <Flex direction='row' gap={2} className='w-full'>
+            <Button
+              type='button'
+              variant='outline'
+              size='lg'
+              className='h-14 shrink-0 rounded-2xl px-3'
+              onClick={onBack}
+              disabled={isPending}
+              aria-label={backLabel}
+            >
+              <IconChevronLeft className='size-5' aria-hidden />
+            </Button>
 
             {isLast ? (
-              <>
-                {!agreedToTerms ? (
-                  <Typography.Muted className='text-destructive text-xs leading-relaxed'>
-                    {tValidation('acceptTerms')}
-                  </Typography.Muted>
-                ) : null}
-                <Button
-                  type='button'
-                  size='lg'
-                  className={cn(
-                    'bg-primary text-primary-foreground h-14 w-full rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]',
-                    !agreedToTerms && !isPending && 'opacity-70'
-                  )}
-                  loading={isPending}
-                  disabled={isPending}
-                  onClick={onPlaceOrder}
-                >
-                  {isPending
-                    ? t('placingOrder')
-                    : t('placeOrder', { total: formatCartMoney(total) })}
-                </Button>
-              </>
+              <Button
+                type='button'
+                size='lg'
+                className={cn(
+                  'bg-primary text-primary-foreground h-14 flex-1 rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]',
+                  !agreedToTerms && !isPending && 'opacity-70'
+                )}
+                loading={isPending}
+                disabled={isPending}
+                onClick={onPlaceOrder}
+              >
+                {isPending ? t('placingOrder') : t('placeOrder', { total: formatCartMoney(total) })}
+              </Button>
             ) : (
               <Button
                 type='button'
                 size='lg'
-                className='bg-primary text-primary-foreground h-14 w-full rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]'
+                className='bg-primary text-primary-foreground h-14 flex-1 rounded-2xl text-base font-semibold shadow-md active:scale-[0.98]'
                 onClick={onNext}
                 disabled={isPending}
               >
                 {t('continueToReview')}
-                <IconChevronRight className='ms-2 size-5 shrink-0' />
+                <IconChevronRight className='ms-1.5 size-5 shrink-0' aria-hidden />
               </Button>
             )}
-
-            {isFirst ? (
-              <button
-                type='button'
-                onClick={onBack}
-                disabled={isPending}
-                className='text-muted-foreground hover:text-foreground inline-flex items-center gap-1 self-center text-sm font-medium transition-colors disabled:opacity-50'
-              >
-                <IconChevronLeft className='size-4 shrink-0' aria-hidden />
-                {backLabel}
-              </button>
-            ) : null}
           </Flex>
         </Flex>
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 }

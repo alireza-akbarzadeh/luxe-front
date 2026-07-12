@@ -60,10 +60,6 @@ export function CheckoutAddressPicker({
   return (
     <>
       <Flex direction='column' spacing={3}>
-        <Typography.Text variant='small' className='font-semibold'>
-          {t('savedAddresses')}
-        </Typography.Text>
-
         <RadioGroup
           value={radioValue}
           onValueChange={(value) => {
@@ -81,8 +77,10 @@ export function CheckoutAddressPicker({
               <div
                 key={address.id}
                 className={cn(
-                  'flex w-full min-w-0 items-start gap-3 rounded-xl border p-3 transition-colors sm:p-4',
-                  isSelected ? 'border-accent bg-accent/5' : 'border-border hover:border-accent/50'
+                  'flex w-full min-w-0 items-start gap-3 rounded-2xl border p-3 transition-colors sm:p-4',
+                  isSelected
+                    ? 'border-gold bg-gold/5 ring-gold/20 ring-1'
+                    : 'border-border hover:border-gold/40'
                 )}
               >
                 <Label

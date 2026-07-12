@@ -22,15 +22,16 @@ import {
   getCartItemImage,
   getCartItemName
 } from '@/domains/cart/lib/cart-utils';
-import { CheckoutInlinePayment } from '@/domains/checkout/components/checkout-inline-payment';
+import { CheckoutPaymentBrandIcon } from '@/domains/checkout/components/checkout-payment-brand-icon';
 import { CheckoutReviewSection } from '@/domains/checkout/components/checkout-review-section';
 import { CheckoutTermsConsent } from '@/domains/checkout/components/checkout-terms-consent';
+import { useCheckoutPaymentMethods } from '@/domains/checkout/hooks/use-checkout-payment-methods';
 import { useCheckoutTotals } from '@/domains/checkout/hooks/useCartTotal';
 import { useStripeCheckoutEnabled } from '@/domains/checkout/hooks/useStripeCheckoutEnabled';
+import { getCheckoutPaymentMethodLabel } from '@/domains/checkout/lib/checkout-payment-methods';
 import {
   detectCardBrand,
   getCardBrandLabel,
-  getPaymentMethodLabel,
   maskCardNumber,
   paymentMethodRequiresCard
 } from '@/domains/checkout/lib/checkout-utils';
@@ -42,8 +43,10 @@ import { cn } from '@/lib/utils';
 
 export function CheckoutReview() {
   const t = useTranslations('checkout.review');
+  const tPayment = useTranslations('checkout.payment');
   const form = useTypedAppFormContext({ defaultValues: checkoutDefaultValues });
   const { isStripeCheckout } = useStripeCheckoutEnabled();
+  const { methods } = useCheckoutPaymentMethods();
   const { items } = useCartController();
   const setCurrentStep = useCheckoutStore((s) => s.setCurrentStep);
   const submitError = useCheckoutStore((s) => s.submitError);
@@ -58,6 +61,8 @@ export function CheckoutReview() {
   const requiresCard = paymentMethodRequiresCard(formValues.paymentMethod);
   const cardBrand = detectCardBrand(formValues.cardNumber ?? '');
   const itemCount = items.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
+  const selectedPayment = methods.find((method) => method.id === formValues.paymentMethod);
+  const paymentLabel = getCheckoutPaymentMethodLabel(formValues.paymentMethod, methods);
 
   return (
     <motion.div
@@ -159,21 +164,31 @@ export function CheckoutReview() {
         )}
       </CheckoutReviewSection>
 
-      {isStripeCheckout ? (
-        <CheckoutReviewSection
-          title={t('paymentMethod')}
-          icon={<IconCreditCard className='h-4 w-4' />}
-        >
-          <Flex direction='column' spacing={1}>
+      <CheckoutReviewSection
+        title={t('paymentMethod')}
+        icon={<IconCreditCard className='h-4 w-4' />}
+        onEdit={() => goTo('shipping')}
+      >
+        <Flex direction='row' align='center' spacing={3}>
+          {selectedPayment ? (
+            <span className='border-border/70 bg-background flex size-11 shrink-0 items-center justify-center rounded-full border'>
+              <CheckoutPaymentBrandIcon method={selectedPayment} />
+            </span>
+          ) : null}
+          <Flex direction='column' spacing={0.5} className='min-w-0'>
             <Typography.Text variant='small' className='font-medium'>
-              {t('stripeCheckout')}
+              {paymentLabel}
             </Typography.Text>
-            <Typography.Text variant='muted'>{t('stripeCheckoutHint')}</Typography.Text>
+            <Typography.Text variant='muted'>
+              {formValues.paymentMethod === 'stripe' || isStripeCheckout
+                ? t('stripeCheckoutHint')
+                : requiresCard
+                  ? tPayment('secureNotice')
+                  : (selectedPayment?.description ?? tPayment('secureNotice'))}
+            </Typography.Text>
           </Flex>
-        </CheckoutReviewSection>
-      ) : (
-        <CheckoutInlinePayment />
-      )}
+        </Flex>
+      </CheckoutReviewSection>
 
       <CheckoutReviewSection
         title={t('items', { count: itemCount })}
@@ -217,8 +232,7 @@ export function CheckoutReview() {
 
       {!isStripeCheckout && requiresCard ? (
         <Typography.Text variant='subtle' className='text-center'>
-          {getPaymentMethodLabel(formValues.paymentMethod)} ·{' '}
-          {maskCardNumber(formValues.cardNumber ?? '')}
+          {paymentLabel} · {maskCardNumber(formValues.cardNumber ?? '')}
           {cardBrand !== 'unknown' ? ` · ${getCardBrandLabel(cardBrand)}` : ''}
         </Typography.Text>
       ) : null}

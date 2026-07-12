@@ -48,7 +48,7 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
     country: defaultAddress?.country || 'United States',
     couponCode: '',
 
-    paymentMethod: 'credit_card',
+    paymentMethod: 'stripe',
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
@@ -71,9 +71,11 @@ export function useCheckoutForm({ onSubmit }: UseCheckoutFormArgs) {
   });
 
   useEffect(() => {
-    if (!isStripeCheckout || stripeHydratedRef.current) return;
-    form.setFieldValue('paymentMethod', 'paypal');
-    stripeHydratedRef.current = true;
+    if (stripeHydratedRef.current) return;
+    if (isStripeCheckout) {
+      form.setFieldValue('paymentMethod', 'stripe');
+      stripeHydratedRef.current = true;
+    }
   }, [form, isStripeCheckout]);
 
   // Hydrate form when user data loads (only once)

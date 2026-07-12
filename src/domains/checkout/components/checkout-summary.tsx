@@ -51,7 +51,7 @@ export function CheckoutSummary() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className='bg-card border-border/50 sticky top-24 overflow-hidden rounded-2xl border shadow-sm'
+      className='bg-card border-border/50 sticky top-24 overflow-hidden rounded-3xl border shadow-sm'
     >
       <Flex direction='column' spacing={0} className='p-5 sm:p-6'>
         <Typography.H4 className='text-lg font-semibold'>{t('title')}</Typography.H4>

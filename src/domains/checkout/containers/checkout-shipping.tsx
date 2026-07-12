@@ -16,6 +16,7 @@ import {
   formatCartMoney,
   getEffectiveShippingPrice
 } from '@/domains/cart/lib/cart-utils';
+import { CheckoutPaymentSection } from '@/domains/checkout/components/checkout-payment-section';
 import { CheckoutShippingAddressBlock } from '@/domains/checkout/components/checkout-shipping-address-block';
 import { useCheckoutShippingProviders } from '@/domains/checkout/hooks/use-checkout-shipping-providers';
 import { checkoutDefaultValues } from '@/domains/checkout/schemas/checkout.schema';
@@ -63,6 +64,8 @@ export function CheckoutShipping() {
 
         <CheckoutShippingAddressBlock isAuthenticated={isAuthenticated} />
 
+        <CheckoutPaymentSection />
+
         <Flex direction='column' spacing={4}>
           <Typography.Text variant='small' className='font-semibold'>
             {t('shippingMethod')}
@@ -107,8 +110,8 @@ export function CheckoutShipping() {
                             className={cn(
                               'flex w-full min-w-0 cursor-pointer flex-col gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
                               isSelected
-                                ? 'border-accent bg-accent/5'
-                                : 'border-border hover:border-accent/50',
+                                ? 'border-gold bg-gold/5 ring-gold/20 ring-1'
+                                : 'border-border hover:border-gold/40',
                               showError && !field.state.value && 'border-destructive/40'
                             )}
                           >

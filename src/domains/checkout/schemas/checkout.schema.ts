@@ -19,7 +19,8 @@ const checkoutBaseSchema = z.object({
   zip: z.string().min(1, 'ZIP code is required'),
   country: z.string().min(1, 'Country is required'),
   couponCode: z.string().optional().default(''),
-  paymentMethod: z.enum(['credit_card', 'debit_card', 'paypal', 'gift_card', 'store_credit']),
+  /** Dynamic provider id from catalog / settings / payment-providers API. */
+  paymentMethod: z.string().min(1, 'Select a payment method'),
   cardNumber: z.string().optional().default(''),
   expiryMonth: z.string().optional().default(''),
   expiryYear: z.string().optional().default(''),
@@ -98,7 +99,7 @@ export const checkoutDefaultValues: CheckoutFormValues = {
   zip: '',
   country: 'United States',
   couponCode: '',
-  paymentMethod: 'credit_card',
+  paymentMethod: 'stripe',
   cardNumber: '',
   expiryMonth: '',
   expiryYear: '',
