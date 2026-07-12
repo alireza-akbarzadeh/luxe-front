@@ -1,56 +1,50 @@
 'use client';
 
-import {
-  IconBrandApple,
-  IconBrandGoogle,
-  IconBrandPaypal,
-  IconCreditCard,
-  IconWallet
-} from '@tabler/icons-react';
+import { IconCreditCard, IconWallet } from '@tabler/icons-react';
+import Image from 'next/image';
 
-import { AppImage } from '@/components/ui/app-image';
 import { cn } from '@/lib/utils';
 
 import type { CheckoutPaymentMethodOption } from '../lib/checkout-payment-methods';
+
+/** Local brand marks under `public/assets/` — used when API has no `icon_url`. */
+const PAYMENT_BRAND_ASSET: Partial<Record<CheckoutPaymentMethodOption['brand'], string>> = {
+  stripe: '/assets/stripe.svg',
+  paypal: '/assets/paypal.svg',
+  apple: '/assets/apple.svg',
+  google: '/assets/google-pay.svg'
+};
 
 interface CheckoutPaymentBrandIconProps {
   method: CheckoutPaymentMethodOption;
   className?: string;
 }
 
-/** Brand mark for payment method chips — icon URL or built-in glyph. */
+/** Brand mark for payment method chips — asset SVG, API icon, or fallback glyph. */
 export function CheckoutPaymentBrandIcon({ method, className }: CheckoutPaymentBrandIconProps) {
-  if (method.iconUrl) {
+  const src = method.iconUrl?.trim() || PAYMENT_BRAND_ASSET[method.brand];
+
+  if (src) {
     return (
-      <span className={cn('relative size-6 overflow-hidden rounded-md', className)}>
-        <AppImage src={method.iconUrl} alt='' fill sizes='24px' className='object-contain' />
+      <span className={cn('relative flex size-7 shrink-0 items-center justify-center', className)}>
+        <Image
+          src={src}
+          alt=''
+          width={28}
+          height={28}
+          unoptimized
+          className='size-7 object-contain'
+          aria-hidden
+        />
       </span>
     );
   }
 
   const iconClass = cn('size-5', className);
 
-  switch (method.brand) {
-    case 'stripe':
-      return (
-        <span
-          className={cn('text-[11px] font-black tracking-tight text-[#635BFF]', className)}
-          aria-hidden
-        >
-          S
-        </span>
-      );
-    case 'paypal':
-      return <IconBrandPaypal className={cn(iconClass, 'text-[#003087]')} aria-hidden />;
-    case 'apple':
-      return <IconBrandApple className={iconClass} aria-hidden />;
-    case 'google':
-      return <IconBrandGoogle className={iconClass} aria-hidden />;
-    case 'wallet':
-      return <IconWallet className={iconClass} aria-hidden />;
-    case 'card':
-      return <IconCreditCard className={iconClass} aria-hidden />;
-    default:
-      return <IconCreditCard className={iconClass} aria-hidden />;
+  if (method.brand === 'wallet') {
+    return <IconWallet className={iconClass} aria-hidden />;
   }
+
+  return <IconCreditCard className={iconClass} aria-hidden />;
 }

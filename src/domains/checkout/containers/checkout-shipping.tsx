@@ -108,7 +108,7 @@ export function CheckoutShipping() {
                             key={provider.id}
                             htmlFor={`shipping-${provider.id}`}
                             className={cn(
-                              'flex w-full min-w-0 cursor-pointer flex-col gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
+                              'flex w-full min-w-0 cursor-pointer gap-3 rounded-xl border p-3 transition-colors sm:flex-row sm:items-center sm:justify-between sm:p-4',
                               isSelected
                                 ? 'border-gold bg-gold/5 ring-gold/20 ring-1'
                                 : 'border-border hover:border-gold/40',

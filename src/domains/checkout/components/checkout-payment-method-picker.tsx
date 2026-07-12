@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 
 import { Flex } from '@/components/ui/flex';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 
@@ -16,7 +17,7 @@ interface CheckoutPaymentMethodPickerProps {
   isLoading?: boolean;
 }
 
-/** Horizontal payment provider chips — dynamic catalog, Luxe theme accents. */
+/** Horizontal payment provider chips — asset icons + tooltips for each method. */
 export function CheckoutPaymentMethodPicker({
   methods,
   value,
@@ -47,37 +48,49 @@ export function CheckoutPaymentMethodPicker({
 
   return (
     <Flex direction='column' gap={4}>
-      <div
-        role='radiogroup'
-        aria-label={t('methodLabel')}
-        className='flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
-      >
-        {methods.map((method) => {
-          const isSelected = method.id === value;
-          return (
-            <button
-              key={method.id}
-              type='button'
-              role='radio'
-              aria-checked={isSelected}
-              aria-label={method.displayName}
-              onClick={() => onChange(method.id)}
-              className={cn(
-                'border-border/70 bg-background relative flex size-14 shrink-0 items-center justify-center rounded-full border shadow-sm transition-all',
-                'hover:border-gold/50 hover:bg-muted/40 active:scale-95',
-                isSelected && 'border-gold ring-gold/30 bg-gold/10 ring-2'
-              )}
-            >
-              <CheckoutPaymentBrandIcon method={method} />
-              {method.comingSoon ? (
-                <span className='bg-muted text-muted-foreground absolute -end-1 -top-1 rounded-full px-1 text-[8px] font-semibold tracking-wide uppercase'>
-                  {t('soon')}
-                </span>
-              ) : null}
-            </button>
-          );
-        })}
-      </div>
+      <TooltipProvider delayDuration={200}>
+        <div
+          role='radiogroup'
+          aria-label={t('methodLabel')}
+          className='flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
+        >
+          {methods.map((method) => {
+            const isSelected = method.id === value;
+            const tooltipLabel = method.comingSoon
+              ? `${method.displayName} (${t('soon')})`
+              : method.displayName;
+
+            return (
+              <Tooltip key={method.id}>
+                <TooltipTrigger asChild>
+                  <button
+                    type='button'
+                    role='radio'
+                    aria-checked={isSelected}
+                    aria-label={tooltipLabel}
+                    onClick={() => onChange(method.id)}
+                    className={cn(
+                      'border-border/70 bg-background relative flex size-14 shrink-0 items-center justify-center rounded-full border shadow-sm transition-all',
+                      'hover:border-gold/50 hover:bg-muted/40 active:scale-95',
+                      isSelected && 'border-gold ring-gold/30 bg-gold/10 text-gold ring-2'
+                    )}
+                  >
+                    <CheckoutPaymentBrandIcon method={method} />
+                    {method.comingSoon ? (
+                      <span className='bg-muted text-muted-foreground absolute -end-1 -top-1 rounded-full px-1 text-[8px] font-semibold tracking-wide uppercase'>
+                        {t('soon')}
+                      </span>
+                    ) : null}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side='top' sideOffset={8} className='text-xs font-medium'>
+                  {tooltipLabel}
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </div>
+      </TooltipProvider>
 
       {selected ? (
         <Flex
