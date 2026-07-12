@@ -319,7 +319,7 @@ export const useCartController = () => {
   // HELPERS
   // =========================================================
 
-  const handleQuantityIncrement = (product: CartItemPayload) => {
+  const handleQuantityIncrement = (product: CartItemPayload, options?: { openSheet?: boolean }) => {
     if (!product.product_id) {
       return;
     }
@@ -353,7 +353,9 @@ export const useCartController = () => {
         {
           onSuccess: () => {
             toast.success(`Added 1 × ${product.product_name}`);
-            openCart();
+            if (options?.openSheet !== false) {
+              openCart();
+            }
           }
         }
       );
@@ -381,7 +383,9 @@ export const useCartController = () => {
         {
           onSuccess: () => {
             toast.success(`${product.product_name} added to cart`);
-            openCart();
+            if (options?.openSheet !== false) {
+              openCart();
+            }
           }
         }
       );

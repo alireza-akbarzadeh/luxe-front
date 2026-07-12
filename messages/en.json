@@ -1112,12 +1112,26 @@
     },
     "mobileSummary": {
       "showSummary": "Show order summary",
+      "collapseSummary": "Hide order summary",
+      "dragHint": "Swipe up for summary",
       "viewSummary": "Order summary",
+      "totalLabel": "Order total",
       "itemCount": "{count, plural, one {# item} other {# items}}",
       "decreaseQuantity": "Decrease quantity",
       "increaseQuantity": "Increase quantity",
       "removeItem": "Remove {name}",
-      "addItems": "Add items"
+      "addItems": "Add items",
+      "addItemsDrawer": {
+        "title": "Add to cart",
+        "description": "Search products and add them without leaving your cart.",
+        "placeholder": "Search products…",
+        "emptyQuery": "Type a product name or pick a trending search.",
+        "noResults": "No products found",
+        "addToCart": "Add",
+        "close": "Close",
+        "decreaseQuantity": "Decrease quantity",
+        "increaseQuantity": "Increase quantity"
+      }
     },
     "smartBundles": {
       "eyebrow": "Smart bundles",

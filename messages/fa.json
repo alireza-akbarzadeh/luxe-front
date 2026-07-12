@@ -1112,12 +1112,26 @@
     },
     "mobileSummary": {
       "showSummary": "نمایش خلاصه سفارش",
+      "collapseSummary": "بستن خلاصه سفارش",
+      "dragHint": "برای خلاصه بالا بکشید",
       "viewSummary": "خلاصه سفارش",
+      "totalLabel": "جمع سفارش",
       "itemCount": "{count, plural, one {# کالا} other {# کالا}}",
       "decreaseQuantity": "کاهش تعداد",
       "increaseQuantity": "افزایش تعداد",
       "removeItem": "حذف {name}",
-      "addItems": "افزودن کالا"
+      "addItems": "افزودن کالا",
+      "addItemsDrawer": {
+        "title": "افزودن به سبد",
+        "description": "محصولات را جستجو کنید و بدون ترک سبد، به سبد اضافه کنید.",
+        "placeholder": "جستجوی محصول…",
+        "emptyQuery": "نام محصول را بنویسید یا یک جستجوی پرطرفدار را انتخاب کنید.",
+        "noResults": "محصولی یافت نشد",
+        "addToCart": "افزودن",
+        "close": "بستن",
+        "decreaseQuantity": "کاهش تعداد",
+        "increaseQuantity": "افزایش تعداد"
+      }
     },
     "smartBundles": {
       "eyebrow": "بسته‌های هوشمند",
