@@ -1,35 +1,23 @@
 'use client';
 
-import { notFound, useSearchParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { Flex } from '@/components/ui/flex';
-import { Grid } from '@/components/ui/grid';
-import { GridItem } from '@/components/ui/grid-item';
 import { useCheckoutStore } from '@/domains/checkout/store/checkout.store';
-import { OrderStatus } from '@/lib/constants/enum-statuses';
 import { useGetOrdersId } from '@/services/-orders-{id}-get';
 
-import { OrderBoxNumber } from './components/order-box-number';
-import { OrderItemSummary } from './components/order-item-summary';
 import { OrderTrackingSkeleton } from './components/order-loading';
-import { OrderTrackingActivityFeed } from './components/order-tracking-activity';
+import { OrderTrackingActivitySupport } from './components/order-tracking-activity-support';
+import { OrderTrackingDeliverySection } from './components/order-tracking-delivery-section';
+import { OrderTrackingItemsPayment } from './components/order-tracking-items-payment';
+import { OrderTrackingMilestones } from './components/order-tracking-milestones';
 import { OrderTrackingMobileActions } from './components/order-tracking-mobile-action-bar';
-import { OrderTrackingMobileSummary } from './components/order-tracking-mobile-summary';
-import { OrderTrackingProgress } from './components/order-tracking-progress';
-import { OrderTrackingStatusHero } from './components/order-tracking-status-hero';
-import { OrderTrackingSummary } from './components/order-tracking-summary';
-import { PaymentDetails } from './components/payment-details';
-import { ShipmentTraking } from './components/shipment-traking';
-import { TrakingFooter } from './components/traking-footer';
+import { OrderTrackingPageFooter } from './components/order-tracking-page-footer';
+import { OrderTrackingPageHeader } from './components/order-tracking-page-header';
 import { useOrderTrackingLive } from './hooks/use-order-tracking-live';
-import {
-  getOrderProgressState,
-  getOrderSubtotal,
-  getOrderTax,
-  mergeOrderWithLive,
-  normalizeOrderForTracking
-} from './lib/order-tracking-utils';
+import { mapOrderToTrackingPageView } from './lib/order-tracking-page-mapper';
+import { mergeOrderWithLive, normalizeOrderForTracking } from './lib/order-tracking-utils';
 
 interface OrderTrackingDomainProps {
   orderId: string;
@@ -37,11 +25,9 @@ interface OrderTrackingDomainProps {
 
 export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   const id = Number(orderId);
-  const searchParams = useSearchParams();
-  const isFreshCheckout = searchParams.get('confirmed') === '1';
 
   const { data: initialData, isLoading, error } = useGetOrdersId(id);
-  const { connectionStatus, liveState, clearPulsingStep } = useOrderTrackingLive(id);
+  const { connectionStatus, liveState } = useOrderTrackingLive(id);
 
   useEffect(() => {
     useCheckoutStore.getState().reset();
@@ -50,86 +36,52 @@ export function OrderTrackingDomain({ orderId }: OrderTrackingDomainProps) {
   if (isLoading) return <OrderTrackingSkeleton />;
   if (error || !initialData?.data) return notFound();
 
-  const order = mergeOrderWithLive(normalizeOrderForTracking(initialData.data), liveState);
-  const currentStatus = order.status ?? OrderStatus.Pending;
-  const progress = getOrderProgressState(currentStatus);
+  const liveOrder = mergeOrderWithLive(normalizeOrderForTracking(initialData.data), liveState);
+  const view = mapOrderToTrackingPageView({
+    ...initialData.data,
+    status: liveOrder.status ?? initialData.data.status,
+    tracking_number: liveOrder.shipment?.tracking_number ?? initialData.data.tracking_number,
+    carrier: liveOrder.shipment?.carrier ?? initialData.data.carrier,
+    shipment_status: liveOrder.shipment?.status ?? initialData.data.shipment_status
+  });
 
-  const payment = order.payment;
-  const shipment = order.shipment;
-  const orderItems = order.items ?? [];
-  const itemCount = orderItems.reduce((sum, item) => sum + (item.quantity ?? 0), 0);
-
-  const subtotal = getOrderSubtotal(orderItems);
-  const shippingCost = shipment?.shipping_price ?? 0;
-  const tax = getOrderTax(subtotal, shippingCost, order.total_amount);
-  const total = order.total_amount ?? subtotal + shippingCost + tax;
-
-  const highlightPayment = liveState.pulsingStepKey === 'processing';
-  const highlightShipment =
-    liveState.pulsingStepKey === 'shipped' || liveState.pulsingStepKey === 'processing';
+  const tracking = view.tracking;
 
   return (
     <Flex direction='column' className='pt-20 pb-24 sm:pt-24 lg:pb-16'>
-      <Flex direction='column' spacing={0} className='app-container max-w-5xl'>
-        <OrderTrackingStatusHero
-          orderNumber={order.order_number ?? '—'}
-          status={currentStatus}
-          createdAt={String(order.created_at)}
-          isFreshCheckout={isFreshCheckout}
+      <Flex direction='column' spacing={0} className='app-container max-w-6xl'>
+        <OrderTrackingPageHeader
+          orderId={view.id}
+          orderNumber={view.orderNumber}
+          statusLabel={tracking.status_label ?? view.status}
+          estimatedArrival={tracking.estimated_arrival}
+          progressPercent={tracking.progress_percent ?? 8}
+          courier={tracking.courier}
           connectionStatus={connectionStatus}
         />
 
-        <OrderBoxNumber order_number={order.order_number || ''} />
+        <OrderTrackingMilestones milestones={tracking.milestones ?? []} />
 
-        <OrderTrackingProgress
-          progress={progress}
-          pulsingStepKey={liveState.pulsingStepKey}
-          onPulseComplete={clearPulsingStep}
+        <OrderTrackingMobileActions orderNumber={view.orderNumber} />
+
+        <OrderTrackingDeliverySection
+          delivery={tracking.delivery}
+          estimatedArrival={tracking.estimated_arrival}
         />
 
-        <OrderTrackingMobileActions orderNumber={order.order_number ?? ''} />
-
-        <OrderTrackingMobileSummary
-          itemCount={itemCount}
-          subtotal={subtotal}
-          shippingCost={shippingCost}
-          tax={tax}
-          total={total}
-          currency={order.currency || ''}
+        <OrderTrackingItemsPayment
+          items={view.items}
+          payment={tracking.payment_summary}
+          shipmentStatus={liveOrder.shipment?.status}
         />
 
-        <Grid gap={8} className='mb-10 grid-cols-1 lg:mb-12 lg:grid-cols-3'>
-          <GridItem className='lg:col-span-2'>
-            <OrderItemSummary orderItems={orderItems} />
-          </GridItem>
-          <GridItem className='hidden lg:block'>
-            <OrderTrackingSummary
-              currency={order.currency || ''}
-              shippingCost={shippingCost}
-              subtotal={subtotal}
-              tax={tax}
-              total={total}
-            />
-          </GridItem>
-        </Grid>
+        <OrderTrackingActivitySupport
+          events={tracking.events ?? []}
+          liveActivities={liveState.activities}
+          driver={tracking.driver}
+        />
 
-        <Grid gap={6} className='mb-10 grid-cols-1 lg:mb-12 lg:grid-cols-3'>
-          <GridItem>
-            <PaymentDetails
-              currentStatus={currentStatus}
-              payment={payment}
-              highlight={highlightPayment}
-            />
-          </GridItem>
-          <GridItem>
-            <ShipmentTraking shipment={shipment} highlight={highlightShipment} />
-          </GridItem>
-          <GridItem>
-            <OrderTrackingActivityFeed activities={liveState.activities} />
-          </GridItem>
-        </Grid>
-
-        <TrakingFooter />
+        <OrderTrackingPageFooter />
       </Flex>
     </Flex>
   );
