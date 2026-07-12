@@ -13,7 +13,9 @@ export function parseWorkflowHistoryResponse(data: unknown): WorkflowHistoryPage
   const root = data as Record<string, unknown>;
   const nested = root['data'];
   const payload =
-    nested && typeof nested === 'object' ? (nested as WorkflowHistoryPage) : (data as WorkflowHistoryPage);
+    nested && typeof nested === 'object'
+      ? (nested as WorkflowHistoryPage)
+      : (data as WorkflowHistoryPage);
 
   return {
     history: Array.isArray(payload.history) ? payload.history : [],
@@ -36,7 +38,9 @@ const BRAND_STATUS_STATES: Record<string, DtoStateView> = {
   draft: { code: 'draft', name: 'Draft', color: '#F59E0B', text_color: '#FFFFFF' },
   active: { code: 'active', name: 'Active', color: '#10B981', text_color: '#FFFFFF' },
   inactive: { code: 'inactive', name: 'Inactive', color: '#9CA3AF', text_color: '#FFFFFF' },
-  archived: { code: 'archived', name: 'Archived', color: '#EF4444', text_color: '#FFFFFF' }
+  archived: { code: 'archived', name: 'Archived', color: '#EF4444', text_color: '#FFFFFF' },
+  completed: { code: 'completed', name: 'Completed', color: '#10B981', text_color: '#FFFFFF' },
+  paid: { code: 'paid', name: 'Paid', color: '#10B981', text_color: '#FFFFFF' }
 };
 
 /** Maps legacy brand status strings to workflow-style badge views for grid display. */

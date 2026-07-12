@@ -3394,6 +3394,58 @@
       "orderNumberLabel": "Order"
     }
   },
+  "orderConfirmed": {
+    "hero": {
+      "confirmedTitle": "Order Confirmed",
+      "receivedTitle": "Order received",
+      "thanksFresh": "Thank you for shopping with LUXE",
+      "thanksDefault": "Thank you for your purchase",
+      "paymentReceived": "Your payment was successful and your order has been placed. We'll email you a confirmation shortly."
+    },
+    "card": {
+      "orderLabel": "Order",
+      "copyOrder": "Copy order number",
+      "placedOn": "Placed on {date}",
+      "paymentSuccessful": "Payment Successful",
+      "paymentPending": "Payment Pending",
+      "estimatedDelivery": "Estimated Delivery",
+      "deliveryWindow": "3–5 business days",
+      "deliveryScheduled": "Scheduled delivery",
+      "deliveryUnavailable": "Delivery estimate coming soon",
+      "shippingTo": "Shipping To",
+      "shippingUnavailable": "Address on file",
+      "paymentMethod": "Payment Method",
+      "qty": "Qty: {count}",
+      "totalPaid": "Total paid",
+      "orderTotal": "Order total"
+    },
+    "actions": {
+      "viewOrderDetails": "View Order Details",
+      "continueShopping": "Continue Shopping",
+      "refreshPaymentStatus": "Refresh payment status"
+    },
+    "trust": {
+      "securePayment": {
+        "title": "Secure Payment",
+        "description": "100% protected"
+      },
+      "easyReturns": {
+        "title": "Easy Returns",
+        "description": "30-day return policy"
+      },
+      "support": {
+        "title": "Dedicated Support",
+        "description": "We're here to help"
+      },
+      "thankYou": {
+        "title": "Thank You!",
+        "description": "We appreciate your trust"
+      }
+    },
+    "footer": {
+      "message": "We appreciate your trust. See you again soon at LUXE."
+    }
+  },
   "vendor": {
     "panel": {
       "shell": {

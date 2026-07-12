@@ -3342,6 +3342,58 @@
       "orderNumberLabel": "Pedido"
     }
   },
+  "orderConfirmed": {
+    "hero": {
+      "confirmedTitle": "Pedido confirmado",
+      "receivedTitle": "Pedido recibido",
+      "thanksFresh": "Gracias por comprar en LUXE",
+      "thanksDefault": "Gracias por tu compra",
+      "paymentReceived": "Tu pago fue exitoso y tu pedido ha sido registrado. Te enviaremos un correo de confirmación en breve."
+    },
+    "card": {
+      "orderLabel": "Pedido",
+      "copyOrder": "Copiar número de pedido",
+      "placedOn": "Realizado el {date}",
+      "paymentSuccessful": "Pago exitoso",
+      "paymentPending": "Pago pendiente",
+      "estimatedDelivery": "Entrega estimada",
+      "deliveryWindow": "3–5 días hábiles",
+      "deliveryScheduled": "Entrega programada",
+      "deliveryUnavailable": "Estimación de entrega próximamente",
+      "shippingTo": "Enviar a",
+      "shippingUnavailable": "Dirección registrada",
+      "paymentMethod": "Método de pago",
+      "qty": "Cant.: {count}",
+      "totalPaid": "Total pagado",
+      "orderTotal": "Total del pedido"
+    },
+    "actions": {
+      "viewOrderDetails": "Ver detalles del pedido",
+      "continueShopping": "Seguir comprando",
+      "refreshPaymentStatus": "Actualizar estado del pago"
+    },
+    "trust": {
+      "securePayment": {
+        "title": "Pago seguro",
+        "description": "100% protegido"
+      },
+      "easyReturns": {
+        "title": "Devoluciones fáciles",
+        "description": "Política de 30 días"
+      },
+      "support": {
+        "title": "Soporte dedicado",
+        "description": "Estamos para ayudarte"
+      },
+      "thankYou": {
+        "title": "¡Gracias!",
+        "description": "Apreciamos tu confianza"
+      }
+    },
+    "footer": {
+      "message": "Apreciamos tu confianza. ¡Te esperamos pronto en LUXE!"
+    }
+  },
   "vendor": {
     "panel": {
       "shell": {

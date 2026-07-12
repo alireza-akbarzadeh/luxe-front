@@ -3371,6 +3371,58 @@
       "orderNumberLabel": "سفارش"
     }
   },
+  "orderConfirmed": {
+    "hero": {
+      "confirmedTitle": "سفارش تأیید شد",
+      "receivedTitle": "سفارش دریافت شد",
+      "thanksFresh": "از خرید شما در LUXE سپاسگزاریم",
+      "thanksDefault": "از خرید شما متشکریم",
+      "paymentReceived": "پرداخت شما با موفقیت انجام شد و سفارش ثبت گردید. به‌زودی ایمیل تأیید برای شما ارسال می‌شود."
+    },
+    "card": {
+      "orderLabel": "سفارش",
+      "copyOrder": "کپی شماره سفارش",
+      "placedOn": "ثبت شده در {date}",
+      "paymentSuccessful": "پرداخت موفق",
+      "paymentPending": "در انتظار پرداخت",
+      "estimatedDelivery": "تحویل تقریبی",
+      "deliveryWindow": "۳ تا ۵ روز کاری",
+      "deliveryScheduled": "تحویل برنامه‌ریزی‌شده",
+      "deliveryUnavailable": "زمان تحویل به‌زودی اعلام می‌شود",
+      "shippingTo": "ارسال به",
+      "shippingUnavailable": "آدرس ثبت‌شده",
+      "paymentMethod": "روش پرداخت",
+      "qty": "تعداد: {count}",
+      "totalPaid": "مبلغ پرداخت‌شده",
+      "orderTotal": "جمع سفارش"
+    },
+    "actions": {
+      "viewOrderDetails": "مشاهده جزئیات سفارش",
+      "continueShopping": "ادامه خرید",
+      "refreshPaymentStatus": "بروزرسانی وضعیت پرداخت"
+    },
+    "trust": {
+      "securePayment": {
+        "title": "پرداخت امن",
+        "description": "۱۰۰٪ محافظت‌شده"
+      },
+      "easyReturns": {
+        "title": "مرجوعی آسان",
+        "description": "سیاست ۳۰ روزه"
+      },
+      "support": {
+        "title": "پشتیبانی اختصاصی",
+        "description": "در کنار شما هستیم"
+      },
+      "thankYou": {
+        "title": "متشکریم!",
+        "description": "از اعتماد شما سپاسگزاریم"
+      }
+    },
+    "footer": {
+      "message": "از اعتماد شما سپاسگزاریم. به‌زودی دوباره در LUXE می‌بینیمتان."
+    }
+  },
   "vendor": {
     "panel": {
       "shell": {
