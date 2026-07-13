@@ -54,6 +54,7 @@ export function CartSheet() {
   const closeCart = useCartStore((s) => s.closeCart);
   const t = useTranslations('common');
   const tCart = useTranslations('cart');
+  const tImport = useTranslations('cart.import');
 
   const { isAuthenticated, loading: isAuthLoading } = useUser();
   const { items, isLoading, error, refetch, itemCount, subtotal, updatingItemId, removingItemId } =
@@ -131,13 +132,17 @@ export function CartSheet() {
                 onClick={() => setImportOpen(true)}
               >
                 <IconDownload className='size-4' />
-                {tCart('import.action')}
+                {tImport('action')}
               </Button>
               <Button asChild variant='ghost' className='rounded-full' onClick={closeCart}>
                 <Link href='/shop'>{t('continueShopping')}</Link>
               </Button>
             </div>
-            <CartImportDialog open={importOpen} onOpenChange={setImportOpen} />
+            <CartImportDialog
+              open={importOpen}
+              onOpenChange={setImportOpen}
+              onImported={closeCart}
+            />
           </div>
         ) : isLoading ? (
           <CartSheetSkeleton />
@@ -174,10 +179,14 @@ export function CartSheet() {
                 onClick={() => setImportOpen(true)}
               >
                 <IconDownload className='size-4' />
-                {tCart('import.action')}
+                {tImport('action')}
               </Button>
             </div>
-            <CartImportDialog open={importOpen} onOpenChange={setImportOpen} />
+            <CartImportDialog
+              open={importOpen}
+              onOpenChange={setImportOpen}
+              onImported={closeCart}
+            />
           </div>
         ) : (
           <>

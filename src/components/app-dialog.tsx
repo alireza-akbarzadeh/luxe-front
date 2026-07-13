@@ -33,6 +33,10 @@ import {
 /** Match sticky PDP/checkout bars — drawer below this width, dialog above. */
 const DRAWER_MAX_WIDTH = 1024;
 
+/** Above cart/wishlist sheets (`z-[100]` / `z-[101]`). */
+const STACKED_OVERLAY_CLASS = 'z-[110]';
+const STACKED_CONTENT_CLASS = 'z-[111]';
+
 interface AppDialogProps {
   trigger?: React.ReactNode;
   children: React.ReactNode;
@@ -44,6 +48,11 @@ interface AppDialogProps {
   component?: 'sheet';
   /** Vaul nested drawer — stacks on an open parent drawer (mobile only). */
   nested?: boolean;
+  /**
+   * Raise overlay/content above open Sheets (cart/wishlist drawers use z-[100]).
+   * Use when this dialog can open while a sheet is visible.
+   */
+  stacked?: boolean;
   /** Extra bottom padding for mobile tab bars. Default true on root drawers. */
   tabBarPadding?: boolean;
   className?: string;
@@ -63,6 +72,7 @@ export function AppDialog(props: AppDialogProps) {
     onOpenChange,
     component,
     nested = false,
+    stacked = false,
     tabBarPadding = true,
     className,
     contentClassName,
@@ -82,10 +92,12 @@ export function AppDialog(props: AppDialogProps) {
         <DrawerContent
           showHandle
           radius='xl'
+          overlayClassName={stacked ? STACKED_OVERLAY_CLASS : undefined}
           className={cn(
             'border-border',
             tabBarPadding && 'pb-[calc(5rem+env(safe-area-inset-bottom))]',
-            sizeClasses.drawer
+            sizeClasses.drawer,
+            stacked && STACKED_CONTENT_CLASS
           )}
         >
           {(title || description) && (
@@ -116,7 +128,11 @@ export function AppDialog(props: AppDialogProps) {
         {trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
         <SheetContent
           side={side}
-          className={cn('flex h-full w-full flex-col gap-0 p-0', sizeClasses.sheet)}
+          className={cn(
+            'flex h-full w-full flex-col gap-0 p-0',
+            sizeClasses.sheet,
+            stacked && STACKED_CONTENT_CLASS
+          )}
         >
           {(title || description) && (
             <SheetHeader
@@ -145,7 +161,10 @@ export function AppDialog(props: AppDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={sizeClasses.dialog}>
+      <DialogContent
+        className={cn(sizeClasses.dialog, stacked && STACKED_CONTENT_CLASS)}
+        overlayClassName={stacked ? STACKED_OVERLAY_CLASS : undefined}
+      >
         {(title || description) && (
           <DialogHeader className={cn('pe-14 text-start', headerClassName)}>
             {title && <DialogTitle>{title}</DialogTitle>}

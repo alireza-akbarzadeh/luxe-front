@@ -57,6 +57,7 @@ export function WishlistSheet() {
   const closeSheet = useWishlistStore((s) => s.closeSheet);
   const t = useTranslations('common');
   const tWish = useTranslations('wishlist');
+  const tImport = useTranslations('wishlist.import');
 
   const { isAuthenticated, loading: isAuthLoading } = useUser();
   const [query, setQuery] = useState('');
@@ -161,13 +162,17 @@ export function WishlistSheet() {
                 onClick={() => setImportOpen(true)}
               >
                 <IconDownload className='size-4' />
-                {tWish('import.action')}
+                {tImport('action')}
               </Button>
               <Button asChild variant='outline' className='rounded-full' onClick={closeSheet}>
                 <Link href='/shop'>{t('continueShopping')}</Link>
               </Button>
             </Flex>
-            <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
+            <WishlistImportDialog
+              open={importOpen}
+              onOpenChange={setImportOpen}
+              onImported={closeSheet}
+            />
           </Flex>
         ) : isLoading ? (
           <WishlistSheetSkeleton />
@@ -218,10 +223,14 @@ export function WishlistSheet() {
                 onClick={() => setImportOpen(true)}
               >
                 <IconDownload className='size-4' />
-                {tWish('import.action')}
+                {tImport('action')}
               </Button>
             </Flex>
-            <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
+            <WishlistImportDialog
+              open={importOpen}
+              onOpenChange={setImportOpen}
+              onImported={closeSheet}
+            />
           </Flex>
         ) : (
           <>

@@ -60,12 +60,13 @@ export function CartShareDialog({ open, onOpenChange, items }: Readonly<CartShar
       title={t('title')}
       description={t('description')}
       size='md'
+      stacked
     >
-      <Flex direction='column' spacing={4} className='pt-1'>
-        <div className='space-y-2'>
+      <Flex direction='column' spacing={4} className='w-full max-w-full min-w-0 pt-1'>
+        <div className='min-w-0 space-y-2'>
           <Typography.Label className='text-sm font-medium'>{t('linkLabel')}</Typography.Label>
-          <Flex spacing={2} align='center'>
-            <Input readOnly value={shareUrl} className='font-mono text-xs' />
+          <Flex spacing={2} align='center' className='min-w-0'>
+            <Input readOnly value={shareUrl} className='min-w-0 flex-1 font-mono text-xs' />
             <Button
               type='button'
               variant='outline'
@@ -83,10 +84,10 @@ export function CartShareDialog({ open, onOpenChange, items }: Readonly<CartShar
           </Flex>
         </div>
 
-        <div className='space-y-2'>
+        <div className='min-w-0 space-y-2'>
           <Typography.Label className='text-sm font-medium'>{t('codeLabel')}</Typography.Label>
-          <Flex spacing={2} align='center'>
-            <Input readOnly value={code ?? ''} className='font-mono text-xs' />
+          <Flex spacing={2} align='center' className='min-w-0'>
+            <Input readOnly value={code ?? ''} className='min-w-0 flex-1 font-mono text-xs' />
             <Button
               type='button'
               variant='outline'

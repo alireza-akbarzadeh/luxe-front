@@ -1,6 +1,7 @@
 'use client';
 
 import { IconDownload } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -10,20 +11,26 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Textarea } from '@/components/ui/textarea';
 import { Typography } from '@/components/ui/typography';
-import { useWishlistShareQuery } from '@/domains/wishlist/hooks/use-wishlist-share-query';
 import {
   extractWishlistShareCode,
-  parseWishlistShareInput
+  parseWishlistShareInput,
+  WISHLIST_SHARE_QUERY_KEY
 } from '@/domains/wishlist/lib/wishlist-share';
 
 type WishlistImportDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** e.g. close the wishlist sheet so the shared wishlist page is visible */
+  onImported?: () => void;
 };
 
-export function WishlistImportDialog({ open, onOpenChange }: Readonly<WishlistImportDialogProps>) {
+export function WishlistImportDialog({
+  open,
+  onOpenChange,
+  onImported
+}: Readonly<WishlistImportDialogProps>) {
   const t = useTranslations('wishlist.import');
-  const [, setShareCode] = useWishlistShareQuery();
+  const router = useRouter();
   const [value, setValue] = useState('');
 
   const handleOpenChange = (next: boolean) => {
@@ -39,9 +46,10 @@ export function WishlistImportDialog({ open, onOpenChange }: Readonly<WishlistIm
       return;
     }
 
-    void setShareCode(code);
-    toast.success(t('success', { count: ids.length }));
+    onImported?.();
     handleOpenChange(false);
+    toast.success(t('success', { count: ids.length }));
+    router.push(`/wishlist?${WISHLIST_SHARE_QUERY_KEY}=${encodeURIComponent(code)}`);
   };
 
   return (
@@ -51,15 +59,16 @@ export function WishlistImportDialog({ open, onOpenChange }: Readonly<WishlistIm
       title={t('title')}
       description={t('description')}
       size='md'
+      stacked
     >
-      <Flex direction='column' spacing={4} className='pt-1'>
-        <div className='space-y-2'>
+      <Flex direction='column' spacing={4} className='w-full max-w-full min-w-0 pt-1'>
+        <div className='w-full max-w-full min-w-0 space-y-2'>
           <Typography.Label className='text-sm font-medium'>{t('fieldLabel')}</Typography.Label>
           <Textarea
             value={value}
             onChange={(event) => setValue(event.target.value)}
             placeholder={t('placeholder')}
-            className='min-h-28 font-mono text-xs'
+            className='field-sizing-fixed min-h-28 w-full max-w-full min-w-0 resize-y font-mono text-xs break-all'
             aria-label={t('fieldLabel')}
           />
           <Typography.Muted className='text-xs'>{t('hint')}</Typography.Muted>

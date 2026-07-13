@@ -53,6 +53,8 @@ interface DrawerContentProps extends React.ComponentProps<typeof DrawerPrimitive
   aboveCommerceActionBar?: boolean;
   /** Dim the page behind the drawer (default true). */
   showOverlay?: boolean;
+  /** Extra classes for the dimming overlay (e.g. raise z-index above sheets). */
+  overlayClassName?: string;
 }
 
 const radiusMap: Record<Radius, string> = {
@@ -71,6 +73,7 @@ function DrawerContent({
   aboveMobileTabBar = false,
   aboveCommerceActionBar = false,
   showOverlay = true,
+  overlayClassName,
   ...props
 }: DrawerContentProps) {
   const bottomClass = aboveCommerceActionBar
@@ -85,7 +88,8 @@ function DrawerContent({
         <DrawerOverlay
           className={cn(
             'fixed inset-x-0 top-0 z-[70] bg-black/50',
-            aboveCommerceActionBar ? MOBILE_COMMERCE_OVERLAY_BOTTOM_CLASS : 'bottom-0'
+            aboveCommerceActionBar ? MOBILE_COMMERCE_OVERLAY_BOTTOM_CLASS : 'bottom-0',
+            overlayClassName
           )}
         />
       ) : null}

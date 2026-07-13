@@ -10,33 +10,34 @@ function readMessage(namespace: string | undefined, key: string): string {
     return key;
   }
 
-  const section = namespace.split('.').reduce<unknown>((acc, part) => {
-    if (acc && typeof acc === 'object' && part in acc) {
-      return (acc as Record<string, unknown>)[part];
-    }
-    return undefined;
-  }, en);
+  const parts = [...namespace.split('.'), ...key.split('.')];
+  let current: unknown = en;
 
-  if (section && typeof section === 'object' && key in section) {
-    return String((section as Record<string, unknown>)[key]);
+  for (const part of parts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = (current as Record<string, unknown>)[part];
+    } else {
+      return key;
+    }
   }
 
-  return key;
+  return typeof current === 'string' ? current : key;
 }
 
 vi.mock('next-intl', () => ({
   useLocale: () => 'en',
-  useTranslations: (namespace?: string) => (key: string, values?: Record<string, string | number>) => {
-    let message = readMessage(namespace, key);
+  useTranslations:
+    (namespace?: string) => (key: string, values?: Record<string, string | number>) => {
+      let message = readMessage(namespace, key);
 
-    if (values) {
-      for (const [name, value] of Object.entries(values)) {
-        message = message.replaceAll(`{${name}}`, String(value));
+      if (values) {
+        for (const [name, value] of Object.entries(values)) {
+          message = message.replaceAll(`{${name}}`, String(value));
+        }
       }
-    }
 
-    return message;
-  },
+      return message;
+    },
   NextIntlClientProvider: ({ children }: { children: React.ReactNode }) => children
 }));
 
