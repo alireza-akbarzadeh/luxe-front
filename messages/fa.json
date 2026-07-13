@@ -346,7 +346,14 @@
       "outOfStock": "ناموجود",
       "inCart": "در سبد ({count, number})",
       "viewProduct": "مشاهده {name}",
-      "moreColors": "+{count, number}"
+      "moreColors": "+{count, number}",
+      "toolbarOpen": "باز کردن اقدامات",
+      "toolbarClose": "بستن اقدامات",
+      "share": "اشتراک‌گذاری محصول",
+      "compare": "افزودن به مقایسه",
+      "removeCompare": "حذف از مقایسه",
+      "fullDetails": "جزئیات کامل محصول",
+      "linkCopiedLabel": "لینک محصول"
     },
     "hero": {
       "title": "همهٔ محصولات",

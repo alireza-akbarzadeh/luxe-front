@@ -11,6 +11,7 @@ import { ProductListRow } from '@/domains/shop/components/product-list-row';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { useSearchParams } from '../hooks/useSearchParams';
+import { SEARCH_PRODUCT_GRID_CLASS, SEARCH_PRODUCT_LIST_CLASS } from '../lib/search-results-layout';
 
 interface ProductGridListProps {
   products: DtoProductWithLike[];
@@ -28,9 +29,7 @@ export function ProductGridList(props: ProductGridListProps) {
     <>
       <div
         className={
-          searchParams.view === 'grid'
-            ? 'grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-3 xl:grid-cols-4'
-            : 'flex flex-col gap-4'
+          searchParams.view === 'grid' ? SEARCH_PRODUCT_GRID_CLASS : SEARCH_PRODUCT_LIST_CLASS
         }
       >
         {products.length > 0 ? (

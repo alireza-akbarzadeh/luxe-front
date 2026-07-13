@@ -27,13 +27,16 @@ export function useCarouselState(): UseCarouselStateReturn {
   const [count, setCount] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  /** Embla can only measure scroll edges in the browser — keep buttons enabled until then to avoid SSR/client `disabled` mismatches. */
+  const [isReady, setIsReady] = useState(false);
 
-  const onSelect = useCallback((api: CarouselApi) => {
-    if (!api) return;
-    setCurrent(api.selectedScrollSnap());
-    setCount(api.scrollSnapList().length);
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
+  const onSelect = useCallback((carouselApi: CarouselApi) => {
+    if (!carouselApi) return;
+    setCurrent(carouselApi.selectedScrollSnap());
+    setCount(carouselApi.scrollSnapList().length);
+    setCanScrollPrev(carouselApi.canScrollPrev());
+    setCanScrollNext(carouselApi.canScrollNext());
+    setIsReady(true);
   }, []);
 
   useEffect(() => {
@@ -60,7 +63,8 @@ export function useCarouselState(): UseCarouselStateReturn {
     scrollTo,
     scrollPrev,
     scrollNext,
-    canScrollPrev,
-    canScrollNext
+    // Until measured, report scrollable so `disabled={!canScroll*}` stays false on SSR + first client paint.
+    canScrollPrev: !isReady || canScrollPrev,
+    canScrollNext: !isReady || canScrollNext
   };
 }

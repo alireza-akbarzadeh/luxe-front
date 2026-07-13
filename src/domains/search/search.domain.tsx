@@ -7,10 +7,8 @@ import { useEffect, useMemo } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ProductGridSkeleton } from '@/domains/home/components/product-grid-skeleton';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
-import { cn } from '@/lib/utils';
 import { useGetCategories } from '@/services/-categories-get';
 import { getGetProductsIdQueryOptions } from '@/services/-products-{id}-get';
 import { useGetSearch } from '@/services/-search-get';
@@ -19,6 +17,7 @@ import { SearchActiveFilters } from './components/search-active-filters';
 import { SearchFilterContent } from './components/search-filter-content';
 import { SearchIntentBanner } from './components/search-intent-banner';
 import { SearchPageSkeleton } from './components/search-page-skeleton';
+import { SearchResultsPending } from './components/search-results-pending';
 import { SearchVisualBanner } from './components/search-visual-banner';
 import { ProductGridList } from './containers/product-grid-list';
 import { ResultHeader } from './containers/result-header';
@@ -125,7 +124,7 @@ export default function SearchDomain() {
   }, [searchParams.page]);
 
   if (isInitialLoading) {
-    return <SearchPageSkeleton productCount={searchParams.perPage} />;
+    return <SearchPageSkeleton productCount={searchParams.perPage} view={searchParams.view} />;
   }
 
   if (error) {
@@ -173,18 +172,9 @@ export default function SearchDomain() {
               categories={categories}
             />
             {searchParams.hasActiveFilters && <SearchActiveFilters stores={stores} />}
-            <div className={cn('relative', isPageLoading && 'pointer-events-none opacity-60')}>
-              {isPageLoading && products.length === 0 ? (
-                <ProductGridSkeleton count={searchParams.perPage} columns={4} />
-              ) : (
-                <ProductGridList products={products} total={total} />
-              )}
-              {isPageLoading && products.length > 0 ? (
-                <div className='bg-background/40 absolute inset-0 flex items-start justify-center pt-24 backdrop-blur-[1px]'>
-                  <ProductGridSkeleton count={Math.min(searchParams.perPage, 4)} columns={4} />
-                </div>
-              ) : null}
-            </div>
+            <SearchResultsPending isPending={isPageLoading} skeletonCount={searchParams.perPage}>
+              <ProductGridList products={products} total={total} />
+            </SearchResultsPending>
           </div>
         </div>
 

@@ -299,7 +299,14 @@
       "outOfStock": "Agotado",
       "inCart": "En carrito ({count, number})",
       "viewProduct": "Ver {name}",
-      "moreColors": "+{count, number}"
+      "moreColors": "+{count, number}",
+      "toolbarOpen": "Abrir acciones",
+      "toolbarClose": "Cerrar acciones",
+      "share": "Compartir producto",
+      "compare": "Añadir a comparar",
+      "removeCompare": "Quitar de comparar",
+      "fullDetails": "Detalles completos",
+      "linkCopiedLabel": "Enlace del producto"
     },
     "hero": {
       "title": "Toda la tienda",

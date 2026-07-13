@@ -1,11 +1,13 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { ProductGridSkeleton } from '@/domains/home/components/product-grid-skeleton';
+
+import { SearchResultsSkeleton } from './search-results-skeleton';
 
 interface SearchPageSkeletonProps {
   productCount?: number;
+  view?: 'grid' | 'list';
 }
 
-export function SearchPageSkeleton({ productCount = 12 }: SearchPageSkeletonProps) {
+export function SearchPageSkeleton({ productCount = 12, view = 'grid' }: SearchPageSkeletonProps) {
   return (
     <>
       <section className='from-secondary/50 to-background relative border-b bg-linear-to-b pt-20'>
@@ -25,7 +27,7 @@ export function SearchPageSkeleton({ productCount = 12 }: SearchPageSkeletonProp
 
       <section className='py-8'>
         <div className='flex flex-col gap-8 lg:flex-row'>
-          <aside className='hidden w-64 shrink-0 lg:block'>
+          <aside className='hidden w-72 shrink-0 lg:block'>
             <div className='bg-card sticky top-24 rounded-2xl border p-6'>
               <Skeleton className='mb-4 h-5 w-24' />
               <div className='space-y-6'>
@@ -48,7 +50,7 @@ export function SearchPageSkeleton({ productCount = 12 }: SearchPageSkeletonProp
             </div>
           </aside>
 
-          <div className='min-w-0 flex-1 space-y-6'>
+          <div className='min-w-0 flex-1 space-y-6 px-4 md:px-0'>
             <div className='flex flex-col justify-between gap-4 sm:flex-row sm:items-center'>
               <div className='space-y-2'>
                 <Skeleton className='h-6 w-48' />
@@ -59,7 +61,7 @@ export function SearchPageSkeleton({ productCount = 12 }: SearchPageSkeletonProp
                 <Skeleton className='hidden h-9 w-20 sm:block' />
               </div>
             </div>
-            <ProductGridSkeleton count={productCount} columns={4} />
+            <SearchResultsSkeleton count={productCount} view={view} />
           </div>
         </div>
       </section>

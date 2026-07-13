@@ -346,7 +346,14 @@
       "outOfStock": "Out of stock",
       "inCart": "In cart ({count, number})",
       "viewProduct": "View {name}",
-      "moreColors": "+{count, number}"
+      "moreColors": "+{count, number}",
+      "toolbarOpen": "Open actions",
+      "toolbarClose": "Close actions",
+      "share": "Share product",
+      "compare": "Add to compare",
+      "removeCompare": "Remove from compare",
+      "fullDetails": "Full product details",
+      "linkCopiedLabel": "Product link"
     },
     "hero": {
       "title": "Shop All",
