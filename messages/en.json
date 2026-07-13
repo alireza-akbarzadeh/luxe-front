@@ -1113,6 +1113,7 @@
     "refresh": "Refresh wishlist",
     "share": {
       "openAria": "Copy and share wishlist",
+      "tooltip": "Share wishlist",
       "title": "Share your wishlist",
       "description": "Send this link or code so someone else can open the same products on Luxe.",
       "linkLabel": "Share link",
@@ -1124,6 +1125,7 @@
     },
     "import": {
       "openAria": "Import a shared wishlist",
+      "tooltip": "Import wishlist",
       "title": "Import a wishlist",
       "description": "Paste a share link or code from a friend to preview their saved products.",
       "fieldLabel": "Share link or code",
@@ -1142,6 +1144,7 @@
       "saveSelected": "Save {count, number} items",
       "editHint": "Remove anything you don’t want before saving.",
       "removedHint": "{count, number} removed",
+      "remove": "Remove",
       "removeAria": "Remove from shared list",
       "allRemovedTitle": "Nothing left to save",
       "allRemovedDescription": "You removed every shared item. Go back to your wishlist or ask for a new link.",
@@ -1172,6 +1175,7 @@
     "taxNote": "Taxes and shipping calculated at checkout.",
     "share": {
       "openAria": "Share basket",
+      "tooltip": "Share basket",
       "action": "Share basket",
       "title": "Share your basket",
       "description": "Send this link or code so someone else can open the same items — including quantities and options.",
@@ -1184,6 +1188,7 @@
     },
     "import": {
       "openAria": "Import a shared basket",
+      "tooltip": "Import basket",
       "title": "Import a basket",
       "description": "Paste a share link or code from a friend to preview their cart items.",
       "fieldLabel": "Share link or code",

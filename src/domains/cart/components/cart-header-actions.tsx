@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { CartImportDialog } from '@/domains/cart/components/cart-import-dialog';
 import { CartShareDialog } from '@/domains/cart/components/cart-share-dialog';
 import type { CartShareSourceItem } from '@/domains/cart/lib/cart-share';
@@ -28,33 +29,45 @@ export function CartHeaderActions({
 
   return (
     <>
-      <Flex spacing={2} className='shrink-0'>
-        {showImport ? (
-          <Button
-            type='button'
-            variant='outline'
-            size='icon'
-            className='size-10 rounded-full'
-            aria-label={t('import.openAria')}
-            onClick={() => setImportOpen(true)}
-          >
-            <IconDownload className='size-4' />
-          </Button>
-        ) : null}
+      <TooltipProvider delayDuration={300}>
+        <Flex direction='row' align='center' spacing={2} className='shrink-0'>
+          {showImport ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  className='size-10 rounded-full'
+                  aria-label={t('import.openAria')}
+                  onClick={() => setImportOpen(true)}
+                >
+                  <IconDownload className='size-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{t('import.tooltip')}</TooltipContent>
+            </Tooltip>
+          ) : null}
 
-        {canShare ? (
-          <Button
-            type='button'
-            variant='outline'
-            size='icon'
-            className='size-10 rounded-full'
-            aria-label={t('share.openAria')}
-            onClick={() => setShareOpen(true)}
-          >
-            <IconShare2 className='size-4' />
-          </Button>
-        ) : null}
-      </Flex>
+          {canShare ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  className='size-10 rounded-full'
+                  aria-label={t('share.openAria')}
+                  onClick={() => setShareOpen(true)}
+                >
+                  <IconShare2 className='size-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{t('share.tooltip')}</TooltipContent>
+            </Tooltip>
+          ) : null}
+        </Flex>
+      </TooltipProvider>
 
       <CartShareDialog open={shareOpen} onOpenChange={setShareOpen} items={items} />
       <CartImportDialog open={importOpen} onOpenChange={setImportOpen} />

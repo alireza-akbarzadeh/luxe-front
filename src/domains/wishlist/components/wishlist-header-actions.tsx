@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
 import { WishlistShareDialog } from '@/domains/wishlist/components/wishlist-share-dialog';
 import { useWishlistStore } from '@/domains/wishlist/wishlist.store';
@@ -28,6 +29,7 @@ interface WishlistHeaderActionsProps {
   isClearing: boolean;
   onClearAll: () => void;
   showImport?: boolean;
+  showClear?: boolean;
 }
 
 export function WishlistHeaderActions({
@@ -35,7 +37,8 @@ export function WishlistHeaderActions({
   productIds,
   isClearing,
   onClearAll,
-  showImport = true
+  showImport = true,
+  showClear = true
 }: Readonly<WishlistHeaderActionsProps>) {
   const t = useTranslations('wishlist');
   const { isCopied, setIsCopied } = useWishlistStore();
@@ -51,85 +54,108 @@ export function WishlistHeaderActions({
 
   return (
     <>
-      <div className='flex shrink-0 items-center gap-2'>
-        {showImport ? (
-          <Button
-            type='button'
-            variant='outline'
-            size='icon'
-            className='size-10 rounded-full'
-            aria-label={t('import.openAria')}
-            onClick={() => setImportOpen(true)}
-          >
-            <IconDownload className='size-4' />
-          </Button>
-        ) : null}
+      <TooltipProvider delayDuration={300}>
+        <div className='flex shrink-0 items-center gap-2'>
+          {showImport ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  className='size-10 rounded-full'
+                  aria-label={t('import.openAria')}
+                  onClick={() => setImportOpen(true)}
+                >
+                  <IconDownload className='size-4' />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{t('import.tooltip')}</TooltipContent>
+            </Tooltip>
+          ) : null}
 
-        {itemLength > 0 ? (
-          <Button
-            type='button'
-            variant='outline'
-            size='icon'
-            onClick={handleOpenShare}
-            className='size-10 rounded-full'
-            aria-label={t('share.openAria')}
-          >
-            <AnimatePresence mode='wait' initial={false}>
-              {isCopied ? (
-                <motion.span
-                  key='check'
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1 }}
+          {itemLength > 0 ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='icon'
+                  onClick={handleOpenShare}
+                  className='size-10 rounded-full'
+                  aria-label={t('share.openAria')}
                 >
-                  <IconCheck className='size-4 text-green-500' />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key='share'
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
-                  <IconShare2 className='size-4' />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </Button>
-        ) : null}
+                  <AnimatePresence mode='wait' initial={false}>
+                    {isCopied ? (
+                      <motion.span
+                        key='check'
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                      >
+                        <IconCheck className='size-4 text-green-500' />
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key='share'
+                        initial={{ opacity: 0, scale: 0.6 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                      >
+                        <IconShare2 className='size-4' />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{t('share.tooltip')}</TooltipContent>
+            </Tooltip>
+          ) : null}
 
-        {itemLength > 0 ? (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant='outline'
-                size='icon'
-                disabled={isClearing}
-                className='text-destructive hover:bg-destructive/10 size-10 rounded-full'
-                aria-label={t('clearAllAria')}
-              >
-                {isClearing ? <Spinner className='size-4' /> : <IconTrash className='size-4' />}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t('clearTitle')}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t('clearDescription', { count: itemLength })}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isClearing}>{t('cancel')}</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={onClearAll}
-                  disabled={isClearing || productIds.length === 0}
-                  className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-                >
-                  {isClearing ? t('clearing') : t('clearConfirm')}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        ) : null}
-      </div>
+          {itemLength > 0 && showClear ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className='inline-flex'>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant='outline'
+                        size='icon'
+                        disabled={isClearing}
+                        className='text-destructive hover:bg-destructive/10 size-10 rounded-full'
+                        aria-label={t('clearAllAria')}
+                      >
+                        {isClearing ? (
+                          <Spinner className='size-4' />
+                        ) : (
+                          <IconTrash className='size-4' />
+                        )}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>{t('clearTitle')}</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t('clearDescription', { count: itemLength })}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isClearing}>{t('cancel')}</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={onClearAll}
+                          disabled={isClearing || productIds.length === 0}
+                          className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                        >
+                          {isClearing ? t('clearing') : t('clearConfirm')}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side='bottom'>{t('clearAllAria')}</TooltipContent>
+            </Tooltip>
+          ) : null}
+        </div>
+      </TooltipProvider>
 
       <WishlistShareDialog open={shareOpen} onOpenChange={setShareOpen} productIds={productIds} />
       <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />

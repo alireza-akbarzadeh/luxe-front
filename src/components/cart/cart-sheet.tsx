@@ -1,9 +1,10 @@
 'use client';
 
-import { IconArrowRight, IconRefresh, IconShoppingBag } from '@tabler/icons-react';
+import { IconArrowRight, IconDownload, IconRefresh, IconShoppingBag } from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -16,6 +17,8 @@ import {
   SheetTitle
 } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CartHeaderActions } from '@/domains/cart/components/cart-header-actions';
+import { CartImportDialog } from '@/domains/cart/components/cart-import-dialog';
 import { FreeShippingProgress } from '@/domains/cart/components/free-shipping-progress';
 import { useCartCheckoutAction } from '@/domains/cart/hooks/use-cart-checkout-action';
 import { useCartOrderEstimate } from '@/domains/cart/hooks/use-cart-order-estimate';
@@ -52,14 +55,17 @@ export function CartSheet() {
   const t = useTranslations('common');
   const tCart = useTranslations('cart');
 
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, loading: isAuthLoading } = useUser();
   const { items, isLoading, error, refetch, itemCount, subtotal, updatingItemId, removingItemId } =
     useCartController();
+  const [importOpen, setImportOpen] = useState(false);
 
   const { totalDiscount, shipping, tax, total, settings } = useCartOrderEstimate(items, subtotal);
   const { hasIncompleteVariants, proceedToCheckout } = useCartCheckoutAction(items, {
     redirectToCartOnBlock: true
   });
+
+  const showCartActions = isAuthenticated && !isAuthLoading && !isLoading && !error;
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -78,16 +84,19 @@ export function CartSheet() {
                 </p>
               ) : null}
             </div>
-            {isAuthenticated && !isLoading && !error ? (
-              <Button
-                variant='ghost'
-                size='icon-sm'
-                className='-mt-3 mr-3 rounded-full'
-                aria-label='Refresh cart'
-                onClick={() => void refetch()}
-              >
-                <IconRefresh className='size-4' />
-              </Button>
+            {showCartActions ? (
+              <div className='me-3 -mt-1 flex items-center gap-1'>
+                {items.length > 0 ? <CartHeaderActions items={items} /> : null}
+                <Button
+                  variant='ghost'
+                  size='icon-sm'
+                  className='rounded-full'
+                  aria-label='Refresh cart'
+                  onClick={() => void refetch()}
+                >
+                  <IconRefresh className='size-4' />
+                </Button>
+              </div>
             ) : null}
           </div>
           <SheetDescription className='sr-only'>
@@ -95,7 +104,9 @@ export function CartSheet() {
           </SheetDescription>
         </SheetHeader>
 
-        {!isAuthenticated ? (
+        {isAuthLoading ? (
+          <CartSheetSkeleton />
+        ) : !isAuthenticated ? (
           <div className='flex flex-1 flex-col items-center justify-center gap-4 px-6 py-12 text-center'>
             <div className='bg-muted/60 flex size-16 items-center justify-center rounded-full'>
               <IconShoppingBag className='text-muted-foreground size-8' />
@@ -103,7 +114,7 @@ export function CartSheet() {
             <div className='space-y-1'>
               <p className='font-display text-lg font-semibold'>{tCart('signInTitle')}</p>
               <p className='text-muted-foreground text-sm leading-relaxed'>
-                {tCart('signInDescriptionAlt')}
+                {tCart('signInDescriptionShared')}
               </p>
             </div>
             <div className='flex w-full max-w-xs flex-col gap-2'>
@@ -113,10 +124,20 @@ export function CartSheet() {
                   <IconArrowRight className='cn-rtl-flip size-4' />
                 </Link>
               </Button>
-              <Button asChild variant='outline' className='rounded-full' onClick={closeCart}>
+              <Button
+                type='button'
+                variant='outline'
+                className='rounded-full'
+                onClick={() => setImportOpen(true)}
+              >
+                <IconDownload className='size-4' />
+                {tCart('import.action')}
+              </Button>
+              <Button asChild variant='ghost' className='rounded-full' onClick={closeCart}>
                 <Link href='/shop'>{t('continueShopping')}</Link>
               </Button>
             </div>
+            <CartImportDialog open={importOpen} onOpenChange={setImportOpen} />
           </div>
         ) : isLoading ? (
           <CartSheetSkeleton />
@@ -137,14 +158,26 @@ export function CartSheet() {
             </div>
             <div className='space-y-1'>
               <p className='font-display text-lg font-semibold'>{tCart('emptyTitle')}</p>
-              <p className='text-muted-foreground text-sm'>{tCart('emptyDescriptionAlt')}</p>
+              <p className='text-muted-foreground text-sm'>{tCart('emptyDescriptionShared')}</p>
             </div>
-            <Button asChild className='mt-1 rounded-full' onClick={closeCart}>
-              <Link href='/shop'>
-                {t('continueShopping')}
-                <IconArrowRight className='cn-rtl-flip size-4' />
-              </Link>
-            </Button>
+            <div className='flex w-full max-w-xs flex-col gap-2'>
+              <Button asChild className='rounded-full' onClick={closeCart}>
+                <Link href='/shop'>
+                  {t('continueShopping')}
+                  <IconArrowRight className='cn-rtl-flip size-4' />
+                </Link>
+              </Button>
+              <Button
+                type='button'
+                variant='outline'
+                className='rounded-full'
+                onClick={() => setImportOpen(true)}
+              >
+                <IconDownload className='size-4' />
+                {tCart('import.action')}
+              </Button>
+            </div>
+            <CartImportDialog open={importOpen} onOpenChange={setImportOpen} />
           </div>
         ) : (
           <>
@@ -249,11 +282,6 @@ export function CartSheet() {
                       </Link>
                     </Button>
                   </div>
-                  <Button asChild variant='ghost' size='sm' className='w-full rounded-full'>
-                    <Link href='/cart' onClick={closeCart}>
-                      Share or import basket
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </SheetFooter>

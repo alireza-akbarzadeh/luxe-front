@@ -1066,6 +1066,7 @@
     "refresh": "Actualizar favoritos",
     "share": {
       "openAria": "Copiar y compartir favoritos",
+      "tooltip": "Compartir lista",
       "title": "Comparte tu lista",
       "description": "Envía este enlace o código para que otra persona vea los mismos productos en Luxe.",
       "linkLabel": "Enlace para compartir",
@@ -1077,6 +1078,7 @@
     },
     "import": {
       "openAria": "Importar una lista compartida",
+      "tooltip": "Importar lista",
       "title": "Importar lista de deseos",
       "description": "Pega un enlace o código de un amigo para ver sus productos guardados.",
       "fieldLabel": "Enlace o código",
@@ -1095,6 +1097,7 @@
       "saveSelected": "Guardar {count, number} artículos",
       "editHint": "Quita lo que no quieras antes de guardar.",
       "removedHint": "{count, number} eliminados",
+      "remove": "Quitar",
       "removeAria": "Quitar de la lista compartida",
       "allRemovedTitle": "No queda nada que guardar",
       "allRemovedDescription": "Eliminaste todos los artículos compartidos. Vuelve a tu lista o pide un enlace nuevo.",
@@ -1125,6 +1128,7 @@
     "taxNote": "Impuestos y envío calculados en el pago.",
     "share": {
       "openAria": "Compartir cesta",
+      "tooltip": "Compartir cesta",
       "action": "Compartir cesta",
       "title": "Comparte tu cesta",
       "description": "Envía este enlace o código para que otra persona abra los mismos artículos, con cantidades y opciones.",
@@ -1137,6 +1141,7 @@
     },
     "import": {
       "openAria": "Importar una cesta compartida",
+      "tooltip": "Importar cesta",
       "title": "Importar cesta",
       "description": "Pega un enlace o código de un amigo para ver los artículos de su carrito.",
       "fieldLabel": "Enlace o código",

@@ -9,7 +9,19 @@ import { AccountNotifications } from '@/domains/account/containers/account-notif
 import { NotificationsGuestState } from './components/notifications-guest-state';
 
 export function NotificationsDomain() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+
+  if (isAuthLoading) {
+    return (
+      <main className='app-container pt-24 pb-16'>
+        <div className='mx-auto max-w-3xl space-y-4'>
+          <div className='bg-muted h-4 w-40 animate-pulse rounded' />
+          <div className='bg-muted h-24 w-full animate-pulse rounded-2xl' />
+          <div className='bg-muted h-24 w-full animate-pulse rounded-2xl' />
+        </div>
+      </main>
+    );
+  }
 
   if (!isAuthenticated) {
     return <NotificationsGuestState />;

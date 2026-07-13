@@ -94,7 +94,7 @@ export function WishlistSharedView({
             ) : null}
           </div>
 
-          <Flex spacing={2} className='shrink-0 flex-wrap'>
+          <Flex direction='row' spacing={2} className='shrink-0 flex-wrap'>
             <Button variant='outline' className='rounded-full' onClick={clearShare}>
               {t('viewMine')}
             </Button>
@@ -189,19 +189,20 @@ export function WishlistSharedView({
             <Grid cols={2} className='gap-4 md:grid-cols-3 lg:grid-cols-4'>
               {products.map((product) =>
                 product.id ? (
-                  <div key={product.id} className='relative'>
+                  <Flex key={product.id} direction='column' spacing={2} className='min-w-0'>
+                    <ProductCard product={product} />
                     <Button
                       type='button'
-                      variant='secondary'
-                      size='icon-sm'
-                      className='bg-background/90 absolute end-2 top-2 z-10 rounded-full shadow-sm'
+                      variant='outline'
+                      size='sm'
+                      className='w-full rounded-full'
                       aria-label={t('removeAria')}
                       onClick={() => removeItem(product.id!)}
                     >
                       <IconX className='size-4' />
+                      {t('remove')}
                     </Button>
-                    <ProductCard product={product} />
-                  </div>
+                  </Flex>
                 ) : null
               )}
             </Grid>

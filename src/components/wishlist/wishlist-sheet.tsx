@@ -1,6 +1,13 @@
 'use client';
 
-import { IconArrowRight, IconHeart, IconRefresh, IconSearch, IconX } from '@tabler/icons-react';
+import {
+  IconArrowRight,
+  IconDownload,
+  IconHeart,
+  IconRefresh,
+  IconSearch,
+  IconX
+} from '@tabler/icons-react';
 import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -19,6 +26,8 @@ import {
 } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Typography } from '@/components/ui/typography';
+import { WishlistHeaderActions } from '@/domains/wishlist/components/wishlist-header-actions';
+import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
 import { useWishlistActions } from '@/domains/wishlist/hooks/use-wishlist-actions';
 import { useWishlistStore } from '@/domains/wishlist/wishlist.store';
 import { useUser } from '@/hooks/useUser';
@@ -49,12 +58,13 @@ export function WishlistSheet() {
   const t = useTranslations('common');
   const tWish = useTranslations('wishlist');
 
-  const { isAuthenticated } = useUser();
+  const { isAuthenticated, loading: isAuthLoading } = useUser();
   const [query, setQuery] = useState('');
+  const [importOpen, setImportOpen] = useState(false);
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
 
   const { items, total, isLoading, isError, refetch, removingProductId, removeItem } =
-    useWishlistActions('name', isAuthenticated && isOpen);
+    useWishlistActions('name', isAuthenticated && isOpen && !isAuthLoading);
 
   const filteredItems =
     deferredQuery.length === 0
@@ -67,6 +77,12 @@ export function WishlistSheet() {
       setQuery('');
     }
   };
+
+  const productIds = items
+    .map((item) => item.product_id)
+    .filter((id): id is number => typeof id === 'number' && id > 0);
+
+  const showWishlistActions = isAuthenticated && !isAuthLoading && !isLoading && !isError;
 
   return (
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
@@ -83,22 +99,36 @@ export function WishlistSheet() {
                 </Typography.Muted>
               ) : null}
             </div>
-            {isAuthenticated && !isLoading && !isError ? (
-              <Button
-                variant='ghost'
-                size='icon-sm'
-                className='me-3 -mt-3 rounded-full'
-                aria-label={tWish('refresh')}
-                onClick={() => void refetch()}
-              >
-                <IconRefresh className='size-4' />
-              </Button>
+            {showWishlistActions ? (
+              <Flex direction='row' align='center' spacing={1} className='me-3 -mt-1'>
+                {items.length > 0 ? (
+                  <WishlistHeaderActions
+                    itemLength={items.length}
+                    productIds={productIds}
+                    isClearing={false}
+                    onClearAll={() => undefined}
+                    showImport={false}
+                    showClear={false}
+                  />
+                ) : null}
+                <Button
+                  variant='ghost'
+                  size='icon-sm'
+                  className='rounded-full'
+                  aria-label={tWish('refresh')}
+                  onClick={() => void refetch()}
+                >
+                  <IconRefresh className='size-4' />
+                </Button>
+              </Flex>
             ) : null}
           </Flex>
           <SheetDescription className='sr-only'>{tWish('sheetDescription')}</SheetDescription>
         </SheetHeader>
 
-        {!isAuthenticated ? (
+        {isAuthLoading ? (
+          <WishlistSheetSkeleton />
+        ) : !isAuthenticated ? (
           <Flex
             direction='column'
             align='center'
@@ -114,7 +144,7 @@ export function WishlistSheet() {
                 {tWish('signInTitle')}
               </Typography.H3>
               <Typography.Muted className='text-sm leading-relaxed'>
-                {tWish('signInDescription')}
+                {tWish('guestDescription')}
               </Typography.Muted>
             </div>
             <Flex direction='column' spacing={2} className='w-full max-w-xs'>
@@ -124,10 +154,20 @@ export function WishlistSheet() {
                   <IconArrowRight className='cn-rtl-flip size-4' />
                 </Link>
               </Button>
+              <Button
+                type='button'
+                variant='outline'
+                className='rounded-full'
+                onClick={() => setImportOpen(true)}
+              >
+                <IconDownload className='size-4' />
+                {tWish('import.action')}
+              </Button>
               <Button asChild variant='outline' className='rounded-full' onClick={closeSheet}>
                 <Link href='/shop'>{t('continueShopping')}</Link>
               </Button>
             </Flex>
+            <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
           </Flex>
         ) : isLoading ? (
           <WishlistSheetSkeleton />
@@ -164,12 +204,24 @@ export function WishlistSheet() {
               </Typography.H3>
               <Typography.Muted className='text-sm'>{tWish('emptyDescription')}</Typography.Muted>
             </div>
-            <Button asChild className='mt-1 rounded-full' onClick={closeSheet}>
-              <Link href='/shop'>
-                {t('continueShopping')}
-                <IconArrowRight className='cn-rtl-flip size-4' />
-              </Link>
-            </Button>
+            <Flex direction='column' spacing={2} className='w-full max-w-xs'>
+              <Button asChild className='mt-1 rounded-full' onClick={closeSheet}>
+                <Link href='/shop'>
+                  {t('continueShopping')}
+                  <IconArrowRight className='cn-rtl-flip size-4' />
+                </Link>
+              </Button>
+              <Button
+                type='button'
+                variant='outline'
+                className='rounded-full'
+                onClick={() => setImportOpen(true)}
+              >
+                <IconDownload className='size-4' />
+                {tWish('import.action')}
+              </Button>
+            </Flex>
+            <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
           </Flex>
         ) : (
           <>

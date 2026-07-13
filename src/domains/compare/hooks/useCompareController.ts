@@ -17,8 +17,7 @@ function toCompareProduct(
 
   const compareAt = product.compare_at_price;
   const price = product.price ?? 0;
-  const discount =
-    compareAt && compareAt > price ? ((compareAt - price) / compareAt) * 100 : 0;
+  const discount = compareAt && compareAt > price ? ((compareAt - price) / compareAt) * 100 : 0;
 
   return {
     ...product,
@@ -47,18 +46,18 @@ async function fetchCompareProducts(productIds: number[]) {
 /** Client-side compare list backed by Orval compare APIs. */
 export default function useCompareController() {
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [highlightDiffs, setHighlightDiffs] = useState(true);
 
   const { data: compareData, isLoading: isLoadingIds } = useGetCompare(undefined, {
-    query: { enabled: isAuthenticated }
+    query: { enabled: isAuthenticated && !isAuthLoading }
   });
   const productIds = compareData?.data?.product_ids ?? [];
 
   const { data: productsData, isLoading: isLoadingProducts } = useQuery({
     queryKey: ['compare-products', productIds],
     queryFn: () => fetchCompareProducts(productIds),
-    enabled: isAuthenticated && productIds.length > 0
+    enabled: isAuthenticated && !isAuthLoading && productIds.length > 0
   });
   const compareProducts = productsData?.data ?? [];
 
@@ -127,7 +126,7 @@ export default function useCompareController() {
     compareProducts,
     highlightDiffs,
     setHighlightDiffs,
-    isLoading: isLoadingIds || isLoadingProducts,
+    isLoading: isAuthLoading || (isAuthenticated && (isLoadingIds || isLoadingProducts)),
     isAuthenticated
   };
 }

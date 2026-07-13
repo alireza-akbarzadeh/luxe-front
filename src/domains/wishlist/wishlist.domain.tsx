@@ -25,7 +25,7 @@ import { useWishlistStore } from './wishlist.store';
 const wishlistMainClass = 'app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16';
 
 export function WishlistDomain() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [shareCode] = useWishlistShareQuery();
   const { sortBy, setSortBy } = useWishlistStore();
   const {
@@ -38,10 +38,14 @@ export function WishlistDomain() {
     isClearing,
     removeItem,
     clearAll
-  } = useWishlistActions(sortBy, isAuthenticated && !shareCode);
+  } = useWishlistActions(sortBy, isAuthenticated && !shareCode && !isAuthLoading);
 
   if (shareCode) {
     return <WishlistSharedView shareCode={shareCode} isAuthenticated={isAuthenticated} />;
+  }
+
+  if (isAuthLoading) {
+    return <WishlistPageSkeleton />;
   }
 
   if (!isAuthenticated) {

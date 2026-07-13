@@ -36,7 +36,7 @@ const cartMainClass = `app-container pt-2 ${MOBILE_PAGE_COMMERCE_PADDING_CLASS} 
 
 export default function CartPage() {
   const t = useTranslations('cart.page');
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const [shareCode] = useCartShareQuery();
   const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
     useCartController();
@@ -45,6 +45,10 @@ export default function CartPage() {
 
   if (shareCode) {
     return <CartSharedView shareCode={shareCode} isAuthenticated={isAuthenticated} />;
+  }
+
+  if (isAuthLoading) {
+    return <CartPageSkeleton />;
   }
 
   if (!isAuthenticated) {
@@ -75,7 +79,7 @@ export default function CartPage() {
     return (
       <main className='app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16'>
         <CartBreadcrumb />
-        <Flex align='start' justify='between' gap={3} className='mb-6 sm:mb-8'>
+        <Flex direction='row' align='start' justify='between' gap={3} className='mb-6 sm:mb-8'>
           <Typography.H1
             family='display'
             className='text-2xl font-semibold sm:text-3xl lg:text-4xl'
@@ -111,7 +115,7 @@ export default function CartPage() {
                 {t('itemCount', { count: itemCount })} · {t('reviewHint')}
               </Typography.Muted>
             </div>
-            <Flex spacing={2} align='center' className='shrink-0'>
+            <Flex direction='row' spacing={2} align='center' className='shrink-0'>
               <CartHeaderActions items={items} />
               <Button asChild variant='outline' className='hidden rounded-full sm:inline-flex'>
                 <Link href='/shop'>{t('continueShopping')}</Link>

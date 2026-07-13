@@ -37,10 +37,18 @@ vi.mock('@/domains/cart/hooks/use-cart-checkout-action', () => ({
   })
 }));
 
+vi.mock('@/domains/cart/components/cart-header-actions', () => ({
+  CartHeaderActions: () => <div data-testid='cart-header-actions' />
+}));
+
+vi.mock('@/domains/cart/components/cart-import-dialog', () => ({
+  CartImportDialog: () => null
+}));
+
 describe('CartSheet', () => {
   beforeEach(() => {
     useCartStore.setState({ isOpen: true });
-    useUserMock.mockReturnValue({ isAuthenticated: false });
+    useUserMock.mockReturnValue({ isAuthenticated: false, loading: false });
     useCartControllerMock.mockReturnValue({
       increment: vi.fn(),
       decrement: vi.fn(),
@@ -57,7 +65,15 @@ describe('CartSheet', () => {
     });
   });
 
-  it('prompts guests to sign in', () => {
+  it('shows loading while auth is resolving', () => {
+    useUserMock.mockReturnValue({ isAuthenticated: false, loading: true });
+
+    render(<CartSheet />);
+
+    expect(screen.queryByText('Sign in to view your cart')).not.toBeInTheDocument();
+  });
+
+  it('prompts guests to sign in and import', () => {
     render(<CartSheet />);
 
     expect(screen.getByText('Sign in to view your cart')).toBeInTheDocument();
@@ -65,10 +81,11 @@ describe('CartSheet', () => {
       'href',
       '/login?callbackUrl=/cart'
     );
+    expect(screen.getByRole('button', { name: 'Import basket' })).toBeInTheDocument();
   });
 
-  it('shows empty state for authenticated users with no items', () => {
-    useUserMock.mockReturnValue({ isAuthenticated: true });
+  it('shows empty state with import for authenticated users with no items', () => {
+    useUserMock.mockReturnValue({ isAuthenticated: true, loading: false });
 
     render(<CartSheet />);
 
@@ -77,10 +94,11 @@ describe('CartSheet', () => {
       'href',
       '/shop'
     );
+    expect(screen.getByRole('button', { name: 'Import basket' })).toBeInTheDocument();
   });
 
-  it('renders cart items and totals when authenticated', () => {
-    useUserMock.mockReturnValue({ isAuthenticated: true });
+  it('renders cart items, totals, and share actions when authenticated', () => {
+    useUserMock.mockReturnValue({ isAuthenticated: true, loading: false });
     useCartControllerMock.mockReturnValue({
       increment: vi.fn(),
       decrement: vi.fn(),
@@ -111,5 +129,6 @@ describe('CartSheet', () => {
     expect(screen.getAllByText('$598.00').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('$645.84').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('button', { name: 'Proceed to checkout' })).toBeInTheDocument();
+    expect(screen.getByTestId('cart-header-actions')).toBeInTheDocument();
   });
 });
