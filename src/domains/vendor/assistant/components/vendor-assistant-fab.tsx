@@ -19,7 +19,7 @@ export function VendorAssistantFab({
       type='button'
       onClick={onClick}
       className={cn(
-        'bg-gold hover:bg-gold/90 fixed inset-s-6 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-40 gap-2 rounded-full px-5 shadow-lg',
+        'bg-gold hover:bg-gold/90 fixed right-10 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-40 gap-2 rounded-full px-5 shadow-lg',
         className
       )}
     >

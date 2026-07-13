@@ -18,26 +18,34 @@ import { useAuth } from '~/src/components/providers/auth-provider';
 import CartBreadcrumb from './components/cart-breadcrumb';
 import { CartEmptyState } from './components/cart-empty-state';
 import { CartGuestState } from './components/cart-guest-state';
+import { CartHeaderActions } from './components/cart-header-actions';
 import { CartItem } from './components/cart-item';
 import { CartItemRow } from './components/cart-item-row';
 import { CartMobileCheckoutBar } from './components/cart-mobile-checkout-bar';
 import { CartPageSkeleton } from './components/cart-page-skeleton';
+import { CartSharedView } from './components/cart-shared-view';
 import { CartSmartInsights } from './components/cart-smart-insights';
 import { CartVariantAlert } from './components/cart-variant-alert';
 import { OrderSummary } from './components/order-summary';
 import { ProductSuggestion } from './components/product-suggestion';
 import { useCartCheckoutAction } from './hooks/use-cart-checkout-action';
 import { useCartOrderEstimate } from './hooks/use-cart-order-estimate';
+import { useCartShareQuery } from './hooks/use-cart-share-query';
 
 const cartMainClass = `app-container pt-2 ${MOBILE_PAGE_COMMERCE_PADDING_CLASS} sm:pt-6 lg:pt-8`;
 
 export default function CartPage() {
   const t = useTranslations('cart.page');
   const { isAuthenticated } = useAuth();
+  const [shareCode] = useCartShareQuery();
   const { items, itemCount, subtotal, isLoading, error, refetch, updatingItemId, removingItemId } =
     useCartController();
   const { total } = useCartOrderEstimate(items, subtotal);
   const { hasIncompleteVariants, proceedToCheckout } = useCartCheckoutAction(items);
+
+  if (shareCode) {
+    return <CartSharedView shareCode={shareCode} isAuthenticated={isAuthenticated} />;
+  }
 
   if (!isAuthenticated) {
     return <CartGuestState />;
@@ -67,12 +75,15 @@ export default function CartPage() {
     return (
       <main className='app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16'>
         <CartBreadcrumb />
-        <Typography.H1
-          family='display'
-          className='mb-6 text-2xl font-semibold sm:mb-8 sm:text-3xl lg:text-4xl'
-        >
-          {t('title')}
-        </Typography.H1>
+        <Flex align='start' justify='between' gap={3} className='mb-6 sm:mb-8'>
+          <Typography.H1
+            family='display'
+            className='text-2xl font-semibold sm:text-3xl lg:text-4xl'
+          >
+            {t('title')}
+          </Typography.H1>
+          <CartHeaderActions items={[]} showShare={false} />
+        </Flex>
         <CartEmptyState />
         <PersonalizationJourneyPromo variant='empty-cart' className='mx-auto mt-8 max-w-lg' />
       </main>
@@ -100,13 +111,12 @@ export default function CartPage() {
                 {t('itemCount', { count: itemCount })} · {t('reviewHint')}
               </Typography.Muted>
             </div>
-            <Button
-              asChild
-              variant='outline'
-              className='hidden shrink-0 rounded-full sm:inline-flex'
-            >
-              <Link href='/shop'>{t('continueShopping')}</Link>
-            </Button>
+            <Flex spacing={2} align='center' className='shrink-0'>
+              <CartHeaderActions items={items} />
+              <Button asChild variant='outline' className='hidden rounded-full sm:inline-flex'>
+                <Link href='/shop'>{t('continueShopping')}</Link>
+              </Button>
+            </Flex>
           </Flex>
         </header>
 

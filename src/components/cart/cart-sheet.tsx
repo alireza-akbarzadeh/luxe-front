@@ -249,6 +249,11 @@ export function CartSheet() {
                       </Link>
                     </Button>
                   </div>
+                  <Button asChild variant='ghost' size='sm' className='w-full rounded-full'>
+                    <Link href='/cart' onClick={closeCart}>
+                      Share or import basket
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </SheetFooter>

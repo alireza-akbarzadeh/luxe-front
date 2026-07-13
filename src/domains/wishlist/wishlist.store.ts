@@ -8,8 +8,10 @@ interface WishlistState {
   viewMode: ViewMode;
   selectedItems: number[];
   isCopied: boolean;
+  isSheetOpen: boolean;
+}
 
-  // Actions
+interface WishlistActions {
   setSortBy: (sort: SortOption) => void;
   setViewMode: (mode: ViewMode) => void;
   setIsCopied: (copied: boolean) => void;
@@ -17,13 +19,25 @@ interface WishlistState {
   toggleSelectAll: (productIds: number[]) => void;
   removeItem: (productId: number) => void;
   clearSelection: () => void;
+  setSheetOpen: (open: boolean) => void;
+  openSheet: () => void;
+  closeSheet: () => void;
+  reset: () => void;
 }
 
-export const useWishlistStore = create<WishlistState>((set) => ({
+type WishlistStore = WishlistState & WishlistActions;
+
+const initialState: WishlistState = {
   sortBy: 'name',
   viewMode: 'grid',
   selectedItems: [],
   isCopied: false,
+  isSheetOpen: false
+};
+
+/** Client UI state for wishlist page + navbar sheet. */
+export const useWishlistStore = create<WishlistStore>()((set) => ({
+  ...initialState,
 
   setSortBy: (sortBy) => set({ sortBy }),
   setViewMode: (viewMode) => set({ viewMode }),
@@ -38,7 +52,6 @@ export const useWishlistStore = create<WishlistState>((set) => ({
 
   toggleSelectAll: (productIds) =>
     set((state) => ({
-      // If everything is already selected, clear it. Otherwise, select everything passed in.
       selectedItems: state.selectedItems.length === productIds.length ? [] : productIds
     })),
 
@@ -47,5 +60,10 @@ export const useWishlistStore = create<WishlistState>((set) => ({
       selectedItems: state.selectedItems.filter((id) => id !== productId)
     })),
 
-  clearSelection: () => set({ selectedItems: [] })
+  clearSelection: () => set({ selectedItems: [] }),
+
+  setSheetOpen: (isSheetOpen) => set({ isSheetOpen }),
+  openSheet: () => set({ isSheetOpen: true }),
+  closeSheet: () => set({ isSheetOpen: false }),
+  reset: () => set(initialState)
 }));

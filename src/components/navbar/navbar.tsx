@@ -26,6 +26,11 @@ const CartSheet = dynamic(() => import('../cart/cart-sheet').then((m) => m.CartS
   ssr: false
 });
 
+const WishlistSheet = dynamic(
+  () => import('../wishlist/wishlist-sheet').then((m) => m.WishlistSheet),
+  { ssr: false }
+);
+
 const SearchMobileSheet = dynamic(
   () => import('@/domains/search/components/search-mobile-sheet').then((m) => m.SearchMobileSheet),
   { ssr: false }
@@ -166,6 +171,7 @@ export function Navbar() {
       ) : null}
 
       <CartSheet />
+      <WishlistSheet />
       <SearchMobileSheet />
       <NavbarVisualSearchDialog />
     </>

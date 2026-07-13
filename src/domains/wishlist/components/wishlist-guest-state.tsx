@@ -1,18 +1,24 @@
 'use client';
 
-import { IconArrowRight, IconChevronRight, IconHeart } from '@tabler/icons-react';
+import { IconArrowRight, IconChevronRight, IconDownload, IconHeart } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { DynamicBreadcrumb } from '@/components/breadcrumb-list';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
+import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
 
 export function WishlistGuestState() {
+  const t = useTranslations('wishlist');
+  const [importOpen, setImportOpen] = useState(false);
+
   return (
     <main className='app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16'>
       <DynamicBreadcrumb
-        items={[{ label: 'My Wishlist' }]}
+        items={[{ label: t('pageTitle') }]}
         direction='column'
         separator={<IconChevronRight className='h-3 w-3' />}
         className='text-muted-foreground mb-4 hidden text-xs sm:flex'
@@ -28,28 +34,35 @@ export function WishlistGuestState() {
           <IconHeart className='text-muted-foreground size-8' />
         </span>
         <Typography.H2 family='display' className='text-2xl font-semibold sm:text-3xl'>
-          Sign in to view your wishlist
+          {t('guestTitle')}
         </Typography.H2>
         <Typography.Muted className='mt-3 mb-8 max-w-sm text-sm leading-relaxed'>
-          Save favorites across devices and move items to cart when you&apos;re ready.
+          {t('guestDescription')}
         </Typography.Muted>
         <Flex direction='column' gap={3} className='w-full sm:w-auto sm:flex-row'>
           <Button asChild className='h-12 w-full rounded-full sm:w-auto' size='lg'>
             <Link href='/login?callbackUrl=/wishlist'>
-              Sign in
+              {t('signIn')}
               <IconArrowRight className='ms-2 size-4' />
             </Link>
           </Button>
           <Button
-            asChild
+            type='button'
             variant='outline'
             className='h-12 w-full rounded-full sm:w-auto'
             size='lg'
+            onClick={() => setImportOpen(true)}
           >
-            <Link href='/shop'>Browse shop</Link>
+            <IconDownload className='me-2 size-4' />
+            {t('import.action')}
           </Button>
         </Flex>
+        <Button asChild variant='ghost' className='mt-3 rounded-full'>
+          <Link href='/shop'>{t('browseShop')}</Link>
+        </Button>
       </Flex>
+
+      <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
     </main>
   );
 }

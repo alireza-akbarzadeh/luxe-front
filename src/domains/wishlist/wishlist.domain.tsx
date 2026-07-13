@@ -17,13 +17,16 @@ import { WishlistHeader } from './components/wishlist-header';
 import { WishlistIntelligencePanel } from './components/wishlist-intelligence-panel';
 import { WishlistItemRow } from './components/wishlist-item-row';
 import { WishlistPageSkeleton } from './components/wishlist-page-skeleton';
+import { WishlistSharedView } from './components/wishlist-shared-view';
 import { useWishlistActions } from './hooks/use-wishlist-actions';
+import { useWishlistShareQuery } from './hooks/use-wishlist-share-query';
 import { useWishlistStore } from './wishlist.store';
 
 const wishlistMainClass = 'app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16';
 
 export function WishlistDomain() {
   const { isAuthenticated } = useAuth();
+  const [shareCode] = useWishlistShareQuery();
   const { sortBy, setSortBy } = useWishlistStore();
   const {
     items,
@@ -35,7 +38,11 @@ export function WishlistDomain() {
     isClearing,
     removeItem,
     clearAll
-  } = useWishlistActions(sortBy, isAuthenticated);
+  } = useWishlistActions(sortBy, isAuthenticated && !shareCode);
+
+  if (shareCode) {
+    return <WishlistSharedView shareCode={shareCode} isAuthenticated={isAuthenticated} />;
+  }
 
   if (!isAuthenticated) {
     return <WishlistGuestState />;

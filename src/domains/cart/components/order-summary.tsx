@@ -3,12 +3,15 @@
 import {
   IconArrowRight,
   IconRotateClockwise,
+  IconShare2,
   IconShieldCheck,
   IconTag,
   IconTruck
 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -23,6 +26,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { CartShareDialog } from '@/domains/cart/components/cart-share-dialog';
 import { useCartController } from '@/hooks/useCartController';
 import { cn } from '@/lib/utils';
 
@@ -33,10 +37,12 @@ import { cartMoneyClassName, formatCartMoney } from '../lib/cart-utils';
 import { FreeShippingProgress } from './free-shipping-progress';
 
 export function OrderSummary() {
+  const t = useTranslations('cart');
   const { subtotal, items, itemCount, clearCart, isClearing } = useCartController();
   const { totalDiscount, shipping, tax, total, settings } = useCartOrderEstimate(items, subtotal);
   const { hasIncompleteVariants, proceedToCheckout } = useCartCheckoutAction(items);
   const checkoutDisabled = itemCount === 0;
+  const [shareOpen, setShareOpen] = useState(false);
 
   return (
     <motion.div
@@ -117,6 +123,17 @@ export function OrderSummary() {
         <IconArrowRight className='ml-2 h-4 w-4' />
       </Button>
 
+      <Button
+        type='button'
+        variant='outline'
+        className='w-full rounded-full'
+        disabled={items.length === 0}
+        onClick={() => setShareOpen(true)}
+      >
+        <IconShare2 className='size-4' />
+        {t('share.action')}
+      </Button>
+
       <div className='flex items-center gap-2 rounded-xl border border-dashed px-3 py-2.5 text-xs'>
         <IconTag className='text-accent h-4 w-4 shrink-0' />
         <span className='text-muted-foreground'>
@@ -174,6 +191,8 @@ export function OrderSummary() {
           <p className='text-muted-foreground text-[10px] leading-tight'>30-day returns</p>
         </div>
       </div>
+
+      <CartShareDialog open={shareOpen} onOpenChange={setShareOpen} items={items} />
     </motion.div>
   );
 }

@@ -60,14 +60,12 @@ export function WishlistHeader({
             </Typography.Muted>
           </div>
 
-          {itemLength > 0 ? (
-            <WishlistHeaderActions
-              itemLength={itemLength}
-              productIds={productIds}
-              isClearing={isClearing}
-              onClearAll={onClearAll}
-            />
-          ) : null}
+          <WishlistHeaderActions
+            itemLength={itemLength}
+            productIds={productIds}
+            isClearing={isClearing}
+            onClearAll={onClearAll}
+          />
         </Flex>
 
         {itemLength > 0 ? (

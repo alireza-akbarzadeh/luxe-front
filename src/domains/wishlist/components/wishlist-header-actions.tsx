@@ -1,8 +1,9 @@
 'use client';
 
-import { IconCheck, IconCopy, IconShare2, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconDownload, IconShare2, IconTrash } from '@tabler/icons-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import {
   AlertDialog,
@@ -17,114 +18,121 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
+import { WishlistShareDialog } from '@/domains/wishlist/components/wishlist-share-dialog';
 import { useWishlistStore } from '@/domains/wishlist/wishlist.store';
-import { copyToClipboard } from '@/lib/utils';
 
 interface WishlistHeaderActionsProps {
   itemLength: number;
   productIds: number[];
   isClearing: boolean;
   onClearAll: () => void;
+  showImport?: boolean;
 }
 
 export function WishlistHeaderActions({
   itemLength,
   productIds,
   isClearing,
-  onClearAll
+  onClearAll,
+  showImport = true
 }: Readonly<WishlistHeaderActionsProps>) {
+  const t = useTranslations('wishlist');
   const { isCopied, setIsCopied } = useWishlistStore();
-  const isShareSupported = typeof navigator !== 'undefined' && 'share' in navigator;
+  const [shareOpen, setShareOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
-  const handleShare = async () => {
-    const shareText = `Check out my wishlist with ${itemLength} items!`;
-
-    if (isShareSupported) {
-      try {
-        await navigator.share({
-          title: 'My Luxe Wishlist',
-          text: shareText,
-          url: globalThis.location.href
-        });
-        toast.success('Wishlist shared successfully!');
-      } catch {
-        // User cancelled share
-      }
-    } else {
-      await copyToClipboard(globalThis.location.href, 'Wishlist link');
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    }
+  const handleOpenShare = () => {
+    if (productIds.length === 0) return;
+    setShareOpen(true);
+    setIsCopied(true);
+    window.setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const shareLabel = isCopied ? 'Copied' : isShareSupported ? 'Share' : 'Copy link';
-
   return (
-    <div className='flex shrink-0 items-center gap-2'>
-      <Button
-        variant='outline'
-        size='icon'
-        onClick={() => void handleShare()}
-        className='size-10 rounded-full'
-        aria-label={shareLabel}
-      >
-        <AnimatePresence mode='wait' initial={false}>
-          {isCopied ? (
-            <motion.span
-              key='check'
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <IconCheck className='size-4 text-green-500' />
-            </motion.span>
-          ) : (
-            <motion.span
-              key='share'
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              {isShareSupported ? (
-                <IconShare2 className='size-4' />
-              ) : (
-                <IconCopy className='size-4' />
-              )}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </Button>
-
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
+    <>
+      <div className='flex shrink-0 items-center gap-2'>
+        {showImport ? (
           <Button
+            type='button'
             variant='outline'
             size='icon'
-            disabled={isClearing}
-            className='text-destructive hover:bg-destructive/10 size-10 rounded-full'
-            aria-label='Clear all'
+            className='size-10 rounded-full'
+            aria-label={t('import.openAria')}
+            onClick={() => setImportOpen(true)}
           >
-            {isClearing ? <Spinner className='size-4' /> : <IconTrash className='size-4' />}
+            <IconDownload className='size-4' />
           </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Clear your wishlist?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This removes all {itemLength} saved items from your account. You can always save
-              products again from the shop.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isClearing}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={onClearAll}
-              disabled={isClearing || productIds.length === 0}
-              className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-            >
-              {isClearing ? 'Removing…' : 'Clear all items'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+        ) : null}
+
+        {itemLength > 0 ? (
+          <Button
+            type='button'
+            variant='outline'
+            size='icon'
+            onClick={handleOpenShare}
+            className='size-10 rounded-full'
+            aria-label={t('share.openAria')}
+          >
+            <AnimatePresence mode='wait' initial={false}>
+              {isCopied ? (
+                <motion.span
+                  key='check'
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <IconCheck className='size-4 text-green-500' />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key='share'
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <IconShare2 className='size-4' />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Button>
+        ) : null}
+
+        {itemLength > 0 ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant='outline'
+                size='icon'
+                disabled={isClearing}
+                className='text-destructive hover:bg-destructive/10 size-10 rounded-full'
+                aria-label={t('clearAllAria')}
+              >
+                {isClearing ? <Spinner className='size-4' /> : <IconTrash className='size-4' />}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t('clearTitle')}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t('clearDescription', { count: itemLength })}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isClearing}>{t('cancel')}</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={onClearAll}
+                  disabled={isClearing || productIds.length === 0}
+                  className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                >
+                  {isClearing ? t('clearing') : t('clearConfirm')}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ) : null}
+      </div>
+
+      <WishlistShareDialog open={shareOpen} onOpenChange={setShareOpen} productIds={productIds} />
+      <WishlistImportDialog open={importOpen} onOpenChange={setImportOpen} />
+    </>
   );
 }
