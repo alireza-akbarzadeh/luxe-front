@@ -6,6 +6,8 @@ export interface OrderTrackingMilestone {
   description?: string;
   status: 'completed' | 'active' | 'upcoming' | string;
   occurred_at?: string;
+  color?: string;
+  text_color?: string;
 }
 
 export interface OrderTrackingEvent {

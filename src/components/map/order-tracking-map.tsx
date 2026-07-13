@@ -10,7 +10,7 @@ export const OrderTrackingMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className='bg-muted border-border h-[280px] animate-pulse rounded-2xl border sm:h-[320px]' />
+      <div className='bg-muted border-border min-h-[min(52vh,420px)] animate-pulse rounded-2xl border sm:min-h-[480px] lg:min-h-[560px]' />
     )
   }
 );

@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  IconCheckbox,
-  IconClipboardCheck,
-  IconHome,
-  IconPackage,
-  IconPackageExport,
-  IconSearch,
-  IconTruck,
-  IconWallet
-} from '@tabler/icons-react';
+import { IconCheckbox, IconPackage } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
@@ -20,22 +11,11 @@ import { cn } from '@/lib/utils';
 
 import type { OrderTrackingMilestone } from '../types/order-tracking.types';
 
-const MILESTONE_ICONS: Record<string, typeof IconCheckbox> = {
-  order_confirmed: IconCheckbox,
-  payment_received: IconWallet,
-  warehouse_processing: IconPackage,
-  quality_inspection: IconSearch,
-  packaged: IconClipboardCheck,
-  shipped: IconPackageExport,
-  out_for_delivery: IconTruck,
-  delivered: IconHome
-};
-
 interface OrderTrackingMilestonesProps {
   milestones: OrderTrackingMilestone[];
 }
 
-/** Horizontal (desktop) / vertical (mobile) 8-step delivery progress. */
+/** Workflow-driven delivery progress — vertical on mobile, horizontal scroll on desktop. */
 export function OrderTrackingMilestones({ milestones }: OrderTrackingMilestonesProps) {
   const t = useTranslations('orderTracking.page');
 
@@ -46,33 +26,51 @@ export function OrderTrackingMilestones({ milestones }: OrderTrackingMilestonesP
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12 }}
-      className='mb-10'
+      className='mb-8 sm:mb-10'
       aria-label={t('deliveryProgress')}
     >
-      <Typography.H3 className='mb-6 text-lg'>{t('deliveryProgress')}</Typography.H3>
+      <Typography.H3 className='mb-4 text-lg sm:mb-6'>{t('deliveryProgress')}</Typography.H3>
 
-      <div className='relative sm:hidden'>
-        <div className='bg-border absolute top-5 bottom-4 left-5 w-0.5' />
+      {/* Mobile: vertical timeline matching design */}
+      <div className='bg-card border-border/60 relative rounded-2xl border p-4 sm:hidden'>
+        <div className='bg-border absolute top-8 bottom-8 left-9 w-0.5' />
         <Flex direction='column' gap={0}>
           {milestones.map((step, index) => {
-            const Icon = MILESTONE_ICONS[step.key] ?? IconPackage;
             const done = step.status === 'completed';
             const active = step.status === 'active';
 
             return (
-              <Flex key={step.key} direction='row' gap={4} className='relative pb-6 last:pb-0'>
+              <Flex key={step.key} direction='row' gap={3} className='relative pb-5 last:pb-0'>
                 <div
                   className={cn(
                     'relative z-10 flex size-10 shrink-0 items-center justify-center rounded-full border-2',
                     done && 'border-green-500 bg-green-500 text-white',
                     active &&
-                      'border-green-500 bg-green-500/15 text-green-600 shadow-[0_0_16px_rgba(34,197,94,0.35)]',
-                    !done && !active && 'border-muted bg-muted text-muted-foreground'
+                      'border-green-500 bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.45)]',
+                    !done && !active && 'border-muted bg-muted/40 text-muted-foreground'
+                  )}
+                  style={
+                    active && step.color
+                      ? {
+                          borderColor: step.color,
+                          backgroundColor: step.color,
+                          color: step.text_color
+                        }
+                      : undefined
+                  }
+                >
+                  {done || active ? (
+                    <IconCheckbox className='size-4' />
+                  ) : (
+                    <IconPackage className='size-4' />
+                  )}
+                </div>
+                <div
+                  className={cn(
+                    'min-w-0 flex-1 rounded-xl px-3 py-2',
+                    active && 'bg-green-500/10 ring-1 ring-green-500/30'
                   )}
                 >
-                  <Icon className='size-4' />
-                </div>
-                <div className='min-w-0 pt-1'>
                   <Typography.Text weight='medium' className='text-sm'>
                     {step.title}
                   </Typography.Text>
@@ -80,9 +78,12 @@ export function OrderTrackingMilestones({ milestones }: OrderTrackingMilestonesP
                     <Typography.Subtle>
                       {formatDate(step.occurred_at, DATE_FORMATS.WITH_TIME)}
                     </Typography.Subtle>
-                  ) : (
-                    <Typography.Subtle>{step.description}</Typography.Subtle>
-                  )}
+                  ) : null}
+                  {step.description ? (
+                    <Typography.Subtle className={cn(step.occurred_at && 'mt-0.5')}>
+                      {step.description}
+                    </Typography.Subtle>
+                  ) : null}
                 </div>
                 <span className='sr-only'>
                   Step {index + 1}: {step.status}
@@ -93,11 +94,17 @@ export function OrderTrackingMilestones({ milestones }: OrderTrackingMilestonesP
         </Flex>
       </div>
 
-      <div className='relative hidden overflow-x-auto pb-2 sm:block'>
-        <div className='bg-border absolute top-5 right-6 left-6 h-0.5' />
-        <div className='relative grid min-w-[720px] grid-cols-8 gap-1'>
+      {/* Desktop: horizontal stepper */}
+      <div className='bg-card border-border/60 relative hidden overflow-x-auto rounded-2xl border p-6 sm:block'>
+        <div className='bg-border absolute top-[2.65rem] right-10 left-10 h-0.5' />
+        <div
+          className='relative grid gap-2'
+          style={{
+            gridTemplateColumns: `repeat(${milestones.length}, minmax(5.5rem, 1fr))`,
+            minWidth: `${milestones.length * 5.5}rem`
+          }}
+        >
           {milestones.map((step) => {
-            const Icon = MILESTONE_ICONS[step.key] ?? IconPackage;
             const done = step.status === 'completed';
             const active = step.status === 'active';
 
@@ -105,14 +112,18 @@ export function OrderTrackingMilestones({ milestones }: OrderTrackingMilestonesP
               <div key={step.key} className='flex flex-col items-center px-1 text-center'>
                 <div
                   className={cn(
-                    'relative z-10 mb-3 flex size-10 items-center justify-center rounded-full border-2',
+                    'relative z-10 mb-3 flex size-11 items-center justify-center rounded-full border-2',
                     done && 'border-green-500 bg-green-500 text-white',
                     active &&
-                      'border-green-500 bg-green-500/15 text-green-600 shadow-[0_0_16px_rgba(34,197,94,0.35)]',
+                      'border-green-500 bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.45)]',
                     !done && !active && 'border-muted bg-muted text-muted-foreground'
                   )}
                 >
-                  <Icon className='size-4' />
+                  {done || active ? (
+                    <IconCheckbox className='size-5' />
+                  ) : (
+                    <IconPackage className='size-5' />
+                  )}
                 </div>
                 <Typography.Text weight='medium' className='text-xs leading-snug'>
                   {step.title}
