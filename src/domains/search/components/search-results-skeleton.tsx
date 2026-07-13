@@ -1,4 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  PRODUCT_CARD_HEIGHT_DEFAULT,
+  PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT,
+  PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT
+} from '@/domains/shop/lib/product-card-layout';
 
 import { SEARCH_PRODUCT_GRID_CLASS, SEARCH_PRODUCT_LIST_CLASS } from '../lib/search-results-layout';
 
@@ -9,12 +14,19 @@ type SearchResultsSkeletonProps = {
   view?: SearchResultsView;
 };
 
-/** Matches ProductCard: shorter image + info overlapping image bottom. */
+/** Matches ProductCard — full-bleed image, rounded info sheet at bottom. */
 function GridCardSkeleton() {
   return (
-    <div className='border-border/50 bg-card overflow-hidden rounded-2xl border shadow-sm'>
-      <Skeleton className='aspect-3/4 w-full rounded-2xl' />
-      <div className='bg-card relative z-10 -mt-10 space-y-2 rounded-t-2xl p-4 pt-3.5'>
+    <div
+      className={`border-border/50 bg-card relative ${PRODUCT_CARD_HEIGHT_DEFAULT} w-full overflow-hidden rounded-2xl border shadow-sm`}
+    >
+      <div className='absolute inset-0 z-0'>
+        <Skeleton className='h-full w-full rounded-none' />
+        <Skeleton className='absolute end-2.5 top-2.5 size-9 rounded-full' />
+      </div>
+      <div
+        className={`bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1.5 p-4 pt-4 shadow-[0_-10px_28px_-6px_rgba(0,0,0,0.45)] ${PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT} ${PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT}`}
+      >
         <Skeleton className='h-2.5 w-14' />
         <Skeleton className='h-5 w-4/5' />
         <Skeleton className='h-3 w-28' />
@@ -23,7 +35,11 @@ function GridCardSkeleton() {
           <Skeleton className='size-3.5 rounded-full' />
           <Skeleton className='size-3.5 rounded-full' />
         </div>
-        <Skeleton className='mt-1 h-4 w-16' />
+        <Skeleton className='h-4 w-16' />
+        <div className='mt-auto flex gap-2 pt-2'>
+          <Skeleton className='h-9 flex-1 rounded-lg' />
+          <Skeleton className='h-9 flex-[1.2] rounded-lg' />
+        </div>
       </div>
     </div>
   );
@@ -53,7 +69,7 @@ function ListRowSkeleton() {
 }
 
 /**
- * Pixel-matched to `ProductGridList` — stacked ProductCard (grid) / ProductListRow (list).
+ * Pixel-matched to `ProductGridList` — ProductCard (grid) / ProductListRow (list).
  */
 export function SearchResultsSkeleton({ count = 8, view = 'grid' }: SearchResultsSkeletonProps) {
   if (view === 'list') {
