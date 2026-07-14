@@ -224,6 +224,62 @@
       }
     }
   },
+  "notifications": {
+    "page": {
+      "breadcrumb": "Notifications"
+    },
+    "guest": {
+      "breadcrumb": "Notifications",
+      "title": "Sign in for live notifications",
+      "description": "Get real-time order updates, shipping alerts, and payment confirmations delivered instantly to your inbox here.",
+      "signIn": "Sign in",
+      "browseShop": "Browse shop"
+    },
+    "inbox": {
+      "title": "Notifications",
+      "subtitle": "Stay updated with your orders, offers and important alerts.",
+      "summary": "{total} total · {unread} unread",
+      "markAllRead": "Mark all as read",
+      "refreshAria": "Refresh notifications",
+      "loadError": "Failed to load notifications.",
+      "retry": "Try again",
+      "sidebarNav": "Notification categories",
+      "settingsLink": "Notification Settings",
+      "settingsHint": "Manage how you receive notifications",
+      "feedCount": "{count} Notifications",
+      "filterBy": "Filter by:",
+      "filters": {
+        "all": "All",
+        "unread": "Unread",
+        "read": "Read"
+      },
+      "emptyTitle": "No notifications yet",
+      "emptyDescription": "Nothing in {category} right now. New alerts will appear here as they happen.",
+      "loadMore": "Load More",
+      "loadingMore": "Loading…",
+      "readState": "Read",
+      "unreadState": "Unread",
+      "categories": {
+        "all": "All",
+        "orders": "Orders",
+        "coupons": "Coupons",
+        "offers": "Offers",
+        "shipping": "Shipping",
+        "wishlist": "Wishlist",
+        "account": "Account",
+        "system": "System"
+      },
+      "pushPromo": {
+        "title": "Enable Push Notifications",
+        "description": "Get instant alerts for orders, shipping updates, and exclusive offers.",
+        "enableNow": "Enable Now",
+        "enabling": "Enabling…",
+        "dismiss": "Dismiss",
+        "enabledSuccess": "Push notifications enabled",
+        "enableError": "Could not enable push notifications"
+      }
+    }
+  },
   "nav": {
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
