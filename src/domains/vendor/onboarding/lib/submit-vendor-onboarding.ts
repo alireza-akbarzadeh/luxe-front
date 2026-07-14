@@ -23,7 +23,7 @@ interface SubmitVendorOnboardingParams {
   setAccountCreated: (created: boolean) => void;
   setCurrentStep: (stepId: VendorOnboardingStepId) => void;
   resetOnboarding: () => void;
-  onSuccess: () => void;
+  onSuccess: (storeName: string) => void;
   translate: (
     key:
       | 'errors.validationFailed'
@@ -83,7 +83,8 @@ export async function submitVendorOnboarding({
   }
 
   await createVendorStore(mapOnboardingToStorePayload(parsed.data as VendorOnboardingValues));
+  const storeName = parsed.data.storeName;
   resetOnboarding();
   toast.success(translate('success.title'), { description: translate('success.description') });
-  onSuccess();
+  onSuccess(storeName);
 }

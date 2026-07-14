@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
 import type { StepDefinition } from '@/components/ui/stepper';
+import { getVendorApplySuccessHref } from '@/domains/vendor/lib/vendor-routes';
 import { submitVendorOnboarding } from '@/domains/vendor/onboarding/lib/submit-vendor-onboarding';
 import {
   applyVendorOnboardingFieldErrors,
@@ -73,7 +74,7 @@ export function useVendorOnboardingWizard({
           setAccountCreated,
           setCurrentStep,
           resetOnboarding,
-          onSuccess: () => router.push('/vendor/panel'),
+          onSuccess: (storeName) => router.push(getVendorApplySuccessHref(storeName)),
           translate: (key, values) => t(key, values)
         });
       } catch (error) {

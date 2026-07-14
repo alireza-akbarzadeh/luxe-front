@@ -4303,6 +4303,62 @@
       }
     },
     "onboarding": {
+      "meta": {
+        "apply": {
+          "title": "Become a seller",
+          "description": "Complete your Luxe seller profile in a few steps and launch your storefront."
+        },
+        "success": {
+          "title": "Store submitted",
+          "description": "Your seller application was received. Finish setup in the vendor dashboard."
+        }
+      },
+      "sidebar": {
+        "eyebrow": "Seller onboarding",
+        "title": "Launch on a premium marketplace",
+        "description": "Tell us about your business once — we save your progress as you go. Most sellers finish in under ten minutes.",
+        "savedProgress": "Your answers are saved locally. You can leave and return anytime before submitting.",
+        "highlights": {
+          "launch": {
+            "title": "Go live fast",
+            "description": "Create your storefront, add products, and start receiving orders from day one."
+          },
+          "reach": {
+            "title": "Reach high-intent shoppers",
+            "description": "Get discovered in curated collections, search, and featured marketplace edits."
+          },
+          "trust": {
+            "title": "Built-in trust",
+            "description": "Verified reviews, secure payouts, and seller tools designed for premium brands."
+          }
+        }
+      },
+      "successPage": {
+        "title": "You're all set",
+        "description": "Your store application was submitted. Open your vendor dashboard to add products while we complete review.",
+        "descriptionWithStore": "{store} is ready for setup. Open your vendor dashboard to add products while we complete review.",
+        "openDashboard": "Open vendor dashboard",
+        "backToOverview": "Back to seller overview",
+        "getHelp": "Get help",
+        "nextSteps": {
+          "title": "Recommended next steps",
+          "description": "These quick wins help you look professional from the first order.",
+          "items": {
+            "catalog": {
+              "title": "Add your first products",
+              "description": "Upload photos, set pricing, and publish listings from the Products module."
+            },
+            "dashboard": {
+              "title": "Review store settings",
+              "description": "Confirm shipping, returns, and payout details in your dashboard."
+            }
+          }
+        }
+      },
+      "shell": {
+        "brandSuffix": "Seller",
+        "signIn": "Sign in"
+      },
       "title": "Launch your seller account",
       "subtitle": "Complete your business profile in a few steps. Your progress is saved automatically — refresh or switch tabs anytime.",
       "progress": "Step {current} of {total}",
