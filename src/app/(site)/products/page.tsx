@@ -42,7 +42,7 @@ export default async function ProductsPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ProductsPageSkeleton view='grid' />}>
+      <Suspense fallback={<ProductsPageSkeleton />}>
         <ProductsDomain />
       </Suspense>
     </HydrationBoundary>

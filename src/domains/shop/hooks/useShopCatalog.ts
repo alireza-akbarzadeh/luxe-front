@@ -9,6 +9,7 @@ import { useGetSearch } from '@/services/-search-get';
 import {
   applyShopClientFilters,
   buildShopSearchParams,
+  shouldUseSearchApi,
   toProductWithLike
 } from '../lib/shop-search.utils';
 import { useProductFilters } from '../useProductFilters';
@@ -19,10 +20,6 @@ function filterSaleProducts(products: DtoProductWithLike[]) {
   );
 }
 
-/**
- * Shop catalog fetch — uses GET /search when the user typed a query (FTS + i18n),
- * otherwise GET /products for filter-only browsing.
- */
 export function useShopCatalog() {
   const filters = useProductFilters();
   const {
@@ -31,6 +28,7 @@ export function useShopCatalog() {
     showOnlySale,
     page,
     categoryId,
+    brandId,
     priceRange,
     minRating,
     maxRating,
@@ -38,13 +36,13 @@ export function useShopCatalog() {
     maxReviews,
     showOnlyNew,
     isDigital,
+    inStock,
     sortBy
   } = filters;
 
   const [priceMin, priceMax] = priceRange;
-
   const trimmedQuery = searchQuery.trim();
-  const usesSearchApi = trimmedQuery.length > 0;
+  const usesSearchApi = shouldUseSearchApi(trimmedQuery, sortBy, { inStock });
 
   const searchApiParams = useMemo(
     () =>
@@ -52,6 +50,7 @@ export function useShopCatalog() {
         searchQuery: trimmedQuery,
         page,
         categoryId,
+        brandId,
         priceMin,
         priceMax,
         minRating,
@@ -61,12 +60,14 @@ export function useShopCatalog() {
         showOnlyNew,
         showOnlySale,
         isDigital,
+        inStock,
         sortBy
       }),
     [
       trimmedQuery,
       page,
       categoryId,
+      brandId,
       priceMin,
       priceMax,
       minRating,
@@ -76,13 +77,14 @@ export function useShopCatalog() {
       showOnlyNew,
       showOnlySale,
       isDigital,
+      inStock,
       sortBy
     ]
   );
 
   const clientFilterInput = useMemo(
-    () => ({ maxRating, minReviews, maxReviews }),
-    [maxRating, minReviews, maxReviews]
+    () => ({ maxRating, minReviews, maxReviews, brandId }),
+    [maxRating, minReviews, maxReviews, brandId]
   );
 
   const productsQuery = useGetProducts(apiParams, {
@@ -97,10 +99,11 @@ export function useShopCatalog() {
 
   const products = useMemo(() => {
     if (usesSearchApi) {
-      const list = (searchQueryResult.data?.data?.products ?? []).map(toProductWithLike);
-      return applyShopClientFilters(list, clientFilterInput);
+      return applyShopClientFilters(
+        (searchQueryResult.data?.data?.products ?? []).map(toProductWithLike),
+        clientFilterInput
+      );
     }
-
     const list = productsQuery.data?.data?.products ?? [];
     return showOnlySale ? filterSaleProducts(list) : list;
   }, [

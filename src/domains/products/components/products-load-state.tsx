@@ -1,6 +1,7 @@
 'use client';
 
 import { IconCheck, IconLoader2 } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -8,12 +9,13 @@ import {
   PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT,
   PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT
 } from '@/domains/shop/lib/product-card-layout';
+import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
 
 export function ProductsLoadMoreSkeleton() {
   return (
-    <div className='mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4'>
-      {Array.from({ length: 4 }).map((_, index) => (
+    <div className='mt-8 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3 lg:gap-6'>
+      {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
           className={cn(
@@ -48,22 +50,27 @@ interface ProductsEndStateProps {
 }
 
 export function ProductsEndState({ loadedCount }: ProductsEndStateProps) {
+  const t = useTranslations('products.grid');
+  const { formatInteger } = useLocaleFormatters();
+
   return (
-    <div className='border-border/60 bg-muted/20 mt-10 flex flex-col items-center gap-2 rounded-2xl border px-6 py-10 text-center'>
+    <div className='border-border/60 bg-muted/20 mt-10 flex flex-col items-center gap-2 rounded-3xl border px-6 py-10 text-center'>
       <IconCheck className='text-accent h-8 w-8' />
-      <p className='font-medium'>You&apos;ve seen it all</p>
+      <p className='font-medium'>{t('endTitle')}</p>
       <p className='text-muted-foreground text-sm'>
-        {loadedCount.toLocaleString('en-US')} product{loadedCount === 1 ? '' : 's'} in this view
+        {t('endDescription', { count: formatInteger(loadedCount) })}
       </p>
     </div>
   );
 }
 
 export function ProductsFetchingMore() {
+  const t = useTranslations('products.grid');
+
   return (
     <div className='text-muted-foreground mt-8 flex items-center justify-center gap-2 text-sm'>
       <IconLoader2 className='h-4 w-4 animate-spin' />
-      Loading more products…
+      {t('loadingMore')}
     </div>
   );
 }

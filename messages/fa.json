@@ -374,6 +374,8 @@
     },
     "sort": {
       "featured": "ویژه",
+      "popular": "محبوب",
+      "bestSelling": "پرفروش‌ترین",
       "newest": "جدیدترین",
       "priceAsc": "قیمت: کم به زیاد",
       "priceDesc": "قیمت: زیاد به کم",
@@ -382,8 +384,17 @@
     "filters": {
       "categories": "دسته‌بندی‌ها",
       "allCategories": "همه دسته‌ها",
+      "brands": "برندها",
+      "allBrands": "همه برندها",
+      "searchBrands": "جستجوی برند…",
+      "searchFilters": "جستجوی فیلترها…",
       "priceRange": "محدوده قیمت",
       "rating": "امتیاز",
+      "anyRating": "هر امتیازی",
+      "ratingAndUp": "به بالا",
+      "availability": "موجودی",
+      "inStock": "موجود",
+      "discount": "تخفیف",
       "reviewCount": "تعداد نظرات",
       "min": "حداقل",
       "max": "حداکثر",
@@ -391,12 +402,21 @@
       "newArrivalsOnly": "فقط تازه‌واردها",
       "onSaleOnly": "فقط حراج",
       "digitalOnly": "فقط محصولات دیجیتال",
-      "clearAll": "پاک کردن همه فیلترها"
+      "clearAll": "پاک کردن همه فیلترها",
+      "resetAll": "بازنشانی",
+      "applyFilters": "اعمال فیلترها",
+      "presets": {
+        "under50": "زیر ۵۰ دلار",
+        "50to100": "۵۰ – ۱۰۰ دلار",
+        "100to250": "۱۰۰ – ۲۵۰ دلار",
+        "premium": "پرمیوم"
+      }
     },
     "activeFilters": {
       "search": "جستجو: «{query}»",
       "newArrivals": "تازه‌واردها",
       "onSale": "حراج",
+      "inStock": "موجود",
       "priceRange": "{min} – {max}",
       "ratingRange": "امتیاز: {min} – {max}",
       "reviewsRange": "نظرات: {min} – {max}",
@@ -419,6 +439,54 @@
       "title": "مشکلی پیش آمد",
       "description": "در حال حاضر فروشگاه در دسترس نیست. لطفاً لحظه‌ای دیگر تلاش کنید.",
       "retry": "تلاش مجدد"
+    }
+  },
+  "products": {
+    "hero": {
+      "breadcrumbHome": "خانه",
+      "breadcrumbProducts": "محصولات",
+      "eyebrow": "مجموعهٔ منتخب",
+      "title": "همه محصولات",
+      "description": "کل کاتالوگ لوکس را مرور کنید — قطعات ممتاز با تمرکز بر کیفیت، ساخت و طراحی ماندگار.",
+      "productCount": "{count} محصول",
+      "loadedCount": "{count} بارگذاری‌شده",
+      "loadingCatalog": "در حال بارگذاری کاتالوگ…",
+      "updating": "در حال به‌روزرسانی…",
+      "prevPromo": "پروموشن قبلی",
+      "nextPromo": "پروموشن بعدی",
+      "bestSellers": {
+        "breadcrumb": "پرفروش‌ترین‌ها",
+        "eyebrow": "محبوب‌ترین‌ها",
+        "title": "پرفروش‌ترین‌ها",
+        "description": "محصولات پربازدید بازار لوکس."
+      },
+      "promos": {
+        "summer": {
+          "eyebrow": "زمان محدود",
+          "title": "حراج تابستان",
+          "description": "تا ۴۰٪ تخفیف روی قطعات منتخب.",
+          "cta": "همین حالا بخرید"
+        },
+        "essentials": {
+          "eyebrow": "تازه‌ها",
+          "title": "محصولات جدید",
+          "description": "جدیدترین اضافه‌شده‌ها به کاتالوگ.",
+          "cta": "مشاهده جدیدها"
+        }
+      }
+    },
+    "grid": {
+      "loadMore": "بارگذاری بیشتر",
+      "loadingMore": "در حال بارگذاری…",
+      "filteredNote": "نمایش {shown, number} از {total, number} پس از فیلترها",
+      "endTitle": "همه را دیدید",
+      "endDescription": "{count} محصول در این نما"
+    },
+    "empty": {
+      "title": "محصولی یافت نشد",
+      "description": "موردی با فیلترهای شما هم‌خوان نیست. جستجو را گسترده‌تر کنید یا فیلترها را پاک کنید.",
+      "reset": "بازنشانی فیلترها",
+      "continueShopping": "ادامه خرید"
     }
   },
   "pdp": {

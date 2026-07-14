@@ -14,10 +14,25 @@ import type { GetProductsParams, GetProductsSort } from '~/src/services/-product
 
 export const SHOP_PAGE_SIZE = 20;
 
-type GridCols = 3 | 4;
-type SortBy = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'rating';
+export type GridCols = 3 | 4;
+export type SortBy =
+  | 'featured'
+  | 'newest'
+  | 'price-asc'
+  | 'price-desc'
+  | 'rating'
+  | 'popular'
+  | 'best-selling';
 
-const sortValues = ['featured', 'newest', 'price-asc', 'price-desc', 'rating'] as const;
+const sortValues = [
+  'featured',
+  'newest',
+  'price-asc',
+  'price-desc',
+  'rating',
+  'popular',
+  'best-selling'
+] as const;
 
 const mapSortToApi = (sort: SortBy): GetProductsSort | undefined => {
   switch (sort) {
@@ -29,6 +44,9 @@ const mapSortToApi = (sort: SortBy): GetProductsSort | undefined => {
       return 'price_desc';
     case 'rating':
       return 'rating_desc';
+    case 'popular':
+    case 'best-selling':
+      return 'reviews_desc';
     default:
       return undefined;
   }
@@ -38,13 +56,15 @@ export function useProductFilters() {
   const [params, setParams] = useQueryStates(
     {
       categoryId: parseAsInteger.withDefault(0),
+      brandId: parseAsInteger.withDefault(0),
       sortBy: parseAsStringLiteral(sortValues).withDefault('featured'),
       priceMin: parseAsInteger.withDefault(0),
       priceMax: parseAsInteger.withDefault(500),
       searchQuery: parseAsString.withDefault(''),
-      gridCols: parseAsInteger.withDefault(4),
+      gridCols: parseAsInteger.withDefault(3),
       showOnlyNew: parseAsBoolean.withDefault(false),
       showOnlySale: parseAsBoolean.withDefault(false),
+      inStock: parseAsBoolean.withDefault(false),
       minRating: parseAsInteger.withDefault(0),
       maxRating: parseAsInteger.withDefault(5),
       minReviews: parseAsInteger.withDefault(0),
@@ -57,6 +77,7 @@ export function useProductFilters() {
 
   const {
     categoryId,
+    brandId,
     sortBy,
     priceMin,
     priceMax,
@@ -64,6 +85,7 @@ export function useProductFilters() {
     gridCols,
     showOnlyNew,
     showOnlySale,
+    inStock,
     minRating,
     maxRating,
     minReviews,
@@ -73,6 +95,7 @@ export function useProductFilters() {
   } = params;
 
   const setCategoryId = (id: number | null) => setParams({ categoryId: id, page: 1 });
+  const setBrandId = (id: number | null) => setParams({ brandId: id ?? 0, page: 1 });
   const setSortBy = (value: SortBy) => setParams({ sortBy: value, page: 1 });
 
   const setPriceRange = useCallback(
@@ -95,23 +118,25 @@ export function useProductFilters() {
   const setGridCols = (value: GridCols) => setParams({ gridCols: value });
   const setShowOnlyNew = (value: boolean) => setParams({ showOnlyNew: value, page: 1 });
   const setShowOnlySale = (value: boolean) => setParams({ showOnlySale: value, page: 1 });
+  const setInStock = (value: boolean) => setParams({ inStock: value, page: 1 });
   const setRatingRange = (min: number, max: number) =>
     setParams({ minRating: min, maxRating: max, page: 1 });
+  const setMinRating = (min: number) => setParams({ minRating: min, maxRating: 5, page: 1 });
   const setReviewsRange = (min: number, max: number) =>
     setParams({ minReviews: min, maxReviews: max, page: 1 });
   const setIsDigital = (value: boolean) => setParams({ isDigital: value, page: 1 });
-  const setPage = (value: number) =>
-    setParams({ page: value }, { scroll: true, history: 'push' });
+  const setPage = (value: number) => setParams({ page: value }, { scroll: true, history: 'push' });
 
   const clearFilters = () => {
     setParams({
       categoryId: null,
+      brandId: 0,
       priceMin: 0,
       priceMax: 500,
       showOnlyNew: false,
       showOnlySale: false,
+      inStock: false,
       searchQuery: '',
-      sortBy: 'featured',
       minRating: 0,
       maxRating: 5,
       minReviews: 0,
@@ -126,6 +151,7 @@ export function useProductFilters() {
       limit: SHOP_PAGE_SIZE,
       offset: (page - 1) * SHOP_PAGE_SIZE,
       category_id: categoryId > 0 ? categoryId : undefined,
+      brand_id: brandId > 0 ? brandId : undefined,
       min_price: priceMin > 0 ? priceMin : undefined,
       max_price: priceMax < 500 ? priceMax : undefined,
       is_new: showOnlyNew || undefined,
@@ -137,6 +163,7 @@ export function useProductFilters() {
       is_digital: isDigital || undefined
     }),
     [
+      brandId,
       categoryId,
       isDigital,
       maxRating,
@@ -151,51 +178,59 @@ export function useProductFilters() {
     ]
   );
 
-  const hasActiveFilters = useMemo(() => {
-    return (
+  const hasActiveFilters = useMemo(
+    () =>
       categoryId > 0 ||
+      brandId > 0 ||
       priceMin > 0 ||
       priceMax < 500 ||
       showOnlyNew ||
       showOnlySale ||
+      inStock ||
       searchQuery !== '' ||
       minRating > 0 ||
       maxRating < 5 ||
       minReviews > 0 ||
       maxReviews < 1000 ||
+      isDigital,
+    [
+      brandId,
+      categoryId,
+      priceMin,
+      priceMax,
+      showOnlyNew,
+      showOnlySale,
+      inStock,
+      searchQuery,
+      minRating,
+      maxRating,
+      minReviews,
+      maxReviews,
       isDigital
-    );
-  }, [
-    categoryId,
-    priceMin,
-    priceMax,
-    showOnlyNew,
-    showOnlySale,
-    searchQuery,
-    minRating,
-    maxRating,
-    minReviews,
-    maxReviews,
-    isDigital
-  ]);
+    ]
+  );
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (categoryId > 0) count++;
+    if (brandId > 0) count++;
     if (priceMin > 0 || priceMax < 500) count++;
     if (showOnlyNew) count++;
     if (showOnlySale) count++;
+    if (inStock) count++;
     if (searchQuery) count++;
     if (minRating > 0 || maxRating < 5) count++;
     if (minReviews > 0 || maxReviews < 1000) count++;
     if (isDigital) count++;
     return count;
   }, [
+    brandId,
     categoryId,
     priceMin,
     priceMax,
     showOnlyNew,
     showOnlySale,
+    inStock,
     searchQuery,
     minRating,
     maxRating,
@@ -206,12 +241,14 @@ export function useProductFilters() {
 
   return {
     categoryId,
+    brandId,
     sortBy,
     priceRange: [priceMin, priceMax] as [number, number],
     searchQuery,
-    gridCols,
+    gridCols: gridCols as GridCols,
     showOnlyNew,
     showOnlySale,
+    inStock,
     minRating,
     maxRating,
     minReviews,
@@ -219,13 +256,16 @@ export function useProductFilters() {
     isDigital,
     page,
     setCategoryId,
+    setBrandId,
     setSortBy,
     setPriceRange,
     setSearchQuery,
     setGridCols,
     setShowOnlyNew,
     setShowOnlySale,
+    setInStock,
     setRatingRange,
+    setMinRating,
     setReviewsRange,
     setIsDigital,
     setPage,

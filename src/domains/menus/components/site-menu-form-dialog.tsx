@@ -141,6 +141,8 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
       title={editingNavId ? 'Edit navigation item' : 'New navigation item'}
       description='Top-level storefront nav item. Mega menus hold columns and links inside the dropdown — not separate parent/child rows.'
       size='xl'
+      preferDialog
+      className='bg-popover text-popover-foreground border-border ring-1 ring-white/10'
     >
       {isHydratingEdit ? (
         <div className='space-y-4 px-1 pb-6'>
@@ -300,12 +302,12 @@ export function SiteMenuFormDialog({ itemCount = 0 }: { itemCount?: number }) {
               </>
             ) : null}
 
-            <div className='flex justify-end gap-2 pt-2'>
+            <div className='border-border/60 bg-card/40 sticky bottom-0 -mx-1 flex justify-end gap-2 border-t px-1 pt-4 pb-1'>
               <Button
                 className='flex-1'
                 size='lg'
                 type='button'
-                variant='outline'
+                variant='secondary'
                 onClick={closeDialog}
               >
                 Cancel

@@ -327,6 +327,8 @@
     },
     "sort": {
       "featured": "Destacados",
+      "popular": "Populares",
+      "bestSelling": "Más vendidos",
       "newest": "Más recientes",
       "priceAsc": "Precio: menor a mayor",
       "priceDesc": "Precio: mayor a menor",
@@ -335,8 +337,17 @@
     "filters": {
       "categories": "Categorías",
       "allCategories": "Todas las categorías",
+      "brands": "Marcas",
+      "allBrands": "Todas las marcas",
+      "searchBrands": "Buscar marcas…",
+      "searchFilters": "Buscar filtros…",
       "priceRange": "Rango de precio",
       "rating": "Valoración",
+      "anyRating": "Cualquier valoración",
+      "ratingAndUp": "o más",
+      "availability": "Disponibilidad",
+      "inStock": "En stock",
+      "discount": "Descuento",
       "reviewCount": "Número de reseñas",
       "min": "Mín",
       "max": "Máx",
@@ -344,12 +355,21 @@
       "newArrivalsOnly": "Solo novedades",
       "onSaleOnly": "Solo en oferta",
       "digitalOnly": "Solo productos digitales",
-      "clearAll": "Borrar todos los filtros"
+      "clearAll": "Borrar todos los filtros",
+      "resetAll": "Restablecer",
+      "applyFilters": "Aplicar filtros",
+      "presets": {
+        "under50": "Menos de $50",
+        "50to100": "$50 – $100",
+        "100to250": "$100 – $250",
+        "premium": "Premium"
+      }
     },
     "activeFilters": {
       "search": "Búsqueda: \"{query}\"",
       "newArrivals": "Novedades",
       "onSale": "En oferta",
+      "inStock": "En stock",
       "priceRange": "{min} – {max}",
       "ratingRange": "Valoración: {min} – {max}",
       "reviewsRange": "Reseñas: {min} – {max}",
@@ -372,6 +392,54 @@
       "title": "Algo salió mal",
       "description": "No pudimos cargar la tienda ahora. Inténtalo de nuevo.",
       "retry": "Reintentar"
+    }
+  },
+  "products": {
+    "hero": {
+      "breadcrumbHome": "Inicio",
+      "breadcrumbProducts": "Productos",
+      "eyebrow": "Colección seleccionada",
+      "title": "Todos los productos",
+      "description": "Explora el catálogo completo de LUXE — piezas premium elegidas por calidad, oficio y diseño atemporal.",
+      "productCount": "{count} productos",
+      "loadedCount": "{count} cargados",
+      "loadingCatalog": "Cargando catálogo…",
+      "updating": "Actualizando…",
+      "prevPromo": "Promoción anterior",
+      "nextPromo": "Siguiente promoción",
+      "bestSellers": {
+        "breadcrumb": "Más vendidos",
+        "eyebrow": "Los más queridos",
+        "title": "Más vendidos",
+        "description": "Piezas más populares del marketplace LUXE."
+      },
+      "promos": {
+        "summer": {
+          "eyebrow": "Tiempo limitado",
+          "title": "Rebajas de verano",
+          "description": "Hasta 40% en piezas seleccionadas.",
+          "cta": "Comprar ahora"
+        },
+        "essentials": {
+          "eyebrow": "Novedades",
+          "title": "Recién llegados",
+          "description": "Las últimas incorporaciones al catálogo.",
+          "cta": "Ver novedades"
+        }
+      }
+    },
+    "grid": {
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando…",
+      "filteredNote": "Mostrando {shown, number} de {total, number} tras filtros",
+      "endTitle": "Has visto todo",
+      "endDescription": "{count} productos en esta vista"
+    },
+    "empty": {
+      "title": "No se encontraron productos",
+      "description": "Nada coincide con tus filtros. Amplía la búsqueda o restablece filtros.",
+      "reset": "Restablecer filtros",
+      "continueShopping": "Seguir comprando"
     }
   },
   "pdp": {

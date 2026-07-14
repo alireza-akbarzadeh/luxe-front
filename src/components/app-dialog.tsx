@@ -53,6 +53,10 @@ interface AppDialogProps {
    * Use when this dialog can open while a sheet is visible.
    */
   stacked?: boolean;
+  /** Always use the centered dialog shell (skip mobile drawer). Admin forms. */
+  preferDialog?: boolean;
+  /** Extra classes for the dimming overlay. */
+  overlayClassName?: string;
   /** Extra bottom padding for mobile tab bars. Default true on root drawers. */
   tabBarPadding?: boolean;
   className?: string;
@@ -73,6 +77,8 @@ export function AppDialog(props: AppDialogProps) {
     component,
     nested = false,
     stacked = false,
+    preferDialog = false,
+    overlayClassName,
     tabBarPadding = true,
     className,
     contentClassName,
@@ -81,7 +87,7 @@ export function AppDialog(props: AppDialogProps) {
     headerClassName
   } = props;
   const { width } = useMediaDevices();
-  const useDrawerShell = nested || width == null || width <= DRAWER_MAX_WIDTH;
+  const useDrawerShell = !preferDialog && (nested || width == null || width <= DRAWER_MAX_WIDTH);
   const sizeClasses = getAppDialogClasses(size, className);
   const DrawerRoot = nested ? NestedDrawer : Drawer;
 
@@ -92,7 +98,7 @@ export function AppDialog(props: AppDialogProps) {
         <DrawerContent
           showHandle
           radius='xl'
-          overlayClassName={stacked ? STACKED_OVERLAY_CLASS : undefined}
+          overlayClassName={cn(stacked && STACKED_OVERLAY_CLASS, overlayClassName)}
           className={cn(
             'border-border',
             tabBarPadding && 'pb-[calc(5rem+env(safe-area-inset-bottom))]',
@@ -162,8 +168,12 @@ export function AppDialog(props: AppDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className={cn(sizeClasses.dialog, stacked && STACKED_CONTENT_CLASS)}
-        overlayClassName={stacked ? STACKED_OVERLAY_CLASS : undefined}
+        className={cn(
+          'bg-popover text-popover-foreground border-border shadow-2xl',
+          sizeClasses.dialog,
+          stacked && STACKED_CONTENT_CLASS
+        )}
+        overlayClassName={cn('bg-black/55', stacked && STACKED_OVERLAY_CLASS, overlayClassName)}
       >
         {(title || description) && (
           <DialogHeader className={cn('pe-14 text-start', headerClassName)}>

@@ -5,14 +5,13 @@ import { useMemo } from 'react';
 
 import {
   applyShopClientFilters,
+  shouldUseSearchApi,
   toProductWithLike
 } from '@/domains/shop/lib/shop-search.utils';
 import { useProductFilters } from '@/domains/shop/useProductFilters';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
-import {
-  getInfiniteProductsQueryOptions
-} from '../lib/infinite-products-query';
+import { getInfiniteProductsQueryOptions } from '../lib/infinite-products-query';
 import { getInfiniteSearchQueryOptions } from '../lib/infinite-search-query';
 import {
   filterSaleProducts,
@@ -23,9 +22,6 @@ import {
 
 export { PRODUCTS_PAGE_SIZE } from '../lib/infinite-products-query';
 
-/**
- * Infinite product catalog — GET /search when a text query is active, else GET /products.
- */
 export function useInfiniteProductCatalog() {
   const filters = useProductFilters();
   const {
@@ -33,6 +29,7 @@ export function useInfiniteProductCatalog() {
     searchQuery,
     showOnlySale,
     categoryId,
+    brandId,
     priceRange,
     minRating,
     maxRating,
@@ -40,20 +37,20 @@ export function useInfiniteProductCatalog() {
     maxReviews,
     showOnlyNew,
     isDigital,
+    inStock,
     sortBy
   } = filters;
 
   const [priceMin, priceMax] = priceRange;
-
   const trimmedQuery = searchQuery.trim();
-  const usesSearchApi = trimmedQuery.length > 0;
-
+  const usesSearchApi = shouldUseSearchApi(trimmedQuery, sortBy, { inStock });
   const catalogParams = useMemo(() => toProductsCatalogParams(apiParams), [apiParams]);
 
   const searchFilterInput = useMemo(
     () => ({
       searchQuery: trimmedQuery,
       categoryId,
+      brandId,
       priceMin,
       priceMax,
       minRating,
@@ -63,11 +60,13 @@ export function useInfiniteProductCatalog() {
       showOnlyNew,
       showOnlySale,
       isDigital,
+      inStock,
       sortBy
     }),
     [
       trimmedQuery,
       categoryId,
+      brandId,
       priceMin,
       priceMax,
       minRating,
@@ -77,13 +76,14 @@ export function useInfiniteProductCatalog() {
       showOnlyNew,
       showOnlySale,
       isDigital,
+      inStock,
       sortBy
     ]
   );
 
   const clientFilterInput = useMemo(
-    () => ({ maxRating, minReviews, maxReviews }),
-    [maxRating, minReviews, maxReviews]
+    () => ({ maxRating, minReviews, maxReviews, brandId }),
+    [maxRating, minReviews, maxReviews, brandId]
   );
 
   const productsInfinite = useInfiniteQuery({
@@ -105,19 +105,13 @@ export function useInfiniteProductCatalog() {
   const rawProducts = useMemo((): DtoProductWithLike[] => {
     if (usesSearchApi) {
       const pages = searchInfinite.data?.pages ?? [];
-      const list = pages.flatMap((page) =>
-        (page.data?.products ?? []).map(toProductWithLike)
+      return applyShopClientFilters(
+        pages.flatMap((page) => (page.data?.products ?? []).map(toProductWithLike)),
+        clientFilterInput
       );
-      return applyShopClientFilters(list, clientFilterInput);
     }
-
     return flattenInfiniteProducts(productsInfinite.data?.pages ?? []);
-  }, [
-    usesSearchApi,
-    searchInfinite.data?.pages,
-    productsInfinite.data?.pages,
-    clientFilterInput
-  ]);
+  }, [usesSearchApi, searchInfinite.data?.pages, productsInfinite.data?.pages, clientFilterInput]);
 
   const products = useMemo(
     () => (usesSearchApi || !showOnlySale ? rawProducts : filterSaleProducts(rawProducts)),

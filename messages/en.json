@@ -374,6 +374,8 @@
     },
     "sort": {
       "featured": "Featured",
+      "popular": "Popular",
+      "bestSelling": "Best Selling",
       "newest": "Newest",
       "priceAsc": "Price: Low to High",
       "priceDesc": "Price: High to Low",
@@ -382,8 +384,17 @@
     "filters": {
       "categories": "Categories",
       "allCategories": "All Categories",
+      "brands": "Brands",
+      "allBrands": "All Brands",
+      "searchBrands": "Search brands…",
+      "searchFilters": "Search filters…",
       "priceRange": "Price Range",
       "rating": "Rating",
+      "anyRating": "Any rating",
+      "ratingAndUp": "& up",
+      "availability": "Availability",
+      "inStock": "In Stock",
+      "discount": "Discount",
       "reviewCount": "Number of Reviews",
       "min": "Min",
       "max": "Max",
@@ -391,12 +402,21 @@
       "newArrivalsOnly": "New Arrivals Only",
       "onSaleOnly": "On Sale Only",
       "digitalOnly": "Digital Products Only",
-      "clearAll": "Clear All Filters"
+      "clearAll": "Clear All Filters",
+      "resetAll": "Reset All",
+      "applyFilters": "Apply Filters",
+      "presets": {
+        "under50": "Under $50",
+        "50to100": "$50 – $100",
+        "100to250": "$100 – $250",
+        "premium": "Premium"
+      }
     },
     "activeFilters": {
       "search": "Search: \"{query}\"",
       "newArrivals": "New Arrivals",
       "onSale": "On Sale",
+      "inStock": "In Stock",
       "priceRange": "{min} – {max}",
       "ratingRange": "Rating: {min} – {max}",
       "reviewsRange": "Reviews: {min} – {max}",
@@ -419,6 +439,54 @@
       "title": "Something went wrong",
       "description": "The shop didn't load. Give it another moment and try again.",
       "retry": "Try again"
+    }
+  },
+  "products": {
+    "hero": {
+      "breadcrumbHome": "Home",
+      "breadcrumbProducts": "Products",
+      "eyebrow": "Curated collection",
+      "title": "All Products",
+      "description": "Browse the full LUXE catalog — premium pieces selected for quality, craft, and timeless design.",
+      "productCount": "{count} products",
+      "loadedCount": "{count} loaded",
+      "loadingCatalog": "Loading catalog…",
+      "updating": "Updating…",
+      "prevPromo": "Previous promotion",
+      "nextPromo": "Next promotion",
+      "bestSellers": {
+        "breadcrumb": "Best Sellers",
+        "eyebrow": "Most loved",
+        "title": "Best Sellers",
+        "description": "Top-performing pieces ranked by popularity across the LUXE marketplace."
+      },
+      "promos": {
+        "summer": {
+          "eyebrow": "Limited time",
+          "title": "Summer Sale",
+          "description": "Up to 40% off selected pieces.",
+          "cta": "Shop Now"
+        },
+        "essentials": {
+          "eyebrow": "Fresh drops",
+          "title": "New Arrivals",
+          "description": "The latest additions to the catalog.",
+          "cta": "Shop New"
+        }
+      }
+    },
+    "grid": {
+      "loadMore": "Load more",
+      "loadingMore": "Loading…",
+      "filteredNote": "Showing {shown, number} of {total, number} after filters",
+      "endTitle": "You've seen it all",
+      "endDescription": "{count} products in this view"
+    },
+    "empty": {
+      "title": "No products found",
+      "description": "Nothing matches your filters yet. Widen your search or clear a few filters.",
+      "reset": "Reset filters",
+      "continueShopping": "Continue shopping"
     }
   },
   "pdp": {

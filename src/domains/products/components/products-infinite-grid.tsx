@@ -1,6 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
+import { EmptyProducts } from '@/domains/products/components/empty-products';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useProductFilters } from '@/domains/shop/useProductFilters';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
@@ -25,33 +28,28 @@ export function ProductsInfiniteGrid({
   isRefetching,
   onLoadMore
 }: ProductsInfiniteGridProps) {
+  const t = useTranslations('products.grid');
   const { gridCols, clearFilters } = useProductFilters();
 
+  // Vertical ProductCards — default / preferred: 3 columns
   const gridClassName =
-    gridCols === 3
-      ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+    gridCols === 4
+      ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      : 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3';
 
   if (products.length === 0 && !isRefetching) {
-    return (
-      <div className='py-20 text-center'>
-        <p className='text-muted-foreground mb-4'>No products found matching your criteria.</p>
-        <Button variant='outline' className='rounded-full' onClick={clearFilters}>
-          Clear filters
-        </Button>
-      </div>
-    );
+    return <EmptyProducts onReset={clearFilters} />;
   }
 
   return (
     <>
-      <div className={`grid gap-5 md:gap-6 ${gridClassName}`}>
+      <div className={`grid gap-4 md:gap-5 lg:gap-6 ${gridClassName}`}>
         {products.map((product, index) => (
           <ProductCard
             key={product.id ?? `product-${index}`}
             product={product}
             index={Math.min(index, 11)}
-            priority={index < 4}
+            priority={index < 3}
           />
         ))}
       </div>
@@ -63,14 +61,14 @@ export function ProductsInfiniteGrid({
             onIntersect={onLoadMore}
           />
           {isFetchingNextPage ? <ProductsLoadMoreSkeleton /> : null}
-          <div className='mt-6 flex justify-center'>
+          <div className='mt-8 flex justify-center'>
             <Button
               variant='outline'
-              className='rounded-full px-8'
+              className='h-11 rounded-full px-8'
               disabled={isFetchingNextPage}
               onClick={onLoadMore}
             >
-              {isFetchingNextPage ? 'Loading…' : 'Load more'}
+              {isFetchingNextPage ? t('loadingMore') : t('loadMore')}
             </Button>
           </div>
         </>
@@ -80,7 +78,7 @@ export function ProductsInfiniteGrid({
 
       {total > 0 && products.length < total && !hasNextPage && (
         <p className='text-muted-foreground mt-4 text-center text-xs'>
-          Showing {products.length} of {total} after filters
+          {t('filteredNote', { shown: products.length, total })}
         </p>
       )}
     </>

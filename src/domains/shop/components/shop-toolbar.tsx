@@ -29,6 +29,8 @@ import { FilterContent } from './filter-content';
 
 const SHOP_SORT_OPTIONS = [
   { value: 'featured', labelKey: 'featured' },
+  { value: 'popular', labelKey: 'popular' },
+  { value: 'best-selling', labelKey: 'bestSelling' },
   { value: 'newest', labelKey: 'newest' },
   { value: 'price-asc', labelKey: 'priceAsc' },
   { value: 'price-desc', labelKey: 'priceDesc' },
@@ -98,7 +100,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
           aria-label={t('searchAriaLabel')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='h-12 border-0 bg-transparent pe-12 ps-12 text-base shadow-none focus-visible:ring-0 md:h-14 md:text-base [&::-webkit-search-cancel-button]:hidden'
+          className='h-12 border-0 bg-transparent ps-12 pe-12 text-base shadow-none focus-visible:ring-0 md:h-14 md:text-base [&::-webkit-search-cancel-button]:hidden'
         />
         {searchQuery ? (
           <Button
@@ -133,7 +135,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
                 <SheetTitle>{t('filters')}</SheetTitle>
               </SheetHeader>
               <div className='mt-6 pb-8'>
-                <FilterContent />
+                <FilterContent variant='sheet' />
               </div>
             </SheetContent>
           </Sheet>
@@ -150,7 +152,7 @@ export function ShopToolbar(props: ShopToolbarProps) {
         </div>
 
         <div className='flex w-full items-center justify-end gap-3 sm:w-auto'>
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select value={sortBy} onValueChange={(value) => setSortBy(value as typeof sortBy)}>
             <SelectTrigger className='h-10 w-full gap-2 rounded-full sm:w-44'>
               <SelectValue placeholder={t('sortBy')} />
             </SelectTrigger>

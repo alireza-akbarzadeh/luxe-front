@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { useLocaleFormatters } from '@/lib/i18n/use-locale-formatters';
 import { cn } from '@/lib/utils';
+import { useGetBrands } from '~/src/services/-brands-get';
 import { useGetCategories } from '~/src/services/-categories-get';
 
 import { useProductFilters } from '../useProductFilters';
@@ -15,9 +16,11 @@ export function ActiveFilter() {
   const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
   const {
     categoryId,
+    brandId,
     priceRange,
     showOnlyNew,
     showOnlySale,
+    inStock,
     minRating,
     maxRating,
     minReviews,
@@ -26,10 +29,12 @@ export function ActiveFilter() {
     searchQuery,
     hasActiveFilters,
     setCategoryId,
+    setBrandId,
     setPriceRange,
     setSearchQuery,
     setShowOnlyNew,
     setShowOnlySale,
+    setInStock,
     setRatingRange,
     setReviewsRange,
     setIsDigital,
@@ -37,8 +42,11 @@ export function ActiveFilter() {
   } = useProductFilters();
 
   const { data: categoriesData } = useGetCategories();
+  const { data: brandsData } = useGetBrands({ limit: 80, status: 'active' });
   const categories = categoriesData?.data?.categories ?? [];
+  const brands = brandsData?.data?.brands ?? [];
   const selectedCategory = categories.find((c) => c.id === categoryId);
+  const selectedBrand = brands.find((b) => b.id === brandId);
 
   return (
     <AnimatePresence>
@@ -58,6 +66,20 @@ export function ActiveFilter() {
             >
               {selectedCategory.name}
               <button onClick={() => setCategoryId(null)} className='hover:text-foreground'>
+                <IconX className='h-3 w-3' />
+              </button>
+            </motion.span>
+          )}
+
+          {brandId > 0 && selectedBrand && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+            >
+              {selectedBrand.name}
+              <button onClick={() => setBrandId(null)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
@@ -100,6 +122,20 @@ export function ActiveFilter() {
             >
               {t('onSale')}
               <button onClick={() => setShowOnlySale(false)} className='hover:text-foreground'>
+                <IconX className='h-3 w-3' />
+              </button>
+            </motion.span>
+          )}
+
+          {inStock && (
+            <motion.span
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className='bg-secondary inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm'
+            >
+              {t('inStock')}
+              <button onClick={() => setInStock(false)} className='hover:text-foreground'>
                 <IconX className='h-3 w-3' />
               </button>
             </motion.span>
