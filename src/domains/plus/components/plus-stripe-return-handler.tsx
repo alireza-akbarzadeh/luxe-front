@@ -13,6 +13,10 @@ import { Box } from '@/components/ui/box';
 import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import { postPlusSubscribeConfirmStripe } from '@/domains/plus/lib/confirm-plus-stripe';
+import {
+  clearPlusStripeSession,
+  readPlusStripeSession
+} from '@/domains/plus/lib/plus-stripe-session-storage';
 import { usePlusActivationStore } from '@/domains/plus/stores/plus-activation-store';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
@@ -23,7 +27,7 @@ function getStripeSessionId(searchParams: URLSearchParams) {
   return searchParams.get('session_id')?.trim() ?? '';
 }
 
-/** Confirms Stripe Plus payment on return and lands on account overview. */
+/** Confirms Stripe Plus payment on return and activates membership on the Plans tab. */
 export function PlusStripeReturnHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -35,11 +39,12 @@ export function PlusStripeReturnHandler() {
 
   useEffect(() => {
     const status = searchParams.get('plus');
-    const sessionId = getStripeSessionId(searchParams);
+    const sessionId = getStripeSessionId(searchParams) || readPlusStripeSession() || '';
 
     if (status === 'cancelled') {
+      clearPlusStripeSession();
       toast.message(t('stripeCancelled'));
-      router.replace('/account?tab=overview');
+      router.replace('/account?tab=plans');
       return;
     }
 
@@ -69,15 +74,16 @@ export function PlusStripeReturnHandler() {
           queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() })
         ]);
 
+        clearPlusStripeSession();
         toast.success(result.message ?? t('activationSuccess'));
-        router.replace('/account?tab=overview');
+        router.replace('/account?tab=plans');
       } catch (error: unknown) {
         const message =
           error instanceof AxiosError
             ? extractErrorMessage(error as AxiosError<ApiErrorResponse>)
             : t('activationError');
         toast.error(message || t('activationError'));
-        router.replace('/account?tab=overview');
+        router.replace('/account?tab=plans');
       } finally {
         setIsConfirming(false);
       }

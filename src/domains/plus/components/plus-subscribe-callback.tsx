@@ -24,7 +24,7 @@ export function PlusSubscribeCallback() {
       query.set('session_id', sessionId);
     }
 
-    router.replace(`/account?tab=overview&${query.toString()}`);
+    router.replace(`/account?tab=plans&${query.toString()}`);
   }, [router, searchParams]);
 
   return null;

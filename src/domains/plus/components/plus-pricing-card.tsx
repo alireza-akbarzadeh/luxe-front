@@ -1,12 +1,13 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useId, useState } from 'react';
 import { toast } from 'sonner';
 
-import { useAuth } from '@/components/providers/auth-provider';
+import { AUTH_USER_QUERY_KEY, useAuth } from '@/components/providers/auth-provider';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
@@ -15,13 +16,21 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Text, Typography } from '@/components/ui/typography';
 import { formatWalletAmount, resolveWalletBalance } from '@/domains/account/lib/wallet-utils';
+import { useStripeCheckoutEnabled } from '@/domains/checkout/hooks/useStripeCheckoutEnabled';
 import { PlusMembershipBadge } from '@/domains/plus/components/plus-membership-badge';
 import {
   usePlusMembershipQuery,
   useSubscribeToPlusMutation
 } from '@/domains/plus/hooks/use-plus-membership';
+import { persistPlusStripeSession } from '@/domains/plus/lib/plus-stripe-session-storage';
+import {
+  isPlusSubscribeInstantlyCompleted,
+  resolvePlusStripeRedirect
+} from '@/domains/plus/lib/plus-subscribe.utils';
 import { cn } from '@/lib/utils';
+import { getGetAccountSummaryQueryKey } from '@/services/-account-summary-get';
 import type { DtoPlusBenefitsResponse } from '@/services/-plus-benefits-get.schemas';
+import { getGetPlusMembershipQueryKey } from '@/services/-plus-membership-get';
 import {
   DtoSubscribePlusRequestPaymentMethod,
   type DtoSubscribePlusRequestPaymentMethod as PaymentMethod
@@ -51,7 +60,13 @@ interface PaymentMethodOptionProps {
   description: string;
 }
 
-function PaymentMethodOption({ id, value, selected, title, description }: PaymentMethodOptionProps) {
+function PaymentMethodOption({
+  id,
+  value,
+  selected,
+  title,
+  description
+}: PaymentMethodOptionProps) {
   return (
     <label
       htmlFor={id}
@@ -76,7 +91,9 @@ function PaymentMethodOption({ id, value, selected, title, description }: Paymen
 export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
   const t = useTranslations('plus.pricing');
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const { isStripeCheckout } = useStripeCheckoutEnabled();
   const { data: membershipData, isLoading: membershipLoading } = usePlusMembershipQuery();
   const {
     data: walletData,
@@ -92,9 +109,10 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
   const fieldId = useId();
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
-    DtoSubscribePlusRequestPaymentMethod.wallet
+    DtoSubscribePlusRequestPaymentMethod.stripe
   );
   const [giftCardCode, setGiftCardCode] = useState('');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const isPlus = membershipData?.data?.is_plus_active === true;
   const expiresAt = membershipData?.data?.plus_expires_at;
@@ -107,7 +125,7 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
 
   const onSubscribe = async () => {
     if (!isAuthenticated) {
-      router.push('/login?redirect=/plus/landing');
+      router.push('/login?redirect=' + encodeURIComponent('/account?tab=plans'));
       return;
     }
 
@@ -119,6 +137,8 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
       return;
     }
 
+    setIsRedirecting(true);
+
     try {
       const result = await subscribe.mutateAsync({
         data: {
@@ -129,17 +149,48 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
         }
       });
 
-      const payload = result.data;
-      if (payload?.payment_status === 'pending' && payload.checkout_url) {
-        window.location.assign(payload.checkout_url);
+      const stripeRedirect = resolvePlusStripeRedirect(result);
+      if (stripeRedirect) {
+        if (stripeRedirect.stripeSessionId) {
+          persistPlusStripeSession(stripeRedirect.stripeSessionId);
+        }
+        window.location.assign(stripeRedirect.checkoutUrl);
         return;
       }
+
+      if (
+        paymentMethod === DtoSubscribePlusRequestPaymentMethod.stripe &&
+        isStripeCheckout &&
+        !isPlusSubscribeInstantlyCompleted(result)
+      ) {
+        toast.error(t('stripeMissingCheckoutUrl'));
+        return;
+      }
+
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: getGetPlusMembershipQueryKey() }),
+        queryClient.invalidateQueries({ queryKey: AUTH_USER_QUERY_KEY }),
+        queryClient.invalidateQueries({ queryKey: getGetAccountSummaryQueryKey() })
+      ]);
 
       toast.success(result.message ?? t('success'));
     } catch (error: unknown) {
       toast.error(getApiErrorMessage(error, t('error')));
+    } finally {
+      setIsRedirecting(false);
     }
   };
+
+  const isBusy = subscribe.isPending || membershipLoading || isRedirecting;
+  const subscribeLabel = isRedirecting
+    ? t('redirectingToStripe')
+    : subscribe.isPending
+      ? t('processing')
+      : isAuthenticated
+        ? paymentMethod === DtoSubscribePlusRequestPaymentMethod.stripe && isStripeCheckout
+          ? t('continueToStripe')
+          : t('subscribe')
+        : t('signInToSubscribe');
 
   return (
     <Box
@@ -236,7 +287,10 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
 
                 {paymentMethod === DtoSubscribePlusRequestPaymentMethod.gift_card ? (
                   <Box>
-                    <Label htmlFor={`${fieldId}-gift-code`} className='mb-2 block text-sm font-medium'>
+                    <Label
+                      htmlFor={`${fieldId}-gift-code`}
+                      className='mb-2 block text-sm font-medium'
+                    >
                       {t('giftCardCode')}
                     </Label>
                     <Input
@@ -258,7 +312,7 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
                       {t('walletInsufficient')}
                     </Text>
                     <Button asChild variant='link' className='mt-1 h-auto p-0 text-sm'>
-                      <Link href='/account'>{t('topUpWallet')}</Link>
+                      <Link href='/account?tab=payment'>{t('topUpWallet')}</Link>
                     </Button>
                   </Box>
                 ) : null}
@@ -269,13 +323,9 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
               size='lg'
               className='from-gold via-gold-strong to-gold w-full rounded-xl bg-linear-to-r text-amber-950 hover:opacity-95'
               onClick={onSubscribe}
-              disabled={subscribe.isPending || membershipLoading}
+              disabled={isBusy}
             >
-              {subscribe.isPending
-                ? t('processing')
-                : isAuthenticated
-                  ? t('subscribe')
-                  : t('signInToSubscribe')}
+              {subscribeLabel}
             </Button>
           </>
         )}
