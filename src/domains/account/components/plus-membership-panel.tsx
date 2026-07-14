@@ -69,7 +69,7 @@ export function PlusMembershipPanel() {
         ) : null}
 
         <Button asChild variant={isPlus ? 'outline' : 'default'} className='rounded-xl'>
-          <Link href='/plus/landing'>{isPlus ? t('viewBenefits') : t('upgrade')}</Link>
+          <Link href='/account?tab=plans'>{isPlus ? t('viewBenefits') : t('upgrade')}</Link>
         </Button>
       </Box>
     </>

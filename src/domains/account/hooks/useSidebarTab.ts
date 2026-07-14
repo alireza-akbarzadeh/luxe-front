@@ -12,6 +12,7 @@ const tabs = [
   'giftCards',
   'addresses',
   'payment',
+  'plans',
   'notifications',
   'settings'
 ] as const;

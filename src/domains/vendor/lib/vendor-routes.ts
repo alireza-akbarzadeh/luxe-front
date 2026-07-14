@@ -4,7 +4,6 @@ export function getVendorStartHref(hasStore: boolean): string {
 }
 
 export const VENDOR_APPLY_PATH = '/vendor/apply';
-export const VENDOR_ONBOARDING_PATH = '/vendor/onboarding';
 export const VENDOR_APPLY_SUCCESS_PATH = '/vendor/apply/success';
 
 export function getVendorApplySuccessHref(storeName: string): string {

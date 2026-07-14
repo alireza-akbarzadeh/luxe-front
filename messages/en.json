@@ -2745,6 +2745,7 @@
         "description": "See exactly what changes when you upgrade — every perk is applied automatically, no coupon codes.",
         "freePlan": "Free",
         "plusPlan": "Luxe Plus",
+        "featureColumn": "Feature",
         "rowDiscount": "Checkout discount",
         "rowReturns": "Return window",
         "rowShipping": "Priority shipping",
@@ -2944,9 +2945,28 @@
       "giftCards": "Gift cards",
       "addresses": "Addresses",
       "payment": "Wallet",
+      "plans": "Plans",
       "notifications": "Notifications",
       "settings": "Settings",
       "signOut": "Sign out"
+    },
+    "plans": {
+      "title": "Membership plans",
+      "description": "Compare Free and Luxe Plus, then upgrade when you are ready.",
+      "perYear": "/ year",
+      "currentPlanBadge": "Your current plan",
+      "plusActiveNote": "You are on Luxe Plus — perks apply automatically at checkout.",
+      "freeDescription": "Everything you need to shop on Luxe with standard returns and support.",
+      "tabs": {
+        "allPlans": "All plans",
+        "compare": "Compare"
+      },
+      "freePerks": {
+        "checkout": "Standard checkout and order tracking",
+        "returns": "{days}-day return window on eligible items",
+        "support": "Standard customer support",
+        "wishlist": "Wishlists, saved addresses, and wallet"
+      }
     },
     "common": {
       "changeLanguage": "Change language",
@@ -4172,6 +4192,48 @@
             "warehouse": "Multi-warehouse",
             "integrations": "Custom integrations",
             "support": "SLA-backed support"
+          }
+        },
+        "compare": {
+          "title": "Compare plans",
+          "subtitle": "See exactly what each seller plan includes side by side.",
+          "featureColumn": "Feature",
+          "tabs": {
+            "allPlans": "All plans",
+            "compare": "Compare"
+          },
+          "rows": {
+            "commission": "Commission",
+            "monthlyFee": "Monthly fee",
+            "skuLimit": "Catalog size",
+            "payouts": "Payouts",
+            "analytics": "Analytics",
+            "promotions": "Coupons & promotions",
+            "featuredListings": "Featured listing credits",
+            "support": "Support",
+            "bulkImport": "Bulk CSV import",
+            "apiAccess": "API access",
+            "multiWarehouse": "Multi-warehouse",
+            "accountManager": "Dedicated account manager",
+            "customIntegrations": "Custom integrations",
+            "slaSupport": "Support SLAs"
+          },
+          "values": {
+            "commission12": "12%",
+            "commission8": "8%",
+            "custom": "Custom",
+            "monthly0": "$0/mo",
+            "monthly49": "$49/mo",
+            "sku100": "Up to 100",
+            "skuUnlimited": "Unlimited",
+            "payoutsStandard": "Standard",
+            "payoutsPriority": "Priority",
+            "payoutsCustom": "Custom",
+            "analyticsBasic": "Basic",
+            "analyticsAdvanced": "Advanced",
+            "supportEmail": "Email",
+            "supportPriority": "Priority",
+            "supportSla": "SLA-backed"
           }
         }
       },

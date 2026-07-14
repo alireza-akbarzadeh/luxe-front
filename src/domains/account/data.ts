@@ -6,6 +6,7 @@ import {
   IconMessageCircle,
   IconPackage,
   IconSettings,
+  IconSparkles,
   IconUser,
   IconWallet,
   type TablerIcon
@@ -19,6 +20,7 @@ export type AccountTab =
   | 'giftCards'
   | 'addresses'
   | 'payment'
+  | 'plans'
   | 'notifications'
   | 'settings';
 
@@ -35,6 +37,7 @@ const ACCOUNT_MENU_CONFIG: AccountMenuConfigItem[] = [
   { id: 'giftCards', icon: IconGift },
   { id: 'addresses', icon: IconMapPin },
   { id: 'payment', icon: IconWallet },
+  { id: 'plans', icon: IconSparkles },
   { id: 'notifications', icon: IconBell },
   { id: 'settings', icon: IconSettings }
 ];

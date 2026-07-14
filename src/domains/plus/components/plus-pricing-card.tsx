@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/components/providers/auth-provider';
@@ -43,6 +43,35 @@ function getApiErrorMessage(error: unknown, fallback: string) {
   return message && message.trim().length > 0 ? message : fallback;
 }
 
+interface PaymentMethodOptionProps {
+  id: string;
+  value: PaymentMethod;
+  selected: boolean;
+  title: string;
+  description: string;
+}
+
+function PaymentMethodOption({ id, value, selected, title, description }: PaymentMethodOptionProps) {
+  return (
+    <label
+      htmlFor={id}
+      className={cn(
+        'flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors',
+        'hover:bg-muted/40',
+        selected ? 'border-gold/50 bg-gold/5 ring-gold/20 ring-1' : 'border-border'
+      )}
+    >
+      <RadioGroupItem value={value} id={id} aria-label={title} />
+      <Box className='min-w-0 flex-1'>
+        <Text className='text-sm font-medium'>{title}</Text>
+        <Text variant='muted' className='text-xs'>
+          {description}
+        </Text>
+      </Box>
+    </label>
+  );
+}
+
 /** Primary CTA card for subscribing to Luxe Plus. */
 export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
   const t = useTranslations('plus.pricing');
@@ -60,6 +89,7 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
     }
   );
   const subscribe = useSubscribeToPlusMutation();
+  const fieldId = useId();
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
     DtoSubscribePlusRequestPaymentMethod.wallet
@@ -160,7 +190,7 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
                 : t('active')}
             </Text>
             <Button asChild variant='outline' className='mt-3 w-full rounded-xl'>
-              <Link href='/account'>{t('manageAccount')}</Link>
+              <Link href='/account?tab=plans'>{t('manageAccount')}</Link>
             </Button>
           </Box>
         ) : (
@@ -174,74 +204,43 @@ export function PlusPricingCard({ benefits, className }: PlusPricingCardProps) {
                     onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
                     className='space-y-2'
                   >
-                    <Flex
-                      align='center'
-                      gap={3}
-                      className='border-border hover:bg-muted/40 rounded-xl border p-3'
-                    >
-                      <RadioGroupItem
-                        value={DtoSubscribePlusRequestPaymentMethod.wallet}
-                        id='plus-pay-wallet'
-                      />
-                      <Label
-                        htmlFor='plus-pay-wallet'
-                        className='flex-1 cursor-pointer font-normal'
-                      >
-                        <Text className='text-sm font-medium'>{t('payWallet')}</Text>
-                        <Text variant='muted' className='text-xs'>
-                          {isWalletBalanceLoading
-                            ? t('walletBalanceLoading')
-                            : t('walletBalance', { amount: formatWalletAmount(walletBalance) })}
-                        </Text>
-                      </Label>
-                    </Flex>
+                    <PaymentMethodOption
+                      id={`${fieldId}-wallet`}
+                      value={DtoSubscribePlusRequestPaymentMethod.wallet}
+                      selected={paymentMethod === DtoSubscribePlusRequestPaymentMethod.wallet}
+                      title={t('payWallet')}
+                      description={
+                        isWalletBalanceLoading
+                          ? t('walletBalanceLoading')
+                          : t('walletBalance', { amount: formatWalletAmount(walletBalance) })
+                      }
+                    />
 
-                    <Flex
-                      align='center'
-                      gap={3}
-                      className='border-border hover:bg-muted/40 rounded-xl border p-3'
-                    >
-                      <RadioGroupItem
-                        value={DtoSubscribePlusRequestPaymentMethod.gift_card}
-                        id='plus-pay-gift'
-                      />
-                      <Label htmlFor='plus-pay-gift' className='flex-1 cursor-pointer font-normal'>
-                        <Text className='text-sm font-medium'>{t('payGiftCard')}</Text>
-                        <Text variant='muted' className='text-xs'>
-                          {t('payGiftCardHint')}
-                        </Text>
-                      </Label>
-                    </Flex>
+                    <PaymentMethodOption
+                      id={`${fieldId}-gift-card`}
+                      value={DtoSubscribePlusRequestPaymentMethod.gift_card}
+                      selected={paymentMethod === DtoSubscribePlusRequestPaymentMethod.gift_card}
+                      title={t('payGiftCard')}
+                      description={t('payGiftCardHint')}
+                    />
 
-                    <Flex
-                      align='center'
-                      gap={3}
-                      className='border-border hover:bg-muted/40 rounded-xl border p-3'
-                    >
-                      <RadioGroupItem
-                        value={DtoSubscribePlusRequestPaymentMethod.stripe}
-                        id='plus-pay-stripe'
-                      />
-                      <Label
-                        htmlFor='plus-pay-stripe'
-                        className='flex-1 cursor-pointer font-normal'
-                      >
-                        <Text className='text-sm font-medium'>{t('payStripe')}</Text>
-                        <Text variant='muted' className='text-xs'>
-                          {t('payStripeHint')}
-                        </Text>
-                      </Label>
-                    </Flex>
+                    <PaymentMethodOption
+                      id={`${fieldId}-stripe`}
+                      value={DtoSubscribePlusRequestPaymentMethod.stripe}
+                      selected={paymentMethod === DtoSubscribePlusRequestPaymentMethod.stripe}
+                      title={t('payStripe')}
+                      description={t('payStripeHint')}
+                    />
                   </RadioGroup>
                 </Box>
 
                 {paymentMethod === DtoSubscribePlusRequestPaymentMethod.gift_card ? (
                   <Box>
-                    <Label htmlFor='plus-gift-code' className='mb-2 block text-sm font-medium'>
+                    <Label htmlFor={`${fieldId}-gift-code`} className='mb-2 block text-sm font-medium'>
                       {t('giftCardCode')}
                     </Label>
                     <Input
-                      id='plus-gift-code'
+                      id={`${fieldId}-gift-code`}
                       value={giftCardCode}
                       onChange={(event) => setGiftCardCode(event.target.value.toUpperCase())}
                       placeholder='LUXE-XXXX-XXXX'

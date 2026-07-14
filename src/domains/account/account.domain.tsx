@@ -17,6 +17,7 @@ import { AccountNotifications } from './containers/account-notifications';
 import { AccountOrder } from './containers/account-order';
 import { AccountOverview } from './containers/account-overview';
 import { AccountPayment } from './containers/account-payment';
+import { AccountPlans } from './containers/account-plans';
 import { AccountSetting } from './containers/account-settings';
 import { AccountWishlist } from './containers/account-wishlist';
 import { useSidebarTab } from './hooks/useSidebarTab';
@@ -46,6 +47,7 @@ export function AccountDomain() {
     giftCards: <AccountGiftCards />,
     addresses: <AccountAddresses />,
     payment: <AccountPayment />,
+    plans: <AccountPlans />,
     notifications: <AccountNotifications />,
     settings: <AccountSetting />
   };

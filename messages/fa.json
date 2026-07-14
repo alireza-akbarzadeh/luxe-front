@@ -2740,6 +2740,7 @@
         "description": "دقیقاً ببینید با ارتقا چه چیزی تغییر می‌کند — همه مزایا به‌طور خودکار اعمال می‌شوند.",
         "freePlan": "رایگان",
         "plusPlan": "لوکس پلاس",
+        "featureColumn": "ویژگی",
         "rowDiscount": "تخفیف پرداخت",
         "rowReturns": "مهلت مرجوعی",
         "rowShipping": "ارسال اولویت‌دار",
@@ -2939,9 +2940,28 @@
       "giftCards": "کارت هدیه",
       "addresses": "آدرس‌ها",
       "payment": "کیف پول",
+      "plans": "طرح‌ها",
       "notifications": "اعلان‌ها",
       "settings": "تنظیمات",
       "signOut": "خروج"
+    },
+    "plans": {
+      "title": "طرح‌های عضویت",
+      "description": "طرح رایگان و لوکس پلاس را مقایسه کنید و در صورت تمایل ارتقا دهید.",
+      "perYear": "/ سال",
+      "currentPlanBadge": "طرح فعلی شما",
+      "plusActiveNote": "شما روی لوکس پلاس هستید — مزایا در تسویه‌حساب به‌صورت خودکار اعمال می‌شوند.",
+      "freeDescription": "هر آنچه برای خرید در لوکس با مرجوعی و پشتیبانی استاندارد نیاز دارید.",
+      "tabs": {
+        "allPlans": "همه طرح‌ها",
+        "compare": "مقایسه"
+      },
+      "freePerks": {
+        "checkout": "تسویه‌حساب استاندارد و پیگیری سفارش",
+        "returns": "پنجره مرجوعی {days} روزه برای اقلام واجد شرایط",
+        "support": "پشتیبانی استاندارد مشتری",
+        "wishlist": "علاقه‌مندی‌ها، آدرس‌های ذخیره‌شده و کیف پول"
+      }
     },
     "common": {
       "changeLanguage": "تغییر زبان",
@@ -4149,6 +4169,48 @@
             "warehouse": "چند انبار",
             "integrations": "یکپارچه‌سازی سفارشی",
             "support": "پشتیبانی با SLA"
+          }
+        },
+        "compare": {
+          "title": "مقایسه طرح‌ها",
+          "subtitle": "دقیقاً ببینید هر طرح فروشنده چه چیزهایی شامل می‌شود.",
+          "featureColumn": "ویژگی",
+          "tabs": {
+            "allPlans": "همه طرح‌ها",
+            "compare": "مقایسه"
+          },
+          "rows": {
+            "commission": "کارمزد",
+            "monthlyFee": "هزینه ماهانه",
+            "skuLimit": "اندازه کاتالوگ",
+            "payouts": "تسویه",
+            "analytics": "تحلیل",
+            "promotions": "کوپن و پروموشن",
+            "featuredListings": "اعتبار لیست ویژه",
+            "support": "پشتیبانی",
+            "bulkImport": "واردات CSV گروهی",
+            "apiAccess": "دسترسی API",
+            "multiWarehouse": "چند انبار",
+            "accountManager": "مدیر حساب اختصاصی",
+            "customIntegrations": "یکپارچه‌سازی سفارشی",
+            "slaSupport": "SLA پشتیبانی"
+          },
+          "values": {
+            "commission12": "۱۲٪",
+            "commission8": "۸٪",
+            "custom": "سفارشی",
+            "monthly0": "۰ دلار/ماه",
+            "monthly49": "۴۹ دلار/ماه",
+            "sku100": "تا ۱۰۰",
+            "skuUnlimited": "نامحدود",
+            "payoutsStandard": "استاندارد",
+            "payoutsPriority": "اولویت‌دار",
+            "payoutsCustom": "سفارشی",
+            "analyticsBasic": "پایه",
+            "analyticsAdvanced": "پیشرفته",
+            "supportEmail": "ایمیل",
+            "supportPriority": "اولویت‌دار",
+            "supportSla": "با SLA"
           }
         }
       },
