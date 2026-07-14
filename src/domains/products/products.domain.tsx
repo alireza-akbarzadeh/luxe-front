@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { useCallback } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { ProductsCatalogSkeleton } from '@/domains/products/components/products-page-skeleton';
 import { ActiveFilter } from '@/domains/shop/components/active-filter';
 import { FilterContent } from '@/domains/shop/components/filter-content';
-import { ShopProductsSkeleton } from '@/domains/shop/components/shop-products-skeleton';
 import { ShopToolbar } from '@/domains/shop/components/shop-toolbar';
 
 import { ProductsHero } from './components/products-hero';
@@ -43,8 +43,8 @@ export function ProductsDomain() {
     <>
       <ProductsHero total={total} loadedCount={loadedCount} isFetching={isRefetching} />
 
-      <div className='pb-20'>
-        <div className='bg-background sticky top-16 z-20 pt-8 lg:top-20'>
+      <div className='app-container pb-20'>
+        <div className='bg-background/95 sticky top-16 z-20 pt-8 backdrop-blur-md lg:top-20'>
           <ShopToolbar
             total={total}
             rangeStart={loadedCount === 0 ? 0 : 1}
@@ -79,7 +79,7 @@ export function ProductsDomain() {
                 </Button>
               </div>
             ) : isInitialLoading ? (
-              <ShopProductsSkeleton />
+              <ProductsCatalogSkeleton view='grid' />
             ) : (
               <ProductsInfiniteGrid
                 products={products}

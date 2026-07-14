@@ -3,12 +3,12 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
+import { ProductsPageSkeleton } from '@/domains/products/components/products-page-skeleton';
 import {
   getInfiniteProductsQueryOptions,
   PRODUCTS_PAGE_SIZE
 } from '@/domains/products/lib/infinite-products-query';
 import { ProductsDomain } from '@/domains/products/products.domain';
-import { ShopProductsSkeleton } from '@/domains/shop/components/shop-products-skeleton';
 import { getQueryClient } from '@/lib/query-client';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import { getProducts } from '@/services/-products-get';
@@ -42,26 +42,9 @@ export default async function ProductsPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ProductsPageFallback />}>
+      <Suspense fallback={<ProductsPageSkeleton view='grid' />}>
         <ProductsDomain />
       </Suspense>
     </HydrationBoundary>
-  );
-}
-
-function ProductsPageFallback() {
-  return (
-    <div className='pb-20'>
-      <div className='from-secondary/40 to-background border-b bg-linear-to-b pt-24 pb-12'>
-        <div className='app-container space-y-4'>
-          <div className='bg-muted h-8 w-32 animate-pulse rounded-full' />
-          <div className='bg-muted h-12 w-72 max-w-full animate-pulse rounded-lg' />
-          <div className='bg-muted h-4 max-w-xl animate-pulse rounded' />
-        </div>
-      </div>
-      <div className='app-container mt-8'>
-        <ShopProductsSkeleton />
-      </div>
-    </div>
   );
 }

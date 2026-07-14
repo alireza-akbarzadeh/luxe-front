@@ -3,19 +3,40 @@
 import { IconCheck, IconLoader2 } from '@tabler/icons-react';
 
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  PRODUCT_CARD_HEIGHT_DEFAULT,
+  PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT,
+  PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT
+} from '@/domains/shop/lib/product-card-layout';
+import { cn } from '@/lib/utils';
 
 export function ProductsLoadMoreSkeleton() {
   return (
-    <div className='mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+    <div className='mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4'>
       {Array.from({ length: 4 }).map((_, index) => (
         <div
           key={index}
-          className='border-border/60 space-y-3 overflow-hidden rounded-2xl border p-3'
+          className={cn(
+            'border-border/50 bg-card relative w-full overflow-hidden rounded-2xl border shadow-sm',
+            PRODUCT_CARD_HEIGHT_DEFAULT
+          )}
         >
-          <Skeleton className='aspect-4/5 w-full rounded-xl' />
-          <Skeleton className='h-4 w-3/4' />
-          <Skeleton className='h-4 w-1/3' />
-          <Skeleton className='h-9 w-full rounded-full' />
+          <Skeleton className='absolute inset-0 rounded-none' />
+          <div
+            className={cn(
+              'bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1.5 p-4',
+              PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT,
+              PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT
+            )}
+          >
+            <Skeleton className='h-2.5 w-14' />
+            <Skeleton className='h-5 w-4/5' />
+            <Skeleton className='h-4 w-16' />
+            <div className='mt-auto flex gap-2 pt-2'>
+              <Skeleton className='h-9 flex-1 rounded-lg' />
+              <Skeleton className='h-9 flex-[1.2] rounded-lg' />
+            </div>
+          </div>
         </div>
       ))}
     </div>
