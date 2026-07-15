@@ -1,5 +1,3 @@
-import { getTranslations } from 'next-intl/server';
-
 import type { DtoBlogPostResponse } from '@/services/-blog-posts-{slug}-get.schemas';
 
 interface WeblogPostDomainProps {

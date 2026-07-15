@@ -45,13 +45,13 @@ export function buildBlogHomeMetadata(data: DtoBlogHomepageData): Metadata {
     description,
 
     alternates: {
-      canonical: '/weblog'
+      canonical: '/blog'
     },
 
     openGraph: {
       title,
       description,
-      url: '/weblog',
+      url: '/blog',
       type: 'website',
       siteName: 'Luxe',
 
