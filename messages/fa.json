@@ -4579,5 +4579,55 @@
         "validationFailed": "لطفاً فیلدهای مشخص‌شده را اصلاح کنید"
       }
     }
+  },
+  "weblog": {
+    "home": {
+      "title": "اخبار، بررسی‌ها و راهنماهای تخصصی",
+      "subtitle": "بررسی‌های کارشناسی، راهنمای خرید و تازه‌های تحریریه لوکس.",
+      "trendingTitle": "داغ‌ترین‌ها",
+      "editorsPicks": "انتخاب سردبیر",
+      "editorsPicksDescription": "مطالب منتخب تیم تحریریه.",
+      "latest": "آخرین مقالات",
+      "buyingGuides": "راهنمای خرید",
+      "buyingGuidesDescription": "قبل از خرید، با اطمینان تصمیم بگیرید.",
+      "productReviews": "بررسی محصولات",
+      "comparisons": "مقایسه‌ها",
+      "popularTitle": "محبوب‌ترین‌ها",
+      "emptyFeatured": "هنوز مطلب ویژه‌ای نیست — به‌زودی برگردید.",
+      "browseCategories": "مرور بر اساس دسته‌بندی"
+    },
+    "newsletter": {
+      "title": "با ما به‌روز بمانید",
+      "description": "جدیدترین بررسی‌ها و راهنماهای خرید را در ایمیل دریافت کنید.",
+      "placeholder": "ایمیل خود را وارد کنید",
+      "emailLabel": "آدرس ایمیل",
+      "subscribe": "عضویت",
+      "submitting": "در حال عضویت…",
+      "disclaimer": "بدون اسپم. هر زمان لغو عضویت کنید.",
+      "success": "عضویت انجام شد. ایمیل خود را برای تأیید بررسی کنید.",
+      "error": "عضویت الان ممکن نشد. دوباره تلاش کنید."
+    },
+    "post": {
+      "breadcrumbLabel": "مسیر صفحه",
+      "breadcrumbHome": "خانه",
+      "breadcrumbBlog": "وبلاگ",
+      "share": "اشتراک‌گذاری:",
+      "copyLink": "کپی لینک",
+      "linkCopiedLabel": "لینک",
+      "tocTitle": "فهرست مطالب",
+      "verdictTitle": "جمع‌بندی سریع",
+      "prosConsTitle": "مزایا و معایب",
+      "pros": "مزایا",
+      "cons": "معایب",
+      "relatedTitle": "مطالب مرتبط",
+      "productsTitle": "محصولات مرتبط",
+      "faqTitle": "پرسش‌های متداول",
+      "tags": "برچسب‌ها",
+      "helpful": "مفید بود",
+      "helpfulThanks": "از بازخورد شما سپاسگزاریم.",
+      "helpfulError": "ثبت رأی ممکن نشد.",
+      "comments": "نظرات",
+      "shareArticle": "اشتراک مقاله"
+    }
   }
 }

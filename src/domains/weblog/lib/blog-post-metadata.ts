@@ -48,12 +48,12 @@ export function buildBlogMetadata(
     title,
     description,
     alternates: {
-      canonical: `/blog/${slug}`
+      canonical: `/weblog/${slug}`
     },
     openGraph: {
       title,
       description,
-      url: `/blog/${slug}`,
+      url: `/weblog/${slug}`,
       type: 'article',
       siteName: 'Luxe',
       publishedTime: post.published_at,

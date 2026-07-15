@@ -1,46 +1,55 @@
-import { IconFlame } from '@tabler/icons-react';
+import { getTranslations } from 'next-intl/server';
 
 import { Flex } from '@/components/ui/flex';
-import { Grid } from '@/components/ui/grid';
 import { Typography } from '@/components/ui/typography';
 import { ArticleCard } from '@/domains/weblog/components/article-card';
 import type { DtoBlogPostListItem } from '@/services/-blog-homepage-get.schemas';
 
 interface BlogHeroProps {
   featured?: DtoBlogPostListItem;
-  trending: DtoBlogPostListItem[];
 }
 
-/** Editorial hero: large featured article beside a compact trending list. */
-export function BlogHero({ featured, trending }: BlogHeroProps) {
-  if (!featured) return null;
-
-  const trendingList = trending.filter((post) => post.slug !== featured.slug).slice(0, 4);
+/** Large featured article hero for the blog homepage. */
+export async function BlogHero({ featured }: BlogHeroProps) {
+  const t = await getTranslations('weblog.home');
+  if (!featured) {
+    return (
+      <section className='bg-muted/40 rounded-2xl border border-dashed px-6 py-16 text-center'>
+        <Typography.Muted>{t('emptyFeatured')}</Typography.Muted>
+      </section>
+    );
+  }
 
   return (
-    <section className='py-6'>
-      <Grid template='1-3' gap={6} className='items-stretch'>
-        <div className='lg:col-span-2'>
-          <ArticleCard post={featured} variant='feature' priority />
-        </div>
+    <section>
+      <ArticleCard post={featured} variant='feature' priority />
+    </section>
+  );
+}
 
-        <Flex direction='column' gap={3} className='bg-card rounded-2xl border p-5 shadow-sm'>
-          <Flex align='center' gap={2} className='text-accent'>
-            <IconFlame className='size-5' />
-            <Typography.Overline className='text-accent'>Trending now</Typography.Overline>
-          </Flex>
+interface BlogTrendingRowProps {
+  posts: DtoBlogPostListItem[];
+  excludeSlug?: string;
+}
 
-          <Flex direction='column' gap={1}>
-            {trendingList.length > 0 ? (
-              trendingList.map((post) => (
-                <ArticleCard key={post.id ?? post.slug} post={post} variant='list' />
-              ))
-            ) : (
-              <Typography.Muted className='text-sm'>No trending stories yet.</Typography.Muted>
-            )}
-          </Flex>
-        </Flex>
-      </Grid>
+/** Horizontal trending carousel under the featured hero. */
+export async function BlogTrendingRow({ posts, excludeSlug }: BlogTrendingRowProps) {
+  const t = await getTranslations('weblog.home');
+  const trending = posts.filter((post) => post.slug !== excludeSlug).slice(0, 8);
+  if (trending.length === 0) return null;
+
+  return (
+    <section className='py-2'>
+      <Flex align='center' justify='between' className='mb-4'>
+        <Typography.H2 className='font-display text-xl sm:text-2xl'>
+          {t('trendingTitle')}
+        </Typography.H2>
+      </Flex>
+      <div className='-mx-1 flex gap-4 overflow-x-auto px-1 pb-2'>
+        {trending.map((post) => (
+          <ArticleCard key={post.id ?? post.slug} post={post} variant='trending' />
+        ))}
+      </div>
     </section>
   );
 }

@@ -4126,5 +4126,55 @@
         "partnerBrandsAria": "Marcas asociadas"
       }
     }
+  },
+  "weblog": {
+    "home": {
+      "title": "Noticias, reseñas y guías",
+      "subtitle": "Reseñas expertas, guías de compra y lo último del equipo editorial de Luxe.",
+      "trendingTitle": "Tendencias",
+      "editorsPicks": "Selección del editor",
+      "editorsPicksDescription": "Lecturas elegidas por nuestro equipo editorial.",
+      "latest": "Últimos artículos",
+      "buyingGuides": "Guías de compra",
+      "buyingGuidesDescription": "Decide con confianza antes de comprar.",
+      "productReviews": "Reseñas de productos",
+      "comparisons": "Comparativas",
+      "popularTitle": "Más populares",
+      "emptyFeatured": "Aún no hay destacados — vuelve pronto.",
+      "browseCategories": "Explorar por categoría"
+    },
+    "newsletter": {
+      "title": "Mantente al día",
+      "description": "Recibe las últimas reseñas y guías de compra en tu bandeja.",
+      "placeholder": "Introduce tu correo",
+      "emailLabel": "Correo electrónico",
+      "subscribe": "Suscribirse",
+      "submitting": "Suscribiendo…",
+      "disclaimer": "Sin spam. Cancela cuando quieras.",
+      "success": "Te has suscrito. Revisa tu correo para confirmar.",
+      "error": "No se pudo suscribir ahora. Inténtalo de nuevo."
+    },
+    "post": {
+      "breadcrumbLabel": "Miguitas",
+      "breadcrumbHome": "Inicio",
+      "breadcrumbBlog": "Blog",
+      "share": "Compartir:",
+      "copyLink": "Copiar enlace",
+      "linkCopiedLabel": "Enlace",
+      "tocTitle": "Tabla de contenidos",
+      "verdictTitle": "Veredicto rápido",
+      "prosConsTitle": "Pros y contras",
+      "pros": "Pros",
+      "cons": "Contras",
+      "relatedTitle": "Historias relacionadas",
+      "productsTitle": "Productos destacados",
+      "faqTitle": "Preguntas frecuentes",
+      "tags": "Etiquetas",
+      "helpful": "Útil",
+      "helpfulThanks": "Gracias por tu comentario.",
+      "helpfulError": "No se pudo registrar tu voto.",
+      "comments": "Comentarios",
+      "shareArticle": "Compartir artículo"
+    }
   }
 }

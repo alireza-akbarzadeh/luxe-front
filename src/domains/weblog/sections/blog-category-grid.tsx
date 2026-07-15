@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
 import { AppImage } from '@/components/ui/app-image';
 import { Grid } from '@/components/ui/grid';
@@ -12,13 +13,14 @@ interface BlogCategoryGridProps {
 }
 
 /** Featured categories as image tiles linking to their landing pages. */
-export function BlogCategoryGrid({ categories }: BlogCategoryGridProps) {
+export async function BlogCategoryGrid({ categories }: BlogCategoryGridProps) {
+  const t = await getTranslations('weblog.home');
   if (!categories || categories.length === 0) return null;
 
   return (
-    <section className='py-6'>
+    <section className='py-2'>
       <Typography.H2 className='font-display mb-5 text-2xl md:text-3xl'>
-        Browse by topic
+        {t('browseCategories')}
       </Typography.H2>
 
       <Grid autoFit='md' gap={4}>

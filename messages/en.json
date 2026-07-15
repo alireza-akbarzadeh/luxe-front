@@ -4603,5 +4603,55 @@
         "validationFailed": "Please fix the highlighted fields"
       }
     }
+  },
+  "weblog": {
+    "home": {
+      "title": "Tech News, Reviews & Guides",
+      "subtitle": "Expert reviews, buying guides & the latest from the Luxe editorial desk.",
+      "trendingTitle": "Trending Now",
+      "editorsPicks": "Editor's Picks",
+      "editorsPicksDescription": "Hand-selected reads from our editorial team.",
+      "latest": "Latest Articles",
+      "buyingGuides": "Buying Guides",
+      "buyingGuidesDescription": "Make confident decisions before you buy.",
+      "productReviews": "Product Reviews",
+      "comparisons": "Comparisons",
+      "popularTitle": "Popular Posts",
+      "emptyFeatured": "No featured stories yet — check back soon.",
+      "browseCategories": "Browse by Category"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Get the latest reviews and buying guides straight to your inbox.",
+      "placeholder": "Enter your email",
+      "emailLabel": "Email address",
+      "subscribe": "Subscribe",
+      "submitting": "Subscribing…",
+      "disclaimer": "No spam. Unsubscribe anytime.",
+      "success": "You are subscribed. Check your inbox to confirm.",
+      "error": "Could not subscribe right now. Please try again."
+    },
+    "post": {
+      "breadcrumbLabel": "Breadcrumb",
+      "breadcrumbHome": "Home",
+      "breadcrumbBlog": "Blog",
+      "share": "Share:",
+      "copyLink": "Copy link",
+      "linkCopiedLabel": "Link",
+      "tocTitle": "Table of Contents",
+      "verdictTitle": "Quick Verdict",
+      "prosConsTitle": "Pros & Cons",
+      "pros": "Pros",
+      "cons": "Cons",
+      "relatedTitle": "Related Stories",
+      "productsTitle": "Featured Products",
+      "faqTitle": "FAQ",
+      "tags": "Tags",
+      "helpful": "Helpful",
+      "helpfulThanks": "Thanks for your feedback.",
+      "helpfulError": "Could not record your vote.",
+      "comments": "Comments",
+      "shareArticle": "Share Article"
+    }
   }
 }

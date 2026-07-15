@@ -13,7 +13,7 @@ interface BlogSectionRowProps {
   posts: DtoBlogPostListItem[];
   /** Optional "view all" destination. */
   viewAllHref?: string;
-  variant?: 'standard' | 'compact';
+  variant?: 'standard' | 'compact' | 'list';
   /** Max cards to render (defaults to 4). */
   limit?: number;
 }
@@ -31,7 +31,7 @@ export function BlogSectionRow({
   const visible = posts.slice(0, limit);
 
   return (
-    <section className='py-6'>
+    <section className='py-2'>
       <Flex align='end' justify='between' gap={4} className='mb-5'>
         <div>
           <Typography.H2 className='font-display text-2xl md:text-3xl'>{title}</Typography.H2>
@@ -48,11 +48,19 @@ export function BlogSectionRow({
         ) : null}
       </Flex>
 
-      <Grid autoFit={variant === 'compact' ? 'md' : 'lg'} gap={5}>
-        {visible.map((post) => (
-          <ArticleCard key={post.id ?? post.slug} post={post} variant={variant} />
-        ))}
-      </Grid>
+      {variant === 'list' ? (
+        <Flex direction='column' gap={2} className='divide-border/60 divide-y'>
+          {visible.map((post) => (
+            <ArticleCard key={post.id ?? post.slug} post={post} variant='list' className='py-3' />
+          ))}
+        </Flex>
+      ) : (
+        <Grid autoFit={variant === 'compact' ? 'md' : 'lg'} gap={5}>
+          {visible.map((post) => (
+            <ArticleCard key={post.id ?? post.slug} post={post} variant={variant} />
+          ))}
+        </Grid>
+      )}
     </section>
   );
 }

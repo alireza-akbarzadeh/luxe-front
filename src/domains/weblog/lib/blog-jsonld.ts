@@ -7,7 +7,7 @@ type JsonLd = Record<string, unknown>;
 
 /** Article structured data (schema.org/Article) for a blog post. */
 export function buildArticleJsonLd(post: DtoBlogPostResponse): JsonLd {
-  const url = absoluteUrl(`/blog/${post.slug ?? ''}`);
+  const url = absoluteUrl(`/weblog/${post.slug ?? ''}`);
 
   return {
     '@context': 'https://schema.org',

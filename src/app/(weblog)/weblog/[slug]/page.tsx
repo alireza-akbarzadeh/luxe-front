@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { buildBlogMetadata, getBlogPostPageData } from '@/domains/weblog/lib/blog-post-metadata';
+import { WeblogPostDomain } from '@/domains/weblog/weblog-post.domain';
+import { getQueryClient } from '@/lib/query-client';
 import { getGetBlogPostsSlugQueryOptions } from '@/services/-blog-posts-{slug}-get';
-import { WeblogPostDomain } from '~/src/domains/weblog/weblog-post.domain';
-import { getQueryClient } from '~/src/lib/query-client';
 
 interface Props {
   params: Promise<{

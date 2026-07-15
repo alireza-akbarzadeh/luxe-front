@@ -104,6 +104,13 @@ export interface ProsConsBlock {
   cons: string[];
 }
 
+export interface VerdictBlock {
+  type: 'verdict';
+  score: number;
+  summary: string;
+  label?: string;
+}
+
 export interface TableBlock {
   type: 'table';
   headers: string[];
@@ -130,6 +137,7 @@ export type BlogBlock =
   | ProductBlock
   | FaqBlock
   | ProsConsBlock
+  | VerdictBlock
   | TableBlock
   | CtaBlock;
 
@@ -298,6 +306,18 @@ export function parseBlock(raw: DtoBlogContentBlock, index: number): BlogBlock |
       const cons = stringArray(block['cons']);
       return pros.length > 0 || cons.length > 0 ? { type: 'pros_cons', pros, cons } : null;
     }
+    case 'verdict': {
+      const summary = firstString(block, 'summary', 'text', 'content');
+      if (!summary) return null;
+      const scoreRaw = Number(block['score'] ?? block['rating']);
+      const score = Number.isFinite(scoreRaw) ? Math.min(10, Math.max(0, scoreRaw)) : 0;
+      return {
+        type: 'verdict',
+        score,
+        summary,
+        label: firstString(block, 'label', 'title') || undefined
+      };
+    }
     case 'table': {
       const headers = stringArray(block['headers']);
       const rows = parseTableRows(block['rows']);
@@ -332,4 +352,31 @@ export function extractFaqs(blocks: BlogBlock[]): FaqItem[] {
   return blocks
     .filter((block): block is FaqBlock => block.type === 'faq')
     .flatMap((block) => block.items);
+}
+
+/** First verdict block, or a score-bearing callout used as a quick verdict. */
+export function extractVerdict(blocks: BlogBlock[]): VerdictBlock | null {
+  const verdict = blocks.find((block): block is VerdictBlock => block.type === 'verdict');
+  if (verdict) return verdict;
+
+  const callout = blocks.find(
+    (block): block is CalloutBlock =>
+      block.type === 'callout' &&
+      Boolean(block.title?.toLowerCase().includes('verdict') || block.tone === 'success')
+  );
+  if (!callout) return null;
+
+  const scoreMatch = callout.text.match(/(\d+(?:\.\d+)?)\s*\/\s*10/);
+  const score = scoreMatch ? Number(scoreMatch[1]) : 0;
+  return {
+    type: 'verdict',
+    score: Number.isFinite(score) ? score : 0,
+    summary: callout.text,
+    label: callout.title || 'Quick Verdict'
+  };
+}
+
+/** First pros/cons block in the article. */
+export function extractProsCons(blocks: BlogBlock[]): ProsConsBlock | null {
+  return blocks.find((block): block is ProsConsBlock => block.type === 'pros_cons') ?? null;
 }
