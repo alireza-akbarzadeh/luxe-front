@@ -25,7 +25,7 @@ export function NotificationsHeader({
   const t = useTranslations('notifications.inbox');
 
   return (
-    <Flex align='start' justify='between' gap={4} className='flex-wrap'>
+    <Flex align='start' justify='between' gap={4} className='flex-wrap md:flex-row'>
       <div>
         <Typography.H2 className='font-display text-3xl font-semibold tracking-tight sm:text-4xl'>
           {t('title')}
@@ -38,7 +38,7 @@ export function NotificationsHeader({
         </Text>
       </div>
 
-      <Flex align='center' gap={2} className='shrink-0'>
+      <Flex align='center' gap={2} className='shrink-0 flex-row'>
         <Button
           variant='outline'
           className='border-gold/30 hover:bg-gold/10 rounded-full'
