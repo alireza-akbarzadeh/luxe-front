@@ -109,7 +109,7 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
 
           <BlogToc headings={headings} />
 
-          <BlogContentRenderer blocks={bodyBlocks} className='mt-2' />
+          <BlogContentRenderer blocks={bodyBlocks} products={post.products} className='mt-2' />
 
           <BlogFaq items={faqs} />
 

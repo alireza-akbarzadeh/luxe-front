@@ -5,34 +5,60 @@ import { AppImage } from '@/components/ui/app-image';
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
+import { BlogLinkedText } from '@/domains/weblog/components/blog-linked-text';
 import type { BlogBlock } from '@/domains/weblog/lib/content-blocks';
+import {
+  buildProductLinkTargets,
+  buildProductMentions,
+  type ProductLinkTarget,
+  type ProductMention
+} from '@/domains/weblog/lib/product-mention-links';
 import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
+import type { DtoBlogPostProductItem } from '@/services/-blog-posts-{slug}-get.schemas';
 
 interface BlogContentRendererProps {
   blocks: BlogBlock[];
+  products?: DtoBlogPostProductItem[];
   className?: string;
 }
 
 /** Renders typed blog content blocks into article body markup. */
-export function BlogContentRenderer({ blocks, className }: BlogContentRendererProps) {
+export function BlogContentRenderer({ blocks, products, className }: BlogContentRendererProps) {
   if (blocks.length === 0) return null;
+
+  const targets = buildProductLinkTargets(products);
+  const mentions = buildProductMentions(targets);
+  const productsById = new Map(targets.map((target) => [target.id, target]));
 
   return (
     <div className={cn('prose-blog flex flex-col gap-7 md:gap-8', className)}>
       {blocks.map((block, index) => (
-        <BlogBlockView key={`${block.type}-${index}`} block={block} />
+        <BlogBlockView
+          key={`${block.type}-${index}`}
+          block={block}
+          mentions={mentions}
+          productsById={productsById}
+        />
       ))}
     </div>
   );
 }
 
-function BlogBlockView({ block }: { block: BlogBlock }) {
+function BlogBlockView({
+  block,
+  mentions,
+  productsById
+}: {
+  block: BlogBlock;
+  mentions: ProductMention[];
+  productsById: Map<number, ProductLinkTarget>;
+}) {
   switch (block.type) {
     case 'paragraph':
       return (
         <Typography.P className='text-foreground/90 text-base leading-relaxed md:text-[1.05rem]'>
-          {block.text}
+          <BlogLinkedText text={block.text} mentions={mentions} />
         </Typography.P>
       );
     case 'heading': {
@@ -43,7 +69,7 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
           id={block.id}
           className='font-display scroll-mt-28 text-xl font-semibold md:text-2xl'
         >
-          {block.text}
+          <BlogLinkedText text={block.text} mentions={mentions} />
         </Heading>
       );
     }
@@ -93,7 +119,7 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
       return (
         <blockquote className='border-accent/40 bg-muted/40 rounded-2xl border-s-4 px-5 py-4'>
           <Typography.P className='font-display text-lg leading-relaxed italic md:text-xl'>
-            {block.text}
+            <BlogLinkedText text={block.text} mentions={mentions} />
           </Typography.P>
           {block.cite ? (
             <Typography.Muted className='mt-2 text-sm'>— {block.cite}</Typography.Muted>
@@ -106,7 +132,7 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
           <ol className='flex list-decimal flex-col gap-2 ps-5'>
             {block.items.map((item, i) => (
               <li key={i} className='text-foreground/90 leading-relaxed'>
-                {item.text}
+                <BlogLinkedText text={item.text} mentions={mentions} />
               </li>
             ))}
           </ol>
@@ -117,7 +143,9 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
           {block.items.map((item, i) => (
             <li key={i} className='flex items-start gap-2.5'>
               <IconCheck className='text-accent mt-1 size-4 shrink-0' />
-              <span className='text-foreground/90 leading-relaxed'>{item.text}</span>
+              <span className='text-foreground/90 leading-relaxed'>
+                <BlogLinkedText text={item.text} mentions={mentions} />
+              </span>
             </li>
           ))}
         </ul>
@@ -142,7 +170,9 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
           {block.title ? (
             <Typography.S className='mb-1 font-semibold'>{block.title}</Typography.S>
           ) : null}
-          <Typography.P className='text-sm leading-relaxed'>{block.text}</Typography.P>
+          <Typography.P className='text-sm leading-relaxed'>
+            <BlogLinkedText text={block.text} mentions={mentions} />
+          </Typography.P>
         </aside>
       );
     }
@@ -162,8 +192,13 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
           </div>
         </div>
       );
-    case 'product':
-      return <Typography.Muted className='text-sm'>Product #{block.productId}</Typography.Muted>;
+    case 'product': {
+      const linked = productsById.get(block.productId);
+      if (!linked) {
+        return null;
+      }
+      return <BlogInlineProductCard product={linked} />;
+    }
     case 'faq':
       return null;
     case 'pros_cons':
@@ -189,7 +224,7 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
                 <tr key={rowIndex} className='border-t'>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} className='px-4 py-3'>
-                      {cell}
+                      <BlogLinkedText text={cell} mentions={mentions} />
                     </td>
                   ))}
                 </tr>
@@ -212,4 +247,26 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
     default:
       return null;
   }
+}
+
+function BlogInlineProductCard({ product }: { product: ProductLinkTarget }) {
+  const image = product.images?.[0] || IMAGE_FALLBACK;
+
+  return (
+    <Link
+      href={product.href}
+      className='group border-border bg-card hover:border-accent/40 flex gap-4 overflow-hidden rounded-2xl border p-4 shadow-sm transition-colors'
+    >
+      <div className='bg-muted relative size-20 shrink-0 overflow-hidden rounded-xl sm:size-24'>
+        <AppImage src={image} alt={product.name} fill sizes='96px' className='object-cover' />
+      </div>
+      <Flex direction='column' justify='center' className='min-w-0 gap-1'>
+        <Typography.Muted className='text-xs tracking-wide uppercase'>Shop</Typography.Muted>
+        <Typography.S className='group-hover:text-accent line-clamp-2 text-base font-semibold transition-colors'>
+          {product.name}
+        </Typography.S>
+        <Typography.Muted className='text-sm'>View product details →</Typography.Muted>
+      </Flex>
+    </Link>
+  );
 }
