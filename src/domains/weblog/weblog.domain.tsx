@@ -2,8 +2,10 @@ import { getTranslations } from 'next-intl/server';
 
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
+import { resolveLatestVideos } from '@/domains/weblog/lib/resolve-latest-videos';
 import { BlogCategoryGrid } from '@/domains/weblog/sections/blog-category-grid';
 import { BlogHero, BlogTrendingRow } from '@/domains/weblog/sections/blog-hero';
+import { BlogLatestVideos } from '@/domains/weblog/sections/blog-latest-videos';
 import { BlogNewsletterCta } from '@/domains/weblog/sections/blog-newsletter-cta';
 import { BlogPopularList } from '@/domains/weblog/sections/blog-popular-list';
 import { BlogSectionRow } from '@/domains/weblog/sections/blog-section-row';
@@ -16,6 +18,7 @@ interface WeblogDomainProps {
 /** Blog homepage — main magazine column + sticky sidebar. */
 export async function WeblogHomeDomain({ data }: WeblogDomainProps) {
   const t = await getTranslations('weblog.home');
+  const latestVideos = resolveLatestVideos(data);
 
   return (
     <div className='app-container py-8'>
@@ -58,12 +61,14 @@ export async function WeblogHomeDomain({ data }: WeblogDomainProps) {
           <div className='sticky top-24 flex flex-col gap-6'>
             <BlogNewsletterCta source='home' variant='compact' />
             <BlogPopularList posts={data.most_popular ?? []} />
+            <BlogLatestVideos posts={latestVideos} />
           </div>
         </aside>
       </div>
 
-      <div className='mt-10 space-y-2 lg:hidden'>
+      <div className='mt-10 space-y-6 lg:hidden'>
         <BlogPopularList posts={data.most_popular ?? []} />
+        <BlogLatestVideos posts={latestVideos} />
         <BlogNewsletterCta source='home' variant='band' />
       </div>
     </div>

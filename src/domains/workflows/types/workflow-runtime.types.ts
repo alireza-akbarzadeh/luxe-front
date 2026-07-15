@@ -14,7 +14,8 @@ export type WorkflowEntityKey =
   | 'brand'
   | 'collection'
   | 'coupon'
-  | 'review';
+  | 'review'
+  | 'blog_post';
 
 export interface WorkflowHistoryEntry {
   id?: number;

@@ -32,10 +32,10 @@ export function BlogSectionRow({
 
   return (
     <section className='py-2'>
-      <Flex align='end' justify='between' gap={4} className='mb-5'>
+      <Flex justify='between' gap={4} className='mb-5'>
         <div>
           <Typography.H2 className='font-display text-2xl md:text-3xl'>{title}</Typography.H2>
-          {description ? <Typography.Muted className='mt-1'>{description}</Typography.Muted> : null}
+          <Typography.Muted className='mt-1'>{description}</Typography.Muted>
         </div>
         {viewAllHref ? (
           <Link

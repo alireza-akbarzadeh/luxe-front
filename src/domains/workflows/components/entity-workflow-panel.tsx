@@ -34,7 +34,8 @@ const ENTITY_LABELS: Record<WorkflowEntityKey, string> = {
   brand: 'Brand',
   collection: 'Collection',
   coupon: 'Coupon',
-  review: 'Review'
+  review: 'Review',
+  blog_post: 'Blog post'
 };
 
 interface EntityWorkflowPanelProps {
@@ -68,7 +69,8 @@ export function EntityWorkflowPanel({
   const entityLabel = ENTITY_LABELS[workflowKey];
   const panelTitle = title ?? `${entityLabel} workflow`;
   const panelDescription =
-    description ?? `Change lifecycle state and review activity for this ${entityLabel.toLowerCase()}.`;
+    description ??
+    `Change lifecycle state and review activity for this ${entityLabel.toLowerCase()}.`;
 
   const transitionByEvent = useMemo(() => {
     const map = new Map<string, DtoTransitionView>();
@@ -141,10 +143,7 @@ export function EntityWorkflowPanel({
                     Current
                   </Label>
                   <div className='flex min-h-9 items-center'>
-                    <WorkflowStateBadge
-                      state={workflow.currentState}
-                      fallbackLabel='Not started'
-                    />
+                    <WorkflowStateBadge state={workflow.currentState} fallbackLabel='Not started' />
                   </div>
                 </div>
 

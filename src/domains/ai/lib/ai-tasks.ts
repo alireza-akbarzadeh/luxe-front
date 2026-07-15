@@ -5,7 +5,10 @@ export const AI_TASKS = {
   couponCopy: 'coupon_copy',
   productChat: 'product_chat',
   productBrief: 'product_brief',
-  qaReply: 'qa_reply'
+  qaReply: 'qa_reply',
+  blogArticle: 'blog_article',
+  blogExcerpt: 'blog_excerpt',
+  blogSeo: 'blog_seo'
 } as const;
 
 export type AiTask = (typeof AI_TASKS)[keyof typeof AI_TASKS];

@@ -53,6 +53,19 @@ export function formatViews(count: number | undefined): string {
   return `${value} view${value === 1 ? '' : 's'}`;
 }
 
+/**
+ * Display duration for video-style cards (mm:ss).
+ * Uses reading time as minutes; seconds are derived from id for stable UI.
+ */
+export function formatVideoDuration(readingTimeMinutes: number | undefined, id?: number): string {
+  const minutes = Math.max(
+    1,
+    readingTimeMinutes && readingTimeMinutes > 0 ? readingTimeMinutes : 5
+  );
+  const seconds = Math.abs((id ?? minutes * 11) * 7) % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
+
 /** True when a post has a hero image URL set. */
 export function hasHero(post: DtoBlogPostListItem): boolean {
   return Boolean(post.hero_image_url && post.hero_image_url.length > 0);

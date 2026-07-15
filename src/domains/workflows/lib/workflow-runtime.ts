@@ -43,6 +43,14 @@ const BRAND_STATUS_STATES: Record<string, DtoStateView> = {
   paid: { code: 'paid', name: 'Paid', color: '#10B981', text_color: '#FFFFFF' }
 };
 
+const BLOG_POST_STATUS_STATES: Record<string, DtoStateView> = {
+  draft: { code: 'draft', name: 'Draft', color: '#9CA3AF', text_color: '#FFFFFF' },
+  in_review: { code: 'in_review', name: 'In Review', color: '#F59E0B', text_color: '#FFFFFF' },
+  scheduled: { code: 'scheduled', name: 'Scheduled', color: '#3B82F6', text_color: '#FFFFFF' },
+  published: { code: 'published', name: 'Published', color: '#10B981', text_color: '#FFFFFF' },
+  archived: { code: 'archived', name: 'Archived', color: '#374151', text_color: '#FFFFFF' }
+};
+
 /** Maps legacy brand status strings to workflow-style badge views for grid display. */
 export function mapBrandStatusToStateView(status?: string): DtoStateView {
   const key = (status ?? 'inactive').toLowerCase();
@@ -50,6 +58,19 @@ export function mapBrandStatusToStateView(status?: string): DtoStateView {
     BRAND_STATUS_STATES[key] ?? {
       code: key,
       name: key.charAt(0).toUpperCase() + key.slice(1),
+      color: '#6B7280',
+      text_color: '#FFFFFF'
+    }
+  );
+}
+
+/** Maps blog post status strings to workflow-style badge views for grid display. */
+export function mapBlogPostStatusToStateView(status?: string): DtoStateView {
+  const key = (status ?? 'draft').toLowerCase();
+  return (
+    BLOG_POST_STATUS_STATES[key] ?? {
+      code: key,
+      name: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '),
       color: '#6B7280',
       text_color: '#FFFFFF'
     }

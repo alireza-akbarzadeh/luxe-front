@@ -82,7 +82,7 @@ export function ArticleCard({
         href={href}
         className={cn('group flex w-44 shrink-0 flex-col gap-2 sm:w-52', className)}
       >
-        <div className='bg-muted relative aspect-square overflow-hidden rounded-2xl'>
+        <div className='bg-muted relative aspect-[4/3] overflow-hidden rounded-2xl'>
           <AppImage
             src={image}
             alt={alt}

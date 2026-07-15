@@ -1,8 +1,10 @@
+import { IconBolt } from '@tabler/icons-react';
 import { getTranslations } from 'next-intl/server';
 
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { ArticleCard } from '@/domains/weblog/components/article-card';
+import { BlogTrendingCarousel } from '@/domains/weblog/sections/blog-trending-carousel';
 import type { DtoBlogPostListItem } from '@/services/-blog-homepage-get.schemas';
 
 interface BlogHeroProps {
@@ -40,16 +42,13 @@ export async function BlogTrendingRow({ posts, excludeSlug }: BlogTrendingRowPro
 
   return (
     <section className='py-2'>
-      <Flex align='center' justify='between' className='mb-4'>
+      <Flex align='center' gap={2} className='mb-4'>
+        <IconBolt className='text-primary size-5 shrink-0' aria-hidden />
         <Typography.H2 className='font-display text-xl sm:text-2xl'>
           {t('trendingTitle')}
         </Typography.H2>
       </Flex>
-      <div className='-mx-1 flex gap-4 overflow-x-auto px-1 pb-2'>
-        {trending.map((post) => (
-          <ArticleCard key={post.id ?? post.slug} post={post} variant='trending' />
-        ))}
-      </div>
+      <BlogTrendingCarousel posts={trending} />
     </section>
   );
 }
