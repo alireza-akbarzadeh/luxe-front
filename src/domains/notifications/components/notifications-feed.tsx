@@ -55,12 +55,12 @@ export function NotificationsFeed({
         <NotificationsPushPromo />
       </div>
 
-      <Flex align='center' justify='between' gap={3} className='flex-wrap'>
+      <Flex align='center' justify='between' gap={3} className='flex-row'>
         <Typography.H3 className='text-lg font-semibold'>
           {t('feedCount', { count: filteredCount })}
         </Typography.H3>
 
-        <Flex align='center' gap={2}>
+        <Flex align='center' gap={2} className='flex-row'>
           <Text variant='muted' className='text-sm'>
             {t('filterBy')}
           </Text>
