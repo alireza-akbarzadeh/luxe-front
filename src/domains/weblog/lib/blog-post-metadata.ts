@@ -20,7 +20,8 @@ export const getBlogPostPageData = cache(
         }
       });
 
-      if (!response.data) {
+      // customInstance may return error payloads without throwing
+      if (response.success === false || !response.data?.slug) {
         return null;
       }
 

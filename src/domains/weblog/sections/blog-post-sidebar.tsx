@@ -7,7 +7,7 @@ import { Typography } from '@/components/ui/typography';
 import { getProductPath } from '@/domains/product/lib/product-routes';
 import { BlogProsCons } from '@/domains/weblog/components/blog-pros-cons';
 import { BlogRelatedPosts } from '@/domains/weblog/components/blog-related-posts';
-import { BlogVerdict } from '@/domains/weblog/components/blog-verdict';
+import { BlogReviewSummary } from '@/domains/weblog/components/blog-review-summary';
 import type { ProsConsBlock, VerdictBlock } from '@/domains/weblog/lib/content-blocks';
 import { BlogNewsletterCta } from '@/domains/weblog/sections/blog-newsletter-cta';
 import { IMAGE_FALLBACK } from '@/lib/images';
@@ -23,7 +23,7 @@ interface BlogPostSidebarProps {
   products?: DtoBlogPostProductItem[];
 }
 
-/** Sticky desktop sidebar for article detail. */
+/** Sticky desktop sidebar matching the blog detail mockup. */
 export async function BlogPostSidebar({
   verdict,
   prosCons,
@@ -36,7 +36,7 @@ export async function BlogPostSidebar({
   return (
     <aside className='hidden lg:block'>
       <div className='sticky top-24 flex flex-col gap-6'>
-        {verdict ? <BlogVerdict verdict={verdict} /> : null}
+        {verdict ? <BlogReviewSummary verdict={verdict} /> : null}
         {prosCons ? <BlogProsCons block={prosCons} /> : null}
 
         {linkedProducts.length > 0 ? (

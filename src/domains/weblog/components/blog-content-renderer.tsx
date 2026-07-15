@@ -19,7 +19,7 @@ export function BlogContentRenderer({ blocks, className }: BlogContentRendererPr
   if (blocks.length === 0) return null;
 
   return (
-    <div className={cn('prose-blog flex flex-col gap-6', className)}>
+    <div className={cn('prose-blog flex flex-col gap-7 md:gap-8', className)}>
       {blocks.map((block, index) => (
         <BlogBlockView key={`${block.type}-${index}`} block={block} />
       ))}
@@ -39,7 +39,10 @@ function BlogBlockView({ block }: { block: BlogBlock }) {
       const Heading =
         block.level === 4 ? Typography.H4 : block.level === 3 ? Typography.H3 : Typography.H2;
       return (
-        <Heading id={block.id} className='font-display scroll-mt-28 text-2xl md:text-3xl'>
+        <Heading
+          id={block.id}
+          className='font-display scroll-mt-28 text-xl font-semibold md:text-2xl'
+        >
           {block.text}
         </Heading>
       );

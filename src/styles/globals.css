@@ -759,3 +759,17 @@ html[dir='rtl'] .vendor-brands-marquee-track {
   border-radius: 0.75rem;
   background: rgb(255 255 255 / 3%);
 }
+
+/* Blog Markdown editor — align @uiw/react-md-editor with dashboard shell tokens */
+.dashboard-shell .blog-md-editor {
+  --color-canvas-default: var(--card);
+  --color-canvas-subtle: var(--muted);
+  --color-border-default: var(--border);
+  --color-border-muted: var(--border);
+  --color-fg-default: var(--foreground);
+  --color-fg-muted: var(--muted-foreground);
+  --color-fg-subtle: var(--muted-foreground);
+  --color-accent-fg: var(--accent);
+  --color-accent-emphasis: var(--accent);
+  --color-danger-fg: #f87171;
+}

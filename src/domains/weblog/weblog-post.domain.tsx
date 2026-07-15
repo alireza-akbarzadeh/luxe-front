@@ -7,6 +7,7 @@ import { BlogBreadcrumbs } from '@/domains/weblog/components/blog-breadcrumbs';
 import { BlogContentRenderer } from '@/domains/weblog/components/blog-content-renderer';
 import { BlogEngagementBar } from '@/domains/weblog/components/blog-engagement-bar';
 import { BlogFaq } from '@/domains/weblog/components/blog-faq';
+import { BlogShareBar } from '@/domains/weblog/components/blog-share-bar';
 import { BlogToc } from '@/domains/weblog/components/blog-toc';
 import { BlogVerdict } from '@/domains/weblog/components/blog-verdict';
 import { blogCategoryPath, blogPostPath } from '@/domains/weblog/lib/blog-format';
@@ -31,7 +32,7 @@ interface WeblogPostDomainProps {
   post: DtoBlogPostResponse;
 }
 
-/** Full article reader — header, body blocks, FAQ, sidebar, engagement. */
+/** Full article reader aligned with the blog-details design sample. */
 export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
   const t = await getTranslations('weblog.post');
   const blocks = parseBlocks(post.content_blocks);
@@ -68,7 +69,7 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
   const faqJsonLd = buildFaqJsonLd(faqs);
 
   return (
-    <article className='app-container py-6 pb-24 lg:pb-10'>
+    <article className='app-container py-6 pb-24 lg:pb-12'>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -84,23 +85,24 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
         />
       ) : null}
 
-      <div className='mb-6'>
+      <Flex align='center' justify='between' gap={4} className='mb-8 flex-wrap border-b pb-4'>
         <BlogBreadcrumbs category={post.category} title={post.title} />
-      </div>
+        <BlogShareBar title={post.title ?? ''} url={shareUrl} />
+      </Flex>
 
-      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_22rem]'>
+      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_22rem]'>
         <div className='min-w-0'>
-          <BlogPostHeader post={post} shareUrl={shareUrl} />
+          <BlogPostHeader post={post} />
 
           {verdict ? (
-            <div className='mb-8 lg:hidden'>
+            <div className='mb-8'>
               <BlogVerdict verdict={verdict} />
             </div>
           ) : null}
 
           <BlogToc headings={headings} />
 
-          <BlogContentRenderer blocks={bodyBlocks} />
+          <BlogContentRenderer blocks={bodyBlocks} className='mt-2' />
 
           <BlogFaq items={faqs} />
 
@@ -111,7 +113,7 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
                 <Link
                   key={tag.id ?? tag.slug}
                   href={`/weblog?tag=${tag.slug ?? ''}`}
-                  className='bg-muted hover:bg-muted/80 rounded-full px-3 py-1 text-xs font-medium transition-colors'
+                  className='bg-muted hover:bg-muted/80 rounded-full px-3 py-1.5 text-xs font-medium transition-colors'
                 >
                   {tag.name}
                 </Link>

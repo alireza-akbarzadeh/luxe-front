@@ -1,4 +1,7 @@
-import type { BlogPostFormValues } from '@/domains/blog-admin/schemas/blog-post-schema';
+import {
+  BLOG_CATEGORY_NONE,
+  type BlogPostFormValues
+} from '@/domains/blog-admin/schemas/blog-post-schema';
 import type { DtoBlogPostResponse } from '@/services/-admin-blog-posts-{id}-get.schemas';
 import type { DtoCreateBlogPostRequest } from '@/services/-admin-blog-posts-post.schemas';
 
@@ -8,7 +11,7 @@ function optionalText(value: string | undefined): string | undefined {
 }
 
 function categoryIdFromForm(value: string | undefined): number | undefined {
-  if (!value) return undefined;
+  if (!value || value === BLOG_CATEGORY_NONE) return undefined;
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
@@ -55,7 +58,7 @@ export function mapBlogPostToFormValues(post: DtoBlogPostResponse): BlogPostForm
     hero_image_alt: post.hero_image_alt ?? '',
     section_type: post.section_type || 'article',
     status: validStatus,
-    category_id: post.category?.id ? String(post.category.id) : '',
+    category_id: post.category?.id ? String(post.category.id) : BLOG_CATEGORY_NONE,
     content_blocks: Array.isArray(post.content_blocks) ? post.content_blocks : [],
     is_featured: post.is_featured ?? false,
     is_editor_pick: post.is_editor_pick ?? false,

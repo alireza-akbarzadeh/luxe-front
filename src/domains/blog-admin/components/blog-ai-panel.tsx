@@ -4,7 +4,7 @@ import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import { AiGenerateButton } from '@/domains/ai/components/ai-generate-button';
 import { AI_TASKS } from '@/domains/ai/lib/ai-tasks';
-import type { BlogContentBlockDraft } from '@/domains/blog-admin/sections/content-block-editor';
+import type { BlogContentBlockDraft } from '@/domains/blog-admin/lib/markdown-content-blocks';
 import type { DtoAiGenerateResponse } from '@/services/-admin-ai-generate-post.schemas';
 
 interface BlogAiPanelProps {

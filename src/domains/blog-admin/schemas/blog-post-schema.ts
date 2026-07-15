@@ -20,6 +20,9 @@ export const BLOG_STATUS_OPTIONS = [
   { label: 'Archived', value: 'archived' }
 ] as const;
 
+/** Radix Select forbids empty-string item values — use this for “no category”. */
+export const BLOG_CATEGORY_NONE = '__none__' as const;
+
 export const blogPostStatusSchema = z.enum([
   'draft',
   'in_review',
@@ -76,7 +79,7 @@ export const blogPostDefaultValues: BlogPostFormValues = {
   hero_image_alt: '',
   section_type: 'article',
   status: 'draft',
-  category_id: '',
+  category_id: BLOG_CATEGORY_NONE,
   content_blocks: [],
   is_featured: false,
   is_editor_pick: false,

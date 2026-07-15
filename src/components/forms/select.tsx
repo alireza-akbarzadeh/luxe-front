@@ -42,15 +42,19 @@ export function SelectController({
         <SelectContent className='bg-background text-foreground'>
           <SelectGroup>
             <SelectLabel>{label}</SelectLabel>
-            {options.map((item, index) => (
-              <SelectItem
-                key={`${item.value}-${item.label}-${index}`}
-                value={item.value}
-                className='text-foreground'
-              >
-                {item.label}
-              </SelectItem>
-            ))}
+            {options.map((item, index) => {
+              // Radix Select forbids empty-string values (used to clear / show placeholder).
+              if (item.value === '') return null;
+              return (
+                <SelectItem
+                  key={`${item.value}-${item.label}-${index}`}
+                  value={item.value}
+                  className='text-foreground'
+                >
+                  {item.label}
+                </SelectItem>
+              );
+            })}
           </SelectGroup>
         </SelectContent>
       </Select>

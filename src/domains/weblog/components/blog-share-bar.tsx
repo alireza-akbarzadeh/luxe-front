@@ -3,6 +3,7 @@
 import {
   IconBrandFacebook,
   IconBrandLinkedin,
+  IconBrandPinterest,
   IconBrandX,
   IconLink,
   IconMail
@@ -19,7 +20,7 @@ interface BlogShareBarProps {
   url: string;
 }
 
-/** Social share row for article pages. */
+/** Social share row for article pages — matches blog detail design. */
 export function BlogShareBar({ title, url }: BlogShareBarProps) {
   const t = useTranslations('weblog.post');
   const encodedUrl = encodeURIComponent(url);
@@ -42,6 +43,11 @@ export function BlogShareBar({ title, url }: BlogShareBarProps) {
       icon: IconBrandLinkedin
     },
     {
+      label: 'Pinterest',
+      href: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedTitle}`,
+      icon: IconBrandPinterest
+    },
+    {
       label: 'Email',
       href: `mailto:?subject=${encodedTitle}&body=${encodedUrl}`,
       icon: IconMail
@@ -49,10 +55,17 @@ export function BlogShareBar({ title, url }: BlogShareBarProps) {
   ] as const;
 
   return (
-    <Flex align='center' gap={2} className='flex-wrap'>
-      <Typography.Muted className='text-sm'>{t('share')}</Typography.Muted>
+    <Flex align='center' gap={1} className='flex-wrap'>
+      <Typography.Muted className='me-1 text-sm'>{t('share')}</Typography.Muted>
       {links.map((item) => (
-        <Button key={item.label} asChild variant='ghost' size='icon-sm' aria-label={item.label}>
+        <Button
+          key={item.label}
+          asChild
+          variant='ghost'
+          size='icon-sm'
+          aria-label={item.label}
+          className='text-muted-foreground hover:text-foreground size-8'
+        >
           <a href={item.href} target='_blank' rel='noopener noreferrer'>
             <item.icon className='size-4' />
           </a>
@@ -63,6 +76,7 @@ export function BlogShareBar({ title, url }: BlogShareBarProps) {
         variant='ghost'
         size='icon-sm'
         aria-label={t('copyLink')}
+        className='text-muted-foreground hover:text-foreground size-8'
         onClick={() => void copyToClipboard(url, t('linkCopiedLabel'))}
       >
         <IconLink className='size-4' />

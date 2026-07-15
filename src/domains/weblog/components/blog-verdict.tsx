@@ -1,4 +1,4 @@
-import { IconStarFilled } from '@tabler/icons-react';
+import { IconStarFilled, IconTrophy } from '@tabler/icons-react';
 import { getTranslations } from 'next-intl/server';
 
 import { Flex } from '@/components/ui/flex';
@@ -9,40 +9,52 @@ import { cn } from '@/lib/utils';
 interface BlogVerdictProps {
   verdict: VerdictBlock;
   className?: string;
+  /** `inline` for article body; `final` uses trophy styling. */
+  variant?: 'inline' | 'final';
 }
 
-/** Quick verdict score card derived from a content block. */
-export async function BlogVerdict({ verdict, className }: BlogVerdictProps) {
+/** Quick / final verdict callout card matching the detail mockup. */
+export async function BlogVerdict({ verdict, className, variant = 'inline' }: BlogVerdictProps) {
   const t = await getTranslations('weblog.post');
   const scoreLabel = verdict.score > 0 ? verdict.score.toFixed(1) : '—';
   const stars = Math.round((verdict.score / 10) * 5);
+  const Icon = variant === 'final' ? IconTrophy : IconStarFilled;
 
   return (
     <aside
       className={cn(
-        'border-accent/25 from-accent/10 to-card rounded-2xl border bg-gradient-to-br p-5 shadow-sm',
+        'border-accent/20 from-accent/12 via-accent/5 to-card rounded-2xl border bg-gradient-to-br p-5 shadow-sm md:p-6',
         className
       )}
     >
-      <Flex align='start' justify='between' gap={4} className='flex-wrap'>
+      <Flex align='start' justify='between' gap={5} className='flex-wrap'>
         <Flex direction='column' gap={2} className='min-w-0 flex-1'>
-          <Typography.S className='text-accent font-semibold tracking-wide uppercase'>
-            {verdict.label || t('verdictTitle')}
-          </Typography.S>
-          <Typography.P className='text-sm leading-relaxed md:text-base'>
+          <Flex align='center' gap={2}>
+            <span className='bg-accent/15 text-accent flex size-8 items-center justify-center rounded-full'>
+              <Icon className='size-4' />
+            </span>
+            <Typography.S className='text-accent text-sm font-semibold tracking-wide uppercase'>
+              {verdict.label || (variant === 'final' ? t('finalVerdictTitle') : t('verdictTitle'))}
+            </Typography.S>
+          </Flex>
+          <Typography.P className='text-foreground/90 text-sm leading-relaxed md:text-base'>
             {verdict.summary}
           </Typography.P>
         </Flex>
         <Flex direction='column' align='end' gap={1} className='shrink-0'>
-          <Typography.H2 className='font-display text-3xl tabular-nums'>{scoreLabel}</Typography.H2>
-          <Typography.Muted className='text-xs'>/ 10</Typography.Muted>
-          <Flex gap={0.5} className='mt-1'>
+          <Flex align='baseline' gap={1}>
+            <Typography.H2 className='font-display text-4xl tracking-tight tabular-nums'>
+              {scoreLabel}
+            </Typography.H2>
+            <Typography.Muted className='text-sm'>/10</Typography.Muted>
+          </Flex>
+          <Flex gap={0.5} className='mt-0.5'>
             {Array.from({ length: 5 }).map((_, index) => (
               <IconStarFilled
                 key={index}
                 className={cn(
                   'size-3.5',
-                  index < stars ? 'text-accent fill-accent' : 'text-muted-foreground/30'
+                  index < stars ? 'text-accent fill-accent' : 'text-muted-foreground/25'
                 )}
               />
             ))}

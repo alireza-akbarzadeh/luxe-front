@@ -23,12 +23,13 @@ import {
 } from '@/domains/blog-admin/lib/blog-post-mapper';
 import { uploadBlogImage } from '@/domains/blog-admin/lib/upload-blog-image';
 import {
+  BLOG_CATEGORY_NONE,
   BLOG_SECTION_TYPE_OPTIONS,
   BLOG_STATUS_OPTIONS,
   blogPostDefaultValues,
   blogPostFormSchema
 } from '@/domains/blog-admin/schemas/blog-post-schema';
-import { ContentBlockEditor } from '@/domains/blog-admin/sections/content-block-editor';
+import { BlogMarkdownEditor } from '@/domains/blog-admin/sections/blog-markdown-editor';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { IMAGE_FALLBACK } from '@/lib/images';
 import { slugify } from '@/lib/utils';
@@ -51,6 +52,7 @@ export function BlogPostForm({ isEdit = false, postId }: BlogPostFormProps) {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [contentEditorKey, setContentEditorKey] = useState(0);
 
   const { data: categoriesData } = useGetBlogCategories();
 
@@ -87,11 +89,13 @@ export function BlogPostForm({ isEdit = false, postId }: BlogPostFormProps) {
   const categoryOptions = useMemo(() => {
     const categories = categoriesData?.data?.categories ?? [];
     return [
-      { label: 'No category', value: '' },
-      ...categories.map((cat) => ({
-        label: cat.name ?? `Category ${cat.id}`,
-        value: cat.id ? String(cat.id) : ''
-      }))
+      { label: 'No category', value: BLOG_CATEGORY_NONE },
+      ...categories
+        .filter((cat) => Boolean(cat.id))
+        .map((cat) => ({
+          label: cat.name ?? `Category ${cat.id}`,
+          value: String(cat.id)
+        }))
     ];
   }, [categoriesData]);
 
@@ -221,7 +225,10 @@ export function BlogPostForm({ isEdit = false, postId }: BlogPostFormProps) {
                       excerpt={excerpt}
                       sectionType={sectionType}
                       disabled={isPending}
-                      onBlocksGenerated={(blocks) => form.setFieldValue('content_blocks', blocks)}
+                      onBlocksGenerated={(blocks) => {
+                        form.setFieldValue('content_blocks', blocks);
+                        setContentEditorKey((key) => key + 1);
+                      }}
                       onExcerptGenerated={(text) => form.setFieldValue('excerpt', text)}
                       onSeoGenerated={(metaTitle, metaDescription) => {
                         if (metaTitle) form.setFieldValue('meta_title', metaTitle);
@@ -359,11 +366,12 @@ export function BlogPostForm({ isEdit = false, postId }: BlogPostFormProps) {
                 <Separator />
 
                 <Flex direction='column' spacing={3}>
-                  <Text className='text-sm font-medium'>Content blocks</Text>
+                  <Text className='text-sm font-medium'>Article content</Text>
                   <form.AppField
                     name='content_blocks'
                     children={(field) => (
-                      <ContentBlockEditor
+                      <BlogMarkdownEditor
+                        key={`${post?.id ?? 'new'}-${contentEditorKey}`}
                         value={field.state.value}
                         onChange={(blocks) => field.handleChange(blocks)}
                       />

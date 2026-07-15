@@ -21,13 +21,13 @@ export async function BlogBreadcrumbs({ category, title }: BlogBreadcrumbsProps)
         <Link href='/' className='hover:text-foreground transition-colors'>
           {t('breadcrumbHome')}
         </Link>
-        <span aria-hidden>/</span>
+        <span aria-hidden>›</span>
         <Link href='/weblog' className='hover:text-foreground transition-colors'>
           {t('breadcrumbBlog')}
         </Link>
         {category?.slug ? (
           <>
-            <span aria-hidden>/</span>
+            <span aria-hidden>›</span>
             <Link
               href={blogCategoryPath(category.slug)}
               className='hover:text-foreground transition-colors'
@@ -38,7 +38,7 @@ export async function BlogBreadcrumbs({ category, title }: BlogBreadcrumbsProps)
         ) : null}
         {title ? (
           <>
-            <span aria-hidden>/</span>
+            <span aria-hidden>›</span>
             <Typography.S className='text-foreground line-clamp-1 max-w-[40vw] font-medium'>
               {title}
             </Typography.S>
