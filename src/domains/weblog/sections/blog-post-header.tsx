@@ -56,7 +56,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
         </Typography.Lead>
       ) : null}
 
-      <Flex align='center' gap={3} className='mb-4 flex-wrap'>
+      <Flex direction='row' align='center' wrap='wrap' gap={3} className='mb-4'>
         <Avatar className='size-11'>
           {post.author?.avatar_url ? (
             <AvatarImage src={post.author.avatar_url} alt={authorName} />
@@ -64,7 +64,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           <AvatarFallback>{initials(authorName)}</AvatarFallback>
         </Avatar>
         <Flex direction='column' gap={0.5} className='min-w-0'>
-          <Flex align='center' gap={1.5}>
+          <Flex direction='row' align='center' gap={1.5}>
             <Typography.S className='truncate text-sm font-semibold'>{authorName}</Typography.S>
             <IconCircleCheckFilled className='text-accent size-4 shrink-0' aria-label='Verified' />
           </Flex>
@@ -74,7 +74,13 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
         </Flex>
       </Flex>
 
-      <Flex align='center' gap={3} className='text-muted-foreground mb-7 flex-wrap text-sm'>
+      <Flex
+        direction='row'
+        align='center'
+        wrap='wrap'
+        gap={3}
+        className='text-muted-foreground mb-7 text-sm'
+      >
         {date ? (
           <span className='inline-flex items-center gap-1.5'>
             <IconCalendar className='size-4 shrink-0' aria-hidden />

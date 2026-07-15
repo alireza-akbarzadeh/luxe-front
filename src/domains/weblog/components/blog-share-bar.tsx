@@ -55,7 +55,7 @@ export function BlogShareBar({ title, url }: BlogShareBarProps) {
   ] as const;
 
   return (
-    <Flex align='center' gap={1} className='flex-wrap'>
+    <Flex direction='row' align='center' wrap='wrap' gap={1}>
       <Typography.Muted className='me-1 text-sm'>{t('share')}</Typography.Muted>
       {links.map((item) => (
         <Button

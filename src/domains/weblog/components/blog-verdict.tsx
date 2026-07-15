@@ -27,9 +27,9 @@ export async function BlogVerdict({ verdict, className, variant = 'inline' }: Bl
         className
       )}
     >
-      <Flex align='start' justify='between' gap={5} className='flex-wrap'>
+      <Flex direction='row' align='start' justify='between' wrap='wrap' gap={5}>
         <Flex direction='column' gap={2} className='min-w-0 flex-1'>
-          <Flex align='center' gap={2}>
+          <Flex direction='row' align='center' gap={2}>
             <span className='bg-accent/15 text-accent flex size-8 items-center justify-center rounded-full'>
               <Icon className='size-4' />
             </span>
@@ -42,13 +42,13 @@ export async function BlogVerdict({ verdict, className, variant = 'inline' }: Bl
           </Typography.P>
         </Flex>
         <Flex direction='column' align='end' gap={1} className='shrink-0'>
-          <Flex align='baseline' gap={1}>
+          <Flex direction='row' align='baseline' gap={1}>
             <Typography.H2 className='font-display text-4xl tracking-tight tabular-nums'>
               {scoreLabel}
             </Typography.H2>
             <Typography.Muted className='text-sm'>/10</Typography.Muted>
           </Flex>
-          <Flex gap={0.5} className='mt-0.5'>
+          <Flex direction='row' gap={0.5} className='mt-0.5'>
             {Array.from({ length: 5 }).map((_, index) => (
               <IconStarFilled
                 key={index}

@@ -85,7 +85,14 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
         />
       ) : null}
 
-      <Flex align='center' justify='between' gap={4} className='mb-8 flex-wrap border-b pb-4'>
+      <Flex
+        direction='row'
+        align='center'
+        justify='between'
+        wrap='wrap'
+        gap={4}
+        className='mb-8 border-b pb-4'
+      >
         <BlogBreadcrumbs category={post.category} title={post.title} />
         <BlogShareBar title={post.title ?? ''} url={shareUrl} />
       </Flex>
@@ -107,7 +114,7 @@ export async function WeblogPostDomain({ post }: WeblogPostDomainProps) {
           <BlogFaq items={faqs} />
 
           {post.tags && post.tags.length > 0 ? (
-            <Flex align='center' gap={2} className='mt-10 flex-wrap'>
+            <Flex direction='row' align='center' wrap='wrap' gap={2} className='mt-10'>
               <Typography.Muted className='text-sm'>{t('tags')}</Typography.Muted>
               {post.tags.map((tag) => (
                 <Link

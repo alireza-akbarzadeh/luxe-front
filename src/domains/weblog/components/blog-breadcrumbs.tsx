@@ -17,7 +17,7 @@ export async function BlogBreadcrumbs({ category, title }: BlogBreadcrumbsProps)
 
   return (
     <nav aria-label={t('breadcrumbLabel')} className='text-muted-foreground text-sm'>
-      <Flex align='center' gap={2} className='flex-wrap'>
+      <Flex direction='row' align='center' wrap='wrap' gap={2}>
         <Link href='/' className='hover:text-foreground transition-colors'>
           {t('breadcrumbHome')}
         </Link>

@@ -66,7 +66,7 @@ export function BlogEngagementBar({
   if (variant === 'sticky') {
     return (
       <div className='bg-background/95 border-border fixed inset-x-0 bottom-0 z-40 border-t p-3 backdrop-blur lg:hidden'>
-        <Flex align='center' gap={2}>
+        <Flex direction='row' align='center' gap={2}>
           <Button
             type='button'
             variant={voted ? 'secondary' : 'outline'}
@@ -100,7 +100,7 @@ export function BlogEngagementBar({
   }
 
   return (
-    <Flex align='center' gap={2} className='flex-wrap'>
+    <Flex direction='row' align='center' wrap='wrap' gap={2}>
       <Button
         type='button'
         variant={voted ? 'secondary' : 'outline'}

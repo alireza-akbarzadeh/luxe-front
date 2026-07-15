@@ -36,7 +36,7 @@ export function ArticleMeta({
   const compact = size === 'sm';
 
   return (
-    <Flex align='center' gap={compact ? 2 : 3} className={cn('min-w-0', className)}>
+    <Flex direction='row' align='center' gap={compact ? 2 : 3} className={cn('min-w-0', className)}>
       <Avatar size={compact ? 'sm' : 'default'}>
         {author?.avatar_url ? (
           <AvatarImage src={author.avatar_url} alt={author.name ?? ''} />
@@ -48,7 +48,7 @@ export function ArticleMeta({
         <Typography.S className='truncate text-sm font-medium'>
           {author?.name ?? 'Luxe Editorial'}
         </Typography.S>
-        <Flex align='center' gap={1.5} className='text-muted-foreground text-xs'>
+        <Flex direction='row' align='center' gap={1.5} className='text-muted-foreground text-xs'>
           {!compact && author?.role ? (
             <>
               <span className='truncate'>{author.role}</span>
