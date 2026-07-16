@@ -10,7 +10,7 @@ interface GradientCtaLinkProps {
   className?: string;
 }
 
-/** Primary landing CTA with gold hover border — falls back to plain link when reduced motion. */
+/** Primary landing CTA with gold hover border — hover animation skips when reduced motion. */
 export function GradientCtaLink({ href, children, className }: GradientCtaLinkProps) {
   return (
     <HoverBorderGradient as='a' href={href} className={className} containerClassName='inline-flex'>

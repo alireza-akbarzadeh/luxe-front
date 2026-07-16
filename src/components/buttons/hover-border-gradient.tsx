@@ -1,8 +1,9 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { cn } from '@/lib/utils';
 
 const highlight =
@@ -28,23 +29,21 @@ export function HoverBorderGradient({
     href?: string;
   } & React.HTMLAttributes<HTMLElement>
 >) {
-  const reduceMotion = useReducedMotion();
+  // SSR-safe: server snapshot is always false so markup matches hydration.
+  const reduceMotion = usePrefersReducedMotion();
   const [hovered, setHovered] = useState(false);
 
-  if (reduceMotion) {
-    return (
-      <Tag className={cn('inline-flex', containerClassName, className)} {...props}>
-        {children}
-      </Tag>
-    );
-  }
+  const setHover = (next: boolean) => {
+    if (reduceMotion) return;
+    setHovered(next);
+  };
 
   return (
     <Tag
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={() => setHovered(false)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
       className={cn(
         'relative inline-flex h-min w-fit items-center justify-center overflow-visible rounded-full p-px',
         containerClassName
@@ -53,8 +52,8 @@ export function HoverBorderGradient({
     >
       <motion.div
         className='absolute inset-0 rounded-[inherit]'
-        style={{ filter: 'blur(2px)' }}
-        animate={{ background: hovered ? highlight : idleBorder }}
+        style={{ filter: 'blur(2px)', background: idleBorder }}
+        animate={reduceMotion ? undefined : { background: hovered ? highlight : idleBorder }}
         transition={{ ease: 'linear', duration }}
         aria-hidden
       />

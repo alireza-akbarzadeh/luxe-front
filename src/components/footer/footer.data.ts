@@ -18,6 +18,7 @@ type FooterLinkKey =
   | 'sale'
   | 'giftCards'
   | 'collections'
+  | 'brands'
   | 'discoverStores'
   | 'topRated'
   | 'verifiedVendors'
@@ -63,7 +64,8 @@ const footerSections: ReadonlyArray<{
       { nameKey: 'trendingNow', href: '/shop?sortBy=trending' },
       { nameKey: 'sale', href: '/shop?showOnlySale=true', badge: '-30%' },
       { nameKey: 'giftCards', href: '/gift-cards' },
-      { nameKey: 'collections', href: '/collections' }
+      { nameKey: 'collections', href: '/collections' },
+      { nameKey: 'brands', href: '/brands' }
     ]
   },
   {

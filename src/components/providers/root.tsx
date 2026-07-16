@@ -1,4 +1,5 @@
 'use client';
+import { MotionConfig } from 'framer-motion';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
@@ -20,16 +21,23 @@ type TRootProvider = Readonly<
 export default function RootProvider({ children, dir }: TRootProvider) {
   return (
     <ThemeProvider defaultTheme='dark'>
-      <DirectionProvider dir={dir}>
-        <NuqsAdapter>
-          <Toaster />
-          <ConnectivityNotifier />
-          <AppUpdateNotifier />
-          <TanstackQueryProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </TanstackQueryProvider>
-        </NuqsAdapter>
-      </DirectionProvider>
+      <MotionConfig
+        // Dev: preview animations even when OS Reduced Motion is on.
+        // Prod: respect the user's preference (a11y).
+        // https://motion.dev/troubleshooting/reduced-motion-disabled
+        reducedMotion={process.env.NODE_ENV === 'production' ? 'user' : 'never'}
+      >
+        <DirectionProvider dir={dir}>
+          <NuqsAdapter>
+            <Toaster />
+            <ConnectivityNotifier />
+            <AppUpdateNotifier />
+            <TanstackQueryProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </TanstackQueryProvider>
+          </NuqsAdapter>
+        </DirectionProvider>
+      </MotionConfig>
     </ThemeProvider>
   );
 }
