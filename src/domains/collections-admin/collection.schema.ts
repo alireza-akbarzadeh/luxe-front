@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const COLLECTION_STATUS_OPTIONS = [
   { label: 'Draft', value: 'draft' },
+  { label: 'Scheduled', value: 'scheduled' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
   { label: 'Archived', value: 'archived' }
@@ -33,7 +34,34 @@ export const COLLECTION_THEME_OPTIONS = [
   { label: 'Minimal', value: 'minimal' }
 ] as const;
 
-export const collectionStatusSchema = z.enum(['draft', 'active', 'inactive', 'archived']);
+export const COLLECTION_RULE_FIELD_OPTIONS = [
+  { label: 'Category', value: 'category_id' },
+  { label: 'Brand', value: 'brand_id' },
+  { label: 'Min price', value: 'min_price' },
+  { label: 'Max price', value: 'max_price' },
+  { label: 'Min rating', value: 'min_rating' },
+  { label: 'Is new', value: 'is_new' },
+  { label: 'In stock', value: 'in_stock' },
+  { label: 'On sale', value: 'on_sale' },
+  { label: 'Search', value: 'search' }
+] as const;
+
+export const COLLECTION_RULE_OPERATOR_OPTIONS = [
+  { label: 'Equals', value: 'eq' },
+  { label: 'Not equals', value: 'neq' },
+  { label: 'Greater or equal', value: 'gte' },
+  { label: 'Less or equal', value: 'lte' },
+  { label: 'Contains', value: 'contains' },
+  { label: 'In list', value: 'in' }
+] as const;
+
+export const collectionStatusSchema = z.enum([
+  'draft',
+  'scheduled',
+  'active',
+  'inactive',
+  'archived'
+]);
 export const collectionTypeSchema = z.enum(['manual', 'dynamic', 'hybrid']);
 export const collectionSortKeySchema = z.enum([
   'newest',
@@ -50,6 +78,55 @@ export const COLLECTION_SORT_KEY_OPTIONS = [
   { label: 'Price: low to high', value: 'price_asc' },
   { label: 'Price: high to low', value: 'price_desc' }
 ] as const;
+
+export const collectionRuleConditionSchema = z.object({
+  field: z.enum([
+    'category_id',
+    'brand_id',
+    'min_price',
+    'max_price',
+    'min_rating',
+    'is_new',
+    'in_stock',
+    'on_sale',
+    'search'
+  ]),
+  operator: z.enum(['eq', 'neq', 'gte', 'lte', 'contains', 'in']),
+  value: z.union([z.string(), z.number(), z.boolean(), z.array(z.number())])
+});
+
+export const collectionRuleGroupSchema = z.object({
+  operator: z.enum(['and', 'or']),
+  conditions: z.array(collectionRuleConditionSchema).min(1, 'Add at least one condition')
+});
+
+export const collectionRulesSchema = z.object({
+  operator: z.enum(['and', 'or']),
+  conditions: z.array(collectionRuleConditionSchema),
+  groups: z.array(collectionRuleGroupSchema)
+});
+
+export type CollectionRuleConditionForm = z.infer<typeof collectionRuleConditionSchema>;
+export type CollectionRuleGroupForm = z.infer<typeof collectionRuleGroupSchema>;
+export type CollectionRulesForm = z.infer<typeof collectionRulesSchema>;
+
+export function emptyRuleCondition(): CollectionRuleConditionForm {
+  return { field: 'in_stock', operator: 'eq', value: true };
+}
+
+export function emptyRuleGroup(): CollectionRuleGroupForm {
+  return { operator: 'or', conditions: [emptyRuleCondition()] };
+}
+
+export function emptyCollectionRules(): CollectionRulesForm {
+  return { operator: 'and', conditions: [emptyRuleCondition()], groups: [] };
+}
+
+function countRuleConditions(rules: CollectionRulesForm): number {
+  return (
+    rules.conditions.length + rules.groups.reduce((sum, group) => sum + group.conditions.length, 0)
+  );
+}
 
 export const collectionFormSchema = z
   .object({
@@ -87,16 +164,7 @@ export const collectionFormSchema = z
     ends_at: z.string().optional(),
     product_ids: z.array(z.string()),
     sort_key: collectionSortKeySchema,
-    rule_operator: z.enum(['and']),
-    rule_category_id: z.string(),
-    rule_brand_id: z.string(),
-    rule_search: z.string().max(255).optional(),
-    rule_min_price: z.number().min(0).max(100000),
-    rule_max_price: z.number().min(0).max(100000),
-    rule_min_rating: z.number().min(0).max(5),
-    rule_is_new: z.boolean(),
-    rule_in_stock: z.boolean(),
-    rule_on_sale: z.boolean(),
+    rules: collectionRulesSchema,
     seo_title: z.string().max(255).optional(),
     seo_description: z.string().max(500).optional(),
     meta_keywords: z.string().max(500).optional(),
@@ -149,6 +217,16 @@ export const collectionFormSchema = z
         });
       }
     }
+    if (
+      (values.mode === 'dynamic' || values.mode === 'hybrid') &&
+      countRuleConditions(values.rules) === 0
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Add at least one rule condition for dynamic or hybrid collections',
+        path: ['rules']
+      });
+    }
   });
 
 export type CollectionFormValues = z.infer<typeof collectionFormSchema>;
@@ -172,16 +250,7 @@ export const collectionDefaultValues: CollectionFormValues = {
   ends_at: '',
   product_ids: [],
   sort_key: 'newest',
-  rule_operator: 'and',
-  rule_category_id: COLLECTION_CATEGORY_NONE,
-  rule_brand_id: COLLECTION_CATEGORY_NONE,
-  rule_search: '',
-  rule_min_price: 0,
-  rule_max_price: 0,
-  rule_min_rating: 0,
-  rule_is_new: false,
-  rule_in_stock: true,
-  rule_on_sale: false,
+  rules: emptyCollectionRules(),
   seo_title: '',
   seo_description: '',
   meta_keywords: '',

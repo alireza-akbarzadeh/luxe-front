@@ -1,6 +1,6 @@
 'use client';
 
-import { IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconCalendar, IconCheck, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -30,14 +30,28 @@ export function CollectionsAdminDomain() {
   const queryClient = useQueryClient();
   const { isDesktop } = useMediaDevices();
 
-  const getQueryParams = useCallback(
-    (state: TableState, filter: string) => ({
+  const getQueryParams = useCallback((state: TableState, filter: string) => {
+    const statusFilter = state.columnFilters.find((item) => item.id === 'status')?.value;
+    const status = Array.isArray(statusFilter)
+      ? String(statusFilter[0] ?? '')
+      : typeof statusFilter === 'string'
+        ? statusFilter
+        : '';
+    const modeFilter = state.columnFilters.find((item) => item.id === 'collection_type')?.value;
+    const modeRaw = Array.isArray(modeFilter)
+      ? String(modeFilter[0] ?? '')
+      : typeof modeFilter === 'string'
+        ? modeFilter
+        : '';
+    return {
       limit: state.pagination.pageSize,
       page: state.pagination.pageIndex + 1,
-      search: filter || undefined
-    }),
-    []
-  );
+      search: filter || undefined,
+      status: status || undefined,
+      mode:
+        modeRaw === 'manual' || modeRaw === 'dynamic' || modeRaw === 'hybrid' ? modeRaw : undefined
+    };
+  }, []);
 
   const getRows = useCallback(
     (data: DtoCollectionListResponse | undefined) => getCollectionsFromListResponse(data),
@@ -119,7 +133,38 @@ export function CollectionsAdminDomain() {
         showColumnVisibility={isDesktop}
         showBulkActions={isDesktop}
         onDelete={isDesktop ? handleBulkDelete : undefined}
-      />
+      >
+        <Table.StatusFilters
+          columnId='status'
+          title='Status'
+          options={[
+            { label: 'Draft', value: 'draft', icon: IconPencil, color: 'text-muted-foreground' },
+            {
+              label: 'Scheduled',
+              value: 'scheduled',
+              icon: IconCalendar,
+              color: 'text-amber-600'
+            },
+            { label: 'Active', value: 'active', icon: IconCheck, color: 'text-emerald-600' },
+            {
+              label: 'Inactive',
+              value: 'inactive',
+              icon: IconTrash,
+              color: 'text-muted-foreground'
+            },
+            { label: 'Archived', value: 'archived', icon: IconTrash, color: 'text-destructive' }
+          ]}
+        />
+        <Table.StatusFilters
+          columnId='collection_type'
+          title='Mode'
+          options={[
+            { label: 'Dynamic', value: 'dynamic', icon: IconCheck, color: 'text-sky-600' },
+            { label: 'Manual', value: 'manual', icon: IconPencil, color: 'text-violet-600' },
+            { label: 'Hybrid', value: 'hybrid', icon: IconCalendar, color: 'text-orange-600' }
+          ]}
+        />
+      </Table.Toolbar>
 
       {!isDesktop ? (
         <Flex

@@ -80,6 +80,27 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
   },
 
   {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.original.status ?? 'draft';
+      const variant =
+        status === 'active'
+          ? 'default'
+          : status === 'scheduled'
+            ? 'secondary'
+            : status === 'draft'
+              ? 'outline'
+              : 'outline';
+      return (
+        <Badge variant={variant} className='text-[10px] capitalize'>
+          {status}
+        </Badge>
+      );
+    }
+  },
+
+  {
     id: 'schedule',
     header: 'Schedule',
     cell: ({ row }) => {
@@ -92,9 +113,9 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
 
   {
     id: 'smart_rules',
-    header: 'Smart rules',
+    header: 'Rules',
     cell: ({ row }) => {
-      if (row.original.collection_type === 'manual') {
+      if (row.original.mode === 'manual' || row.original.collection_type === 'manual') {
         const count = row.original.product_ids?.length ?? 0;
         return (
           <span className='text-muted-foreground text-xs'>
@@ -103,13 +124,16 @@ export const collectionColumns: ColumnDef<DtoCollectionResponse>[] = [
         );
       }
 
-      const rules: string[] = [];
-      if (row.original.preview_is_new) rules.push('New');
-      if (row.original.preview_category_id) rules.push(`Cat #${row.original.preview_category_id}`);
-      if (row.original.preview_sort) rules.push(row.original.preview_sort);
+      const conditionCount = row.original.rules?.conditions?.length ?? 0;
+      const groupCount = row.original.rules?.groups?.length ?? 0;
+      if (conditionCount === 0 && groupCount === 0) {
+        return <span className='text-muted-foreground text-xs'>No rules</span>;
+      }
       return (
         <span className='text-muted-foreground text-xs'>
-          {rules.length ? rules.join(' · ') : 'All products'}
+          {conditionCount} condition{conditionCount === 1 ? '' : 's'}
+          {groupCount > 0 ? ` · ${groupCount} group${groupCount === 1 ? '' : 's'}` : ''}
+          {row.original.rules?.operator ? ` · ${row.original.rules.operator.toUpperCase()}` : ''}
         </span>
       );
     }

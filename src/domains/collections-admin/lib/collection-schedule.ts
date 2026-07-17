@@ -1,21 +1,44 @@
-/** Schedule helpers for admin collections — datetime-local ↔ ISO and live status labels. */
+/** Schedule helpers for admin collections — DatePicker (YYYY-MM-DD) ↔ ISO and live status labels. */
 
 export type CollectionScheduleStatus = 'always' | 'scheduled' | 'live' | 'upcoming' | 'expired';
 
-export function toScheduleISO(value: string | undefined): string | undefined {
+const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+function pad(part: number): string {
+  return String(part).padStart(2, '0');
+}
+
+function formatDateOnly(date: Date): string {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/** Maps DatePicker `YYYY-MM-DD` (or ISO) to API RFC3339. End dates use end-of-day local. */
+export function toScheduleISO(value: string | undefined, endOfDay = false): string | undefined {
   const trimmed = value?.trim();
   if (!trimmed) return undefined;
+
+  const dateOnly = DATE_ONLY.exec(trimmed);
+  if (dateOnly) {
+    const year = Number(dateOnly[1]);
+    const month = Number(dateOnly[2]);
+    const day = Number(dateOnly[3]);
+    const local = endOfDay
+      ? new Date(year, month - 1, day, 23, 59, 59, 999)
+      : new Date(year, month - 1, day, 0, 0, 0, 0);
+    return local.toISOString();
+  }
+
   const parsed = new Date(trimmed);
   if (Number.isNaN(parsed.getTime())) return undefined;
   return parsed.toISOString();
 }
 
+/** Maps API ISO timestamps to DatePicker `YYYY-MM-DD` values. */
 export function fromScheduleISO(iso: string | undefined): string {
   if (!iso) return '';
   const parsed = new Date(iso);
   if (Number.isNaN(parsed.getTime())) return '';
-  const pad = (part: number) => String(part).padStart(2, '0');
-  return `${parsed.getFullYear()}-${pad(parsed.getMonth() + 1)}-${pad(parsed.getDate())}T${pad(parsed.getHours())}:${pad(parsed.getMinutes())}`;
+  return formatDateOnly(parsed);
 }
 
 export function getCollectionScheduleStatus(

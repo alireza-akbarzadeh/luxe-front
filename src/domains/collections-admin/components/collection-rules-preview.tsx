@@ -1,142 +1,109 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { useDeferredValue, useMemo } from 'react';
+
 import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Flex } from '@/components/ui/flex';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Text } from '@/components/ui/typography';
-import {
-  COLLECTION_CATEGORY_NONE,
-  COLLECTION_PREVIEW_SORT_NONE
-} from '@/domains/collections-admin/collection.schema';
+import type { CollectionRulesForm } from '@/domains/collections-admin/collection.schema';
+import { mapFormRulesToDto } from '@/domains/collections-admin/lib/collection-mapper';
 import { IMAGE_FALLBACK } from '@/lib/images';
-import { useGetProducts } from '@/services/-products-get';
-import type { GetProductsSort } from '@/services/-products-get.schemas';
+import { postCollectionsIdValidateRules } from '@/services/-collections-{id}-validate-rules-post';
+import { postCollectionsValidateRules } from '@/services/-collections-validate-rules-post';
 
 interface CollectionRulesPreviewProps {
-  sortKey?: string;
-  categoryId?: string;
-  brandId?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  minRating?: number;
-  isNew?: boolean;
-  inStock?: boolean;
-  onSale?: boolean;
-  search?: string;
+  mode: 'manual' | 'dynamic' | 'hybrid';
+  rules: CollectionRulesForm;
+  collectionId?: number;
 }
 
-function mapPreviewSort(sort?: string): GetProductsSort | undefined {
-  if (!sort || sort === COLLECTION_PREVIEW_SORT_NONE) return undefined;
-  const allowed: GetProductsSort[] = [
-    'newest',
-    'rating_desc',
-    'reviews_desc',
-    'price_asc',
-    'price_desc'
-  ];
-  return allowed.includes(sort as GetProductsSort) ? (sort as GetProductsSort) : undefined;
-}
+/** Live preview of collection rules via validate-rules (same resolver as storefront). */
+export function CollectionRulesPreview({ mode, rules, collectionId }: CollectionRulesPreviewProps) {
+  const deferredRules = useDeferredValue(rules);
+  const dtoRules = useMemo(() => mapFormRulesToDto(deferredRules), [deferredRules]);
+  const canPreview = mode !== 'manual' && Boolean(dtoRules);
 
-/** Live preview of smart collection product rules on the admin form. */
-export function CollectionRulesPreview({
-  sortKey,
-  categoryId: rawCategoryId,
-  brandId: rawBrandId,
-  minPrice,
-  maxPrice,
-  minRating,
-  isNew,
-  inStock,
-  onSale,
-  search
-}: CollectionRulesPreviewProps) {
-  const categoryId =
-    rawCategoryId && rawCategoryId !== COLLECTION_CATEGORY_NONE ? Number(rawCategoryId) : undefined;
-  const brandId =
-    rawBrandId && rawBrandId !== COLLECTION_CATEGORY_NONE ? Number(rawBrandId) : undefined;
-
-  const { data, isLoading } = useGetProducts(
-    {
-      limit: 4,
-      offset: 0,
-      category_id: categoryId,
-      brand_id: brandId,
-      min_price: minPrice && minPrice > 0 ? minPrice : undefined,
-      max_price: maxPrice && maxPrice > 0 ? maxPrice : undefined,
-      min_rating: minRating && minRating > 0 ? minRating : undefined,
-      is_new: isNew || undefined,
-      sort: mapPreviewSort(sortKey)
+  const previewQuery = useQuery({
+    queryKey: ['collection-rules-preview', mode, collectionId, dtoRules],
+    queryFn: async () => {
+      const body = { mode, rules: dtoRules!, limit: 4 };
+      if (collectionId) {
+        return postCollectionsIdValidateRules(collectionId, body);
+      }
+      return postCollectionsValidateRules(body);
     },
-    { query: { staleTime: 30_000 } }
-  );
+    enabled: canPreview,
+    staleTime: 15_000
+  });
 
-  const products = data?.data?.products ?? [];
-  const total = data?.data?.total ?? 0;
+  const products = previewQuery.data?.data?.products ?? [];
+  const total = previewQuery.data?.data?.total ?? 0;
+  const errorMessage =
+    !canPreview && mode !== 'manual'
+      ? 'Add at least one condition to preview'
+      : previewQuery.isError
+        ? previewQuery.error instanceof Error
+          ? previewQuery.error.message
+          : 'Failed to validate rules'
+        : null;
 
-  const ruleLabels: string[] = [];
-  if (isNew) ruleLabels.push('New only');
-  if (categoryId) ruleLabels.push(`Category #${categoryId}`);
-  if (brandId) ruleLabels.push(`Brand #${brandId}`);
-  if (minPrice && minPrice > 0) ruleLabels.push(`Min price ${minPrice}`);
-  if (maxPrice && maxPrice > 0) ruleLabels.push(`Max price ${maxPrice}`);
-  if (minRating && minRating > 0) ruleLabels.push(`Min rating ${minRating}`);
-  if (inStock) ruleLabels.push('In stock');
-  if (onSale) ruleLabels.push('On sale');
-  if (search?.trim()) ruleLabels.push(`Search: ${search.trim()}`);
-  if (sortKey && sortKey !== COLLECTION_PREVIEW_SORT_NONE) {
-    ruleLabels.push(`Sort: ${sortKey}`);
+  if (mode === 'manual') {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className='text-base'>Rules preview</CardTitle>
+          <CardDescription>Manual collections resolve from curated product picks.</CardDescription>
+        </CardHeader>
+      </Card>
+    );
   }
-  if (ruleLabels.length === 0) ruleLabels.push('No filters — all products');
 
   return (
-    <Card className='border-dashed'>
-      <CardHeader className='pb-3'>
-        <CardTitle className='text-base'>Rules preview</CardTitle>
-        <CardDescription>
-          Sample products matching the smart rules below ({total.toLocaleString()} total).
-        </CardDescription>
+    <Card>
+      <CardHeader>
+        <Flex direction='row' align='center' justify='between' className='gap-2'>
+          <div>
+            <CardTitle className='text-base'>Rules preview</CardTitle>
+            <CardDescription>Resolved with the same API path as the storefront.</CardDescription>
+          </div>
+          {canPreview && !previewQuery.isFetching && !errorMessage ? (
+            <Badge variant='secondary'>{total.toLocaleString()} matches</Badge>
+          ) : null}
+        </Flex>
       </CardHeader>
       <CardContent>
-        <Flex direction='row' wrap='wrap' spacing={2} className='mb-4'>
-          {ruleLabels.map((label) => (
-            <Badge key={label} variant='outline' className='text-[10px]'>
-              {label}
-            </Badge>
-          ))}
-        </Flex>
-
-        {isLoading ? (
-          <Flex direction='row' spacing={3} className='overflow-x-auto'>
+        {previewQuery.isFetching ? (
+          <Flex direction='row' spacing={3} className='flex-wrap'>
             {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className='size-20 shrink-0 rounded-lg' />
+              <Skeleton key={index} className='h-20 w-20 rounded-lg' />
             ))}
           </Flex>
+        ) : errorMessage ? (
+          <Text variant='muted' className='text-destructive text-sm'>
+            {errorMessage}
+          </Text>
         ) : products.length === 0 ? (
           <Text variant='muted' className='text-sm'>
-            No products match these rules yet.
+            No products matched these rules.
           </Text>
         ) : (
-          <Flex direction='row' spacing={3} className='overflow-x-auto pb-1'>
+          <Flex direction='row' spacing={3} className='flex-wrap'>
             {products.map((product) => (
-              <Flex key={product.id} direction='column' spacing={1} className='w-24 shrink-0'>
-                <Flex
-                  align='center'
-                  justify='center'
-                  className='bg-muted relative size-20 overflow-hidden rounded-lg border'
-                >
+              <Flex key={product.id} direction='column' spacing={1} className='w-20'>
+                <div className='relative h-20 w-20 overflow-hidden rounded-lg border'>
                   <AppImage
                     src={product.images?.[0] ?? IMAGE_FALLBACK}
-                    alt={product.name ?? ''}
+                    alt={product.name ?? 'Product'}
                     fill
                     sizes='80px'
                     className='object-cover'
                   />
-                </Flex>
-                <Text variant='muted' className='line-clamp-2 text-[10px] leading-tight'>
-                  {product.name ?? '—'}
-                </Text>
+                </div>
+                <Text className='line-clamp-2 text-[10px]'>{product.name}</Text>
               </Flex>
             ))}
           </Flex>

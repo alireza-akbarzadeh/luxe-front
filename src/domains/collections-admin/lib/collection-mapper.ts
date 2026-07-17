@@ -1,7 +1,10 @@
-import type { CollectionFormValues } from '@/domains/collections-admin/collection.schema';
+import type {
+  CollectionFormValues,
+  CollectionRulesForm
+} from '@/domains/collections-admin/collection.schema';
 import {
-  COLLECTION_CATEGORY_NONE,
-  COLLECTION_PREVIEW_SORT_NONE
+  emptyCollectionRules,
+  emptyRuleCondition
 } from '@/domains/collections-admin/collection.schema';
 import {
   fromScheduleISO,
@@ -22,68 +25,103 @@ function optionalText(value: string | undefined): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-function parseCategoryId(value: string | null | undefined): number | undefined {
-  if (!value?.trim() || value === COLLECTION_CATEGORY_NONE) return undefined;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+function mapScheduleField(value: string | undefined, endOfDay = false): string | undefined {
+  return toScheduleISO(value, endOfDay);
 }
 
-function mapPreviewSort(value: string | undefined): string | undefined {
-  if (!value?.trim() || value === COLLECTION_PREVIEW_SORT_NONE) return undefined;
-  return value;
+function coerceConditionValue(field: string, value: unknown): string | number | boolean | number[] {
+  if (field === 'is_new' || field === 'in_stock' || field === 'on_sale') {
+    return Boolean(value);
+  }
+  if (
+    field === 'category_id' ||
+    field === 'brand_id' ||
+    field === 'min_price' ||
+    field === 'max_price' ||
+    field === 'min_rating'
+  ) {
+    return Number(value) || 0;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => Number(item)).filter((item) => Number.isFinite(item));
+  }
+  return String(value ?? '');
 }
 
-function mapScheduleField(value: string | undefined): string | undefined {
-  return toScheduleISO(value);
-}
+/** Maps form rules tree to API DtoCollectionRules. */
+export function mapFormRulesToDto(rules: CollectionRulesForm): DtoCollectionRules | undefined {
+  const conditions: DtoCollectionRuleCondition[] = rules.conditions.map((condition) => ({
+    field: condition.field,
+    operator: condition.operator,
+    value: condition.value
+  }));
+  const groups = rules.groups
+    .filter((group) => group.conditions.length > 0)
+    .map((group) => ({
+      operator: group.operator,
+      conditions: group.conditions.map((condition) => ({
+        field: condition.field,
+        operator: condition.operator,
+        value: condition.value
+      }))
+    }));
 
-function parseOptionalNumber(value: string | null | undefined): number | undefined {
-  if (!value?.trim() || value === COLLECTION_CATEGORY_NONE) return undefined;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : undefined;
-}
-
-function buildCollectionRules(values: CollectionFormValues): DtoCollectionRules | undefined {
-  const conditions: DtoCollectionRuleCondition[] = [];
-
-  const categoryId = parseCategoryId(values.rule_category_id);
-  const brandId = parseCategoryId(values.rule_brand_id);
-
-  if (categoryId) {
-    conditions.push({ field: 'category_id', operator: 'eq', value: categoryId });
-  }
-  if (brandId) {
-    conditions.push({ field: 'brand_id', operator: 'eq', value: brandId });
-  }
-  if (values.rule_search?.trim()) {
-    conditions.push({ field: 'search', operator: 'contains', value: values.rule_search.trim() });
-  }
-  if (values.rule_min_price > 0) {
-    conditions.push({ field: 'min_price', operator: 'gte', value: values.rule_min_price });
-  }
-  if (values.rule_max_price > 0) {
-    conditions.push({ field: 'max_price', operator: 'lte', value: values.rule_max_price });
-  }
-  if (values.rule_min_rating > 0) {
-    conditions.push({ field: 'min_rating', operator: 'gte', value: values.rule_min_rating });
-  }
-  if (values.rule_is_new) {
-    conditions.push({ field: 'is_new', operator: 'eq', value: true });
-  }
-  if (values.rule_in_stock) {
-    conditions.push({ field: 'in_stock', operator: 'eq', value: true });
-  }
-  if (values.rule_on_sale) {
-    conditions.push({ field: 'on_sale', operator: 'eq', value: true });
-  }
-  if (values.sort_key?.trim()) {
-    conditions.push({ field: 'sort', operator: 'eq', value: values.sort_key });
-  }
-
-  if (conditions.length === 0) return undefined;
+  if (conditions.length === 0 && groups.length === 0) return undefined;
   return {
-    operator: values.rule_operator,
-    conditions
+    operator: rules.operator,
+    conditions,
+    groups: groups.length > 0 ? groups : undefined
+  };
+}
+
+function mapDtoRulesToForm(rules: DtoCollectionRules | undefined): CollectionRulesForm {
+  if (!rules) return emptyCollectionRules();
+
+  const conditions = (rules.conditions ?? [])
+    .filter((item) => item.field && item.field !== 'sort' && item.field !== 'ids')
+    .map((item) => ({
+      field: (item.field ?? 'in_stock') as CollectionRulesForm['conditions'][number]['field'],
+      operator: (item.operator || 'eq') as CollectionRulesForm['conditions'][number]['operator'],
+      value: coerceConditionValue(item.field ?? 'in_stock', item.value)
+    }));
+
+  const groups = (rules.groups ?? []).map((group) => ({
+    operator: (group.operator === 'or' ? 'or' : 'and') as CollectionRulesForm['operator'],
+    conditions:
+      (group.conditions ?? []).length > 0
+        ? (group.conditions ?? []).map((item) => ({
+            field: (item.field ?? 'in_stock') as CollectionRulesForm['conditions'][number]['field'],
+            operator: (item.operator ||
+              'eq') as CollectionRulesForm['conditions'][number]['operator'],
+            value: coerceConditionValue(item.field ?? 'in_stock', item.value)
+          }))
+        : [emptyRuleCondition()]
+  }));
+
+  if (conditions.length === 0 && groups.length === 0) {
+    return emptyCollectionRules();
+  }
+
+  return {
+    operator: rules.operator === 'or' ? 'or' : 'and',
+    conditions: conditions.length > 0 ? conditions : [],
+    groups
+  };
+}
+
+function previewFromRules(rules: CollectionRulesForm): {
+  preview_is_new?: boolean;
+  preview_category_id?: number;
+} {
+  const all = [...rules.conditions, ...rules.groups.flatMap((group) => group.conditions)];
+  const isNew = all.find((item) => item.field === 'is_new' && item.value === true);
+  const category = all.find((item) => item.field === 'category_id');
+  return {
+    preview_is_new: isNew ? true : undefined,
+    preview_category_id:
+      category && typeof category.value === 'number' && category.value > 0
+        ? category.value
+        : undefined
   };
 }
 
@@ -95,10 +133,8 @@ export function mapFormToCreateCollectionRequest(
     values.mode === 'manual' || values.mode === 'hybrid'
       ? parseProductIds(values.product_ids)
       : undefined;
-  const rules = buildCollectionRules(values);
-  const previewCategoryId = parseCategoryId(values.rule_category_id);
-  const previewIsNew = values.rule_is_new || undefined;
-  const previewSort = mapPreviewSort(values.sort_key);
+  const rules = mapFormRulesToDto(values.rules);
+  const preview = previewFromRules(values.rules);
 
   return {
     slug: values.slug.trim(),
@@ -115,12 +151,12 @@ export function mapFormToCreateCollectionRequest(
     collection_type: values.mode === 'manual' ? 'manual' : 'smart',
     mode: values.mode,
     starts_at: mapScheduleField(values.starts_at),
-    ends_at: mapScheduleField(values.ends_at),
+    ends_at: mapScheduleField(values.ends_at, true),
     product_ids: productIds,
     product_overrides: productOverrides,
-    preview_sort: previewSort,
-    preview_is_new: previewIsNew,
-    preview_category_id: previewCategoryId,
+    preview_sort: values.sort_key,
+    preview_is_new: preview.preview_is_new,
+    preview_category_id: preview.preview_category_id,
     sort_key: values.sort_key,
     rules,
     seo_title: optionalText(values.seo_title),
@@ -151,9 +187,8 @@ export function mapFormToUpdateCollectionRequest(
 ): DtoUpdateCollectionRequest {
   const productIds =
     values.mode === 'manual' || values.mode === 'hybrid' ? parseProductIds(values.product_ids) : [];
-  const rules = buildCollectionRules(values);
-  const previewCategoryId = parseCategoryId(values.rule_category_id);
-  const previewIsNew = values.rule_is_new || undefined;
+  const rules = mapFormRulesToDto(values.rules);
+  const preview = previewFromRules(values.rules);
 
   return {
     slug: values.slug.trim(),
@@ -166,15 +201,16 @@ export function mapFormToUpdateCollectionRequest(
     cta_label: optionalText(values.cta_label) ?? 'Shop collection',
     sort_order: values.sort_order,
     theme: optionalText(values.theme),
+    status: values.status,
     collection_type: values.mode === 'manual' ? 'manual' : 'smart',
     mode: values.mode,
     starts_at: mapScheduleField(values.starts_at) ?? '',
-    ends_at: mapScheduleField(values.ends_at) ?? '',
+    ends_at: mapScheduleField(values.ends_at, true) ?? '',
     product_ids: productIds,
     product_overrides: productOverrides,
-    preview_sort: mapPreviewSort(values.sort_key),
-    preview_is_new: previewIsNew,
-    preview_category_id: previewCategoryId,
+    preview_sort: values.sort_key,
+    preview_is_new: preview.preview_is_new,
+    preview_category_id: preview.preview_category_id,
     sort_key: values.sort_key,
     rules,
     seo_title: optionalText(values.seo_title),
@@ -202,7 +238,11 @@ export function mapFormToUpdateCollectionRequest(
 export function mapCollectionToFormValues(collection: DtoCollectionResponse): CollectionFormValues {
   const status = collection.status;
   const validStatus =
-    status === 'draft' || status === 'active' || status === 'inactive' || status === 'archived'
+    status === 'draft' ||
+    status === 'scheduled' ||
+    status === 'active' ||
+    status === 'inactive' ||
+    status === 'archived'
       ? status
       : 'draft';
 
@@ -212,11 +252,6 @@ export function mapCollectionToFormValues(collection: DtoCollectionResponse): Co
       : collection.collection_type === 'manual'
         ? 'manual'
         : 'dynamic';
-
-  const conditions = collection.rules?.conditions ?? [];
-  const readCondition = (field: string) => conditions.find((item) => item.field === field)?.value;
-  const ruleCategoryId = parseOptionalNumber(String(readCondition('category_id') ?? ''));
-  const ruleBrandId = parseOptionalNumber(String(readCondition('brand_id') ?? ''));
 
   return {
     eyebrow: collection.eyebrow ?? '',
@@ -235,16 +270,7 @@ export function mapCollectionToFormValues(collection: DtoCollectionResponse): Co
     ends_at: fromScheduleISO(collection.ends_at),
     product_ids: (collection.product_ids ?? []).map(String),
     sort_key: (collection.sort_key as CollectionFormValues['sort_key']) ?? 'newest',
-    rule_operator: collection.rules?.operator === 'and' ? 'and' : 'and',
-    rule_category_id: ruleCategoryId ? String(ruleCategoryId) : COLLECTION_CATEGORY_NONE,
-    rule_brand_id: ruleBrandId ? String(ruleBrandId) : COLLECTION_CATEGORY_NONE,
-    rule_search: String(readCondition('search') ?? ''),
-    rule_min_price: Number(readCondition('min_price') ?? 0),
-    rule_max_price: Number(readCondition('max_price') ?? 0),
-    rule_min_rating: Number(readCondition('min_rating') ?? 0),
-    rule_is_new: Boolean(readCondition('is_new') ?? collection.preview_is_new ?? false),
-    rule_in_stock: Boolean(readCondition('in_stock') ?? true),
-    rule_on_sale: Boolean(readCondition('on_sale') ?? false),
+    rules: mapDtoRulesToForm(collection.rules),
     seo_title: collection.seo_title ?? '',
     seo_description: collection.seo_description ?? '',
     meta_keywords: collection.meta_keywords ?? '',
