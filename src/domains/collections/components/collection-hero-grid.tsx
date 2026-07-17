@@ -2,11 +2,12 @@
 
 import { IconArrowUpRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
-import type { DtoCollectionResponse } from '~/src/services/-collections-get.schemas';
+import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
 
 interface CollectionHeroGridProps {
   collections: DtoCollectionResponse[];
@@ -28,7 +29,7 @@ export function CollectionHeroGrid({ collections }: CollectionHeroGridProps) {
             className={cn(isFeatured && 'col-span-2 row-span-2 lg:col-span-2 lg:row-span-2')}
           >
             <Link
-              href={`#${collection.id}`}
+              href={`/collections/${collection.slug ?? ''}`}
               className={cn(
                 'group border-border/60 bg-card relative block overflow-hidden rounded-2xl border shadow-sm sm:rounded-3xl',
                 isFeatured
@@ -36,8 +37,8 @@ export function CollectionHeroGrid({ collections }: CollectionHeroGridProps) {
                   : 'aspect-[4/5]'
               )}
             >
-              <Image
-                src={collection.image_url ?? ''}
+              <AppImage
+                src={collection.desktop_image_url || collection.image_url || IMAGE_FALLBACK}
                 alt={collection.title ?? ''}
                 fill
                 sizes={

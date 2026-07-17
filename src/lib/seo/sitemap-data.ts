@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next';
 
 import { absoluteUrl } from '@/lib/seo/site-url';
 import { getCategories } from '@/services/-categories-get';
+import { getCollections } from '@/services/-collections-get';
+import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
 import { getProducts } from '@/services/-products-get';
 import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 import { getStores } from '@/services/-stores-get';
@@ -70,15 +72,36 @@ async function fetchAllStores(): Promise<DtoStoreResponse[]> {
   return items;
 }
 
+async function fetchAllLiveCollections(): Promise<DtoCollectionResponse[]> {
+  const items: DtoCollectionResponse[] = [];
+  const limit = 100;
+  let page = 1;
+  let total = Number.POSITIVE_INFINITY;
+
+  while (items.length < total) {
+    const response = await getCollections({ status: 'active', live_only: true, limit, page });
+    const batch = response.data?.collections ?? [];
+    total = response.data?.total ?? batch.length;
+    items.push(...batch);
+    if (batch.length === 0) {
+      break;
+    }
+    page += 1;
+  }
+
+  return items;
+}
+
 /** Build sitemap entries from API catalog data (server-only). */
 export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [...STATIC_ROUTES];
 
   try {
-    const [products, stores, categoriesResponse] = await Promise.all([
+    const [products, stores, categoriesResponse, collections] = await Promise.all([
       fetchAllActiveProducts(),
       fetchAllStores(),
-      getCategories({ is_active: true, limit: 100, offset: 0 })
+      getCategories({ is_active: true, limit: 100, offset: 0 }),
+      fetchAllLiveCollections()
     ]);
 
     for (const product of products) {
@@ -116,6 +139,19 @@ export async function buildSitemapEntries(): Promise<MetadataRoute.Sitemap> {
         url: absoluteUrl(`/shop?category=${encodeURIComponent(category.slug)}`),
         changeFrequency: 'weekly',
         priority: 0.6
+      });
+    }
+
+    for (const collection of collections) {
+      if (!collection.slug || collection.is_indexable === false) {
+        continue;
+      }
+
+      entries.push({
+        url: absoluteUrl(`/collections/${collection.slug}`),
+        lastModified: collection.updated_at ? new Date(collection.updated_at) : undefined,
+        changeFrequency: 'weekly',
+        priority: 0.7
       });
     }
   } catch {

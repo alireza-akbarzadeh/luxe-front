@@ -15,9 +15,16 @@ import { useGetProducts } from '@/services/-products-get';
 import type { GetProductsSort } from '@/services/-products-get.schemas';
 
 interface CollectionRulesPreviewProps {
-  previewSort?: string;
-  previewCategoryId?: string;
-  previewIsNew?: boolean;
+  sortKey?: string;
+  categoryId?: string;
+  brandId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  isNew?: boolean;
+  inStock?: boolean;
+  onSale?: boolean;
+  search?: string;
 }
 
 function mapPreviewSort(sort?: string): GetProductsSort | undefined {
@@ -34,22 +41,33 @@ function mapPreviewSort(sort?: string): GetProductsSort | undefined {
 
 /** Live preview of smart collection product rules on the admin form. */
 export function CollectionRulesPreview({
-  previewSort,
-  previewCategoryId,
-  previewIsNew
+  sortKey,
+  categoryId: rawCategoryId,
+  brandId: rawBrandId,
+  minPrice,
+  maxPrice,
+  minRating,
+  isNew,
+  inStock,
+  onSale,
+  search
 }: CollectionRulesPreviewProps) {
   const categoryId =
-    previewCategoryId && previewCategoryId !== COLLECTION_CATEGORY_NONE
-      ? Number(previewCategoryId)
-      : undefined;
+    rawCategoryId && rawCategoryId !== COLLECTION_CATEGORY_NONE ? Number(rawCategoryId) : undefined;
+  const brandId =
+    rawBrandId && rawBrandId !== COLLECTION_CATEGORY_NONE ? Number(rawBrandId) : undefined;
 
   const { data, isLoading } = useGetProducts(
     {
       limit: 4,
       offset: 0,
       category_id: categoryId,
-      is_new: previewIsNew || undefined,
-      sort: mapPreviewSort(previewSort)
+      brand_id: brandId,
+      min_price: minPrice && minPrice > 0 ? minPrice : undefined,
+      max_price: maxPrice && maxPrice > 0 ? maxPrice : undefined,
+      min_rating: minRating && minRating > 0 ? minRating : undefined,
+      is_new: isNew || undefined,
+      sort: mapPreviewSort(sortKey)
     },
     { query: { staleTime: 30_000 } }
   );
@@ -58,10 +76,17 @@ export function CollectionRulesPreview({
   const total = data?.data?.total ?? 0;
 
   const ruleLabels: string[] = [];
-  if (previewIsNew) ruleLabels.push('New only');
+  if (isNew) ruleLabels.push('New only');
   if (categoryId) ruleLabels.push(`Category #${categoryId}`);
-  if (previewSort && previewSort !== COLLECTION_PREVIEW_SORT_NONE) {
-    ruleLabels.push(`Sort: ${previewSort}`);
+  if (brandId) ruleLabels.push(`Brand #${brandId}`);
+  if (minPrice && minPrice > 0) ruleLabels.push(`Min price ${minPrice}`);
+  if (maxPrice && maxPrice > 0) ruleLabels.push(`Max price ${maxPrice}`);
+  if (minRating && minRating > 0) ruleLabels.push(`Min rating ${minRating}`);
+  if (inStock) ruleLabels.push('In stock');
+  if (onSale) ruleLabels.push('On sale');
+  if (search?.trim()) ruleLabels.push(`Search: ${search.trim()}`);
+  if (sortKey && sortKey !== COLLECTION_PREVIEW_SORT_NONE) {
+    ruleLabels.push(`Sort: ${sortKey}`);
   }
   if (ruleLabels.length === 0) ruleLabels.push('No filters — all products');
 

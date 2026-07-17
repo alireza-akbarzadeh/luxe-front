@@ -31,6 +31,7 @@ export interface VendorOrdersListParams {
 
 export interface VendorOrdersListResponse {
   data?: {
+    x: unknown;
     orders?: VendorOrderListItem[];
     total?: number;
     limit?: number;

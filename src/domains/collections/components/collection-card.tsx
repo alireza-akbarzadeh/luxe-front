@@ -2,16 +2,17 @@
 
 import { IconArrowRight, IconArrowUpRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { AppImage } from '@/components/ui/app-image';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
+import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
-import type { DtoHomeCollectionItem } from '~/src/services/-home-popular-collections-get.schemas';
+import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
 
 interface CollectionCardProps {
-  collection: DtoHomeCollectionItem;
+  collection: DtoCollectionResponse;
   index: number;
 }
 
@@ -35,8 +36,8 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
             !imageFirst && 'lg:order-2'
           )}
         >
-          <Image
-            src={collection.image_url ?? ''}
+          <AppImage
+            src={collection.desktop_image_url || collection.image_url || IMAGE_FALLBACK}
             alt={collection.title ?? ''}
             fill
             sizes='(max-width: 1024px) 100vw, 50vw'
@@ -84,7 +85,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
 
             <div className='mt-8 flex flex-col gap-3 sm:flex-row sm:items-center'>
               <Link
-                href={collection.href ?? ''}
+                href={`/collections/${collection.slug ?? ''}`}
                 className={cn(
                   buttonVariants({ size: 'lg' }),
                   'bg-accent text-accent-foreground hover:bg-accent/90 h-12 rounded-full px-8 shadow-sm'
@@ -94,7 +95,7 @@ export function CollectionCard({ collection, index }: CollectionCardProps) {
                 <IconArrowRight className='ml-2 size-4' />
               </Link>
               <Link
-                href={collection.href ?? ''}
+                href={`/collections/${collection.slug ?? ''}`}
                 className='text-foreground hover:text-accent inline-flex items-center gap-1.5 text-sm font-medium transition-colors'
               >
                 Browse all pieces

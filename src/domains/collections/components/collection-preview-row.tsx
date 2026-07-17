@@ -1,95 +1,18 @@
 'use client';
 
 import { IconArrowRight } from '@tabler/icons-react';
-import { useQueries } from '@tanstack/react-query';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
 import type { DtoCollectionResponse } from '@/services/-collections-get.schemas';
-import { getProductsId } from '@/services/-products-{id}-get';
-import { useGetProducts } from '@/services/-products-get';
-import type {
-  DtoProductWithLike,
-  GetProductsParams,
-  GetProductsSort
-} from '@/services/-products-get.schemas';
+import { useGetCollectionsSlugSlugProducts } from '@/services/-collections-slug-{slug}-products-get';
+import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 
 import { CollectionProductCard } from './collection-product-card';
 
 interface CollectionPreviewRowProps {
   collection: DtoCollectionResponse;
   className?: string;
-}
-
-function SmartCollectionPreview({
-  collection,
-  className
-}: {
-  collection: DtoCollectionResponse;
-  className?: string;
-}) {
-  const previewParams: GetProductsParams = {
-    status: 'active',
-    limit: 4,
-    offset: 0,
-    sort: collection.preview_sort as GetProductsSort,
-    is_new: collection.preview_is_new || undefined,
-    category_id: collection.preview_category_id
-  };
-
-  const { data, isLoading } = useGetProducts(previewParams);
-
-  const products = data?.data?.products ?? [];
-  const total = data?.data?.total;
-
-  return (
-    <CollectionPreviewContent
-      className={className}
-      collection={collection}
-      products={products}
-      total={total}
-      isLoading={isLoading}
-    />
-  );
-}
-
-function ManualCollectionPreview({
-  collection,
-  className
-}: {
-  collection: DtoCollectionResponse;
-  className?: string;
-}) {
-  const productIds = (collection.product_ids ?? []).slice(0, 4);
-
-  const productQueries = useQueries({
-    queries: productIds.map((id) => ({
-      queryKey: ['collection-preview-product', id],
-      queryFn: () => getProductsId(String(id)),
-      staleTime: 60_000
-    }))
-  });
-
-  const isLoading = productQueries.some((query) => query.isLoading);
-  const products: DtoProductWithLike[] = [];
-  for (const query of productQueries) {
-    const product = query.data?.data?.product;
-    if (!product) continue;
-    products.push({
-      ...product,
-      is_liked: query.data?.data?.is_liked
-    });
-  }
-
-  return (
-    <CollectionPreviewContent
-      className={className}
-      collection={collection}
-      products={products}
-      total={collection.product_ids?.length}
-      isLoading={isLoading}
-    />
-  );
 }
 
 function CollectionPreviewContent({
@@ -151,7 +74,7 @@ function CollectionPreviewContent({
           </p>
         </div>
         <Link
-          href={collection.href ?? ''}
+          href={`/collections/${collection.slug ?? ''}`}
           className='border-border/60 hover:border-accent/40 hover:bg-muted/40 inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors'
         >
           Shop collection
@@ -174,9 +97,20 @@ function CollectionPreviewContent({
 }
 
 export function CollectionPreviewRow({ collection, className }: CollectionPreviewRowProps) {
-  if (collection.collection_type === 'manual') {
-    return <ManualCollectionPreview collection={collection} className={className} />;
-  }
+  const slug = collection.slug ?? '';
+  const { data, isLoading } = useGetCollectionsSlugSlugProducts(
+    slug,
+    { limit: 4, offset: 0 },
+    { query: { enabled: Boolean(slug), staleTime: 30_000 } }
+  );
 
-  return <SmartCollectionPreview collection={collection} className={className} />;
+  return (
+    <CollectionPreviewContent
+      className={className}
+      collection={collection}
+      products={data?.data?.products ?? []}
+      total={data?.data?.total}
+      isLoading={isLoading}
+    />
+  );
 }

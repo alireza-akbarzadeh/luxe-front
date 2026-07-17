@@ -8,8 +8,9 @@ export const COLLECTION_STATUS_OPTIONS = [
 ] as const;
 
 export const COLLECTION_TYPE_OPTIONS = [
-  { label: 'Smart collection', value: 'smart' },
-  { label: 'Manual collection', value: 'manual' }
+  { label: 'Dynamic collection', value: 'dynamic' },
+  { label: 'Manual collection', value: 'manual' },
+  { label: 'Hybrid collection', value: 'hybrid' }
 ] as const;
 
 export const COLLECTION_PREVIEW_SORT_NONE = 'none' as const;
@@ -33,7 +34,22 @@ export const COLLECTION_THEME_OPTIONS = [
 ] as const;
 
 export const collectionStatusSchema = z.enum(['draft', 'active', 'inactive', 'archived']);
-export const collectionTypeSchema = z.enum(['manual', 'smart']);
+export const collectionTypeSchema = z.enum(['manual', 'dynamic', 'hybrid']);
+export const collectionSortKeySchema = z.enum([
+  'newest',
+  'rating_desc',
+  'reviews_desc',
+  'price_asc',
+  'price_desc'
+]);
+
+export const COLLECTION_SORT_KEY_OPTIONS = [
+  { label: 'Newest', value: 'newest' },
+  { label: 'Top rated', value: 'rating_desc' },
+  { label: 'Most reviewed', value: 'reviews_desc' },
+  { label: 'Price: low to high', value: 'price_asc' },
+  { label: 'Price: high to low', value: 'price_desc' }
+] as const;
 
 export const collectionFormSchema = z
   .object({
@@ -42,6 +58,7 @@ export const collectionFormSchema = z
       .string()
       .min(2, 'Title must be at least 2 characters')
       .max(255, 'Title must be at most 255 characters'),
+    subtitle: z.string().max(255, 'Subtitle must be at most 255 characters').optional(),
     slug: z
       .string()
       .min(2, 'Slug must be at least 2 characters')
@@ -65,13 +82,60 @@ export const collectionFormSchema = z
     sort_order: z.number().int().min(0).max(9999),
     theme: z.string().max(64).optional(),
     status: collectionStatusSchema,
-    collection_type: collectionTypeSchema,
+    mode: collectionTypeSchema,
     starts_at: z.string().optional(),
     ends_at: z.string().optional(),
     product_ids: z.array(z.string()),
-    preview_sort: z.string().max(64).optional(),
-    preview_is_new: z.boolean(),
-    preview_category_id: z.string()
+    sort_key: collectionSortKeySchema,
+    rule_operator: z.enum(['and']),
+    rule_category_id: z.string(),
+    rule_brand_id: z.string(),
+    rule_search: z.string().max(255).optional(),
+    rule_min_price: z.number().min(0).max(100000),
+    rule_max_price: z.number().min(0).max(100000),
+    rule_min_rating: z.number().min(0).max(5),
+    rule_is_new: z.boolean(),
+    rule_in_stock: z.boolean(),
+    rule_on_sale: z.boolean(),
+    seo_title: z.string().max(255).optional(),
+    seo_description: z.string().max(500).optional(),
+    meta_keywords: z.string().max(500).optional(),
+    og_title: z.string().max(255).optional(),
+    og_description: z.string().max(500).optional(),
+    og_image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    twitter_title: z.string().max(255).optional(),
+    twitter_description: z.string().max(500).optional(),
+    twitter_image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    canonical_url: z.string().max(2048).optional(),
+    robots_directives: z.string().max(255).optional(),
+    is_indexable: z.boolean(),
+    hero_title: z.string().max(255).optional(),
+    hero_description: z.string().max(2000).optional(),
+    desktop_image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    tablet_image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    mobile_image_url: z
+      .string()
+      .max(2048)
+      .refine((value) => value === '' || /^https?:\/\//.test(value), 'Enter a valid image URL')
+      .optional(),
+    overlay_opacity: z.number().min(0).max(1),
+    theme_variant: z.string().max(64).optional()
   })
   .superRefine((values, ctx) => {
     if (values.starts_at && values.ends_at) {
@@ -94,6 +158,7 @@ export const COLLECTION_CATEGORY_NONE = 'none' as const;
 export const collectionDefaultValues: CollectionFormValues = {
   eyebrow: '',
   title: '',
+  subtitle: '',
   slug: '',
   description: '',
   href: '/shop',
@@ -102,11 +167,38 @@ export const collectionDefaultValues: CollectionFormValues = {
   sort_order: 0,
   theme: '',
   status: 'draft',
-  collection_type: 'smart',
+  mode: 'dynamic',
   starts_at: '',
   ends_at: '',
   product_ids: [],
-  preview_sort: COLLECTION_PREVIEW_SORT_NONE,
-  preview_is_new: false,
-  preview_category_id: COLLECTION_CATEGORY_NONE
+  sort_key: 'newest',
+  rule_operator: 'and',
+  rule_category_id: COLLECTION_CATEGORY_NONE,
+  rule_brand_id: COLLECTION_CATEGORY_NONE,
+  rule_search: '',
+  rule_min_price: 0,
+  rule_max_price: 0,
+  rule_min_rating: 0,
+  rule_is_new: false,
+  rule_in_stock: true,
+  rule_on_sale: false,
+  seo_title: '',
+  seo_description: '',
+  meta_keywords: '',
+  og_title: '',
+  og_description: '',
+  og_image_url: '',
+  twitter_title: '',
+  twitter_description: '',
+  twitter_image_url: '',
+  canonical_url: '',
+  robots_directives: '',
+  is_indexable: true,
+  hero_title: '',
+  hero_description: '',
+  desktop_image_url: '',
+  tablet_image_url: '',
+  mobile_image_url: '',
+  overlay_opacity: 0.25,
+  theme_variant: ''
 };

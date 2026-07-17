@@ -15,15 +15,17 @@ import { Grid } from '@/components/ui/grid';
 import { GridItem } from '@/components/ui/grid-item';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Typography } from '@/components/ui/typography';
 import {
   COLLECTION_CATEGORY_NONE,
-  COLLECTION_PREVIEW_SORT_OPTIONS,
+  COLLECTION_SORT_KEY_OPTIONS,
   COLLECTION_STATUS_OPTIONS,
   COLLECTION_THEME_OPTIONS,
   COLLECTION_TYPE_OPTIONS,
   collectionDefaultValues,
   collectionFormSchema
 } from '@/domains/collections-admin/collection.schema';
+import { CollectionProductOverridesEditor } from '@/domains/collections-admin/components/collection-product-overrides-editor';
 import { CollectionProductPicker } from '@/domains/collections-admin/components/collection-product-picker';
 import { CollectionRulesPreview } from '@/domains/collections-admin/components/collection-rules-preview';
 import {
@@ -34,12 +36,14 @@ import {
 import { uploadCollectionImage } from '@/domains/collections-admin/lib/upload-collection-image';
 import { EntityWorkflowPanel } from '@/domains/workflows/components/entity-workflow-panel';
 import { slugify } from '@/lib/utils';
+import { useGetBrands } from '@/services/-brands-get';
 import { useGetCategories } from '@/services/-categories-get';
 import type { ModelsCategory } from '@/services/-categories-get.schemas';
 import { useGetCollectionsId } from '@/services/-collections-{id}-get';
 import { getGetCollectionsIdQueryKey } from '@/services/-collections-{id}-get';
 import { usePutCollectionsId } from '@/services/-collections-{id}-put';
 import { getGetCollectionsQueryKey } from '@/services/-collections-get';
+import type { DtoCollectionProductOverrideInput } from '@/services/-collections-get.schemas';
 import { usePostCollections } from '@/services/-collections-post';
 
 interface CollectionFormProps {
@@ -52,8 +56,10 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [productOverrides, setProductOverrides] = useState<DtoCollectionProductOverrideInput[]>([]);
 
   const { data: categoriesData } = useGetCategories({ limit: 100 });
+  const { data: brandsData } = useGetBrands({ limit: 100 });
 
   const { data: { data: collection } = {}, isLoading: isLoadingCollection } = useGetCollectionsId(
     Number(collectionId),
@@ -84,6 +90,10 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
   });
 
   const isPending = isCreating || isUpdating || isUploadingImage;
+  const effectiveProductOverrides = useMemo(
+    () => (productOverrides.length > 0 ? productOverrides : (collection?.product_overrides ?? [])),
+    [collection?.product_overrides, productOverrides]
+  );
 
   const categoryOptions = useMemo(() => {
     const options: { label: string; value: string }[] = [];
@@ -101,6 +111,15 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
     flatten(categoriesData?.data?.categories ?? []);
     return [{ label: 'All categories', value: COLLECTION_CATEGORY_NONE }, ...options];
   }, [categoriesData]);
+
+  const brandOptions = useMemo(() => {
+    const options =
+      brandsData?.data?.brands?.map((brand) => ({
+        label: brand.name ?? `Brand #${brand.id}`,
+        value: String(brand.id)
+      })) ?? [];
+    return [{ label: 'All brands', value: COLLECTION_CATEGORY_NONE }, ...options];
+  }, [brandsData]);
 
   const form = useAppForm({
     defaultValues: collectionDefaultValues,
@@ -122,11 +141,13 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
         if (isEdit && collection?.id) {
           await updateCollection({
             id: collection.id,
-            data: mapFormToUpdateCollectionRequest(value)
+            data: mapFormToUpdateCollectionRequest(value, effectiveProductOverrides)
           });
           toast.success('Collection updated successfully');
         } else {
-          await createCollection({ data: mapFormToCreateCollectionRequest(value) });
+          await createCollection({
+            data: mapFormToCreateCollectionRequest(value, effectiveProductOverrides)
+          });
           toast.success('Collection created successfully');
         }
 
@@ -150,6 +171,7 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
     try {
       const publicUrl = await uploadCollectionImage(file);
       form.setFieldValue('image_url', publicUrl);
+      form.setFieldValue('desktop_image_url', publicUrl);
       toast.success('Image uploaded');
     } catch (error) {
       toast.error('Failed to upload image', {
@@ -214,7 +236,7 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
             >
               <Flex direction='column' spacing={6}>
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Content</h3>
+                  <Typography.H3 className='text-base'>Content</Typography.H3>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
@@ -248,6 +270,18 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                         )}
                       />
                     </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='subtitle'
+                        children={(field) => (
+                          <field.TextField
+                            label='Subtitle'
+                            placeholder='Premium summer essentials'
+                            detail='Short supporting line below the title'
+                          />
+                        )}
+                      />
+                    </GridItem>
                     <GridItem>
                       <form.AppField
                         name='slug'
@@ -256,17 +290,16 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                             label='Slug'
                             placeholder='modern-essentials'
                             required
-                            detail='Used as anchor id on the collections page'
+                            detail='Permanent storefront URL segment'
                           />
                         )}
                       />
                     </GridItem>
                     <GridItem>
                       {isEdit ? (
-                        <p className='text-muted-foreground text-sm'>
-                          Status is controlled by the workflow panel above (Draft / Active /
-                          Inactive / Archived).
-                        </p>
+                        <Typography.Muted className='text-sm'>
+                          Status is controlled by the workflow panel above.
+                        </Typography.Muted>
                       ) : (
                         <form.AppField
                           name='status'
@@ -293,7 +326,7 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Presentation</h3>
+                  <Typography.H3 className='text-base'>Presentation</Typography.H3>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
@@ -309,12 +342,12 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                     </GridItem>
                     <GridItem>
                       <form.AppField
-                        name='href'
+                        name='theme_variant'
                         children={(field) => (
                           <field.TextField
-                            label='Shop link'
-                            placeholder='/shop?sortBy=newest'
-                            detail='Where the CTA button navigates'
+                            label='Theme variant'
+                            placeholder='cos-mono'
+                            detail='Editorial variant label for design treatment'
                           />
                         )}
                       />
@@ -330,7 +363,7 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                   </Grid>
 
                   <form.Subscribe
-                    selector={(state) => state.values.image_url}
+                    selector={(state) => state.values.desktop_image_url || state.values.image_url}
                     children={(imageUrl) => (
                       <Flex direction='row' spacing={4} align='start' className='flex-wrap'>
                         <Flex
@@ -380,15 +413,51 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                           </Button>
 
                           <form.AppField
-                            name='image_url'
+                            name='desktop_image_url'
                             children={(field) => (
                               <field.TextField
-                                label='Hero image URL'
+                                label='Desktop image URL'
                                 placeholder='https://…'
                                 detail='Upload an image or paste a public URL'
                               />
                             )}
                           />
+                          <Grid cols={1} gap={3} className='sm:grid-cols-2'>
+                            <GridItem>
+                              <form.AppField
+                                name='tablet_image_url'
+                                children={(field) => (
+                                  <field.TextField
+                                    label='Tablet image URL'
+                                    placeholder='https://…'
+                                  />
+                                )}
+                              />
+                            </GridItem>
+                            <GridItem>
+                              <form.AppField
+                                name='mobile_image_url'
+                                children={(field) => (
+                                  <field.TextField
+                                    label='Mobile image URL'
+                                    placeholder='https://…'
+                                  />
+                                )}
+                              />
+                            </GridItem>
+                            <GridItem className='sm:col-span-2'>
+                              <form.AppField
+                                name='overlay_opacity'
+                                children={(field) => (
+                                  <field.TextField
+                                    label='Overlay opacity'
+                                    type='number'
+                                    detail='Number between 0 and 1'
+                                  />
+                                )}
+                              />
+                            </GridItem>
+                          </Grid>
                         </Flex>
                       </Flex>
                     )}
@@ -398,17 +467,29 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Collection type</h3>
+                  <Typography.H3 className='text-base'>Mode</Typography.H3>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
-                        name='collection_type'
+                        name='mode'
                         children={(field) => (
                           <field.Select
-                            label='Type'
+                            label='Collection mode'
                             options={[...COLLECTION_TYPE_OPTIONS]}
-                            description='Smart collections use dynamic rules; manual collections pick specific products'
+                            description='Dynamic collections use rules, manual collections use curated product picks, and hybrid merges both.'
                             required
+                          />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='sort_key'
+                        children={(field) => (
+                          <field.Select
+                            label='Default sort'
+                            options={[...COLLECTION_SORT_KEY_OPTIONS]}
+                            description='Baseline ordering for dynamic product resolution'
                           />
                         )}
                       />
@@ -419,11 +500,11 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                 <Separator />
 
                 <Flex direction='column' spacing={4}>
-                  <h3 className='text-foreground text-sm font-medium'>Schedule</h3>
-                  <p className='text-muted-foreground text-sm'>
+                  <Typography.H3 className='text-base'>Schedule</Typography.H3>
+                  <Typography.Muted className='text-sm'>
                     Optional start and end dates control when an active collection appears on the
                     storefront.
-                  </p>
+                  </Typography.Muted>
                   <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                     <GridItem>
                       <form.AppField
@@ -455,72 +536,134 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                 <Separator />
 
                 <form.Subscribe
-                  selector={(state) => state.values.collection_type}
-                  children={(collectionType) =>
-                    collectionType === 'manual' ? (
+                  selector={(state) => state.values.mode}
+                  children={(mode) =>
+                    mode === 'manual' || mode === 'hybrid' ? (
                       <Flex direction='column' spacing={4}>
-                        <h3 className='text-foreground text-sm font-medium'>Manual products</h3>
-                        <p className='text-muted-foreground text-sm'>
-                          Choose the exact products shown in this collection preview.
-                        </p>
+                        <Typography.H3 className='text-base'>Manual merchandising</Typography.H3>
+                        <Typography.Muted className='text-sm'>
+                          Choose the exact products included in the collection and optionally
+                          override their storefront priority.
+                        </Typography.Muted>
                         <form.AppField
                           name='product_ids'
                           children={(field) => <CollectionProductPicker field={field} />}
                         />
+                        <form.Subscribe
+                          selector={(state) => state.values.product_ids}
+                          children={(selectedIds) => (
+                            <CollectionProductOverridesEditor
+                              selectedIds={selectedIds}
+                              overrides={effectiveProductOverrides}
+                              onChange={setProductOverrides}
+                            />
+                          )}
+                        />
                       </Flex>
                     ) : (
                       <Flex direction='column' spacing={4}>
-                        <h3 className='text-foreground text-sm font-medium'>
-                          Smart collection rules
-                        </h3>
-                        <p className='text-muted-foreground text-sm'>
-                          Dynamic product row shown under this collection on the storefront —
-                          filters apply automatically.
-                        </p>
+                        <Typography.H3 className='text-base'>Dynamic rules</Typography.H3>
+                        <Typography.Muted className='text-sm'>
+                          Build a living product set from catalog filters. These rules feed both the
+                          collection landing page and the collection previews.
+                        </Typography.Muted>
                         <Grid cols={1} gap={4} className='sm:grid-cols-2'>
                           <GridItem>
                             <form.AppField
-                              name='preview_sort'
+                              name='rule_category_id'
                               children={(field) => (
-                                <field.Select
-                                  label='Preview sort'
-                                  options={[...COLLECTION_PREVIEW_SORT_OPTIONS]}
+                                <field.Select label='Category' options={categoryOptions} />
+                              )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_brand_id'
+                              children={(field) => (
+                                <field.Select label='Brand' options={brandOptions} />
+                              )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_search'
+                              children={(field) => (
+                                <field.TextField
+                                  label='Search term'
+                                  placeholder='linen, minimal, travel…'
                                 />
                               )}
                             />
                           </GridItem>
                           <GridItem>
                             <form.AppField
-                              name='preview_category_id'
+                              name='rule_min_price'
                               children={(field) => (
-                                <field.Select label='Preview category' options={categoryOptions} />
+                                <field.TextField label='Min price' type='number' />
                               )}
                             />
                           </GridItem>
                           <GridItem>
                             <form.AppField
-                              name='preview_is_new'
+                              name='rule_max_price'
                               children={(field) => (
-                                <field.Switch
-                                  label='New products only'
-                                  description='Filter preview to new items'
-                                />
+                                <field.TextField label='Max price' type='number' />
                               )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_min_rating'
+                              children={(field) => (
+                                <field.TextField label='Min rating' type='number' />
+                              )}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_is_new'
+                              children={(field) => <field.Switch label='New products only' />}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_in_stock'
+                              children={(field) => <field.Switch label='In stock only' />}
+                            />
+                          </GridItem>
+                          <GridItem>
+                            <form.AppField
+                              name='rule_on_sale'
+                              children={(field) => <field.Switch label='On sale only' />}
                             />
                           </GridItem>
                         </Grid>
 
                         <form.Subscribe
                           selector={(state) => ({
-                            previewSort: state.values.preview_sort,
-                            previewCategoryId: state.values.preview_category_id,
-                            previewIsNew: state.values.preview_is_new
+                            sortKey: state.values.sort_key,
+                            categoryId: state.values.rule_category_id,
+                            brandId: state.values.rule_brand_id,
+                            minPrice: state.values.rule_min_price,
+                            maxPrice: state.values.rule_max_price,
+                            minRating: state.values.rule_min_rating,
+                            isNew: state.values.rule_is_new,
+                            inStock: state.values.rule_in_stock,
+                            onSale: state.values.rule_on_sale,
+                            search: state.values.rule_search
                           })}
-                          children={({ previewSort, previewCategoryId, previewIsNew }) => (
+                          children={(preview) => (
                             <CollectionRulesPreview
-                              previewSort={previewSort}
-                              previewCategoryId={previewCategoryId}
-                              previewIsNew={previewIsNew}
+                              sortKey={preview.sortKey}
+                              categoryId={preview.categoryId}
+                              brandId={preview.brandId}
+                              minPrice={preview.minPrice}
+                              maxPrice={preview.maxPrice}
+                              minRating={preview.minRating}
+                              isNew={preview.isNew}
+                              inStock={preview.inStock}
+                              onSale={preview.onSale}
+                              search={preview.search}
                             />
                           )}
                         />
@@ -528,6 +671,134 @@ export function CollectionForm({ isEdit = false, collectionId }: CollectionFormP
                     )
                   }
                 />
+
+                <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <Typography.H3 className='text-base'>SEO</Typography.H3>
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
+                      <form.AppField
+                        name='seo_title'
+                        children={(field) => <field.TextField label='SEO title' />}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='canonical_url'
+                        children={(field) => (
+                          <field.TextField label='Canonical URL' placeholder='https://…' />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='seo_description'
+                        children={(field) => <field.TextArea label='SEO description' rows={3} />}
+                      />
+                    </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='meta_keywords'
+                        children={(field) => (
+                          <field.TextField
+                            label='Meta keywords'
+                            placeholder='summer, women, dresses'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='is_indexable'
+                        children={(field) => <field.Switch label='Allow indexing' />}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='robots_directives'
+                        children={(field) => (
+                          <field.TextField
+                            label='Robots directives'
+                            placeholder='max-image-preview:large'
+                          />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='og_title'
+                        children={(field) => <field.TextField label='Open Graph title' />}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='og_image_url'
+                        children={(field) => (
+                          <field.TextField label='Open Graph image URL' placeholder='https://…' />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='og_description'
+                        children={(field) => (
+                          <field.TextArea label='Open Graph description' rows={3} />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='twitter_title'
+                        children={(field) => <field.TextField label='Twitter title' />}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='twitter_image_url'
+                        children={(field) => (
+                          <field.TextField label='Twitter image URL' placeholder='https://…' />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='twitter_description'
+                        children={(field) => (
+                          <field.TextArea label='Twitter description' rows={3} />
+                        )}
+                      />
+                    </GridItem>
+                  </Grid>
+                </Flex>
+
+                <Separator />
+
+                <Flex direction='column' spacing={4}>
+                  <Typography.H3 className='text-base'>Hero Copy</Typography.H3>
+                  <Grid cols={1} gap={4} className='sm:grid-cols-2'>
+                    <GridItem>
+                      <form.AppField
+                        name='hero_title'
+                        children={(field) => <field.TextField label='Hero title' />}
+                      />
+                    </GridItem>
+                    <GridItem>
+                      <form.AppField
+                        name='image_url'
+                        children={(field) => (
+                          <field.TextField label='Card image URL' placeholder='https://…' />
+                        )}
+                      />
+                    </GridItem>
+                    <GridItem className='sm:col-span-2'>
+                      <form.AppField
+                        name='hero_description'
+                        children={(field) => <field.TextArea label='Hero description' rows={3} />}
+                      />
+                    </GridItem>
+                  </Grid>
+                </Flex>
 
                 <Flex direction='row' justify='between' spacing={3} className='flex-wrap'>
                   <Button
