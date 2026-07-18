@@ -33,27 +33,19 @@ export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export const walletDepositSchema = z.object({
   amount: z
-    .string()
-    .trim()
-    .min(1, 'Amount is required')
-    .refine((value) => {
-      const parsed = Number(value);
-      return !Number.isNaN(parsed) && parsed > 0;
-    }, 'Enter a valid amount')
-    .refine((value) => Number(value) <= 50_000, 'Maximum deposit is $50,000')
+    .number()
+    .int('Amount must be a whole number (no cents)')
+    .positive('Enter a valid amount')
+    .max(50_000, 'Maximum deposit is $50,000')
 });
 
 export type WalletDepositValues = z.infer<typeof walletDepositSchema>;
 
 export const walletWithdrawSchema = z.object({
   amount: z
-    .string()
-    .trim()
-    .min(1, 'Amount is required')
-    .refine((value) => {
-      const parsed = Number(value);
-      return !Number.isNaN(parsed) && parsed > 0;
-    }, 'Enter a valid amount'),
+    .number()
+    .int('Amount must be a whole number (no cents)')
+    .positive('Enter a valid amount'),
   description: z.string().max(200, 'Description is too long').optional()
 });
 

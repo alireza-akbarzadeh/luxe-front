@@ -11,15 +11,13 @@ import { Button } from '~/src/components/ui/button';
 import { usePostWalletDeposit } from '~/src/services/-wallet-deposit-post';
 import { getGetWalletQueryKey } from '~/src/services/-wallet-get';
 
-import { walletDepositSchema, type WalletDepositValues } from '../account.schema';
-import { formatWalletAmount, parseWalletNumber } from '../lib/wallet-utils';
+import { walletDepositSchema } from '../account.schema';
+import { formatWalletAmount } from '../lib/wallet-utils';
 
 interface WalletDepositDialogProps {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
-
-const defaultValues: WalletDepositValues = { amount: '' };
 
 export function WalletDepositDialog({ open, onOpenChange }: WalletDepositDialogProps) {
   const queryClient = useQueryClient();
@@ -28,13 +26,15 @@ export function WalletDepositDialog({ open, onOpenChange }: WalletDepositDialogP
   const tCommon = useTranslations('account.common');
 
   const form = useAppForm({
-    defaultValues,
+    defaultValues: {
+      amount: null as unknown as number
+    },
     validators: {
       onSubmit: walletDepositSchema
     },
     onSubmit: async ({ value }) => {
       try {
-        const response = await mutateAsync({ data: { amount: Number(value.amount) } });
+        const response = await mutateAsync({ data: { amount: Math.trunc(value.amount) } });
         const deposit = response.data;
 
         if (deposit?.checkout_url && deposit.status === 'pending') {
@@ -80,19 +80,11 @@ export function WalletDepositDialog({ open, onOpenChange }: WalletDepositDialogP
           <form.AppField name='amount'>
             {(field) => (
               <>
-                <field.TextField
-                  label={t('depositAmount')}
-                  type='number'
-                  min={0}
-                  step='0.01'
-                  placeholder='1,000.00'
-                  inputMode='decimal'
-                />
-                {parseWalletNumber(field.state.value) != null &&
-                parseWalletNumber(field.state.value)! > 0 ? (
+                <field.PriceField label={t('depositAmount')} placeholder='1,000' />
+                {typeof field.state.value === 'number' && field.state.value > 0 ? (
                   <p className='text-muted-foreground mt-2 text-sm'>
                     {t('depositPreview', {
-                      amount: formatWalletAmount(parseWalletNumber(field.state.value)!)
+                      amount: formatWalletAmount(field.state.value)
                     })}
                   </p>
                 ) : null}

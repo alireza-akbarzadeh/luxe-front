@@ -1,39 +1,31 @@
 'use client';
 
-import { IconCheck, IconChevronDown, IconUser } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { IconUser } from '@tabler/icons-react';
 import { useDeferredValue, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-
-import {
-  getGiftCardRecipientLookup,
-  type GiftRecipientLookup
-} from '../lib/gift-card-transfer-api';
+import { AsyncSearchCombobox } from '@/components/ui/async-search-combobox';
+import { useGetGiftCardsRecipientLookup } from '@/services/-gift-cards-recipient-lookup-get';
+import type { DtoGiftRecipientLookupResponse } from '@/services/-gift-cards-recipient-lookup-get.schemas';
 
 type GiftCardRecipientPickerProps = {
   value: string;
-  onChange: (user: GiftRecipientLookup | null) => void;
+  onChange: (user: DtoGiftRecipientLookupResponse | null) => void;
   label?: string;
   placeholder?: string;
   emptyLabel?: string;
   searchingLabel?: string;
 };
 
-function formatRecipientLabel(user: GiftRecipientLookup) {
+function formatRecipientLabel(user: DtoGiftRecipientLookupResponse) {
+  const name = user.display_name?.trim() || `User #${user.id ?? ''}`;
   const contact = user.masked_email ?? user.masked_phone;
-  if (contact) return `${user.display_name} · ${contact}`;
-  return user.display_name;
+  if (contact) return `${name} · ${contact}`;
+  return name;
+}
+
+function recipientDescription(user: DtoGiftRecipientLookupResponse) {
+  const parts = [user.masked_email, user.masked_phone].filter(Boolean);
+  return parts.length > 0 ? parts.join(' · ') : undefined;
 }
 
 /** Search Luxe members by email or phone when gifting a card to another user. */
@@ -45,89 +37,52 @@ export function GiftCardRecipientPicker({
   emptyLabel = 'No members found',
   searchingLabel = 'Searching…'
 }: GiftCardRecipientPickerProps) {
-  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
   const deferredSearch = useDeferredValue(search.trim());
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['gift-card-recipient-lookup', deferredSearch],
-    queryFn: () => getGiftCardRecipientLookup(deferredSearch),
-    enabled: deferredSearch.length >= 3,
-    staleTime: 30_000
-  });
-
-  const users = data?.data ?? [];
-  const selectedUser = users.find((user) => String(user.id) === value);
+  const { data, isFetching } = useGetGiftCardsRecipientLookup(
+    { q: deferredSearch },
+    {
+      query: {
+        // Load up to 10 members as soon as the popover opens (empty q); refine as user types
+        enabled: menuOpen,
+        staleTime: 30_000
+      }
+    }
+  );
 
   return (
-    <div className='space-y-2'>
-      {label ? <p className='text-sm font-medium'>{label}</p> : null}
-
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type='button'
-            variant='outline'
-            role='combobox'
-            className={cn(
-              'border-border/80 h-11 w-full justify-between rounded-xl px-4',
-              value ? 'text-foreground' : 'text-muted-foreground'
-            )}
-          >
-            <span className='flex items-center gap-2 truncate'>
-              <IconUser className='text-accent size-4 shrink-0' />
-              {selectedUser
-                ? formatRecipientLabel(selectedUser)
-                : value
-                  ? `User #${value}`
-                  : placeholder}
+    <AsyncSearchCombobox
+      value={value}
+      options={data?.data ?? []}
+      getOptionValue={(user) => String(user.id ?? '')}
+      getOptionLabel={formatRecipientLabel}
+      onSelect={(user) => onChange(user)}
+      search={search}
+      onSearchChange={setSearch}
+      onOpenChange={setMenuOpen}
+      isFetching={isFetching}
+      label={label}
+      placeholder={placeholder}
+      emptyLabel={emptyLabel}
+      searchingLabel={searchingLabel}
+      icon={IconUser}
+      valueFallbackLabel={(id) => `User #${id}`}
+      renderOption={(user) => {
+        const id = String(user.id ?? '');
+        const description = recipientDescription(user);
+        return (
+          <div className='flex flex-col'>
+            <span className='text-sm font-medium'>
+              {user.display_name?.trim() || `User #${id}`}
             </span>
-            <IconChevronDown className='size-4 shrink-0 opacity-50' />
-          </Button>
-        </PopoverTrigger>
-
-        <PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' align='start'>
-          <Command shouldFilter={false}>
-            <CommandInput placeholder={placeholder} value={search} onValueChange={setSearch} />
-            <CommandList>
-              <CommandEmpty>
-                {deferredSearch.length < 3
-                  ? 'Type at least 3 characters'
-                  : isFetching
-                    ? searchingLabel
-                    : emptyLabel}
-              </CommandEmpty>
-              <CommandGroup>
-                {users.map((user) => {
-                  const id = String(user.id);
-                  const isSelected = value === id;
-
-                  return (
-                    <CommandItem
-                      key={id}
-                      value={id}
-                      onSelect={() => {
-                        onChange(user);
-                        setOpen(false);
-                      }}
-                    >
-                      <IconCheck
-                        className={cn('mr-2 size-4', isSelected ? 'opacity-100' : 'opacity-0')}
-                      />
-                      <div className='flex flex-col'>
-                        <span className='text-sm font-medium'>{user.display_name}</span>
-                        <span className='text-muted-foreground text-xs'>
-                          {[user.masked_email, user.masked_phone].filter(Boolean).join(' · ')}
-                        </span>
-                      </div>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+            {description ? (
+              <span className='text-muted-foreground text-xs'>{description}</span>
+            ) : null}
+          </div>
+        );
+      }}
+    />
   );
 }

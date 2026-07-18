@@ -2573,7 +2573,36 @@
     "breadcrumb": "Gift cards",
     "tabs": {
       "purchase": "Purchase",
+      "mine": "My cards",
       "redeem": "Redeem"
+    },
+    "myCards": {
+      "title": "Your gift cards",
+      "subtitle": "Active balances you can spend at checkout, plus cards you’ve sent.",
+      "openAccount": "Open in account",
+      "activeSummary": "{received} active received · {sent} active sent",
+      "activeLabel": "Active balance",
+      "receivedTab": "Received",
+      "sentTab": "Sent",
+      "receivedEmptyTitle": "No gift cards received yet",
+      "receivedEmptyDescription": "When someone sends you a Luxe gift card, it will show up here after payment.",
+      "sentEmptyTitle": "No gift cards sent yet",
+      "sentEmptyDescription": "Purchase a gift card and pay with Stripe — it appears here once payment succeeds.",
+      "buyCta": "Buy a gift card",
+      "signInTitle": "Sign in to see your cards",
+      "signInDescription": "Gift cards are linked to your Luxe account so you can track balances and transfers.",
+      "signInCta": "Sign in",
+      "toRecipient": "To {name}",
+      "fromSender": "From {name}",
+      "createdOn": "Created {date}",
+      "expiresOn": "Expires {date}",
+      "claimCard": "Claim to my account",
+      "claiming": "Claiming…",
+      "claimSuccess": "Gift card claimed",
+      "claimFailed": "Could not claim this gift card",
+      "transfer": "Give to a member",
+      "loadError": "Could not load gift cards",
+      "retry": "Try again"
     },
     "finderPromo": {
       "title": "Not sure what to buy?",
@@ -2586,6 +2615,12 @@
       "signInDescription": "Create or sign in to your Luxe account so we can send your receipt and track sent gift cards.",
       "signInCta": "Sign in to continue",
       "selectAmount": "Select amount",
+      "amountTabs": {
+        "preset": "Suggested",
+        "custom": "Custom"
+      },
+      "customAmount": "Your amount",
+      "customAmountHint": "Enter any amount between {min} and {max}",
       "senderName": "Your name",
       "senderNamePlaceholder": "Alex Morgan",
       "recipientName": "Recipient name",
@@ -2599,7 +2634,8 @@
       "submit": "Continue to pay {amount}",
       "success": "Gift card created — {amount} sent to your recipient.",
       "paymentRequired": "Payment checkout could not be started. Ensure Stripe is enabled and try again.",
-      "error": "Could not start gift card purchase. Please try again."
+      "error": "Could not start gift card purchase. Please try again.",
+      "validationError": "Please fix the highlighted fields and try again."
     },
     "redeem": {
       "intro": "Enter your gift card code at checkout in the payment step, or manage cards in your account.",
@@ -2613,7 +2649,7 @@
     },
     "stripe": {
       "confirming": "Confirming your payment…",
-      "success": "Gift card purchased successfully!",
+      "success": "Gift card purchased — check your notifications and My cards list.",
       "cancelled": "Payment cancelled — your gift card was not charged.",
       "confirmError": "We couldn't confirm payment yet. Check your account or try again."
     }

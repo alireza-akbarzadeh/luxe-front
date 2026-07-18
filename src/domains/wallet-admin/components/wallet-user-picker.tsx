@@ -1,19 +1,9 @@
 'use client';
 
-import { IconCheck, IconChevronDown, IconUser } from '@tabler/icons-react';
-import { useDeferredValue, useMemo, useState } from 'react';
+import { IconUser } from '@tabler/icons-react';
+import { useDeferredValue, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { AsyncSearchCombobox } from '@/components/ui/async-search-combobox';
 import { useGetAdminUsers } from '@/services/-admin-users-get';
 import type { DtoAdminUserResponse } from '@/services/-admin-users-get.schemas';
 
@@ -31,8 +21,8 @@ function formatUserLabel(user: DtoAdminUserResponse) {
   return user.email ?? name ?? `User #${user.id}`;
 }
 
+/** Admin wallet adjust — search customers by name or email. */
 export function WalletUserPicker({ value, onChange, label, detail, error }: WalletUserPickerProps) {
-  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search.trim());
 
@@ -42,83 +32,28 @@ export function WalletUserPicker({ value, onChange, label, detail, error }: Wall
     search: deferredSearch || undefined
   });
 
-  const users = data?.data?.users ?? [];
-
-  const selectedUser = useMemo(() => {
-    if (!value) return undefined;
-    return users.find((user) => String(user.id) === value);
-  }, [users, value]);
+  const users = (data?.data?.users ?? []).filter((user) => user.id != null);
 
   return (
-    <div className='space-y-2'>
-      {label ? <p className='text-sm font-medium'>{label}</p> : null}
-
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            type='button'
-            variant='outline'
-            role='combobox'
-            className={cn(
-              'h-11 w-full justify-between px-4',
-              value ? 'text-foreground' : 'text-muted-foreground',
-              error && 'border-destructive'
-            )}
-          >
-            <span className='flex items-center gap-2 truncate'>
-              <IconUser className='size-4 shrink-0 opacity-60' />
-              {selectedUser
-                ? formatUserLabel(selectedUser)
-                : value
-                  ? `User #${value}`
-                  : 'Search by name or email…'}
-            </span>
-            <IconChevronDown className='size-4 shrink-0 opacity-50' />
-          </Button>
-        </PopoverTrigger>
-
-        <PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' align='start'>
-          <Command shouldFilter={false}>
-            <CommandInput
-              placeholder='Search customers…'
-              value={search}
-              onValueChange={setSearch}
-            />
-            <CommandList>
-              <CommandEmpty>{isFetching ? 'Searching…' : 'No customers found'}</CommandEmpty>
-              <CommandGroup>
-                {users.map((user) => {
-                  if (!user.id) return null;
-                  const id = String(user.id);
-                  const isSelected = value === id;
-
-                  return (
-                    <CommandItem
-                      key={id}
-                      value={id}
-                      onSelect={() => {
-                        onChange(id);
-                        setOpen(false);
-                      }}
-                    >
-                      <IconCheck
-                        className={cn('mr-2 size-4', isSelected ? 'opacity-100' : 'opacity-0')}
-                      />
-                      <div className='flex flex-col'>
-                        <span className='text-sm font-medium'>{formatUserLabel(user)}</span>
-                        <span className='text-muted-foreground text-xs'>ID {user.id}</span>
-                      </div>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-
-      {detail ? <p className='text-muted-foreground text-xs'>{detail}</p> : null}
-      {error ? <p className='text-destructive text-xs'>{error}</p> : null}
-    </div>
+    <AsyncSearchCombobox
+      value={value}
+      options={users}
+      getOptionValue={(user) => String(user.id)}
+      getOptionLabel={formatUserLabel}
+      getOptionDescription={(user) => (user.id != null ? `ID ${user.id}` : undefined)}
+      onSelect={(user) => onChange(String(user.id))}
+      search={search}
+      onSearchChange={setSearch}
+      isFetching={isFetching}
+      label={label}
+      detail={detail}
+      error={error}
+      placeholder='Search by name or email…'
+      searchPlaceholder='Search customers…'
+      emptyLabel='No customers found'
+      searchingLabel='Searching…'
+      icon={IconUser}
+      valueFallbackLabel={(id) => `User #${id}`}
+    />
   );
 }

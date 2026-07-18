@@ -61,10 +61,11 @@ export function mapHomeProductItem(item: DtoHomeProductItem) {
 }
 
 export function formatPrice(value?: number, locale: Locale = 'en'): string {
-  if (value === undefined || Number.isNaN(value)) {
+  if (value === undefined || value === null || Number.isNaN(value)) {
     return formatLocaleCurrency(0, locale);
   }
-  return formatLocaleCurrency(value, locale);
+  // Gift cards and storefront labels use whole dollars — never show cents.
+  return formatLocaleCurrency(Math.trunc(value), locale);
 }
 
 /** Break out of parent padding for full-bleed sections */

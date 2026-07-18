@@ -18,12 +18,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/typography';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { usePostGiftCardsCodeTransfer } from '@/services/-gift-cards-{code}-transfer-post';
 import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import { getGetGiftCardsReceivedQueryKey } from '@/services/-gift-cards-received-get';
+import type { DtoGiftRecipientLookupResponse } from '@/services/-gift-cards-recipient-lookup-get.schemas';
 import { getGetGiftCardsSentQueryKey } from '@/services/-gift-cards-sent-get';
 import { AppDialog } from '~/src/components/app-dialog';
 
-import { type GiftRecipientLookup, postGiftCardTransfer } from '../lib/gift-card-transfer-api';
 import { GiftCardRecipientPicker } from './gift-card-recipient-picker';
 
 type GiftCardTransferDialogProps = {
@@ -36,9 +37,9 @@ type GiftCardTransferDialogProps = {
 export function GiftCardTransferDialog({ card, open, onOpenChange }: GiftCardTransferDialogProps) {
   const t = useTranslations('account.giftCards.transfer');
   const queryClient = useQueryClient();
-  const [selectedUser, setSelectedUser] = useState<GiftRecipientLookup | null>(null);
+  const { mutateAsync: transferGiftCard, isPending: isSubmitting } = usePostGiftCardsCodeTransfer();
+  const [selectedUser, setSelectedUser] = useState<DtoGiftRecipientLookupResponse | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const balance = card?.balance ?? card?.initial_amount ?? 0;
 
@@ -53,15 +54,17 @@ export function GiftCardTransferDialog({ card, open, onOpenChange }: GiftCardTra
   };
 
   const handleTransfer = async () => {
-    if (!card?.code || !selectedUser) return;
-    setIsSubmitting(true);
+    if (!card?.code || selectedUser?.id == null) return;
     try {
-      await postGiftCardTransfer(card.code, selectedUser.id);
+      await transferGiftCard({
+        code: card.code,
+        data: { recipient_user_id: selectedUser.id }
+      });
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: getGetGiftCardsSentQueryKey() }),
         queryClient.invalidateQueries({ queryKey: getGetGiftCardsReceivedQueryKey() })
       ]);
-      toast.success(t('success', { name: selectedUser.display_name }));
+      toast.success(t('success', { name: selectedUser.display_name ?? '' }));
       handleClose(false);
     } catch (error) {
       toast.error(
@@ -69,7 +72,6 @@ export function GiftCardTransferDialog({ card, open, onOpenChange }: GiftCardTra
           t('error')
       );
     } finally {
-      setIsSubmitting(false);
       setConfirmOpen(false);
     }
   };
@@ -82,31 +84,33 @@ export function GiftCardTransferDialog({ card, open, onOpenChange }: GiftCardTra
         title={t('title')}
         description={t('description')}
       >
-        {card ? (
-          <div className='bg-muted/40 border-border/60 space-y-1 rounded-xl border p-4'>
-            <Text className='font-semibold tabular-nums'>{formatPrice(balance)}</Text>
-            <Text variant='muted' className='font-mono text-xs'>
-              {card.code}
-            </Text>
-          </div>
-        ) : null}
+        <div className='space-y-3'>
+          {card ? (
+            <div className='bg-muted/40 border-border/60 space-y-1 rounded-xl border p-4'>
+              <Text className='font-semibold tabular-nums'>{formatPrice(balance)}</Text>
+              <Text variant='muted' className='font-mono text-xs'>
+                {card.code}
+              </Text>
+            </div>
+          ) : null}
 
-        <GiftCardRecipientPicker
-          label={t('searchLabel')}
-          placeholder={t('searchPlaceholder')}
-          emptyLabel={t('searchEmpty')}
-          searchingLabel={t('searching')}
-          value={selectedUser ? String(selectedUser.id) : ''}
-          onChange={setSelectedUser}
-        />
+          <GiftCardRecipientPicker
+            label={t('searchLabel')}
+            placeholder={t('searchPlaceholder')}
+            emptyLabel={t('searchEmpty')}
+            searchingLabel={t('searching')}
+            value={selectedUser?.id != null ? String(selectedUser.id) : ''}
+            onChange={setSelectedUser}
+          />
 
-        <Button
-          className='w-full rounded-full'
-          disabled={!selectedUser}
-          onClick={() => setConfirmOpen(true)}
-        >
-          {t('continue')}
-        </Button>
+          <Button
+            className='w-full rounded-full'
+            disabled={!selectedUser?.id}
+            onClick={() => setConfirmOpen(true)}
+          >
+            {t('continue')}
+          </Button>
+        </div>
       </AppDialog>
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>

@@ -11,6 +11,7 @@ import { FormRoot } from './form-root';
 import { InputPassword } from './input-password';
 import { InputPhone } from './input-phone';
 import { MultiSelect } from './multi-select';
+import { PriceField } from './price-field';
 import { SelectController } from './select';
 import { SubscribeButton } from './subscribe-button';
 import { Switch } from './switch';
@@ -23,6 +24,7 @@ export const { useAppForm, extendForm, useTypedAppFormContext, withFieldGroup, w
     fieldComponents: {
       TextField,
       NumberField,
+      PriceField,
       TextArea,
       Switch,
       Checkbox,

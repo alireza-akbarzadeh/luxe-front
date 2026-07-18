@@ -1,0 +1,163 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit configuration for luxe-front
+# Next.js 16 · React 19 · TypeScript · Tailwind v4 · TanStack · Orval · Playwright/Vitest
+# Docs: https://docs.coderabbit.ai/reference/yaml-template
+
+language: en-US
+early_access: false
+tone_instructions: >-
+  Be concise and technical. Focus on correctness, React 19 / Next.js App Router
+  pitfalls, accessibility, and type safety. Skip nitpicks already handled by
+  ESLint or Prettier.
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: '@coderabbitai summary'
+  auto_title_placeholder: '@coderabbitai'
+  review_status: true
+  commit_status: true
+  poem: false
+  collapse_walkthrough: false
+  changed_files_summary: true
+  sequence_diagrams: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  suggested_reviewers: true
+  abort_on_close: true
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+    ignore_title_keywords:
+      - 'wip'
+      - '[skip ci]'
+
+  # Files CodeRabbit should not review (generated, lockfiles, assets, build output)
+  path_filters:
+    - '!**/pnpm-lock.yaml'
+    - '!**/package-lock.json'
+    - '!**/yarn.lock'
+    - '!**/.next/**'
+    - '!**/node_modules/**'
+    - '!**/dist/**'
+    - '!**/build/**'
+    - '!**/coverage/**'
+    - '!**/playwright-report/**'
+    - '!**/test-results/**'
+    - '!**/*.min.js'
+    - '!**/*.min.css'
+    # Orval-generated API client & types are machine-generated — skip review
+    - '!src/services/**/*.gen.ts'
+    - '!src/services/**/generated/**'
+    - '!**/*.generated.ts'
+    # Assets / fonts / lock artifacts
+    - '!**/*.svg'
+    - '!**/*.png'
+    - '!**/*.jpg'
+    - '!**/*.ico'
+    - '!**/*.woff2'
+    - '!public/**'
+
+  # Targeted, path-scoped review guidance
+  path_instructions:
+    - path: 'src/**/*.{ts,tsx}'
+      instructions: >-
+        Enforce strict TypeScript: no `any`, no non-null assertions without
+        justification, prefer `type-fest` utilities and `zod` schemas for
+        runtime validation. Flag unsafe casts and untyped API responses.
+    - path: '**/*.tsx'
+      instructions: >-
+        This is a React 19 + Next.js 16 App Router codebase using the React
+        Compiler (babel-plugin-react-compiler). Do NOT recommend manual
+        useMemo/useCallback/React.memo — the compiler handles memoization.
+        Verify Server vs Client Component boundaries: only add `'use client'`
+        when hooks, event handlers, or browser APIs are used. Flag async client
+        components and hooks called conditionally.
+    - path: 'src/app/**'
+      instructions: >-
+        App Router files. Check that `page.tsx`/`layout.tsx` server components
+        don't import client-only code, that metadata is typed, loading/error
+        boundaries exist for async segments, and dynamic APIs (cookies, headers,
+        params) are awaited per Next.js 16.
+    - path: '**/*.{ts,tsx}'
+      instructions: >-
+        Data fetching uses TanStack Query v5 — verify query keys are stable and
+        typed, mutations invalidate the right keys, and no fetching happens in
+        render. Forms use TanStack React Form with zod validation; check schema
+        and form field wiring. Server state must not be duplicated in zustand.
+    - path: '**/*.{css,scss}'
+      instructions: >-
+        Tailwind CSS v4 project. Prefer utility classes and design tokens over
+        custom CSS. Flag hardcoded colors/spacing that should use theme tokens.
+    - path: '**/*.{test,spec}.{ts,tsx}'
+      instructions: >-
+        Unit tests use Vitest + Testing Library. Prefer role-based queries,
+        avoid testing implementation details, and assert on user-visible
+        behavior. Ensure async assertions use findBy/waitFor.
+    - path: 'e2e/**'
+      instructions: >-
+        Playwright end-to-end tests. Prefer role/label locators over CSS
+        selectors, avoid hardcoded waits (use auto-waiting/web-first
+        assertions), and keep @smoke/@auth/@integration tags accurate.
+    - path: '**/*.{ts,tsx}'
+      instructions: >-
+        Accessibility matters (eslint-plugin-jsx-a11y is enabled). Flag missing
+        alt text, unlabeled interactive elements, non-semantic click handlers,
+        and missing keyboard support. Radix UI primitives should keep their
+        accessible props intact.
+
+  # Static analysis / linters CodeRabbit runs alongside its own review
+  tools:
+    eslint:
+      enabled: true
+    biome:
+      enabled: false
+    gitleaks:
+      enabled: true
+    actionlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    semgrep:
+      enabled: true
+    checkov:
+      enabled: false
+
+  finishing_touches:
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: true
+
+chat:
+  auto_reply: true
+  integrations:
+    jira:
+      usage: auto
+    linear:
+      usage: auto
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
+  pull_requests:
+    scope: auto
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - '**/CLAUDE.md'
+      - '**/.cursor/rules/**'
+      - '**/eslint.config.*'

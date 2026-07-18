@@ -2464,7 +2464,36 @@
     "breadcrumb": "Tarjetas regalo",
     "tabs": {
       "purchase": "Comprar",
+      "mine": "Mis tarjetas",
       "redeem": "Canjear"
+    },
+    "myCards": {
+      "title": "Tus tarjetas regalo",
+      "subtitle": "Saldos activos para el checkout y tarjetas que has enviado.",
+      "openAccount": "Abrir en la cuenta",
+      "activeSummary": "{received} recibidas activas · {sent} enviadas activas",
+      "activeLabel": "Saldo activo",
+      "receivedTab": "Recibidas",
+      "sentTab": "Enviadas",
+      "receivedEmptyTitle": "Aún no has recibido tarjetas",
+      "receivedEmptyDescription": "Cuando alguien te envíe una tarjeta Luxe, aparecerá aquí tras el pago.",
+      "sentEmptyTitle": "Aún no has enviado tarjetas",
+      "sentEmptyDescription": "Compra una tarjeta y paga con Stripe: aparecerá aquí cuando el pago se confirme.",
+      "buyCta": "Comprar tarjeta",
+      "signInTitle": "Inicia sesión para ver tus tarjetas",
+      "signInDescription": "Las tarjetas están vinculadas a tu cuenta Luxe para seguir saldos y transferencias.",
+      "signInCta": "Iniciar sesión",
+      "toRecipient": "Para {name}",
+      "fromSender": "De {name}",
+      "createdOn": "Creada {date}",
+      "expiresOn": "Caduca {date}",
+      "claimCard": "Reclamar en mi cuenta",
+      "claiming": "Reclamando…",
+      "claimSuccess": "Tarjeta reclamada",
+      "claimFailed": "No se pudo reclamar la tarjeta",
+      "transfer": "Dar a un miembro",
+      "loadError": "No se pudieron cargar las tarjetas",
+      "retry": "Reintentar"
     },
     "finderPromo": {
       "title": "¿No sabes qué regalar?",
@@ -2477,6 +2506,12 @@
       "signInDescription": "Entra en tu cuenta Luxe para el recibo y el seguimiento de tarjetas enviadas.",
       "signInCta": "Iniciar sesión",
       "selectAmount": "Seleccionar importe",
+      "amountTabs": {
+        "preset": "Sugeridos",
+        "custom": "Personalizado"
+      },
+      "customAmount": "Tu importe",
+      "customAmountHint": "Introduce un importe entre {min} y {max}",
       "senderName": "Tu nombre",
       "senderNamePlaceholder": "Alex Morgan",
       "recipientName": "Nombre del destinatario",
@@ -2490,7 +2525,8 @@
       "submit": "Continuar para pagar {amount}",
       "success": "Tarjeta creada — {amount} enviado al destinatario.",
       "paymentRequired": "No se pudo iniciar el pago. Activa Stripe e inténtalo de nuevo.",
-      "error": "No se pudo iniciar la compra. Inténtalo de nuevo."
+      "error": "No se pudo iniciar la compra. Inténtalo de nuevo.",
+      "validationError": "Corrige los campos marcados e inténtalo de nuevo."
     },
     "redeem": {
       "intro": "Introduce el código al pagar en el checkout o gestiona tarjetas en tu cuenta.",
@@ -2504,7 +2540,7 @@
     },
     "stripe": {
       "confirming": "Confirmando tu pago…",
-      "success": "¡Tarjeta regalo comprada con éxito!",
+      "success": "¡Tarjeta comprada — revisa notificaciones y Mis tarjetas!",
       "cancelled": "Pago cancelado — no se ha cobrado nada.",
       "confirmError": "No pudimos confirmar el pago. Revisa tu cuenta o inténtalo de nuevo."
     }

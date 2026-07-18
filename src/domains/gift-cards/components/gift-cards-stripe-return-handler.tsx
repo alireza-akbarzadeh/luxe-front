@@ -1,6 +1,7 @@
 'use client';
 
 import { IconLoader2 } from '@tabler/icons-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -12,17 +13,24 @@ import { Flex } from '@/components/ui/flex';
 import { Text } from '@/components/ui/typography';
 import { extractErrorMessage } from '@/lib/api/api-utils';
 import type { ApiErrorResponse } from '@/lib/api/type';
-
-import { postGiftCardsConfirmStripe } from '../lib/confirm-gift-card-stripe';
+import { postGiftCardsConfirmStripe } from '@/services/-gift-cards-confirm-stripe-post';
+import { getGetGiftCardsReceivedQueryKey } from '@/services/-gift-cards-received-get';
+import { getGetGiftCardsSentQueryKey } from '@/services/-gift-cards-sent-get';
 
 function getStripeSessionId(searchParams: URLSearchParams) {
   return searchParams.get('session_id')?.trim() ?? '';
 }
 
+type GiftCardsStripeReturnHandlerProps = {
+  /** Called after payment is confirmed so the hub can open the My cards tab. */
+  onSuccess?: () => void;
+};
+
 /** Confirms Stripe gift card payment on return from checkout. */
-export function GiftCardsStripeReturnHandler() {
+export function GiftCardsStripeReturnHandler({ onSuccess }: GiftCardsStripeReturnHandlerProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const t = useTranslations('giftCardsPage.stripe');
   const handledSessionRef = useRef<string | null>(null);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -50,9 +58,14 @@ export function GiftCardsStripeReturnHandler() {
 
     const confirm = async () => {
       try {
-        const result = await postGiftCardsConfirmStripe(sessionId);
+        const result = await postGiftCardsConfirmStripe({ session_id: sessionId });
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: getGetGiftCardsSentQueryKey() }),
+          queryClient.invalidateQueries({ queryKey: getGetGiftCardsReceivedQueryKey() })
+        ]);
         toast.success(result.message ?? t('success'));
-        router.replace('/account?tab=giftCards');
+        onSuccess?.();
+        router.replace('/gift-cards?tab=mine');
       } catch (error: unknown) {
         const message =
           error instanceof AxiosError
@@ -66,7 +79,7 @@ export function GiftCardsStripeReturnHandler() {
     };
 
     void confirm();
-  }, [router, searchParams, t]);
+  }, [onSuccess, queryClient, router, searchParams, t]);
 
   if (!isConfirming) {
     return null;

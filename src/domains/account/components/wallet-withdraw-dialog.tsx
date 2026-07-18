@@ -11,16 +11,14 @@ import { Button } from '~/src/components/ui/button';
 import { getGetWalletQueryKey } from '~/src/services/-wallet-get';
 import { usePostWalletWithdraw } from '~/src/services/-wallet-withdraw-post';
 
-import { walletWithdrawSchema, type WalletWithdrawValues } from '../account.schema';
-import { formatWalletAmount, parseWalletNumber } from '../lib/wallet-utils';
+import { walletWithdrawSchema } from '../account.schema';
+import { formatWalletAmount } from '../lib/wallet-utils';
 
 interface WalletWithdrawDialogProps {
   open: boolean;
   onOpenChange: Dispatch<SetStateAction<boolean>>;
   availableBalance: number;
 }
-
-const defaultValues: WalletWithdrawValues = { amount: '', description: '' };
 
 export function WalletWithdrawDialog({
   open,
@@ -33,12 +31,15 @@ export function WalletWithdrawDialog({
   const tCommon = useTranslations('account.common');
 
   const form = useAppForm({
-    defaultValues,
+    defaultValues: {
+      amount: null as unknown as number,
+      description: ''
+    },
     validators: {
       onSubmit: walletWithdrawSchema
     },
     onSubmit: async ({ value }) => {
-      const amount = Number(value.amount);
+      const amount = Math.trunc(value.amount);
       if (amount > availableBalance) {
         toast.error(t('withdrawMaxError', { amount: formatWalletAmount(availableBalance) }));
         return;
@@ -91,20 +92,11 @@ export function WalletWithdrawDialog({
           <form.AppField name='amount'>
             {(field) => (
               <>
-                <field.TextField
-                  label={t('depositAmount')}
-                  type='number'
-                  min={0}
-                  max={availableBalance}
-                  step='0.01'
-                  placeholder='1,000.00'
-                  inputMode='decimal'
-                />
-                {parseWalletNumber(field.state.value) != null &&
-                parseWalletNumber(field.state.value)! > 0 ? (
+                <field.PriceField label={t('depositAmount')} placeholder='1,000' />
+                {typeof field.state.value === 'number' && field.state.value > 0 ? (
                   <p className='text-muted-foreground mt-2 text-sm'>
                     {t('withdrawPreview', {
-                      amount: formatWalletAmount(parseWalletNumber(field.state.value)!)
+                      amount: formatWalletAmount(field.state.value)
                     })}
                   </p>
                 ) : null}
