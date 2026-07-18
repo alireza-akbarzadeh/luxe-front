@@ -97,8 +97,20 @@ export function SidebarNavItem({
             const childActive = isPathActive(pathname, child.href);
             return (
               <DropdownMenuItem key={child.href} asChild>
-                <Link href={child.href ?? '#'} className={childLinkClasses(!!childActive)}>
-                  {child.label}
+                <Link
+                  href={child.href ?? '#'}
+                  onClick={onNavigate}
+                  className={cn(childLinkClasses(!!childActive), 'group flex items-center gap-2')}
+                >
+                  <span className='min-w-0 flex-1 truncate'>{child.label}</span>
+                  <SidebarNavFavoriteButton
+                    href={child.href}
+                    label={child.label}
+                    isCollapsed={false}
+                    isFavorite={isFavorite}
+                    favoritePendingHref={favoritePendingHref}
+                    onToggle={(href, label) => void toggleFavorite(href, label)}
+                  />
                 </Link>
               </DropdownMenuItem>
             );
@@ -141,9 +153,18 @@ export function SidebarNavItem({
               <Link
                 key={child.href}
                 href={child.href ?? '#'}
-                className={childLinkClasses(!!childActive)}
+                onClick={onNavigate}
+                className={cn(childLinkClasses(!!childActive), 'group flex items-center gap-2')}
               >
-                {child.label}
+                <span className='min-w-0 flex-1 truncate'>{child.label}</span>
+                <SidebarNavFavoriteButton
+                  href={child.href}
+                  label={child.label}
+                  isCollapsed={false}
+                  isFavorite={isFavorite}
+                  favoritePendingHref={favoritePendingHref}
+                  onToggle={(href, label) => void toggleFavorite(href, label)}
+                />
               </Link>
             );
           })}

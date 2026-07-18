@@ -33,6 +33,7 @@ import {
   IconShieldCheck,
   IconShoppingCart,
   IconSparkles,
+  IconStar,
   IconTags,
   IconTicket,
   IconTrendingUp,
@@ -382,5 +383,6 @@ export const ICON_MAP = {
   BuildingWarehouse: IconBuildingWarehouse,
   Ticket: IconTicket,
   BuildingStore: IconBuildingStore,
-  TrendingUp: IconTrendingUp
+  TrendingUp: IconTrendingUp,
+  Star: IconStar
 } as const;

@@ -3,6 +3,7 @@ import type { DtoAdminNavRecentPage } from '@/services/-admin-nav-preferences-ge
 export interface AdminNavLink {
   href: string;
   label: string;
+  icon?: string;
 }
 
 export interface AdminNavPreferencesView {

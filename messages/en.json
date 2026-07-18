@@ -41,6 +41,7 @@
     },
     "nav": {
       "favorites": "Favorites",
+      "favoritesEmpty": "Hover a menu item and tap the star to pin it here.",
       "recent": "Recent"
     },
     "notifications": {

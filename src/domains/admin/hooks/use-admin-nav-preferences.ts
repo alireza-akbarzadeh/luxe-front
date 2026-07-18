@@ -43,19 +43,36 @@ export function useAdminNavPreferences() {
   };
 
   const toggleFavorite = async (href: string, label: string) => {
-    setFavoritePendingHref(href);
-    const nextFavorites = favorites.includes(href)
+    const removing = favorites.includes(href);
+    const nextFavorites = removing
       ? favorites.filter((item) => item !== href)
       : [...favorites, href];
 
-    await savePreferences({
-      favorites: nextFavorites,
-      recent
+    setFavoritePendingHref(href);
+
+    // Optimistic cache so the Favorites group updates immediately.
+    queryClient.setQueryData(getGetAdminNavPreferencesQueryKey(), (current: unknown) => {
+      if (!current || typeof current !== 'object') return current;
+      const typed = current as { data?: { favorites?: string[]; recent?: unknown } };
+      return {
+        ...typed,
+        data: {
+          ...typed.data,
+          favorites: nextFavorites,
+          recent: typed.data?.recent ?? recent
+        }
+      };
     });
 
-    toast.success(
-      favorites.includes(href) ? `Removed ${label} from favorites` : `Added ${label} to favorites`
-    );
+    try {
+      await savePreferences({
+        favorites: nextFavorites,
+        recent
+      });
+      toast.success(removing ? `Removed ${label} from favorites` : `Added ${label} to favorites`);
+    } catch {
+      void queryClient.invalidateQueries({ queryKey: getGetAdminNavPreferencesQueryKey() });
+    }
   };
 
   const isFavorite = (href: string) => favorites.includes(href);

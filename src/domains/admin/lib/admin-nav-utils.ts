@@ -8,7 +8,11 @@ import type { AdminNavLink } from '../types/admin-nav.types';
 function flattenMenuItems(items: DtoMenuItemResponse[] | undefined, acc: AdminNavLink[] = []) {
   for (const item of items ?? []) {
     if (item.href) {
-      acc.push({ href: item.href, label: item.label ?? item.href });
+      acc.push({
+        href: item.href,
+        label: item.label ?? item.href,
+        icon: item.icon
+      });
     }
     if (item.children?.length) flattenMenuItems(item.children, acc);
   }

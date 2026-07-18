@@ -76,6 +76,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
           <AdminNavFavorites
             items={favoriteLinks}
             isCollapsed={effectiveCollapsed}
+            pathname={pathname}
             onNavigate={onNavigate}
           />
           <AdminNavRecent items={recent} isCollapsed={effectiveCollapsed} onNavigate={onNavigate} />

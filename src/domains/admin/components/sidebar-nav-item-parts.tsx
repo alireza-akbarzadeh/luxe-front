@@ -80,7 +80,12 @@ export function SidebarNavFavoriteButton({
       type='button'
       aria-label={activeFavorite ? 'Remove from favorites' : 'Add to favorites'}
       disabled={pending}
-      className='text-muted-foreground ms-1 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:text-amber-500'
+      className={cn(
+        'ms-1 shrink-0 transition-opacity hover:text-amber-500',
+        activeFavorite
+          ? 'text-amber-500 opacity-100'
+          : 'text-muted-foreground opacity-40 group-hover:opacity-100 focus-visible:opacity-100'
+      )}
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
