@@ -184,6 +184,15 @@
         "webhooks": {
           "title": "No se pudieron cargar los eventos webhook"
         },
+        "calendar": {
+          "title": "No se pudo cargar el calendario de tiendas"
+        },
+        "holidays": {
+          "title": "No se pudieron cargar los feriados"
+        },
+        "rules": {
+          "title": "No se pudieron cargar las reglas del calendario de entrega"
+        },
         "revenue": {
           "title": "Algo salió mal",
           "description": "No se pudo cargar el informe de ingresos. Inténtalo de nuevo.",

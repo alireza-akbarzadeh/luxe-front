@@ -18,7 +18,10 @@ type AdminModuleKey =
   | 'stores'
   | 'wallet'
   | 'webhooks'
-  | 'revenue';
+  | 'revenue'
+  | 'calendar'
+  | 'holidays'
+  | 'rules';
 
 export function AdminModuleError({
   module,

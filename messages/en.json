@@ -208,6 +208,9 @@
         "stores": { "title": "Could not load stores" },
         "wallet": { "title": "Could not load wallet tools" },
         "webhooks": { "title": "Could not load webhook events" },
+        "calendar": { "title": "Could not load the store calendar" },
+        "holidays": { "title": "Could not load holidays" },
+        "rules": { "title": "Could not load delivery calendar rules" },
         "revenue": {
           "title": "Something went wrong",
           "description": "The revenue report could not be loaded. Please try again.",
