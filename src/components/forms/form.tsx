@@ -87,17 +87,29 @@ export function FieldMessage({ asChild, className, children, ...props }: FieldMe
 }
 
 export function FieldContainer({ label, detail, children, className }: FieldContainerProps) {
+  const hasHeader = Boolean(label || detail);
+
   return (
-    <div className={cn('space-y-1.5', className)}>
-      {(label || detail) && (
+    <div className={cn('flex flex-col gap-1.5', className)}>
+      {hasHeader ? (
         <div className='flex flex-col gap-0.5'>
-          {label && <FieldLabel>{label}</FieldLabel>}
-          {detail && <FieldDetail>{detail}</FieldDetail>}
+          {label ? <FieldLabel>{label}</FieldLabel> : null}
+          {/*
+            Always reserve one description line so side-by-side fields keep
+            their controls aligned when only one has helper text.
+          */}
+          <FieldDetail className={cn(!detail && 'invisible')} aria-hidden={!detail || undefined}>
+            {detail || '\u00A0'}
+          </FieldDetail>
         </div>
-      )}
+      ) : null}
 
       <Slot>{children}</Slot>
-      <FieldMessage />
+
+      {/* Reserve error-line height so a sibling error does not shift the other control. */}
+      <div className='min-h-[1rem]'>
+        <FieldMessage />
+      </div>
     </div>
   );
 }

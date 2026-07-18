@@ -1,7 +1,8 @@
 'use client';
 
 import { IconTag } from '@tabler/icons-react';
-import { useDeferredValue, useState } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
+import { useDeferredValue, useMemo, useState } from 'react';
 
 import { AsyncSearchCombobox } from '@/components/ui/async-search-combobox';
 import { getBrandsFromListResponse } from '@/domains/brands/lib/brand-list';
@@ -17,6 +18,8 @@ export type BrandPickerProps = {
   error?: string;
   placeholder?: string;
   searchPlaceholder?: string;
+  emptyLabel?: string;
+  searchingLabel?: string;
   allowClear?: boolean;
   clearLabel?: string;
   enabled?: boolean;
@@ -44,6 +47,8 @@ export function BrandPicker({
   error,
   placeholder = 'Search brands…',
   searchPlaceholder = 'Type a brand name…',
+  emptyLabel = 'No brands found',
+  searchingLabel = 'Searching…',
   allowClear = false,
   clearLabel = 'All brands',
   enabled = true
@@ -52,21 +57,26 @@ export function BrandPicker({
   const [menuOpen, setMenuOpen] = useState(false);
   const deferredSearch = useDeferredValue(search.trim());
 
+  // Trust API search; avoid client re-filter that can hide valid hits.
   const { data, isFetching } = useGetBrands(
     {
-      limit: 40,
+      limit: 100,
       page: 1,
-      search: deferredSearch || undefined
+      search: deferredSearch.length >= 1 ? deferredSearch : undefined
     },
     {
       query: {
         enabled: enabled && menuOpen,
-        staleTime: 30_000
+        staleTime: 30_000,
+        placeholderData: keepPreviousData
       }
     }
   );
 
-  const brands = getBrandsFromListResponse(data).filter((brand) => brand.id != null);
+  const brands = useMemo(
+    () => getBrandsFromListResponse(data).filter((brand) => brand.id != null),
+    [data]
+  );
 
   return (
     <AsyncSearchCombobox
@@ -78,15 +88,18 @@ export function BrandPicker({
       onSelect={(brand) => onChange(String(brand.id), brand)}
       search={search}
       onSearchChange={setSearch}
-      onOpenChange={setMenuOpen}
+      onOpenChange={(open) => {
+        setMenuOpen(open);
+        if (!open) setSearch('');
+      }}
       isFetching={isFetching}
       label={label}
       detail={detail}
       error={error}
       placeholder={placeholder}
       searchPlaceholder={searchPlaceholder}
-      emptyLabel='No brands found'
-      searchingLabel='Searching…'
+      emptyLabel={emptyLabel}
+      searchingLabel={searchingLabel}
       icon={IconTag}
       valueFallbackLabel={(id) => `Brand #${id}`}
       clearLabel={allowClear ? clearLabel : undefined}

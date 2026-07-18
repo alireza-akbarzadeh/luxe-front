@@ -545,6 +545,40 @@
       "continueShopping": "Continue shopping"
     }
   },
+  "productDashboard": {
+    "filters": {
+      "title": "Filter products",
+      "description": "Narrow the catalog by status, price, category, brand, and product type. Filters sync to the URL and the products API.",
+      "status": "Status",
+      "statusPlaceholder": "All statuses",
+      "statusAll": "All",
+      "statusActive": "Active",
+      "statusDraft": "Draft",
+      "statusArchived": "Archived",
+      "minPrice": "Min price",
+      "maxPrice": "Max price",
+      "priceMinPlaceholder": "0",
+      "priceMaxPlaceholder": "Any",
+      "category": "Category",
+      "categoryAll": "All categories",
+      "categoryPlaceholder": "All categories",
+      "categorySearch": "Type a category name…",
+      "categoryEmpty": "No categories found",
+      "categorySearching": "Searching…",
+      "brand": "Brand",
+      "brandAll": "All brands",
+      "brandPlaceholder": "All brands",
+      "brandSearch": "Type a brand name…",
+      "brandEmpty": "No brands found",
+      "brandSearching": "Searching…",
+      "productType": "Product type",
+      "typeAll": "All types",
+      "typeDigital": "Digital only",
+      "typePhysical": "Physical only",
+      "reset": "Reset filters",
+      "apply": "Apply"
+    }
+  },
   "pdp": {
     "breadcrumb": {
       "home": "Home",

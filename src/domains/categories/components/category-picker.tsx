@@ -1,7 +1,8 @@
 'use client';
 
 import { IconCategory } from '@tabler/icons-react';
-import { useDeferredValue, useState } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
+import { useDeferredValue, useMemo, useState } from 'react';
 
 import { AsyncSearchCombobox } from '@/components/ui/async-search-combobox';
 import { useGetCategories } from '@/services/-categories-get';
@@ -16,10 +17,12 @@ export type CategoryPickerProps = {
   error?: string;
   placeholder?: string;
   searchPlaceholder?: string;
+  emptyLabel?: string;
+  searchingLabel?: string;
   /** Show an "All / none" row (filters, optional form fields). */
   allowClear?: boolean;
   clearLabel?: string;
-  /** Only active categories (default true). */
+  /** Only active categories. Default false so admin can pick any category. */
   isActiveOnly?: boolean;
   /** Gate the categories query (e.g. sheet open). Default true. */
   enabled?: boolean;
@@ -50,30 +53,39 @@ export function CategoryPicker({
   error,
   placeholder = 'Search categories…',
   searchPlaceholder = 'Type a category name…',
+  emptyLabel = 'No categories found',
+  searchingLabel = 'Searching…',
   allowClear = false,
   clearLabel = 'All categories',
-  isActiveOnly = true,
+  isActiveOnly = false,
   enabled = true
 }: CategoryPickerProps) {
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const deferredSearch = useDeferredValue(search.trim());
 
+  // Server search covers name/slug/search_document (all locales). Do not re-filter
+  // client-side — localized labels can hide API hits (e.g. EN query + FA name).
   const { data, isFetching } = useGetCategories(
     {
-      limit: 40,
-      search: deferredSearch || undefined,
+      limit: 100,
+      sort: 'name',
+      search: deferredSearch.length >= 1 ? deferredSearch : undefined,
       is_active: isActiveOnly ? true : undefined
     },
     {
       query: {
         enabled: enabled && menuOpen,
-        staleTime: 30_000
+        staleTime: 30_000,
+        placeholderData: keepPreviousData
       }
     }
   );
 
-  const categories = (data?.data?.categories ?? []).filter((category) => category.id != null);
+  const categories = useMemo(
+    () => (data?.data?.categories ?? []).filter((category) => category.id != null),
+    [data]
+  );
 
   return (
     <AsyncSearchCombobox
@@ -85,15 +97,18 @@ export function CategoryPicker({
       onSelect={(category) => onChange(String(category.id), category)}
       search={search}
       onSearchChange={setSearch}
-      onOpenChange={setMenuOpen}
+      onOpenChange={(open) => {
+        setMenuOpen(open);
+        if (!open) setSearch('');
+      }}
       isFetching={isFetching}
       label={label}
       detail={detail}
       error={error}
       placeholder={placeholder}
       searchPlaceholder={searchPlaceholder}
-      emptyLabel='No categories found'
-      searchingLabel='Searching…'
+      emptyLabel={emptyLabel}
+      searchingLabel={searchingLabel}
       icon={IconCategory}
       valueFallbackLabel={(id) => `Category #${id}`}
       clearLabel={allowClear ? clearLabel : undefined}

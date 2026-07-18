@@ -569,6 +569,40 @@
       "continueShopping": "ادامه خرید"
     }
   },
+  "productDashboard": {
+    "filters": {
+      "title": "فیلتر محصولات",
+      "description": "کاتالوگ را بر اساس وضعیت، قیمت، دسته‌بندی، برند و نوع محصول محدود کنید. فیلترها با URL و API همگام می‌شوند.",
+      "status": "وضعیت",
+      "statusPlaceholder": "همه وضعیت‌ها",
+      "statusAll": "همه",
+      "statusActive": "فعال",
+      "statusDraft": "پیش‌نویس",
+      "statusArchived": "بایگانی‌شده",
+      "minPrice": "حداقل قیمت",
+      "maxPrice": "حداکثر قیمت",
+      "priceMinPlaceholder": "۰",
+      "priceMaxPlaceholder": "هر مقدار",
+      "category": "دسته‌بندی",
+      "categoryAll": "همه دسته‌ها",
+      "categoryPlaceholder": "همه دسته‌ها",
+      "categorySearch": "نام دسته را تایپ کنید…",
+      "categoryEmpty": "دسته‌ای یافت نشد",
+      "categorySearching": "در حال جستجو…",
+      "brand": "برند",
+      "brandAll": "همه برندها",
+      "brandPlaceholder": "همه برندها",
+      "brandSearch": "نام برند را تایپ کنید…",
+      "brandEmpty": "برندی یافت نشد",
+      "brandSearching": "در حال جستجو…",
+      "productType": "نوع محصول",
+      "typeAll": "همه انواع",
+      "typeDigital": "فقط دیجیتال",
+      "typePhysical": "فقط فیزیکی",
+      "reset": "بازنشانی فیلترها",
+      "apply": "اعمال"
+    }
+  },
   "pdp": {
     "breadcrumb": {
       "home": "خانه",

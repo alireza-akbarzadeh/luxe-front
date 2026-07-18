@@ -87,10 +87,23 @@ function CommandInput({ className, ...props }: ComponentProps<typeof CommandPrim
   );
 }
 
-function CommandList({ className, ...props }: ComponentProps<typeof CommandPrimitive.List>) {
+function CommandList({
+  className,
+  onWheel,
+  ...props
+}: ComponentProps<typeof CommandPrimitive.List>) {
   return (
     <CommandPrimitive.List
-      className={cn('max-h-[300px] overflow-x-hidden overflow-y-auto', className)}
+      className={cn(
+        'max-h-[300px] overflow-x-hidden overflow-y-auto overscroll-contain',
+        className
+      )}
+      onWheel={(event) => {
+        // Portaled menus sit outside Dialog/Sheet RemoveScroll — stop bubble so the
+        // document lock does not cancel wheel, and the list can scroll natively.
+        event.stopPropagation();
+        onWheel?.(event);
+      }}
       {...props}
     />
   );
@@ -127,7 +140,10 @@ function CommandItem({ className, ...props }: ComponentProps<typeof CommandPrimi
   return (
     <CommandPrimitive.Item
       className={cn(
-        'aria-selected:bg-accent aria-selected:text-accent-foreground relative flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none aria-disabled:pointer-events-none aria-disabled:opacity-50',
+        'relative flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none',
+        // Soft gold highlight (lighter than solid accent)
+        'aria-selected:bg-accent/25 aria-selected:text-foreground',
+        'aria-disabled:pointer-events-none aria-disabled:opacity-50',
         className
       )}
       {...props}

@@ -133,15 +133,18 @@ export function AsyncSearchCombobox<T>({
         <PopoverContent
           className='pointer-events-auto z-[120] w-[var(--radix-popover-trigger-width)] p-0'
           align='start'
+          onWheel={(event) => {
+            // Keep wheel inside the menu; Sheet RemoveScroll otherwise eats it.
+            event.stopPropagation();
+          }}
         >
-          {' '}
           <Command shouldFilter={false}>
             <CommandInput
               placeholder={searchPlaceholder ?? placeholder}
               value={search}
               onValueChange={onSearchChange}
             />
-            <CommandList>
+            <CommandList className='max-h-72 overscroll-contain'>
               <CommandEmpty>{emptyMessage}</CommandEmpty>
               <CommandGroup>
                 {clearLabel && onClear ? (
@@ -162,15 +165,19 @@ export function AsyncSearchCombobox<T>({
                   const optionValue = getOptionValue(option);
                   if (!optionValue) return null;
                   const isSelected = value === optionValue;
+                  const labelText = getOptionLabel(option);
 
                   return (
                     <CommandItem
                       key={optionValue}
-                      value={optionValue}
+                      // Include label so cmdk value matching works if filtering is ever enabled.
+                      value={`${labelText} ${optionValue}`}
+                      keywords={[labelText, optionValue]}
                       onSelect={() => {
                         onSelect(option);
                         setOpen(false);
                       }}
+                      className='aria-selected:bg-accent/25 aria-selected:text-foreground'
                     >
                       <IconCheck
                         className={cn('mr-2 size-4', isSelected ? 'opacity-100' : 'opacity-0')}

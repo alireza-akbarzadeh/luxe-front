@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Input } from '@/components/ui/input';
@@ -31,6 +33,7 @@ interface ProductsFilterSheetProps {
 }
 
 export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFilterSheetProps) {
+  const t = useTranslations('productDashboard.filters');
   const {
     status,
     setStatus,
@@ -74,41 +77,42 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
         }}
       >
         <SheetHeader className='border-border shrink-0 border-b px-6 py-5 pe-14 text-start'>
-          <SheetTitle>Filter products</SheetTitle>
-          <SheetDescription>
-            Narrow the catalog by status, price, category, brand, and product type. Filters sync to
-            the URL and the products API.
-          </SheetDescription>
+          <SheetTitle>{t('title')}</SheetTitle>
+          <SheetDescription>{t('description')}</SheetDescription>
         </SheetHeader>
 
-        <Flex direction='column' spacing={5} className='min-h-0 flex-1 overflow-y-auto px-6 py-5'>
+        <Flex
+          direction='column'
+          spacing={5}
+          className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-5'
+        >
           <div className='space-y-2'>
-            <Label>Status</Label>
+            <Label>{t('status')}</Label>
             <Select
               value={status}
               onValueChange={(value) => void setStatus(value as typeof status)}
             >
               <SelectTrigger className='h-11 w-full'>
-                <SelectValue placeholder='All statuses' />
+                <SelectValue placeholder={t('statusPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='all'>All</SelectItem>
-                <SelectItem value={GetProductsStatus.active}>Active</SelectItem>
-                <SelectItem value={GetProductsStatus.draft}>Draft</SelectItem>
-                <SelectItem value={GetProductsStatus.archived}>Archived</SelectItem>
+                <SelectItem value='all'>{t('statusAll')}</SelectItem>
+                <SelectItem value={GetProductsStatus.active}>{t('statusActive')}</SelectItem>
+                <SelectItem value={GetProductsStatus.draft}>{t('statusDraft')}</SelectItem>
+                <SelectItem value={GetProductsStatus.archived}>{t('statusArchived')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className='grid gap-4 sm:grid-cols-2'>
             <div className='space-y-2'>
-              <Label htmlFor='products-min-price'>Min price</Label>
+              <Label htmlFor='products-min-price'>{t('minPrice')}</Label>
               <Input
                 id='products-min-price'
                 type='number'
                 min={0}
                 step='0.01'
-                placeholder='0'
+                placeholder={t('priceMinPlaceholder')}
                 className='h-11'
                 value={minPrice ?? ''}
                 onChange={(event) => {
@@ -118,13 +122,13 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
               />
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='products-max-price'>Max price</Label>
+              <Label htmlFor='products-max-price'>{t('maxPrice')}</Label>
               <Input
                 id='products-max-price'
                 type='number'
                 min={0}
                 step='0.01'
-                placeholder='Any'
+                placeholder={t('priceMaxPlaceholder')}
                 className='h-11'
                 value={maxPrice ?? ''}
                 onChange={(event) => {
@@ -138,23 +142,31 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
           <CategoryPicker
             value={categoryId != null ? String(categoryId) : ''}
             onChange={(id) => void setCategoryId(id ? Number(id) : null)}
+            label={t('category')}
             allowClear
-            clearLabel='All categories'
-            placeholder='All categories'
+            clearLabel={t('categoryAll')}
+            placeholder={t('categoryPlaceholder')}
+            searchPlaceholder={t('categorySearch')}
+            emptyLabel={t('categoryEmpty')}
+            searchingLabel={t('categorySearching')}
             enabled={open}
           />
 
           <BrandPicker
             value={brandId != null ? String(brandId) : ''}
             onChange={(id) => void setBrandId(id ? Number(id) : null)}
+            label={t('brand')}
             allowClear
-            clearLabel='All brands'
-            placeholder='All brands'
+            clearLabel={t('brandAll')}
+            placeholder={t('brandPlaceholder')}
+            searchPlaceholder={t('brandSearch')}
+            emptyLabel={t('brandEmpty')}
+            searchingLabel={t('brandSearching')}
             enabled={open}
           />
 
           <div className='space-y-2'>
-            <Label>Product type</Label>
+            <Label>{t('productType')}</Label>
             <Select
               value={isDigital}
               onValueChange={(value) => void setIsDigital(value as typeof isDigital)}
@@ -163,9 +175,9 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='all'>All types</SelectItem>
-                <SelectItem value='yes'>Digital only</SelectItem>
-                <SelectItem value='no'>Physical only</SelectItem>
+                <SelectItem value='all'>{t('typeAll')}</SelectItem>
+                <SelectItem value='yes'>{t('typeDigital')}</SelectItem>
+                <SelectItem value='no'>{t('typePhysical')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -173,10 +185,10 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
 
         <SheetFooter className='border-border shrink-0 gap-2 border-t px-6 py-4 sm:justify-between'>
           <Button type='button' variant='ghost' onClick={onReset}>
-            Reset filters
+            {t('reset')}
           </Button>
           <Button type='button' onClick={() => onOpenChange(false)}>
-            Done
+            {t('apply')}
           </Button>
         </SheetFooter>
       </SheetContent>
