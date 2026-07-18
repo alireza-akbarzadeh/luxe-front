@@ -1,9 +1,9 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { isUnauthorizedError } from '@/lib/api/api-utils';
 import { useDeleteStoresSlugFollow } from '@/services/-stores-{slug}-follow-delete';
 import { usePostStoresSlugFollow } from '@/services/-stores-{slug}-follow-post';
@@ -18,7 +18,7 @@ interface UseStoreFollowProps {
 
 export function useStoreFollow({ slug, storeName, onFollowChange }: UseStoreFollowProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const { openAuthDialog } = useRequireAuth();
   const label = storeName ?? slug;
 
   const invalidateStoreQueries = () => {
@@ -28,10 +28,7 @@ export function useStoreFollow({ slug, storeName, onFollowChange }: UseStoreFoll
 
   const handleAuthError = () => {
     toast.error('Sign in to follow stores');
-    const callbackUrl = encodeURIComponent(
-      typeof window !== 'undefined' ? window.location.pathname : `/store/${slug}`
-    );
-    router.push(`/login?callbackUrl=${callbackUrl}`);
+    openAuthDialog({ reason: 'follow-store' });
   };
 
   const { mutate: followMutate, isPending: isFollowingPending } = usePostStoresSlugFollow();

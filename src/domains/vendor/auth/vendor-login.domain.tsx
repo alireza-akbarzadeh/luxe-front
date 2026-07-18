@@ -52,8 +52,8 @@ export function VendorLoginDomain() {
         formData.append('callbackUrl', callbackUrl);
 
         const result = await loginAction(formData);
-        setError(result?.error as string);
         if (result && 'error' in result) {
+          setError(result.error);
           toast.error(result.error);
           if (
             result.error.includes('Invalid credentials') ||

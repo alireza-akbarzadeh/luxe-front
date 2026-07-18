@@ -1565,6 +1565,8 @@
     "login": {
       "title": "Welcome back",
       "subtitle": "Enter your credentials to access your account",
+      "dialogTitle": "Sign in or create account",
+      "dialogSubtitle": "Continue shopping with your Luxe account — wishlist, cart, and member perks.",
       "rememberMe": "Remember me for 15 days",
       "submit": "Sign in",
       "orContinueWith": "Or continue with",
@@ -1702,6 +1704,7 @@
       "login": {
         "title": "Premium shopping experience",
         "description": "Discover curated collections, track orders, and save favorites — all in a shopping experience designed around you.",
+        "tagline": "Curated fashion with secure checkout and member rewards.",
         "stats": {
           "secureCheckout": "Secure checkout",
           "secureCheckoutValue": "{bits, number}-bit SSL",

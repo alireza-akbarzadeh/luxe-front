@@ -1,7 +1,6 @@
 'use client';
 
 import { startOfToday } from 'date-fns';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
@@ -10,6 +9,7 @@ import { Flex } from '@/components/ui/flex';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/typography';
 import { formatPrice } from '@/domains/home/lib/home-utils';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 
 import { GIFT_CARD_MAX_AMOUNT, GIFT_CARD_MIN_AMOUNT } from '../gift-cards.schema';
 import type { useGiftCardPurchase } from '../hooks/use-gift-card-purchase';
@@ -23,6 +23,7 @@ type AmountMode = 'preset' | 'custom';
 /** Amount picker + recipient form for buying a digital gift card. */
 export function GiftCardPurchaseForm({ purchase }: GiftCardPurchaseFormProps) {
   const t = useTranslations('giftCardsPage.purchase');
+  const { openAuthDialog } = useRequireAuth();
   const {
     form: purchaseForm,
     amounts,
@@ -49,8 +50,12 @@ export function GiftCardPurchaseForm({ purchase }: GiftCardPurchaseFormProps) {
           <Text variant='muted' className='text-sm'>
             {t('signInDescription')}
           </Text>
-          <Button asChild className='w-fit rounded-full'>
-            <Link href='/login?redirect=%2Fgift-cards'>{t('signInCta')}</Link>
+          <Button
+            type='button'
+            className='w-fit rounded-full'
+            onClick={() => openAuthDialog({ callbackUrl: '/gift-cards', reason: 'gift-card' })}
+          >
+            {t('signInCta')}
           </Button>
         </Flex>
       ) : null}

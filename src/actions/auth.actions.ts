@@ -94,7 +94,7 @@ async function handleAuthResponse<
   rememberMe = false,
   formData?: FormData,
   defaultRedirect = '/account'
-): Promise<{ error: string } | void> {
+): Promise<{ error: string } | { success: true } | void> {
   if (!response.ok || !json.success) {
     return { error: json.message || 'Authentication failed' };
   }
@@ -106,6 +106,11 @@ async function handleAuthResponse<
   }
 
   await setAuthCookies(access_token, refresh_token, rememberMe);
+
+  // Dialog / in-place login — set cookies but let the client refresh session & stay put.
+  if (formData?.get('clientOnly') === 'true') {
+    return { success: true };
+  }
 
   const callbackUrl = await resolvePostAuthRedirect(formData, defaultRedirect);
   redirect(callbackUrl);
@@ -134,8 +139,8 @@ export async function loginAction(formData: FormData) {
       return { error: 'Server returned an unexpected response. Please try again.' };
     }
 
-    const error = await handleAuthResponse(res, json, rememberMe, formData);
-    if (error) return error;
+    const result = await handleAuthResponse(res, json, rememberMe, formData);
+    if (result) return result;
   } catch (error) {
     if (isNextRedirectError(error)) {
       throw error;
@@ -223,8 +228,8 @@ export async function verifyLoginOTPAction(formData: FormData) {
       return { error: 'Server returned an unexpected response. Please try again.' };
     }
 
-    const error = await handleAuthResponse(res, json, rememberMe, formData);
-    if (error) return error;
+    const result = await handleAuthResponse(res, json, rememberMe, formData);
+    if (result) return result;
   } catch (error) {
     if (isNextRedirectError(error)) {
       throw error;

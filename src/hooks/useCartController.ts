@@ -12,6 +12,7 @@ import { usePutCartItemsId } from '../services/-cart-items-{id}-put';
 import { useDeleteCartItems } from '../services/-cart-items-delete';
 import { usePostCartItems } from '../services/-cart-items-post';
 import { useCartStore } from '../store/card.store';
+import { useRequireAuth } from './use-require-auth';
 import { useUser } from './useUser';
 
 export interface CartItemPayload {
@@ -28,6 +29,7 @@ export interface CartItemPayload {
 export const useCartController = () => {
   const { isAuthenticated } = useUser();
   const openCart = useCartStore((state) => state.openCart);
+  const { openAuthDialog } = useRequireAuth();
 
   const queryClient = useQueryClient();
 
@@ -326,7 +328,7 @@ export const useCartController = () => {
 
     if (!isAuthenticated) {
       toast.error('Sign in to add items to your cart');
-      openCart();
+      openAuthDialog({ reason: 'add-to-cart' });
       return;
     }
 

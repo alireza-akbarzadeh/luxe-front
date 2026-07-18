@@ -24,6 +24,7 @@ import { useCartCheckoutAction } from '@/domains/cart/hooks/use-cart-checkout-ac
 import { useCartOrderEstimate } from '@/domains/cart/hooks/use-cart-order-estimate';
 import { formatEstimatedTaxLabel } from '@/domains/cart/lib/cart-commerce-settings';
 import { cartMoneyClassName, formatCartMoney } from '@/domains/cart/lib/cart-utils';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { useCartController } from '@/hooks/useCartController';
 import { useUser } from '@/hooks/useUser';
 import { cn } from '@/lib/utils';
@@ -57,6 +58,7 @@ export function CartSheet() {
   const tImport = useTranslations('cart.import');
 
   const { isAuthenticated, loading: isAuthLoading } = useUser();
+  const { openAuthDialog } = useRequireAuth();
   const { items, isLoading, error, refetch, itemCount, subtotal, updatingItemId, removingItemId } =
     useCartController();
   const [importOpen, setImportOpen] = useState(false);
@@ -119,11 +121,16 @@ export function CartSheet() {
               </p>
             </div>
             <div className='flex w-full max-w-xs flex-col gap-2'>
-              <Button asChild className='rounded-full' onClick={closeCart}>
-                <Link href='/login?callbackUrl=/cart'>
-                  {t('signIn')}
-                  <IconArrowRight className='cn-rtl-flip size-4' />
-                </Link>
+              <Button
+                type='button'
+                className='rounded-full'
+                onClick={() => {
+                  closeCart();
+                  openAuthDialog({ callbackUrl: '/cart', reason: 'cart' });
+                }}
+              >
+                {t('signIn')}
+                <IconArrowRight className='cn-rtl-flip size-4' />
               </Button>
               <Button
                 type='button'

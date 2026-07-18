@@ -10,10 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 
 export function WishlistGuestState() {
   const t = useTranslations('wishlist');
   const [importOpen, setImportOpen] = useState(false);
+  const { openAuthDialog } = useRequireAuth();
 
   return (
     <main className='app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16'>
@@ -40,11 +42,14 @@ export function WishlistGuestState() {
           {t('guestDescription')}
         </Typography.Muted>
         <Flex direction='column' gap={3} className='w-full sm:w-auto sm:flex-row'>
-          <Button asChild className='h-12 w-full rounded-full sm:w-auto' size='lg'>
-            <Link href='/login?callbackUrl=/wishlist'>
-              {t('signIn')}
-              <IconArrowRight className='ms-2 size-4' />
-            </Link>
+          <Button
+            type='button'
+            className='h-12 w-full rounded-full sm:w-auto'
+            size='lg'
+            onClick={() => openAuthDialog({ callbackUrl: '/wishlist', reason: 'wishlist-page' })}
+          >
+            {t('signIn')}
+            <IconArrowRight className='ms-2 size-4' />
           </Button>
           <Button
             type='button'

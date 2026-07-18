@@ -3,6 +3,7 @@
 import { IconLogout, IconUserCircle } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
 
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { cn } from '@/lib/utils';
 import { useProfileDrawerStore } from '@/stores/profile-drawer-store';
 import { useNavbarProfile } from '~/src/components/navbar/user/useNavbarProfile';
@@ -11,6 +12,7 @@ export function AuthMenuItem() {
   const t = useTranslations('nav.userProfile.auth');
   const { isLoggedIn, handleLogout } = useNavbarProfile();
   const closeProfileDrawer = useProfileDrawerStore((state) => state.closeProfileDrawer);
+  const { openAuthDialog } = useRequireAuth();
 
   return (
     <button
@@ -20,7 +22,7 @@ export function AuthMenuItem() {
         if (isLoggedIn) {
           void handleLogout();
         } else {
-          globalThis.location.href = '/login';
+          openAuthDialog({ reason: 'nav' });
         }
       }}
       className={cn(

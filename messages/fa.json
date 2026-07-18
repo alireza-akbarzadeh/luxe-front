@@ -195,18 +195,42 @@
         "tryAgain": "تلاش مجدد"
       },
       "modules": {
-        "orders": { "title": "بارگذاری سفارش‌ها ممکن نشد" },
-        "order": { "title": "بارگذاری سفارش ممکن نشد" },
-        "shipments": { "title": "بارگذاری ارسال‌ها ممکن نشد" },
-        "shipment": { "title": "بارگذاری ارسال ممکن نشد" },
-        "returns": { "title": "بارگذاری مرجوعی‌ها ممکن نشد" },
-        "return": { "title": "بارگذاری مرجوعی ممکن نشد" },
-        "invoices": { "title": "بارگذاری فاکتورها ممکن نشد" },
-        "invoice": { "title": "بارگذاری فاکتور ممکن نشد" },
-        "discounts": { "title": "بارگذاری تخفیف‌ها ممکن نشد" },
-        "stores": { "title": "بارگذاری فروشگاه‌ها ممکن نشد" },
-        "wallet": { "title": "بارگذاری ابزار کیف پول ممکن نشد" },
-        "webhooks": { "title": "بارگذاری رویدادهای وب‌هوک ممکن نشد" },
+        "orders": {
+          "title": "بارگذاری سفارش‌ها ممکن نشد"
+        },
+        "order": {
+          "title": "بارگذاری سفارش ممکن نشد"
+        },
+        "shipments": {
+          "title": "بارگذاری ارسال‌ها ممکن نشد"
+        },
+        "shipment": {
+          "title": "بارگذاری ارسال ممکن نشد"
+        },
+        "returns": {
+          "title": "بارگذاری مرجوعی‌ها ممکن نشد"
+        },
+        "return": {
+          "title": "بارگذاری مرجوعی ممکن نشد"
+        },
+        "invoices": {
+          "title": "بارگذاری فاکتورها ممکن نشد"
+        },
+        "invoice": {
+          "title": "بارگذاری فاکتور ممکن نشد"
+        },
+        "discounts": {
+          "title": "بارگذاری تخفیف‌ها ممکن نشد"
+        },
+        "stores": {
+          "title": "بارگذاری فروشگاه‌ها ممکن نشد"
+        },
+        "wallet": {
+          "title": "بارگذاری ابزار کیف پول ممکن نشد"
+        },
+        "webhooks": {
+          "title": "بارگذاری رویدادهای وب‌هوک ممکن نشد"
+        },
         "revenue": {
           "title": "مشکلی پیش آمد",
           "description": "گزارش درآمد بارگذاری نشد. لطفاً دوباره تلاش کنید.",
@@ -1592,7 +1616,9 @@
         "resend": "ارسال مجدد کد",
         "changeIdentifier": "تغییر ایمیل/شماره",
         "rememberMe": "مرا به مدت ۱۵ روز به خاطر بسپار"
-      }
+      },
+      "dialogTitle": "ورود یا ایجاد حساب",
+      "dialogSubtitle": "با حساب لوکس ادامه دهید — علاقه‌مندی‌ها، سبد خرید و مزایای اعضا."
     },
     "legal": {
       "loading": "در حال بارگذاری سند...",
@@ -1709,7 +1735,8 @@
           "freeReturnsValue": "{days, number} روز",
           "support": "پشتیبانی",
           "supportValue": "{hours, number}/{days, number}"
-        }
+        },
+        "tagline": "مد و انتخاب‌شده با پرداخت امن و پاداش اعضا."
       },
       "register": {
         "title": "به جامعهٔ ما بپیوندید",
@@ -4549,13 +4576,27 @@
         }
       },
       "fields": {
-        "firstName": { "label": "نام" },
-        "lastName": { "label": "نام خانوادگی" },
-        "email": { "label": "ایمیل کاری" },
-        "phone": { "label": "تلفن (اختیاری)" },
-        "password": { "label": "رمز عبور" },
-        "confirmPassword": { "label": "تأیید رمز عبور" },
-        "businessLegalName": { "label": "نام حقوقی کسب‌وکار" },
+        "firstName": {
+          "label": "نام"
+        },
+        "lastName": {
+          "label": "نام خانوادگی"
+        },
+        "email": {
+          "label": "ایمیل کاری"
+        },
+        "phone": {
+          "label": "تلفن (اختیاری)"
+        },
+        "password": {
+          "label": "رمز عبور"
+        },
+        "confirmPassword": {
+          "label": "تأیید رمز عبور"
+        },
+        "businessLegalName": {
+          "label": "نام حقوقی کسب‌وکار"
+        },
         "businessType": {
           "label": "نوع کسب‌وکار",
           "options": {
@@ -4576,10 +4617,18 @@
             "ae": "امارات متحده عربی"
           }
         },
-        "website": { "label": "وب‌سایت (اختیاری)" },
-        "taxId": { "label": "شناسه مالیاتی (اختیاری)" },
-        "storeName": { "label": "نام فروشگاه" },
-        "storeDescription": { "label": "توضیحات فروشگاه" },
+        "website": {
+          "label": "وب‌سایت (اختیاری)"
+        },
+        "taxId": {
+          "label": "شناسه مالیاتی (اختیاری)"
+        },
+        "storeName": {
+          "label": "نام فروشگاه"
+        },
+        "storeDescription": {
+          "label": "توضیحات فروشگاه"
+        },
         "location": {
           "label": "موقعیت اصلی (شهر، کشور)",
           "placeholder": "موقعیت فروشگاه خود را روی نقشه انتخاب کنید",
@@ -4604,8 +4653,12 @@
             "hybrid": "ترکیبی از ارسال شخصی و شرکا"
           }
         },
-        "shippingInfo": { "label": "خلاصه سیاست ارسال" },
-        "returnPolicy": { "label": "خلاصه سیاست مرجوعی" },
+        "shippingInfo": {
+          "label": "خلاصه سیاست ارسال"
+        },
+        "returnPolicy": {
+          "label": "خلاصه سیاست مرجوعی"
+        },
         "acceptVendorTerms": {
           "prefix": "با",
           "agreementLink": "توافق‌نامه فروشنده لوکس",

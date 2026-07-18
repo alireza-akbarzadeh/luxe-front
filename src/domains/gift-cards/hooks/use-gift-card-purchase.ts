@@ -1,11 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useAppForm } from '@/components/forms/useAppForm';
 import { useAuth } from '@/components/providers/auth-provider';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { usePostGiftCards } from '@/services/-gift-cards-post';
 
 import { GIFT_CARD_AMOUNTS, giftCardPurchaseSchema } from '../gift-cards.schema';
@@ -34,7 +34,7 @@ function firstFieldErrorMessage(formApi: {
 /** Purchase form state + Stripe redirect for public gift card checkout. */
 export function useGiftCardPurchase(redirectPath = '/gift-cards') {
   const t = useTranslations('giftCardsPage.purchase');
-  const router = useRouter();
+  const { openAuthDialog } = useRequireAuth();
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
   const { mutateAsync: createGiftCard, isPending: isCreating } = usePostGiftCards();
 
@@ -54,7 +54,7 @@ export function useGiftCardPurchase(redirectPath = '/gift-cards') {
     },
     onSubmit: async ({ value }) => {
       if (!isAuthenticated) {
-        router.push(`/login?redirect=${encodeURIComponent(redirectPath)}`);
+        openAuthDialog({ callbackUrl: redirectPath, reason: 'gift-card' });
         return;
       }
 

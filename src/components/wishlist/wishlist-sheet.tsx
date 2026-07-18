@@ -29,6 +29,7 @@ import { WishlistHeaderActions } from '@/domains/wishlist/components/wishlist-he
 import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
 import { useWishlistActions } from '@/domains/wishlist/hooks/use-wishlist-actions';
 import { useWishlistStore } from '@/domains/wishlist/wishlist.store';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { useUser } from '@/hooks/useUser';
 import { WishlistSheetSkeleton } from '~/src/components/wishlist/wishlist-sekeleton';
 
@@ -38,6 +39,7 @@ export function WishlistSheet() {
   const isOpen = useWishlistStore((s) => s.isSheetOpen);
   const setSheetOpen = useWishlistStore((s) => s.setSheetOpen);
   const closeSheet = useWishlistStore((s) => s.closeSheet);
+  const { openAuthDialog } = useRequireAuth();
   const t = useTranslations('common');
   const tWish = useTranslations('wishlist');
   const tImport = useTranslations('wishlist.import');
@@ -132,11 +134,16 @@ export function WishlistSheet() {
               </Typography.Muted>
             </div>
             <Flex direction='column' spacing={2} className='w-full max-w-xs'>
-              <Button asChild className='rounded-full' onClick={closeSheet}>
-                <Link href='/login?callbackUrl=/wishlist'>
-                  {t('signIn')}
-                  <IconArrowRight className='cn-rtl-flip size-4' />
-                </Link>
+              <Button
+                type='button'
+                className='rounded-full'
+                onClick={() => {
+                  closeSheet();
+                  openAuthDialog({ callbackUrl: '/wishlist', reason: 'wishlist' });
+                }}
+              >
+                {t('signIn')}
+                <IconArrowRight className='cn-rtl-flip size-4' />
               </Button>
               <Button
                 type='button'

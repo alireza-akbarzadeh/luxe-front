@@ -16,6 +16,7 @@ import {
   type PaginatedGiftCardsData,
   readPaginatedData
 } from '@/domains/account/lib/account-list-data';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { usePostGiftCardsCodeClaim } from '@/services/-gift-cards-{code}-claim-post';
 import type { DtoCreateGiftCardResponse } from '@/services/-gift-cards-post.schemas';
 import {
@@ -37,6 +38,7 @@ type GiftCardsMyCardsProps = {
 export function GiftCardsMyCards({ onBuyClick }: GiftCardsMyCardsProps) {
   const t = useTranslations('giftCardsPage.myCards');
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const { openAuthDialog } = useRequireAuth();
   const queryClient = useQueryClient();
   const [listTab, setListTab] = useState<'received' | 'sent'>('received');
   const [transferCard, setTransferCard] = useState<DtoCreateGiftCardResponse | null>(null);
@@ -95,7 +97,10 @@ export function GiftCardsMyCards({ onBuyClick }: GiftCardsMyCardsProps) {
         description={t('signInDescription')}
         actionLabel={t('signInCta')}
         onAction={() => {
-          window.location.assign('/login?redirect=%2Fgift-cards%3Ftab%3Dmine');
+          openAuthDialog({
+            callbackUrl: '/gift-cards?tab=mine',
+            reason: 'gift-card-mine'
+          });
         }}
       />
     );

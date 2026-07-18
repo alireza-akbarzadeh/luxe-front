@@ -148,18 +148,42 @@
         "tryAgain": "Intentar de nuevo"
       },
       "modules": {
-        "orders": { "title": "No se pudieron cargar los pedidos" },
-        "order": { "title": "No se pudo cargar el pedido" },
-        "shipments": { "title": "No se pudieron cargar los envíos" },
-        "shipment": { "title": "No se pudo cargar el envío" },
-        "returns": { "title": "No se pudieron cargar las devoluciones" },
-        "return": { "title": "No se pudo cargar la devolución" },
-        "invoices": { "title": "No se pudieron cargar las facturas" },
-        "invoice": { "title": "No se pudo cargar la factura" },
-        "discounts": { "title": "No se pudieron cargar los descuentos" },
-        "stores": { "title": "No se pudieron cargar las tiendas" },
-        "wallet": { "title": "No se pudieron cargar las herramientas de billetera" },
-        "webhooks": { "title": "No se pudieron cargar los eventos webhook" },
+        "orders": {
+          "title": "No se pudieron cargar los pedidos"
+        },
+        "order": {
+          "title": "No se pudo cargar el pedido"
+        },
+        "shipments": {
+          "title": "No se pudieron cargar los envíos"
+        },
+        "shipment": {
+          "title": "No se pudo cargar el envío"
+        },
+        "returns": {
+          "title": "No se pudieron cargar las devoluciones"
+        },
+        "return": {
+          "title": "No se pudo cargar la devolución"
+        },
+        "invoices": {
+          "title": "No se pudieron cargar las facturas"
+        },
+        "invoice": {
+          "title": "No se pudo cargar la factura"
+        },
+        "discounts": {
+          "title": "No se pudieron cargar los descuentos"
+        },
+        "stores": {
+          "title": "No se pudieron cargar las tiendas"
+        },
+        "wallet": {
+          "title": "No se pudieron cargar las herramientas de billetera"
+        },
+        "webhooks": {
+          "title": "No se pudieron cargar los eventos webhook"
+        },
         "revenue": {
           "title": "Algo salió mal",
           "description": "No se pudo cargar el informe de ingresos. Inténtalo de nuevo.",
@@ -1488,7 +1512,9 @@
         "resend": "Reenviar código",
         "changeIdentifier": "Usar otro correo",
         "rememberMe": "Recordarme durante 15 días"
-      }
+      },
+      "dialogTitle": "Iniciar sesión o crear cuenta",
+      "dialogSubtitle": "Siga comprando con su cuenta Luxe — favoritos, carrito y beneficios de miembro."
     },
     "legal": {
       "loading": "Cargando documento...",
@@ -1605,7 +1631,8 @@
           "freeReturnsValue": "{days, number} días",
           "support": "Soporte",
           "supportValue": "{hours, number}/{days, number}"
-        }
+        },
+        "tagline": "Moda seleccionada con pago seguro y recompensas para miembros."
       },
       "register": {
         "title": "Únase a nuestra comunidad",

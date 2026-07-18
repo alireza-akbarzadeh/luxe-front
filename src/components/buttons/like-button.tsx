@@ -4,6 +4,7 @@ import { IconHeart } from '@tabler/icons-react';
 import React from 'react';
 
 import { useLikeProduct } from '@/components/buttons/useUpdateLike';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { cn } from '~/src/hooks/useContextFactory';
 
 import { Button } from '../ui/button';
@@ -17,10 +18,15 @@ interface Props {
 
 export function LikeButton({ productId, productName, isLiked, className }: Props) {
   const likeMutation = useLikeProduct(productName);
+  const { requireAuth } = useRequireAuth();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!requireAuth({ reason: 'like-product' })) {
+      return;
+    }
 
     likeMutation.mutate({
       id: productId,

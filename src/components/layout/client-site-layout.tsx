@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import type { PropsWithChildren } from 'react';
 
 import { ProfileDrawerSheet } from '@/components/navbar/user/profile-drawer-sheet';
+import { AuthDialog } from '@/domains/auth/components/auth-dialog';
 import { SiteRealtimeProvider } from '@/lib/realtime/site-realtime-provider';
 
 const FooterClient = dynamic(
@@ -45,6 +46,7 @@ export function ClientSiteLayout({ children }: PropsWithChildren) {
         <MobileBottomNavClient />
         <PwaInstallPromptClient />
         <ProfileDrawerSheet />
+        <AuthDialog />
         <ShoppingAssistantRoot />
       </SiteRealtimeProvider>
       <FooterClient />

@@ -17,10 +17,13 @@ import { Typography } from '@/components/ui/typography';
 
 type LoginOtpPanelProps = {
   callbackUrl: string;
+  /** Skip server redirect — used by the global auth dialog. */
+  clientOnly?: boolean;
+  onSuccess?: () => void | Promise<void>;
 };
 
 /** Passwordless login: request a 6-digit email code, then verify with Input OTP. */
-export function LoginOtpPanel({ callbackUrl }: LoginOtpPanelProps) {
+export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: LoginOtpPanelProps) {
   const t = useTranslations('auth.login.otp');
   const [isPending, startTransition] = useTransition();
   const [identifier, setIdentifier] = useState('');
@@ -55,12 +58,22 @@ export function LoginOtpPanel({ callbackUrl }: LoginOtpPanelProps) {
       formData.append('code', otpValue);
       formData.append('rememberMe', String(rememberMe));
       formData.append('callbackUrl', callbackUrl);
+      if (clientOnly) {
+        formData.append('clientOnly', 'true');
+      }
 
       const result = await verifyLoginOTPAction(formData);
-      if (result && 'error' in result) {
+      if (!result) return;
+
+      if ('error' in result && result.error) {
         setError(result.error);
         toast.error(result.error);
         setCode('');
+        return;
+      }
+
+      if (clientOnly && 'success' in result) {
+        await onSuccess?.();
       }
     });
   };
@@ -83,8 +96,10 @@ export function LoginOtpPanel({ callbackUrl }: LoginOtpPanelProps) {
           </Typography.Text>
         ) : null}
 
-        <Flex direction='column' gap={2} className='items-center'>
-          <Label htmlFor='login-otp'>{t('codeLabel')}</Label>
+        <Flex direction='column' gap={3} className='items-center'>
+          <Label htmlFor='login-otp' className='text-sm font-medium'>
+            {t('codeLabel')}
+          </Label>
           <InputOTP
             id='login-otp'
             maxLength={6}
@@ -95,15 +110,15 @@ export function LoginOtpPanel({ callbackUrl }: LoginOtpPanelProps) {
               setCode(value);
               if (value.length === 6) verifyCode(value);
             }}
-            containerClassName='justify-center'
+            containerClassName='w-full justify-center'
           >
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
+            <InputOTPGroup className='w-full max-w-sm justify-between sm:justify-center'>
+              <InputOTPSlot index={0} className='size-12 sm:size-14' />
+              <InputOTPSlot index={1} className='size-12 sm:size-14' />
+              <InputOTPSlot index={2} className='size-12 sm:size-14' />
+              <InputOTPSlot index={3} className='size-12 sm:size-14' />
+              <InputOTPSlot index={4} className='size-12 sm:size-14' />
+              <InputOTPSlot index={5} className='size-12 sm:size-14' />
             </InputOTPGroup>
           </InputOTP>
         </Flex>

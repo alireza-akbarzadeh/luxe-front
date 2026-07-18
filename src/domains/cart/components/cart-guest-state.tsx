@@ -9,11 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
 import { CartImportDialog } from '@/domains/cart/components/cart-import-dialog';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 
 export function CartGuestState() {
   const t = useTranslations('cart');
   const tCommon = useTranslations('common');
   const [importOpen, setImportOpen] = useState(false);
+  const { openAuthDialog } = useRequireAuth();
 
   return (
     <main className='app-container pt-2 pb-6 sm:pt-6 sm:pb-10 lg:pt-8 lg:pb-16'>
@@ -32,11 +34,14 @@ export function CartGuestState() {
           {t('signInDescriptionShared')}
         </Typography.Muted>
         <Flex direction='column' gap={3} className='w-full sm:w-auto sm:flex-row'>
-          <Button asChild className='h-12 w-full rounded-full sm:w-auto' size='lg'>
-            <Link href='/login?callbackUrl=/cart'>
-              {tCommon('signIn')}
-              <IconArrowRight className='ms-2 size-4' />
-            </Link>
+          <Button
+            type='button'
+            className='h-12 w-full rounded-full sm:w-auto'
+            size='lg'
+            onClick={() => openAuthDialog({ callbackUrl: '/cart', reason: 'cart-page' })}
+          >
+            {tCommon('signIn')}
+            <IconArrowRight className='ms-2 size-4' />
           </Button>
           <Button
             type='button'

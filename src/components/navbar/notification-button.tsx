@@ -20,6 +20,7 @@ import {
   getNotificationTypeStyle
 } from '@/domains/account/lib/notification-utils';
 import { useNotificationUnreadCount } from '@/domains/notifications/hooks/use-notification-unread-count';
+import { useRequireAuth } from '@/hooks/use-require-auth';
 import { cn } from '@/lib/utils';
 
 const PREVIEW_LIMIT = 5;
@@ -41,6 +42,7 @@ export function NotificationButton() {
   const t = useTranslations('nav.notifications');
   const tTypes = useTranslations('account.notifications');
   const { isAuthenticated } = useAuth();
+  const { openAuthDialog } = useRequireAuth();
   const { data: unreadCount = 0 } = useNotificationUnreadCount();
   const [open, setOpen] = useState(false);
 
@@ -110,10 +112,16 @@ export function NotificationButton() {
                 {t('signInDescription')}
               </Text>
             </div>
-            <Button asChild className='w-full rounded-full' size='sm'>
-              <Link href='/login?callbackUrl=/notifications' onClick={() => setOpen(false)}>
-                {t('signInButton')}
-              </Link>
+            <Button
+              type='button'
+              className='w-full rounded-full'
+              size='sm'
+              onClick={() => {
+                setOpen(false);
+                openAuthDialog({ callbackUrl: '/notifications', reason: 'notifications' });
+              }}
+            >
+              {t('signInButton')}
             </Button>
           </Flex>
         ) : (
