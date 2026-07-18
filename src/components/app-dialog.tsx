@@ -169,19 +169,24 @@ export function AppDialog(props: AppDialogProps) {
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={cn(
-          'bg-popover text-popover-foreground border-border shadow-2xl',
+          // Override DialogContent `grid` — flex + max-h so body can scroll instead of clipping.
+          'bg-popover text-popover-foreground border-border flex max-h-[min(90dvh,48rem)] flex-col gap-4 overflow-hidden shadow-2xl',
           sizeClasses.dialog,
           stacked && STACKED_CONTENT_CLASS
         )}
         overlayClassName={cn('bg-black/55', stacked && STACKED_OVERLAY_CLASS, overlayClassName)}
       >
         {(title || description) && (
-          <DialogHeader className={cn('pe-14 text-start', headerClassName)}>
+          <DialogHeader className={cn('shrink-0 pe-14 text-start', headerClassName)}>
             {title && <DialogTitle>{title}</DialogTitle>}
             {description && <DialogDescription>{description}</DialogDescription>}
           </DialogHeader>
         )}
-        <div className={cn('py-4', contentClassName)}>{children}</div>
+        <div
+          className={cn('min-h-0 flex-1 overflow-y-auto overscroll-contain py-4', contentClassName)}
+        >
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   );

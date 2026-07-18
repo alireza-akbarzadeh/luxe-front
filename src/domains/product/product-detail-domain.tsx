@@ -99,7 +99,7 @@ export default async function ProductDetailDomain({ product, isLiked }: ProductD
               PDP_MOBILE_SHEET_RADIUS_CLASS,
               PDP_MOBILE_SHEET_SHADOW_CLASS,
               PDP_MOBILE_INFO_OVERLAP_CLASS,
-              'lg:sticky lg:top-28 lg:z-10 lg:mt-0 lg:self-start lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:pt-0 lg:shadow-none'
+              'lg:z-10 lg:mt-0 lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:pt-0 lg:shadow-none'
             )}
           >
             <ProductInfo is_liked={isLiked} product={product} />

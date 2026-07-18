@@ -92,7 +92,7 @@ export function StoreHeroSection() {
                 onChange={(e) => setFilters({ search: e.target.value, page: 1 })}
                 placeholder='Search brands, stores, categories…'
                 aria-label='Search stores'
-                className='border-0 bg-transparent text-base shadow-none focus-visible:ring-0'
+                className='border-0 !bg-transparent text-base shadow-none focus-visible:ring-0'
               />
             </div>
           </motion.div>

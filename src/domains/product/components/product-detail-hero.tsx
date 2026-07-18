@@ -23,8 +23,8 @@ export function ProductDetailHero({
 }: ProductDetailHeroProps) {
   return (
     <ProductDetailProvider isLiked={isLiked} product={product}>
-      <div className='mt-0 grid items-start gap-0 lg:mt-14 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-14 lg:px-8 xl:gap-20'>
-        <div className='min-w-0'>
+      <div className='mt-0 grid gap-0 lg:mt-14 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-14 lg:px-8 xl:gap-20'>
+        <div className='min-w-0 lg:min-h-0'>
           <ProductGallery discount={discount} product={product} />
         </div>
         {children}
