@@ -14,16 +14,24 @@ import { Input } from '@/components/ui/input';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 
 type LoginOtpPanelProps = {
   callbackUrl: string;
   /** Skip server redirect — used by the global auth dialog. */
   clientOnly?: boolean;
+  /** Tighter spacing + controls for the auth dialog. */
+  compact?: boolean;
   onSuccess?: () => void | Promise<void>;
 };
 
 /** Passwordless login: request a 6-digit email code, then verify with Input OTP. */
-export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: LoginOtpPanelProps) {
+export function LoginOtpPanel({
+  callbackUrl,
+  clientOnly = false,
+  compact = false,
+  onSuccess
+}: LoginOtpPanelProps) {
   const t = useTranslations('auth.login.otp');
   const [isPending, startTransition] = useTransition();
   const [identifier, setIdentifier] = useState('');
@@ -80,9 +88,9 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
 
   if (step === 'verify') {
     return (
-      <Flex direction='column' gap={6}>
+      <Flex direction='column' gap={compact ? 3 : 6}>
         <Flex direction='column' gap={2}>
-          <Typography.Muted>
+          <Typography.Muted className={cn(compact && 'text-xs')}>
             {maskedDestination
               ? t('codeSentTo', { destination: maskedDestination })
               : t('codeSentGeneric')}
@@ -96,7 +104,7 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
           </Typography.Text>
         ) : null}
 
-        <Flex direction='column' gap={3} className='items-center'>
+        <Flex direction='column' gap={compact ? 2 : 3} className='items-center'>
           <Label htmlFor='login-otp' className='text-sm font-medium'>
             {t('codeLabel')}
           </Label>
@@ -113,12 +121,30 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
             containerClassName='w-full justify-center'
           >
             <InputOTPGroup className='w-full max-w-sm justify-between sm:justify-center'>
-              <InputOTPSlot index={0} className='size-12 sm:size-14' />
-              <InputOTPSlot index={1} className='size-12 sm:size-14' />
-              <InputOTPSlot index={2} className='size-12 sm:size-14' />
-              <InputOTPSlot index={3} className='size-12 sm:size-14' />
-              <InputOTPSlot index={4} className='size-12 sm:size-14' />
-              <InputOTPSlot index={5} className='size-12 sm:size-14' />
+              <InputOTPSlot
+                index={0}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
+              <InputOTPSlot
+                index={1}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
+              <InputOTPSlot
+                index={2}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
+              <InputOTPSlot
+                index={3}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
+              <InputOTPSlot
+                index={4}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
+              <InputOTPSlot
+                index={5}
+                className={compact ? 'size-11 sm:size-12' : 'size-12 sm:size-14'}
+              />
             </InputOTPGroup>
           </InputOTP>
         </Flex>
@@ -137,7 +163,7 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
 
         <Button
           type='button'
-          className='h-12 w-full'
+          className={cn('w-full', compact ? 'h-10' : 'h-12')}
           disabled={isPending || code.length !== 6}
           onClick={() => verifyCode(code)}
           data-testid='otp-verify-submit'
@@ -169,7 +195,7 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
   }
 
   return (
-    <Flex direction='column' gap={6}>
+    <Flex direction='column' gap={compact ? 3 : 6}>
       {error ? (
         <Typography.Text className='text-sm text-red-500' data-testid='otp-form-error'>
           {error}
@@ -187,7 +213,7 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
             value={identifier}
             onChange={(event) => setIdentifier(event.target.value)}
             placeholder={t('identifierPlaceholder')}
-            className='h-12 ps-10'
+            className={cn('ps-10', compact ? 'h-10' : 'h-12')}
             disabled={isPending}
             autoComplete='username'
           />
@@ -197,7 +223,7 @@ export function LoginOtpPanel({ callbackUrl, clientOnly = false, onSuccess }: Lo
 
       <Button
         type='button'
-        className='h-12 w-full'
+        className={cn('w-full', compact ? 'h-10' : 'h-12')}
         disabled={isPending || !identifier.trim()}
         onClick={sendCode}
         data-testid='otp-send-submit'

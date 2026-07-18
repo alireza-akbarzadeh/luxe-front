@@ -23,7 +23,7 @@ import { LoginOtpPanel } from './login-otp-panel';
 
 export type LoginFormPanelProps = {
   callbackUrl: string;
-  /** `dialog` skips server redirect and calls onSuccess after cookies are set. */
+  /** `dialog` skips server redirect and uses a denser layout. */
   variant?: 'page' | 'dialog';
   onSuccess?: () => void;
   showBrandMark?: boolean;
@@ -46,7 +46,7 @@ export function LoginFormPanel({
   const tValidation = useTranslations('auth.validation');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const clientOnly = variant === 'dialog';
+  const isDialog = variant === 'dialog';
 
   const loginFormSchema = useMemo(() => createLoginFormSchema(tValidation), [tValidation]);
 
@@ -74,7 +74,7 @@ export function LoginFormPanel({
         formData.append('password', value.password);
         formData.append('rememberMe', String(value.rememberMe ?? false));
         formData.append('callbackUrl', callbackUrl);
-        if (clientOnly) {
+        if (isDialog) {
           formData.append('clientOnly', 'true');
         }
 
@@ -97,7 +97,7 @@ export function LoginFormPanel({
           return;
         }
 
-        if (clientOnly && 'success' in result) {
+        if (isDialog && 'success' in result) {
           await finishClientLogin();
         }
       });
@@ -105,9 +105,10 @@ export function LoginFormPanel({
   });
 
   const registerHref = `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+  const inputHeight = isDialog ? 'h-10' : 'h-12';
 
   return (
-    <Flex direction='column' gap={6} className={cn('w-full', className)}>
+    <Flex direction='column' gap={isDialog ? 3 : 6} className={cn('w-full', className)}>
       {showBrandMark ? (
         <Link href='/' className='inline-block'>
           <Typography.Text className='font-display text-3xl font-bold tracking-tight'>
@@ -116,22 +117,32 @@ export function LoginFormPanel({
         </Link>
       ) : null}
 
-      <Flex direction='column' gap={2}>
-        <Typography.H1 className='text-2xl font-bold sm:text-3xl'>
-          {variant === 'dialog' ? tLogin('dialogTitle') : tLogin('title')}
-        </Typography.H1>
-        <Typography.Muted>
-          {variant === 'dialog' ? tLogin('dialogSubtitle') : tLogin('subtitle')}
+      <Flex direction='column' gap={isDialog ? 1 : 2}>
+        {isDialog ? (
+          <Typography.H2 className='text-lg font-semibold tracking-tight sm:text-xl'>
+            {tLogin('dialogTitle')}
+          </Typography.H2>
+        ) : (
+          <Typography.H1 className='text-2xl font-bold sm:text-3xl'>
+            {tLogin('title')}
+          </Typography.H1>
+        )}
+        <Typography.Muted className={cn(isDialog && 'text-xs leading-snug')}>
+          {isDialog ? tLogin('dialogSubtitle') : tLogin('subtitle')}
         </Typography.Muted>
       </Flex>
 
       <Tabs defaultValue='password' className='w-full'>
-        <TabsList className='mb-6 grid w-full grid-cols-2'>
-          <TabsTrigger value='password'>{tLogin('tabs.password')}</TabsTrigger>
-          <TabsTrigger value='otp'>{tLogin('tabs.otp')}</TabsTrigger>
+        <TabsList className={cn('grid w-full grid-cols-2', isDialog ? 'mb-3 h-9' : 'mb-6')}>
+          <TabsTrigger value='password' className={cn(isDialog && 'text-xs')}>
+            {tLogin('tabs.password')}
+          </TabsTrigger>
+          <TabsTrigger value='otp' className={cn(isDialog && 'text-xs')}>
+            {tLogin('tabs.otp')}
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value='password'>
+        <TabsContent value='password' className={cn(isDialog && 'mt-0')}>
           <form.AppForm>
             <form.Root
               onSubmit={(e) => {
@@ -139,7 +150,7 @@ export function LoginFormPanel({
                 e.stopPropagation();
                 form.handleSubmit();
               }}
-              className='space-y-5'
+              className={cn(isDialog ? 'space-y-3' : 'space-y-5')}
             >
               {error ? (
                 <Typography.Text data-testid='form-error' className='text-sm text-red-500'>
@@ -154,7 +165,7 @@ export function LoginFormPanel({
                     label={t('fields.email')}
                     placeholder={t('fields.emailPlaceholder')}
                     inputDir='ltr'
-                    className='h-12'
+                    className={inputHeight}
                   />
                 )}
               </form.AppField>
@@ -181,21 +192,23 @@ export function LoginFormPanel({
                 data-testid='login-submit'
                 isPending={isPending}
                 label={tLogin('submit')}
+                className={cn(isDialog && 'h-10')}
               />
             </form.Root>
           </form.AppForm>
         </TabsContent>
 
-        <TabsContent value='otp'>
+        <TabsContent value='otp' className={cn(isDialog && 'mt-0')}>
           <LoginOtpPanel
             callbackUrl={callbackUrl}
-            clientOnly={clientOnly}
-            onSuccess={clientOnly ? finishClientLogin : undefined}
+            clientOnly={isDialog}
+            compact={isDialog}
+            onSuccess={isDialog ? finishClientLogin : undefined}
           />
         </TabsContent>
       </Tabs>
 
-      <Flex direction='column' gap={4}>
+      <Flex direction='column' gap={isDialog ? 2 : 4}>
         <Flex align='center' gap={3} className='w-full'>
           <div className='border-border h-px flex-1 border-t' />
           <Typography.Muted className='text-xs whitespace-nowrap'>
@@ -204,11 +217,11 @@ export function LoginFormPanel({
           <div className='border-border h-px flex-1 border-t' />
         </Flex>
 
-        <Flex direction='row' gap={3} className='w-full'>
+        <Flex direction='row' gap={2} className='w-full'>
           <Button
             type='button'
             variant='outline'
-            className='h-11 flex-1'
+            className={cn('flex-1', isDialog ? 'h-9' : 'h-11')}
             disabled
             onClick={() => toast.message(tLogin('socialComingSoon'))}
           >
@@ -217,7 +230,7 @@ export function LoginFormPanel({
           <Button
             type='button'
             variant='outline'
-            className='h-11 flex-1'
+            className={cn('flex-1', isDialog ? 'h-9' : 'h-11')}
             disabled
             onClick={() => toast.message(tLogin('socialComingSoon'))}
           >
@@ -226,9 +239,9 @@ export function LoginFormPanel({
         </Flex>
       </Flex>
 
-      <Typography.Muted className='text-center text-sm'>
+      <Typography.Muted className={cn('text-center', isDialog ? 'text-xs' : 'text-sm')}>
         {tLogin('noAccount')}{' '}
-        {variant === 'dialog' ? (
+        {isDialog ? (
           <button
             type='button'
             className='text-accent font-medium hover:underline'
@@ -243,7 +256,9 @@ export function LoginFormPanel({
         )}
       </Typography.Muted>
 
-      <Typography.Muted className='text-center text-xs leading-relaxed'>
+      <Typography.Muted
+        className={cn('text-center leading-relaxed', isDialog ? 'text-[0.65rem]' : 'text-xs')}
+      >
         {tLogin('legalPrefix')}{' '}
         <LegalDocumentLink kind='terms'>{tRegister('termsLink')}</LegalDocumentLink>{' '}
         {tRegister('termsAnd')}{' '}

@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils';
 type AuthBrandPanelProps = {
   /** Compact strip for mobile drawer; full panel for desktop split. */
   variant?: 'panel' | 'strip';
+  /** Denser type + padding for the auth dialog. */
+  compact?: boolean;
   className?: string;
 };
 
@@ -65,7 +67,11 @@ function LightSweep({ animate }: { animate: boolean }) {
 }
 
 /** Luxe-branded auth visual — sheer accent wash + animated blur orbs (login page + dialog). */
-export function AuthBrandPanel({ variant = 'panel', className }: AuthBrandPanelProps) {
+export function AuthBrandPanel({
+  variant = 'panel',
+  compact = false,
+  className
+}: AuthBrandPanelProps) {
   const locale = useLocale() as Locale;
   const pageDir = getDirection(locale);
   const t = useTranslations('auth.sidebar.login');
@@ -126,7 +132,8 @@ export function AuthBrandPanel({ variant = 'panel', className }: AuthBrandPanelP
     <Box
       dir={pageDir}
       className={cn(
-        'bg-accent/5 relative hidden flex-1 items-center justify-center overflow-hidden p-10 lg:flex',
+        'bg-accent/5 relative hidden flex-1 items-center justify-center overflow-hidden lg:flex',
+        compact ? 'p-6' : 'p-10',
         className
       )}
     >
@@ -139,35 +146,56 @@ export function AuthBrandPanel({ variant = 'panel', className }: AuthBrandPanelP
         variants={container}
         initial='hidden'
         animate='show'
-        className='relative z-10 max-w-sm text-center'
+        className={cn('relative z-10 text-center', compact ? 'max-w-xs' : 'max-w-sm')}
       >
         <motion.div variants={item}>
-          <Typography.Text className='font-display mb-6 text-5xl font-bold tracking-tight'>
+          <Typography.Text
+            className={cn(
+              'font-display font-bold tracking-tight',
+              compact ? 'mb-3 text-4xl' : 'mb-6 text-5xl'
+            )}
+          >
             LUXE
           </Typography.Text>
         </motion.div>
         <motion.div variants={item}>
-          <Typography.H2 className='mb-3 text-xl font-semibold'>{t('title')}</Typography.H2>
+          <Typography.H2
+            className={cn('font-semibold', compact ? 'mb-2 text-base' : 'mb-3 text-xl')}
+          >
+            {t('title')}
+          </Typography.H2>
         </motion.div>
         <motion.div variants={item}>
-          <Typography.Muted className='leading-relaxed'>{t('description')}</Typography.Muted>
+          <Typography.Muted className={cn('leading-relaxed', compact && 'text-xs')}>
+            {t('description')}
+          </Typography.Muted>
         </motion.div>
         <motion.div variants={item}>
-          <Typography.Text className='text-muted-foreground mt-6 text-sm font-medium'>
+          <Typography.Text
+            className={cn(
+              'text-muted-foreground font-medium',
+              compact ? 'mt-3 text-xs' : 'mt-6 text-sm'
+            )}
+          >
             {t('tagline')}
           </Typography.Text>
         </motion.div>
 
         <motion.div variants={item}>
-          <Grid cols={3} gap={3} className='mt-10'>
+          <Grid cols={3} gap={compact ? 2 : 3} className={cn(compact ? 'mt-6' : 'mt-10')}>
             {stats.map((feature) => (
               <Flex
                 key={feature.label}
                 direction='column'
                 gap={1}
-                className='border-border/50 bg-background/30 hover:bg-background/50 rounded-2xl border px-2 py-3 text-center backdrop-blur-sm transition-colors duration-300'
+                className={cn(
+                  'border-border/50 bg-background/30 hover:bg-background/50 rounded-2xl border text-center backdrop-blur-sm transition-colors duration-300',
+                  compact ? 'px-1.5 py-2' : 'px-2 py-3'
+                )}
               >
-                <Typography.Text className='text-sm font-semibold'>{feature.value}</Typography.Text>
+                <Typography.Text className={cn('font-semibold', compact ? 'text-xs' : 'text-sm')}>
+                  {feature.value}
+                </Typography.Text>
                 <Typography.Muted className='text-[0.65rem]'>{feature.label}</Typography.Muted>
               </Flex>
             ))}
