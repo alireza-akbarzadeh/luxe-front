@@ -24,32 +24,15 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Typography } from '@/components/ui/typography';
 import { WishlistHeaderActions } from '@/domains/wishlist/components/wishlist-header-actions';
 import { WishlistImportDialog } from '@/domains/wishlist/components/wishlist-import-dialog';
 import { useWishlistActions } from '@/domains/wishlist/hooks/use-wishlist-actions';
 import { useWishlistStore } from '@/domains/wishlist/wishlist.store';
 import { useUser } from '@/hooks/useUser';
+import { WishlistSheetSkeleton } from '~/src/components/wishlist/wishlist-sekeleton';
 
 import { WishlistSheetItem } from './wishlist-sheet-item';
-
-function WishlistSheetSkeleton() {
-  return (
-    <div className='flex-1 space-y-4 overflow-y-auto px-6 py-4'>
-      {[1, 2, 3].map((i) => (
-        <Flex key={i} spacing={4}>
-          <Skeleton className='h-24 w-20 rounded-xl' />
-          <Flex direction='column' spacing={2} className='flex-1'>
-            <Skeleton className='h-4 w-3/4' />
-            <Skeleton className='h-3 w-1/2' />
-            <Skeleton className='h-8 w-28 rounded-full' />
-          </Flex>
-        </Flex>
-      ))}
-    </div>
-  );
-}
 
 export function WishlistSheet() {
   const isOpen = useWishlistStore((s) => s.isSheetOpen);

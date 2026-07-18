@@ -46,7 +46,7 @@ export const walletWithdrawSchema = z.object({
     .number()
     .int('Amount must be a whole number (no cents)')
     .positive('Enter a valid amount'),
-  description: z.string().max(200, 'Description is too long').optional()
+  description: z.string().max(200, 'Description is too long')
 });
 
 export type WalletWithdrawValues = z.infer<typeof walletWithdrawSchema>;

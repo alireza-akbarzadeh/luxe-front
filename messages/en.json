@@ -3225,9 +3225,9 @@
       "transfer": {
         "giveToMember": "Give to Luxe member",
         "title": "Give gift card to a member",
-        "description": "Search by email or phone, then confirm to transfer this card.",
+        "description": "Search by name, email, or phone, then confirm to transfer this card.",
         "searchLabel": "Find recipient",
-        "searchPlaceholder": "Email or phone number…",
+        "searchPlaceholder": "Name, email, or phone…",
         "searchEmpty": "No members found",
         "searching": "Searching…",
         "continue": "Continue",

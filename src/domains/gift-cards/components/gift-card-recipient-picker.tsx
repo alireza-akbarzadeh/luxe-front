@@ -28,12 +28,12 @@ function recipientDescription(user: DtoGiftRecipientLookupResponse) {
   return parts.length > 0 ? parts.join(' · ') : undefined;
 }
 
-/** Search Luxe members by email or phone when gifting a card to another user. */
+/** Search Luxe members by name, email, or phone when gifting a card to another user. */
 export function GiftCardRecipientPicker({
   value,
   onChange,
   label,
-  placeholder = 'Search by email or phone…',
+  placeholder = 'Search by name, email, or phone…',
   emptyLabel = 'No members found',
   searchingLabel = 'Searching…'
 }: GiftCardRecipientPickerProps) {

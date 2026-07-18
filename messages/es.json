@@ -3093,9 +3093,9 @@
       "transfer": {
         "giveToMember": "Regalar a miembro Luxe",
         "title": "Regalar tarjeta a un miembro",
-        "description": "Busca por correo o teléfono y confirma la transferencia.",
+        "description": "Busca por nombre, correo o teléfono y confirma la transferencia.",
         "searchLabel": "Buscar destinatario",
-        "searchPlaceholder": "Correo o teléfono…",
+        "searchPlaceholder": "Nombre, correo o teléfono…",
         "searchEmpty": "No se encontraron miembros",
         "searching": "Buscando…",
         "continue": "Continuar",
