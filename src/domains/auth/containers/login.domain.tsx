@@ -10,12 +10,14 @@ import { toast } from 'sonner';
 
 import { loginAction } from '@/actions/auth.actions';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getDirection, type Locale } from '@/i18n/config';
 import { getCallbackUrl } from '@/lib/utils';
 import { useAppForm } from '~/src/components/forms/useAppForm';
 
 import { createLoginFormSchema } from '../auth.schema';
 import { LegalDocumentLink } from '../components/legal-document-link';
+import { LoginOtpPanel } from '../components/login-otp-panel';
 import { LoginSidebar } from '../components/login-sidebar';
 
 export function LoginDomain() {
@@ -91,58 +93,75 @@ export function LoginDomain() {
             <h1 className='mb-2 text-3xl font-bold'>{tLogin('title')}</h1>
             <p className='text-muted-foreground'>{tLogin('subtitle')}</p>
           </div>
-          <form.AppForm>
-            <form.Root
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                form.handleSubmit();
-              }}
-              className='space-y-6'
-            >
-              {error && (
-                <div data-testid='form-error' className='mb-2 text-sm text-red-500'>
-                  {error}
-                </div>
-              )}
-              <form.AppField name='email'>
-                {(field) => (
-                  <field.TextField
-                    startIcon={IconMail}
-                    data-testid='email-input'
-                    label={t('fields.email')}
-                    placeholder={t('fields.emailPlaceholder')}
-                    inputDir='ltr'
-                    className='h-12'
+
+          <Tabs defaultValue='password' className='w-full'>
+            <TabsList className='mb-6 grid w-full grid-cols-2'>
+              <TabsTrigger value='password'>{tLogin('tabs.password')}</TabsTrigger>
+              <TabsTrigger value='otp'>{tLogin('tabs.otp')}</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value='password'>
+              <form.AppForm>
+                <form.Root
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.handleSubmit();
+                  }}
+                  className='space-y-6'
+                >
+                  {error && (
+                    <div data-testid='form-error' className='mb-2 text-sm text-red-500'>
+                      {error}
+                    </div>
+                  )}
+                  <form.AppField name='email'>
+                    {(field) => (
+                      <field.TextField
+                        startIcon={IconMail}
+                        data-testid='email-input'
+                        label={t('fields.email')}
+                        placeholder={t('fields.emailPlaceholder')}
+                        inputDir='ltr'
+                        className='h-12'
+                      />
+                    )}
+                  </form.AppField>
+
+                  <form.AppField name='password'>
+                    {(field) => (
+                      <field.InputPassword
+                        data-testid='password-input'
+                        label={t('fields.password')}
+                        placeholder={t('password.enterPlaceholder')}
+                        showForgotLink
+                        forgotPasswordLabel={t('forgotPasswordLink')}
+                      />
+                    )}
+                  </form.AppField>
+
+                  <form.AppField name='rememberMe'>
+                    {(field) => (
+                      <field.Checkbox
+                        label={tLogin('rememberMe')}
+                        data-testid='remember-me-checkbox'
+                      />
+                    )}
+                  </form.AppField>
+
+                  <form.Submit
+                    data-testid='login-submit'
+                    isPending={isPending}
+                    label={tLogin('submit')}
                   />
-                )}
-              </form.AppField>
+                </form.Root>
+              </form.AppForm>
+            </TabsContent>
 
-              <form.AppField name='password'>
-                {(field) => (
-                  <field.InputPassword
-                    data-testid='password-input'
-                    label={t('fields.password')}
-                    placeholder={t('password.enterPlaceholder')}
-                    showForgotLink
-                    forgotPasswordLabel={t('forgotPasswordLink')}
-                  />
-                )}
-              </form.AppField>
-
-              <form.AppField name='rememberMe'>
-                {(field) => (
-                  <field.Checkbox label={tLogin('rememberMe')} data-testid='remember-me-checkbox' />
-                )}
-              </form.AppField>
-
-              <form.Submit
-                data-testid='login-submit'
-                isPending={isPending}
-                label={tLogin('submit')}
-              />
-            </form.Root>
-          </form.AppForm>
+            <TabsContent value='otp'>
+              <LoginOtpPanel callbackUrl={callbackUrl} />
+            </TabsContent>
+          </Tabs>
 
           <div className='relative my-8'>
             <div className='absolute inset-0 flex items-center'>

@@ -1469,7 +1469,26 @@
       "welcomeBackToast": "¡Bienvenido de nuevo!",
       "invalidCredentials": "Credenciales no válidas",
       "socialComingSoon": "El inicio de sesión social llegará pronto — use el correo por ahora",
-      "legalPrefix": "Al iniciar sesión, acepta nuestros"
+      "legalPrefix": "Al iniciar sesión, acepta nuestros",
+      "tabs": {
+        "password": "Contraseña",
+        "otp": "Código por correo"
+      },
+      "otp": {
+        "identifierLabel": "Correo o teléfono",
+        "identifierPlaceholder": "you@email.com o +15551234567",
+        "identifierHint": "Enviaremos un código de 6 dígitos por correo. Con teléfono usamos el email de la cuenta.",
+        "sendCode": "Enviar código",
+        "codeLabel": "Código de verificación",
+        "codeSentToast": "Código de acceso enviado",
+        "codeSentTo": "Enviamos un código a {destination}",
+        "codeSentGeneric": "Si existe una cuenta, enviamos un código al correo registrado.",
+        "phoneNote": "SMS aún no está disponible — los códigos se envían por correo.",
+        "verify": "Verificar e iniciar sesión",
+        "resend": "Reenviar código",
+        "changeIdentifier": "Usar otro correo",
+        "rememberMe": "Recordarme durante 15 días"
+      }
     },
     "legal": {
       "loading": "Cargando documento...",

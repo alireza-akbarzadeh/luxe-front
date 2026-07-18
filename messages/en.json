@@ -1573,7 +1573,26 @@
       "welcomeBackToast": "Welcome back!",
       "invalidCredentials": "Invalid credentials",
       "socialComingSoon": "Social sign-in is coming soon — use email for now",
-      "legalPrefix": "By signing in, you agree to our"
+      "legalPrefix": "By signing in, you agree to our",
+      "tabs": {
+        "password": "Password",
+        "otp": "Email code"
+      },
+      "otp": {
+        "identifierLabel": "Email or phone",
+        "identifierPlaceholder": "you@email.com or +15551234567",
+        "identifierHint": "We’ll email a 6-digit code. Phone numbers use the email on your account.",
+        "sendCode": "Send code",
+        "codeLabel": "Verification code",
+        "codeSentToast": "Sign-in code sent",
+        "codeSentTo": "We sent a code to {destination}",
+        "codeSentGeneric": "If an account exists, we sent a sign-in code to the email on file.",
+        "phoneNote": "SMS delivery is not enabled yet — codes are always emailed.",
+        "verify": "Verify and sign in",
+        "resend": "Resend code",
+        "changeIdentifier": "Use a different email",
+        "rememberMe": "Remember me for 15 days"
+      }
     },
     "legal": {
       "loading": "Loading document...",

@@ -145,6 +145,95 @@ export async function loginAction(formData: FormData) {
   }
 }
 
+export type RequestLoginOTPResult =
+  | {
+      success: true;
+      delivery_channel?: string;
+      masked_destination?: string;
+      expires_in_seconds?: number;
+      message?: string;
+    }
+  | { error: string };
+
+/** Request a 6-digit passwordless login code (email or E.164 phone). */
+export async function requestLoginOTPAction(identifier: string): Promise<RequestLoginOTPResult> {
+  try {
+    const trimmed = identifier.trim();
+    if (!trimmed) {
+      return { error: 'Email or phone is required' };
+    }
+
+    const res = await fetch(`${BASE_URL}/auth/login/otp/request`, {
+      method: 'POST',
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({ identifier: trimmed })
+    });
+
+    const json = (await res.json()) as {
+      success?: boolean;
+      message?: string;
+      data?: {
+        delivery_channel?: string;
+        masked_destination?: string;
+        expires_in_seconds?: number;
+      };
+    };
+
+    if (!res.ok || !json.success) {
+      return { error: json.message || 'Unable to send sign-in code' };
+    }
+
+    return {
+      success: true,
+      delivery_channel: json.data?.delivery_channel,
+      masked_destination: json.data?.masked_destination,
+      expires_in_seconds: json.data?.expires_in_seconds,
+      message: json.message
+    };
+  } catch (error) {
+    logger.error('Request login OTP error:', error);
+    return { error: 'An unexpected error occurred while sending the code' };
+  }
+}
+
+/** Verify OTP and establish session cookies (same as password login). */
+export async function verifyLoginOTPAction(formData: FormData) {
+  try {
+    const identifier = formData.get('identifier') as string;
+    const code = formData.get('code') as string;
+    const rememberMe = formData.get('rememberMe') === 'true';
+
+    if (!identifier?.trim() || !code?.trim()) {
+      return { error: 'Code and email/phone are required' };
+    }
+
+    const res = await fetch(`${BASE_URL}/auth/login/otp/verify`, {
+      method: 'POST',
+      headers: await getClientRequestHeaders(),
+      body: JSON.stringify({
+        identifier: identifier.trim(),
+        code: code.trim()
+      })
+    });
+
+    const { data: json, raw } = await safeParseJson<DtoRegisterResponse>(res);
+
+    if (!json) {
+      logger.error('OTP login: empty/invalid JSON from backend', { status: res.status, raw });
+      return { error: 'Server returned an unexpected response. Please try again.' };
+    }
+
+    const error = await handleAuthResponse(res, json, rememberMe, formData);
+    if (error) return error;
+  } catch (error) {
+    if (isNextRedirectError(error)) {
+      throw error;
+    }
+    logger.error('OTP login error:', error);
+    return { error: 'An unexpected error occurred during login' };
+  }
+}
+
 export async function registerAction(formData: FormData) {
   try {
     const email = formData.get('email') as string;

@@ -1573,7 +1573,26 @@
       "welcomeBackToast": "خوش آمدید!",
       "invalidCredentials": "ایمیل یا رمز عبور نادرست است",
       "socialComingSoon": "ورود با شبکه‌های اجتماعی به‌زودی — فعلاً با ایمیل وارد شوید",
-      "legalPrefix": "با ورود، با"
+      "legalPrefix": "با ورود، با",
+      "tabs": {
+        "password": "رمز عبور",
+        "otp": "کد ایمیل"
+      },
+      "otp": {
+        "identifierLabel": "ایمیل یا شماره موبایل",
+        "identifierPlaceholder": "you@email.com یا +98912…",
+        "identifierHint": "یک کد ۶ رقمی به ایمیل ارسال می‌شود. برای شماره موبایل، ایمیل ثبت‌شده در حساب استفاده می‌شود.",
+        "sendCode": "ارسال کد",
+        "codeLabel": "کد تأیید",
+        "codeSentToast": "کد ورود ارسال شد",
+        "codeSentTo": "کد به {destination} ارسال شد",
+        "codeSentGeneric": "اگر حسابی وجود داشته باشد، کد ورود به ایمیل ثبت‌شده ارسال شده است.",
+        "phoneNote": "ارسال پیامک هنوز فعال نیست — کدها همیشه ایمیل می‌شوند.",
+        "verify": "تأیید و ورود",
+        "resend": "ارسال مجدد کد",
+        "changeIdentifier": "تغییر ایمیل/شماره",
+        "rememberMe": "مرا به مدت ۱۵ روز به خاطر بسپار"
+      }
     },
     "legal": {
       "loading": "در حال بارگذاری سند...",
