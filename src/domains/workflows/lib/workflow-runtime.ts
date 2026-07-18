@@ -77,6 +77,11 @@ export function mapBlogPostStatusToStateView(status?: string): DtoStateView {
   );
 }
 
+/** Maps privacy rule status strings to workflow-style badge views for grid display. */
+export function mapPrivacyRuleStatusToStateView(status?: string): DtoStateView {
+  return mapBrandStatusToStateView(status);
+}
+
 /** Maps category active flag to workflow-style badge views for grid display. */
 export function mapCategoryActiveToStateView(isActive?: boolean): DtoStateView {
   return isActive
