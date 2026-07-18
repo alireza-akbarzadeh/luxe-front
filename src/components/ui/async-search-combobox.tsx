@@ -1,7 +1,7 @@
 'use client';
 
 import { IconCheck, IconChevronDown, type TablerIcon } from '@tabler/icons-react';
-import { type ReactNode,useState } from 'react';
+import { type ReactNode, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -45,6 +45,9 @@ export type AsyncSearchComboboxProps<T> = {
   getOptionDescription?: (option: T) => string | undefined;
   /** Called when the popover opens/closes — useful to lazy-fetch options. */
   onOpenChange?: (open: boolean) => void;
+  /** When set, shows a clear row at the top of the list (e.g. "All categories"). */
+  clearLabel?: string;
+  onClear?: () => void;
   triggerClassName?: string;
 };
 
@@ -75,6 +78,8 @@ export function AsyncSearchCombobox<T>({
   renderOption,
   getOptionDescription,
   onOpenChange,
+  clearLabel,
+  onClear,
   triggerClassName
 }: AsyncSearchComboboxProps<T>) {
   const [open, setOpen] = useState(false);
@@ -99,7 +104,7 @@ export function AsyncSearchCombobox<T>({
     <Flex direction='column' spacing={2} className='w-full'>
       {label ? <p className='text-sm font-medium'>{label}</p> : null}
 
-      <Popover open={open} onOpenChange={handleOpenChange}>
+      <Popover modal={false} open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button
             type='button'
@@ -125,7 +130,11 @@ export function AsyncSearchCombobox<T>({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className='w-[var(--radix-popover-trigger-width)] p-0' align='start'>
+        <PopoverContent
+          className='pointer-events-auto z-[120] w-[var(--radix-popover-trigger-width)] p-0'
+          align='start'
+        >
+          {' '}
           <Command shouldFilter={false}>
             <CommandInput
               placeholder={searchPlaceholder ?? placeholder}
@@ -135,6 +144,20 @@ export function AsyncSearchCombobox<T>({
             <CommandList>
               <CommandEmpty>{emptyMessage}</CommandEmpty>
               <CommandGroup>
+                {clearLabel && onClear ? (
+                  <CommandItem
+                    value='__clear__'
+                    onSelect={() => {
+                      onClear();
+                      setOpen(false);
+                    }}
+                  >
+                    <IconCheck
+                      className={cn('mr-2 size-4', !value ? 'opacity-100' : 'opacity-0')}
+                    />
+                    <span className='text-muted-foreground text-sm'>{clearLabel}</span>
+                  </CommandItem>
+                ) : null}
                 {options.map((option) => {
                   const optionValue = getOptionValue(option);
                   if (!optionValue) return null;

@@ -3,7 +3,7 @@
 import { IconDownload, IconFileSpreadsheet, IconFilter } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { TableState } from '@/components/table/data-table';
@@ -81,6 +81,12 @@ export function ProductsDomains() {
     getTotal,
     useQuery: useGetProducts
   });
+
+  // Filters live in the URL — jump back to page 1 when they change.
+  useEffect(() => {
+    serverTable.tableState.resetPagination();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when filter query params change
+  }, [status, minPrice, maxPrice, categoryId, brandId, isDigital]);
 
   const handleBulkDelete = useCallback(() => {
     const productIds = Object.entries(serverTable.tableState.rowSelection)

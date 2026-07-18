@@ -19,8 +19,9 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet';
+import { BrandPicker } from '@/domains/brands/components/brand-picker';
+import { CategoryPicker } from '@/domains/categories/components/category-picker';
 import { useProductsQueryState } from '@/domains/product-dashboard/hooks/use-products-query';
-import { useGetBrands } from '@/services/-brands-get';
 import { GetProductsStatus } from '@/services/-products-get.schemas';
 
 interface ProductsFilterSheetProps {
@@ -45,31 +46,49 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
     setIsDigital
   } = useProductsQueryState();
 
-  const { data: brandsData } = useGetBrands({ limit: 100, page: 1 });
-  const brandOptions =
-    brandsData?.data?.brands?.map((brand) => ({
-      label: brand.name ?? `Brand #${brand.id}`,
-      value: String(brand.id)
-    })) ?? [];
-
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side='right' className='flex w-full flex-col sm:max-w-md'>
-        <SheetHeader>
+      <SheetContent
+        side='right'
+        className='flex h-full w-full max-w-full flex-col gap-0 p-0 sm:max-w-xl lg:max-w-2xl'
+        onInteractOutside={(event) => {
+          // Portaled Select / Combobox menus render outside the sheet — keep the sheet open.
+          const target = event.target as HTMLElement | null;
+          if (
+            target?.closest(
+              '[data-slot=select-content], [data-radix-popper-content-wrapper], [cmdk-root], [data-slot=popover-content]'
+            )
+          ) {
+            event.preventDefault();
+          }
+        }}
+        onPointerDownOutside={(event) => {
+          const target = event.target as HTMLElement | null;
+          if (
+            target?.closest(
+              '[data-slot=select-content], [data-radix-popper-content-wrapper], [cmdk-root], [data-slot=popover-content]'
+            )
+          ) {
+            event.preventDefault();
+          }
+        }}
+      >
+        <SheetHeader className='border-border shrink-0 border-b px-6 py-5 pe-14 text-start'>
           <SheetTitle>Filter products</SheetTitle>
           <SheetDescription>
-            Narrow the catalog by status, price, category, and product type.
+            Narrow the catalog by status, price, category, brand, and product type. Filters sync to
+            the URL and the products API.
           </SheetDescription>
         </SheetHeader>
 
-        <Flex direction='column' spacing={4} className='flex-1 overflow-y-auto px-1 py-2'>
+        <Flex direction='column' spacing={5} className='min-h-0 flex-1 overflow-y-auto px-6 py-5'>
           <div className='space-y-2'>
             <Label>Status</Label>
             <Select
               value={status}
               onValueChange={(value) => void setStatus(value as typeof status)}
             >
-              <SelectTrigger>
+              <SelectTrigger className='h-11 w-full'>
                 <SelectValue placeholder='All statuses' />
               </SelectTrigger>
               <SelectContent>
@@ -90,6 +109,7 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
                 min={0}
                 step='0.01'
                 placeholder='0'
+                className='h-11'
                 value={minPrice ?? ''}
                 onChange={(event) => {
                   const value = event.target.value;
@@ -105,6 +125,7 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
                 min={0}
                 step='0.01'
                 placeholder='Any'
+                className='h-11'
                 value={maxPrice ?? ''}
                 onChange={(event) => {
                   const value = event.target.value;
@@ -114,40 +135,23 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
             </div>
           </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='products-category-id'>Category ID</Label>
-            <Input
-              id='products-category-id'
-              type='number'
-              min={1}
-              placeholder='Optional'
-              value={categoryId ?? ''}
-              onChange={(event) => {
-                const value = event.target.value;
-                void setCategoryId(value === '' ? null : Number(value));
-              }}
-            />
-          </div>
+          <CategoryPicker
+            value={categoryId != null ? String(categoryId) : ''}
+            onChange={(id) => void setCategoryId(id ? Number(id) : null)}
+            allowClear
+            clearLabel='All categories'
+            placeholder='All categories'
+            enabled={open}
+          />
 
-          <div className='space-y-2'>
-            <Label>Brand</Label>
-            <Select
-              value={brandId != null ? String(brandId) : 'all'}
-              onValueChange={(value) => void setBrandId(value === 'all' ? null : Number(value))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder='All brands' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='all'>All brands</SelectItem>
-                {brandOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <BrandPicker
+            value={brandId != null ? String(brandId) : ''}
+            onChange={(id) => void setBrandId(id ? Number(id) : null)}
+            allowClear
+            clearLabel='All brands'
+            placeholder='All brands'
+            enabled={open}
+          />
 
           <div className='space-y-2'>
             <Label>Product type</Label>
@@ -155,7 +159,7 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
               value={isDigital}
               onValueChange={(value) => void setIsDigital(value as typeof isDigital)}
             >
-              <SelectTrigger>
+              <SelectTrigger className='h-11 w-full'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -167,12 +171,12 @@ export function ProductsFilterSheet({ open, onOpenChange, onReset }: ProductsFil
           </div>
         </Flex>
 
-        <SheetFooter className='gap-2 sm:justify-between'>
+        <SheetFooter className='border-border shrink-0 gap-2 border-t px-6 py-4 sm:justify-between'>
           <Button type='button' variant='ghost' onClick={onReset}>
             Reset filters
           </Button>
           <Button type='button' onClick={() => onOpenChange(false)}>
-            Apply
+            Done
           </Button>
         </SheetFooter>
       </SheetContent>
