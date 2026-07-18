@@ -1,48 +1,64 @@
 'use client';
 
-import {
-  IconDownload,
-  IconFileSpreadsheet,
-  IconUpload
-} from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { AppDialog } from '@/components/app-dialog';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Flex } from '@/components/ui/flex';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+import { ExcelImportDialog, type ExcelImportResult } from '@/components/excel-import';
+import { downloadBlobExport } from '@/lib/download-blob-export';
 import { usePostAdminImportCategories } from '@/services/-admin-import-categories-post';
-import type { DtoImportRowResult } from '@/services/-admin-import-categories-post.schemas';
 import { getAdminImportTemplateEntity } from '@/services/-admin-import-template-{entity}-get';
 import { getGetCategoriesQueryKey } from '@/services/-categories-get';
+
+import { CATEGORY_IMPORT_COLUMNS } from '../lib/category-import-columns';
 
 interface CategoryImportDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+async function downloadCategoryImportTemplate() {
+  const blob = await getAdminImportTemplateEntity('categories', {
+    responseType: 'blob',
+    headers: {
+      Accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    },
+    skipToast: true
+  });
+
+  if (!(blob instanceof Blob)) {
+    throw new Error('Unexpected template response');
+  }
+
+  if (blob.type.includes('json') || blob.size < 64) {
+    const text = await blob.text();
+    let message = 'Could not download template';
+    try {
+      const parsed = JSON.parse(text) as { message?: string; error?: string };
+      message = parsed.message || parsed.error || message;
+    } catch {
+      // keep default
+    }
+    throw new Error(message);
+  }
+
+  downloadBlobExport(blob, 'luxe-categories-import-template.xlsx');
+}
+
 export function CategoryImportDialog({ open, onOpenChange }: CategoryImportDialogProps) {
   const queryClient = useQueryClient();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [rows, setRows] = useState<DtoImportRowResult[]>([]);
-  const [summary, setSummary] = useState<{ created?: number; failed?: number; skipped?: number }>(
-    {}
-  );
+  const [result, setResult] = useState<ExcelImportResult | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const importMutation = usePostAdminImportCategories({
     mutation: {
       onSuccess: (response) => {
         const data = response.data;
-        setRows(data?.rows ?? []);
-        setSummary({
+        setResult({
           created: data?.created,
           failed: data?.failed,
-          skipped: data?.skipped
+          skipped: data?.skipped,
+          rows: data?.rows
         });
         void queryClient.invalidateQueries({ queryKey: getGetCategoriesQueryKey() });
         toast.success('Import finished', {
@@ -57,146 +73,34 @@ export function CategoryImportDialog({ open, onOpenChange }: CategoryImportDialo
     }
   });
 
-  const reset = () => {
-    setFile(null);
-    setRows([]);
-    setSummary({});
-  };
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) reset();
-    onOpenChange(next);
-  };
-
   const handleDownloadTemplate = async () => {
+    setIsDownloading(true);
     try {
-      const blob = await getAdminImportTemplateEntity('categories', { responseType: 'blob' });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = 'categories-import-template.xlsx';
-      anchor.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      toast.error('Could not download template');
+      await downloadCategoryImportTemplate();
+      toast.success('Template downloaded');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Could not download template');
+    } finally {
+      setIsDownloading(false);
     }
-  };
-
-  const handleImport = () => {
-    if (!file) {
-      toast.error('Choose an Excel file first');
-      return;
-    }
-
-    importMutation.mutate({ data: { file } });
   };
 
   return (
-    <AppDialog
+    <ExcelImportDialog
       open={open}
-      onOpenChange={handleOpenChange}
+      onOpenChange={onOpenChange}
       title='Import categories from Excel'
-      description='Upload a .xlsx file with columns: name, slug, description, parent_id, is_active.'
-      size='lg'
-    >
-      <Flex direction='column' spacing={4}>
-        <Flex direction='row' wrap='wrap' spacing={2}>
-          <Button type='button' variant='outline' onClick={handleDownloadTemplate}>
-            <IconDownload className='size-4' />
-            Download template
-          </Button>
-          <Button type='button' variant='outline' onClick={() => inputRef.current?.click()}>
-            <IconUpload className='size-4' />
-            Choose file
-          </Button>
-          <input
-            ref={inputRef}
-            type='file'
-            accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            className='sr-only'
-            onChange={(event) => {
-              const next = event.target.files?.[0] ?? null;
-              setFile(next);
-              setRows([]);
-              setSummary({});
-            }}
-          />
-        </Flex>
-
-        <div
-          className={cn(
-            'rounded-lg border border-dashed p-6 text-center',
-            file ? 'border-primary/40 bg-primary/5' : 'border-border'
-          )}
-        >
-          <IconFileSpreadsheet className='text-muted-foreground mx-auto mb-2 size-8' />
-          {file ? (
-            <Flex direction='column' spacing={1} align='center'>
-              <p className='text-sm font-medium'>{file.name}</p>
-              <p className='text-muted-foreground text-xs'>
-                {(file.size / 1024).toFixed(1)} KB · Excel workbook
-              </p>
-            </Flex>
-          ) : (
-            <p className='text-muted-foreground text-sm'>
-              Select a .xlsx file or download the template to get started.
-            </p>
-          )}
-        </div>
-
-        {(summary.created !== undefined || rows.length > 0) && (
-          <Flex direction='column' spacing={2}>
-            <Flex direction='row' spacing={2} wrap='wrap'>
-              <Badge variant='secondary'>Created: {summary.created ?? 0}</Badge>
-              <Badge variant='outline'>Failed: {summary.failed ?? 0}</Badge>
-              <Badge variant='outline'>Skipped: {summary.skipped ?? 0}</Badge>
-            </Flex>
-            {rows.length > 0 && (
-              <ScrollArea className='max-h-56 rounded-lg border'>
-                <div className='divide-y p-2'>
-                  {rows.map((row) => (
-                    <Flex
-                      key={`${row.row}-${row.name}`}
-                      direction='row'
-                      align='center'
-                      justify='between'
-                      className='py-2 text-sm'
-                    >
-                      <span>
-                        Row {row.row}: {row.name ?? '—'}
-                      </span>
-                      <Badge
-                        variant={
-                          row.status === 'created'
-                            ? 'default'
-                            : row.status === 'failed'
-                              ? 'destructive'
-                              : 'secondary'
-                        }
-                      >
-                        {row.status}
-                      </Badge>
-                    </Flex>
-                  ))}
-                </div>
-              </ScrollArea>
-            )}
-          </Flex>
-        )}
-
-        <Flex direction='row' justify='end' spacing={2}>
-          <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-            Close
-          </Button>
-          <Button
-            type='button'
-            onClick={handleImport}
-            disabled={!file || importMutation.isPending}
-          >
-            {importMutation.isPending ? 'Importing…' : 'Import categories'}
-          </Button>
-        </Flex>
-      </Flex>
-    </AppDialog>
+      description='Download the template, fill the sheet, review the preview grid, then import.'
+      preferredSheetName='Categories'
+      columns={CATEGORY_IMPORT_COLUMNS}
+      emptyHint='Select a .xlsx with columns: name, slug, description, parent_id, is_active.'
+      submitLabel='Import categories'
+      isSubmitting={importMutation.isPending}
+      onSubmit={(file) => importMutation.mutate({ data: { file } })}
+      onDownloadTemplate={handleDownloadTemplate}
+      isDownloadingTemplate={isDownloading}
+      result={result}
+      onResetResult={() => setResult(null)}
+    />
   );
 }

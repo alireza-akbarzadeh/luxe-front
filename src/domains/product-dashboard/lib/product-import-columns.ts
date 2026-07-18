@@ -1,10 +1,7 @@
+import type { ExcelImportColumn } from '@/components/excel-import';
+
 /** Exact Excel columns expected by POST /admin/import/products (order matters). */
-export type ProductImportColumn = {
-  key: string;
-  required: boolean;
-  description: string;
-  example: string;
-};
+export type ProductImportColumn = ExcelImportColumn;
 
 export const PRODUCT_IMPORT_COLUMNS: ProductImportColumn[] = [
   {
