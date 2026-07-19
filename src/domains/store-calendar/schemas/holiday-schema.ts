@@ -43,6 +43,10 @@ export const holidayFormSchema = z
   .refine((values) => values.end_date >= values.start_date, {
     message: 'End date must be on or after the start date',
     path: ['end_date']
+  })
+  .refine((values) => values.apply_to !== 'vendor' || Boolean(values.vendor_id?.trim()), {
+    message: 'Select a vendor',
+    path: ['vendor_id']
   });
 
 export type HolidayFormValues = z.infer<typeof holidayFormSchema>;

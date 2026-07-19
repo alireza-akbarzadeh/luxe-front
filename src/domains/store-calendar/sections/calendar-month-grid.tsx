@@ -8,7 +8,11 @@ import { CalendarListView } from '@/domains/store-calendar/sections/calendar-lis
 import { CalendarMonthView } from '@/domains/store-calendar/sections/calendar-month-view';
 import { CalendarWeekView } from '@/domains/store-calendar/sections/calendar-week-view';
 import { useStoreCalendarStore } from '@/domains/store-calendar/stores/store-calendar-store';
-import type { CalendarDayEvent, CalendarQuickAction, CalendarViewMode } from '@/domains/store-calendar/types/store-calendar.types';
+import type {
+  CalendarDayEvent,
+  CalendarQuickAction,
+  CalendarViewMode
+} from '@/domains/store-calendar/types/store-calendar.types';
 
 interface CalendarMonthGridProps {
   year: number;
@@ -62,7 +66,11 @@ export function CalendarMonthGrid({ year, month, eventsByDate, onAction }: Calen
           />
         )}
         {viewMode === 'list' && (
-          <CalendarListView eventsByDate={eventsByDate} selectedDate={selectedDate} onSelect={handleSelect} />
+          <CalendarListView
+            eventsByDate={eventsByDate}
+            selectedDate={selectedDate}
+            onSelect={handleSelect}
+          />
         )}
       </CardContent>
     </Card>

@@ -25,7 +25,11 @@ import {
   holidayDefaultValues,
   holidayFormSchema
 } from '@/domains/store-calendar/schemas/holiday-schema';
-import { getGetAdminCalendarHolidaysIdQueryKey, useGetAdminCalendarHolidaysId } from '@/services/-admin-calendar-holidays-{id}-get';
+import { VendorPicker } from '@/domains/vendors-admin/components/vendor-picker';
+import {
+  getGetAdminCalendarHolidaysIdQueryKey,
+  useGetAdminCalendarHolidaysId
+} from '@/services/-admin-calendar-holidays-{id}-get';
 import { usePutAdminCalendarHolidaysId } from '@/services/-admin-calendar-holidays-{id}-put';
 import { usePostAdminCalendarHolidays } from '@/services/-admin-calendar-holidays-post';
 import { useGetAdminStores } from '@/services/-admin-stores-get';
@@ -42,10 +46,10 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
   const queryClient = useQueryClient();
   const invalidateCalendar = useInvalidateCalendar();
 
-  const { data: { data: holiday } = {}, isLoading: isLoadingHoliday } = useGetAdminCalendarHolidaysId(
-    Number(holidayId),
-    { query: { enabled: isEdit && Boolean(holidayId) } }
-  );
+  const { data: { data: holiday } = {}, isLoading: isLoadingHoliday } =
+    useGetAdminCalendarHolidaysId(Number(holidayId), {
+      query: { enabled: isEdit && Boolean(holidayId) }
+    });
 
   const { data: storesData } = useGetAdminStores({ limit: 100, sort_by: 'newest' });
   const storeOptions = (storesData?.data?.stores ?? []).map((store) => ({
@@ -73,7 +77,11 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
   const isPending = isCreating || isUpdating;
 
   const form = useAppForm({
-    defaultValues: { ...holidayDefaultValues, start_date: defaultDate ?? '', end_date: defaultDate ?? '' },
+    defaultValues: {
+      ...holidayDefaultValues,
+      start_date: defaultDate ?? '',
+      end_date: defaultDate ?? ''
+    },
     validators: { onSubmit: holidayFormSchema },
     onSubmit: async ({ value }) => {
       try {
@@ -157,7 +165,11 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                   <form.AppField
                     name='holiday_type'
                     children={(field) => (
-                      <field.Select label='Holiday type' options={[...HOLIDAY_TYPE_OPTIONS]} required />
+                      <field.Select
+                        label='Holiday type'
+                        options={[...HOLIDAY_TYPE_OPTIONS]}
+                        required
+                      />
                     )}
                   />
                 </GridItem>
@@ -165,7 +177,11 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                   <form.AppField
                     name='apply_to'
                     children={(field) => (
-                      <field.Select label='Apply to' options={[...HOLIDAY_APPLY_TO_OPTIONS]} required />
+                      <field.Select
+                        label='Apply to'
+                        options={[...HOLIDAY_APPLY_TO_OPTIONS]}
+                        required
+                      />
                     )}
                   />
                 </GridItem>
@@ -173,13 +189,13 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                 <GridItem>
                   <form.AppField
                     name='start_date'
-                          children={(field) => <field.DatePicker label='Start date' />}
+                    children={(field) => <field.DatePicker label='Start date' />}
                   />
                 </GridItem>
                 <GridItem>
                   <form.AppField
                     name='end_date'
-                          children={(field) => <field.DatePicker label='End date' />}
+                    children={(field) => <field.DatePicker label='End date' />}
                   />
                 </GridItem>
 
@@ -206,10 +222,24 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                         </GridItem>
                       )}
                       {applyTo === 'vendor' && (
-                        <GridItem>
+                        <GridItem className='sm:col-span-2'>
                           <form.AppField
                             name='vendor_id'
-                            children={(field) => <field.TextField label='Vendor ID' placeholder='42' />}
+                            children={(field) => (
+                              <VendorPicker
+                                value={field.state.value ?? ''}
+                                onChange={(vendorId) => field.handleChange(vendorId ?? '')}
+                                label='Vendor'
+                                placeholder='Select a vendor…'
+                                searchPlaceholder='Search by name…'
+                                detail='Assign this off day to a specific vendor store.'
+                                error={
+                                  field.state.meta.errors?.[0] != null
+                                    ? String(field.state.meta.errors[0])
+                                    : undefined
+                                }
+                              />
+                            )}
                           />
                         </GridItem>
                       )}
@@ -245,9 +275,7 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                 <GridItem className='sm:col-span-2'>
                   <form.AppField
                     name='notes'
-                    children={(field) => (
-                      <field.TextArea label='Internal notes' rows={2} />
-                    )}
+                    children={(field) => <field.TextArea label='Internal notes' rows={2} />}
                   />
                 </GridItem>
               </Grid>
@@ -270,7 +298,11 @@ export function HolidayForm({ isEdit = false, holidayId, defaultDate }: HolidayF
                   {isPending ? <IconLoader2 className='size-4 animate-spin' /> : null}
                   Save as draft
                 </Button>
-                <Button type='button' disabled={isPending} onClick={() => submitWithStatus('published')}>
+                <Button
+                  type='button'
+                  disabled={isPending}
+                  onClick={() => submitWithStatus('published')}
+                >
                   {isPending ? <IconLoader2 className='size-4 animate-spin' /> : null}
                   Save &amp; publish
                 </Button>
