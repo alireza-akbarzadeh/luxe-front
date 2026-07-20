@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Flex } from '@/components/ui/flex';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Typography } from '@/components/ui/typography';
-import { clearClientAccessToken } from '@/lib/auth/auth-session';
+import { bootstrapAuthSession } from '@/lib/auth/auth-session';
 import { cn } from '@/lib/utils';
 
 import { createLoginFormSchema } from '../auth.schema';
@@ -51,10 +51,10 @@ export function LoginFormPanel({
   const loginFormSchema = useMemo(() => createLoginFormSchema(tValidation), [tValidation]);
 
   const finishClientLogin = async () => {
-    clearClientAccessToken();
+    onSuccess?.();
+    await bootstrapAuthSession();
     await refreshUser();
     toast.success(tLogin('welcomeBackToast'));
-    onSuccess?.();
   };
 
   const form = useAppForm({

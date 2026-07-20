@@ -10,7 +10,8 @@ import { Flex } from '@/components/ui/flex';
 import {
   deliverySimulateDefaultValues,
   deliverySimulateFormSchema,
-  SHIPPING_METHOD_OPTIONS} from '@/domains/store-calendar/schemas/delivery-simulate-schema';
+  SHIPPING_METHOD_OPTIONS
+} from '@/domains/store-calendar/schemas/delivery-simulate-schema';
 import { usePostAdminCalendarSimulate } from '@/services/-admin-calendar-simulate-post';
 import type { DtoSimulateDeliveryResponse } from '@/services/-admin-calendar-simulate-post.schemas';
 import { useGetAdminStores } from '@/services/-admin-stores-get';
@@ -95,7 +96,7 @@ export function DeliverySimulatorCard({ onResult }: DeliverySimulatorCardProps) 
                 <form.AppField
                   name='shipping_method'
                   children={(field) => (
-                    <field.Select label='Shipping method' options={[...SHIPPING_METHOD_OPTIONS]} required />
+                    <field.Select label='method' options={[...SHIPPING_METHOD_OPTIONS]} required />
                   )}
                 />
               </Flex>

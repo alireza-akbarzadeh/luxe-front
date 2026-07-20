@@ -6,6 +6,8 @@ interface AuthDialogState {
   callbackUrl: string;
   /** Optional context for analytics / future copy variants. */
   reason: string | null;
+  /** Ignore open requests briefly after a successful sign-in close. */
+  suppressOpenUntil: number;
 }
 
 interface AuthDialogActions {
@@ -20,8 +22,11 @@ type AuthDialogStore = AuthDialogState & AuthDialogActions;
 const initialState: AuthDialogState = {
   isOpen: false,
   callbackUrl: '/',
-  reason: null
+  reason: null,
+  suppressOpenUntil: 0
 };
+
+const SUPPRESS_REOPEN_MS = 600;
 
 function resolveCallbackUrl(callbackUrl?: string): string {
   if (callbackUrl?.startsWith('/') && !callbackUrl.startsWith('//')) {
@@ -37,12 +42,24 @@ function resolveCallbackUrl(callbackUrl?: string): string {
 export const useAuthDialogStore = create<AuthDialogStore>()((set) => ({
   ...initialState,
   openAuthDialog: (options) =>
-    set({
-      isOpen: true,
-      callbackUrl: resolveCallbackUrl(options?.callbackUrl),
-      reason: options?.reason ?? null
+    set((state) => {
+      if (Date.now() < state.suppressOpenUntil) {
+        return state;
+      }
+
+      return {
+        isOpen: true,
+        callbackUrl: resolveCallbackUrl(options?.callbackUrl),
+        reason: options?.reason ?? null,
+        suppressOpenUntil: 0
+      };
     }),
-  closeAuthDialog: () => set({ isOpen: false, reason: null }),
+  closeAuthDialog: () =>
+    set({
+      isOpen: false,
+      reason: null,
+      suppressOpenUntil: Date.now() + SUPPRESS_REOPEN_MS
+    }),
   setOpen: (open) => set({ isOpen: open, ...(open ? {} : { reason: null }) }),
   reset: () => set(initialState)
 }));

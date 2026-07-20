@@ -1,9 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { AppDialog } from '@/components/app-dialog';
+import { useAuth } from '@/components/providers/auth-provider';
 import { Flex } from '@/components/ui/flex';
+import { useMediaDevices } from '@/hooks/useMediaDevices';
 import { useAuthDialogStore } from '@/stores/auth-dialog-store';
 
 import { AuthBrandPanel } from './auth-brand-panel';
@@ -12,16 +15,47 @@ import { LoginFormPanel } from './login-form-panel';
 /** Global split auth dialog — denser than the full `/login` page. */
 export function AuthDialog() {
   const t = useTranslations('auth.login');
+  const { isAuthenticated } = useAuth();
+  const { isDesktop } = useMediaDevices();
   const isOpen = useAuthDialogStore((state) => state.isOpen);
   const callbackUrl = useAuthDialogStore((state) => state.callbackUrl);
   const setOpen = useAuthDialogStore((state) => state.setOpen);
   const closeAuthDialog = useAuthDialogStore((state) => state.closeAuthDialog);
+  const ignoreOpenChangeRef = useRef(false);
+
+  useEffect(() => {
+    if (isAuthenticated && isOpen) {
+      ignoreOpenChangeRef.current = true;
+      closeAuthDialog();
+    }
+  }, [closeAuthDialog, isAuthenticated, isOpen]);
+
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (open && ignoreOpenChangeRef.current) {
+        return;
+      }
+
+      if (!open) {
+        ignoreOpenChangeRef.current = false;
+      }
+
+      setOpen(open);
+    },
+    [setOpen]
+  );
+
+  const handleLoginSuccess = useCallback(() => {
+    ignoreOpenChangeRef.current = true;
+    closeAuthDialog();
+  }, [closeAuthDialog]);
 
   return (
     <AppDialog
       open={isOpen}
-      onOpenChange={setOpen}
+      onOpenChange={handleOpenChange}
       stacked
+      preferDialog={isDesktop}
       size='xl'
       title={t('dialogTitle')}
       headerClassName='sr-only'
@@ -39,7 +73,7 @@ export function AuthDialog() {
             <LoginFormPanel
               variant='dialog'
               callbackUrl={callbackUrl}
-              onSuccess={closeAuthDialog}
+              onSuccess={handleLoginSuccess}
             />
           </Flex>
         </Flex>
