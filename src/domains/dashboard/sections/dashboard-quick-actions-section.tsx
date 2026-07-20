@@ -21,7 +21,7 @@ export function DashboardQuickActionsSection() {
         <CardDescription>Jump into common admin workflows</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-4'>
+        <div className='grid gap-3 sm:grid-cols-2 xl:grid-cols-3'>
           {DASHBOARD_QUICK_ACTIONS.map((action) => {
             const Icon = QUICK_ACTION_ICONS[action.icon];
             return (

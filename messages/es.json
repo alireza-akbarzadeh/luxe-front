@@ -172,6 +172,15 @@
         "invoice": {
           "title": "No se pudo cargar la factura"
         },
+        "transactions": {
+          "title": "No se pudieron cargar las transacciones"
+        },
+        "transaction": {
+          "title": "No se pudo cargar la transacción"
+        },
+        "payment": {
+          "title": "No se pudo cargar el pago"
+        },
         "discounts": {
           "title": "No se pudieron cargar los descuentos"
         },
