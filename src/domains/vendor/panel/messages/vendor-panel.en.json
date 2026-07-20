@@ -5,6 +5,12 @@
     "backToMarketing": "← Vendor marketing"
   },
   "nav": {
+    "favorites": "Favorites",
+    "favoritesEmpty": "Star any page below to pin it here for quick access.",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "addedToFavorites": "Added {label} to favorites",
+    "removedFromFavorites": "Removed {label} from favorites",
     "groups": {
       "main": "Main",
       "commerce": "Commerce",

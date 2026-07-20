@@ -3913,6 +3913,12 @@
         "backToMarketing": "← بازاریابی فروشندگان"
       },
       "nav": {
+        "favorites": "علاقه‌مندی‌ها",
+        "favoritesEmpty": "برای دسترسی سریع، هر صفحه‌ای را ستاره‌دار کنید.",
+        "addToFavorites": "افزودن به علاقه‌مندی‌ها",
+        "removeFromFavorites": "حذف از علاقه‌مندی‌ها",
+        "addedToFavorites": "{label} به علاقه‌مندی‌ها اضافه شد",
+        "removedFromFavorites": "{label} از علاقه‌مندی‌ها حذف شد",
         "groups": {
           "main": "اصلی",
           "commerce": "فروش",

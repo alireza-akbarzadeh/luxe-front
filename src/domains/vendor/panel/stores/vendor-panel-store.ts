@@ -10,6 +10,8 @@ interface VendorPanelState {
   activeStoreName: string;
   activeStoreSlug: string;
   productViewMode: 'grid' | 'table';
+  /** Pinned vendor panel routes (`href` values from vendor nav). */
+  favoriteHrefs: string[];
 }
 
 interface VendorPanelActions {
@@ -20,6 +22,8 @@ interface VendorPanelActions {
   setNotificationsOpen: (open: boolean) => void;
   setActiveStore: (store: { id: number; name: string; slug: string }) => void;
   setProductViewMode: (mode: 'grid' | 'table') => void;
+  toggleFavoriteHref: (href: string) => void;
+  isFavoriteHref: (href: string) => boolean;
   reset: () => void;
 }
 
@@ -33,7 +37,8 @@ const initialState: VendorPanelState = {
   activeStoreId: 0,
   activeStoreName: '',
   activeStoreSlug: '',
-  productViewMode: 'table'
+  productViewMode: 'table',
+  favoriteHrefs: []
 };
 
 /** Client UI state for the vendor dashboard shell (not server data). */
@@ -53,6 +58,16 @@ export const useVendorPanelStore = create<VendorPanelStore>()(
           activeStoreSlug: store.slug
         }),
       setProductViewMode: (mode) => set({ productViewMode: mode }),
+      toggleFavoriteHref: (href) =>
+        set((state) => {
+          const exists = state.favoriteHrefs.includes(href);
+          return {
+            favoriteHrefs: exists
+              ? state.favoriteHrefs.filter((item) => item !== href)
+              : [...state.favoriteHrefs, href]
+          };
+        }),
+      isFavoriteHref: (href) => get().favoriteHrefs.includes(href),
       reset: () => set(initialState)
     }),
     {
@@ -62,7 +77,8 @@ export const useVendorPanelStore = create<VendorPanelStore>()(
         activeStoreId: state.activeStoreId,
         activeStoreName: state.activeStoreName,
         activeStoreSlug: state.activeStoreSlug,
-        productViewMode: state.productViewMode
+        productViewMode: state.productViewMode,
+        favoriteHrefs: state.favoriteHrefs
       })
     }
   )

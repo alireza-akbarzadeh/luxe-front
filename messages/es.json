@@ -3803,6 +3803,12 @@
         "backToMarketing": "← Marketing de vendedores"
       },
       "nav": {
+        "favorites": "Favoritos",
+        "favoritesEmpty": "Marca cualquier página para fijarla aquí y acceder rápido.",
+        "addToFavorites": "Añadir a favoritos",
+        "removeFromFavorites": "Quitar de favoritos",
+        "addedToFavorites": "{label} añadido a favoritos",
+        "removedFromFavorites": "{label} quitado de favoritos",
         "groups": {
           "main": "Principal",
           "commerce": "Comercio",

@@ -11,7 +11,11 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { VendorNavFavoriteButton } from '@/domains/vendor/panel/components/layout/vendor-nav-favorite-button';
+import { useVendorNavFavorites } from '@/domains/vendor/panel/hooks/use-vendor-nav-favorites';
 import { useVendorPanelNav } from '@/domains/vendor/panel/hooks/use-vendor-panel-nav';
+import { resolveVendorFavoriteLinks } from '@/domains/vendor/panel/lib/vendor-nav-utils';
+import { VendorNavFavorites } from '@/domains/vendor/panel/sections/vendor-nav-favorites';
 import { useVendorPanelStore } from '@/domains/vendor/panel/stores/vendor-panel-store';
 import type { VendorNavItem } from '@/domains/vendor/vendor-panel-nav';
 import { useMediaDevices } from '@/hooks/useMediaDevices';
@@ -25,6 +29,10 @@ interface VendorSidebarProps {
 export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
   const t = useTranslations('vendor.panel.shell');
   const { groups, logoutItem } = useVendorPanelNav();
+  const favoriteItems = resolveVendorFavoriteLinks(
+    useVendorPanelStore((state) => state.favoriteHrefs),
+    groups
+  );
   const pathname = usePathname();
   const { isMobile } = useMediaDevices();
   const sidebarCollapsed = useVendorPanelStore((s) => s.sidebarCollapsed);
@@ -59,9 +67,16 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
         <Separator className={cn('opacity-30', effectiveCollapsed ? 'mx-auto w-10' : 'mx-3')} />
 
         <ScrollArea className='flex-1 py-3'>
-          <div className={cn('space-y-5', effectiveCollapsed ? 'px-1.5' : 'px-2')}>
+          <motion.div layout className={cn('space-y-5', effectiveCollapsed ? 'px-1.5' : 'px-2')}>
+            <VendorNavFavorites
+              items={favoriteItems}
+              pathname={pathname}
+              collapsed={effectiveCollapsed}
+              onNavigate={onNavigate}
+            />
+
             {groups.map((group) => (
-              <div key={group.id}>
+              <motion.div key={group.id} layout>
                 <AnimatePresence initial={false}>
                   {!effectiveCollapsed ? (
                     <motion.p
@@ -85,9 +100,9 @@ export function VendorSidebar({ className, onNavigate }: VendorSidebarProps) {
                     />
                   ))}
                 </nav>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </ScrollArea>
 
         <div className='space-y-1 border-t border-white/8 p-2'>
@@ -124,22 +139,31 @@ function VendorSidebarLink({
   onNavigate?: () => void;
   onLogout?: boolean;
 }) {
+  const { isFavorite, toggleFavorite } = useVendorNavFavorites();
   const isActive =
     item.href === '/vendor/panel' ? pathname === item.href : pathname.startsWith(item.href);
 
   const content = (
     <>
       <item.icon className='size-4 shrink-0' aria-hidden />
-      {!collapsed ? <span className='truncate'>{item.label}</span> : null}
-      {!collapsed && item.badge ? (
-        <span className='dashboard-nav-badge'>{item.badge}</span>
+      {!collapsed ? <span className='flex-1 truncate'>{item.label}</span> : null}
+      {!collapsed && item.badge ? <span className='dashboard-nav-badge'>{item.badge}</span> : null}
+      {!onLogout ? (
+        <VendorNavFavoriteButton
+          href={item.href}
+          label={item.label}
+          isCollapsed={collapsed}
+          isFavorite={isFavorite}
+          onToggle={toggleFavorite}
+        />
       ) : null}
     </>
   );
 
   const className = cn(
-    'dashboard-nav-item',
+    'dashboard-nav-item group',
     collapsed && 'justify-center px-2',
+    !collapsed && 'w-full',
     isActive && 'dashboard-nav-item-active'
   );
 
