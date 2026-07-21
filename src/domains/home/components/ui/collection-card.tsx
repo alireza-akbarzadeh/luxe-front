@@ -4,7 +4,8 @@ import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { AppImage } from '@/components/ui/app-image';
-import { buttonVariants } from '@/components/ui/button';
+import { Flex } from '@/components/ui/flex';
+import { Typography } from '@/components/ui/typography';
 import { cn } from '@/lib/utils';
 import type { DtoHomeCollectionItem } from '@/services/-home-popular-collections-get.schemas';
 
@@ -19,46 +20,71 @@ export function HomeCollectionCard({
   const href = banner.href ?? (banner.slug ? `/collections/${banner.slug}` : '/collections');
 
   return (
-    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[14rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[16rem] lg:min-h-[18rem]'>
-      {banner.image_url ? (
-        <AppImage
-          src={banner.image_url}
-          alt={banner.title ?? fallbackLabel}
-          fill
-          sizes='(max-width: 768px) 92vw, (max-width: 1024px) 80vw, 45vw'
-          loading='lazy'
-          className='object-cover transition-transform duration-700 group-hover:scale-[1.03]'
-        />
-      ) : (
-        <div className='bg-muted absolute inset-0' />
+    <article
+      className={cn(
+        'group border-border/50 flex h-full min-h-[14rem] flex-col overflow-hidden rounded-2xl border shadow-sm sm:min-h-[16rem] lg:min-h-[18rem] lg:flex-row',
+        'bg-[#f3ede4] dark:border-white/10 dark:bg-[#222222]'
       )}
-
-      <div className='from-foreground/90 via-foreground/40 absolute inset-0 bg-gradient-to-t to-transparent' />
-
-      <div className='absolute inset-0 flex flex-col justify-end p-4 sm:p-5 lg:p-6'>
+    >
+      <Flex
+        direction='column'
+        justify='center'
+        className='w-full shrink-0 p-4 sm:p-5 lg:w-[42%] lg:p-6 xl:w-[40%]'
+      >
         {banner.eyebrow ? (
-          <span className='text-primary-foreground/75 text-[10px] font-semibold tracking-[0.2em] uppercase'>
+          <Typography.Text
+            variant='subtle'
+            weight='semibold'
+            className='text-foreground/70 text-[10px] tracking-[0.2em] uppercase'
+          >
             {banner.eyebrow}
-          </span>
+          </Typography.Text>
         ) : null}
-        <h3 className='text-primary-foreground font-display mt-1.5 text-xl font-semibold sm:text-2xl'>
+
+        <Typography.H3
+          family='display'
+          className='text-foreground mt-2 text-xl font-semibold tracking-tight sm:text-2xl'
+        >
           {banner.title}
-        </h3>
+        </Typography.H3>
+
         {banner.description ? (
-          <p className='text-primary-foreground/80 mt-1.5 line-clamp-2 max-w-md text-xs leading-relaxed sm:text-sm'>
+          <Typography.Muted className='mt-2 line-clamp-3 text-xs leading-relaxed sm:text-sm'>
             {banner.description}
-          </p>
+          </Typography.Muted>
         ) : null}
+
         <Link
           href={href}
           className={cn(
-            buttonVariants({ size: 'sm' }),
-            'text-gold-foreground [&_svg]:text-gold-foreground mt-4 w-fit border-0 bg-white shadow-md hover:bg-white/90'
+            'bg-foreground text-background hover:bg-foreground/90 mt-4 inline-flex w-fit items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition-colors sm:text-sm',
+            'dark:bg-white dark:text-[#141414] dark:hover:bg-white/90'
           )}
         >
           {banner.cta_label ?? fallbackLabel}
-          <IconArrowRight className='cn-rtl-flip ms-2 h-4 w-4' />
+          <IconArrowRight className='cn-rtl-flip size-4' />
         </Link>
+      </Flex>
+
+      <div className='bg-muted relative min-h-[10rem] flex-1 overflow-hidden lg:min-h-0'>
+        {banner.image_url ? (
+          <AppImage
+            src={banner.image_url}
+            alt={banner.title ?? fallbackLabel}
+            fill
+            sizes='(max-width: 1024px) 92vw, 35vw'
+            loading='lazy'
+            className='object-cover transition-transform duration-700 group-hover:scale-[1.03]'
+          />
+        ) : (
+          <Flex
+            align='center'
+            justify='center'
+            className='text-muted-foreground/40 absolute inset-0'
+          >
+            <span className='text-xs'>Image</span>
+          </Flex>
+        )}
       </div>
     </article>
   );

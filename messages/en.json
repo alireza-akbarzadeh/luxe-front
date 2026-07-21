@@ -1923,11 +1923,13 @@
     "seasonalPicks": {
       "eyebrow": "Seasonal picks",
       "title": "Editorial banners",
+      "description": "Campaign moments for gifts, outerwear, and seasonal dressing — shop the story in one tap.",
       "viewAll": "Shop seasonal edits"
     },
     "collections": {
       "eyebrow": "Collections",
       "title": "Curated edits",
+      "description": "Editorial capsules with layered tailoring, rich textures, and timeless silhouettes for the season ahead.",
       "viewAll": "View all collections",
       "banners": {
         "essentials": {

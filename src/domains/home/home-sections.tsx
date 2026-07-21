@@ -1,6 +1,5 @@
-import { BrandsSection } from '@/domains/home/components/brands-section';
 import { MostWhitelists } from '@/domains/home/components/most-whitelists';
-import { CarouselSkeleton, MarqueeSkeleton } from '@/domains/home/components/ui/home-skeleton';
+import { CarouselSkeleton } from '@/domains/home/components/ui/home-skeleton';
 import { SectionBoundary } from '@/domains/home/components/ui/section-boundary';
 import { LifestyleCollectionsSection } from '@/domains/lifestyle-collections/components/lifestyle-collections-section';
 import { PersonalizationDiscoverySection } from '@/domains/personalization/components/personalization-discovery-section';
@@ -33,13 +32,11 @@ export function HomeSections() {
           <FavoriteCategoriesSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={null}>
           <MarketingBandsSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary
           fallback={
@@ -53,7 +50,6 @@ export function HomeSections() {
           <FeaturedProducts />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary
           fallback={
@@ -67,11 +63,6 @@ export function HomeSections() {
           <CollectionBanner />
         </SectionBoundary>
       </MobileDeferredSection>
-
-      <MobileDeferredSection>
-        <FeaturesSection />
-      </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary
           fallback={<CarouselSkeleton count={3} columns={{ mobile: 2, tablet: 2, desktop: 3 }} />}
@@ -79,13 +70,11 @@ export function HomeSections() {
           <SeasonalPicksSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={5} />}>
           <NewArrivalsSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary
           fallback={
@@ -100,52 +89,43 @@ export function HomeSections() {
         </SectionBoundary>
       </MobileDeferredSection>
 
-      <SectionBoundary fallback={<MarqueeSkeleton />}>
-        <BrandsSection />
-      </SectionBoundary>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={3} />}>
           <LifestyleCollectionsSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
-      <MobileDeferredSection>
-        <TestimonialsSection />
-      </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={2} />}>
           <ShopTheLookSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
           <RecommendedForYouSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <SectionBoundary fallback={null}>
           <PersonalizationDiscoverySection />
         </SectionBoundary>
       </MobileDeferredSection>
-
+      <MobileDeferredSection>
+        <TestimonialsSection />
+      </MobileDeferredSection>
+      <MobileDeferredSection>
+        <FeaturesSection />
+      </MobileDeferredSection>
       <MobileDeferredSection>
         <SectionBoundary fallback={<CarouselSkeleton count={4} />}>
           <RecentlyViewedHomeSection />
         </SectionBoundary>
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <HowItWorksSection />
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <FaqSection />
       </MobileDeferredSection>
-
       <MobileDeferredSection>
         <NewsletterSection />
       </MobileDeferredSection>

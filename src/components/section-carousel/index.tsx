@@ -77,8 +77,10 @@ export type SectionCarouselProps<T> = {
   loop?: boolean;
   /** Hide eyebrow/title/description; keeps carousel controls when viewAllHref is set. */
   hideHeader?: boolean;
-  /** Hide dot indicators (e.g. compact story rails). */
+  /** Hide dot indicators under the carousel (default: hidden). */
   hideDots?: boolean;
+  /** Show dot indicators — opt-in; overrides hideDots when true. */
+  showDots?: boolean;
 };
 
 // ── Column → Tailwind basis map ───────────────────────────────────────────────
@@ -127,8 +129,10 @@ export function SectionCarousel<T>({
   footerSlot,
   opts,
   hideHeader = false,
-  hideDots = false
+  hideDots = true,
+  showDots = false
 }: SectionCarouselProps<T>) {
+  const displayDots = showDots || hideDots === false;
   const { setApi, current, count, scrollTo, scrollPrev, scrollNext, canScrollPrev, canScrollNext } =
     useCarouselState();
 
@@ -154,12 +158,12 @@ export function SectionCarousel<T>({
         {!hideHeader ? (
           <div className='mb-8 flex items-end justify-between gap-4 md:mb-10'>
             <div className='min-w-0'>
-              {eyebrow && (
-                <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
+              {eyebrow ? (
+                <p className='text-gold text-[11px] font-semibold tracking-[0.2em] uppercase sm:text-xs'>
                   {eyebrow}
                 </p>
-              )}
-              <h2 className='font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl'>
+              ) : null}
+              <h2 className='font-display text-foreground mt-2 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl'>
                 {title}
               </h2>
               {description && (
@@ -170,20 +174,20 @@ export function SectionCarousel<T>({
             </div>
 
             <div className='flex shrink-0 items-center gap-3 pb-1'>
-              <div className='hidden items-center gap-2 lg:flex'>
+              <div className='hidden items-center gap-2 sm:flex'>
                 <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
                 <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
               </div>
 
-              {viewAllHref && (
+              {viewAllHref ? (
                 <Link
                   href={viewAllHref}
-                  className='text-accent inline-flex items-center gap-1 text-sm font-medium hover:underline'
+                  className='text-foreground hover:text-gold inline-flex items-center gap-1 text-sm font-medium transition-colors'
                 >
                   {viewAllLabel}
-                  <IconArrowRight className='cn-rtl-flip h-4 w-4' />
+                  <IconArrowRight className='cn-rtl-flip text-gold size-4' />
                 </Link>
-              )}
+              ) : null}
             </div>
           </div>
         ) : (
@@ -240,21 +244,26 @@ export function SectionCarousel<T>({
         </Carousel>
 
         {/* ── Bottom controls ────────────────────────────────────────────── */}
-        {!isLoading && !hideDots && (
-          <div className='mt-6 flex items-center justify-between lg:justify-center'>
-            <div className='flex items-center gap-2 lg:hidden'>
+        {!isLoading && displayDots ? (
+          <div className='mt-6 flex items-center justify-between sm:justify-center'>
+            <div className='flex items-center gap-2 sm:hidden'>
               <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
               <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
             </div>
 
             <DotIndicators count={count} active={current} onDotClick={scrollTo} />
 
-            <div className='flex gap-2 opacity-0 lg:hidden' aria-hidden>
+            <div className='flex gap-2 opacity-0 sm:hidden' aria-hidden>
               <div className='size-9' />
               <div className='size-9' />
             </div>
           </div>
-        )}
+        ) : !isLoading && !hideHeader ? (
+          <div className='mt-4 flex items-center justify-center gap-2 sm:hidden'>
+            <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
+            <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
+          </div>
+        ) : null}
         {footerSlot}
       </div>
     </section>

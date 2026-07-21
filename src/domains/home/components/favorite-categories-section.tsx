@@ -23,7 +23,6 @@ export async function FavoriteCategoriesSection() {
       className='border-border/40 min-h-[9.75rem] border-b py-5 sm:min-h-[10.5rem] sm:py-6'
       title={t('title')}
       hideHeader
-      hideDots
       viewAllHref='/shop'
       viewAllLabel={tCommon('viewAll')}
       fitContent

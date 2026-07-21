@@ -29,6 +29,7 @@ export async function CollectionBanner() {
       className={HOME_RAIL_SECTION_CLASS}
       eyebrow={t('eyebrow')}
       title={t('title')}
+      description={t('description')}
       viewAllHref='/collections'
       viewAllLabel={t('viewAll')}
       columns={{ mobile: 1, tablet: 2, desktop: 2 }}
