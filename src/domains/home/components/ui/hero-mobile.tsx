@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
-import { AppImage } from '@/components/ui/app-image';
 import { Box } from '@/components/ui/box';
 import { Flex } from '@/components/ui/flex';
 import { Text, Typography } from '@/components/ui/typography';
-import { HERO_EDITORIAL_SPOTLIGHT_IMAGE } from '@/domains/home/lib/home-mock-data';
 import { marketingNumbers } from '@/lib/i18n/marketing-numbers';
 import { cn } from '@/lib/utils';
 
+import { HeroEditorialPanel } from './hero-editorial-panel';
 import { HeroIconArrowRight, HeroIconSparkles, HeroIconStar } from './hero-icons';
 
 const primaryCtaClass = cn(
@@ -26,7 +25,6 @@ const secondaryCtaClass = cn(
 export async function HeroMobile() {
   const t = await getTranslations('home.hero');
   const year = new Date().getFullYear();
-  const tPromo = await getTranslations('home.hero.promoPanel');
 
   return (
     <Box
@@ -85,32 +83,7 @@ export async function HeroMobile() {
             </Flex>
           </Flex>
 
-          <Link
-            href='/shop'
-            className='border-border/50 bg-card relative block aspect-[5/4] overflow-hidden rounded-2xl border shadow-sm'
-          >
-            <AppImage
-              src={HERO_EDITORIAL_SPOTLIGHT_IMAGE}
-              alt=''
-              aria-hidden
-              fill
-              sizes='100vw'
-              priority
-              className='object-cover'
-            />
-            <div
-              aria-hidden
-              className='from-foreground/80 via-foreground/25 absolute inset-0 bg-gradient-to-t to-transparent'
-            />
-            <div className='absolute inset-x-0 bottom-0 p-4'>
-              <p className='text-primary-foreground/80 text-[10px] font-bold tracking-widest uppercase'>
-                {tPromo('eyebrow')}
-              </p>
-              <p className='text-primary-foreground font-display mt-1 text-xl font-semibold'>
-                {tPromo('title')}
-              </p>
-            </div>
-          </Link>
+          <HeroEditorialPanel />
         </Flex>
       </section>
     </Box>

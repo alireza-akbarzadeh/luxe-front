@@ -81,7 +81,10 @@ export function BannerForm({ bannerId, isEdit = false }: BannerFormProps) {
     <Card>
       <CardHeader>
         <CardTitle>{isEdit ? 'Edit banner' : 'Create banner'}</CardTitle>
-        <CardDescription>Featured homepage section shown in seasonal picks.</CardDescription>
+        <CardDescription>
+          Homepage merchandising block. Use keys starting with <code>hero-</code> for the hero
+          carousel, or <code>flash-deals-promo</code> for the flash-sale band copy.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form.AppForm>
@@ -118,6 +121,52 @@ export function BannerForm({ bannerId, isEdit = false }: BannerFormProps) {
                     name='image_url'
                     children={(field) => (
                       <field.TextField label='Image URL' placeholder='https://…' />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='eyebrow'
+                    children={(field) => (
+                      <field.TextField label='Eyebrow (hero slides)' placeholder='Seasonal edit' />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='description'
+                    children={(field) => (
+                      <field.TextField label='Description' placeholder='Subtitle or promo body' />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='badge'
+                    children={(field) => (
+                      <field.TextField
+                        label='Badge (flash-deals-promo)'
+                        placeholder='Limited time'
+                      />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='cta_label'
+                    children={(field) => (
+                      <field.TextField label='CTA label' placeholder='Shop the sale' />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='ends_at'
+                    children={(field) => (
+                      <field.TextField
+                        label='Promo ends at (ISO)'
+                        placeholder='2026-12-31T23:59:59Z'
+                      />
                     )}
                   />
                 </GridItem>

@@ -28,7 +28,12 @@ export const bannerFormSchema = z.object({
   href: z.string().min(1, 'Link is required').max(512),
   image_url: z.string().optional(),
   sort_order: z.number().int().min(0),
-  status: z.enum(['draft', 'published', 'archived'])
+  status: z.enum(['draft', 'published', 'archived']),
+  eyebrow: z.string().optional(),
+  description: z.string().optional(),
+  badge: z.string().optional(),
+  cta_label: z.string().optional(),
+  ends_at: z.string().optional()
 });
 
 export type BannerFormValues = z.infer<typeof bannerFormSchema>;
@@ -39,7 +44,12 @@ export const bannerDefaultValues: BannerFormValues = {
   href: '/shop',
   image_url: '',
   sort_order: 0,
-  status: 'draft'
+  status: 'draft',
+  eyebrow: '',
+  description: '',
+  badge: '',
+  cta_label: '',
+  ends_at: ''
 };
 
 export const campaignFormSchema = z.object({

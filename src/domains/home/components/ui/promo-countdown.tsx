@@ -19,13 +19,12 @@ import type { DtoHomeFlashDealItem } from '~/src/services/-home-flash-deals-get.
 interface PromoCountdownProps {
   promoEnd: Date;
   deals: DtoHomeFlashDealItem[];
-  promoCode: string;
+  ctaHref: string;
   t: {
     badge: string;
     title: string;
     description: string;
     shopSale: string;
-    createAccount: string;
     countdown: {
       hours: string;
       minutes: string;
@@ -34,7 +33,6 @@ interface PromoCountdownProps {
   };
   common: {
     promoImageAlt: string;
-    shopNow: string;
   };
 }
 
@@ -56,8 +54,8 @@ function dealDiscountPercent(deal: DtoHomeFlashDealItem): number | null {
   return null;
 }
 
-/** Dense flash-deals band — countdown + compact product rail. */
-export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownProps) {
+/** Dense flash-deals band — admin copy + countdown + compact product rail. */
+export function PromoCountdown({ promoEnd, deals, ctaHref, t, common }: PromoCountdownProps) {
   const locale = useLocale() as Locale;
   const { hours, minutes, seconds } = useCountdown(promoEnd);
 
@@ -70,14 +68,13 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-2xl',
-        'bg-foreground text-background',
+        'border-border/60 bg-muted/45 dark:bg-card relative overflow-hidden rounded-2xl border',
         'px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7'
       )}
     >
       <div
         aria-hidden
-        className='bg-gold/15 pointer-events-none absolute -start-16 top-0 size-48 rounded-full blur-3xl'
+        className='bg-gold/10 pointer-events-none absolute -start-16 top-0 size-48 rounded-full blur-3xl dark:opacity-60'
       />
 
       <Flex
@@ -85,19 +82,19 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
         className='relative gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8'
       >
         <Flex direction='column' className='shrink-0 lg:max-w-xs'>
-          <span className='border-background/20 bg-background/10 inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase'>
+          <span className='border-border/70 bg-background/70 text-foreground inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase'>
             <IconTag className='text-gold size-3.5' />
             {t.badge}
           </span>
 
           <Typography.H2
             family='display'
-            className='text-background mt-3 text-xl font-semibold tracking-tight sm:text-2xl'
+            className='text-foreground mt-3 text-xl font-semibold tracking-tight sm:text-2xl'
           >
             {t.title}
           </Typography.H2>
 
-          <Typography.Muted className='text-background/70 mt-1.5 line-clamp-2 text-xs sm:text-sm'>
+          <Typography.Muted className='mt-1.5 line-clamp-2 text-xs sm:text-sm'>
             {t.description}
           </Typography.Muted>
 
@@ -105,12 +102,12 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
             {countdownItems.map((item) => (
               <div
                 key={item.label}
-                className='border-background/15 bg-background/10 min-w-[3.25rem] rounded-lg border px-2.5 py-2 text-center'
+                className='border-border/70 bg-background min-w-[3.25rem] rounded-lg border px-2.5 py-2 text-center shadow-sm'
               >
-                <div className='font-display text-background text-lg font-semibold tabular-nums sm:text-xl'>
+                <div className='font-display text-foreground text-lg font-semibold tabular-nums sm:text-xl'>
                   {item.value}
                 </div>
-                <div className='text-background/55 text-[9px] tracking-wider uppercase'>
+                <div className='text-muted-foreground text-[9px] tracking-wider uppercase'>
                   {item.label}
                 </div>
               </div>
@@ -118,7 +115,7 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
           </Flex>
 
           <Link
-            href='/shop'
+            href={ctaHref}
             className={cn(
               'mt-4 inline-flex h-9 w-fit items-center gap-1.5 rounded-full px-4 text-xs font-semibold',
               'bg-gold text-gold-foreground hover:bg-gold/90 transition-colors'
@@ -142,9 +139,9 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
                 <li key={deal.id ?? product.id} className='w-[8.5rem] shrink-0 sm:w-[9.5rem]'>
                   <Link
                     href={href}
-                    className='border-background/10 bg-background/10 hover:bg-background/15 group flex h-full flex-col overflow-hidden rounded-xl border transition-colors'
+                    className='border-border/60 bg-card hover:border-gold/30 group flex h-full flex-col overflow-hidden rounded-xl border transition-colors'
                   >
-                    <div className='bg-background/5 relative aspect-square overflow-hidden'>
+                    <div className='bg-muted/40 relative aspect-square overflow-hidden'>
                       <AppImage
                         src={image}
                         alt={product.name ?? common.promoImageAlt}
@@ -160,7 +157,7 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
                       ) : null}
                     </div>
                     <div className='flex flex-1 flex-col gap-0.5 p-2.5'>
-                      <p className='text-background line-clamp-2 text-[11px] leading-snug font-medium'>
+                      <p className='text-foreground line-clamp-2 text-[11px] leading-snug font-medium'>
                         {product.name}
                       </p>
                       <Flex direction='row' align='baseline' gap={1.5} className='mt-auto pt-1'>
@@ -170,7 +167,7 @@ export function PromoCountdown({ promoEnd, deals, t, common }: PromoCountdownPro
                         {product.compare_at_price != null &&
                         product.price != null &&
                         product.compare_at_price > product.price ? (
-                          <span className='text-background/45 text-[10px] tabular-nums line-through'>
+                          <span className='text-muted-foreground text-[10px] tabular-nums line-through'>
                             {formatPrice(product.compare_at_price, locale)}
                           </span>
                         ) : null}

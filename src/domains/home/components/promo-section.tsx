@@ -19,8 +19,14 @@ export async function PromoSection() {
 
   const data = await safeHomeFetch(() => getHomeFlashDeals({ limit: FLASH_DEAL_LIMIT }));
   const deals = (data?.data?.deals ?? []).filter((deal) => deal.product && deal.ends_at);
+  const promo = data?.data?.promo;
   const lead = deals[0];
-  const promoEnd = lead?.ends_at ? new Date(lead.ends_at) : null;
+
+  const promoEnd = promo?.ends_at
+    ? new Date(promo.ends_at)
+    : lead?.ends_at
+      ? new Date(lead.ends_at)
+      : null;
 
   if (!lead || !promoEnd || deals.length === 0) {
     return null;
@@ -37,19 +43,24 @@ export async function PromoSection() {
         ? (product.compare_at_price - product.price) / product.compare_at_price
         : marketingNumbers.promoDiscountPercent;
 
+  const badge = promo?.badge?.trim() || t('badge');
+  const title = promo?.title?.trim() || t('title', { discount });
+  const description = promo?.description?.trim() || t('description', { discount, code: promoCode });
+  const shopSale = promo?.cta_label?.trim() || t('shopSale');
+  const ctaHref = promo?.cta_href?.trim() || '/shop';
+
   return (
     <section className={cn(HOME_RAIL_SECTION_CLASS, 'py-8 sm:py-10')}>
       <div className={sectionContainerClass}>
         <PromoCountdown
           promoEnd={promoEnd}
           deals={deals}
-          promoCode={promoCode}
+          ctaHref={ctaHref}
           t={{
-            badge: t('badge'),
-            title: t('title', { discount }),
-            description: t('description', { discount, code: promoCode }),
-            shopSale: t('shopSale'),
-            createAccount: t('createAccount'),
+            badge,
+            title,
+            description,
+            shopSale,
             countdown: {
               hours: t('countdown.hours'),
               minutes: t('countdown.minutes'),
@@ -57,8 +68,7 @@ export async function PromoSection() {
             }
           }}
           common={{
-            promoImageAlt: tCommon('promoImageAlt'),
-            shopNow: tCommon('shopNow')
+            promoImageAlt: tCommon('promoImageAlt')
           }}
         />
       </div>

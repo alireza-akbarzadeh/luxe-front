@@ -2,9 +2,25 @@ import type { BannerFormValues } from '@/domains/promotions-admin/schemas/promot
 import type { ModelsHomepageSection } from '@/services/-admin-homepage-sections-get.schemas';
 import type { DtoCreateHomepageSectionRequest } from '@/services/-admin-homepage-sections-post.schemas';
 
+function readFilterString(filters: Record<string, unknown> | undefined, key: string): string {
+  const value = filters?.[key];
+  return typeof value === 'string' ? value : '';
+}
+
+function buildBannerFilters(value: BannerFormValues): Record<string, unknown> | undefined {
+  const filters: Record<string, unknown> = {};
+  if (value.eyebrow?.trim()) filters['eyebrow'] = value.eyebrow.trim();
+  if (value.description?.trim()) filters['description'] = value.description.trim();
+  if (value.badge?.trim()) filters['badge'] = value.badge.trim();
+  if (value.cta_label?.trim()) filters['cta_label'] = value.cta_label.trim();
+  if (value.ends_at?.trim()) filters['ends_at'] = value.ends_at.trim();
+  return Object.keys(filters).length > 0 ? filters : undefined;
+}
+
 export function mapBannerToFormValues(section: ModelsHomepageSection): BannerFormValues {
   const status =
     section.status === 'published' || section.status === 'archived' ? section.status : 'draft';
+  const filters = section.filters as Record<string, unknown> | undefined;
 
   return {
     section_key: section.section_key ?? '',
@@ -12,7 +28,12 @@ export function mapBannerToFormValues(section: ModelsHomepageSection): BannerFor
     href: section.href ?? '/shop',
     image_url: section.image_url ?? '',
     sort_order: section.sort_order ?? 0,
-    status
+    status,
+    eyebrow: readFilterString(filters, 'eyebrow'),
+    description: readFilterString(filters, 'description'),
+    badge: readFilterString(filters, 'badge'),
+    cta_label: readFilterString(filters, 'cta_label'),
+    ends_at: readFilterString(filters, 'ends_at')
   };
 }
 
@@ -23,6 +44,7 @@ export function mapBannerFormToPayload(value: BannerFormValues): DtoCreateHomepa
     href: value.href.trim(),
     image_url: value.image_url?.trim() || '',
     sort_order: value.sort_order,
-    status: value.status
+    status: value.status,
+    filters: buildBannerFilters(value)
   };
 }
