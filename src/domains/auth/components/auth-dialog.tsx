@@ -59,7 +59,7 @@ export function AuthDialog() {
       size='xl'
       title={t('dialogTitle')}
       headerClassName='sr-only'
-      className='gap-0 overflow-hidden p-0 sm:max-w-4xl'
+      className='gap-0 overflow-hidden p-0 sm:max-w-5xl'
       contentClassName='p-0 py-0'
     >
       <Flex direction='row' className='min-h-0 w-full overflow-hidden rounded-[inherit]'>
@@ -68,7 +68,7 @@ export function AuthDialog() {
           <AuthBrandPanel variant='strip' className='lg:hidden' />
           <Flex
             direction='column'
-            className='max-h-[min(92dvh,40rem)] flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6'
+            className='max-h-[min(95dvh,45rem)] flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6'
           >
             <LoginFormPanel
               variant='dialog'

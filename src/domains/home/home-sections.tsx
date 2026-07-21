@@ -13,9 +13,9 @@ import { FavoriteCategoriesSection } from './components/favorite-categories-sect
 import { FeaturedProducts } from './components/featured-products';
 import { FeaturesSection } from './components/features-section';
 import { HowItWorksSection } from './components/how-it-works-section';
+import { MarketingBandsSection } from './components/marketing-bands-section';
 import { NewArrivalsSection } from './components/new-arrivals-section';
 import { NewsletterSection } from './components/newsletter-section';
-import { PromoSection } from './components/promo-section';
 import { RecentlyViewedHomeSection } from './components/recently-viewed-home-section';
 import { RecommendedForYouSection } from './components/recommended-for-you-section';
 import { SeasonalPicksSection } from './components/seasonal-picks-section';
@@ -36,7 +36,7 @@ export function HomeSections() {
 
       <MobileDeferredSection>
         <SectionBoundary fallback={null}>
-          <PromoSection />
+          <MarketingBandsSection />
         </SectionBoundary>
       </MobileDeferredSection>
 

@@ -20,14 +20,15 @@ export async function FavoriteCategoriesSection() {
   return (
     <SectionCarousel
       sectionId='favorite-categories'
-      className='border-border/40 border-b py-8 sm:py-10 lg:py-12'
-      eyebrow={t('eyebrow')}
+      className='border-border/40 min-h-[9.75rem] border-b py-5 sm:min-h-[10.5rem] sm:py-6'
       title={t('title')}
-      description={t('description')}
+      hideHeader
+      hideDots
       viewAllHref='/shop'
       viewAllLabel={tCommon('viewAll')}
       fitContent
-      gapPx={3}
+      gapPx={12}
+      loop={false}
     >
       {categories.map((category, index) => (
         <FavoriteCategoryItem

@@ -73,6 +73,10 @@ export type SectionCarouselProps<T> = {
 
   // ── Carousel options ──────────────────────────────────────────────────────
   loop?: boolean;
+  /** Hide eyebrow/title/description; keeps carousel controls when viewAllHref is set. */
+  hideHeader?: boolean;
+  /** Hide dot indicators (e.g. compact story rails). */
+  hideDots?: boolean;
 };
 
 // ── Column → Tailwind basis map ───────────────────────────────────────────────
@@ -118,7 +122,9 @@ export function SectionCarousel<T>({
   loop = true,
   headerSlot,
   footerSlot,
-  opts
+  opts,
+  hideHeader = false,
+  hideDots = false
 }: SectionCarouselProps<T>) {
   const { setApi, current, count, scrollTo, scrollPrev, scrollNext, canScrollPrev, canScrollNext } =
     useCarouselState();
@@ -142,41 +148,57 @@ export function SectionCarousel<T>({
     <section id={sectionId} className={cn('py-16 sm:py-20 lg:py-28', className)}>
       <div className='app-container'>
         {/* ── Header ────────────────────────────────────────────────────── */}
-        <div className='mb-8 flex items-end justify-between gap-4 md:mb-10'>
-          <div className='min-w-0'>
-            {eyebrow && (
-              <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
-                {eyebrow}
-              </p>
-            )}
-            <h2 className='font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl'>
-              {title}
-            </h2>
-            {description && (
-              <p className='text-muted-foreground mt-2 max-w-xl text-sm leading-relaxed sm:text-base'>
-                {description}
-              </p>
-            )}
-          </div>
+        {!hideHeader ? (
+          <div className='mb-8 flex items-end justify-between gap-4 md:mb-10'>
+            <div className='min-w-0'>
+              {eyebrow && (
+                <p className='text-accent text-xs font-semibold tracking-[0.2em] uppercase'>
+                  {eyebrow}
+                </p>
+              )}
+              <h2 className='font-display mt-2 text-3xl font-semibold tracking-tight sm:text-4xl'>
+                {title}
+              </h2>
+              {description && (
+                <p className='text-muted-foreground mt-2 max-w-xl text-sm leading-relaxed sm:text-base'>
+                  {description}
+                </p>
+              )}
+            </div>
 
-          <div className='flex shrink-0 items-center gap-3 pb-1'>
-            {/* Desktop chevrons */}
-            <div className='hidden items-center gap-2 lg:flex'>
+            <div className='flex shrink-0 items-center gap-3 pb-1'>
+              <div className='hidden items-center gap-2 lg:flex'>
+                <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
+                <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
+              </div>
+
+              {viewAllHref && (
+                <Link
+                  href={viewAllHref}
+                  className='text-accent inline-flex items-center gap-1 text-sm font-medium hover:underline'
+                >
+                  {viewAllLabel}
+                  <IconArrowRight className='cn-rtl-flip h-4 w-4' />
+                </Link>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className='mb-3 flex items-center justify-end gap-2'>
+            <div className='flex items-center gap-2'>
               <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
               <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
             </div>
-
-            {viewAllHref && (
+            {viewAllHref ? (
               <Link
                 href={viewAllHref}
-                className='text-accent inline-flex items-center gap-1 text-sm font-medium hover:underline'
+                className='text-muted-foreground hover:text-foreground ms-auto text-xs font-medium'
               >
                 {viewAllLabel}
-                <IconArrowRight className='cn-rtl-flip h-4 w-4' />
               </Link>
-            )}
+            ) : null}
           </div>
-        </div>
+        )}
         {/* ── Header slot (e.g. Tabs) ──────────────────────────────────────── */}
         {headerSlot && <div className='mb-8 sm:mb-10'>{headerSlot}</div>}
         {/* ── Carousel ──────────────────────────────────────────────────── */}
@@ -215,9 +237,8 @@ export function SectionCarousel<T>({
         </Carousel>
 
         {/* ── Bottom controls ────────────────────────────────────────────── */}
-        {!isLoading && (
+        {!isLoading && !hideDots && (
           <div className='mt-6 flex items-center justify-between lg:justify-center'>
-            {/* Mobile chevrons */}
             <div className='flex items-center gap-2 lg:hidden'>
               <ChevronButton direction='prev' onClick={scrollPrev} disabled={!canScrollPrev} />
               <ChevronButton direction='next' onClick={scrollNext} disabled={!canScrollNext} />
@@ -225,7 +246,6 @@ export function SectionCarousel<T>({
 
             <DotIndicators count={count} active={current} onDotClick={scrollTo} />
 
-            {/* Mirror spacer — keeps dots centred on mobile */}
             <div className='flex gap-2 opacity-0 lg:hidden' aria-hidden>
               <div className='size-9' />
               <div className='size-9' />

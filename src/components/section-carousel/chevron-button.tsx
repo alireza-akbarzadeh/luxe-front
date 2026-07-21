@@ -6,11 +6,13 @@ import { cn } from '~/src/lib/utils';
 export function ChevronButton({
   direction,
   onClick,
-  disabled
+  disabled,
+  className
 }: {
   direction: 'prev' | 'next';
   onClick: () => void;
   disabled: boolean;
+  className?: string;
 }) {
   return (
     <button
@@ -22,7 +24,8 @@ export function ChevronButton({
         'border-border/60 bg-card flex size-9 items-center justify-center rounded-full border shadow-sm transition-all duration-200',
         disabled
           ? 'text-muted-foreground/30 cursor-not-allowed opacity-40'
-          : 'text-foreground hover:border-border hover:shadow-md active:scale-95'
+          : 'text-foreground hover:border-border hover:shadow-md active:scale-95',
+        className
       )}
     >
       {direction === 'prev' ? (

@@ -82,8 +82,9 @@ export function BannerForm({ bannerId, isEdit = false }: BannerFormProps) {
       <CardHeader>
         <CardTitle>{isEdit ? 'Edit banner' : 'Create banner'}</CardTitle>
         <CardDescription>
-          Homepage merchandising block. Use keys starting with <code>hero-</code> for the hero
-          carousel, or <code>flash-deals-promo</code> for the flash-sale band copy.
+          Homepage merchandising block. Use <code>hero-*</code> for the hero carousel,{' '}
+          <code>flash-deals-promo</code> or <code>marketing-band-*</code> for promo bands with
+          product rails.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -166,6 +167,31 @@ export function BannerForm({ bannerId, isEdit = false }: BannerFormProps) {
                       <field.TextField
                         label='Promo ends at (ISO)'
                         placeholder='2026-12-31T23:59:59Z'
+                      />
+                    )}
+                  />
+                </GridItem>
+                <GridItem>
+                  <form.AppField
+                    name='theme'
+                    children={(field) => (
+                      <field.Select
+                        label='Band theme'
+                        options={[
+                          { label: 'Dark', value: 'dark' },
+                          { label: 'Light', value: 'light' }
+                        ]}
+                      />
+                    )}
+                  />
+                </GridItem>
+                <GridItem className='sm:col-span-2'>
+                  <form.AppField
+                    name='flash_deal_ids'
+                    children={(field) => (
+                      <field.TextField
+                        label='Flash deal IDs (optional)'
+                        placeholder='12, 15, 18 — leave empty for all active deals'
                       />
                     )}
                   />

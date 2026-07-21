@@ -7,6 +7,28 @@ function readFilterString(filters: Record<string, unknown> | undefined, key: str
   return typeof value === 'string' ? value : '';
 }
 
+function readFilterFlashDealIds(filters: Record<string, unknown> | undefined): string {
+  const value = filters?.['flash_deal_ids'];
+  if (!Array.isArray(value)) return '';
+  return value
+    .map((item) => (typeof item === 'number' ? item : Number(item)))
+    .filter((id) => Number.isFinite(id) && id > 0)
+    .join(', ');
+}
+
+function readFilterTheme(filters: Record<string, unknown> | undefined): 'dark' | 'light' {
+  const value = filters?.['theme'];
+  return value === 'light' ? 'light' : 'dark';
+}
+
+function parseFlashDealIds(raw: string | undefined): number[] {
+  if (!raw?.trim()) return [];
+  return raw
+    .split(/[,\s]+/)
+    .map((part) => Number.parseInt(part.trim(), 10))
+    .filter((id) => Number.isFinite(id) && id > 0);
+}
+
 function buildBannerFilters(value: BannerFormValues): Record<string, unknown> | undefined {
   const filters: Record<string, unknown> = {};
   if (value.eyebrow?.trim()) filters['eyebrow'] = value.eyebrow.trim();
@@ -14,6 +36,9 @@ function buildBannerFilters(value: BannerFormValues): Record<string, unknown> | 
   if (value.badge?.trim()) filters['badge'] = value.badge.trim();
   if (value.cta_label?.trim()) filters['cta_label'] = value.cta_label.trim();
   if (value.ends_at?.trim()) filters['ends_at'] = value.ends_at.trim();
+  if (value.theme) filters['theme'] = value.theme;
+  const dealIds = parseFlashDealIds(value.flash_deal_ids);
+  if (dealIds.length > 0) filters['flash_deal_ids'] = dealIds;
   return Object.keys(filters).length > 0 ? filters : undefined;
 }
 
@@ -33,7 +58,9 @@ export function mapBannerToFormValues(section: ModelsHomepageSection): BannerFor
     description: readFilterString(filters, 'description'),
     badge: readFilterString(filters, 'badge'),
     cta_label: readFilterString(filters, 'cta_label'),
-    ends_at: readFilterString(filters, 'ends_at')
+    ends_at: readFilterString(filters, 'ends_at'),
+    theme: readFilterTheme(filters),
+    flash_deal_ids: readFilterFlashDealIds(filters)
   };
 }
 

@@ -62,13 +62,13 @@ export function CategoryCard({
       >
         <Link
           href={href}
-          className='group category-story-item flex w-[4.25rem] shrink-0 flex-col items-center gap-1.5 sm:w-[4.75rem]'
+          className='group category-story-item flex w-[5.25rem] shrink-0 flex-col items-center gap-2 sm:w-[5.75rem]'
         >
           <motion.div
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.94 }}
             transition={{ type: 'spring', stiffness: 420, damping: 24 }}
-            className='relative size-16 sm:size-[4.25rem]'
+            className='relative size-[4.75rem] sm:size-20'
           >
             <CompactRingBorder />
 
@@ -82,7 +82,7 @@ export function CategoryCard({
                 alt=''
                 aria-hidden
                 fill
-                sizes='76px'
+                sizes='96px'
                 loading='lazy'
                 className='object-cover transition-transform duration-500 group-hover:scale-110'
               />
@@ -93,7 +93,7 @@ export function CategoryCard({
             variant='subtle'
             weight='medium'
             align='center'
-            className='text-foreground/90 group-hover:text-foreground line-clamp-2 w-full text-[11px] leading-tight transition-colors'
+            className='text-foreground/90 group-hover:text-foreground line-clamp-2 w-full text-xs leading-tight transition-colors'
           >
             {name ?? categoryAlt}
           </Typography.Text>

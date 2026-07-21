@@ -33,7 +33,9 @@ export const bannerFormSchema = z.object({
   description: z.string().optional(),
   badge: z.string().optional(),
   cta_label: z.string().optional(),
-  ends_at: z.string().optional()
+  ends_at: z.string().optional(),
+  theme: z.enum(['dark', 'light']).optional(),
+  flash_deal_ids: z.string().optional()
 });
 
 export type BannerFormValues = z.infer<typeof bannerFormSchema>;
@@ -49,7 +51,9 @@ export const bannerDefaultValues: BannerFormValues = {
   description: '',
   badge: '',
   cta_label: '',
-  ends_at: ''
+  ends_at: '',
+  theme: 'dark',
+  flash_deal_ids: ''
 };
 
 export const campaignFormSchema = z.object({

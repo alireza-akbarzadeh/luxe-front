@@ -2,16 +2,13 @@
 
 import { IconArrowRight, IconTag } from '@tabler/icons-react';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
 
-import { AppImage } from '@/components/ui/app-image';
+import { useTheme } from '@/components/providers/client/theme';
 import { Flex } from '@/components/ui/flex';
 import { Typography } from '@/components/ui/typography';
-import { formatPrice } from '@/domains/home/lib/home-utils';
-import { getProductPath } from '@/domains/product/lib/product-routes';
+import { PromoProductRail } from '@/domains/home/components/ui/promo-product-rail';
 import { useCountdown } from '@/hooks/useCountdown';
 import { formatLocaleCountdownUnit } from '@/lib/i18n/format-number';
-import { IMAGE_FALLBACK } from '@/lib/images';
 import { cn } from '@/lib/utils';
 import type { Locale } from '~/src/i18n/config';
 import type { DtoHomeFlashDealItem } from '~/src/services/-home-flash-deals-get.schemas';
@@ -20,6 +17,8 @@ interface PromoCountdownProps {
   promoEnd: Date;
   deals: DtoHomeFlashDealItem[];
   ctaHref: string;
+  theme?: 'dark' | 'light';
+  locale: Locale;
   t: {
     badge: string;
     title: string;
@@ -36,28 +35,20 @@ interface PromoCountdownProps {
   };
 }
 
-function dealDiscountPercent(deal: DtoHomeFlashDealItem): number | null {
-  const product = deal.product;
-  if (!product) return null;
-  if (product.discount_percent != null && product.discount_percent > 0) {
-    return Math.round(product.discount_percent);
-  }
-  if (
-    product.compare_at_price != null &&
-    product.price != null &&
-    product.compare_at_price > product.price
-  ) {
-    return Math.round(
-      ((product.compare_at_price - product.price) / product.compare_at_price) * 100
-    );
-  }
-  return null;
-}
-
-/** Dense flash-deals band — admin copy + countdown + compact product rail. */
-export function PromoCountdown({ promoEnd, deals, ctaHref, t, common }: PromoCountdownProps) {
-  const locale = useLocale() as Locale;
+/** Dense flash-deals band — admin copy + countdown + carousel product rail. */
+export function PromoCountdown({
+  promoEnd,
+  deals,
+  ctaHref,
+  theme = 'dark',
+  locale,
+  t,
+  common
+}: PromoCountdownProps) {
   const { hours, minutes, seconds } = useCountdown(promoEnd);
+  const { resolvedTheme } = useTheme();
+  /** Light admin bands render as dark surfaces when the storefront is in dark mode. */
+  const useDarkBand = theme === 'dark' || resolvedTheme === 'dark';
 
   const countdownItems = [
     { value: formatLocaleCountdownUnit(hours, locale), label: t.countdown.hours },
@@ -68,33 +59,54 @@ export function PromoCountdown({ promoEnd, deals, ctaHref, t, common }: PromoCou
   return (
     <div
       className={cn(
-        'border-border/60 bg-muted/45 dark:bg-card relative overflow-hidden rounded-2xl border',
-        'px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7'
+        'relative overflow-hidden rounded-2xl px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7',
+        'min-h-[18.5rem] sm:min-h-[18rem] lg:min-h-[17.5rem]',
+        useDarkBand
+          ? 'border border-white/10 bg-[#141414] text-white'
+          : 'border-border/60 bg-muted/55 text-foreground border'
       )}
     >
       <div
         aria-hidden
-        className='bg-gold/10 pointer-events-none absolute -start-16 top-0 size-48 rounded-full blur-3xl dark:opacity-60'
+        className={cn(
+          'bg-gold/10 pointer-events-none absolute -start-16 top-0 size-48 rounded-full blur-3xl',
+          !useDarkBand && 'opacity-80'
+        )}
       />
 
       <Flex
         direction='column'
-        className='relative gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8'
+        className='relative h-full gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8'
       >
         <Flex direction='column' className='shrink-0 lg:max-w-xs'>
-          <span className='border-border/70 bg-background/70 text-foreground inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase'>
+          <span
+            className={cn(
+              'inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase',
+              useDarkBand
+                ? 'border-white/15 bg-white/10 text-white'
+                : 'border-border/70 bg-background/80 text-foreground'
+            )}
+          >
             <IconTag className='text-gold size-3.5' />
             {t.badge}
           </span>
 
           <Typography.H2
             family='display'
-            className='text-foreground mt-3 text-xl font-semibold tracking-tight sm:text-2xl'
+            className={cn(
+              'mt-3 text-xl font-semibold tracking-tight sm:text-2xl',
+              useDarkBand ? 'text-white' : 'text-foreground'
+            )}
           >
             {t.title}
           </Typography.H2>
 
-          <Typography.Muted className='mt-1.5 line-clamp-2 text-xs sm:text-sm'>
+          <Typography.Muted
+            className={cn(
+              'mt-1.5 line-clamp-2 text-xs sm:text-sm',
+              useDarkBand ? 'text-white/70' : undefined
+            )}
+          >
             {t.description}
           </Typography.Muted>
 
@@ -102,12 +114,27 @@ export function PromoCountdown({ promoEnd, deals, ctaHref, t, common }: PromoCou
             {countdownItems.map((item) => (
               <div
                 key={item.label}
-                className='border-border/70 bg-background min-w-[3.25rem] rounded-lg border px-2.5 py-2 text-center shadow-sm'
+                className={cn(
+                  'min-w-[3.25rem] rounded-lg border px-2.5 py-2 text-center',
+                  useDarkBand
+                    ? 'border-white/15 bg-white/10'
+                    : 'border-border/70 bg-background shadow-sm'
+                )}
               >
-                <div className='font-display text-foreground text-lg font-semibold tabular-nums sm:text-xl'>
+                <div
+                  className={cn(
+                    'font-display text-lg font-semibold tabular-nums sm:text-xl',
+                    useDarkBand ? 'text-white' : 'text-foreground'
+                  )}
+                >
                   {item.value}
                 </div>
-                <div className='text-muted-foreground text-[9px] tracking-wider uppercase'>
+                <div
+                  className={cn(
+                    'text-[9px] tracking-wider uppercase',
+                    useDarkBand ? 'text-white/55' : 'text-muted-foreground'
+                  )}
+                >
                   {item.label}
                 </div>
               </div>
@@ -126,59 +153,11 @@ export function PromoCountdown({ promoEnd, deals, ctaHref, t, common }: PromoCou
           </Link>
         </Flex>
 
-        <div className='min-w-0 flex-1'>
-          <ul className='flex gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
-            {deals.map((deal) => {
-              const product = deal.product;
-              if (!product) return null;
-              const href = getProductPath(product);
-              const image = product.images?.[0] ?? IMAGE_FALLBACK;
-              const discount = dealDiscountPercent(deal);
-
-              return (
-                <li key={deal.id ?? product.id} className='w-[8.5rem] shrink-0 sm:w-[9.5rem]'>
-                  <Link
-                    href={href}
-                    className='border-border/60 bg-card hover:border-gold/30 group flex h-full flex-col overflow-hidden rounded-xl border transition-colors'
-                  >
-                    <div className='bg-muted/40 relative aspect-square overflow-hidden'>
-                      <AppImage
-                        src={image}
-                        alt={product.name ?? common.promoImageAlt}
-                        fill
-                        loading='lazy'
-                        sizes='160px'
-                        className='object-cover transition-transform duration-500 group-hover:scale-105'
-                      />
-                      {discount != null ? (
-                        <span className='bg-gold text-gold-foreground absolute end-1.5 top-1.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold'>
-                          -{discount}%
-                        </span>
-                      ) : null}
-                    </div>
-                    <div className='flex flex-1 flex-col gap-0.5 p-2.5'>
-                      <p className='text-foreground line-clamp-2 text-[11px] leading-snug font-medium'>
-                        {product.name}
-                      </p>
-                      <Flex direction='row' align='baseline' gap={1.5} className='mt-auto pt-1'>
-                        <span className='text-gold text-xs font-semibold tabular-nums'>
-                          {formatPrice(product.price, locale)}
-                        </span>
-                        {product.compare_at_price != null &&
-                        product.price != null &&
-                        product.compare_at_price > product.price ? (
-                          <span className='text-muted-foreground text-[10px] tabular-nums line-through'>
-                            {formatPrice(product.compare_at_price, locale)}
-                          </span>
-                        ) : null}
-                      </Flex>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <PromoProductRail
+          deals={deals}
+          promoImageAlt={common.promoImageAlt}
+          theme={useDarkBand ? 'dark' : 'light'}
+        />
       </Flex>
     </div>
   );
