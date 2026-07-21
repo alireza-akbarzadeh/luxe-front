@@ -18,15 +18,15 @@ export async function ProductStorySection() {
   const t = await getTranslations('home.productStory');
 
   return (
-    <section id='product-story' className='py-16 sm:py-20 lg:py-28'>
+    <section id='product-story' className='py-10 sm:py-12 lg:py-16'>
       <div className={sectionContainerClass}>
-        <Grid cols={1} className='items-center gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-20'>
-          <div className='luxe-fade group luxury-image-zoom relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-3xl'>
+        <Grid cols={1} className='items-center gap-8 lg:grid-cols-2 lg:gap-12'>
+          <div className='luxe-fade group luxury-image-zoom relative aspect-[5/4] overflow-hidden rounded-2xl sm:aspect-[4/3]'>
             <AppImage
               src={HOME_PRODUCT_STORY_IMAGE}
               alt={t('imageAlt')}
               fill
-              sizes='(max-width: 1024px) 100vw, 50vw'
+              sizes='(max-width: 1024px) 100vw, 45vw'
               loading='lazy'
               className='object-cover'
             />
@@ -36,7 +36,7 @@ export async function ProductStorySection() {
             />
             <div
               aria-hidden
-              className='border-gold/20 pointer-events-none absolute inset-0 rounded-2xl border sm:rounded-3xl'
+              className='border-gold/20 pointer-events-none absolute inset-0 rounded-2xl border'
             />
           </div>
 

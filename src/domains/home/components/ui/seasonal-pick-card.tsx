@@ -20,7 +20,7 @@ export function SeasonalPickCard({
   const imageSrc = section.image_url ?? IMAGE_FALLBACK;
 
   return (
-    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[20rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[24rem] sm:rounded-3xl'>
+    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[12rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[14rem]'>
       <AppImage
         src={imageSrc}
         alt={section.title ?? fallbackLabel}
@@ -32,15 +32,15 @@ export function SeasonalPickCard({
 
       <div className='from-foreground/90 via-foreground/40 absolute inset-0 bg-gradient-to-t to-transparent' />
 
-      <div className='absolute inset-0 flex flex-col justify-end p-6 sm:p-8'>
-        <h3 className='text-primary-foreground font-display text-2xl font-semibold sm:text-3xl'>
+      <div className='absolute inset-0 flex flex-col justify-end p-4 sm:p-5'>
+        <h3 className='text-primary-foreground font-display text-lg font-semibold sm:text-xl'>
           {section.title}
         </h3>
         <Link
           href={href}
           className={cn(
-            buttonVariants({ size: 'lg' }),
-            'text-gold-foreground [&_svg]:text-gold-foreground mt-5 w-fit border-0 bg-white shadow-md hover:bg-white/90'
+            buttonVariants({ size: 'sm' }),
+            'text-gold-foreground [&_svg]:text-gold-foreground mt-3 w-fit border-0 bg-white shadow-md hover:bg-white/90'
           )}
         >
           {fallbackLabel}

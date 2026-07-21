@@ -595,13 +595,22 @@ html[dir='rtl'] .vendor-brands-marquee-track {
   background: conic-gradient(
     from 0deg,
     transparent 0%,
-    #c9a96e 20%,
-    #f0d9a8 35%,
-    rgb(255 255 255 / 0.19) 50%,
-    #c9a96e 65%,
-    transparent 80%
+    #c9a96e 18%,
+    #f0d9a8 32%,
+    rgb(255 255 255 / 0.22) 48%,
+    #c9a96e 62%,
+    transparent 78%
   );
-  animation: category-ring-spin 4s linear infinite;
+  animation: category-ring-spin 5.5s linear infinite;
+}
+
+.category-story-item:hover .category-ring-border,
+.category-story-item:focus-visible .category-ring-border {
+  animation-duration: 1.8s;
+}
+
+.category-story-item:active .category-ring-border {
+  animation-play-state: paused;
 }
 
 @keyframes voice-wave-pulse {

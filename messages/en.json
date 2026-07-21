@@ -1796,6 +1796,11 @@
       "socialProof": "Trusted by {count, number}+ shoppers",
       "shopNewArrivals": "Shop new arrivals",
       "exploreCollections": "Explore collections",
+      "promoPanel": {
+        "eyebrow": "Seasonal edit",
+        "title": "Up to 40% off selected pieces",
+        "cta": "Shop the sale"
+      },
       "trust": {
         "shipping": "Complimentary worldwide shipping",
         "authenticity": "Authenticity guaranteed"

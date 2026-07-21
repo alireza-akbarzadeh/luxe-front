@@ -1727,6 +1727,11 @@
       "socialProof": "Con la confianza de más de {count, number} compradores",
       "shopNewArrivals": "Ver novedades",
       "exploreCollections": "Explorar colecciones",
+      "promoPanel": {
+        "eyebrow": "Edición de temporada",
+        "title": "Hasta 40% en piezas seleccionadas",
+        "cta": "Comprar la oferta"
+      },
       "trust": {
         "shipping": "Envío gratuito a todo el mundo",
         "authenticity": "Autenticidad garantizada"

@@ -29,7 +29,7 @@ export type SectionCarouselColumns = {
   /** Cards fully visible on sm/tablet (default: 2) */
   tablet?: 1 | 2 | 3;
   /** Cards fully visible on lg/desktop (default: 4) */
-  desktop?: 1 | 2 | 3 | 4;
+  desktop?: 1 | 2 | 3 | 4 | 5;
 };
 
 export type SectionCarouselProps<T> = {
@@ -60,6 +60,13 @@ export type SectionCarouselProps<T> = {
   // ── Layout ────────────────────────────────────────────────────────────────
   footerSlot?: ReactNode;
   columns?: SectionCarouselColumns;
+  /**
+   * Size slides to their content instead of equal column fractions
+   * (e.g. Instagram-stories style rings). Ignores `columns` when true.
+   */
+  fitContent?: boolean;
+  /** Gap between slides in px (default 16). */
+  gapPx?: number;
   /** Extra classes on the outer <section> */
   className?: string;
   sectionId?: string;
@@ -85,7 +92,8 @@ const desktopBasis: Record<number, string> = {
   1: 'lg:basis-full',
   2: 'lg:basis-1/2',
   3: 'lg:basis-1/3',
-  4: 'lg:basis-1/4'
+  4: 'lg:basis-1/4',
+  5: 'lg:basis-1/5'
 };
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -103,6 +111,8 @@ export function SectionCarousel<T>({
   renderItem,
   children,
   columns = { mobile: 1, tablet: 2, desktop: 4 },
+  fitContent = false,
+  gapPx = 16,
   className,
   sectionId,
   loop = true,
@@ -114,7 +124,15 @@ export function SectionCarousel<T>({
     useCarouselState();
 
   const { mobile = 1, tablet = 2, desktop = 4 } = columns;
-  const itemBasis = cn(mobileBasis[mobile], tabletBasis[tablet], desktopBasis[desktop]);
+  const itemBasis = fitContent
+    ? '!basis-auto'
+    : cn(mobileBasis[mobile], tabletBasis[tablet], desktopBasis[desktop]);
+  const contentStyle = fitContent ? ({ marginLeft: `-${gapPx}px` } as const) : undefined;
+  const itemStyle = fitContent ? ({ paddingLeft: `${gapPx}px` } as const) : undefined;
+  const itemClassName = cn(
+    itemBasis,
+    fitContent ? 'min-w-0 shrink-0 grow-0 !basis-auto !pl-0' : 'pl-4'
+  );
   const placeholderCount = skeletonCount ?? desktop;
   const itemsToRender = items ?? [];
   const hasChildren = !!children;
@@ -167,10 +185,10 @@ export function SectionCarousel<T>({
           opts={opts ?? { align: 'start', loop, skipSnaps: false }}
           className='w-full'
         >
-          <CarouselContent className='-ml-4'>
+          <CarouselContent className={cn(fitContent ? '!-ml-0' : '-ml-4')} style={contentStyle}>
             {isLoading
               ? Array.from({ length: placeholderCount }).map((_, i) => (
-                  <CarouselItem key={i} className={cn('pl-4', itemBasis)}>
+                  <CarouselItem key={i} className={itemClassName} style={itemStyle}>
                     {renderSkeleton ? (
                       renderSkeleton()
                     ) : (
@@ -182,13 +200,13 @@ export function SectionCarousel<T>({
                 ? Children.toArray(children)
                     .filter(isValidElement)
                     .map((child: React.ReactElement, index: number) => (
-                      <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
+                      <CarouselItem key={index} className={itemClassName} style={itemStyle}>
                         {child}
                       </CarouselItem>
                     ))
                 : shouldRenderItems
                   ? itemsToRender.map((item, index) => (
-                      <CarouselItem key={index} className={cn('pl-4', itemBasis)}>
+                      <CarouselItem key={index} className={itemClassName} style={itemStyle}>
                         {renderItem?.(item, index)}
                       </CarouselItem>
                     ))

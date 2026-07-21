@@ -2,9 +2,9 @@ import { IconHeadphones, IconLock, IconRefresh, IconTruck } from '@tabler/icons-
 import { getTranslations } from 'next-intl/server';
 
 import { TRUST_ITEMS } from '@/domains/home/lib/home-mock-data';
-import { getHomeMarketingCopyParams } from '~/src/lib/i18n/marketing-copy-params';
+import { getHomeMarketingCopyParams } from '@/lib/i18n/marketing-copy-params';
 
-import { fullBleedClass, sectionContainerClass } from '../lib/home-utils';
+import { sectionContainerClass } from '../lib/home-utils';
 
 const iconMap = {
   truck: IconTruck,
@@ -13,6 +13,7 @@ const iconMap = {
   headphones: IconHeadphones
 } as const;
 
+/** Slim trust strip under the hero — icon + title row like dense storefront homes. */
 export async function TrustBar() {
   const t = await getTranslations('home');
   const copy = getHomeMarketingCopyParams();
@@ -28,23 +29,21 @@ export async function TrustBar() {
     title: t(`trust.items.${item.key}.title`, trustItemParams[item.key]),
     description: t(`trust.items.${item.key}.description`, trustItemParams[item.key])
   }));
+
   return (
-    <section className={fullBleedClass}>
+    <section className='border-border/40 border-y'>
       <div className={sectionContainerClass}>
-        <ul className='grid grid-cols-2 gap-3 py-6 sm:grid-cols-4 sm:gap-4 sm:py-8'>
+        <ul className='grid grid-cols-2 gap-x-3 gap-y-3 py-4 sm:grid-cols-4 sm:gap-4 sm:py-5'>
           {trustItems.map((item) => {
             const Icon = iconMap[item.icon];
             return (
-              <li
-                key={item.title}
-                className='border-border/60 bg-card/60 hover:border-gold/40 flex items-center gap-3 rounded-xl border px-4 py-4 transition-colors sm:px-5'
-              >
-                <div className='bg-gold/10 border-gold/20 text-gold flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border sm:h-11 sm:w-11'>
-                  <Icon className='h-5 w-5' stroke={1.5} />
+              <li key={item.title} className='flex min-w-0 items-center gap-2.5'>
+                <div className='bg-gold/10 text-gold flex size-8 shrink-0 items-center justify-center rounded-lg'>
+                  <Icon className='size-4' stroke={1.5} />
                 </div>
                 <div className='min-w-0'>
-                  <p className='truncate text-sm font-semibold'>{item.title}</p>
-                  <p className='text-muted-foreground truncate text-xs sm:text-sm'>
+                  <p className='truncate text-xs font-semibold sm:text-sm'>{item.title}</p>
+                  <p className='text-muted-foreground hidden truncate text-[11px] sm:block'>
                     {item.description}
                   </p>
                 </div>

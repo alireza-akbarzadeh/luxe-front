@@ -14,15 +14,14 @@ export function FavoriteCategoryItem({
   categoryAlt: string;
 }>) {
   return (
-    <div className='shrink-0'>
-      <CategoryCard
-        variant='compact'
-        name={category.name}
-        categoryId={category.id}
-        image={getHomeCategoryImage(category, index)}
-        shopNowLabel={shopNowLabel}
-        categoryAlt={categoryAlt}
-      />
-    </div>
+    <CategoryCard
+      variant='compact'
+      name={category.name}
+      categoryId={category.id}
+      image={getHomeCategoryImage(category, index)}
+      shopNowLabel={shopNowLabel}
+      categoryAlt={categoryAlt}
+      animationIndex={index}
+    />
   );
 }

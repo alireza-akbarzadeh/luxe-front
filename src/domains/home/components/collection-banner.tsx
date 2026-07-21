@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
+import { HOME_RAIL_SECTION_CLASS } from '@/domains/home/lib/home-density';
 import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomePopularCollections } from '@/services/-home-popular-collections-get';
 
@@ -25,11 +26,12 @@ export async function CollectionBanner() {
   return (
     <SectionCarousel
       sectionId='collections'
+      className={HOME_RAIL_SECTION_CLASS}
       eyebrow={t('eyebrow')}
       title={t('title')}
       viewAllHref='/collections'
       viewAllLabel={t('viewAll')}
-      columns={{ mobile: 1, tablet: 1, desktop: 2 }}
+      columns={{ mobile: 1, tablet: 2, desktop: 2 }}
       loop={false}
     >
       {collections.map((collection, index) => (

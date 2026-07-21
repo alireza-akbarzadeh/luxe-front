@@ -19,7 +19,7 @@ export function HomeCollectionCard({
   const href = banner.href ?? (banner.slug ? `/collections/${banner.slug}` : '/collections');
 
   return (
-    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[22rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[26rem] sm:rounded-3xl lg:min-h-[32rem]'>
+    <article className='group luxury-card luxury-image-zoom border-border/60 bg-card relative min-h-[14rem] overflow-hidden rounded-2xl border shadow-sm sm:min-h-[16rem] lg:min-h-[18rem]'>
       {banner.image_url ? (
         <AppImage
           src={banner.image_url}
@@ -35,25 +35,25 @@ export function HomeCollectionCard({
 
       <div className='from-foreground/90 via-foreground/40 absolute inset-0 bg-gradient-to-t to-transparent' />
 
-      <div className='absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10'>
+      <div className='absolute inset-0 flex flex-col justify-end p-4 sm:p-5 lg:p-6'>
         {banner.eyebrow ? (
-          <span className='text-primary-foreground/75 text-xs font-semibold tracking-[0.2em] uppercase'>
+          <span className='text-primary-foreground/75 text-[10px] font-semibold tracking-[0.2em] uppercase'>
             {banner.eyebrow}
           </span>
         ) : null}
-        <h3 className='text-primary-foreground font-display mt-2 text-2xl font-semibold sm:text-3xl lg:text-4xl'>
+        <h3 className='text-primary-foreground font-display mt-1.5 text-xl font-semibold sm:text-2xl'>
           {banner.title}
         </h3>
         {banner.description ? (
-          <p className='text-primary-foreground/80 mt-2 max-w-md text-sm leading-relaxed sm:text-base'>
+          <p className='text-primary-foreground/80 mt-1.5 line-clamp-2 max-w-md text-xs leading-relaxed sm:text-sm'>
             {banner.description}
           </p>
         ) : null}
         <Link
           href={href}
           className={cn(
-            buttonVariants({ size: 'lg' }),
-            'text-gold-foreground [&_svg]:text-gold-foreground mt-6 w-fit border-0 bg-white shadow-md hover:bg-white/90'
+            buttonVariants({ size: 'sm' }),
+            'text-gold-foreground [&_svg]:text-gold-foreground mt-4 w-fit border-0 bg-white shadow-md hover:bg-white/90'
           )}
         >
           {banner.cta_label ?? fallbackLabel}

@@ -1832,6 +1832,11 @@
       "socialProof": "مورد اعتماد بیش از {count, number} خریدار",
       "shopNewArrivals": "مشاهده تازه‌ها",
       "exploreCollections": "کاوش مجموعه‌ها",
+      "promoPanel": {
+        "eyebrow": "ویرایش فصلی",
+        "title": "تا ۴۰٪ تخفیف روی قطعات منتخب",
+        "cta": "خرید حراج"
+      },
       "trust": {
         "shipping": "ارسال رایگان به سراسر جهان",
         "authenticity": "تضمین اصالت کالا"

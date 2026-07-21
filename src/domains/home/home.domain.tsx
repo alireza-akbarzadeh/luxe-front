@@ -1,18 +1,14 @@
-import { Suspense } from 'react';
-
 import { Hero } from '@/domains/home/components/hero';
+import { TrustBar } from '@/domains/home/components/trust-bar';
 import { CardGridSkeleton, CarouselSkeleton } from '@/domains/home/components/ui/home-skeleton';
 
-import { TrustBar } from './components/trust-bar';
 import { HomeSections } from './home-sections';
 
 export function HomeDomains() {
   return (
     <div className='flex flex-col overflow-x-hidden'>
       <Hero />
-      <Suspense fallback={null}>
-        <TrustBar />
-      </Suspense>
+      <TrustBar />
       <HomeSections />
     </div>
   );

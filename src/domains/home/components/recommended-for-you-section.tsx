@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 
 import { useAuth } from '@/components/providers/auth-provider';
 import { SectionCarousel } from '@/components/section-carousel';
+import { HOME_PRODUCT_COLUMNS, HOME_RAIL_SECTION_CLASS } from '@/domains/home/lib/home-density';
 import { mapHomeProductItem } from '@/domains/home/lib/home-utils';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import { useGetHomeRecommended } from '@/services/-home-recommended-get';
@@ -41,16 +42,18 @@ export function RecommendedForYouSection() {
   return (
     <SectionCarousel
       sectionId='recommended-for-you'
+      className={HOME_RAIL_SECTION_CLASS}
       eyebrow={t('eyebrow')}
       title={t('title')}
       description={t('description')}
       viewAllHref='/shop'
       viewAllLabel={tCommon('shopAll')}
+      columns={HOME_PRODUCT_COLUMNS}
       isLoading={isLoading}
-      skeletonCount={4}
+      skeletonCount={5}
     >
       {products.map((product, index) => (
-        <ProductCard key={product.id ?? index} product={product} index={index} />
+        <ProductCard key={product.id ?? index} product={product} index={index} size='dense' />
       ))}
     </SectionCarousel>
   );

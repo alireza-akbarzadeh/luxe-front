@@ -19,8 +19,10 @@ import { ProductCardToolbar } from '@/domains/shop/components/product-card-toolb
 import {
   PRODUCT_CARD_HEIGHT_COMPACT,
   PRODUCT_CARD_HEIGHT_DEFAULT,
+  PRODUCT_CARD_HEIGHT_DENSE,
   PRODUCT_CARD_INFO_MIN_HEIGHT_COMPACT,
   PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT,
+  PRODUCT_CARD_INFO_MIN_HEIGHT_DENSE,
   PRODUCT_CARD_INFO_TOP_RADIUS_COMPACT,
   PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT
 } from '@/domains/shop/lib/product-card-layout';
@@ -33,7 +35,8 @@ import type { DtoProductWithLike } from '@/services/-products-get.schemas';
 export interface ProductCardProps {
   product: DtoProductWithLike;
   index?: number;
-  size?: 'default' | 'compact';
+  /** `dense` is for homepage rails; shop/collection stay on `default` / `compact`. */
+  size?: 'default' | 'compact' | 'dense';
   /** Preload above-the-fold images for LCP (maps to Next.js `priority`). */
   priority?: boolean;
 }
@@ -55,7 +58,8 @@ export function ProductCard({
 }: ProductCardProps) {
   const t = useTranslations('shop.productCard');
   const { formatPrice, formatDecimal, formatInteger, moneyClassName } = useLocaleFormatters();
-  const isCompact = size === 'compact';
+  const isCompact = size === 'compact' || size === 'dense';
+  const isDense = size === 'dense';
   const { increment, isLoading, items: cartItems } = useCartController();
   const [canHoverLens, setCanHoverLens] = useState(false);
 
@@ -113,13 +117,19 @@ export function ProductCard({
 
   const showLens = canHoverLens && !isCompact;
   const showSecondaryImage = Boolean(secondaryImage) && !showLens;
-  const cardHeight = isCompact ? PRODUCT_CARD_HEIGHT_COMPACT : PRODUCT_CARD_HEIGHT_DEFAULT;
+  const cardHeight = isDense
+    ? PRODUCT_CARD_HEIGHT_DENSE
+    : isCompact
+      ? PRODUCT_CARD_HEIGHT_COMPACT
+      : PRODUCT_CARD_HEIGHT_DEFAULT;
   const infoTopRadius = isCompact
     ? PRODUCT_CARD_INFO_TOP_RADIUS_COMPACT
     : PRODUCT_CARD_INFO_TOP_RADIUS_DEFAULT;
-  const infoMinHeight = isCompact
-    ? PRODUCT_CARD_INFO_MIN_HEIGHT_COMPACT
-    : PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT;
+  const infoMinHeight = isDense
+    ? PRODUCT_CARD_INFO_MIN_HEIGHT_DENSE
+    : isCompact
+      ? PRODUCT_CARD_INFO_MIN_HEIGHT_COMPACT
+      : PRODUCT_CARD_INFO_MIN_HEIGHT_DEFAULT;
 
   const productImage = (
     <div

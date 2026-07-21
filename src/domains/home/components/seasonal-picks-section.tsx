@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { SectionCarousel } from '@/components/section-carousel';
+import { HOME_RAIL_SECTION_CLASS } from '@/domains/home/lib/home-density';
 import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeSeasonalPicks } from '@/services/-home-seasonal-picks-get';
 
@@ -24,11 +25,12 @@ export async function SeasonalPicksSection() {
   return (
     <SectionCarousel
       sectionId='seasonal-picks'
+      className={HOME_RAIL_SECTION_CLASS}
       eyebrow={t('eyebrow')}
       title={t('title')}
       viewAllHref='/shop'
       viewAllLabel={t('viewAll')}
-      columns={{ mobile: 1, tablet: 2, desktop: 3 }}
+      columns={{ mobile: 2, tablet: 2, desktop: 3 }}
       loop={false}
     >
       {sections.map((section, index) => (

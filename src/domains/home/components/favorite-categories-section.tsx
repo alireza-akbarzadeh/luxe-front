@@ -5,7 +5,7 @@ import { FavoriteCategoryItem } from '@/domains/home/components/ui/favorite-cate
 import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { getHomeCategories } from '@/services/-home-categories-get';
 
-const HOME_CATEGORY_LIMIT = 8;
+const HOME_CATEGORY_LIMIT = 16;
 
 export async function FavoriteCategoriesSection() {
   const [t, tCommon] = await Promise.all([
@@ -20,13 +20,14 @@ export async function FavoriteCategoriesSection() {
   return (
     <SectionCarousel
       sectionId='favorite-categories'
-      className='border-border/40 border-b py-10 sm:py-12 lg:py-16'
+      className='border-border/40 border-b py-8 sm:py-10 lg:py-12'
       eyebrow={t('eyebrow')}
       title={t('title')}
       description={t('description')}
       viewAllHref='/shop'
       viewAllLabel={tCommon('viewAll')}
-      columns={{ mobile: 2, tablet: 3, desktop: 4 }}
+      fitContent
+      gapPx={3}
     >
       {categories.map((category, index) => (
         <FavoriteCategoryItem

@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { SectionCarousel } from '@/components/section-carousel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { HOME_PRODUCT_COLUMNS, HOME_RAIL_SECTION_CLASS } from '@/domains/home/lib/home-density';
 import { ProductCard } from '@/domains/shop/components/product-card';
 import type { DtoHomeProductItem } from '~/src/services/-home-categories-get.schemas';
 
@@ -60,17 +61,18 @@ export function FeaturedProductsSection({
   return (
     <SectionCarousel
       sectionId='products'
+      className={HOME_RAIL_SECTION_CLASS}
       eyebrow={t.eyebrow}
       title={t.title}
       description={t.description}
       viewAllHref='/shop'
       viewAllLabel={t.shopAll}
-      columns={{ mobile: 1, tablet: 2, desktop: 4 }}
+      columns={HOME_PRODUCT_COLUMNS}
       headerSlot={tabsNode}
       opts={{ align: 'start', loop: false, skipSnaps: false }}
     >
       {products.map((product, index) => (
-        <ProductCard key={product.id ?? index} product={product} index={index} />
+        <ProductCard key={product.id ?? index} product={product} index={index} size='dense' />
       ))}
     </SectionCarousel>
   );
