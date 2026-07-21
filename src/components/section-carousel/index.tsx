@@ -41,6 +41,8 @@ export type SectionCarouselProps<T> = {
   viewAllHref?: string;
   viewAllLabel?: string;
   headerSlot?: ReactNode;
+  /** Spacing below `headerSlot` (default: mb-8 sm:mb-10). */
+  headerSlotClassName?: string;
   opts?: CarouselOptions;
   // ── Data ──────────────────────────────────────────────────────────────────
   /** Items to render. Required when using renderItem. Optional when using children. */
@@ -121,6 +123,7 @@ export function SectionCarousel<T>({
   sectionId,
   loop = true,
   headerSlot,
+  headerSlotClassName = 'mb-8 sm:mb-10',
   footerSlot,
   opts,
   hideHeader = false,
@@ -200,7 +203,7 @@ export function SectionCarousel<T>({
           </div>
         )}
         {/* ── Header slot (e.g. Tabs) ──────────────────────────────────────── */}
-        {headerSlot && <div className='mb-8 sm:mb-10'>{headerSlot}</div>}
+        {headerSlot ? <div className={headerSlotClassName}>{headerSlot}</div> : null}
         {/* ── Carousel ──────────────────────────────────────────────────── */}
         <Carousel
           setApi={setApi}
