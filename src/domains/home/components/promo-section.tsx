@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { PromoCountdown } from '@/domains/home/components/ui/promo-countdown';
 import { HOME_RAIL_SECTION_CLASS } from '@/domains/home/lib/home-density';
@@ -6,6 +6,7 @@ import { safeHomeFetch } from '@/domains/home/lib/safe-home-fetch';
 import { marketingNumbers } from '@/lib/i18n/marketing-numbers';
 import { cn } from '@/lib/utils';
 import { getHomeFlashDeals } from '@/services/-home-flash-deals-get';
+import type { Locale } from '~/src/i18n/config';
 
 import { sectionContainerClass } from '../lib/home-utils';
 
@@ -53,6 +54,7 @@ export async function PromoSection() {
     <section className={cn(HOME_RAIL_SECTION_CLASS, 'py-8 sm:py-10')}>
       <div className={sectionContainerClass}>
         <PromoCountdown
+          locale={getLocale() as unknown as Locale}
           promoEnd={promoEnd}
           deals={deals}
           ctaHref={ctaHref}

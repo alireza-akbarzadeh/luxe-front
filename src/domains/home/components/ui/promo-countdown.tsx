@@ -115,7 +115,7 @@ export function PromoCountdown({
               <div
                 key={item.label}
                 className={cn(
-                  'min-w-[3.25rem] rounded-lg border px-2.5 py-2 text-center',
+                  'min-w-[4.25rem] rounded-lg border px-2.5 py-2 text-center',
                   useDarkBand
                     ? 'border-white/15 bg-white/10'
                     : 'border-border/70 bg-background shadow-sm'

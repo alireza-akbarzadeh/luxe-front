@@ -76,7 +76,11 @@ export function PromoProductRail({ deals, promoImageAlt, theme = 'dark' }: Promo
         />
       </Flex>
 
-      <Carousel setApi={setApi} opts={{ align: 'start', loop: false, dragFree: true }} className='w-full'>
+      <Carousel
+        setApi={setApi}
+        opts={{ align: 'start', loop: false, dragFree: true }}
+        className='w-full'
+      >
         <CarouselContent className='-ms-2.5'>
           {deals.map((deal) => {
             const product = deal.product;
@@ -90,9 +94,9 @@ export function PromoProductRail({ deals, promoImageAlt, theme = 'dark' }: Promo
                 <Link
                   href={href}
                   className={cn(
-                    'group flex h-[11.75rem] w-[8.5rem] flex-col overflow-hidden rounded-xl border transition-colors sm:w-[9.5rem]',
+                    'group flex h-[13.75rem] w-[10rem] flex-col overflow-hidden rounded-xl border transition-colors sm:w-[9.5rem]',
                     isDark
-                      ? 'border-white/15 bg-white/10 hover:border-gold/40'
+                      ? 'hover:border-gold/40 border-white/15 bg-white/10'
                       : 'border-border/60 bg-card hover:border-gold/30'
                   )}
                 >
